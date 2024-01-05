@@ -1,21 +1,20 @@
-<img src="https://raw.githubusercontent.com/NormalNed/Project-Altis/53168140c5b29f018467bedec35b4e59a83d0609/resources/phase_3.5/etc/transicon.png" align="right" width="200"/>
 
-# Project Altis
-Project Altis Beta Source, that just works.
+# Aristotown: Altis Edition
+A customized version of Project Altis that's is heavily based on the predecessor Toontown: Corporate Clash. Although this version of the game may not reflect what comes directly from Clash, it does have very similar features to what Clash has to offer. This game is in no way, shape or form intended to be a Toontown: Corporate Clash mirror or duplicate (it is very far from being so), this version of the game uses various assets from Clash such as select gui panels, cog models, animated cog heads, cog abilities, cog animations, and prop models. 
 
-# ❓ What is Project Altis
-Project Altis was a private server aimed around adding a crap ton of new features. We are going to keep up this tradition finishing and polishing up Altis for the community.
-This project is not related to Corporate Clash. We simply are porting the Altis Codebase and continuing it not adding everything clash did.
-
-# ❗ Notice
-This source is only intented for personal/historical exploration. (i.e: exploring the game by yourself or with a few friends to see what Altis was like before it's rebranding) It is not meant to be a base to build a private server from.
-
-Many ideas in this server where carried over to Corporate Clash, where they have been improved and stabilized. Not only that, but this source also contains potential vulnerabilities and exploits that hackers could leverage, making hosting a public server unsafe.
-
-We instead recommend using Toontown School House. A version written in Python 3 can be found in this organization. 
-
-# 🔨 Setting Up
-Support is currently being worked on for MacOS and Non Arch Based Linux Distros
+# ❓ What does Aristotown: Altis Edition have to offer?
+- There are currently a total of 128 cogs in this game. New cogs have been added to each department, each department has 14 regular cogs, the rest of the cogs have been filled with managers ranging from the ones seen in clash to a few custom managers made by me. There are Operations Analysts and Field Specialists for each department.
+- Executive and Manager cogs have both been implemented working the same as they do in clash. Managers have lure resistance and are completely immune to being fired.
+- Governaughts have been added, they have double the amount of health as regular cogs and deal twice the amount of damage.
+- Version 2 cogs work the same way they do in clash, having half of the amount of health after the first shell is dead, also dealing 1.5x the amount of damage. Cogs can have more than 2 layers, the health deduction and damage multipliers will stack.
+- 99% of the managers from Clash have been added, however most of them do not have their set abilities from Clash.
+- The Litigation team with working abilities some mirroring Clash others I have tweaked myself to meet specific needs.
+- Legacy managers including, Count Erclaim, Count Erfit (not with the old model), Redd "Heir" Wing and The Witness Stand-In have been added. (Sads is not present.)
+- Facility managers are present ingame, however are not placed in their desired locations (yet).
+- All cogs will go into "desperation mode" once they reach .3x of their max health, including managers, once they are desperation mode, they will deal twice the amount of damage, this will stack with governaughts, executive and v2 damage multipliers.
+- Gag damages mirror what they are in Clash, level 8s have not been added yet but it is on the todo list.
+- Trap damage reflects what prestige trap damage is in Clash, prestiges don't exist (yet).
+- Zap is present ingame, but needs to be revamped.
 
 ## 💻 Windows
 Run the [Start.bat](Start.bat) file to launch the game.
