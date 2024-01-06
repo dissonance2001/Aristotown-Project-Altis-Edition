@@ -58,7 +58,8 @@ class Walk(StateData.StateData):
     def enterWalking(self):
         if base.localAvatar.hp > 0:
             base.localAvatar.startTrackAnimToSpeed()
-            base.localAvatar.setWalkSpeedNormal()
+            self.accept('shift-up', base.localAvatar.setWalkSpeedNormal)
+            self.accept('shift', base.localAvatar.setWalkSpeedFast)
             base.localAvatar.applyBuffs()
         else:
             self.fsm.request('slowWalking')

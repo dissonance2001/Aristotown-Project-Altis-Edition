@@ -53,6 +53,7 @@ class SuitBase:
          'level': self.getActualLevel()}
         self.setDisplayName(nameWLevel)
         attributes = SuitBattleGlobals.SuitAttributes[self.dna.name]
+        nameWLevel = TTLocalizer.SuitBaseNameWithLevelHP % {'currHP': attributes['hp'][self.level]}
         self.maxHP = attributes['hp'][self.level]
         self.currHP = self.maxHP
 

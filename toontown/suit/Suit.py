@@ -2473,7 +2473,7 @@ class Suit(Avatar.Avatar):
             # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(10.7)
         elif dna.name == 'pht':
-            self.scale = 7.0 / bSize
+            self.scale = 6.0 / bSize
             self.handColor = VBase4(0.616, 0.761, 0.576, 1)
             self.generateBody()
             #self.generateMolder()
@@ -2482,7 +2482,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
-            self.setHeight(9.2)
+            self.setHeight(8.2)
         elif dna.name == 'csh':
             self.scale = 4.5 / aSize
             self.handColor = VBase4(1, 1, 1, 1)
@@ -2616,10 +2616,13 @@ class Suit(Avatar.Avatar):
             self.setHeight(4.63)
         elif dna.name == 'tm':
             self.scale = 3.75 / bSize
-            self.handColor = SuitDNA.salesPolyColor
+            self.handColor = VBase4(0.965, 0.859, 0.831, 1)
             self.generateBody()
             #self.generateTelemarketer()
             self.generateHead('telemarketer')
+            texture = loader.loadTexture('phase_4/maps/telemarketer.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_shyster-zero.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral.bam')
             self.setHeight(5.24)
         elif dna.name == 'nd':
@@ -2706,7 +2709,7 @@ class Suit(Avatar.Avatar):
             # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(8.5)
         elif dna.name == 'ssm':
-            self.scale = 6.0 / aSize
+            self.scale = 5.75 / aSize
             self.handColor = VBase4(0.373, 0.286, 0.227, 1)
             self.generateBody()
             #self.generateMolder()
@@ -2715,9 +2718,9 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
-            self.setHeight(7.7)
+            self.setHeight(7.5)
         elif dna.name == 'isw':
-            self.scale = 7.0 / bSize
+            self.scale = 6.0 / bSize
             self.handColor = VBase4(0.918, 0.796, 0.996, 1)
             self.generateBody()
             #self.generateMolder()
@@ -2726,7 +2729,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
-            self.setHeight(9.1)
+            self.setHeight(8.1)
         elif dna.name == 'ssr':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.522, 0.482, 0.435, 1)
@@ -2735,7 +2738,7 @@ class Suit(Avatar.Avatar):
             self.headTexture = 'rootuser.jpg'
             self.generateHead2('telemarketer')
             # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
-            self.setHeight(8.7)
+            self.setHeight(9.0)
         elif dna.name == 'fas':
             self.scale = 4.5 / aSize
             self.handColor = VBase4(1, 0.486, 0, 1)
@@ -2959,7 +2962,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.2)
         elif dna.name == 'dfh':
             self.scale = 6.5 / aSize
-            self.handColor = SuitDNA.legalPolyColor
+            self.handColor = VBase4(0.412, 0.482, 0.737, 1)
             self.generateFemaleBody()
             self.generateHead('needlenose', animated=True)
             # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
@@ -2978,13 +2981,10 @@ class Suit(Avatar.Avatar):
             self.setHeight(7.7)
         elif dna.name == 'cps':
             self.scale = 6.5 / aSize
-            self.handColor = VBase4(0.922, 0.89, 0.878, 1)
+            self.handColor = VBase4(0.306, 0.306, 0.318, 1)
             self.generateBody()
             #self.generateMolder()
-            self.generateHead('yesman')
-            texture = loader.loadTexture('phase_3.5/maps/enforcer.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+            self.generateHead2('camera')
             # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.2)
         elif dna.name == 'tld':
@@ -3293,6 +3293,10 @@ class Suit(Avatar.Avatar):
         Avatar.Avatar.initializeBodyCollisions(self, collIdStr)
         if not self.ghostMode:
             self.collNode.setCollideMask(self.collNode.getIntoCollideMask() | ToontownGlobals.PieBitmask)
+
+    def updateNametag(self):
+        nameInfo = TTLocalizer.SuitBaseNameWithLevelHP % {'currHP': self.currHP}
+        self.setDisplayName(nameInfo)
 
     def setSuitClothes(self, modelRoot=None):
         if not modelRoot:
@@ -3848,6 +3852,11 @@ class Suit(Avatar.Avatar):
                 headModel.setScale(1.05)
                 headModel.setZ(-.1)
                 headModel.setY(0)
+            elif headType == 'advocate' and self.style.name == 'bdb':
+                headModel.setScale(1.05)
+                headModel.setZ(-.1)
+                headModel.setY(-.2)
+                headModel.setY(0)
             elif headType == 'redd':
                 headModel.setScale(.8)
             elif headType == 'witchhunter':
@@ -3867,11 +3876,7 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(-.3)
                 headModel.setY(-.2)
                 headModel.setH(180)
-            elif headType == 'needlenose' and self.style.name == 'ka':
-                headModel.setScale(1.05)
-                headModel.setZ(-.1)
-                headModel.setY(-.1)
-            elif headType == 'needlenose' and self.style.name == 'dot':
+            elif headType == 'needlenose' and self.style.name == 'dfh':
                 headModel.setScale(1.05)
                 headModel.setZ(-.1)
                 headModel.setY(-.1)
@@ -4036,6 +4041,8 @@ class Suit(Avatar.Avatar):
                 headModel = loader.loadModel('phase_3.5/models/char/suitC-heads')
         if headType == 'connoisseur_hat' and self.style.name == 'bgh':
                 headModel = loader.loadModel('phase_14/models/char/ttcc_ene_connoisseur')
+        if headType == 'camera' and self.style.name == 'cps':
+                headModel = loader.loadModel('phase_4/models/accessories/newstoon_camera')
         if headType == 'connoisseur_head' and self.style.name == 'bgh':
                 headModel = loader.loadModel('phase_14/models/char/ttcc_ene_connoisseur')
         if headType == 'connoisseur_monocle' and self.style.name == 'bgh':
@@ -4124,6 +4131,11 @@ class Suit(Avatar.Avatar):
                 headPart.setY(-.1)
                 headPart.setScale(1.05)
                 headPart.setH(0)
+            if self.style.name == 'cps':
+                headPart.setZ(1)
+                headPart.setY(0)
+                headPart.setScale(2.5)
+                headPart.setH(90)
             if headType == 'hatjp187187' and self.style.name == 'rng':
                 headPart.setZ(-.7)
             if self.headTexture:
