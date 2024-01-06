@@ -124,7 +124,15 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
                 suitTrack.append(Func(trapProp.wrtReparentTo, suit))
                 suit.battleTrapProp = trapProp
             suitTrack.append(Func(suit.loop, 'lured'))
-            if not suit.style.name == 'm':
+            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'ad' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
+                    and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
+                    and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
+                    and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
+                    and not suit.style.name == 'nd' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
+                    and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'ca' and not suit.style.name == 'cn' and not suit.style.name == 'sw' and not suit.style.name == 'mdm' \
+                    and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng' and not suit.style.name == 'cps' \
+                    and not suit.style.name == 'tld':
                 for headPart in suit.headParts:
                     suitTrack.append(Func(headPart.loop, 'neutral-lured'))
             suitTrack.append(Func(battle.lureSuit, suit))
@@ -134,7 +142,7 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
                 suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle))
             if died != 0:
                 if trapProp:
-                    if not (trapProp.getName() == 'tnt' and suit.maxHP <= 42):
+                    if not (trapProp.getName() == 'tnt' and suit.currHP <= 315):
                         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle))
             tracks.append(suitTrack)
     else:
@@ -185,7 +193,15 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 suitTrack.append(ActorInterval(suit, 'landing', startTime=1.16, endTime=0.7))
                 suitTrack.append(ActorInterval(suit, 'landing', startTime=0.7, duration=1.3))
                 suitTrack.append(Func(suit.loop, 'lured'))
-                if not suit.style.name == 'm':
+                if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                        and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'ad' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
+                        and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
+                        and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
+                        and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
+                        and not suit.style.name == 'nd' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
+                        and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'ca' and not suit.style.name == 'cn' and not suit.style.name == 'sw' and not suit.style.name == 'mdm' \
+                        and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng' and not suit.style.name == 'cps' \
+                        and not suit.style.name == 'tld':
                     for headPart in suit.headParts:
                         suitTrack.append(Func(headPart.loop, 'neutral-lured'))
                 suitTrack.append(Func(battle.lureSuit, suit))
@@ -195,7 +211,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
                 elif died != 0:
                     if trapProp:
-                        if not (trapProp.getName() == 'tnt' and suit.maxHP <= 42):
+                        if not (trapProp.getName() == 'tnt' and suit.currHP <= 315):
                             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
@@ -247,7 +263,15 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
                 suitTrack.append(Func(suit.setPos, battle, reachPos))
                 suitTrack.append(Func(suit.loop, 'lured'))
-                if not suit.style.name == 'm':
+                if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                        and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
+                        and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
+                        and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
+                        and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
+                        and not suit.style.name == 'nd' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
+                        and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'ca' and not suit.style.name == 'cn' and not suit.style.name == 'sw' and not suit.style.name == 'mdm' \
+                        and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'ad' and not suit.style.name == 'bfh' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng' and not suit.style.name == 'cps' \
+                        and not suit.style.name == 'tld':
                     for headPart in suit.headParts:
                         suitTrack.append(Func(headPart.loop, 'neutral-lured'))
                 suitTrack.append(Func(battle.lureSuit, suit))
@@ -439,7 +463,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
                  ActorInterval(suit, 'flail', startTime=0.9),
                  LerpPosInterval(suit, 0.3, flyPos),
                  ))
-        if suit.maxHP <= 315:
+        if suit.currHP <= 315:
             suitTrack.append(midairSuitExplodeTrack(suit, battle))
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
@@ -477,7 +501,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
             )
         result.append(Parallel(tntTrack, suitTrack, damageTrack, explosionTrack, soundTrack))
 
-        if suit.maxHP <= 315:
+        if suit.currHP <= 315:
             suit.battleTrapProp = trapProp
             result.append(Func(battle.removeTrap, suit, True))
             return result
@@ -735,7 +759,15 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
                 suitTrack.append(Func(suit.setPos, battle, reachPos))
                 suitTrack.append(Func(suit.loop, 'lured'))
-                if not suit.style.name == 'm':
+                if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                        and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
+                        and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
+                        and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
+                        and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
+                        and not suit.style.name == 'nd' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
+                        and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'ca' and not suit.style.name == 'cn' and not suit.style.name == 'sw' and not suit.style.name == 'mdm' \
+                        and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'ad' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng' and not suit.style.name == 'cps' \
+                        and not suit.style.name == 'tld':
                     for headPart in suit.headParts:
                         suitTrack.append(Func(headPart.loop, 'neutral-lured'))
                 suitTrack.append(Func(battle.lureSuit, suit))
@@ -745,7 +777,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
                 elif died != 0:
                     if trapProp:
-                        if not (trapProp.getName() == 'tnt' and suit.maxHP <= 42):
+                        if not (trapProp.getName() == 'tnt' and suit.maxHP <= 315):
                             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))

@@ -161,16 +161,16 @@ SuitSizes = {
     'hho': 7.0,
 }
 
-SpecialCogDict = ('cg', 'gkp', 'ddv', 'dty', 'dfg', 'dfr', 'bsh', 'ghd', 'dfh', 'tyh', 'jgd', 'bby', 'dvk', 'otm', 'cry', 'tcm', 'bg', 'msr', 'kb', 'ts', 'tc', 'tg', 'tb', 'adc', 'drm', 'cp', 'fbd', 'frs', 'gtk', 'jdg', 'jur', 'tlr', 'cm', 'ggm', 'th', 'kc', 'tr', 'mp', 'laa', 'scg', 'csm', 'ste', 'lit', 'csh', 'bgr', 'mes', 'dm', 'tcc', 'fb', 'jl', 'gb', 'lbs', 'trk', 'dsf', 'msp', 'mad', 'crf', 'fas', 'mdr', 'nar', 'fd', 'fm', 'jb', 'jg', 'jr', 'prr', 'blr', 'dvp', 'dsk', 'ffm', 'sft')
+SpecialCogDict = ('cg', 'gkp', 'ddv', 'dty', 'dfg', 'dfr', 'bsh', 'ghd', 'tyh', 'jgd', 'bby', 'dvk', 'otm', 'cry', 'tcm', 'bg', 'msr', 'kb', 'ts', 'tc', 'tg', 'tb', 'adc', 'drm', 'cp', 'fbd', 'frs', 'gtk', 'jdg', 'jur', 'tlr', 'cm', 'ggm', 'th', 'kc', 'tr', 'mp', 'laa', 'scg', 'csm', 'ste', 'lit', 'csh', 'bgr', 'mes', 'dm', 'tcc', 'fb', 'jl', 'gb', 'lbs', 'trk', 'dsf', 'msp', 'mad', 'crf', 'fas', 'mdr', 'nar', 'fd', 'fm', 'jb', 'jg', 'jr', 'prr', 'blr', 'dvp', 'dsk', 'ffm', 'sft')
 
 SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Flunky', # cogs singular name, for tasks
        'pluralname': 'Flunkies', # cogs plural name, for tasks
        'level': 0, # level the cog starts at (level - 1)
-        'hp': (6, 12, 20, 30, 42, 56, 72, 90, 110, 132, 156, 182, 210), # cogs hp (more numbers, more levels)
-       'def':(5,5,5,5,5,5,5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)
-       'freq':(50,30,10,5,5,5,5,5,5,5,5,5,5), # cogs level frequency
-       'acc':(35,40,45,50,55,55,55,55,55,55,55,55,55), # cogs accuracy (more numbers, more levels)
+        'hp': (6, 12, 20, 30, 42, 56, 72, 90), # cogs hp (more numbers, more levels)
+       'def':(5,5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)
+       'freq':(50,30,10,5,5,5,5,5), # cogs level frequency
+       'acc':(35,40,45,50,55,55,55,55), # cogs accuracy (more numbers, more levels)
        'attacks':
                 (('PoundKey',
                   (2, 2, 3, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22), # attack damage
@@ -425,10 +425,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (8, 11, 14, 17, 20, 22, 24, 26, 28, 30, 32, 34, 36),
                (85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'dvg': {'name': 'Big Wheel',
-        'singularname': 'a Big Wheel',
-		'pluralname': 'Big Wheels',
-		'level': 11,
+'dvg': {'name': 'The Molder',
+        'singularname': 'a The Molder',
+		'pluralname': 'The Molders',
+		'level': 10,
          'hp':(156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600),
          'def':(56,56,56,56,56,56,56,56,56,56,56,56,56),
          'freq':(30,35,40,45,50,50,50,50,50,50,50,50,50),
@@ -453,7 +453,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 'cpl': {'name': 'Capitalist',
         'singularname': 'a Capitalist',
 		'pluralname': 'Capitalists',
-		'level': 12,
+		'level': 11,
          'hp':(156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600),
          'def':(56,56,56,56,56,56,56,56,56,56,56,56,56),
          'freq':(30,35,40,45,50,50,50,50,50,50,50,50,50),
@@ -478,7 +478,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 'bkp': {'name': 'Bookkeeper',
         'singularname': 'a Bookkeeper',
 		'pluralname': 'Bookkeepers',
-		'level': 13,
+		'level': 12,
          'hp':(156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600),
          'def':(56,56,56,56,56,56,56,56,56,56,56,56,56),
          'freq':(30,35,40,45,50,50,50,50,50,50,50,50,50),
@@ -500,10 +500,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (8, 11, 14, 17, 20, 22, 24, 26, 28, 30, 32, 34, 36),
               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'kpn': {'name': 'Kingpin',
-        'singularname': 'a Kingpin',
-		'pluralname': 'Kingpins',
-		'level': 10,
+'kpn': {'name': 'Enforcer',
+        'singularname': 'a Enforcer',
+		'pluralname': 'Enforcers',
+		'level': 13,
          'hp':(156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600),
          'def':(56,56,56,56,56,56,56,56,56,56,56,56,56),
          'freq':(30,35,40,45,50,50,50,50,50,50,50,50,50),
@@ -1399,9 +1399,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'ssr': {'name': 'Sharp Seer',
-        'singularname': 'a Sharp Seer',
-		'pluralname': 'Sharp Seers',
+ 'ssr': {'name': 'Root User',
+        'singularname': 'a Root User',
+		'pluralname': 'Root Users',
 		'level': 13,
          'hp':(156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600),
 		'def':(60,60,60,60,60,60,60,60,60,60,60,60,60),
@@ -2238,9 +2238,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 36),
                (100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'mld': {'name': 'Money\nLaunderer',
-        'singularname': 'a Money Launderer',
-		'pluralname': 'Money Launderers',
+ 'mld': {'name': 'Big Fish',
+        'singularname': 'a Big Fish',
+		'pluralname': 'Big Fish',
 		'level': 12,
          'hp':(156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600),
          'def':(56,56,56,56,56,56,56,56,56,56,56,56,56),
@@ -3070,9 +3070,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (18, 20, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33),
               (100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
               (30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
- 'sjg': {'name': 'Shadow Justice',
-        'singularname': 'a Shadow Justice',
-		'pluralname': 'Shadow Justices',
+ 'sjg': {'name': 'Peacekeeper',
+        'singularname': 'a Peacekeeper',
+		'pluralname': 'Peacekeepers',
 		'level': 12,
          'hp':(156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600),
 		'def':(65,65,65,65,65,65,65,65,65,65,65,65,65),
@@ -3931,9 +3931,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (8, 11, 14, 17, 20, 22, 24, 26, 28, 30, 32, 34, 36),
                (85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'bgh': {'name': 'Taskmaster',
-        'singularname': 'a Taskmaster',
-		'pluralname': 'Taskmasters',
+ 'bgh': {'name': 'Sharp Seer',
+        'singularname': 'a Sharp Seer',
+		'pluralname': 'Sharp Seers',
 		'level': 9,
          'hp':(132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552),
          'def':(56,56,56,56,56,56,56,56,56,56,56,56,56),

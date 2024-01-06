@@ -117,8 +117,8 @@ class TownBattleCogPanel(DirectFrame):
         self.head.calcTightBounds(p1, p2)
         d = p2 - p1
         biggest = max(d[0], d[1], d[2])
-        s = 0.19 / biggest
-        self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        s = 0.2 / biggest
+        self.head.setPosHprScale(-0.27, 0.5, 0.13, 180, 0, 0, s, s, s)
         self.setLevelText()
 
     def setLevelText(self):

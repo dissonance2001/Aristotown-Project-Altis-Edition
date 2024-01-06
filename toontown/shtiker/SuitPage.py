@@ -154,7 +154,23 @@ SHADOW_SCALE_POS = ((1.225, 0, 10, -0.03),# Flunky
                     (1.0, -0.02, 10, -0.01),  # Downsizer
                     (1.05, 0, 10, -0.0425),  # Head Hunter
                     (1.0, 0, 10, -0.05),  # Corporate Raider
-                    (0.9, -0.0225, 10, -0.025),# Head Honcho
+                    (0.9, -0.0225, 10, -0.025),
+                    (1.125, 0, 10, -0.015),  # Yesman
+                    (1.0, 0, 10, -0.02),  # Micromanager
+                    (1.0, -0.02, 10, -0.01),  # Downsizer
+                    (1.05, 0, 10, -0.0425),  # Head Hunter
+                    (1.0, 0, 10, -0.05),  # Corporate Raider
+                    (0.9, -0.0225, 10, -0.025),  # The Big Cheese
+                    (0.9, 0, 10, -0.03),
+                    (0.9, 0, 10, 0),
+                    (0.9, 0, 10, 0),  # Pencil Pusher
+                    (1.125, 0, 10, -0.015),  # Yesman
+                    (1.0, 0, 10, -0.02),  # Micromanager
+                    (1.0, -0.02, 10, -0.01),  # Downsizer
+                    (1.05, 0, 10, -0.0425),  # Head Hunter
+                    (1.0, 0, 10, -0.05),  # Corporate Raider
+                    (0.9, -0.0225, 10, -0.025),
+                    # Head Honcho
 (0.9, 0, 10, -0.03))  # Robber Baron
 
 class SuitPage(ShtikerPage.ShtikerPage):
@@ -336,7 +352,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
     def makePanels(self):
         self.panels = []
         base.panels = []
-        xStart = -0.66
+        xStart = -1.66
         yStart = -0.18
         xOffset = 0.199
         yOffset = 0.2272
