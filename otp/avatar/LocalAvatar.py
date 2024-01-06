@@ -439,6 +439,10 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     def setWalkSpeedNormal(self):
         self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonJumpForce, OTPGlobals.ToonReverseSpeed, OTPGlobals.ToonRotateSpeed)
 
+    def setWalkSpeedFast(self):
+        self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeedFast, OTPGlobals.ToonJumpForce,
+                                      OTPGlobals.ToonReverseSpeedFast, OTPGlobals.ToonRotateSpeedFast)
+
     def setWalkSpeedSlow(self):
         self.controlManager.setSpeeds(OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonJumpSlowForce, OTPGlobals.ToonReverseSlowSpeed, OTPGlobals.ToonRotateSlowSpeed)
 

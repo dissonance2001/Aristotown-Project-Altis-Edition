@@ -1107,17 +1107,17 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             self.isElite = True
         if type is None:
             if ZoneUtil.isCogHQZone(self.zoneId):
-                typeChoices = range(max(level - 12, 1), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
+                typeChoices = range(max(level - 13, 1), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
                 type = random.choice(typeChoices)
                 if random.random() < self.HQ_SKELE_CHANCE:
                     self.skeleChance = 1
             else:
-                typeChoices = range(max(level - 12, 1), min(level, self.MAX_SUIT_TYPES) + 1)
+                typeChoices = range(max(level - 13, 1), min(level, self.MAX_SUIT_TYPES) + 1)
                 type = random.choice(typeChoices)
         if level > 20:
             pass
         else:
-            level = min(max(level, type), type + 12)
+            level = min(max(level, type), type + 13)
         if track is None:
             track = SuitDNA.suitDepts[SuitBattleGlobals.pickFromFreqList(self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_TRACK])]
         self.notify.debug('pickLevelTypeAndTrack: %s %s %s' % (level, type, track))
