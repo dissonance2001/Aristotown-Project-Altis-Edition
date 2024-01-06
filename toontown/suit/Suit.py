@@ -1871,72 +1871,57 @@ class Suit(Avatar.Avatar):
             #self.generateFlunky()
             self.generateHead('flunky')
             self.generateHead('glasses')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickman-zero.bam', 'phase_12/models/char/suits/ttcc_ene_derrickman-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickman-neutral.bam')
             self.setHeight(4.88)
         elif dna.name == 'p':
             self.scale = 3.35 / bSize
             self.handColor = SuitDNA.corpPolyColor
             self.generateBody()
-            #self.generatePencilPusher()
             self.generateHead('pencilpusher')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(5.0)
         elif dna.name == 'ym':
             self.scale = 4.125 / aSize
             self.handColor = SuitDNA.corpPolyColor
             self.generateBody()
-            #self.generateYesman()
             self.generateHead('yesman')
             texture = loader.loadTexture('phase_4/maps/yes_man.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(5.28)
         elif dna.name == 'mm':
             self.scale = 2.5 / cSize
             self.handColor = SuitDNA.corpPolyColor
             self.generateFemaleBody()
-            #self.generateMicromanager()
             self.generateHead('micromanager')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(3.25)
         elif dna.name == 'ds':
             self.scale = 4.5 / bSize
             self.handColor = VBase4(0.388, 0.388, 0.388, 1)
             self.generateBody()
-            #self.generateDownsizer()
             self.generateHead('beancounter')
             texture = loader.loadTexture('phase_4/maps/downsizer.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(6.08)
         elif dna.name == 'hh':
             self.scale = 6.5 / aSize
             self.handColor = SuitDNA.corpPolyColor
             self.generateBody()
-            #self.generateHeadHunter()
             self.generateHead('headhunter')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(7.45)
         elif dna.name == 'cr':
             self.scale = 6.75 / cSize
             self.handColor = SuitDNA.corpPolyColor
             self.generateBody()
-            #self.generateCorporateRaider()
             self.generateHead('flunky')
             texture = loader.loadTexture('phase_4/maps/corporate-raider.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_mouthpiece-zero.bam', 'phase_11/models/char/suits/ttcc_ene_mouthpiece-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_mouthpiece-neutral.bam')
             self.setHeight(8.23)
         elif dna.name == 'tbc':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.749, 0.859, 0.525, 1.0)
             self.generateBody()
-            #self.generateBigCheese()
             self.generateHead('bigcheese')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_mouthpiece-zero.bam', 'phase_11/models/char/suits/ttcc_ene_mouthpiece-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_mouthpiece-neutral.bam')
             self.setHeight(9.34)
         elif dna.name == 'trb':
             self.scale = 5.75 / aSize
@@ -1946,7 +1931,6 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_4/maps/voodoo_programmer.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_mouthpiece-zero.bam', 'phase_11/models/char/suits/ttcc_ene_mouthpiece-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_mouthpiece-neutral.bam')
             self.setHeight(7.23)
         elif dna.name == 'dot':
             self.scale = 6.5 / aSize
@@ -1956,7 +1940,6 @@ class Suit(Avatar.Avatar):
             self.generateHead2('telemarketer')
             self.headTexture = 'DS_hat.png'
             self.generateHead2('hatjp187187')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_mouthpiece-zero.bam', 'phase_11/models/char/suits/ttcc_ene_mouthpiece-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_mouthpiece-neutral.bam')
             self.setHeight(8.54)
         elif dna.name == 'dvg':
             self.scale = 7.0 / aSize
@@ -1971,48 +1954,40 @@ class Suit(Avatar.Avatar):
             self.generateHead2('antenna_ball')
             self.generateHead2('eye_mouth')
             self.generateHead2('pupils')
-            #self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.7)
         elif dna.name == 'cpl':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.749, 0.647, 0.518, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead('bigwig')
             texture = loader.loadTexture('phase_4/maps/affiliate.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.7)
         elif dna.name == 'bkp':
             self.scale = 5.0 / aSize
             self.handColor = VBase4(0.749, 0.647, 0.518, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead('yesman')
             texture = loader.loadTexture('phase_4/maps/bookkeeper.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead('downsizerHat')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(6.7)
         elif dna.name == 'kpn':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.749, 0.647, 0.518, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead('yesman')
             texture = loader.loadTexture('phase_4/maps/enforcer.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.7)
         elif dna.name == 'cg':
             self.scale = 4.5 / aSize
             self.handColor = VBase4(0.573, 0.384, 0.204, 1)
             self.generateBody()
             self.generateHead('derrickman', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(6.0)
         elif dna.name == 'bg':
             self.scale = 7.0 / aSize
@@ -2020,7 +1995,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('derrickhand', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(9.5)
             self.setTransparency(1)
         elif dna.name == 'msr':
@@ -2028,7 +2002,6 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateSkeletonBody()
             self.generateHead('derrickhand_skele', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(9.5)
             self.isSkeleton = 1
             self.makeAutocaddie()
@@ -2040,7 +2013,6 @@ class Suit(Avatar.Avatar):
             self.generateHead('autocaddie', animated=True)
             self.makeAutocaddie()
             self.isSkeleton = 1
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(6.0)
         elif dna.name == 'ts':
             self.scale = 7.0 / aSize
@@ -2048,7 +2020,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('clubpresident', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.7)
         elif dna.name == 'tc':
             self.scale = 5.5 / aSize
@@ -2056,7 +2027,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeGatekeeper()
             self.generateHead('gatekeeper', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_barrister-zero.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral.bam')
             self.setHeight(6.9)
         elif dna.name == 'tg':
             self.scale = 7.5 / aSize
@@ -2064,7 +2034,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeFirestarter()
             self.generateHead('firestarter', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_chainsaw-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chainsaw-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_chainsaw-neutral.bam')
             self.setHeight(10.5)
             self.setTransparency(1)
         elif dna.name == 'tb':
@@ -2073,7 +2042,6 @@ class Suit(Avatar.Avatar):
             self.generateHighRollerBody()
             self.makeHighRoller()
             self.generateHead('majorplayer', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'adc':
@@ -2085,7 +2053,6 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_a.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_ottoman-zero.bam', 'phase_14/models/char/suits/ttcc_ene_ottoman-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_ottoman-neutral.bam')
             self.setHeight(11.0)
             self.setTransparency(1)
         elif dna.name == 'drm':
@@ -2094,7 +2061,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeChainsaw()
             self.generateHead('chainsaw_b', animated=True)
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_ottoman-zero.bam', 'phase_14/models/char/suits/ttcc_ene_ottoman-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_ottoman-neutral.bam')
             self.setHeight(11.0)
             self.setTransparency(1)
         elif dna.name == 'cp':
@@ -2103,7 +2069,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('dola', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(7.5)
             self.setTransparency(1)
         elif dna.name == 'fbd':
@@ -2112,7 +2077,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('dold', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'frs':
@@ -2124,7 +2088,6 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_wiretapper.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_9/models/char/suits/ttcc_ene_prethinker-zero.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral-hurt.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral.bam')
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'gtk':
@@ -2133,7 +2096,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('prethinker', animated=True)
-            # self.generateClashHead('phase_9/models/char/suits/ttcc_ene_prethinker-zero.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral-hurt.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral.bam')
             self.setHeight(9.1)
             self.setTransparency(1)
         elif dna.name == 'bf':
@@ -2141,14 +2103,12 @@ class Suit(Avatar.Avatar):
             self.handColor = SuitDNA.legalPolyColor
             self.generateBody()
             self.generateHead('pettifogger', animated=True)
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_dola-zero.bam', 'phase_14/models/char/suits/ttcc_ene_dola-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_dola-neutral.bam')
             self.setHeight(5.6)
         elif dna.name == 'b':
             self.scale = 4.25 / aSize
             self.handColor = SuitDNA.legalPolyColor
             self.generateBody()
             self.generateHead('doubletalker', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(5.63)
         elif dna.name == 'dt':
             self.scale = 4.75 / aSize
@@ -2156,71 +2116,60 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.generateBelt()
             self.generateHead('conveyancer', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_shyster-zero.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral.bam')
             self.setHeight(6.4)
         elif dna.name == 'ac':
             self.scale = 5.0 / cSize
             self.handColor = VBase4(0.255, 0.318, 0.549, 1)
             self.generateFemaleBody()
             self.generateHead('needlenose', animated=True)
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_dola-zero.bam', 'phase_14/models/char/suits/ttcc_ene_dola-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_dola-neutral.bam')
             self.setHeight(6.6)
         elif dna.name == 'bs':
             self.scale = 4.5 / aSize
             self.handColor = VBase4(0.647, 0.639, 0.788, 1)
             self.generateBody()
             self.generateHead('backstabber', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(6.71)
         elif dna.name == 'sd':
             self.scale = 5.65 / bSize
             self.handColor = VBase4(0.678, 0.91, 0.808, 1)
             self.generateBody()
             self.generateHead('spin_doctor', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_advocate-zero.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral.bam')
             self.setHeight(7.9)
         elif dna.name == 'le':
             self.scale = 5.65 / bSize
             self.handColor = VBase4(0.647, 0.639, 0.788, 1)
             self.generateFemaleBody()
             self.generateHead('shyster', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_shyster-zero.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral.bam')
             self.setHeight(7.4)
         elif dna.name == 'bw':
             self.scale = 5.5 / cSize
             self.handColor = VBase4(0.098, 0.098, 0.153, 1)
             self.generateBody()
             self.generateHead('advocate', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_shyster-zero.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral.bam')
             self.setHeight(7.0)
         elif dna.name == 'brv':
             self.scale = 6.8 / aSize
             self.handColor = VBase4(0.25, 0.25, 0.5, 1.0)
             self.generateBody()
             self.generateHead('legal_eagle', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_advocate-zero.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral.bam')
             self.setHeight(8.57)
         elif dna.name == 'sb':
             self.scale = 6.9 / aSize
             self.handColor = VBase4(1, 1, 1, 1)
             self.generateBody()
             self.generateHead('barrister', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_barrister-zero.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral.bam')
             self.setHeight(8.3)
         elif dna.name == 'cfp':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.573, 0.557, 0.761, 1)
             self.generateBody()
             self.generateHead('bigwig', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_barrister-zero.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral.bam')
             self.setHeight(8.69)
         elif dna.name == 'arb':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.584, 0.573, 0.671, 1)
             self.generateFemaleBody()
-            #self.generateMolder()
             self.generateHead('clo', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.7)
         elif dna.name == 'sjg':
             self.scale = 7.0 / aSize
@@ -2230,15 +2179,12 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_3.5/maps/mingler.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.7)
         elif dna.name == 'lsc':
             self.scale = 6.0 / aSize
             self.handColor = VBase4(0.412, 0.482, 0.737, 1)
             self.generateFemaleBody()
-            #self.generateMolder()
             self.generateHead('judy', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(7.7)
         elif dna.name == 'jdg':
             self.scale = 6.0 / bSize
@@ -2246,7 +2192,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeBoardbotManager()
             self.generateHead('dola', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_clo-zero.bam', 'phase_11/models/char/suits/ttcc_ene_clo-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_clo-neutral.bam')
             self.setHeight(8.0)
         elif dna.name == 'jur':
             self.scale = 7.5 / aSize
@@ -2254,25 +2199,18 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeBoardbotManager()
             self.generateHead('dold', animated=True)
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_dold-zero.bam', 'phase_14/models/char/suits/ttcc_ene_dold-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_dold-neutral.bam')
             self.setTransparency(1)
             self.setHeight(9.81)
         elif dna.name == 'tlr':
             self.scale = 4.5 / aSize
             self.handColor = VBase4(1, 0.486, 0, 1)
-            self.generateBody()
-            self.makeSkeleton()
-            self.generateHead('skullA', animated=True)
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_dold-zero.bam', 'phase_14/models/char/suits/ttcc_ene_dold-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_dold-neutral.bam')
+            self.generateSkeletonBody()
             self.setTransparency(1)
             self.setHeight(6.0)
         elif dna.name == 'cm':
             self.scale = 7.2 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.generateBody()
-            self.makeSkeleton()
-            self.generateHead('skullB', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_litigator-zero.bam', 'phase_11/models/char/suits/ttcc_ene_litigator-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_litigator-neutral.bam')
+            self.generateSkeletonBody()
             self.setTransparency(1)
             self.setHeight(8.7)
         elif dna.name == 'ggm':
@@ -2281,7 +2219,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeExecutive()
             self.generateHead('mouthpiece', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_witchhunter-zero.bam', 'phase_11/models/char/suits/ttcc_ene_witchhunter-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_witchhunter-neutral.bam')
             self.setHeight(6.8)
         elif dna.name == 'th':
             self.scale = 5.5 / bSize
@@ -2289,7 +2226,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeExecutive()
             self.generateHead('rainmaker', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(7.5)
             self.setTransparency(1)
         elif dna.name == 'kc':
@@ -2298,7 +2234,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('witchhunter', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(8.0)
             self.setTransparency(1)
         elif dna.name == 'tr':
@@ -2307,7 +2242,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeGovernaught()
             self.generateHead('counterclaim', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(8.69)
             self.setTransparency(1)
         elif dna.name == 'mp':
@@ -2316,7 +2250,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('redd', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(7.69)
             self.setTransparency(1)
         elif dna.name == 'laa':
@@ -2324,7 +2257,6 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateSkeletonBody()
             self.makeWSI()
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(8.69)
             self.setTransparency(1)
         elif dna.name == 'scg':
@@ -2341,7 +2273,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('casemanager', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_casemanager-zero.bam', 'phase_11/models/char/suits/ttcc_ene_casemanager-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_casemanager-neutral.bam')
             self.setHeight(8.2)
             self.setTransparency(1)
         elif dna.name == 'ste':
@@ -2350,7 +2281,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeExecutive()
             self.generateHead('stenographer', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_stenographer-zero.bam', 'phase_11/models/char/suits/ttcc_ene_stenographer-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_stenographer-neutral.bam')
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'lit':
@@ -2359,81 +2289,63 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('litigator', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_litigator-zero.bam', 'phase_11/models/char/suits/ttcc_ene_litigator-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_litigator-neutral.bam')
             self.setTransparency(1)
             self.setHeight(9.4)
         elif dna.name == 'sc':
             self.scale = 3.0 / cSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
-            #self.generateShortChange()
             self.generateHead('coldcaller')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(4.5)
         elif dna.name == 'pp':
             self.scale = 3.55 / aSize
             self.handColor = VBase4(1.0, 0.5, 0.6, 1.0)
             self.generateBody()
-            #self.generatePennyPincher()
             self.generateHead('pennypincher')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(5.26)
         elif dna.name == 'tw':
             self.scale = 4.5 / cSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
-            #self.generateTightwad()
             self.generateHead('tightwad')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(5.41)
         elif dna.name == 'bc':
             self.scale = 4.4 / bSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
-            #self.generateBeanCounter()
             self.generateHead('beancounter')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(5.95)
         elif dna.name == 'nc':
             self.scale = 5.25 / aSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateFemaleBody()
-            #self.generateNumberCruncher()
             self.generateHead('numbercruncher')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(7.22)
         elif dna.name == 'mb':
             self.scale = 5.3 / cSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
-            #self.generateMoneyBags()
             self.generateHead('moneybags')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(6.97)
         elif dna.name == 'ls':
             self.scale = 6.5 / bSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
-            #self.generateLoanShark()
             self.generateHead2('loanshark')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(8.58)
         elif dna.name == 'rb':
             self.scale = 7.0 / aSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
-            #self.generateRobberBaron()
             self.generateHead('yesman', animated=False)
             texture = loader.loadTexture('phase_4/maps/robber-baron.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(8.95)
         elif dna.name == 'gm':
             self.scale = 7.0 / bSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateSkeletonBody()
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(8.58)
         elif dna.name == 'ad':
             self.scale = 7.0 / aSize
@@ -2443,45 +2355,35 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_3.5/maps/mingler3.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            #self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(9.0)
         elif dna.name == 'cvy':
             self.scale = 7.0 / cSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateSkeletonBody()
-            #self.generateHead('skullC', animated=True)
-            #self.setSuitClothesSkeleton()
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(8.95)
         elif dna.name == 'ptr':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.616, 0.761, 0.576, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead('twoface')
             texture = loader.loadTexture('phase_3.5/maps/consig.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(9.0)
         elif dna.name == 'mld':
             self.scale = 7.5 / cSize
             self.handColor = VBase4(0.608, 0.008, 0.204, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead('bigfish')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(10.7)
         elif dna.name == 'pht':
             self.scale = 6.0 / bSize
             self.handColor = VBase4(0.616, 0.761, 0.576, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead('movershaker')
             texture = loader.loadTexture('phase_3.5/maps/enter.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.2)
         elif dna.name == 'csh':
             self.scale = 4.5 / aSize
@@ -2489,14 +2391,11 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeSkeleton()
             self.generateHead('skullA', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(6.0)
         elif dna.name == 'bgr':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(0.286, 0.29, 0.286, 1)
             self.generateSkeletonBody()
-            #self.generateHead('skullC', animated=True)
-            # self.generateClashHead('phase_9/models/char/suits/ttcc_ene_multislacker-zero.bam', 'phase_9/models/char/suits/ttcc_ene_multislacker-neutral-hurt.bam', 'phase_9/models/char/suits/ttcc_ene_multislacker-neutral.bam')
             self.setHeight(9.0)
             self.makeExecutive()
             self.setTransparency(1)
@@ -2505,7 +2404,6 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(1.0, 0.5, 0.6, 1.0)
             self.generateBody()
             self.generateHead('duckshuffler', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_majorplayer-zero.bam', 'phase_12/models/char/suits/ttcc_ene_majorplayer-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_majorplayer-neutral.bam')
             self.setHeight(7.0)
             self.setTransparency(1)
         elif dna.name == 'dm':
@@ -2520,8 +2418,6 @@ class Suit(Avatar.Avatar):
             self.scale = 5.5 / cSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateSkeletonBody()
-            #self.generateHead('skullC', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(6.97)
             self.makeExecutive()
             self.setTransparency(1)
@@ -2529,8 +2425,6 @@ class Suit(Avatar.Avatar):
             self.scale = 6.5 / bSize
             self.handColor = VBase4(0.529, 0.455, 0.369, 1)
             self.generateSkeletonBody()
-            #self.generateHead('skullB', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_majorplayer-zero.bam', 'phase_12/models/char/suits/ttcc_ene_majorplayer-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_majorplayer-neutral.bam')
             self.setHeight(7.5)
             self.makeExecutive()
             self.setTransparency(1)
@@ -2538,8 +2432,6 @@ class Suit(Avatar.Avatar):
             self.scale = 6.75 / cSize
             self.handColor = VBase4(0.5, 1, 0, 1.0)
             self.generateSkeletonBody()
-            #self.generateHead('skullC', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand_skele-zero.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand_skele-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand_skele-neutral.bam')
             self.setHeight(8.23)
             self.makeExecutive()
             self.setTransparency(1)
@@ -2547,8 +2439,6 @@ class Suit(Avatar.Avatar):
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateSkeletonBody()
-            #self.generateHead('skullA', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(8.95)
             self.makeExecutive()
             self.setTransparency(1)
@@ -2556,8 +2446,6 @@ class Suit(Avatar.Avatar):
             self.scale = 5.25 / aSize
             self.handColor = VBase4(0.286, 0.29, 0.286, 1)
             self.generateSkeletonBody()
-            #self.generateHead('skullA', animated=True)
-            # self.generateClashHead('phase_9/models/char/suits/ttcc_ene_multislacker-zero.bam', 'phase_9/models/char/suits/ttcc_ene_multislacker-neutral-hurt.bam', 'phase_9/models/char/suits/ttcc_ene_multislacker-neutral.bam')
             self.setHeight(7.22)
             self.makeExecutive()
             self.setTransparency(1)
@@ -2567,7 +2455,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makePlutocrat()
             self.generateHead('plutocrat', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(5.0)
             self.setTransparency(1)
         elif dna.name == 'dsf':
@@ -2576,7 +2463,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeCountErfit()
             self.generateHead('counterclaim', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'msp':
@@ -2585,7 +2471,6 @@ class Suit(Avatar.Avatar):
             self.generateHighRollerBody()
             self.makeHighRollerWhite()
             self.generateHead('highroller', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(10.0)
         elif dna.name == 'mad':
             self.scale = 7.3 / aSize
@@ -2593,7 +2478,6 @@ class Suit(Avatar.Avatar):
             self.generateHighRollerBody()
             self.makeHighRoller()
             self.generateHead('duckshuffler', animated=True)
-            # self.generateClashHead('phase_10/models/char/suits/ttcc_ene_duckshuffler-zero.bam', 'phase_10/models/char/suits/ttcc_ene_duckshuffler-neutral-hurt.bam', 'phase_10/models/char/suits/ttcc_ene_duckshuffler-neutral.bam')
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'crf':
@@ -2602,7 +2486,6 @@ class Suit(Avatar.Avatar):
             self.generateHighRollerBody()
             self.makeHighRoller()
             self.generateHead('highroller', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'cc':
@@ -2610,93 +2493,73 @@ class Suit(Avatar.Avatar):
             self.headColor = VBase4(0.25, 0.35, 1.0, 1.0)
             self.handColor = VBase4(0.55, 0.65, 1.0, 1.0)
             self.generateBody()
-            #self.generateColdCaller()
             self.generateHead('coldcaller')
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_dola-zero.bam', 'phase_14/models/char/suits/ttcc_ene_dola-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_dola-neutral.bam')
             self.setHeight(4.63)
         elif dna.name == 'tm':
             self.scale = 3.75 / bSize
             self.handColor = VBase4(0.965, 0.859, 0.831, 1)
             self.generateBody()
-            #self.generateTelemarketer()
             self.generateHead('telemarketer')
             texture = loader.loadTexture('phase_4/maps/telemarketer.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_shyster-zero.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral.bam')
             self.setHeight(5.24)
         elif dna.name == 'nd':
             self.scale = 4.35 / aSize
             self.handColor = SuitDNA.salesPolyColor
             self.generateFemaleBody()
-            #self.generateNameDropper()
             self.generateHead('numbercruncher')
             texture = loader.loadTexture('phase_3.5/maps/name-dropper.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(5.98)
         elif dna.name == 'gh':
             self.scale = 4.75 / cSize
             self.handColor = VBase4(0.918, 0.886, 0.875, 1)
             self.generateBody()
-            #self.generateGladHander()
             self.generateHead('gladhander')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_advocate-zero.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral.bam')
             self.setHeight(6.4)
         elif dna.name == 'ms':
             self.scale = 4.75 / bSize
             self.handColor = VBase4(0.965, 0.859, 0.831, 1)
             self.generateBody()
-            #self.generateMoverShaker()
             self.generateHead('movershaker')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_shyster-zero.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral.bam')
             self.setHeight(6.7)
         elif dna.name == 'tf':
             self.scale = 5.25 / aSize
             self.handColor = VBase4(0.965, 0.859, 0.831, 1)
             self.generateBody()
-            #self.generateTwoFace()
             self.generateHead('twoface')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_shyster-zero.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral.bam')
             self.setHeight(6.95)
         elif dna.name == 'm':
             self.scale = 5.75 / aSize
             self.handColor = VBase4(0.918, 0.808, 0.871, 1)
             self.generateFemaleBody()
-            #self.generateMingler()
             self.generateHead('twoface')
             texture = loader.loadTexture('phase_4/maps/mingler2.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_advocate-zero.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral.bam')
             self.setHeight(7.61)
         elif dna.name == 'mh':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.918, 0.886, 0.875, 1)
             self.generateBody()
-            #self.generateHollywood()
             self.generateHead('yesman')
             self.generateHead('shades')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_advocate-zero.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral.bam')
             self.setHeight(8.95)
         elif dna.name == 'ka':
             self.scale = 5.0 / aSize
             self.handColor = VBase4(0.255, 0.318, 0.549, 1)
             self.generateSkeletonBody()
-            #self.generateHead('needlenose', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_advocate-zero.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral.bam')
             self.setHeight(6.45)
         elif dna.name == 'mka':
             self.scale = 6.0 / aSize
             self.handColor = VBase4(0.992, 0.851, 0.757, 1)
             self.generateBody()
-            #self.generateYesman()
             self.generateHead('yesman')
             texture = loader.loadTexture('phase_4/maps/mr_hollywood1.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_advocate-zero.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_advocate-neutral.bam')
             self.setHeight(7.95)
         elif dna.name == 'trm':
             self.scale = 7.0 / cSize
@@ -2706,38 +2569,31 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_4/maps/mademan.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(8.5)
         elif dna.name == 'ssm':
             self.scale = 5.75 / aSize
             self.handColor = VBase4(0.373, 0.286, 0.227, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead('numbercruncher')
             texture = loader.loadTexture('phase_4/maps/software-simian.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(7.5)
         elif dna.name == 'isw':
             self.scale = 6.0 / bSize
             self.handColor = VBase4(0.918, 0.796, 0.996, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead('movershaker')
             texture = loader.loadTexture('phase_4/maps/installation-wizard.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.1)
         elif dna.name == 'ssr':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.522, 0.482, 0.435, 1)
             self.generateBody()
-            #self.generateMolder()
             self.headTexture = 'rootuser.jpg'
             self.generateHead2('telemarketer')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(9.0)
         elif dna.name == 'fas':
             self.scale = 4.5 / aSize
@@ -2745,7 +2601,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeBoardbotManager()
             self.generateHead('dold', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_rainmaker-zero.bam', 'phase_11/models/char/suits/ttcc_ene_rainmaker-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_rainmaker-neutral.bam')
             self.setHeight(6.0)
             self.setTransparency(1)
         elif dna.name == 'mdr':
@@ -2755,24 +2610,21 @@ class Suit(Avatar.Avatar):
             self.makeSkeleton()
             self.makeDOPA()
             self.generateHead('skullA', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_chainsaw-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chainsaw-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_chainsaw-neutral.bam')
             self.setHeight(9.5)
             self.setTransparency(1)
         elif dna.name == 'nar':
             self.scale = 6.0 / cSize
             self.handColor = VBase4(0.369, 0.369, 0.369, 1)
-            self.generateBody()
-            self.makeSkeleton()
-            self.makeDOPA()
+            self.generateSkeletonBody()
             self.generateHead('dopr', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(7.8)
+            self.isSkeleton = 1
+            self.makeDOPA()
         elif dna.name == 'fd':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(1, 1, 1, 1.0)
             self.generateSkeletonBody()
             self.generateHead('dopa', animated=True)
-            # self.generateClashHead('phase_9/models/char/suits/ttcc_ene_dopa-zero.bam', 'phase_9/models/char/suits/ttcc_ene_dopa-hurt.bam', 'phase_9/models/char/suits/ttcc_ene_dopa-neutral.bam')
             self.setHeight(9.5)
             self.isSkeleton = 1
             self.makeDOPA()
@@ -2783,21 +2635,18 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeDeepDiver()
             self.generateHead('deepdiver', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_barrister-zero.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral.bam')
             self.setHeight(10.0)
         elif dna.name == 'jb':
             self.scale = 5.0 / bSize
             self.handColor = VBase4(0.886, 0.749, 0.451, 1)
             self.generateBody()
             self.generateHead('bellringer', animated=True)
-            # self.generateClashHead('phase_5/models/char/suitA_skeleton_skull-zero.bam', 'phase_5/models/char/suitA_skeleton_skull-neutral-hurt.bam', 'phase_5/models/char/suitA_skeleton_skull-neutral.bam')
             self.setHeight(6.8)
         elif dna.name == 'jg':
             self.scale = 4.5 / cSize
             self.handColor = VBase4(1, 1, 1, 1.0)
             self.generateBody()
             self.generateHead('dummy', animated=True)
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_dola-zero.bam', 'phase_14/models/char/suits/ttcc_ene_dola-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_dola-neutral.bam')
             self.setHeight(7.0)
         elif dna.name == 'jr':
             self.scale = 5.0 / bSize
@@ -2805,7 +2654,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makePrethinker()
             self.generateHead('prethinker', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(6.5)
             self.setTransparency(1)
         elif dna.name == 'prr':
@@ -2814,7 +2662,6 @@ class Suit(Avatar.Avatar):
             self.generateHighRollerBody()
             self.makeHighRoller()
             self.generateHead('multislacker', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'blr':
@@ -2823,7 +2670,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('counterclaim', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'dvp':
@@ -2832,7 +2678,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeExecutive()
             self.generateHead('mouthpiece', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_rainmaker-zero.bam', 'phase_11/models/char/suits/ttcc_ene_rainmaker-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_rainmaker-neutral.bam')
             self.setHeight(9.5)
             self.setTransparency(1)
         elif dna.name == 'dsk':
@@ -2841,7 +2686,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('firestarter', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_chainsaw-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chainsaw-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_chainsaw-neutral.bam')
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'ffm':
@@ -2850,7 +2694,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makePlutocrat()
             self.generateHead('plutocrat', animated=True)
-            # self.generateClashHead('phase_9/models/char/suits/ttcc_ene_prethinker-zero.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral-hurt.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral.bam')
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'sft':
@@ -2859,113 +2702,92 @@ class Suit(Avatar.Avatar):
             self.generatePaceBody()
             self.makePacesetter()
             self.generateHead('pacesetter', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_chainsaw_b-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chainsaw_b-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_chainsaw_b-neutral.bam')
             self.setHeight(8.5)
         elif dna.name == 'ca':
             self.scale = 4.0 / cSize
             self.handColor = SuitDNA.boardPolyColor
             self.generateBody()
-            #self.generateConArtist()
             self.generateHead('flunky')
             texture = loader.loadTexture('phase_3.5/maps/conartist.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead('beret')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(4.88)
         elif dna.name == 'cn':
             self.scale = 3.75 / bSize
             self.handColor = VBase4(0.95, 0.95, 1.0, 1.0)
             self.generateBody()
-            #self.generateConnoisseur()
             self.generateHead2('connoisseur_hat')
             self.generateHead2('connoisseur_head')
             self.generateHead2('connoisseur_monocle')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_shyster-zero.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral.bam')
             self.setHeight(5.24)
         elif dna.name == 'sw':
             self.scale = 4.34 / aSize
             self.handColor = SuitDNA.boardPolyColor
             self.generateBody()
-            #self.generateSwindler()
             self.generateHead('pennypincher')
             texture = loader.loadTexture('phase_3.5/maps/swindler.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(5.45)
         elif dna.name == 'mdm':
             self.scale = 5.0 / aSize
             self.handColor = SuitDNA.boardPolyColor
             self.generateBody()
-            #self.generateMiddleman()
             self.generateHead('twoface')
             texture = loader.loadTexture('phase_3.5/maps/middleman.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(6.7)
         elif dna.name == 'txm':
             self.scale = 5.25 / cSize
             self.handColor = VBase4(0.78, 0.769, 0.02, 1)
             self.generateBody()
-            #self.generateToxicManager()
             self.generateHead('toxicleader')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(7.2)
         elif dna.name == 'mg':
             self.scale = 6.5 / aSize
             self.handColor = VBase4(0.031, 0.035, 0.035, 1)
             self.generateBody()
-            #self.generateMagnate()
             self.generateHead('legaleagle')
             texture = loader.loadTexture('phase_3.5/maps/magnate.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_clubpresident-zero.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_clubpresident-neutral.bam')
             self.setHeight(7.56)
         elif dna.name == 'bfh':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(0.635, 0.62, 0.651, 1)
             self.generateBody()
-            #self.generateBigFish()
             self.generateHead2('bigfish')
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(10.0)
         elif dna.name == 'hho':
             self.scale = 7.0 / aSize
             self.handColor = SuitDNA.boardPolyColor
             self.generateBody()
-            #self.generateHeadHoncho()
             self.generateHead('headhoncho')
             texture = loader.loadTexture('phase_3.5/maps/head-honcho.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.7)
         elif dna.name == 'bdb':
             self.scale = 6.5 / aSize
             self.handColor = VBase4(0.098, 0.098, 0.153, 1)
             self.generateBody()
             self.generateHead('advocate', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_shyster-zero.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_shyster-neutral.bam')
             self.setHeight(8.0)
         elif dna.name == 'bgh':
             self.scale = 6.5 / aSize
             self.handColor = VBase4(0.663, 0.576, 0.569, 1)
             self.generateBody()
-            #self.generateConnoisseur2()
             self.generateHead2('connoisseur_hat')
             self.generateHead2('connoisseur_head')
             self.generateHead2('connoisseur_monocle')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.2)
         elif dna.name == 'dfh':
             self.scale = 6.5 / aSize
             self.handColor = VBase4(0.412, 0.482, 0.737, 1)
             self.generateFemaleBody()
             self.generateHead('needlenose', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_highroller-zero.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_highroller-neutral.bam')
             self.setHeight(8.5)
         elif dna.name == 'rng':
             self.scale = 6.5 / aSize
@@ -2977,23 +2799,18 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.headTexture = 'DS_hat.png'
             self.generateHead2('hatjp187187')
-            #self.generateClashHead('phase_10/models/char/suits/ttcc_ene_loanshark.bam')
             self.setHeight(7.7)
         elif dna.name == 'cps':
             self.scale = 6.5 / aSize
             self.handColor = VBase4(0.306, 0.306, 0.318, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead2('camera')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.2)
         elif dna.name == 'tld':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.882, 0.894, 0.004, 1)
             self.generateBody()
-            #self.generateMolder()
             self.generateHead('toxicleader')
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_needlenose-zero.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_needlenose-neutral.bam')
             self.setHeight(8.7)
         elif dna.name == 'gkp':
             self.scale = 6.0 / bSize
@@ -3001,7 +2818,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeBoardbotManager()
             self.generateHead('dola', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_clo-zero.bam', 'phase_11/models/char/suits/ttcc_ene_clo-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_clo-neutral.bam')
             self.setHeight(8.0)
         elif dna.name == 'ddv':
             self.scale = 7.0 / aSize
@@ -3009,7 +2825,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeBoardbotManager()
             self.generateHead('dold', animated=True)
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_dold-zero.bam', 'phase_14/models/char/suits/ttcc_ene_dold-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_dold-neutral.bam')
             self.setTransparency(1)
             self.setHeight(9.31)
         elif dna.name == 'dty':
@@ -3018,7 +2833,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeDeepDiver()
             self.generateHead('deepdiver', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_barrister-zero.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral.bam')
             self.setHeight(10.0)
         elif dna.name == 'dfg':
             self.scale = 5.5 / aSize
@@ -3026,7 +2840,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeGatekeeper()
             self.generateHead('gatekeeper', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_barrister-zero.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_barrister-neutral.bam')
             self.setHeight(6.9)
         elif dna.name == 'dfr':
             self.scale = 5.0 / bSize
@@ -3034,7 +2847,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeExecutive()
             self.generateHead('mouthpiece', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_witchhunter-zero.bam', 'phase_11/models/char/suits/ttcc_ene_witchhunter-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_witchhunter-neutral.bam')
             self.setHeight(6.8)
         elif dna.name == 'bsh':
             self.scale = 5.5 / aSize
@@ -3042,7 +2854,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeExecutive()
             self.generateHead('dola', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(7.5)
             self.setTransparency(1)
         elif dna.name == 'ghd':
@@ -3051,7 +2862,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('dold', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(8.0)
             self.setTransparency(1)
         elif dna.name == 'tyh':
@@ -3060,7 +2870,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeExecutive()
             self.generateHead('rainmaker', animated=True)
-            # self.generateClashHead('phase_9/models/char/suits/ttcc_ene_prethinker-zero.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral-hurt.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral.bam')
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'jgd':
@@ -3069,7 +2878,6 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeExecutive()
             self.generateHead('rainmaker', animated=True)
-            # self.generateClashHead('phase_9/models/char/suits/ttcc_ene_prethinker-zero.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral-hurt.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral.bam')
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'bby':
@@ -3078,7 +2886,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead('prethinker', animated=True)
-            # self.generateClashHead('phase_9/models/char/suits/ttcc_ene_prethinker-zero.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral-hurt.bam', 'phase_9/models/char/suits/ttcc_ene_prethinker-neutral.bam')
             self.setHeight(9.1)
             self.setTransparency(1)
         elif dna.name == 'dvk':
@@ -3087,7 +2894,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeBoardbotManager()
             self.generateHead('redd', animated=True)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_redd-zero.bam', 'phase_11/models/char/suits/ttcc_ene_redd-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_redd-neutral.bam')
             self.setHeight(8.4)
             self.setTransparency(1)
         elif dna.name == 'otm':
@@ -3096,7 +2902,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeBoardbotManager()
             self.generateHead('ottoman', animated=True)
-            # self.generateClashHead('phase_12/models/char/suits/ttcc_ene_derrickhand-zero.bam', 'phase_12/models/char/suits/ttcc_ene_chairman-derrickhand-hurt.bam', 'phase_12/models/char/suits/ttcc_ene_derrickhand-neutral.bam')
             self.setHeight(8.0)
             self.setTransparency(1)
         elif dna.name == 'cry':
@@ -3108,7 +2913,6 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_crystalline.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            # self.generateClashHead('phase_11/models/char/suits/ttcc_ene_judy-zero.bam', 'phase_11/models/char/suits/ttcc_ene_judy-neutral-hurt.bam', 'phase_11/models/char/suits/ttcc_ene_judy-neutral.bam')
             self.setHeight(9.7)
             self.setTransparency(1)
         elif dna.name == 'tcm':
@@ -3117,7 +2921,6 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeBoardbotManager()
             self.generateHead('chairman-a', animated=True)
-            # self.generateClashHead('phase_14/models/char/suits/ttcc_ene_chairman-a-zero.bam', 'phase_14/models/char/suits/ttcc_ene_chairman-a-neutral-hurt.bam', 'phase_14/models/char/suits/ttcc_ene_chairman-a-neutral.bam')
             self.setHeight(9.7)
             self.setTransparency(1)
         self.setName(SuitBattleGlobals.SuitAttributes[dna.name]['name'])
