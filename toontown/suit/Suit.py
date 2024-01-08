@@ -89,69 +89,57 @@ SuitsCEOBattle = (('sit', 'sit'),
  ('tray-walk', 'tray-walk'),
  ('tray-neutral', 'tray-neutral'),
  ('sit-lose', 'sit-lose'))
-f = (('throw-paper', 'throw-paper', 3.5), ('phone', 'phone', 3.5), ('shredder', 'shredder', 3.5))
-p = (('pencil-sharpener', 'pencil-sharpener', 5),
- ('pen-squirt', 'pen-squirt', 5),
- ('hold-eraser', 'hold-eraser', 5),
- ('finger-wag', 'finger-wag', 5),
- ('hold-pencil', 'hold-pencil', 5))
-ym = (('throw-paper', 'throw-paper', 5),
- ('golf-club-swing', 'golf-club-swing', 5),
- ('magic3', 'magic3', 5),
- ('rubber-stamp', 'rubber-stamp', 5),
- ('smile', 'smile', 5))
-mm = (('speak', 'speak', 5),
- ('effort', 'effort', 5),
- ('magic1', 'magic1', 5),
- ('pen-squirt', 'fountain-pen', 5),
- ('finger-wag', 'finger-wag', 5))
-ds = (('magic1', 'magic1', 5),
- ('magic2', 'magic2', 5),
+f = (('throw-paper', 'throw-paper', 4), ('phone', 'phone', 4), ('shredder', 'shredder', 4))
+p = (('pencil-sharpener', 'pencil-sharpener', 4),
+ ('pen-squirt', 'pen-squirt', 4),
+ ('hold-eraser', 'hold-eraser', 4),
+ ('finger-wag', 'finger-wag', 4),
+ ('hold-pencil', 'hold-pencil', 4))
+ym = (('golf-club-swing', 'golf-club-swing', 4),
+ ('magic3', 'magic3', 4),
+ ('rubber-stamp', 'rubber-stamp', 4),
+ ('smile', 'smile', 4))
+mm = (('speak', 'speak', 4),
+ ('effort', 'effort', 4),
+ ('magic1', 'magic1', 4),
+ ('pen-squirt', 'fountain-pen', 4),
+ ('finger-wag', 'finger-wag', 4))
+ds = (('magic2', 'magic2', 5),
  ('throw-paper', 'throw-paper', 5),
  ('magic3', 'magic3', 5))
-hh = (('pen-squirt', 'fountain-pen', 7),
- ('glower', 'glower', 5),
- ('throw-paper', 'throw-paper', 5),
- ('magic1', 'magic1', 5),
- ('magic3', 'magic3', 5),
- ('roll-o-dex', 'roll-o-dex', 5))
-cr = (('pickpocket', 'pickpocket', 5), ('throw-paper', 'throw-paper', 3.5), ('glower', 'glower', 5))
-tbc = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-       ('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-trb = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-       ('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-dot = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
-       ('speak', 'speak', 4),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-dvg = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-cpl = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-bkp = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-kpn = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
+hh = (('pen-squirt', 'fountain-pen', 4),
+ ('glower', 'glower', 4),
+ ('throw-paper', 'throw-paper', 4),
+ ('magic1', 'magic1', 4),
+ ('magic3', 'magic3', 4),
+ ('roll-o-dex', 'roll-o-dex', 4))
+cr = (('pickpocket', 'pickpocket', 4), ('throw-paper', 'throw-paper', 4), ('glower', 'glower', 4))
+tbc = (('cigar-smoke', 'cigar-smoke', 4),
+ ('glower', 'glower', 4),
+       ('magic1', 'magic1', 4),
+ ('golf-club-swing', 'golf-club-swing', 4))
+trb = (('cigar-smoke', 'cigar-smoke', 4),
+ ('glower', 'glower', 4),
+       ('magic1', 'magic1', 4),
+ ('phone', 'phone', 4))
+dot = (('glower', 'glower', 4),
+        ('magic2', 'magic2', 4),
+       ('speak', 'speak', 4))
+dvg = (('cigar-smoke', 'cigar-smoke', 4),
+ ('glower', 'glower', 4),
+ ('song-and-dance', 'song-and-dance', 4),
+ ('golf-club-swing', 'golf-club-swing', 4))
+cpl = (('phone', 'phone', 4),
+ ('magic2', 'magic2', 4),
+('throw-paper', 'throw-paper', 4))
+bkp = (('cigar-smoke', 'cigar-smoke', 4),
+       ('magic1', 'magic1', 4),
+       ('throw-object', 'throw-object', 4),
+       ('throw-paper', 'throw-paper', 4))
+kpn = (('cigar-smoke', 'cigar-smoke', 4),
+        ('glower', 'glower', 4),
+        ('magic3', 'magic3', 4),
+        ('smile', 'smile', 4))
 cg = (('pen-squirt', 'fountain-pen', 4),
       ('throw-paper', 'throw-paper', 4),
       ('quick-jump', 'jump', 4),
@@ -295,69 +283,56 @@ gtk = (('throw-object', 'throw-object', 4),
       ('magic2', 'magic2', 4),
       ('speak', 'speak', 4),
       ('cease', 'cease', 4))
-cc = (('speak', 'speak', 5),
- ('glower', 'glower', 5),
- ('phone', 'phone', 3.5),
- ('finger-wag', 'finger-wag', 5))
-tm = (('speak', 'speak', 5),
- ('throw-paper', 'throw-paper', 5),
- ('pickpocket', 'pickpocket', 5),
- ('phone', 'phone', 5),
- ('roll-o-dex', 'roll-o-dex', 5),
- ('finger-wag', 'finger-wag', 5))
-nd = (('pickpocket', 'pickpocket', 5),
- ('roll-o-dex', 'roll-o-dex', 5),
- ('magic3', 'magic3', 5),
- ('smile', 'smile', 5))
-gh = (('speak', 'speak', 5), ('pen-squirt', 'fountain-pen', 5), ('rubber-stamp', 'rubber-stamp', 5))
-ms = (('effort', 'effort', 5),
- ('throw-paper', 'throw-paper', 5),
- ('stomp', 'stomp', 5),
- ('quick-jump', 'jump', 6))
-tf = (('phone', 'phone', 5),
- ('smile', 'smile', 5),
- ('throw-object', 'throw-object', 5),
- ('magic3', 'magic3', 5),
- ('glower', 'glower', 5))
-m = (('speak', 'speak', 5),
- ('magic2', 'magic2', 5),
- ('magic1', 'magic1', 5),
- ('golf-club-swing', 'golf-club-swing', 5))
-mh = (('magic1', 'magic1', 5),
- ('smile', 'smile', 5),
- ('magic2', 'magic2', 5),
- ('speak', 'speak', 5),
- ('golf-club-swing', 'golf-club-swing', 5),
- ('song-and-dance', 'song-and-dance', 8))
+cc = (('speak', 'speak', 4),
+    ('glower', 'glower', 4),
+    ('phone', 'phone', 4))
+tm = (('speak', 'speak', 4),
+ ('throw-paper', 'throw-paper', 4),
+ ('pickpocket', 'pickpocket', 4),
+ ('phone', 'phone', 4),
+ ('roll-o-dex', 'roll-o-dex', 4),
+ ('finger-wag', 'finger-wag', 4))
+nd = (('pickpocket', 'pickpocket', 4),
+ ('roll-o-dex', 'roll-o-dex', 4),
+ ('magic3', 'magic3', 4),
+ ('smile', 'smile', 4))
+gh = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
+ms = (('effort', 'effort', 4),
+ ('throw-paper', 'throw-paper', 4),
+ ('stomp', 'stomp', 4),
+ ('quick-jump', 'jump', 4))
+tf = (('phone', 'phone', 4),
+ ('smile', 'smile', 4),
+ ('throw-object', 'throw-object', 4),
+ ('magic3', 'magic3', 4),
+ ('glower', 'glower', 4))
+m = (('speak', 'speak', 4),
+ ('magic2', 'magic2', 4),
+ ('golf-club-swing', 'golf-club-swing', 4))
+mh = (('smile', 'smile', 4),
+ ('speak', 'speak', 4),
+ ('golf-club-swing', 'golf-club-swing', 4),
+ ('song-and-dance', 'song-and-dance', 4))
 ka = (('speak', 'speak', 4),
- ('magic2', 'magic2', 4),
- ('magic1', 'magic1', 4),
- ('golf-club-swing', 'golf-club-swing', 4))
-mka = (('magic1', 'magic1', 5),
- ('smile', 'smile', 5),
- ('magic2', 'magic2', 5),
- ('speak', 'speak', 5),
- ('golf-club-swing', 'golf-club-swing', 5),
- ('song-and-dance', 'song-and-dance', 8))
-trm = (('speak', 'speak', 4),
- ('magic2', 'magic2', 4),
- ('magic1', 'magic1', 4),
- ('golf-club-swing', 'golf-club-swing', 4))
-ssm = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-isw = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-ssr = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
+      ('throw-object', 'throw-object', 4))
+mka = (('magic1', 'magic1', 4),
+ ('smile', 'smile', 4),
+ ('effort', 'effort', 4),
+ ('speak', 'speak', 4),
+ ('golf-club-swing', 'golf-club-swing', 4),
+ ('song-and-dance', 'song-and-dance', 4))
+trm = (('glower', 'glower', 4),
+ ('cigar-smoke', 'cigar-smoke', 4),
+ ('magic2', 'magic2', 4))
+ssm = (('phone', 'phone', 4),
+ ('glower', 'glower', 4))
+isw = (('hold-pencil', 'hold-pencil', 4),
+       ('hold-eraser', 'hold-eraser', 4),
+ ('glower', 'glower', 4),
+('phone', 'phone', 4))
+ssr = (('phone', 'phone', 4),
+ ('glower', 'glower', 4),
+('magic1', 'magic1', 4))
 fas = (('magic3', 'magic3', 4),
        ('magic2', 'magic2', 4),
        ('magic1', 'magic1', 4),
@@ -455,35 +430,31 @@ sft = (('glower', 'glower', 4),
     ('sanction', 'rushjob', 4),
     ('smile', 'smile', 4),
       ('neutral', 'pace', 4))
-sc = (('throw-paper', 'throw-paper', 3.5), ('watercooler', 'watercooler', 5), ('pickpocket', 'pickpocket', 5))
-pp = (('throw-paper', 'throw-paper', 5), ('glower', 'glower', 5), ('finger-wag', 'fingerwag', 5))
-tw = (('throw-paper', 'throw-paper', 3.5),
- ('glower', 'glower', 5),
- ('magic2', 'magic2', 5),
- ('finger-wag', 'finger-wag', 5))
-bc = (('phone', 'phone', 5), ('hold-pencil', 'hold-pencil', 5))
-nc = (('phone', 'phone', 5), ('throw-object', 'throw-object', 5))
-mb = (('magic1', 'magic1', 5), ('throw-paper', 'throw-paper', 3.5))
-ls = (('throw-paper', 'throw-paper', 5), ('throw-object', 'throw-object', 5), ('hold-pencil', 'hold-pencil', 5))
-rb = (('cigar-smoke', 'cigar-smoke', 8), ('magic3', 'magic3', 5), ('pickpocket', 'pickpocket', 5), ('golf-club-swing', 'golf-club-swing', 5))
-gm = (('throw-paper', 'throw-paper', 4), ('throw-object', 'throw-object', 4), ('hold-pencil', 'hold-pencil', 4), ('phone', 'phone', 4))
-ad = (('pickpocket', 'pickpocket', 4), ('sanction', 'sanction', 4), ('phone', 'phone', 4), ('watercooler', 'watercooler', 4), ('effort', 'effort', 4))
-cvy = (('magic1', 'magic1', 5), ('throw-paper', 'throw-paper', 3.5))
-ptr = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-mld = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-pht = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
+sc = (('throw-paper', 'throw-paper', 4), ('watercooler', 'watercooler', 4), ('pickpocket', 'pickpocket', 4))
+pp = (('throw-paper', 'throw-paper', 4), ('glower', 'glower', 4), ('finger-wag', 'finger-wag', 4))
+tw = (('throw-paper', 'throw-paper', 4),
+ ('glower', 'glower', 4),
+ ('magic2', 'magic2', 4),
+ ('finger-wag', 'finger-wag', 4))
+bc = (('phone', 'phone', 4), ('hold-pencil', 'hold-pencil', 4))
+nc = (('phone', 'phone', 4), ('throw-object', 'throw-object', 4))
+mb = (('magic1', 'magic1', 4), ('throw-paper', 'throw-paper', 4), ('throw-object', 'throw-object', 4))
+ls = (('magic1', 'magic1', 4), ('throw-paper', 'throw-paper', 4), ('throw-object', 'throw-object', 4), ('hold-pencil', 'hold-pencil', 4))
+rb = (('cigar-smoke', 'cigar-smoke', 4), ('magic3', 'magic3', 4), ('pickpocket', 'pickpocket', 4), ('golf-club-swing', 'golf-club-swing', 4))
+gm = (('phone', 'phone', 4), ('glower', 'glower', 4))
+ad = (('pickpocket', 'pickpocket', 4), ('magic3', 'magic3', 4), ('throw-paper', 'throw-paper', 4), ('glower', 'glower', 4))
+cvy = (('phone', 'phone', 4), ('glower', 'glower', 4))
+ptr = (('phone', 'phone', 4),
+ ('glower', 'glower', 4),
+('magic1', 'magic1', 4))
+mld = (('watercooler', 'watercooler', 4),
+('magic1', 'magic1', 4),
+ ('pickpocket', 'pickpocket', 4),
+ ('throw-paper', 'throw-paper', 4))
+pht = (('magic3', 'magic3', 4),
+('effort', 'effort', 4),
+ ('smile', 'smile', 4),
+ ('magic1', 'magic1', 4))
 csh = (('magic3', 'magic3', 4),
        ('effort', 'scabbard', 4),
         ('mob-mentality', 'mob-mentality', 4),
@@ -597,35 +568,29 @@ crf = (('effort', 'wheelspin', 4),
         ('pickpocket', 'sanction', 4),
         ('neutral', 'rolled', 4))
 bf = (('speak', 'speak', 4),
- ('glower', 'glower', 4),
- ('throw-paper', 'throw-paper', 4),
- ('phone', 'phone', 4),
  ('throw-object', 'throw-object', 4),
  ('hold-pencil', 'hold-pencil', 4),
  ('finger-wag', 'finger-wag', 4))
 b = (('rubber-stamp', 'rubber-stamp', 4),
  ('throw-paper', 'throw-paper', 4),
+ ('speak', 'speak', 4))
+dt = (('throw-paper', 'throw-paper', 4),
  ('speak', 'speak', 4),
- ('finger-wag', 'fingerwag', 4))
-dt = (('rubber-stamp', 'rubber-stamp', 4),
- ('throw-paper', 'throw-paper', 4),
-      ('roll-o-dex', 'roll-o-dex', 4),
- ('speak', 'speak', 4),
- ('finger-wag', 'fingerwag', 4))
-ac = (('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4),
+ ('roll-o-dex', 'roll-o-dex', 4))
+ac = (('pen-squirt', 'fountain-pen', 4),
+      ('rubber-stamp', 'rubber-stamp', 4),
  ('phone', 'phone', 4),
- ('speak', 'speak', 4),
- ('finger-wag', 'fingerwag', 4))
-bs = (('magic1', 'magic1', 4), ('throw-paper', 'throw-paper', 4),  ('pickpocket', 'pickpocket', 4), ('finger-wag', 'fingerwag', 4))
+ ('speak', 'speak', 4))
+bs = (('magic1', 'magic1', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('pickpocket', 'pickpocket', 4),
+      ('finger-wag', 'fingerwag', 4))
 sd = (('magic2', 'magic2', 4),
  ('quick-jump', 'jump', 4),
- ('stomp', 'stomp', 4),
  ('magic3', 'magic3', 4),
- ('hold-pencil', 'hold-pencil', 4),
- ('throw-paper', 'throw-paper', 4))
+ ('hold-pencil', 'hold-pencil', 4))
 le = (('magic1', 'magic1', 4),
       ('throw-paper', 'throw-paper', 4),
-      ('throw-object', 'throw-object', 4),
       ('hold-eraser', 'hold-eraser', 4))
 bw = (('shredder', 'shredder', 4),
     ('magic1', 'magic1', 4),
@@ -633,34 +598,24 @@ bw = (('shredder', 'shredder', 4),
     ('glower', 'glower', 4))
 brv = (('speak', 'speak', 4),
  ('throw-object', 'throw-object', 4),
- ('glower', 'glower', 4),
- ('throw-paper', 'throw-paper', 4))
+ ('glower', 'glower', 4))
 sb = (('quick-jump', 'jump', 4),
         ('throw-paper', 'throw-paper', 4),
 ('throw-object', 'throw-object', 4),
-        ('glower', 'glower', 4),
-        ('quick-jump', 'jump', 4))
-arb = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-sjg = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-lsc = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
+        ('glower', 'glower', 4))
 cfp = (('finger-wag', 'fingerwag', 4),
  ('cigar-smoke', 'cigar-smoke', 4),
- ('gavel', 'gavel', 4),
  ('magic1', 'magic1', 4),
- ('throw-object', 'throw-object', 4),
- ('throw-paper', 'throw-paper', 4))
+ ('throw-object', 'throw-object', 4))
+arb = (('throw-object', 'throw-object', 4),
+('magic1', 'magic1', 4),
+ ('magic3', 'magic3', 4),
+ ('phone', 'phone', 4))
+sjg = (('throw-paper', 'throw-paper', 4),
+('magic1', 'magic1', 4),
+ ('throw-object', 'throw-object', 4))
+lsc = (('phone', 'phone', 4),
+ ('speak', 'speak', 4))
 jdg = (('stomp', 'rage', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
@@ -760,79 +715,53 @@ lit = (('magic2', 'magic2', 4),
       ('snap', 'snap', 4),
       ('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4))
-ca = (('pickpocket', 'pickpocket', 5),
- ('speak', 'speak', 5),
- ('throw-paper', 'throw-paper', 3.5),
- ('pen-squirt', 'fountain-pen', 5))
-cn = (('speak', 'speak', 5),
- ('throw-paper', 'throw-paper', 5),
- ('effort', 'effort', 5),
- ('magic3', 'magic3', 5),
+ca = (('pickpocket', 'pickpocket', 4),
+ ('speak', 'speak', 4),
+ ('throw-paper', 'throw-paper', 4),
+ ('pen-squirt', 'fountain-pen', 4))
+cn = (('speak', 'speak', 4),
+ ('throw-paper', 'throw-paper', 4),
+ ('effort', 'effort', 4),
+ ('finger-wag', 'finger-wag', 4))
+sw = (('phone', 'phone', 4),
+ ('pickpocket', 'pickpocket', 4),
+ ('throw-paper', 'throw-paper', 4),
+ ('roll-o-dex', 'roll-o-dex', 4))
+mdm = (('smile', 'smile', 4),
+ ('roll-o-dex', 'roll-o-dex', 4),
+ ('magic3', 'magic3', 4))
+txm = (('pen-squirt', 'fountain-pen', 4),
+ ('glower', 'glower', 4),
+ ('magic1', 'magic1', 4))
+mg = (('speak', 'speak', 4),
+ ('glower', 'glower', 4),
  ('phone', 'phone', 5),
- ('finger-wag', 'finger-wag', 5))
-sw = (('phone', 'phone', 5),
- ('pickpocket', 'pickpocket', 5),
- ('throw-paper', 'throw-paper', 5),
- ('roll-o-dex', 'roll-o-dex', 5))
-mdm = (('smile', 'smile', 5),
- ('roll-o-dex', 'roll-o-dex', 5),
- ('magic3', 'magic3', 5))
-txm = (('pen-squirt', 'fountain-pen', 5),
- ('glower', 'glower', 5),
- ('magic1', 'magic1', 5))
-mg = (('speak', 'speak', 5),
- ('glower', 'glower', 5),
- ('throw-paper', 'throw-paper', 5),
- ('phone', 'phone', 5),
- ('throw-object', 'throw-object', 5),
- ('magic1', 'magic1', 5),
- ('finger-wag', 'finger-wag', 5))
-bfh = (('magic1', 'magic1', 5), ('throw-paper', 'throw-paper', 3.5), ('glower', 'glower', 5), ('watercooler', 'watercooler', 5), ('effort', 'effort', 5))
-hho = (('cigar-smoke', 'cigar-smoke', 8),
- ('pen-squirt', 'fountain-pen', 7),
- ('glower', 'glower', 5),
- ('throw-paper', 'throw-paper', 5),
- ('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('magic2', 'magic2', 5),
+ ('throw-object', 'throw-object', 4),
+ ('magic1', 'magic1', 4))
+bfh = (('magic1', 'magic1', 4), ('throw-paper', 'throw-paper', 4), ('watercooler', 'watercooler', 4))
+hho = (('cigar-smoke', 'cigar-smoke', 4),
+ ('throw-paper', 'throw-paper', 4),
+ ('magic1', 'magic1', 4),
+ ('magic2', 'magic2', 4),
  ('golf-club-swing', 'golf-club-swing', 5))
-bdb = (('speak', 'speak', 5),
- ('glower', 'glower', 5),
- ('throw-paper', 'throw-paper', 5),
- ('phone', 'phone', 5),
- ('throw-object', 'throw-object', 5),
- ('magic1', 'magic1', 5),
- ('finger-wag', 'finger-wag', 5))
-bgh = (('quick-jump', 'jump', 4),
-        ('throw-paper', 'throw-paper', 4),
-('throw-object', 'throw-object', 4),
-        ('glower', 'glower', 4),
-        ('magic1', 'magic1', 4))
-dfh = (('effort', 'wheelspin', 4),
-        ('pickpocket', 'sanction', 4),
-       ('magic1', 'magic1', 5),
-        ('magic3', 'magic3', 4),
-       ('cease', 'cease2', 4),
-        ('finger-wag', 'cease2', 4),
-        ('magic2', 'magic2', 4),
-('song-and-dance', 'song-and-dance', 4),
-        ('speak', 'speak', 5),
-        ('sanction', 'sanction', 4))
-rng = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-cps = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
-tld = (('cigar-smoke', 'cigar-smoke', 8),
- ('glower', 'glower', 5),
-('magic1', 'magic1', 5),
- ('song-and-dance', 'song-and-dance', 8),
- ('golf-club-swing', 'golf-club-swing', 5))
+bdb = (('cigar-smoke', 'cigar-smoke', 4),
+ ('glower', 'glower', 4),
+ ('magic1', 'magic1', 4))
+bgh = (('glower', 'glower', 4),
+        ('magic3', 'magic3', 4))
+dfh = (('magic3', 'magic3', 4),
+        ('speak', 'speak', 5))
+rng = (('glower', 'glower', 4),
+('magic1', 'magic1', 4),
+ ('throw-paper', 'throw-paper', 4),
+ ('quick-jump', 'jump', 4))
+cps = (('glower', 'glower', 4),
+('smile', 'smile', 4),
+ ('song-and-dance', 'song-and-dance', 4))
+tld = (('cigar-smoke', 'cigar-smoke', 4),
+ ('glower', 'glower', 4),
+('magic1', 'magic1', 4),
+ ('magic2', 'magic2', 4))
 gkp = (('stomp', 'rage', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
@@ -2562,7 +2491,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(7.95)
         elif dna.name == 'trm':
-            self.scale = 7.0 / cSize
+            self.scale = 6.5 / cSize
             self.handColor = VBase4(0.718, 0.451, 0.451, 1)
             self.generateBody()
             self.generateHead('flunky')

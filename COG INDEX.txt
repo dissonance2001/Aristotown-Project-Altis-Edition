@@ -126,7 +126,7 @@ fm - Bellringer Level 13.mgr
 jb - Desk Jockey Level 3-8.mgr
 jg - Prethinker Level 12.mgr
 jr - Multislacker Level 24.mgr
-prr - Broadcaster Level 66.mgr
+prr - Videographer Level 66.mgr
 blr - The Investor Level 32.mgr change
 dvp - Perpetrator Level 38.mgr change
 dsk - Pyromaniac Level 38.mgr
@@ -146,7 +146,7 @@ bdb - Dark Horse Level 9-21
 bgh - Sharp Seer Level 10-22
 dfh - Commissioner Level 11-23 
 rng - Renegade Level 12-24
-cps - Videographer Level 13-25
+cps - Broadcaster Level 13-25
 tld - Toxic Leader Level 14-26
 gkp - Land Acquistion Architect Level 7.mgr
 ddv - Director Of Land Development Level 25.mgr

@@ -88,7 +88,7 @@ class FireCogPanel(StateData.StateData):
 
     def __placeButtons(self, numAvatars, invalidTargets, localNum, fireCosts):
         canfire = 0
-        for i in xrange(4):
+        for i in xrange(6):
             if numAvatars > i and i not in invalidTargets and i != localNum:
                 self.avatarButtons[i].show()
                 self.avatarButtons[i]['text'] = ''

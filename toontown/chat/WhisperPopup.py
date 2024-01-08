@@ -8,7 +8,7 @@ from toontown.toontowngui.Clickable2d import Clickable2d
 from direct.interval.IntervalGlobal import Sequence, LerpScaleInterval, Func, LerpColorScaleInterval, Parallel
 
 class WhisperQuitButton(Clickable2d):
-    CONTENTS_SCALE = 12
+    CONTENTS_SCALE = 6
 
     def __init__(self, whisperPopup):
         Clickable2d.__init__(self, 'WhisperQuitButton')
@@ -84,7 +84,7 @@ class WhisperQuitButton(Clickable2d):
 class WhisperPopup(Clickable2d, MarginVisible):
     CONTENTS_SCALE = 0.25
 
-    TEXT_MAX_ROWS = 6
+    TEXT_MAX_ROWS = 8
     TEXT_WORD_WRAP = 8
 
     QUIT_BUTTON_SHIFT = (-0.42, 0, -0.42)
