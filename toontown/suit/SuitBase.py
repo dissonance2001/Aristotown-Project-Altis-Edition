@@ -43,6 +43,12 @@ class SuitBase:
             self.notify.error('called getStyleDept() before dna was set!')
             return 'unknown'
 
+    def getCurrentHealth(self):
+        return self.currHP
+
+    def getMaxHealth(self):
+        return self.maxHP
+
     def getLevel(self):
         return self.level
 

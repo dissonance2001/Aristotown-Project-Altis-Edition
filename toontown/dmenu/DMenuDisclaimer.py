@@ -10,8 +10,8 @@ class DMenuDisclaimer(DirectObject):
     def __init__(self):
         DirectObject.__init__(self)
         base.setBackgroundColor(0, 0, 0)
-        disclaimerText = "Project Altis is a not-for-profit fanmade parody made under Fair Use. Project Altis is not affiliated with The Walt Disney Company and/or the Disney Interactive Media Group (collectively referred to as \"Disney\") by clicking I agree you hereby agree that you acknowledge this fact."
-        self.disclaimer = OnscreenText(text = disclaimerText, font = ToontownGlobals.getMinnieFont(), style = 3, wordwrap = 30, scale = .08, pos = (0, .3, 0))
+        disclaimerText = "Aristotown: Altis Edition is fanmade version of Project Altis, made to mimic the feel of Toontown: Corporate Clash. This source is not in any way, shape or form affiliated with Toontown: Corporate Clash or it's team. ANY REPRODUCTION OR REDISTRIBUTION OF THIS SOURCE INCLUDING SHARING SCREENSHOTS/VIDEOS IS PROHIBITED W/O CONSENT FROM DISSONANCE! This source was meant to be shared with close friends, as well as to serve as a learning project for myself. If you have any questions, please DM Dissonance2020 on Discord. Please click the checkmark to obtain access to the rest of the game."
+        self.disclaimer = OnscreenText(text = disclaimerText, font = ToontownGlobals.getMinnieFont(), style = 3, wordwrap = 40, scale = .07, pos = (0, .6, 0))
         gui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_mainGui.bam')
         yesUp = gui.find('**/tt_t_gui_mat_okUp')
         yesDown = gui.find('**/tt_t_gui_mat_okDown')
@@ -20,7 +20,7 @@ class DMenuDisclaimer(DirectObject):
         
         self.accept = DirectButton(parent = aspect2d, relief = None, image = (yesUp, yesDown, yesUp), image_scale = (0.6, 0.6, 0.6), image1_scale = (0.7, 0.7, 0.7), image2_scale = (0.7, 0.7, 0.7), text = ('', 'I Agree', 'I Agree'), text_pos=(0, -0.175), text_style = 3, text_scale=0.08, pos = (.4, 0, -.5), command = self.accept)
         
-        self.deny = DirectButton(parent = aspect2d, relief = None, image = (noUp, noDown, noUp), image_scale = (0.6, 0.6, 0.6), image1_scale = (0.7, 0.7, 0.7), image2_scale = (0.7, 0.7, 0.7), text = ('', 'I Disagree', 'I Disagree'), text_pos=(0, -0.175), text_style = 3, text_scale=0.08, pos = (-.4, 0, -.5), command = self.deny)
+        self.deny = DirectButton(parent = aspect2d, relief = None, image = (noUp, noDown, noUp), image_scale = (0.6, 0.6, 0.6), image1_scale = (0.7, 0.7, 0.7), image2_scale = (0.7, 0.7, 0.7), text = ('', 'You better not click this button', 'You better not click this button'), text_pos=(0, -0.175), text_style = 3, text_scale=0.08, pos = (-.4, 0, -.5), command = self.deny)
         
     def accept(self):
         self.disclaimer['text'] = 'Loading...'

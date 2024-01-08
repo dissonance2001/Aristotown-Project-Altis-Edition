@@ -50,8 +50,11 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
         relativelevel = avatar.getLevel()
         revives = avatar.getMaxSkeleRevives() + 1
         attributes = SuitBattleGlobals.SuitAttributes[avatar.getStyleName()]
-        health = str(avatar.getHP())
-        maxHealth = str(avatar.getMaxHP())
+        if avatar.getCurrentHealth() > 0:
+            health = avatar.getCurrentHealth()
+        else:
+            health = 0
+        maxHealth = avatar.getMaxHealth()
         currHP = attributes['hp'][relativelevel]
         maxHP = attributes['hp'][relativelevel]
         dept = SuitDNA.getSuitDeptFullname(avatar.dna.name)
@@ -139,6 +142,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
         messenger.send('avPanelDone')
         self.frame.reparentTo(base.a2dTopRight)
         self.frame.setPos(-0.25, 0, -0.5)
+
 
     def cleanup(self):
         if self.frame == None:

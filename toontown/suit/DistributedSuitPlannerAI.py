@@ -1114,6 +1114,10 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             else:
                 typeChoices = range(max(level - 13, 1), min(level, self.MAX_SUIT_TYPES) + 1)
                 type = random.choice(typeChoices)
+
+        if level < type:
+            level = type
+
         if level > 20:
             pass
         else:

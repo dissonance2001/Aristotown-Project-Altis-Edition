@@ -100,15 +100,15 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
 			
     def renameBoss(self):
         if self.getSkeleRevives() > 0:
-            nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': TTLocalizer.Foreman,
+            nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': self.name,
              'dept': self.getStyleDept(),
-             'level': '%s%s%s' % (self.getActualLevel(), TTLocalizer.SkeleRevivePostFix, ' Elite')}
+             'level': '%s%s%s' % (self.getActualLevel(), TTLocalizer.SkeleRevivePostFix, '')}
             self.setName(TTLocalizer.Foreman)
             self.setDisplayName(nameInfo)
         else:
-            nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': TTLocalizer.Foreman,
+            nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': self.name,
              'dept': self.getStyleDept(),
-             'level': str(self.getActualLevel()) + ' Elite'}
+             'level': str(self.getActualLevel()) + ''}
             self.setName(TTLocalizer.Foreman)
             self.setDisplayName(nameInfo)
 

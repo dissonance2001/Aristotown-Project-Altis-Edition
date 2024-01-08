@@ -36,14 +36,14 @@ class DistributedStageSuit(DistributedFactorySuit.DistributedFactorySuit):
 
     def renameBoss(self):
         if self.getSkeleRevives() > 0:
-            nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': TTLocalizer.Clerk,
+            nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': self.name,
              'dept': self.getStyleDept(),
-             'level': '%s%s%s' % (self.getActualLevel(), TTLocalizer.SkeleRevivePostFix, '.mgr')}
+             'level': '%s%s%s' % (self.getActualLevel(), TTLocalizer.SkeleRevivePostFix, '')}
             self.setName(TTLocalizer.Clerk)
             self.setDisplayName(nameInfo)
         else:
-            nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': TTLocalizer.Clerk,
+            nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': self.name,
              'dept': self.getStyleDept(),
-             'level': str(self.getActualLevel()) + '.mgr'}
+             'level': str(self.getActualLevel())}
             self.setName(TTLocalizer.Clerk)
             self.setDisplayName(nameInfo)
