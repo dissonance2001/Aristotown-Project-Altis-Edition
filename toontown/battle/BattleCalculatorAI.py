@@ -821,6 +821,8 @@ class BattleCalculatorAI:
                     if suit:
                         if suit.getManager():
                             attackDamage = 0
+                        elif suit.currHP > (suit.maxHP * 1.5):
+                            attackDamage = 0
                         else:
                             costToFire = 1
                             abilityToFire = toon.getPinkSlips()
@@ -1620,6 +1622,18 @@ class BattleCalculatorAI:
                 self.setToonCondition(toon.doId, 'noGags', 1, 3, 'setBoth')
                 self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
                 self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
+            elif atkInfo['name'] == 'CourtMandate':
+                self.setToonCondition(toon.doId, 'noSquirtGags', 1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'noZapGags', 1, 3, 'setBoth')
+            elif atkInfo['name'] == 'CourtMandate1':
+                self.setToonCondition(toon.doId, 'noToonUpGags', 1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'noSoundGags', 1, 3, 'setBoth')
+            elif atkInfo['name'] == 'CourtMandate2':
+                self.setToonCondition(toon.doId, 'noLureGags', 1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'noThrowGags', 1, 3, 'setBoth')
+            elif atkInfo['name'] == 'CourtMandate3':
+                self.setToonCondition(toon.doId, 'noTrapGags', 1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'noDropGags', 1, 3, 'setBoth')
             elif atkInfo['name'] == 'CourtRecord1':
                 self.setToonCondition(toon.doId, 'noToonUpGags', 1, 3, 'setBoth')
                 self.setToonCondition(toon.doId, 'noLureGags', 1, 3, 'setBoth')
@@ -1648,6 +1662,14 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'CourtCosts':
                 attack[SUIT_HP_COL][targetIndex] = (24 + (self.TurnsElapsed * 2))
                 self.setToonCondition(toon.doId, 'allGagBoost', -10, 2, 'setBoth')
+            elif atkInfo['name'] == 'LifeInsurance':
+                theSuit.setHP(int(theSuit.currHP + 350))
+            elif atkInfo['name'] == 'WorkersCompensation':
+                theSuit.setHP(int(theSuit.currHP + 500))
+            elif atkInfo['name'] == 'ExtraTip':
+                for suit in self.battle.suits:
+                    suit.setHP(int(suit.currHP + 500))
+                    continue
             elif atkInfo['name'] == 'CourtSanction':
                 attack[SUIT_HP_COL][targetIndex] = 25
                 self.setToonCondition(toon.doId, 'allGagBoost', -75, 3, 'setBoth')
@@ -1666,7 +1688,15 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'ClockChange':
                 attack[SUIT_HP_COL][targetIndex] = 50
                 self.setToonCondition(toon.doId, 'allGagBoost', 75, 2, 'setBoth')
-            elif atkInfo['name'] == 'EvictionNotice':
+            elif atkInfo['name'] == 'InsurancePlan':
+                for suit in self.battle.activeSuits:
+                    if suit.currHP <= 0:
+                        continue
+
+                    suit.setHP(suit.currHP + 250)
+                    self.setSuitCondition(suit.doId, 'dodgy', 30, 1, 'setBoth')
+                    continue
+            elif atkInfo['name'] == 'Refinement':
                 for suit in self.battle.activeSuits:
                     if suit.currHP <= 0:
                         continue
@@ -1684,16 +1714,19 @@ class BattleCalculatorAI:
                         continue
 
                     suit.setHP(suit.currHP + 500)
-                    self.setSuitCondition(suit.doId, 'dodgy', 30, 3, 'setBoth')
+                    self.setSuitCondition(suit.doId, 'dodgy', 30, 1, 'setBoth')
+                    continue
                 for suit in self.currentlyLuredSuits.keys():
                     self.__removeLured(suit)
-                    continue
             elif atkInfo['name'] == 'HeatWave':
                 attack[SUIT_HP_COL][targetIndex] = (24 + (self.TurnsElapsed * 2))
             elif atkInfo['name'] == 'StealSafe':
                 attack[SUIT_HP_COL][targetIndex] = 45
                 theSuit.setHP(int(theSuit.currHP + 350))
-            elif atkInfo['name'] == 'Tremor':
+            #elif atkInfo['name'] == 'WhitePowder':
+                #for suit in self.currentlyLuredSuits.keys():
+                    #self.__removeLured(suit)
+            elif atkInfo['name'] == 'Enraged':
                 attack[SUIT_HP_COL][targetIndex] = 45
                 self.setToonCondition(toon.doId, 'allGagBoost', 25, 2, 'setBoth')
                 theSuit.setHP(int(theSuit.currHP + attack[SUIT_HP_COL][
@@ -1708,10 +1741,10 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] *= 1.5
 
             self.notify.debug('__calcSuitAtkHp - result is %s for index %i' % (str(attack[SUIT_HP_COL][targetIndex]), targetIndex))
-            if theSuit.getHP() < (theSuit.getMaxHP() * .3):    # overcharged logic, if >150% HP, attacks do 1.5x
+            if theSuit.getHP() < (theSuit.getMaxHP() * .25):    # overcharged logic, if >150% HP, attacks do 1.5x
                 self.notify.debug('currHP: %s | maxHP: %s' % (theSuit.getHP(), theSuit.getMaxHp()))
                 self.notify.debug('__calcSuitAtkHp - Self is damaged, dealing 2.0x')
-                attack[SUIT_HP_COL][targetIndex] *= 1.5
+                attack[SUIT_HP_COL][targetIndex] *= 2.0
 
             self.notify.debug('__calcSuitAtkHp - result is %s for index %i' % (str(attack[SUIT_HP_COL][targetIndex]), targetIndex))
 
@@ -2141,7 +2174,11 @@ class BattleCalculatorAI:
             self.currentlyLuredSuits[suitId][2] = chance
 
     def __incLuredCurrRound(self, suitId):
+        theSuit = self.battle.findSuit(suitId)
         if self.battle.findSuit(suitId).getManager() and self.currentlyLuredSuits[suitId][
+            0] < 1:  # sets manager lure resistance to 2 rounds
+            self.currentlyLuredSuits[suitId][0] = self.currentlyLuredSuits[suitId][1] - 2
+        if theSuit.getHP() > (theSuit.getMaxHP() * 1.5) and self.currentlyLuredSuits[suitId][
             0] < 1:  # sets manager lure resistance to 2 rounds
             self.currentlyLuredSuits[suitId][0] = self.currentlyLuredSuits[suitId][1] - 2
         if self.__suitIsLured(suitId):

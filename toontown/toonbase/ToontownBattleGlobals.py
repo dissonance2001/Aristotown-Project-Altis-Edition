@@ -462,9 +462,9 @@ AvLureRounds = (2,
  3,
  4,
  4,
- 15)
+ 5)
 InstaKillChance = [2, 3, 5, 8, 10, 15, 20]
-AvSoakRounds = (2, 2, 3, 3, 4, 5, 6)
+AvSoakRounds = (2, 2, 3, 3, 4, 4, 5)
 AvSoakDefReduction = 15
 TRAP_EXECUTIVE_BONUS = 0.3
 TRAP_HEALTHY_BONUS = 0.2

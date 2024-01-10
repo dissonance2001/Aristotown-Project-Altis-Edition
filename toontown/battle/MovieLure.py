@@ -41,6 +41,8 @@ def doLures(lures):
 def showLureRounds(suit, level):
     if suit.style.name in SuitBattleGlobals.SpecialCogDict:
         suit.showHpText("LURED 2 ROUNDS")
+    elif suit.currHP > (suit.maxHP * 1.5):
+        suit.showHpText("LURED 2 ROUNDS")
     else:
         suit.showHpText("LURED %i ROUNDS" % ToontownBattleGlobals.AvLureRounds[level])
 

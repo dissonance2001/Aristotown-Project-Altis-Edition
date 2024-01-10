@@ -142,7 +142,13 @@ class TownBattleCogPanel(DirectFrame):
 
     def updateHealthBar(self):
         condition = self.cog.healthCondition
-        if condition == 9:
+        if condition == 7:
+            self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(1.2), Task(self.__blinkGray), Task.pause(0.1))
+            taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
+        elif condition == 8:
+            self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(1.2), Task(self.__blinkGray), Task.pause(0.1))
+            taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
+        elif condition == 9:
             self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.75), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
         elif condition == 10:
