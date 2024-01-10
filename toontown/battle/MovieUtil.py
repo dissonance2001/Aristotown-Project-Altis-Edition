@@ -12,11 +12,11 @@ from toontown.toonbase import TTLocalizer
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieUtil')
 SUIT_LOSE_DURATION = 6.0
-SUIT_LURE_DISTANCE = 2.6
+SUIT_LURE_DISTANCE = 3.6
 SUIT_LURE_DOLLAR_DISTANCE = 5.1
 SUIT_EXTRA_REACH_DISTANCE = 0.9
 SUIT_EXTRA_RAKE_DISTANCE = 1.1
-SUIT_TRAP_DISTANCE = 2.6
+SUIT_TRAP_DISTANCE = 3.6
 SUIT_TRAP_RAKE_DISTANCE = 4.5
 SUIT_TRAP_MARBLES_DISTANCE = 3.7
 SUIT_TRAP_TNT_DISTANCE = 5.1
@@ -333,7 +333,7 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'tg':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
-    elif suit.style.name == 'cg':
+    elif suit.style.name == 'msr':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrman_death.ogg')
     elif suit.style.name == 'jg':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ptjockey_death.ogg')
@@ -365,8 +365,6 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'cp':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dlao_death.ogg')
-    elif suit.style.name == 'jur':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'frs':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'gtk':
@@ -375,9 +373,9 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'ffm':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
-    elif suit.style.name == 'msr':
+    elif suit.style.name == 'ts':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
-    elif suit.style.name == 'bg':
+    elif suit.style.name == 'kb':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'frs':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
@@ -941,7 +939,7 @@ def createSuitStunInterval(suit, before, after):
             and not suit.style.name == 'tld':
         for headPart in suit.headParts:
             headInterval = Func(headPart.loop, 'stun')
-            headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.3 else ''))
+            headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
             hasAnimatedHead = True
     if hasAnimatedHead:
         return Sequence(Wait(before), Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)),

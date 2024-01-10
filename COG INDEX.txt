@@ -28,11 +28,11 @@ dvg - The Molder Level 11-23
 cpl - Capitalists Level 12-24
 bkp - Bookkeeper Level 13-25
 kpn - Enforcer Level 14-26
-cg - Derrick Man Level 5.mgr
-bg - Derrick Hand Level 25.mgr
-msr - Director Of Ambush Marketing Level: 25.mgr
-kb - Autocaddie Level 14-15.mgr
-ts - Club President Level 18.mgr
+cg - Autocaddie Level 14.mgr
+bg - Club President Level 16-18.mgr
+msr - Derrick Man Level 5.mgr
+kb - Derrick Hand Level 25.mgr
+ts - Director Of Ambush Marketing Level 25.mgr
 tc - Firestarter Level 20.mgr
 tg - Featherbedder Level 30.mgr
 tb - Major Player Level 55.mgr
@@ -58,10 +58,10 @@ cfp - Big Wig Level 11-23
 arb - Arbitrator Level 12-24
 sjg - Peacekeeper Level 13-25
 lsc - Secretary Level 14-26
-jdg - Clerk Level 12-13.mgr
-jur - Bailiff Level 12-13.mgr
-tlr - Arbitrator Level 12-13.mgr
-cm - Head Attorney Level 16.mgr
+jdg - Bailiff Level 13.mgr
+jur - Head Attorney Level 16.mgr
+tlr - N/A Level N/A.mgr
+cm - N/A Level N/A.mgr
 ggm - Mouthpiece Level 16.mgr
 th - Rainmaker Level 16.mgr
 kc - Witch Hunter Level 20.mgr
@@ -88,7 +88,7 @@ cvy - Mercenary Level 11-23
 ptr - Patronizer Level 12-24
 mld - Big Fish Level 13-25
 pht - Entrepreneur Level 14-25
-csh - Safe Auditor Level 10-12.mgr
+csh - Mint Auditor Level 11.mgr
 bgr - Mint Supervisor Level 13.mgr
 mes - Duck Shuffler Level 5.mgr
 dm - Treekiller Level 24.mgr
@@ -118,7 +118,7 @@ trm - Assembly Assassin Level 11-23
 ssm - Software Simian Level 12-24
 isw - Installer Wizard Level 13-25
 ssr - Root User Level 14-26
-fas - Safe-ty Supervisor Level 7-10.mgr
+fas - Safe-ty Supervisor Level 8.mgr
 mdr - Factory Foreman Level 11.mgr
 nar - Public Relations Representative Level 10.mgr
 fd - Director Of Public Affairs Level 30.mgr
@@ -148,12 +148,12 @@ dfh - Commissioner Level 11-23
 rng - Renegade Level 12-24
 cps - Broadcaster Level 13-25
 tld - Toxic Leader Level 14-26
-gkp - Land Acquistion Architect Level 7.mgr
-ddv - Director Of Land Development Level 25.mgr
+gkp - Chairperson Level 15.mgr
+ddv - Board Director Level 16-20.mgr
 dty - Deep Diver Level 7.mgr
 dfg - Gatekeeper Level 10.mgr
-dfr - Office Holder Level 16-18.mgr
-bsh - Board Director Level 20.mgr
+dfr - Land Acquisition Architect Level 7.mgr
+bsh - Director Of Land Development Level 25.mgr
 ghd - Concierge Level 40.mgr dola
 tyh - Proprietor Level 44.mgr dold
 jgd - Union Buster Level 44.mgr

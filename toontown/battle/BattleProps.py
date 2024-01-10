@@ -189,6 +189,10 @@ Props = ((5, 'partyBall', 'partyBall'),
   'teeth',
   'teeth-mod',
   'teeth-chan'),
+         (5,
+          'litigator-teeth',
+          'teeth-mod',
+          'teeth-chan'),
  (5, 'power-tie', 'power-tie'),
  (3.5, 'spray', 'spray'),
  (3.5, 'splash', 'splash'),
@@ -208,6 +212,7 @@ Props = ((5, 'partyBall', 'partyBall'),
  (3.5, 'suit_explosion_dust', 'dust_cloud'),
  (4, 'ripples', 'ripples'),
  (4, 'wake', 'wake'),
+         (5, 'laptop', 'laptop'),
  (4,
   'splashdown',
   'SZ_splashdown-mod',
@@ -246,7 +251,9 @@ Variants = ('cupcake',
  'ship',
  'trolley',
  'traintrack',
-            'black-orb')
+            'black-orb',
+            'litigator-teeth',
+            'laptop')
 
 class PropPool:
     notify = DirectNotifyGlobal.directNotify.newCategory('PropPool')
@@ -317,6 +324,9 @@ class PropPool:
         propName = 'black-orb'
         self.propStrings[propName] = (self.getPath(5, 'evil-eye'),)
         self.propTypes[propName] = 'model'
+        propName = 'laptop'
+        self.propStrings[propName] = (self.getPath(5, 'laptop'),)
+        self.propTypes[propName] = 'model'
 
     def getPath(self, phase, model):
         return 'phase_%s/models/props/%s' % (phase, model)
@@ -355,6 +365,11 @@ class PropPool:
             self.props[name].setTexture(tex, 1)
         elif name == '10dollar':
             tex = loader.loadTexture('phase_5/maps/dollar_10.jpg')
+            tex.setMinfilter(Texture.FTLinearMipmapLinear)
+            tex.setMagfilter(Texture.FTLinear)
+            self.props[name].setTexture(tex, 1)
+        elif name == 'litigator-teeth':
+            tex = loader.loadTexture('phase_11/maps/litigator_palette_4allc_1.png')
             tex.setMinfilter(Texture.FTLinearMipmapLinear)
             tex.setMagfilter(Texture.FTLinear)
             self.props[name].setTexture(tex, 1)

@@ -31,6 +31,22 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                         Parallel(self.scaleInterval(0.25, (0, 0, 0)),
                                  self.posInterval(0.25, (0, 0, 0))))
 
+    def getShowIntervalOvercharged(self, text, duration):
+        return Sequence(Func(self.hide), Func(self.setFg, (0.988, 0., 1.0, 1.0)),
+                        LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
+                        self.posInterval(0, (0, 0, 0.42)), Func(self.setText, text),
+                        Func(self.show),
+                        Wait(0.5),
+                        Parallel(self.scaleInterval(0.25, (1.2, 1.2, 1.2)),
+                                 self.posInterval(0.25, (0, 0, -0.075))),
+                        Parallel(self.scaleInterval(0.25, (1.1, 1.1, 1.1)),
+                                 self.posInterval(0.25, (0, 0, -0.040))),
+                        Wait(2),
+                        Parallel(self.scaleInterval(0.25, (1.3, 1.3, 1.3)),
+                                 self.posInterval(0.25, (0, 0, -0.075))),
+                        Parallel(self.scaleInterval(0.25, (0, 0, 0)),
+                                 self.posInterval(0.25, (0, 0, 0))))
+
     def getShowIntervalCheat(self, text, duration):
         return Sequence(Func(self.hide), Func(self.setFg, (0.466, 0.474, 1.0, 1.0)), Wait(duration * 0.1),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),

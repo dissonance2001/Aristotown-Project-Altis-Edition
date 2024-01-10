@@ -145,7 +145,7 @@ def getDefaultSuitAttack():
      [],
      0,
      0,
-     0]
+     01]
 
 
 def findToonAttack(toons, attacks, track):

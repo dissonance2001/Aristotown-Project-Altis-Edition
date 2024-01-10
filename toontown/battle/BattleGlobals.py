@@ -17,7 +17,7 @@ AttackExpPerTrack = [0,
  40,
  50,
  60]
-NumRoundsLured = [2, 2, 3, 3, 4, 4, 15]
+NumRoundsLured = [2, 2, 3, 3, 4, 4, 5]
 NumRoundsWet = [1, 1, 2, 2, 3, 3, 6]
 TRAP_CONFLICT = -2
 APPLY_HEALTH_ADJUSTMENTS = 1

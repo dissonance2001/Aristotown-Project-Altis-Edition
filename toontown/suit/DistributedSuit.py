@@ -735,7 +735,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 and not self.style.name == 'tld':
             for headPart in self.headParts: Sequence(
                 ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.3 else '',))
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             # You might want to change the healthCondition thing as it does not reflect the threshold of which you want the head to animate the hurt animation.
             ).start()
 
