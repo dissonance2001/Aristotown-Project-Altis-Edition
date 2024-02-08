@@ -32,10 +32,10 @@ cg - Autocaddie Level 14.mgr
 bg - Club President Level 16-18.mgr
 msr - Derrick Man Level 5.mgr
 kb - Derrick Hand Level 25.mgr
-ts - Director Of Ambush Marketing Level 25.mgr
+ts - Derrick Hybrid Level 25.mgr
 tc - Firestarter Level 20.mgr
 tg - Featherbedder Level 30.mgr
-tb - Major Player Level 55.mgr
+tb - Major Player Level 28.mgr
 adc - Chainsaw Consultant NONOR Level 50.mgr
 drm - Chainsaw Consultant Level 50.mgr
 cp - Powerhouse Level 38.mgr
@@ -100,7 +100,7 @@ lbs - Charon Level 25.mgr
 trk - Plutocrat Level 38.mgr
 dsf - Count Erfit Level 10-20.mgr
 msp - High Roller Silhouettes Level 12-25.mgr
-mad - Duck Shuffler Level 55.mgr
+mad - Cinematographer Level 50.mgr
 crf - High Roller Level 100.mgr
 
 SELLBOTS:
@@ -126,11 +126,11 @@ fm - Bellringer Level 13.mgr
 jb - Desk Jockey Level 3-8.mgr
 jg - Prethinker Level 12.mgr
 jr - Multislacker Level 24.mgr
-prr - Videographer Level 66.mgr
-blr - The Investor Level 32.mgr change
-dvp - Perpetrator Level 38.mgr change
-dsk - Pyromaniac Level 38.mgr
-ffm - The Godfather Level 45.mgr
+prr - Videographer Level 50.mgr
+blr - Concierge Level 32.mgr change
+dvp - Pluviculturist Level 38.mgr change
+dsk - Union Buster Level 38.mgr
+ffm - Bureaucrat Level 45.mgr
 sft - Pacesetter Level 66.mgr
 
 BOARDBOTS(WIP):
@@ -144,7 +144,7 @@ bfh - Big Fish Level 7-20
 hho - Head Honcho Level 8-20
 bdb - Dark Horse Level 9-21
 bgh - Sharp Seer Level 10-22
-dfh - Commissioner Level 11-23 
+dfh - Witch Doctor Level 11-23 
 rng - Renegade Level 12-24
 cps - Broadcaster Level 13-25
 tld - Toxic Leader Level 14-26
@@ -154,10 +154,10 @@ dty - Deep Diver Level 7.mgr
 dfg - Gatekeeper Level 10.mgr
 dfr - Land Acquisition Architect Level 7.mgr
 bsh - Director Of Land Development Level 25.mgr
-ghd - Concierge Level 40.mgr dola
-tyh - Proprietor Level 44.mgr dold
-jgd - Union Buster Level 44.mgr
-bby - Bureaucrat Level 50.mgr judy
+ghd - TBD Level 40.mgr dola
+tyh - TBD Level 44.mgr dold
+jgd - TBD Level 44.mgr
+bby - TBD Level 50.mgr judy
 dvk - Dividend King Level 65.mgr
 otm - The Ottoman Level 75.mgr
 cry - Crystalline Level 77.mgr

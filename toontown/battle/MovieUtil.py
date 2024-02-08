@@ -290,7 +290,7 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
     hasAnimatedHead = False
     if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'dfh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
             and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
             and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
             and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
@@ -330,17 +330,17 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
     elif suit.style.name == 'otm':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
     elif suit.style.name == 'dsk':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'tg':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
-    elif suit.style.name == 'msr':
+    elif suit.style.name == 'cg':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrman_death.ogg')
     elif suit.style.name == 'jg':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ptjockey_death.ogg')
     elif suit.style.name == 'mes':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'mad':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'dm':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
     elif suit.style.name == 'crf':
@@ -362,14 +362,14 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
     elif suit.style.name == 'blr':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_erfit_death.ogg')
     elif suit.style.name == 'fbd':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'cp':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dlao_death.ogg')
     elif suit.style.name == 'frs':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'gtk':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
-    elif suit.style.name == 'ddv':
+    elif suit.style.name == 'bsh':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'ffm':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
@@ -380,6 +380,8 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
     elif suit.style.name == 'frs':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'cry':
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+    elif suit.style.name == 'lsc':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'fd':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
@@ -392,6 +394,14 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
     elif suit.style.name == 'nc':
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'ac':
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+    elif suit.style.name == 'sjg':
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+    elif suit.style.name == 'trb':
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+    elif suit.style.name == 'ad':
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+    elif suit.style.name == 'arb':
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'le':
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
@@ -439,7 +449,7 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
     hasAnimatedHead = False
     if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
+            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'dfh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
             and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
             and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
             and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
@@ -478,7 +488,7 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
     elif suit.style.name == 'otm':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
     elif suit.style.name == 'dsk':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'tg':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'cg':
@@ -488,7 +498,7 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
     elif suit.style.name == 'mes':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'mad':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'dm':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
     elif suit.style.name == 'crf':
@@ -499,8 +509,6 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'tb':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
-    elif suit.style.name == 'fas':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'prr':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'sft':
@@ -510,22 +518,20 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
     elif suit.style.name == 'blr':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_erfit_death.ogg')
     elif suit.style.name == 'fbd':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'cp':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dlao_death.ogg')
-    elif suit.style.name == 'jur':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'frs':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'gtk':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
-    elif suit.style.name == 'ddv':
+    elif suit.style.name == 'bsh':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'ffm':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
-    elif suit.style.name == 'msr':
+    elif suit.style.name == 'ts':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
-    elif suit.style.name == 'bg':
+    elif suit.style.name == 'kb':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'frs':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
@@ -549,7 +555,7 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'ad':
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
-    elif suit.style.name == 'dfh':
+    elif suit.style.name == 'trb':
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'arb':
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
@@ -589,6 +595,45 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
     if hasAnimatedHead:
         returnval.append(headInterval)
     return returnval
+
+def createSuitHeadlessDeathTrack(suit, battle, headless = False):
+    suitTrack = Sequence()
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    removeTrainTrack(suit, battle, suitTrack)
+    deathSuit = suit.getLoseActor(headless=headless)
+    deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
+    suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
+    suitTrack.append(Func(insertDeathSuit, suit, deathSuit, battle, suitPos, suitHpr))
+    suitTrack.append(Func(notify.debug, 'before actorInterval lose'))
+    suitTrack.append(ActorInterval(deathSuit, 'headless-death', duration=3.0))
+    suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
+    suitTrack.append(Func(removeDeathSuit, suit, deathSuit, name='remove-death-suit'))
+    suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
+    deathSound = base.loadSfx('phase_5/audio/sfx/COG_headless_death.ogg')
+    deathSoundTrack = Sequence(Wait(0), SoundInterval(deathSound, volume=0.6))
+
+    returnval = Parallel(suitTrack, deathSoundTrack)
+    return returnval
+
+def createSuitCrashTrack(suit):
+    suitScale = suit.getScale()
+    suitPos = suit.getPos()
+    hitTime = 0.1
+    shrinkStartDelay = 2.0
+    #crashSoundEffects = []
+    #for sound in crashSounds:
+        #crashSoundEffects.append(globalBattleSoundCache.getSound(sound))
+    soundTrack = base.loadSfx('phase_5/audio/sfx/drop_react.ogg')
+    deathSoundTrack = Sequence(Wait(0), SoundInterval(soundTrack, volume=1.0))
+    suitTrack = Sequence(Wait(hitTime),
+                         Func(suit.setScale, Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
+                         Func(suit.setPos, Point3(suitPos[0], suitPos[1], suitPos[2] + 0.02)),
+                         Func(suit.setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
+                         Func(suit.deleteDropShadow),
+                         Wait(shrinkStartDelay),
+                         LerpScaleInterval(suit, 0.8, Point3(0.0001, 0.0001, 0.0001), blendType='easeIn'),
+                         Func(suit.hide))
+    return Parallel(suitTrack, deathSoundTrack)
 
 
 def createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits):
@@ -816,6 +861,19 @@ def getToonTeleportInInterval(toon):
     jumpTrack = Sequence(Wait(delay), Func(toon.reparentTo, render), ActorInterval(toon, 'jump'))
     return Parallel(holeAnimTrack, jumpTrack)
 
+def getSuitStuns(attacks):
+    fShowStun = 0
+    if isGroupAttack(attacks[0]):
+        for target in attacks[0]['target']:
+            fShowStun = len(attacks) == 1 and target['hp'] > 0
+    else:
+        fShowStun = len(attacks) == 1 and attacks[0]['target']['hp'] > 0
+    return fShowStun
+
+
+def isGroupAttack(attack):
+    return isinstance(attack['target'], type([]))
+
 
 def getSuitRakeOffset(suit):
     suitName = suit.getStyleName()
@@ -929,7 +987,7 @@ def createSuitStunInterval(suit, before, after):
     head.calcTightBounds(p1, p2)
     hasAnimatedHead = False
     if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
+            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'dfh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
             and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
             and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
             and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
@@ -948,6 +1006,16 @@ def createSuitStunInterval(suit, before, after):
     else:
         return Sequence(Wait(before), Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)),
                         Func(stars.loop, 'stun'), Wait(after), Func(stars.cleanup), Func(stars.removeNode))
+
+def createLureStunInterval(suit):
+    p1 = Point3(0)
+    p2 = Point3(0)
+    stars = globalPropPool.getProp('stun')
+    stars.setColor(1, 1, 1, 1)
+    stars.adjustAllPriorities(100)
+    head = suit.getHeadParts()[0]
+    head.calcTightBounds(p1, p2)
+    return Sequence(Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)), Func(stars.loop, 'stun'), Func(stars.cleanup), Func(stars.removeNode))
 	
 def zapCog(suit, before, after, battle):
     zapSuit = suit.getZapActor()
@@ -962,7 +1030,7 @@ def zapCog(suit, before, after, battle):
     p2 = Point3(0)
     head = suit.getHeadParts()[0]
     head.calcTightBounds(p1, p2)
-    headLoop = head.hprInterval(0.5, Vec3(360, 0, 0))
+    headLoop = head.hprInterval(0.5, Vec3(0, 0, 0))
     headNormal = head.hprInterval(0, Vec3(0, 0, 0))
     zapTrack = Sequence(Wait(before), Func(base.playSfx, zapSfx), headLoop, headLoop, Wait(after), headNormal)
     flashTrack = Sequence(Wait(before), Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
@@ -1029,3 +1097,16 @@ def calcAvgSuitPos(throw):
 
     avgSuitPos /= numTargets
     return avgSuitPos
+
+def sortAttacks(attacksDict):
+    attacks = attacksDict.values()
+
+    def compFunc(a, b):
+        if len(a) > len(b):
+            return 1
+        elif len(a) < len(b):
+            return -1
+        return 0
+
+    attacks.sort(compFunc)
+    return attacks

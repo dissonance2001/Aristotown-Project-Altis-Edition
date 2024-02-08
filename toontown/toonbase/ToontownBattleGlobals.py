@@ -170,7 +170,7 @@ EXECUTIVE_HP_MULT = 1.5
 EXECUTIVE_DMG_MULT = 1.2
 EXECUTIVE_BASE_CHANCE = 40
 GOVERNAUGHT_HP_MULT = 2
-GOVERNAUGHT_DMG_MULT = 2.0
+GOVERNAUGHT_DMG_MULT = 1.5
 GOVERNAUGHT_BASE_CHANCE = 15
 pieNames = ['cupcake',
  'fruitpie-slice',
@@ -337,13 +337,13 @@ AvPropAccuracy = ((70,
   95,
   95,
   95),
- (80,
-  80,
-  80,
-  80,
-  80,
-  80,
-  80),
+ (100,
+  100,
+  100,
+  100,
+  100,
+  100,
+  100),
  (80,
   80,
   80,
@@ -400,7 +400,7 @@ AvPropDamage = ((((8, 10), (Levels[0][0], Levels[0][1])),
                  ((30, 30), (Levels[5][3], Levels[5][4])),
                  ((60, 60), (Levels[5][4], Levels[5][5])),
                  ((90, 90), (Levels[5][5], Levels[5][6])),
-                 ((115, 115), (Levels[5][6], MaxSkill))),
+                 ((120, 120), (Levels[5][6], MaxSkill))),
  ( # Zap
   ((3, 4), (Levels[6][0], Levels[6][1])),
   ((5, 6), (Levels[6][1], Levels[6][2])),
@@ -412,11 +412,11 @@ AvPropDamage = ((((8, 10), (Levels[0][0], Levels[0][1])),
  ),
                 (((20, 20), (Levels[6][0], Levels[6][1])),
                  ((35, 35), (Levels[6][1], Levels[6][2])),
-                 ((40, 40), (Levels[6][2], Levels[6][3])),
+                 ((56, 56), (Levels[6][2], Levels[6][3])),
                  ((90, 90), (Levels[6][3], Levels[6][4])),
                  ((140, 140), (Levels[6][4], Levels[6][5])),
                  ((200, 200), (Levels[6][5], Levels[6][6])),
-                 ((275, 275), (Levels[6][6], MaxSkill))))
+                 ((250, 250), (Levels[6][6], MaxSkill))))
 ATK_SINGLE_TARGET = 0
 ATK_GROUP_TARGET = 1
 AvPropTargetCat = ((ATK_SINGLE_TARGET,
@@ -456,26 +456,32 @@ AvPropTarget = (0,
  3,
  3,
  3)
-AvLureRounds = (2,
+AvLureRounds = (1,
+ 1,
+ 2,
  2,
  3,
  3,
- 4,
- 4,
- 5)
+ 4)
+AvZapJumps = ((3, 2.25, 1.5),
+              (3, 2.5, 2),
+              (3, 2.75, 2.5))
 InstaKillChance = [2, 3, 5, 8, 10, 15, 20]
-AvSoakRounds = (2, 2, 3, 3, 4, 4, 5)
+AvSoakRounds = (1, 1, 2, 2, 3, 3, 4)
+AvMarkRounds = (1, 1, 1, 1, 1, 1, 1)
+AvDazeRounds = (2, 2, 2, 2, 2, 2, 2)
 AvSoakDefReduction = 15
+AvDazeDefReduction = 10
+AvMarkBoost = 10
+AvZapBoost = 300
 TRAP_EXECUTIVE_BONUS = 0.3
 TRAP_HEALTHY_BONUS = 0.2
 
-def getTrapDamage(trapLevel, toon, suit = None, executive = None, healthy = None):
+
+def getTrapDamage(trapLevel, toon, suit = None, executive = None):
     if suit:
-        executive = suit.getExecutive() or suit.getManager() or suit.getGovernaught()
-        healthy = suit.currHP >= suit.maxHP / 2
+        executive = suit.getExecutive() or suit.getGovernaught()
     damage = getAvPropDamage(TRAP_TRACK, trapLevel, toon.experience.getExp(TRAP_TRACK))
-    if healthy:
-        damage += math.ceil(damage * TRAP_HEALTHY_BONUS)
     if executive:
         damage += math.ceil(damage * TRAP_EXECUTIVE_BONUS)
     return int(damage)
@@ -503,7 +509,7 @@ def getAvPropDamage(attackTrack, attackLevel, exp, organicBonus = False, propBon
 
 def getDamageBonus(normal, track = 4):
     if track == THROW_TRACK:
-        bonus = int(normal * 0.2)
+        bonus = int(normal * 0.1)
         if bonus < 1 and normal > 0:
             bonus = 1
     else:
@@ -652,6 +658,8 @@ ValidStatusConditions = (
     # cog specific
     'soaked',   # decreases afflicted targets' dodge rates by 15%
     'lured',
+    'marked',
+    'dazed',
     # battle specific
     'corruption',   # increases damage taken from attacks (toons only)
     'shadowInfluence',  # increases damage recieved from attacks (cogs only)

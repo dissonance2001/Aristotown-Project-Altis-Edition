@@ -91,7 +91,7 @@ def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamag
                 suitTrack.append(Func(setPosFromOther, breakEffect, suit, Point3(0, 0.0, suit.getHeight() - 1.0)))
                 #suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5))) THIS CRASHES PANDA WITH A BOUNDING SPHERE ERROR
                 suitTrack.append(Sequence(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit)))
-                if died and not suit.getSkelecog():
+                if died:
                     suitTrack.append(headExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
@@ -186,7 +186,7 @@ def __doSoundsLevel(sounds, delay, hitCount, npcs):
                 deathTracks.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
             elif died:
                 if (sound['level'] >= ToontownBattleGlobals.UBER_GAG_LEVEL_INDEX) and (totalDamage >= target['hp']):
-                    deathTracks.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs, headless=True))
+                    deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle, headless=True))
                 else:
                     deathTracks.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
 

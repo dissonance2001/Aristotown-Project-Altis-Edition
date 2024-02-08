@@ -69,23 +69,23 @@ class FriendsListManager:
             return
         if not self._entered:
             return
-        self._entered = True
-        self.accept('openFriendsList', self.__openFriendsList)
+        self._entered = False
+        self.ignore('openFriendsList')
         self.accept('clickedNametag', self.__handleClickedNametag)
         self.accept('clickedNametagPlayer', self.__handleClickedNametagPlayer)
-        base.localAvatar.setFriendsListButtonActive(1)
+        base.localAvatar.setFriendsListButtonActive(0)
         NametagGlobals.setWantActiveNametags(True)
         if self.avatarPanel:
             self.avatarPanel.cleanup()
             self.avatarPanel = None
         self.ignore('gotoAvatar')
-        self.accept('friendAvatar', self.__handleFriendAvatar)
-        self.accept('avatarDetails', self.__handleAvatarDetails)
-        self.accept('playerDetails', self.__handlePlayerDetails)
+        self.ignore('friendAvatar')
+        self.ignore('avatarDetails')
+        self.ignore('playerDetails')
         FriendsListPanel.hideFriendsList()
         ToontownFriendSecret.hideFriendSecret()
         if base.cr.friendManager:
-            base.cr.friendManager.setAvailable(1)
+            base.cr.friendManager.setAvailable(0)
         self.ignore('friendInvitation')
         FriendInviter.hideFriendInviter()
         ToonAvatarDetailPanel.hideAvatarDetail()

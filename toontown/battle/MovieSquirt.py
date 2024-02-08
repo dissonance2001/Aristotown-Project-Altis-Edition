@@ -204,24 +204,29 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         else:
             sival = ActorInterval(suit, anim)
         soakTracks.append(__soakSuit(suit))
-        suitIndex = battle.activeSuits.index(suit)
-        soakTracks.append(__soakNearby(suitIndex + 1, battle.activeSuits))
-        soakTracks.append(__soakNearby(suitIndex - 1, battle.activeSuits))
+        #suitIndex = battle.activeSuits.index(suit)
+        #soakTracks.append(__soakNearby(suitIndex + 1, battle.activeSuits))
+        #soakTracks.append(__soakNearby(suitIndex - 1, battle.activeSuits))
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=SQUIRT_TRACK)
-        updateHealthBar = Func(suit.updateHealthBar, hp)
+        value = hp
+        #if kbbonus > 0:
+            #value += kbbonus
+        #if hpbonus > 0:
+            #value += hpbonus
+        updateHealthBar = Func(suit.updateHealthBar, value)
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
         durationToWait = 0
         if kbbonus > 0:
-            durationToWait += 0
+            durationToWait += 0.75
         if hpbonus > 0:
-            durationToWait += 0
+            durationToWait += 0.75
         if not geyser:
-            suitTrack.append(Parallel(sival, Sequence(Wait(durationToWait), Func(showSoakRounds, suit, level))))
+            suitTrack.append(Parallel(sival, Sequence(Wait(2), Func(showSoakRounds, suit, level))))
         elif not uberRepeat:
             geyserMotion = Sequence(sUp, Wait(0.0), sDown)
-            suitLaunch = Parallel(sival, geyserMotion, Sequence(Wait(durationToWait), Func(showSoakRounds, suit, level)))
+            suitLaunch = Parallel(sival, geyserMotion, Sequence(Wait(2), Func(showSoakRounds, suit, level)))
             suitTrack.append(suitLaunch)
         else:
             suitTrack.append(Wait(5.5))
@@ -251,7 +256,7 @@ def say(statement):
 def __soakNearby(suitIndex, suits):
     if len(suits) > suitIndex >= 0:
         return Parallel(Sequence(ActorInterval(suits[suitIndex], 'squirt-small-react')),
-                        __soakSuit(suits[suitIndex]))
+                        __soakSuit(suits[suitIndex]), Func(suit.loop, 'neutral'))
     else:
         return Sequence()
 

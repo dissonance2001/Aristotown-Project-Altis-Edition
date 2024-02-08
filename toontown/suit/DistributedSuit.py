@@ -725,7 +725,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.nametag.setChatText(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if not self.style.name == 'm' and not self.style.name == 'tf' and not self.style.name == 'ad' and not self.style.name == 'bfh' and not self.style.name == 'dvg' and not self.style.name == 'f' and not self.style.name == 'p' and not self.style.name == 'ym' and not self.style.name == 'mm' \
-                and not self.style.name == 'ds' and not self.style.name == 'hh' and not self.style.name == 'cr' and not self.style.name == 'tbc'\
+                and not self.style.name == 'ds' and not self.style.name == 'hh' and not self.style.name == 'dfh' and not self.style.name == 'cr' and not self.style.name == 'tbc'\
                 and not self.style.name == 'trb' and not self.style.name == 'dot' and not self.style.name == 'dvg' and not self.style.name == 'cpl' and not self.style.name == 'bkp' and not self.style.name == 'kpn' and not self.style.name == 'sjg' \
                 and not self.style.name == 'sc' and not self.style.name == 'sjg' and not self.style.name == 'pp' and not self.style.name == 'tw' and not self.style.name == 'bc' and not self.style.name == 'nc' and not self.style.name == 'mb' \
                 and not self.style.name == 'ls' and not self.style.name == 'rb' and not self.style.name == 'ptr' and not self.style.name == 'mld' and not self.style.name == 'pht' and not self.style.name == 'cc' and not self.style.name == 'tm' \

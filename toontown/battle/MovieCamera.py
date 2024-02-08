@@ -277,14 +277,11 @@ def chooseSquirtCloseShot(squirts, suitSquirtsDict, openDuration, openName, atta
     track = apply(random.choice(shotChoices), [av, duration])
     return track
 
-def chooseZapShot(zaps, attackDuration, enterDuration = 0.0, exitDuration = 0.0):
+def chooseZapShot(zaps, attackDuration, enterDuration=0.0, exitDuration=0.0):
     enterShot = chooseNPCEnterShot(zaps, enterDuration)
-    openShot = chooseZapOpenShot(zaps, attackDuration)
-    openDuration = openShot.getDuration()
-    openName = openShot.getName()
-    closeShot = chooseZapCloseShot(zaps, openDuration, openName, attackDuration)
     exitShot = chooseNPCExitShot(zaps, exitDuration)
-    track = Sequence(enterShot, openShot, closeShot, exitShot)
+    fullShot = allGroupHighShot(None, attackDuration)
+    track = Sequence(enterShot, fullShot, exitShot)
     return track
 
 
@@ -307,14 +304,18 @@ def chooseZapCloseShot(zaps, openDuration, openName, attackDuration):
     return track
 
 
-def chooseDropShot(drops, suitDropsDict, attackDuration, enterDuration = 0.0, exitDuration = 0.0):
+def chooseDropShot(drops, suitDropsDict, attackDuration, enterDuration=0.0, exitDuration=0.0):
     enterShot = chooseNPCEnterShot(drops, enterDuration)
-    openShot = chooseDropOpenShot(drops, suitDropsDict, attackDuration)
-    openDuration = openShot.getDuration()
-    openName = openShot.getName()
-    closeShot = chooseDropCloseShot(drops, suitDropsDict, openDuration, openName, attackDuration)
     exitShot = chooseNPCExitShot(drops, exitDuration)
-    track = Sequence(enterShot, openShot, closeShot, exitShot)
+    if any(drop['level'] > 0 for drop in drops):
+        fullShot = allGroupHighShot(None, attackDuration)
+        track = Sequence(enterShot, fullShot, exitShot)
+    else:
+        openShot = chooseDropOpenShot(drops, suitDropsDict, attackDuration)
+        openDuration = openShot.getDuration()
+        openName = openShot.getName()
+        closeShot = chooseDropCloseShot(drops, suitDropsDict, openDuration, openName, attackDuration)
+        track = Sequence(enterShot, openShot, closeShot, exitShot)
     return track
 
 
@@ -816,11 +817,15 @@ def allGroupShot(avatar, duration):
 
 
 def allGroupLowShot(avatar, duration):
-    return heldShot(15, 0, 3, 89, 0, 0, duration, 'allGroupLowShot')
+    return heldShot(17, -5, 3, 79, 0, 0, duration, 'allGroupLowShot')
 
 
 def allGroupLowDiagonalShot(avatar, duration):
     return heldShot(7, 5, 6, 119, -30, 0, duration, 'allGroupLowShot')
+
+
+def allGroupHighShot(avatar, duration):
+    return heldShot(0, -15, 7, 0, 0, 0, duration, 'allGroupHighShot')
 
 
 def toonGroupShot(avatar, duration):

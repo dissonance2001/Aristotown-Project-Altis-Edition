@@ -282,7 +282,7 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, npcs
     objInit = Func(posObject, object, hp <= 0)
     objectTrack.append(Wait(delay + tObjectAppears))
     objectTrack.append(objInit)
-    if (hp > 0 and (not died and lastDrop)) or 0 < level < 4:
+    if (hp > 0 and (not died and lastDrop)) or 0 < level < 3:
         if hasattr(object, 'getAnimControls'):
             animProp = ActorInterval(object, objName)
             shrinkProp = LerpScaleInterval(object, dShrink, Point3(0.01, 0.01, 0.01), startScale=object.getScale())
@@ -401,7 +401,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
             suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
         if died and lastDrop:
             if majorObject:
-                suitGettingHit.append(suitCrashTrack(suit))
+                suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit))
                 suitTrack.append(suitGettingHit)
                 return suitTrack
             elif not suit.getSkelecog():
@@ -413,11 +413,11 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         bonusTrack = None
         if hpbonus > 0:
             bonusTrack = Sequence(Wait(delay + tObjectAppears + 0.75), Func(suit.showHpText, -hpbonus, 1, openEnded=0), Func(suit.updateHealthBar, hpbonus))
-            bonusTrack.append(updateHealthBar)
+            #bonusTrack.append(updateHealthBar)
         if revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
         elif died != 0:
-            suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs, headless))
+            suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle, headless))
         else:
             suitTrack.append(Func(suit.loop, 'neutral'))
         if bonusTrack != None:
@@ -448,11 +448,11 @@ def suitCrashTrack(suit):
                          Func(suit.setScale, Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
                          Func(suit.setPos, Point3(suitPos[0], suitPos[1], suitPos[2] + 0.02)),
                          Func(suit.setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
-                         Func(suit.deleteNametag3d),
                          Func(suit.deleteDropShadow),
                          Wait(shrinkStartDelay),
                          LerpScaleInterval(suit, 0.8, Point3(0.0001, 0.0001, 0.0001), blendType='easeIn'),
-                         Func(suit.hide))
+                         Func(suit.hide), SoundInterval(crashSoundEffects[0], node=suit),
+                          SoundInterval(crashSoundEffects[1], node=suit))
     soundTrack = Parallel(SoundInterval(crashSoundEffects[0], node=suit),
                           SoundInterval(crashSoundEffects[1], node=suit))
     return Parallel(suitTrack, soundTrack)
