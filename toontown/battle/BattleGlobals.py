@@ -8,8 +8,8 @@ DamageBonuses = [0,
  20]
 DamageBonusesDrop = [0,
  30,
- 40,
- 50]
+ 30,
+ 30]
 AttackExpPerTrack = [0,
  10,
  20,

@@ -155,6 +155,8 @@ def doSuitAttack(attack):
         suitTrack = doEvictionNotice(attack)
     elif name == CHOMP:
         suitTrack = doChomp(attack)
+    elif name == LD_QUAKE:
+        suitTrack = doQuake(attack)
     elif name == SNAP:
         suitTrack = doSnap(attack)
     elif name == BLACK_ORB:
@@ -2100,8 +2102,8 @@ def doPoisonSpray(attack):
     print('*************************************')
 
     print('suit.currHP %i' % int(suit.currHP))
-    print('setHP() %i' % int(suit.currHP - 800))
-    suit.setHealthForMe(int(suit.currHP - 800))
+    print('setHP() %i' % int(suit.currHP - 400))
+    suit.setHealthForMe(int(suit.currHP - 400))
     print('suit.currHP %i' % int(suit.currHP))
 
     print('ts.currHP %i' % int(theSuit.currHP))
@@ -2111,7 +2113,7 @@ def doPoisonSpray(attack):
 
     suitTrack = Sequence(getSuitAnimTrack(attack), ActorInterval(attack['suit'], 'neutral'))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_defense.ogg'), node=suit))
-    selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, -800), Func(suit.updateHealthBar, 0))
+    selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, -400), Func(suit.updateHealthBar, 0))
     managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpText, 800), Func(theSuit.updateHealthBar, 0),
                                 SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=theSuit))
     return Parallel(suitTrack, soundTrack, selfDamageTrack, managerHealTrack)
@@ -2767,8 +2769,8 @@ def doGlowerPower(attack):
         leftPosPoints = [Point3(0.6, 4.5, 6), MovieUtil.PNT3_ZERO]
         rightPosPoints = [Point3(-0.6, 4.5, 6), MovieUtil.PNT3_ZERO]
     else:
-        leftPosPoints = [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO]
-        rightPosPoints = [Point3(-0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO]
+        leftPosPoints = [Point3(0.4, 6.0, 7.0), MovieUtil.PNT3_ZERO]
+        rightPosPoints = [Point3(-0.4, 6.0, 7.0), MovieUtil.PNT3_ZERO]
     leftKnifeTracks = Parallel()
     rightKnifeTracks = Parallel()
     for i in xrange(0, 3):
@@ -2992,7 +2994,7 @@ def doEvilEye(attack):
     elif suitName == 'le':
         posPoints = [Point3(-0.64, 4.45, 5.91), VBase3(-155.0, -20.0, 0.0)]
     else:
-        posPoints = [Point3(-0.4, 3.65, 5.01), VBase3(-155.0, -20.0, 0.0)]
+        posPoints = [Point3(-0.4, 6.0, 7.0), VBase3(-155.0, -20.0, 0.0)]
     appearDelay = 0.8
     suitHoldStart = 1.06
     suitHoldStop = 1.69

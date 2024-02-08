@@ -447,18 +447,16 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                            # track, level)})
                                                                                          ##'extra': self.getExtraText(track, level, organicBonus)})
             #self.detailCreditLabel.setPos(-0.22, 0, -0.39625)
-        if (track == TRAP_TRACK and organicBonus):
+        if track == TRAP_TRACK:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
-                                                                                   'bonus': '\nHealthy Mult.: %i%s\nExe. Mult.: %i%s' % (
+                                                                                   'bonus': '\nExe./Gov. Mult.: %i%s\nDaze Rounds: %i' % (
                                                                                    int(damage * (
-                                                                                               1 + ToontownBattleGlobals.TRAP_HEALTHY_BONUS)),
-                                                                                   damageAppendStr, int(damage * (
                                                                                                1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS)),
-                                                                                   damageAppendStr) + damageBonusStr,
+                                                                                   damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.42625)
@@ -467,9 +465,31 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': "Rounds",
                                                                                    'damage':
                                                                                        ToontownBattleGlobals.AvLureRounds[
-                                                                                           level],
+                                                                                           level] + 1,
                                                                                    'bonus': '\nKnockback: %i%%' % (
                                                                                        lureValue) + damageBonusStr,
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.39625)
+        elif track == THROW_TRACK:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': self.getToonupDmgStr(
+                                                                                       track, level),
+                                                                                   'damage': str(
+                                                                                       damage) + damageAppendStr,
+                                                                                   'bonus': '\nMark Rounds: %i\nBonus Damage: %i%%' % (
+                                                                                       ToontownBattleGlobals.AvMarkRounds[
+                                                                                           level], +ToontownBattleGlobals.AvMarkBoost) + damageBonusStr,
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.42625)
+        elif track == ZAP_TRACK:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': self.getToonupDmgStr(
+                                                                                       track, level),
+                                                                                   'damage': str(
+                                                                                       damage) + damageAppendStr,
+                                                                                   'bonus': '\nSoak Damage Mult.: %i%%' % ToontownBattleGlobals.AvZapBoost + damageBonusStr,
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.39625)

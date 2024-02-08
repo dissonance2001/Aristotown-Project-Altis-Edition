@@ -87,7 +87,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         [ToontownGlobals.BossbotHQ, 8, 30, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (100, 0, 0, 0, 0),
          (7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
         [ToontownGlobals.SellbotHQ, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 20, 20, 20, 20),
-         (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
+         (7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
         [ToontownGlobals.SellbotFactoryExt, 8, 70, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 20, 20, 20, 20),
          (7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
         [ToontownGlobals.CashbotHQ, 8, 100, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 100, 0, 0),
@@ -110,7 +110,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     SUIT_HOOD_INFO_HEIGHTS = 10
     SUIT_HOOD_INFO_ECHANCE = 11
     MAX_SUIT_TYPES = 8
-    MAX_SUIT_TYPES_HQ = 14
+    MAX_SUIT_TYPES_HQ = 16
     HQ_SKELE_CHANCE = 0
     POP_UPKEEP_DELAY = 10
     POP_ADJUST_DELAY = 200
@@ -1107,7 +1107,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             self.isElite = True
         if type is None:
             if ZoneUtil.isCogHQZone(self.zoneId):
-                typeChoices = range(max(level - 13, 1), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
+                typeChoices = range(max(level - 13, 5), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
                 type = random.choice(typeChoices)
                 if random.random() < self.HQ_SKELE_CHANCE:
                     self.skeleChance = 1

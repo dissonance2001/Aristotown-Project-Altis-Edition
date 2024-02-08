@@ -77,7 +77,7 @@ def doZaps(zaps):
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
     camDuration = zapTrack.getDuration()
-    camTrack = MovieCamera.chooseLureShot(zaps, camDuration, enterDuration, exitDuration)
+    camTrack = MovieCamera.chooseZapShot(zaps, camDuration, enterDuration, exitDuration)
     return (zapTrack, camTrack)
 
 
@@ -150,19 +150,19 @@ def __createSuitResetPosTrack(suit, battle):
 def createSuitResetPosTrack(suit, battle):
     return __createSuitResetPosTrack(suit, battle)
 
-def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 1.8, uberRepeat = 0, revived = 0, npcs = [], dodge = True):
+def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 2.0, uberRepeat = 0, revived = 0, npcs = [], dodge = True):
     if hp > 0:
         suitTrack = Sequence()
         zapTracks = Parallel()
         sival = ActorInterval(suit, anim)
         sival = []
         if fShowStun == 1:
-            sival = Parallel(Func(suit.loop, anim), MovieUtil.zapCog(suit, beforeStun, afterStun, battle))
+            sival = Parallel(Func(suit.loop, anim), MovieUtil.zapCog(suit, beforeStun, afterStun, battle), MovieUtil.createSuitStunInterval(suit, 0.1, 1.8))
         else:
             sival = ActorInterval(suit, anim)
-        suitIndex = battle.activeSuits.index(suit)
-        zapTracks.append(__zapNearby(suitIndex + 1, battle.activeSuits))
-        zapTracks.append(__zapNearby(suitIndex - 1, battle.activeSuits))
+        #suitIndex = battle.activeSuits.index(suit)
+        #zapTracks.append(__zapNearby(suitIndex + 1, battle.activeSuits))
+        #zapTracks.append(__zapNearby(suitIndex - 1, battle.activeSuits))
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=ZAP_TRACK)
         updateHealthBar = Func(suit.updateHealthBar, hp)
         suitTrack.append(Wait(tContact))
@@ -178,10 +178,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=ZAP_TRACK))
             bonusTrack.append(updateHealthBar)
         if died != 0:
-            if hp == suit.currHP:
-                suitTrack.append(shortCircuitTrack(suit, battle))
-            else:
-                suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
+            suitTrack.append(shortCircuitTrack(suit, battle))
         else:
             suitTrack.append(Func(suit.loop, 'neutral'))
         if revived != 0:

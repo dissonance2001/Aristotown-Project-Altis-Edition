@@ -122,6 +122,20 @@ def __doSuitThrows(throws, npcs):
 
     return toonTracks
 
+def showMarkRounds(suit, level):
+    suit.showHpText("MARKED!")
+
+def doMarkRemovals(markRemovals):
+    mainTrack = Parallel()
+    for soakRemoval in soakRemovals:
+        if len(soakRemoval) > 0:
+            suit = soakRemoval['suit']
+            mainTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=6.5), __soakSuit(suit, 1)))
+
+    camDuration = mainTrack.getDuration()
+    camTrack = MovieCamera.allGroupHighShot(None, camDuration)
+    return mainTrack, camTrack
+
 
 def __showProp(prop, parent, pos):
     prop.reparentTo(parent)
@@ -337,7 +351,13 @@ def __throwPie(throw, delay, hitCount, npcs):
     if hitSuit:
         suitResponseTrack = Sequence()
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=THROW_TRACK)
-        updateHealthBar = Func(suit.updateHealthBar, hp)
+        markDamage = Func(showMarkRounds, suit, level)
+        value = hp
+        #if kbbonus > 0:
+            #value = kbbonus
+        #if hpbonus > 0:
+            #value = hpbonus
+        updateHealthBar = Func(suit.updateHealthBar, value)
         sival = []
         if kbbonus > 0:
             suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -362,6 +382,8 @@ def __throwPie(throw, delay, hitCount, npcs):
         suitResponseTrack.append(Func(__splatSuit, suit, level))
         suitResponseTrack.append(updateHealthBar)
         suitResponseTrack.append(sival)
+        suitResponseTrack.append(Wait(0))
+        suitResponseTrack.append(markDamage)
         bonusTrack = Sequence(Wait(delay + tPieHitsSuit))
         if kbbonus > 0:
             bonusTrack.append(Wait(0.75))
