@@ -477,7 +477,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
-                                                                                   'bonus': '\nMark Rounds: %i\nBonus Damage: %i%%' % (
+                                                                                   'bonus': '\nMark Rounds: %i\nMarked Damage: %i%%' % (
                                                                                        ToontownBattleGlobals.AvMarkRounds[
                                                                                            level], +ToontownBattleGlobals.AvMarkBoost) + damageBonusStr,
                                                                                    'singleOrGroup': self.getSingleGroupStr(
@@ -530,7 +530,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
              'damageString': self.getToonupDmgStr(track, level),
-             'damage': str(damage) + damageAppendStr,
+             'damage': str(damage) + damageAppendStr + '+Varies',
              'bonus': damageBonusStr,
              'singleOrGroup': self.getSingleGroupStr(track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.365)
@@ -1163,6 +1163,14 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         if track == SQUIRT_TRACK and 'noSquirtGags' in base.localAvatar.battleConditions:
                             self.makeUnpressable(button, track, level)
                         if track == ZAP_TRACK and 'noZapGags' in base.localAvatar.battleConditions:
+                            self.makeUnpressable(button, track, level)
+                        if level == 3 and 'nolevel4s' in base.localAvatar.battleConditions:
+                            self.makeUnpressable(button, track, level)
+                        if level == 4 and 'nolevel5s' in base.localAvatar.battleConditions:
+                            self.makeUnpressable(button, track, level)
+                        if level == 5 and 'nolevel6s' in base.localAvatar.battleConditions:
+                            self.makeUnpressable(button, track, level)
+                        if level == 6 and 'nolevel7s' in base.localAvatar.battleConditions:
                             self.makeUnpressable(button, track, level)
                         if track == DROP_TRACK and 'noDropGags' in base.localAvatar.battleConditions:
                             self.makeUnpressable(button, track, level)

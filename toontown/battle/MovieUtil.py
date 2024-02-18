@@ -286,17 +286,17 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
     suitTrack = Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     removeTrainTrack(suit, battle, suitTrack)
-    deathSuit = suit.getLoseActor()
+    deathSuit = suit
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
     hasAnimatedHead = False
     if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'dfh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
             and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
             and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
             and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
             and not suit.style.name == 'nd' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
             and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'ca' and not suit.style.name == 'cn' and not suit.style.name == 'sw' and not suit.style.name == 'mdm' \
-            and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng' and not suit.style.name == 'cps' \
+            and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng' \
             and not suit.style.name == 'tld':
         for headPart in suit.headParts:
             headInterval = Func(headPart.loop, 'death')
@@ -324,7 +324,7 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
     elif suit.style.name == 'nar':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'dvp':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'tcm':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'otm':
@@ -359,10 +359,8 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'dvk':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_redd_death.ogg')
-    elif suit.style.name == 'blr':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_erfit_death.ogg')
     elif suit.style.name == 'fbd':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'cp':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dlao_death.ogg')
     elif suit.style.name == 'frs':
@@ -377,8 +375,6 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'kb':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
-    elif suit.style.name == 'frs':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'cry':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'lsc':
@@ -399,6 +395,8 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'trb':
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+    elif suit.style.name == 'blr':
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'ad':
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'arb':
@@ -441,21 +439,21 @@ def createSuitReviveTrack(suit, toon, battle, npcs = []):
     return returnval
 
 
-def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
+def createSuitDeathTrack(suit, toon, battle, npcs = []):
     suitTrack = Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     removeTrainTrack(suit, battle, suitTrack)
-    deathSuit = suit.getLoseActor(headless=headless)
+    deathSuit = suit
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
     hasAnimatedHead = False
     if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'dfh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
+            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
             and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
             and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
             and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
             and not suit.style.name == 'nd' and not suit.style.name == 'gh' and not suit.style.name == 'ad' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
             and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'ca' and not suit.style.name == 'cn' and not suit.style.name == 'sw' and not suit.style.name == 'mdm' \
-            and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng' and not suit.style.name == 'cps' \
+            and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng' \
             and not suit.style.name == 'tld':
         for headPart in suit.headParts:
             headInterval = Func(headPart.loop, 'death')
@@ -482,7 +480,7 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
     elif suit.style.name == 'nar':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'dvp':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
     elif suit.style.name == 'tcm':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'otm':
@@ -515,10 +513,8 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'dvk':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_redd_death.ogg')
-    elif suit.style.name == 'blr':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_erfit_death.ogg')
     elif suit.style.name == 'fbd':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'cp':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dlao_death.ogg')
     elif suit.style.name == 'frs':
@@ -533,13 +529,13 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'kb':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
-    elif suit.style.name == 'frs':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'cry':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'lsc':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'fd':
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
+    elif suit.style.name == 'blr':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'nar':
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
@@ -596,16 +592,16 @@ def createSuitDeathTrack(suit, toon, battle, npcs = [], headless = False):
         returnval.append(headInterval)
     return returnval
 
-def createSuitHeadlessDeathTrack(suit, battle, headless = False):
+def createSuitHeadlessDeathTrack(suit, battle):
     suitTrack = Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     removeTrainTrack(suit, battle, suitTrack)
-    deathSuit = suit.getLoseActor(headless=headless)
+    deathSuit = suit
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
     suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
     suitTrack.append(Func(insertDeathSuit, suit, deathSuit, battle, suitPos, suitHpr))
     suitTrack.append(Func(notify.debug, 'before actorInterval lose'))
-    suitTrack.append(ActorInterval(deathSuit, 'headless-death', duration=3.0))
+    suitTrack.append(ActorInterval(deathSuit, 'lose2', duration=3.0))
     suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
     suitTrack.append(Func(removeDeathSuit, suit, deathSuit, name='remove-death-suit'))
     suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
@@ -987,13 +983,13 @@ def createSuitStunInterval(suit, before, after):
     head.calcTightBounds(p1, p2)
     hasAnimatedHead = False
     if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'dfh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
+            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
             and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
             and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
             and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
             and not suit.style.name == 'nd' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
             and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'ca' and not suit.style.name == 'cn' and not suit.style.name == 'sw' and not suit.style.name == 'mdm' \
-            and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'ad' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng' and not suit.style.name == 'cps' \
+            and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'ad' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng'  \
             and not suit.style.name == 'tld':
         for headPart in suit.headParts:
             headInterval = Func(headPart.loop, 'stun')
@@ -1007,6 +1003,35 @@ def createSuitStunInterval(suit, before, after):
         return Sequence(Wait(before), Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)),
                         Func(stars.loop, 'stun'), Wait(after), Func(stars.cleanup), Func(stars.removeNode))
 
+def createSuitLureInterval(suit):
+    p1 = Point3(0)
+    p2 = Point3(0)
+    stars = globalPropPool.getProp('stun')
+    stars.setColor(1, 1, 1, 1)
+    stars.adjustAllPriorities(100)
+    head = suit.getHeadParts()[0]
+    head.calcTightBounds(p1, p2)
+    hasAnimatedHead = False
+    if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+            and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' \
+            and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' and not suit.style.name == 'sjg' \
+            and not suit.style.name == 'sc' and not suit.style.name == 'sjg' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
+            and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
+            and not suit.style.name == 'nd' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
+            and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'ca' and not suit.style.name == 'cn' and not suit.style.name == 'sw' and not suit.style.name == 'mdm' \
+            and not suit.style.name == 'txm' and not suit.style.name == 'mg' and not suit.style.name == 'bfh' and not suit.style.name == 'ad' and not suit.style.name == 'hho' and not suit.style.name == 'bgh' and not suit.style.name == 'rng'  \
+            and not suit.style.name == 'tld':
+        for headPart in suit.headParts:
+            headLoopLure = Func(headPart.loop, 'neutral-lured')
+            headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+            hasAnimatedHead = True
+    if hasAnimatedHead:
+        return Parallel(Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)),
+                        Func(stars.loop, 'stun'), headLoopLure)
+    else:
+        return Parallel(Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)),
+                        Func(stars.loop, 'stun'))
+
 def createLureStunInterval(suit):
     p1 = Point3(0)
     p2 = Point3(0)
@@ -1016,6 +1041,10 @@ def createLureStunInterval(suit):
     head = suit.getHeadParts()[0]
     head.calcTightBounds(p1, p2)
     return Sequence(Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)), Func(stars.loop, 'stun'), Func(stars.cleanup), Func(stars.removeNode))
+
+def createDesperation(suit):
+    suitTrack = Func(suit.showHpTextRed, 'Desperation!')
+    return Parallel(suitTrack)
 	
 def zapCog(suit, before, after, battle):
     zapSuit = suit.getZapActor()
@@ -1097,6 +1126,17 @@ def calcAvgSuitPos(throw):
 
     avgSuitPos /= numTargets
     return avgSuitPos
+
+def calcAvgToonPos(attack):
+    battle = attack['battle']
+    avgToonPos = Point3(0, 0, 0)
+    numTargets = len(attack['target'])
+    for i in xrange(numTargets):
+        toon = attack['target'][i]['toon']
+        avgToonPos += toon.getPos(battle)
+
+    avgToonPos /= numTargets
+    return avgToonPos
 
 def sortAttacks(attacksDict):
     attacks = attacksDict.values()

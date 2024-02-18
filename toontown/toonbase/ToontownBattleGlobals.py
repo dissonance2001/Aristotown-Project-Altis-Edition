@@ -467,7 +467,7 @@ AvZapJumps = ((3, 2.25, 1.5),
               (3, 2.5, 2),
               (3, 2.75, 2.5))
 InstaKillChance = [2, 3, 5, 8, 10, 15, 20]
-AvSoakRounds = (1, 1, 2, 2, 3, 3, 4)
+AvSoakRounds = (2, 2, 3, 3, 4, 4, 5)
 AvMarkRounds = (1, 1, 1, 1, 1, 1, 1)
 AvDazeRounds = (2, 2, 2, 2, 2, 2, 2)
 AvSoakDefReduction = 15
@@ -648,6 +648,10 @@ ValidStatusConditions = (
     'throwBoost',
     'noThrowGags',
     'squirtBoost',
+    'nolevel7s',
+    'nolevel6s',
+    'nolevel5s',
+    'nolevel4s',
     'noSquirtGags',
     'zapBoost',
     'noZapGags',

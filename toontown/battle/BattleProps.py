@@ -411,7 +411,9 @@ class PropPool:
             s.setFrameRate(12)
             p.attachNewNode(s)
         elif name == 'ship':
+            paper = self.props[name]
             self.props[name] = self.props[name].find('**/ship_gag')
+            paper.setH(90)
         elif name == 'trolley':
             self.props[name] = self.props[name].find('**/trolley_car')
         elif name == 'black-orb':

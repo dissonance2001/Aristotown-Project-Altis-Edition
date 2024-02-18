@@ -186,7 +186,7 @@ def __doSoundsLevel(sounds, delay, hitCount, npcs):
                 deathTracks.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
             elif died:
                 if (sound['level'] >= ToontownBattleGlobals.UBER_GAG_LEVEL_INDEX) and (totalDamage >= target['hp']):
-                    deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle, headless=True))
+                    deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
                 else:
                     deathTracks.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
 

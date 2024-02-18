@@ -907,13 +907,13 @@ class Movie(DirectObject.DirectObject):
                 if a['group'] == ATK_TGT_GROUP:
                     for target in targetField:
                         if target['died'] and target['toon'].doId == base.localAvatar.doId:
-                            isLocalToonSad = True
+                            isLocalToonSad = False
 
                 elif a['group'] == ATK_TGT_SINGLE:
                     if targetField['died'] and targetField['toon'].doId == base.localAvatar.doId:
-                        isLocalToonSad = True
+                        isLocalToonSad = False
                 if isLocalToonSad:
-                    break
+                    continue
 
             if len(track) == 0:
                 return (None, None)

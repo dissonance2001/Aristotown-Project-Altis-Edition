@@ -436,7 +436,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == HEAVY_RAINFALL:
         camTrack.append(defaultCamera(openShotDuration=2.7))
     elif name == AFTERSHOCK:
-        camTrack.append(defaultCamera(openShotDuration=2.7))
+        camTrack.append(defaultCamera(openShotDuration=0.7))
     elif name == DROWNING:
         camTrack.append(defaultCamera(openShotDuration=2.7))
     elif name == FREEZING_RAIN:
@@ -446,12 +446,6 @@ def chooseSuitShot(attack, attackDuration):
     elif name == CALCULATE:
         camTrack.append(defaultCamera())
     elif name == CANNED:
-        camTrack.append(defaultCamera(openShotDuration=2.9))
-    elif name == BAR:
-        camTrack.append(defaultCamera(openShotDuration=2.9))
-    elif name == FREE_CRUISE:
-        camTrack.append(defaultCamera(openShotDuration=2.9))
-    elif name == DICE_ROULETTE:
         camTrack.append(defaultCamera(openShotDuration=2.9))
     elif name == CHOMP:
         camTrack.append(defaultCamera(openShotDuration=2.8))
@@ -469,6 +463,16 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(suitCameraShakeShot(suit, attackDuration, 0))
     elif name in (CHAINSAW_DETONATE, CHAINSAW_DETONATE_2, CHAINSAW_DETONATE_3):
         camTrack.append(suitCameraShakeShot(suit, attackDuration, 0))
+    elif name in (HEAD_ROLLER, HEAD_ROLLER_2, HEAD_ROLLER_3):
+        shakeIntensity = 0.25
+        quake = 1
+        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity, quake))
+        camTrack.append(defaultCamera(openShotDuration=6.8))
+    elif name in (UNION_BUST, UNION_BUST_2, UNION_BUST_3):
+        shakeIntensity = 0.25
+        quake = 1
+        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity, quake))
+        camTrack.append(defaultCamera(openShotDuration=6.8))
     elif name == DOUBLE_TALK:
         camTrack.append(defaultCamera(openShotDuration=3.9))
     elif name == EVICTION_NOTICE:
@@ -477,6 +481,14 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera(openShotDuration=3.2))
     elif name == INSURANCE_PLAN:
         camTrack.append(defaultCamera(openShotDuration=3.2))
+    elif name == OIL_RAIN:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == EMBEZZLE:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == FLOOD_THE_MARKET:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == CAGE:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == EXTRA_TIP:
         camTrack.append(defaultCamera(openShotDuration=3.2))
     elif name == REFINEMENT:
@@ -484,19 +496,27 @@ def chooseSuitShot(attack, attackDuration):
     elif name == LIFE_INSURANCE:
         camTrack.append(defaultCamera(openShotDuration=3.2))
     elif name == WORKERS_COMPENSATION:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(defaultCamera(openShotDuration=4.2))
     elif name == COURT_RECORD_1:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(defaultCamera(openShotDuration=4.2))
     elif name == COURT_RECORD_2:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(defaultCamera(openShotDuration=4.2))
+    elif name == COURT_RECORD_3:
+        camTrack.append(defaultCamera(openShotDuration=4.2))
+    elif name == COURT_RECORD_4:
+        camTrack.append(defaultCamera(openShotDuration=4.2))
+    elif name == COURT_RECORD_5:
+        camTrack.append(defaultCamera(openShotDuration=4.2))
+    elif name == SPOTLIGHT:
+        camTrack.append(defaultCamera(openShotDuration=4.2))
     elif name == COURT_MANDATE:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(defaultCamera(openShotDuration=4.2))
     elif name == COURT_MANDATE_1:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(defaultCamera(openShotDuration=4.2))
     elif name == COURT_MANDATE_2:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(defaultCamera(openShotDuration=4.2))
     elif name == COURT_MANDATE_3:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(defaultCamera(openShotDuration=4.2))
     elif name == EVIL_EYE:
         camTrack.append(defaultCamera(openShotDuration=2.7))
     elif name == EVIL_EYE_WSI:
@@ -554,7 +574,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == PICK_POCKET:
         camTrack.append(allGroupLowShot(suit, 2.7))
     elif name == COURT_SANCTION:
-        camTrack.append(defaultCamera(openShotDuration=1.6))
+        camTrack.append(defaultCamera(openShotDuration=0.6))
     elif name == CHAINSAW_REVVING_UP:
         camTrack.append(defaultCamera(openShotDuration=1.6))
     elif name == PINK_SLIP:
@@ -621,6 +641,8 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera(openShotDuration=2.9))
     elif name == SCHMOOZE:
         camTrack.append(defaultCamera(openShotDuration=2.8))
+    elif name == CONE_OF_SHAME:
+        camTrack.append(defaultCamera(openShotDuration=0.8))
     elif name == SHAKE:
         shakeIntensity = 1.75
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
@@ -634,6 +656,10 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == SYNERGY:
         camTrack.append(defaultCamera(openShotDuration=1.7))
+    elif name == UNION_DUES:
+        camTrack.append(defaultCamera(openShotDuration=1.7))
+    elif name == UNION_BUSTER:
+        camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == LEGAL_BINDINGS:
         camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == TABULATE:
@@ -644,6 +670,9 @@ def chooseSuitShot(attack, attackDuration):
         shakeIntensity = 0.25
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
     elif name == TREMOR:
+        shakeIntensity = 0.25
+        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
+    elif name == WHITE_POWDER:
         shakeIntensity = 0.25
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
     elif name == WATERCOOLER:

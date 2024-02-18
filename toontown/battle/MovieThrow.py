@@ -15,7 +15,7 @@ from toontown.battle.MovieUtil import calcAvgSuitPos
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieThrow')
 hitSoundFiles = ('AA_tart_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_wholepie_only.ogg', 'AA_wholepie_only.ogg')
 splatDict = {0: 'tiny_splat_cake', 1: 'tiny_splat_fruit', 2: 'tiny_splat_cream',
-             3: 'splat_cake', 4: 'splat_fruit', 5: 'splat_cream', 6: 'splat_cake', 7: 'splat_cake'}
+             3: 'splat_fruit', 4: 'splat_cream', 5: 'splat_cake', 6: 'splat_cake', 7: 'splat_cake'}
 tPieLeavesHand = 2.7
 tPieHitsSuit = 3.0
 tSuitDodges = 2.45
@@ -123,7 +123,7 @@ def __doSuitThrows(throws, npcs):
     return toonTracks
 
 def showMarkRounds(suit, level):
-    suit.showHpText("MARKED!")
+    suit.showHpTextWhite("MARKED!")
 
 def doMarkRemovals(markRemovals):
     mainTrack = Parallel()
@@ -618,6 +618,7 @@ def __splatSuit(suit, level):
     splatTex = loader.loadTexture('phase_5/maps/' + splatDict[level] + '.png')
     splat = TextureStage(splatDict[level])
     splat.setMode(TextureStage.MDecal)
+    #splat.setSavedResult()
     suit.find('**/body').setTexture(splat, splatTex)
 
 
