@@ -100,7 +100,7 @@ lbs - Charon Level 25.mgr
 trk - Plutocrat Level 38.mgr
 dsf - Count Erfit Level 10-20.mgr
 msp - High Roller Silhouettes Level 12-25.mgr
-mad - Cinematographer Level 50.mgr
+mad - Broadcaster Level 50.mgr
 crf - High Roller Level 100.mgr
 
 SELLBOTS:
@@ -127,8 +127,8 @@ jb - Desk Jockey Level 3-8.mgr
 jg - Prethinker Level 12.mgr
 jr - Multislacker Level 24.mgr
 prr - Videographer Level 50.mgr
-blr - Concierge Level 32.mgr change
-dvp - Pluviculturist Level 38.mgr change
+blr - Radiographer Level 35.mgr
+dvp - Perpetrator Level 38.mgr
 dsk - Union Buster Level 38.mgr
 ffm - Bureaucrat Level 45.mgr
 sft - Pacesetter Level 66.mgr
@@ -142,11 +142,11 @@ txm - Toxic Leader Level 5-15
 mg - Magnate Level 6-18
 bfh - Big Fish Level 7-20
 hho - Head Honcho Level 8-20
-bdb - Dark Horse Level 9-21
+bdb - Bagholder Level 9-21
 bgh - Sharp Seer Level 10-22
-dfh - Witch Doctor Level 11-23 
+dfh - Circuit Breaker Level 11-23 
 rng - Renegade Level 12-24
-cps - Broadcaster Level 13-25
+cps - Deadlock Level 13-25
 tld - Toxic Leader Level 14-26
 gkp - Chairperson Level 15.mgr
 ddv - Board Director Level 16-20.mgr
@@ -154,10 +154,10 @@ dty - Deep Diver Level 7.mgr
 dfg - Gatekeeper Level 10.mgr
 dfr - Land Acquisition Architect Level 7.mgr
 bsh - Director Of Land Development Level 25.mgr
-ghd - TBD Level 40.mgr dola
-tyh - TBD Level 44.mgr dold
+ghd - Test Dummy Level 69.mgr
+tyh - TBD Level 44.mgr 
 jgd - TBD Level 44.mgr
-bby - TBD Level 50.mgr judy
+bby - TBD Level 50.mgr
 dvk - Dividend King Level 65.mgr
 otm - The Ottoman Level 75.mgr
 cry - Crystalline Level 77.mgr

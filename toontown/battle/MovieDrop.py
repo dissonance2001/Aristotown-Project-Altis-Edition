@@ -405,7 +405,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
                 suitTrack.append(suitGettingHit)
                 return suitTrack
             elif not suit.getSkelecog():
-                headless = True
+                #headless = True
                 sequence = Sequence(Wait(random.uniform(0.25, 2.0)))
                 thing = Parallel(sequence, MovieUtil.spawnHeadExplosion(suit, battle))
                 suitGettingHit.append(thing)
@@ -417,7 +417,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         if revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
         elif died != 0:
-            suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle, headless))
+            suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
         else:
             suitTrack.append(Func(suit.loop, 'neutral'))
         if bonusTrack != None:

@@ -274,7 +274,7 @@ def __getSoundTrack(level, hitSuit, delay, node = None):
 
 
 def showSoakRounds(suit, level):
-    suit.showHpText("SOAKED %i ROUNDS" % ToontownBattleGlobals.AvSoakRounds[level])
+    suit.showHpTextWhite("SOAKED %i ROUNDS" % ToontownBattleGlobals.AvSoakRounds[level])
 
 def __soakSuit(suit, remove=0):
     if remove:

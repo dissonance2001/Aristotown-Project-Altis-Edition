@@ -124,19 +124,19 @@ class TownBattleCogPanel(DirectFrame):
     def setLevelText(self):
         t = 'Level ' + str(self.cog.getActualLevel())
         if self.cog.getSkeleRevives() > 0:
-            self['image_color'] = Vec4(0.5, 0.5, 0.5, 1.0)
+            #self['image_color'] = Vec4(0.5, 0.5, 0.5, 1.0)
             t += TTLocalizer.SkeleRevivePostFix
         else:
             self['image_color'] = Vec4(0.7, 0.7, 0.7, 1.0)
         if self.cog.getExecutive() or self.cog.getManager() or self.cog.getGovernaught():
             if self.cog.getExecutive():
-                self['image_color'] = Vec4(0.3, 0.3, 0.3, 1.0)
+                #self['image_color'] = Vec4(0.3, 0.3, 0.3, 1.0)
                 t += TTLocalizer.ExecutivePostFix
             elif self.cog.getManager():
-                self['image_color'] = Vec4(0.7, 0.4, 0.4, 1.0)
+                #self['image_color'] = Vec4(0.7, 0.4, 0.4, 1.0)
                 t += TTLocalizer.ManagerPostFix
             else:
-                self['image_color'] = Vec4(0.361, 0.635, 0.839, 1.0)
+                #self['image_color'] = Vec4(0.361, 0.635, 0.839, 1.0)
                 t += TTLocalizer.GovernaughtPostFix
         self.healthText['text'] = t
 
@@ -207,13 +207,13 @@ class TownBattleCogPanel(DirectFrame):
         if self.blinkTask:
             taskMgr.remove(self.blinkTask)
             self.blinkTask = None
-        
+
         self.hidden = True
         self.healthNode.hide()
         self.button.hide()
         #self.glow.hide()
         DirectFrame.hide(self)
-        
+
     def unload(self):
         if self.isLoaded == 0:
             return
