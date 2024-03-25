@@ -11,8 +11,12 @@ from toontown.battle import MovieNPCSOS
 
 from toontown.toonbase import ToontownBattleGlobals
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSound')
-soundFiles = ('AA_sound_bikehorn.ogg', 'AA_sound_whistle.ogg', 'AA_sound_bugle.ogg', 'AA_sound_aoogah.ogg', 'AA_sound_elephant.ogg', 'SZ_DD_foghorn.ogg', 'AA_sound_Opera_Singer.ogg')
-appearSoundFiles = ('MG_tag_1.ogg', 'LB_receive_evidence.ogg', 'm_match_trumpet.ogg', 'TL_step_on_rake.ogg', 'toonbldg_grow.ogg', 'mailbox_full_wobble.ogg', 'mailbox_full_wobble.ogg')
+soundFiles = (
+    'AA_sound_kazoo.ogg', 'AA_sound_bikehorn.ogg', 'AA_sound_whistle.ogg', 'AA_sound_bugle.ogg', 'AA_sound_aoogah.ogg',
+    'AA_sound_elephant.ogg', 'SZ_DD_foghorn.ogg', 'AA_sound_Opera_Singer.ogg')
+appearSoundFiles = (
+    'toonbldg_settle.ogg', 'MG_tag_1.ogg', 'LB_receive_evidence.ogg', 'm_match_trumpet.ogg', 'TL_step_on_rake.ogg',
+    'toonbldg_grow.ogg', 'mailbox_full_wobble.ogg', 'mailbox_full_wobble.ogg')
 hitSoundFiles = ('AA_sound_Opera_Singer_Cog_Glass.ogg',)
 tSound = 2.45
 tSuitReact = 2.8
@@ -37,6 +41,7 @@ def doSounds(sounds):
      [],
      [],
      [],
+                  [],
      []]
     for sound in sounds:
         level = sound['level']
@@ -50,7 +55,7 @@ def doSounds(sounds):
     for soundList in prevSounds:
         if len(soundList) > 0:
             mtrack.append(__doSoundsLevel(soundList, delay, hitCount, npcs))
-            delay += TOON_SOUND_DELAY
+            delay += 0
 
     soundTrack = Sequence(npcArrivals, mtrack, npcDepartures)
     targets = sounds[0]['target']
@@ -65,7 +70,7 @@ def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamag
     attacks = 0
     uberDelay = 0.0
     isUber = 0
-    if sound['level'] >= ToontownBattleGlobals.UBER_GAG_LEVEL_INDEX:
+    if sound['level'] >= 7:
         uberDelay = 3.0
         isUber = 1
     for target in targets:
@@ -76,6 +81,7 @@ def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamag
             battle = sound['battle']
             kbbonus = target['kbbonus']
             suitTrack = Sequence()
+            toonTrack = Sequence(Func(toon.showHpTextWhite, "ENCORE!"))
             showDamage = Func(suit.showHpText, -totalDamage, openEnded=0)
             updateHealthBar = Func(suit.updateHealthBar, totalDamage)
             if isUber:
@@ -91,15 +97,17 @@ def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamag
                 suitTrack.append(Func(setPosFromOther, breakEffect, suit, Point3(0, 0.0, suit.getHeight() - 1.0)))
                 #suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5))) THIS CRASHES PANDA WITH A BOUNDING SPHERE ERROR
                 suitTrack.append(Sequence(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit)))
+                suitTrack.append(toonTrack)
                 if died:
                     suitTrack.append(headExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
                 suitTrack.append(updateHealthBar)
+                suitTrack.append(toonTrack)
             if hitCount == 1:
                 suitTrack.append(Parallel(ActorInterval(suit, 'squirt-small-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
             else:
-                suitTrack.append(ActorInterval(suit, 'squirt-small-react'))
+                suitTrack.append(Parallel(ActorInterval(suit, 'squirt-small-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
             if kbbonus == 0:
                 suitTrack.append(__createSuitResetPosTrack(suit, battle))
                 suitTrack.append(Func(battle.unlureSuit, suit))
@@ -107,6 +115,19 @@ def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamag
             if hpbonus > 0:
                 bonusTrack = Sequence(Wait(delay + tSuitReact + delay + 0.75 + uberDelay), Func(suit.showHpText, -hpbonus, 1, openEnded=0), Func(suit.updateHealthBar, hpbonus))
             suitTrack.append(Func(suit.loop, 'neutral'))
+            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+                    and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
+                    and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
+                    and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
+                    and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
+                    and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
+                    and not suit.style.name == 'msr' and not suit.style.name == 'tlr' and not suit.style.name == 'cvy' and not suit.style.name == 'cps' and not suit.style.name == 'dfh' and not suit.style.name == 'fas' and not suit.style.name == 'csh':
+                for headPart in suit.headParts:
+                    suitTrack.append(
+                    Func(headPart.loop,
+                         'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',))
+                )
             if bonusTrack == None:
                 tracks.append(suitTrack)
             else:
@@ -185,10 +206,10 @@ def __doSoundsLevel(sounds, delay, hitCount, npcs):
             if revived:
                 deathTracks.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
             elif died:
-                if (sound['level'] >= ToontownBattleGlobals.UBER_GAG_LEVEL_INDEX) and (totalDamage >= target['hp']):
+                if (sound['level'] >= 7) and (totalDamage >= target['hp']):
                     deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
                 else:
-                    deathTracks.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
+                    deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
 
     mainTrack.append(tracks)
     mainTrack.append(deathTracks)
@@ -249,6 +270,63 @@ def __hasLuredSuits(sound):
             break
 
     return retval
+
+def __doKazoo(sound, delay, toon, targets, level):
+    tracks = Parallel()
+    instrMin = Vec3(0.001, 0.001, 0.001)
+    instrMax = Vec3(0.65, 0.65, 0.65)
+    instrMax *= INSTRUMENT_SCALE_MODIFIER
+    instrStretch = Vec3(0.6, 1.1, 0.6)
+    instrStretch *= INSTRUMENT_SCALE_MODIFIER
+    megaphone = globalPropPool.getProp('megaphone')
+    megaphone2 = MovieUtil.copyProp(megaphone)
+    megaphones = [megaphone, megaphone2]
+    instrument = globalPropPool.getProp('kazoo')
+    instrument2 = MovieUtil.copyProp(instrument)
+    instruments = [instrument, instrument2]
+
+    def setInstrumentStats(instrument=instrument, instrument2=instrument2):
+        instrument.setPos(-1.1, -1.4, 0.1)
+        instrument.setHpr(145, 0, 0)
+        instrument.setScale(instrMin)
+        instrument2.setPos(-1.1, -1.4, 0.1)
+        instrument2.setHpr(145, 0, 0)
+        instrument2.setScale(instrMin)
+
+    hands = toon.getRightHands()
+    megaphoneShow = Sequence(Func(MovieUtil.showProps, megaphones, hands),
+                             Func(MovieUtil.showProps, instruments, hands), Func(setInstrumentStats))
+    megaphoneHide = Sequence(Func(MovieUtil.removeProps, megaphones), Func(MovieUtil.removeProps, instruments))
+    instrumentAppearSfx = globalBattleSoundCache.getSound(appearSoundFiles[level])
+    grow = getScaleIntervals(instruments, duration=0.2, startScale=instrMin, endScale=instrMax)
+    instrumentAppear = Parallel(grow, Sequence(Wait(0.15), SoundInterval(instrumentAppearSfx, node=toon)))
+    stretchInstr = getScaleBlendIntervals(instruments, duration=0.2, startScale=instrMax, endScale=instrStretch,
+                                          blendType='easeOut')
+    backInstr = getScaleBlendIntervals(instruments, duration=0.2, startScale=instrStretch, endScale=instrMax,
+                                       blendType='easeIn')
+    stretchMega = getScaleBlendIntervals(megaphones, duration=0.2, startScale=megaphone.getScale(), endScale=0.9,
+                                         blendType='easeOut')
+    backMega = getScaleBlendIntervals(megaphones, duration=0.2, startScale=0.9, endScale=megaphone.getScale(),
+                                      blendType='easeIn')
+    attackTrack = Parallel(Sequence(stretchInstr, backInstr), Sequence(stretchMega, backMega))
+    hasLuredSuits = __hasLuredSuits(sound)
+    delayTime = delay
+    if hasLuredSuits:
+        delayTime += TIME_TO_WALK_BACK
+    megaphoneTrack = Sequence(Wait(delayTime), megaphoneShow, Wait(1.0), instrumentAppear, Wait(3.0), megaphoneHide)
+    tracks.append(megaphoneTrack)
+    toonTrack = __createToonInterval(sound, delay, toon)
+    tracks.append(toonTrack)
+    soundEffect = globalBattleSoundCache.getSound(soundFiles[level])
+    instrumentshrink = getScaleIntervals(instruments, duration=0.1, startScale=instrMax, endScale=instrMin)
+    if soundEffect:
+        delayTime = delay + tSound
+        if hasLuredSuits:
+            delayTime += TIME_TO_WALK_BACK
+        soundTrack = Sequence(Wait(delayTime), Parallel(attackTrack, SoundInterval(soundEffect, node=toon)), Wait(0.2),
+                              instrumentshrink)
+        tracks.append(soundTrack)
+    return tracks
 
 
 def __doBikehorn(sound, delay, toon, targets, level):
@@ -655,13 +733,14 @@ def getScaleBlendIntervals(props, duration, startScale, endScale, blendType):
     return tracks
 
 
-soundfn_array = (__doBikehorn,
- __doWhistle,
- __doBugle,
- __doAoogah,
- __doElephant,
- __doFoghorn,
- __doOpera)
+soundfn_array = (__doKazoo,
+                  __doBikehorn,
+                  __doWhistle,
+                  __doBugle,
+                  __doAoogah,
+                  __doElephant,
+                  __doFoghorn,
+                  __doOpera)
 
 def __getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs, softStop = 0):
     pEffect = partExtraArgs[0]

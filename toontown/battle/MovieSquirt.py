@@ -13,15 +13,13 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSquirt')
-hitSoundFiles = ('AA_squirt_flowersquirt.ogg', 'AA_squirt_glasswater.ogg', 'AA_squirt_neonwatergun.ogg', 'AA_squirt_seltzer.ogg', 'firehose_spray.ogg', 'AA_throw_stormcloud.ogg', 'AA_squirt_Geyser.ogg')
-missSoundFiles = ('AA_squirt_flowersquirt_miss.ogg', 'AA_squirt_glasswater_miss.ogg', 'AA_squirt_neonwatergun_miss.ogg', 'AA_squirt_seltzer_miss.ogg', 'firehose_spray.ogg', 'AA_throw_stormcloud_miss.ogg', 'AA_squirt_Geyser.ogg')
-sprayScales = [0.2,
- 0.3,
- 0.1,
- 0.6,
- 0.8,
- 1.0,
- 2.0]
+hitSoundFiles = ('AA_squirt_flowersquirt.ogg', 'AA_squirt_glasswater.ogg', 'AA_squirt_neonwatergun.ogg',
+                 'SA_watercooler_spray_only.ogg', 'AA_squirt_seltzer.ogg', 'firehose_spray.ogg',
+                 'AA_throw_stormcloud.ogg', 'AA_squirt_Geyser.ogg')
+missSoundFiles = ('AA_squirt_flowersquirt_miss.ogg', 'AA_squirt_glasswater_miss.ogg', 'AA_squirt_neonwatergun_miss.ogg',
+                  'AA_pie_throw_only.ogg', 'AA_squirt_seltzer_miss.ogg', 'firehose_spray.ogg',
+                  'AA_throw_stormcloud_miss.ogg', 'AA_squirt_Geyser.ogg')
+sprayScales = [0.2, 0.3, 0.3, 0.4, 0.6, 0.8, 1.0, 2.0]
 WaterSprayColor = Point4(0.75, 0.75, 1.0, 0.8)
 SoakColor = Point4(0.65, 0.65, 1.0, 1.0)
 
@@ -69,7 +67,7 @@ def doSquirts(squirts):
             ival = __doSuitSquirts(st)
             if ival:
                 mtrack.append(Sequence(Wait(delay), ival))
-            delay = delay + TOON_SQUIRT_SUIT_DELAY
+            delay = delay + 0
 
     camDuration = mtrack.getDuration()
     camTrack = MovieCamera.chooseSquirtShot(squirts, suitSquirtsDict, camDuration)
@@ -205,9 +203,9 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             sival = ActorInterval(suit, anim)
         soakTracks.append(__soakSuit(suit))
         #suitIndex = battle.activeSuits.index(suit)
-        #soakTracks.append(__soakNearby(suitIndex + 1, battle.activeSuits))
-        #soakTracks.append(__soakNearby(suitIndex - 1, battle.activeSuits))
-        showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=SQUIRT_TRACK)
+        #soakTracks.append(__soakNearby(suit, suitIndex + 1, battle.activeSuits, tContact, hp, level))
+        #soakTracks.append(__soakNearby(suit, suitIndex - 1, battle.activeSuits, tContact, hp, level))
+        showDamage = Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK)
         value = hp
         #if kbbonus > 0:
             #value += kbbonus
@@ -223,10 +221,10 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         if hpbonus > 0:
             durationToWait += 0.75
         if not geyser:
-            suitTrack.append(Parallel(sival, Sequence(Wait(2), Func(showSoakRounds, suit, level))))
+            suitTrack.append(Parallel(sival))
         elif not uberRepeat:
             geyserMotion = Sequence(sUp, Wait(0.0), sDown)
-            suitLaunch = Parallel(sival, geyserMotion, Sequence(Wait(2), Func(showSoakRounds, suit, level)))
+            suitLaunch = Parallel(sival, geyserMotion)
             suitTrack.append(suitLaunch)
         else:
             suitTrack.append(Wait(5.5))
@@ -240,11 +238,24 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=SQUIRT_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
         if died != 0:
-            suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle))
+            suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             suitTrack.append(Func(suit.loop, 'neutral'))
+            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+                    and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
+                    and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
+                    and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
+                    and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
+                    and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
+                    and not suit.style.name == 'msr' and not suit.style.name == 'tlr' and not suit.style.name == 'cvy' and not suit.style.name == 'cps' and not suit.style.name == 'dfh' and not suit.style.name == 'fas' and not suit.style.name == 'csh':
+                for headPart in suit.headParts:
+                    suitTrack.append(
+                    Func(headPart.loop,
+                         'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',))
+                )
         if revived != 0:
-            suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle))
+            suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         return Parallel(suitTrack, bonusTrack, soakTracks)
     else:
         return MovieUtil.createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits)
@@ -253,10 +264,13 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
 def say(statement):
     print statement
 
-def __soakNearby(suitIndex, suits):
+def __soakNearby(suit, suitIndex, suits, tContact, hp, level=0):
     if len(suits) > suitIndex >= 0:
-        return Parallel(Sequence(ActorInterval(suits[suitIndex], 'squirt-small-react')),
-                        __soakSuit(suits[suitIndex]), Func(suit.loop, 'neutral'))
+        suitTrack = Sequence()
+        suitTrack.append(Wait(tContact))
+        suitTrack.append(Sequence(ActorInterval(suits[suitIndex], 'squirt-small-react'),
+                        __soakSuit(suits[suitIndex]), Func(suit.loop, 'neutral')))
+        return suitTrack
     else:
         return Sequence()
 
@@ -489,6 +503,67 @@ def __doWaterGun(squirt, delay, fShowStun):
         tracks.append(
             __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits,
                            rightSuits, battle, toon, fShowStun, revived=revived, level=2))
+    return tracks
+
+def __doWaterBalloon(squirt, delay, fShowStun):
+    battle, died, hp, hpBonus, kbBonus, leftSuits, level, revived, rightSuits, suit, toon = __getSquirtProps(squirt)
+    suitPos = suit.getPos(battle)
+    origHpr = toon.getHpr(battle)
+    hitSuit = hp > 0
+    scale = sprayScales[level]
+    balloonName = pieNames[8]
+    tWindUp = 1.7
+    tLaunch = tWindUp + 0.9
+    tContact = tLaunch + 0.3
+    tSuitDodges = max(tContact - 0.7, 0.0)
+    balloon = globalPropPool.getProp(balloonName)
+    balloon.setColor(0.2, 1, 0.4, 1)
+    balloon.setScale(1.2, 1.2, 0.8)
+    balloon2 = MovieUtil.copyProp(balloon)
+    balloons = [balloon, balloon2]
+    hands = toon.getRightHands()
+    tracks = Parallel()
+    toonTrack = toonThrowTrack(toon, battle, delay, suitPos, origHpr)
+    tracks.append(toonTrack)
+    balloonShow = Func(MovieUtil.showProps, balloons, hands)
+    balloonScale1 = LerpScaleInterval(balloon, 1.0, balloon.getScale(), startScale=MovieUtil.PNT3_NEARZERO)
+    balloonScale2 = LerpScaleInterval(balloon2, 1.0, balloon2.getScale(), startScale=MovieUtil.PNT3_NEARZERO)
+    balloonScale = Parallel(balloonScale1, balloonScale2)
+    balloonPreflight = Func(MovieThrow.__propPreflight, balloons, suit, toon, battle)
+    balloonTrack = Sequence(Wait(delay), balloonShow, balloonScale,
+                            Func(battle.movie.needRestoreRenderProp, balloons[0]), Wait(tLaunch - 1.0),
+                            balloonPreflight)
+
+    targetPoint = __suitTargetPoint(suit)
+
+    soundThrow = Sequence(Wait(2.6), SoundInterval(globalBattleSoundCache.getSound('AA_pie_throw_only.ogg'), node=toon))
+    soundSplash = __getSoundTrack(level, hitSuit, tContact, toon)
+    soundTracks = Parallel(soundThrow, soundSplash)
+    tracks.append(soundTracks)
+
+    if hitSuit:
+        balloonTrack.append(LerpPosInterval(balloon, tContact - tLaunch,
+                                            pos=MovieUtil.avatarFacePoint(suit, other=battle),
+                                            name=MovieThrow.pieFlyTaskName, other=battle))
+        balloonTrack.append(Func(MovieUtil.removeProps, balloons))
+        balloonTrack.append(Func(battle.movie.clearRenderProp, balloons[0]))
+
+    else:
+        missDict = {}
+        suitPoint = MovieThrow.__suitMissPoint(suit, other=battle)
+        balloonTrack.append(Func(MovieThrow.__piePreMiss, missDict, balloon, suitPoint, battle))
+        balloonTrack.append(LerpFunctionInterval(MovieThrow.__pieMissLerpCallback, extraArgs=[missDict],
+                                                 duration=(tContact - tLaunch) * ratioMissToHit))
+        balloonTrack.append(Func(MovieUtil.removeProps, balloons))
+        balloonTrack.append(Func(battle.movie.clearRenderProp, balloons[0]))
+    tracks.append(balloonTrack)
+
+    if hp > 0:
+        tracks.append(__getSplashTrack(targetPoint, scale, tContact, battle))
+    if hp > 0 or delay <= 0:
+        tracks.append(
+            __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'squirt-small-react', died, leftSuits,
+                           rightSuits, battle, fShowStun, level=3, revived=revived,))
     return tracks
 
 
@@ -794,9 +869,10 @@ def __doGeyser(squirt, delay, fShowStun, uberClone = 0):
 
 
 squirtfn_array = (__doFlower,
- __doWaterGlass,
- __doWaterGun,
- __doSeltzerBottle,
- __doFireHose,
- __doStormCloud,
- __doGeyser)
+                   __doWaterGlass,
+                   __doWaterGun,
+                   __doWaterGun,
+                   __doSeltzerBottle,
+                   __doFireHose,
+                   __doStormCloud,
+                   __doGeyser)

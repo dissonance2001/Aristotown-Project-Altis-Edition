@@ -38,6 +38,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.assign(render.attachNewNode(self.uniqueBattleName('distributed-battle')))
         BattleBase.__init__(self)
         self.bossBattle = 0
+        self.TurnsElapsed = 0
         self.townBattle = townBattle
         self.__battleCleanedUp = 0
         self.activeIntervals = {}

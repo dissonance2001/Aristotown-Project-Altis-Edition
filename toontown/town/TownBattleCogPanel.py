@@ -68,13 +68,13 @@ class TownBattleCogPanel(DirectFrame):
         else:
             gui = loader.loadModel('phase_3.5/models/gui/suit_panel')
         
-        DirectFrame.__init__(self, relief=None, image=gui.find('**/suit_panel_main'), image_color=Vec4(0.5, 0.5, 0.5, 1.0))
+        DirectFrame.__init__(self, relief=None, image=gui.find('**/suit_panel_main'))
         self.initialiseoptions(TownBattleCogPanel)
         self.hidden = False
         self.cog = None
         self.isLoaded = 0
         self.notify.info("Loading Cog Battle Panel!")
-        self.healthText = DirectLabel(parent=self, text='', pos=(0.11, 1.0, 0.24), text_scale=0.075)
+        self.healthText = DirectLabel(parent=self, text='', pos=(0.11, 1.0, 0.244), text_scale=0.065)
         healthGui = loader.loadModel('phase_3.5/models/gui/suit_panel')
         button = healthGui.find('**/status_effect_slot')
         button.setScale(0.63)
@@ -86,8 +86,8 @@ class TownBattleCogPanel(DirectFrame):
         self.healthNode.setPos(0.125, 0.0, 0.19)
         self.healthNode.setTransparency(1)
         button.reparentTo(self.healthNode)
-        self.hpText = DirectLabel(parent=self, text='', pos=(0.115, 0.1, 0.13), text_scale=0.085)
-        self.setScale(0.4)
+        self.hpText = DirectLabel(parent=self, text='', pos=(0.115, 0.1, 0.132), text_scale=0.075)
+        self.setScale(0.5)
         #glow = BattleProps.globalPropPool.getProp('glow')
         #glow.reparentTo(button)
         #glow.setScale(0.28)
@@ -106,7 +106,7 @@ class TownBattleCogPanel(DirectFrame):
         self.updateHealthBar()
         if self.head:
             self.head.removeNode()
-        
+
         self.head = self.attachNewNode('head')
         for part in cog.headParts:
             copyPart = part.copyTo(self.head)
@@ -117,8 +117,55 @@ class TownBattleCogPanel(DirectFrame):
         self.head.calcTightBounds(p1, p2)
         d = p2 - p1
         biggest = max(d[0], d[1], d[2])
-        s = 0.2 / biggest
-        self.head.setPosHprScale(-0.27, 0.5, 0.13, 180, 0, 0, s, s, s)
+        s = 0.19 / biggest
+        if self.cog.dna.name == 'ptr':
+            self.head.setPosHprScale(-0.27, 0.5, 0.12, 270, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'dfh':
+            self.head.setPosHprScale(-0.27, 0.5, 0.12, 270, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'bf':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'b':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'dt':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'ac':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'bs':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'cp':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'le':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'brv':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'arb':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'jgd':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'sjg':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'mg':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'ca':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'dvk':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'lsc':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'jdg':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'lit':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'ste':
+            self.head.setPosHprScale(-0.27, 0.5, 0.13, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'tyh':
+            self.head.setPosHprScale(-0.27, 0.5, 0.13, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'ghd':
+            self.head.setPosHprScale(-0.27, 0.5, 0.13, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'csm':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        else:
+            self.head.setPosHprScale(-0.27, 0.5, 0.12, 180, 0, 0, s, s, s)
         self.setLevelText()
 
     def setLevelText(self):
@@ -126,8 +173,6 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.getSkeleRevives() > 0:
             #self['image_color'] = Vec4(0.5, 0.5, 0.5, 1.0)
             t += TTLocalizer.SkeleRevivePostFix
-        else:
-            self['image_color'] = Vec4(0.7, 0.7, 0.7, 1.0)
         if self.cog.getExecutive() or self.cog.getManager() or self.cog.getGovernaught():
             if self.cog.getExecutive():
                 #self['image_color'] = Vec4(0.3, 0.3, 0.3, 1.0)

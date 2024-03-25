@@ -151,9 +151,15 @@ class SuitPlannerInteriorAI:
         suit.setLevel(suitLevel)
         if suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             suit.setManager(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager():
+        if suit.dna.name == 'cg':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive():
+        if suit.dna.name == 'jdg':
+            suit.setExecutive(1)
+        if suit.dna.name == 'gkp':
+            suit.setExecutive(1)
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp':
+            suit.setExecutive(1)
+        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp':
             suit.setGovernaught(1)
         return flags
 
@@ -171,8 +177,6 @@ class SuitPlannerInteriorAI:
             newSuit.b_setWaiter(1)
         if flags & IFV2:
             newSuit.b_setSkeleRevives(1)
-        if random.random() <= 0.2:
-            newSuit.b_setElite(1)
         newSuit.node().setName('suit-%s' % newSuit.doId)
         return newSuit
 

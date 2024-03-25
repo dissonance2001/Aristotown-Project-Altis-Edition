@@ -14,15 +14,17 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieZap')
-hitSoundFiles = ('AA_tesla.ogg', 'AA_carpet.ogg', 'AA_balloon.ogg', 'AA_tesla.ogg', 'AA_tesla.ogg', 'AA_tesla.ogg', 'AA_lightning.ogg')
-missSoundFiles = ('AA_tesla_miss.ogg', 'AA_carpet.ogg', 'AA_balloon_miss.ogg', 'AA_tesla_miss.ogg', 'AA_tesla_miss.ogg', 'AA_tesla_miss.ogg', 'AA_lightning_miss.ogg')
+hitSoundFiles = ('AA_tesla.ogg', 'AA_carpet.ogg', 'AA_balloon.ogg', 'AA_tesla.ogg',
+                 'AA_tesla.ogg', 'AA_tesla.ogg', 'AA_tesla.ogg', 'AA_lightning.ogg')
+missSoundFiles = ('AA_tesla_miss.ogg', 'AA_carpet.ogg', 'AA_balloon_miss.ogg', 'AA_tesla_miss.ogg',
+                  'AA_tesla_miss.ogg', 'AA_tesla_miss.ogg', 'AA_tesla_miss.ogg', 'AA_lightning_miss.ogg')
 sprayScales = [0.2,
- 0.3,
- 0.1,
- 0.6,
- 0.8,
- 1.0,
- 2.0]
+               0.3,
+               0.1,
+               0.6,
+               0.8,
+               1.0,
+               2.0]
 WaterSprayColor = Point4(1.0, 1.0, 0, 1.0)
 zapPos = Point3(0, 0, 0)
 zapHpr = Vec3(0, 0, 0)
@@ -72,7 +74,7 @@ def doZaps(zaps):
             ival = __doSuitZaps(st, npcs)
             if ival:
                 mtrack.append(Sequence(Wait(delay), ival))
-            delay = delay + TOON_ZAP_SUIT_DELAY
+            delay = delay + 0
     zapTrack = Sequence(npcArrivals, mtrack, npcDepartures)
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
@@ -150,6 +152,21 @@ def __createSuitResetPosTrack(suit, battle):
 def createSuitResetPosTrack(suit, battle):
     return __createSuitResetPosTrack(suit, battle)
 
+def __soakRemoval(suit, remove=0):
+    if remove:
+        color = Point4(1.0, 1.0, 1.0, 1.0)
+    else:
+        color = SoakColor
+    if suit.isSkeleton:
+        suitBody = [suit]
+    else:
+        suitBody = [suit.find('**/body'), suit.find('**/hands')]
+    suitInterval = Sequence()
+    for bodyPart in suitBody:
+        if bodyPart:
+            suitInterval.append(Func(bodyPart.setColor, color))
+        return suitInterval
+
 def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 2.0, uberRepeat = 0, revived = 0, npcs = [], dodge = True):
     if hp > 0:
         suitTrack = Sequence()
@@ -157,9 +174,9 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         sival = ActorInterval(suit, anim)
         sival = []
         if fShowStun == 1:
-            sival = Parallel(Func(suit.loop, anim), MovieUtil.zapCog(suit, beforeStun, afterStun, battle), MovieUtil.createSuitStunInterval(suit, 0.1, 1.8))
+            sival = Parallel(Func(suit.loop, anim), MovieUtil.zapCog(suit, beforeStun, afterStun, battle), MovieUtil.createSuitStunInterval(suit, beforeStun, afterStun))
         else:
-            sival = ActorInterval(suit, anim)
+            sival = Parallel(Func(suit.loop, anim), MovieUtil.zapCog(suit, beforeStun, afterStun, battle), MovieUtil.createSuitStunInterval(suit, beforeStun, afterStun))
         #suitIndex = battle.activeSuits.index(suit)
         #zapTracks.append(__zapNearby(suitIndex + 1, battle.activeSuits))
         #zapTracks.append(__zapNearby(suitIndex - 1, battle.activeSuits))
@@ -180,7 +197,10 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         if died != 0:
             suitTrack.append(shortCircuitTrack(suit, battle))
         else:
+            suitTrack.append(Wait(1.0))
+            suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
             suitTrack.append(Func(suit.loop, 'neutral'))
+            #suitTrack.append(__soakRemoval(suit))
         if revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
         return Parallel(suitTrack, bonusTrack, zapTracks)
@@ -692,5 +712,6 @@ zapfn_array = (__doJoybuzzer,
  __doBalloon,
  __doBattery,
  __doTazer,
- __doTesla,
+               __doBattery,
+               __doTesla,
  __doLightning)

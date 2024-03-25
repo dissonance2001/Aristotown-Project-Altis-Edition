@@ -136,7 +136,8 @@ ExperienceGagLevels = (10 - 1,
 40 - 1,
 50 - 1,
 60 - 1,
-70 - 1)
+70 - 1,
+80 - 1)
 ExperienceMoneyLevels = (5 - 1,
 10 - 1,
 15 - 1,

@@ -1811,7 +1811,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         trapInfo = None
         for otherSuit in self.activeSuits:
             if otherSuit.battleTrap == UBER_GAG_LEVEL_INDEX:
-                hasTrainTrap = True
+                hasTrainTrap = False
 
         if hasTrainTrap:
             for curSuit in self.activeSuits:

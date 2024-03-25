@@ -277,13 +277,13 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             return Parallel(lerpPosTrack, shadowTrack, fadeInTrack, animTrack, propTrack, name=self.taskName('trackName'))
         else:
             lerpPosTrack = Sequence(Wait(impactLength), LerpPosInterval(self, timeTillLanding, skyPos, startPos=pos))
-            shadowTrack = Sequence(Func(self.dropShadow.reparentTo, render), Func(self.dropShadow.setPos, pos), self.dropShadow.scaleInterval(timeTillLanding, Vec3(0.01, 0.01, 1.0), startScale=self.scale), Func(self.dropShadow.reparentTo, self.getShadowJoint()), Func(self.dropShadow.setPos, 0, 0, 0))
+            #shadowTrack = Sequence(Func(self.dropShadow.reparentTo, render), Func(self.dropShadow.setPos, pos), self.dropShadow.scaleInterval(timeTillLanding, Vec3(0.01, 0.01, 1.0), startScale=self.scale), Func(self.dropShadow.reparentTo, self.getShadowJoint()), Func(self.dropShadow.setPos, 0, 0, 0))
             fadeOutTrack = Sequence(Func(self.setTransparency, 1), self.colorScaleInterval(1, colorScale=VBase4(1, 1, 1, 0), startColorScale=VBase4(1, 1, 1, 1)), Func(self.clearColorScale), Func(self.clearTransparency), Func(self.reparentTo, hidden))
             actInt = ActorInterval(self, 'landing', loop=0, startTime=dur, endTime=0.0)
             self.attachPropeller()
             self.prop.hide()
             propTrack = Parallel(SoundInterval(self.propOutSound, duration=waitTime + dur, node=self), Sequence(Func(self.prop.show), ActorInterval(self.prop, 'propeller', endTime=openTime, startTime=propDur), ActorInterval(self.prop, 'propeller', constrainedLoop=1, duration=propDur - openTime, startTime=spinTime, endTime=0.0), Func(self.detachPropeller)))
-            return Parallel(ParallelEndTogether(lerpPosTrack, shadowTrack, fadeOutTrack), actInt, propTrack, name=self.taskName('trackName'))
+            return Parallel(ParallelEndTogether(lerpPosTrack, fadeOutTrack), actInt, propTrack, name=self.taskName('trackName'))
 
     def enableBattleDetect(self, name, handler):
         if self.collTube:
@@ -450,33 +450,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
                 if number < 0:
                     self.HpTextGenerator.setText(str(number))
-                    if base.cr.newsManager.isHolidayRunning(ToontownGlobals.SILLY_SURGE_HOLIDAY):
-                        self.sillySurgeText = True
-                        absNum = abs(number)
-                        if absNum > 0 and absNum <= 10:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[1])
-                        elif absNum > 10 and absNum <= 20:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[2])
-                        elif absNum > 20 and absNum <= 30:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[3])
-                        elif absNum > 30 and absNum <= 40:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[4])
-                        elif absNum > 40 and absNum <= 50:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[5])
-                        elif absNum > 50 and absNum <= 60:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[6])
-                        elif absNum > 60 and absNum <= 70:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[7])
-                        elif absNum > 70 and absNum <= 80:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[8])
-                        elif absNum > 80 and absNum <= 90:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[9])
-                        elif absNum > 90 and absNum <= 100:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[10])
-                        elif absNum > 100 and absNum <= 110:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[11])
-                        else:
-                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.SillySurgeTerms[12])
                     if self.interactivePropTrackBonus > -1 and self.interactivePropTrackBonus == attackTrack:
                         self.sillySurgeText = True
                         if attackTrack in TTLocalizer.InteractivePropTrackBonusTerms:
@@ -535,6 +508,210 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     self.nametag3d.setBin('fixed', 99)
                 self.hpText.setPos(0, 0, self.height / 2)
                 seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
+                seq.start()
+
+    def showHpTextSquirt(self, level, number, bonus = 0, scale = 1, attackTrack = -1):
+        if self.HpTextEnabled and not self.ghostMode:
+            if number != 0:
+                if self.hpText:
+                    self.hideHpText()
+                self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+                if number < 0:
+                    self.HpTextGenerator.setText(str(number) + '\n' + 'SOAKED %i ROUNDS' % ToontownBattleGlobals.AvSoakRounds[level])
+                    if self.interactivePropTrackBonus > -1 and self.interactivePropTrackBonus == attackTrack:
+                        self.sillySurgeText = True
+                        if attackTrack in TTLocalizer.InteractivePropTrackBonusTerms:
+                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.InteractivePropTrackBonusTerms[attackTrack])
+                elif type(number) in [int, float]:
+                    self.HpTextGenerator.setText('+' + str(number))
+                else:
+                    self.HpTextGenerator.setText(str(number))
+                self.HpTextGenerator.clearShadow()
+                self.HpTextGenerator.setAlign(TextNode.ACenter)
+                if bonus == 1:
+                    r = 1.0
+                    g = 1.0
+                    b = 0
+                    a = 1
+                elif bonus == 2:
+                    r = 1.0
+                    g = 0.5
+                    b = 0
+                    a = 1
+                elif bonus == 3:
+                    r = 0.6
+                    g = 0.2
+                    b = 0.8
+                    a = 1.0
+                    scale = 0.9
+                elif bonus == 4:
+                    r = 0.93
+                    g = 0.51
+                    b = 0.93
+                    a = 1.0
+                    scale = 0.9
+                elif number < 0:
+                    r = 0.9
+                    g = 0
+                    b = 0
+                    a = 1
+                    if self.interactivePropTrackBonus > -1 and self.interactivePropTrackBonus == attackTrack:
+                        r = 0
+                        g = 0
+                        b = 1
+                        a = 1
+                else:
+                    r = 0
+                    g = 0.9
+                    b = 0
+                    a = 1
+                self.HpTextGenerator.setTextColor(r, g, b, a)
+                self.hpTextNode = self.HpTextGenerator.generate()
+                self.hpText = self.attachNewNode(self.hpTextNode)
+                self.hpText.setScale(scale)
+                self.hpText.setBillboardPointEye()
+                self.hpText.setBin('fixed', 100)
+                if self.sillySurgeText:
+                    self.nametag3d.setDepthTest(0)
+                    self.nametag3d.setBin('fixed', 99)
+                self.hpText.setPos(0, 0, self.height / 2)
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
+                seq.start()
+
+    def showHpTextThrow(self, number, bonus = 0, scale = 1, attackTrack = -1):
+        if self.HpTextEnabled and not self.ghostMode:
+            if number != 0:
+                if self.hpText:
+                    self.hideHpText()
+                self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+                if number < 0:
+                    self.HpTextGenerator.setText(str(number) + '\n' + 'MARKED!')
+                    if self.interactivePropTrackBonus > -1 and self.interactivePropTrackBonus == attackTrack:
+                        self.sillySurgeText = True
+                        if attackTrack in TTLocalizer.InteractivePropTrackBonusTerms:
+                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.InteractivePropTrackBonusTerms[attackTrack])
+                elif type(number) in [int, float]:
+                    self.HpTextGenerator.setText('+' + str(number))
+                else:
+                    self.HpTextGenerator.setText(str(number))
+                self.HpTextGenerator.clearShadow()
+                self.HpTextGenerator.setAlign(TextNode.ACenter)
+                if bonus == 1:
+                    r = 1.0
+                    g = 1.0
+                    b = 0
+                    a = 1
+                elif bonus == 2:
+                    r = 1.0
+                    g = 0.5
+                    b = 0
+                    a = 1
+                elif bonus == 3:
+                    r = 0.6
+                    g = 0.2
+                    b = 0.8
+                    a = 1.0
+                    scale = 0.9
+                elif bonus == 4:
+                    r = 0.93
+                    g = 0.51
+                    b = 0.93
+                    a = 1.0
+                    scale = 0.9
+                elif number < 0:
+                    r = 0.9
+                    g = 0
+                    b = 0
+                    a = 1
+                    if self.interactivePropTrackBonus > -1 and self.interactivePropTrackBonus == attackTrack:
+                        r = 0
+                        g = 0
+                        b = 1
+                        a = 1
+                else:
+                    r = 0
+                    g = 0.9
+                    b = 0
+                    a = 1
+                self.HpTextGenerator.setTextColor(r, g, b, a)
+                self.hpTextNode = self.HpTextGenerator.generate()
+                self.hpText = self.attachNewNode(self.hpTextNode)
+                self.hpText.setScale(scale)
+                self.hpText.setBillboardPointEye()
+                self.hpText.setBin('fixed', 100)
+                if self.sillySurgeText:
+                    self.nametag3d.setDepthTest(0)
+                    self.nametag3d.setBin('fixed', 99)
+                self.hpText.setPos(0, 0, self.height / 2)
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
+                seq.start()
+
+    def showHpTextTrap(self, number, bonus = 0, scale = 1, attackTrack = -1):
+        if self.HpTextEnabled and not self.ghostMode:
+            if number != 0:
+                if self.hpText:
+                    self.hideHpText()
+                self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+                if number < 0:
+                    self.HpTextGenerator.setText(str(number) + '\n' + 'DAZED!')
+                    if self.interactivePropTrackBonus > -1 and self.interactivePropTrackBonus == attackTrack:
+                        self.sillySurgeText = True
+                        if attackTrack in TTLocalizer.InteractivePropTrackBonusTerms:
+                            self.HpTextGenerator.setText(str(number) + '\n' + TTLocalizer.InteractivePropTrackBonusTerms[attackTrack])
+                elif type(number) in [int, float]:
+                    self.HpTextGenerator.setText('+' + str(number))
+                else:
+                    self.HpTextGenerator.setText(str(number))
+                self.HpTextGenerator.clearShadow()
+                self.HpTextGenerator.setAlign(TextNode.ACenter)
+                if bonus == 1:
+                    r = 1.0
+                    g = 1.0
+                    b = 0
+                    a = 1
+                elif bonus == 2:
+                    r = 1.0
+                    g = 0.5
+                    b = 0
+                    a = 1
+                elif bonus == 3:
+                    r = 0.6
+                    g = 0.2
+                    b = 0.8
+                    a = 1.0
+                    scale = 0.9
+                elif bonus == 4:
+                    r = 0.93
+                    g = 0.51
+                    b = 0.93
+                    a = 1.0
+                    scale = 0.9
+                elif number < 0:
+                    r = 0.9
+                    g = 0
+                    b = 0
+                    a = 1
+                    if self.interactivePropTrackBonus > -1 and self.interactivePropTrackBonus == attackTrack:
+                        r = 0
+                        g = 0
+                        b = 1
+                        a = 1
+                else:
+                    r = 0
+                    g = 0.9
+                    b = 0
+                    a = 1
+                self.HpTextGenerator.setTextColor(r, g, b, a)
+                self.hpTextNode = self.HpTextGenerator.generate()
+                self.hpText = self.attachNewNode(self.hpTextNode)
+                self.hpText.setScale(scale)
+                self.hpText.setBillboardPointEye()
+                self.hpText.setBin('fixed', 100)
+                if self.sillySurgeText:
+                    self.nametag3d.setDepthTest(0)
+                    self.nametag3d.setBin('fixed', 99)
+                self.hpText.setPos(0, 0, self.height / 2)
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
                 seq.start()
 
     def hideHpText(self):

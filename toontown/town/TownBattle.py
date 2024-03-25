@@ -196,7 +196,7 @@ class TownBattle(StateData.StateData):
             panel.setPos(0, 0, 0.7)
 
         for i in range(num):
-            self.cogPanels[i].setX(((num - 1) * 0.2) - (i * 0.4))
+            self.cogPanels[i].setX(((num - 1) * 0.25) - (i * 0.5))
             self.cogPanels[i].show()
 
     def __enterPanels(self, num, localNum):
@@ -647,7 +647,7 @@ class TownBattle(StateData.StateData):
             self.fsm.request('SOS')
 
     def __isCogChoiceNecessary(self):
-        if self.numCogs > 1 and not self.__isGroupAttack(self.track, self.level):
+        if not self.__isGroupAttack(self.track, self.level):
             return 1
         else:
             return 0

@@ -487,6 +487,16 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == FLOOD_THE_MARKET:
         camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == WHEEL_SPIN:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == SNAP_WET:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == ACCUSATIONS:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == ACCUSATIONS_2:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == GAME_SHOW:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == CAGE:
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == EXTRA_TIP:
@@ -666,9 +676,6 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera())
     elif name == TEE_OFF:
         camTrack.append(defaultCamera(openShotDuration=4.5))
-    elif name == ENRAGED:
-        shakeIntensity = 0.25
-        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
     elif name == TREMOR:
         shakeIntensity = 0.25
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
@@ -842,11 +849,11 @@ def motionShot(x, y, z, h, p, r, duration, other = None, name = 'motionShot'):
 
 
 def allGroupShot(avatar, duration):
-    return heldShot(10, 0, 10, 89, -30, 0, duration, 'allGroupShot')
+    return heldShot(10, 0, 10, 79, -30, 0, duration, 'allGroupShot')
 
 
 def allGroupLowShot(avatar, duration):
-    return heldShot(17, -5, 3, 79, 0, 0, duration, 'allGroupLowShot')
+    return heldShot(17, -5, 3, 69, 0, 0, duration, 'allGroupLowShot')
 
 
 def allGroupLowDiagonalShot(avatar, duration):
