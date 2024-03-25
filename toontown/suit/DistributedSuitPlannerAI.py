@@ -87,7 +87,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         [ToontownGlobals.BossbotHQ, 8, 30, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (100, 0, 0, 0, 0),
          (7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
         [ToontownGlobals.SellbotHQ, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 20, 20, 20, 20),
-         (7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
+         (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
         [ToontownGlobals.SellbotFactoryExt, 8, 70, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 20, 20, 20, 20),
          (7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
         [ToontownGlobals.CashbotHQ, 8, 100, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 100, 0, 0),
@@ -110,7 +110,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     SUIT_HOOD_INFO_HEIGHTS = 10
     SUIT_HOOD_INFO_ECHANCE = 11
     MAX_SUIT_TYPES = 8
-    MAX_SUIT_TYPES_HQ = 16
+    MAX_SUIT_TYPES_HQ = 17
     HQ_SKELE_CHANCE = 0
     POP_UPKEEP_DELAY = 10
     POP_ADJUST_DELAY = 200
@@ -430,11 +430,17 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setSkelecog(1)
         if newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
             newSuit.setManager(1)
+        if newSuit.dna.name == 'cg':
+            newSuit.setExecutive(1)
+        if newSuit.dna.name == 'jdg':
+            newSuit.setExecutive(1)
+        if newSuit.dna.name == 'gkp':
+            newSuit.setExecutive(1)
         if executive and not newSuit.getManager():
             newSuit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager():
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp':
             newSuit.setExecutive(1)
-        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive():
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp':
             newSuit.setGovernaught(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         if revives is not None:
@@ -1118,10 +1124,10 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if level < type:
             level = type
 
-        if level > 20:
+        if level > 25:
             pass
         else:
-            level = min(max(level, type), type + 13)
+            level = min(max(level, type), type + 15)
         if track is None:
             track = SuitDNA.suitDepts[SuitBattleGlobals.pickFromFreqList(self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_TRACK])]
         self.notify.debug('pickLevelTypeAndTrack: %s %s %s' % (level, type, track))

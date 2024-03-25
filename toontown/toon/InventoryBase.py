@@ -295,10 +295,8 @@ class InventoryBase(DirectObject.DirectObject):
             for level in xrange(UBER_GAG_LEVEL_INDEX):
                 self.inventory[track][level] = 0
 
-            if killUber:
-                self.inventory[track][UBER_GAG_LEVEL_INDEX] = 0
-            if self.inventory[track][UBER_GAG_LEVEL_INDEX] > 1:
-                self.inventory[track][UBER_GAG_LEVEL_INDEX] = 1
+            if self.inventory[track][7] > 1:
+                self.inventory[track][7] = 1
 
         self.calcTotalProps()
 

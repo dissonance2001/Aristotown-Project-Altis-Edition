@@ -214,7 +214,7 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8),Func(self.hideHpText)))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
                 seq.start()
 
     def showHpTextWhite(self, number, bonus = 0, scale = 1):
@@ -268,7 +268,7 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8),Func(self.hideHpText)))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
                 seq.start()
 
     def showHpText(self, number, bonus = 0, scale = 1):
@@ -322,8 +322,64 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8),Func(self.hideHpText)))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
                 seq.start()
+
+    def showHpTextVulnerable(self, number, bonus = 0, scale = 1):
+        if self.HpTextEnabled and not self.ghostMode:
+            if number != 0:
+                if self.hpText:
+                    self.hideHpText()
+                self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+                if number < 0:
+                    self.HpTextGenerator.setText(str(number) + '\n' + 'VULNERABLE!')
+                else:
+                    self.HpTextGenerator.setText(str(number))
+                self.HpTextGenerator.clearShadow()
+                self.HpTextGenerator.setAlign(TextNode.ACenter)
+                if bonus == 1:
+                    r = 1.0
+                    g = 1.0
+                    b = 0
+                    a = 1
+                elif bonus == 2:
+                    r = 1.0
+                    g = 0.5
+                    b = 0
+                    a = 1
+                elif bonus == 3:
+                    r = 0.6
+                    g = 0.2
+                    b = 0.8
+                    a = 1.0
+                    scale = 0.9
+                elif bonus == 4:
+                    r = 0.93
+                    g = 0.51
+                    b = 0.93
+                    a = 1.0
+                    scale = 0.9
+                elif number < 0:
+                    r = 0.9
+                    g = 0
+                    b = 0
+                    a = 1
+                else:
+                    r = 0
+                    g = 0.9
+                    b = 0
+                    a = 1
+                self.HpTextGenerator.setTextColor(r, g, b, a)
+                self.hpTextNode = self.HpTextGenerator.generate()
+                self.hpText = self.attachNewNode(self.hpTextNode)
+                self.hpText.setScale(scale)
+                self.hpText.setBillboardPointEye()
+                self.hpText.setBin('fixed', 100)
+                self.hpText.setPos(0, 0, self.height / 2)
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
+                seq.start()
+
+
 
     def showHpString(self, text, duration = 0.85, scale = 0.7):
         if self.HpTextEnabled and not self.ghostMode:
@@ -342,7 +398,7 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setScale(scale)
                 self.hpText.setBillboardAxis()
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(duration), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Func(self.hideHpText))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Func(self.hideHpText))
                 seq.start()
 
     def hideHpText(self):

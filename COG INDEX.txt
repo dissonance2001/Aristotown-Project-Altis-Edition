@@ -16,52 +16,52 @@ them until they are completely fixed.
 BOSSBOTS:
 f- Flunky Level 1-8
 p - Pencil Pusher Level 2-9
-ym - Yesman Level 3-10
-mm - Micromanager Level 4-12
-ds - Downsizer Level 5-15
-hh - Head Hunter Level 6-18
-cr - Corporate Raider Level 7-20
-tbc - The Big Cheese Level 8-20
-trb - Affiliate Level 9-21
-dot - Overseer Level 10-22
-dvg - The Molder Level 11-23
-cpl - Capitalists Level 12-24
-bkp - Bookkeeper Level 13-25
-kpn - Enforcer Level 14-26
-cg - Autocaddie Level 14.mgr
-bg - Club President Level 16-18.mgr
-msr - Derrick Man Level 5.mgr
+ym - Bookkeeper Level 2-10 (Operations Analyst)
+mm - Yesman Level 3-10
+ds - Affiliate Level 3-12 (Operations Analyst)
+hh - Micromanager Level 4-12
+cr - The Overseer Level 4-15 (Field Specialist)
+tbc - Downsizer Level 5-15
+trb - Capitalist Level 5-20 (Operations Analyst)
+dot - Head Hunter Level 6-18
+dvg - The Enforcer Level 6-18 (Field Specialist)
+cpl - Corporate Raider Level 7-20
+bkp - Toxic Leader Level 7-20 (Field Specialist)
+kpn - The Big Cheese Level 8-25
+cg - Autocaddie Level 14-15.exe
+bg - Club President Level 18.mgr
+msr - Club President (TTR) Level 24.mgr
 kb - Derrick Hand Level 25.mgr
 ts - Derrick Hybrid Level 25.mgr
 tc - Firestarter Level 20.mgr
 tg - Featherbedder Level 30.mgr
 tb - Major Player Level 28.mgr
-adc - Chainsaw Consultant NONOR Level 50.mgr
-drm - Chainsaw Consultant Level 50.mgr
+adc - Derrick Man Level 5.mgr
+drm - Chainsaw Consultant (OR) Level 50.mgr
 cp - Powerhouse Level 38.mgr
-fbd - Groundbreaker Level 44.mgr
+fbd - Shareholder Level 44.mgr
 frs - Wiretapper Level 44.mgr
 gtk - Ambassador Level 48.mgr
 
 LAWBOTS:
-bf - Pettifogger Level 1-8
-b - Double Talker Level 2-9
-dt - Conveyancer Level 3-10
-ac - Needlenose Level 4-12
-bs - Back Stabber Level 5-15
-sd - Spin Doctor Level 6-18
-le - Shyster Level 7-20
-bw - Advocate Level 8-20
-brv - Legal Eagle Level 9-21
-sb - Barrister Level 10-22
-cfp - Big Wig Level 11-23
-arb - Arbitrator Level 12-24
-sjg - Peacekeeper Level 13-25
-lsc - Secretary Level 14-26
-jdg - Bailiff Level 13.mgr
+bf - Bottom Feeder Level 1-8
+b - Bloodsucker Level 2-9
+dt - Pettifogger Level 2-10 (Operations Analyst)
+ac - Double Talker Level 3-10
+bs - Conveyancer Level 3-12 (Operations Analyst)
+sd - Ambulance Chaser Level 4-12
+le - Needlenose Level 4-15 (Field Specialist)
+bw - Back Stabber Level 5-15
+brv - Advocate Level 5-20 (Operations Analyst)
+sb - Spin Doctor Level 6-18
+cfp - Shyster Level 6-18 (Field Specialist)
+arb - Legal Eagle Level 7-20
+sjg - Barrister Level 7-20 (Field Specialist)
+lsc - Big Wig Level 8-25
+jdg - Arbitrator Level 15-20.exe
 jur - Head Attorney Level 16.mgr
-tlr - N/A Level N/A.mgr
-cm - N/A Level N/A.mgr
+tlr - Clerk (TTR) Level 22.mgr
+cm - Secretary Level 20.mgr
 ggm - Mouthpiece Level 16.mgr
 th - Rainmaker Level 16.mgr
 kc - Witch Hunter Level 20.mgr
@@ -76,21 +76,21 @@ lit - Litigator Level 40.mgr
 CASHBOTS:
 sc - Short Change Level 1-8
 pp - Penny Pincher Level 2-9
-tw - Tightwad Level 3-10
-bc - Bean Counter Level 4-12
-nc - Number Cruncher Level 5-15
-mb - Money Bags Level 6-18
-ls - Loan Shark Level 7-20
-rb - Robber Baron Level 8-20
-gm - Analyst Level 9-21
-ad - Treasurer Level 10-22
-cvy - Mercenary Level 11-23
-ptr - Patronizer Level 12-24
-mld - Big Fish Level 13-25
-pht - Entrepreneur Level 14-25
-csh - Mint Auditor Level 11.mgr
+tw - Patronizer Level 2-10 (Field Specialist)
+bc - Tightwad Level 3-10
+nc - The Swindler Level 3-12 (Field Specialist)
+mb - Bean Counter Level 4-12
+ls - Entrepreneur Level 4-15 (Operations Analyst)
+rb - Number Cruncher Level 5-15
+gm - Mercenary Level 5-20 (Field Specialist)
+ad - Money Bags Level 6-18
+cvy - Treasurer Level 6-18 (Field Specialist)
+ptr - Loan Shark Level 7-20
+mld - Big Fish Level 7-20 (Field Specialist)
+pht - Robber Baron Level 8-25
+csh - Mint Auditor (TTR) Level 20.mgr
 bgr - Mint Supervisor Level 13.mgr
-mes - Duck Shuffler Level 5.mgr
+mes - Mint Supervisor 2 Level 13.mgr
 dm - Treekiller Level 24.mgr
 tcc - Styx Level 20.mgr
 fb - Nix Level 21.mgr
@@ -106,58 +106,58 @@ crf - High Roller Level 100.mgr
 SELLBOTS:
 cc - Cold Caller Level 1-8
 tm - Telemarketer Level 2-9
-nd - Name Dropper Level 3-10
-gh - Glad Hander Level 4-12
-ms - Mover & Shaker Level 5-15
-tf - Two-Face Level 6-18
-m - The Mingler Level 7-20
-mh - Mr. Hollywood Level 8-20
-ka - Lobbyist Level 9-21
-mka - Candidate Level 10-22
-trm - Assembly Assassin Level 11-23
-ssm - Software Simian Level 12-24
-isw - Installer Wizard Level 13-25
-ssr - Root User Level 14-26
-fas - Safe-ty Supervisor Level 8.mgr
+nd - Lobbyist Level 2-10 (Field Specialist)
+gh - Name Dropper Level 3-10
+ms - Prospector Level 3-12 (Operations Analyst)
+tf - Glad Hander Level 4-12
+m - Quota Crusher Level 4-15 (Operations Analyst)
+mh - Mover & Shaker Level 5-15
+ka - The Candidate Level 5-20 (Field Specialist)
+mka - Two-Face Level 6-18
+trm - Assembly Assassin Level 6-18 (Field Specialist)
+ssm - The Mingler Level 7-20
+isw - Aggressive Achiever Level 7-20 (Field Specialist)
+ssr - Mr. Hollywood Level 8-25
+fas - Factory Foreman (TTR) Level 18.mgr
 mdr - Factory Foreman Level 11.mgr
-nar - Public Relations Representative Level 10.mgr
+nar - Factory Foreman 2 Level 11.mgr
 fd - Director Of Public Affairs Level 30.mgr
 fm - Bellringer Level 13.mgr
-jb - Desk Jockey Level 3-8.mgr
+jb - Desk Jockey Level 3-8.exe
 jg - Prethinker Level 12.mgr
 jr - Multislacker Level 24.mgr
 prr - Videographer Level 50.mgr
-blr - Radiographer Level 35.mgr
-dvp - Perpetrator Level 38.mgr
-dsk - Union Buster Level 38.mgr
-ffm - Bureaucrat Level 45.mgr
+blr - Radiographer Level 28.mgr
+dvp - Perpetrator Level 32.mgr
+dsk - Union Buster Level 32.mgr
+ffm - Bureaucrat Level 38.mgr
 sft - Pacesetter Level 66.mgr
 
 BOARDBOTS(WIP):
-ca - Con Artist Level 1-8
-cn - Connoisseur Level 2-9
-sw - The Swindler Level 3-10
-mdm - Middleman Level 4-12
-txm - Toxic Leader Level 5-15
-mg - Magnate Level 6-18
-bfh - Big Fish Level 7-20
-hho - Head Honcho Level 8-20
-bdb - Bagholder Level 9-21
-bgh - Sharp Seer Level 10-22
-dfh - Circuit Breaker Level 11-23 
-rng - Renegade Level 12-24
-cps - Deadlock Level 13-25
-tld - Toxic Leader Level 14-26
-gkp - Chairperson Level 15.mgr
-ddv - Board Director Level 16-20.mgr
-dty - Deep Diver Level 7.mgr
+ca - Bagholder Level 1-8
+cn - Paper Hands Level 2-9
+sw - Con Artist Level 2-10 (Operations Analyst)
+mdm - The Insider Level 3-10
+txm - Middleman Level 3-12 (Field Specialist)
+mg - Circuit Breaker Level 4-12
+bfh - Toxic Manager Level 4-15 (Operations Analyst) 
+hho - Deadlock Level 5-15
+bdb - Renegade Level 5-20 (Field Specialist)
+bgh - Shark Watcher Level 6-18
+dfh - Big Fish Level 6-18 (Field Specialist) 
+rng - Magnate Level 7-20
+cps - Chairwarmer Level 7-20 (Field Specialist)
+tld - Head Honcho Level 8-25
+gkp - Chairperson Level 18.mgr
+ddv - Board Director Level 20.mgr
+dty - Board Director 2 Level 20.mgr
 dfg - Gatekeeper Level 10.mgr
 dfr - Land Acquisition Architect Level 7.mgr
 bsh - Director Of Land Development Level 25.mgr
-ghd - Test Dummy Level 69.mgr
-tyh - TBD Level 44.mgr 
-jgd - TBD Level 44.mgr
-bby - TBD Level 50.mgr
+ghd - Black Hat Level 40.mgr
+tyh - Typographer Level 45.mgr 
+jgd - Tyrannizer Level 45.mgr
+bby - Directorate Level 50.mgr
 dvk - Dividend King Level 65.mgr
 otm - The Ottoman Level 75.mgr
 cry - Crystalline Level 77.mgr

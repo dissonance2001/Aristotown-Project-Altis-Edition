@@ -59,20 +59,24 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('run', 'walk'), ('neutral', 'neutral'), ('headless-death', 'headless-death'))
+AllSuits = (('walk', 'walk'), ('run', 'walk'), ('neutral', 'neutral'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'),  ('headless-death', 'headless-death'))
 AllSuitsMinigame = (('victory', 'victory'),
  ('flail', 'flailing'),
  ('tug-o-war', 'tug-o-war'),
  ('slip-backward', 'slip-backward'),
+('lose3', 'wrecked'),
  ('slip-forward', 'slip-forward'))
-AllSuitsTutorialBattle = (('lose', 'lose'), ('lose2', 'headless-death'), ('dance', 'song-and-dance'),  ('pie-small-react', 'pie-small'), ('squirt-small-react', 'squirt-small'))
+AllSuitsTutorialBattle = (('lose', 'lose'), ('lose2', 'headless-death'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'), ('dance', 'song-and-dance'),  ('pie-small-react', 'pie-small'), ('squirt-small-react', 'squirt-small'))
 AllSuitsBattle = (('drop-react', 'anvil-drop'),
  ('flatten', 'drop'),
 ('headless-death', 'headless-death'),
 ('dance', 'song-and-dance'),
+('lose3', 'wrecked'),
+('wrecked', 'wrecked'),
  ('sidestep-left', 'sidestep-left'),
  ('sidestep-right', 'sidestep-right'),
  ('squirt-large-react', 'squirt-large'),
+                  ('sound-react', 'sound-react'),
  ('landing', 'landing'),
  ('reach', 'walknreach'),
  ('rake-react', 'rake'),
@@ -84,6 +88,7 @@ SuitsCEOBattle = (('sit', 'sit'),
  ('sit-eat-in', 'sit-eat-in'),
  ('sit-eat-loop', 'sit-eat-loop'),
  ('sit-eat-out', 'sit-eat-out'),
+('lose3', 'wrecked'),
  ('sit-angry', 'sit-angry'),
  ('sit-hungry-left', 'leftsit-hungry'),
  ('sit-hungry-right', 'rightsit-hungry'),
@@ -92,81 +97,117 @@ SuitsCEOBattle = (('sit', 'sit'),
  ('tray-neutral', 'tray-neutral'),
  ('sit-lose', 'sit-lose'),
                   ('headless-death', 'headless-death'))
-f = (('throw-paper', 'throw-paper', 4), ('phone', 'phone', 4), ('shredder', 'shredder', 4), ('headless-death', 'headless-death', 4))
+f = (('throw-paper', 'throw-paper', 4), ('phone', 'phone', 4), ('lose3', 'wrecked', 4), ('shredder', 'shredder', 4))
 p = (('pencil-sharpener', 'pencil-sharpener', 4),
- ('pen-squirt', 'pen-squirt', 4),
- ('hold-eraser', 'hold-eraser', 4),
- ('finger-wag', 'finger-wag', 4),
- ('hold-pencil', 'hold-pencil', 4))
-ym = (('golf-club-swing', 'golf-club-swing', 4),
+    ('pen-squirt', 'pen-squirt', 4),
+     ('lose3', 'wrecked', 4),
+    ('hold-eraser', 'hold-eraser', 4),
+    ('finger-wag', 'finger-wag', 4),
+    ('hold-pencil', 'hold-pencil', 4))
+ym = (('magic3', 'magic3', 4),
+      ('finger-wag', 'finger-wag', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('lose3', 'wrecked', 4),
+      ('throw-object', 'throw-object', 4))
+mm = (('golf-club-swing', 'golf-club-swing', 4),
  ('magic3', 'magic3', 4),
+      ('lose3', 'wrecked', 4),
  ('rubber-stamp', 'rubber-stamp', 4),
  ('smile', 'smile', 4))
-mm = (('speak', 'speak', 4),
+ds =  (('roll-o-dex', 'roll-o-dex', 4),
+ ('magic3', 'magic3', 4),
+       ('lose3', 'wrecked', 4),
+ ('smile', 'smile', 4))
+hh = (('speak', 'speak', 4),
  ('effort', 'effort', 4),
+      ('lose3', 'wrecked', 4),
  ('magic1', 'magic1', 4),
  ('pen-squirt', 'fountain-pen', 4),
  ('finger-wag', 'finger-wag', 4))
-ds = (('magic2', 'magic2', 5),
- ('throw-paper', 'throw-paper', 5),
- ('magic3', 'magic3', 5))
-hh = (('pen-squirt', 'fountain-pen', 4),
+cr = (('glower', 'glower', 4),
+ ('finger-wag', 'finger-wag', 4),
+      ('lose3', 'wrecked', 4),
+ ('speak', 'speak', 4))
+tbc = (('magic2', 'magic2', 4),
+ ('throw-paper', 'throw-paper', 4),
+       ('lose3', 'wrecked', 4),
+ ('magic3', 'magic3', 4))
+trb = (('magic1', 'magic1', 4),
+ ('speak', 'speak', 4),
+       ('finger-wag', 'finger-wag', 4),
+       ('lose3', 'wrecked', 4),
+ ('glower', 'glower', 4),
+ ('magic3', 'magic3', 4))
+dot = (('pen-squirt', 'fountain-pen', 4),
  ('glower', 'glower', 4),
  ('throw-paper', 'throw-paper', 4),
+       ('lose3', 'wrecked', 4),
  ('magic1', 'magic1', 4),
  ('magic3', 'magic3', 4),
  ('roll-o-dex', 'roll-o-dex', 4))
-cr = (('pickpocket', 'pickpocket', 4), ('throw-paper', 'throw-paper', 4), ('glower', 'glower', 4))
-tbc = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4),
-       ('magic1', 'magic1', 4),
- ('golf-club-swing', 'golf-club-swing', 4))
-trb = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4),
-       ('magic1', 'magic1', 4),
- ('phone', 'phone', 4))
-dot = (('glower', 'glower', 4),
-        ('magic2', 'magic2', 4),
-       ('speak', 'speak', 4))
-dvg = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4),
- ('song-and-dance', 'song-and-dance', 4),
- ('golf-club-swing', 'golf-club-swing', 4))
-cpl = (('phone', 'phone', 4),
+dvg = (('glower', 'glower', 4),
  ('magic2', 'magic2', 4),
-('throw-paper', 'throw-paper', 4))
-bkp = (('cigar-smoke', 'cigar-smoke', 4),
-       ('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
+       ('golf-club-swing', 'golf-club-swing', 4),
+ ('quick-jump', 'jump', 4))
+cpl = (('glower', 'glower', 4),
+ ('throw-paper', 'throw-paper', 4),
+       ('lose3', 'wrecked', 4),
        ('throw-object', 'throw-object', 4),
-       ('throw-paper', 'throw-paper', 4))
-kpn = (('cigar-smoke', 'cigar-smoke', 4),
-        ('glower', 'glower', 4),
-        ('magic3', 'magic3', 4),
-        ('smile', 'smile', 4))
+ ('pickpocket', 'pickpocket', 4))
+bkp = (('glower', 'glower', 4),
+ ('magic2', 'magic2', 4),
+       ('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
+ ('cigar-smoke', 'cigar-smoke', 4))
+kpn = (('glower', 'glower', 4),
+ ('golf-club-swing', 'golf-club-swing', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic1', 'magic1', 4),
+ ('cigar-smoke', 'cigar-smoke', 4))
 cg = (('magic1', 'magic1', 4),
       ('glower', 'glower', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
 ('magic3', 'magic3', 4),
+      ('lose3', 'wrecked', 4),
       ('golf-club-swing', 'golf-club-swing', 4),
       ('song-and-dance', 'song-and-dance', 4),
       ('cigar-smoke', 'cigar-smoke', 4))
 bg = (('magic1', 'magic1', 4),
       ('glower', 'glower', 4),
 ('magic3', 'magic3', 4),
+      ('lose3', 'wrecked', 4),
       ('frustrated', 'frustrated', 4),
       ('golf-club-swing', 'golf-club-swing', 4),
       ('song-and-dance', 'song-and-dance', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
       ('cigar-smoke', 'cigar-smoke', 4),
        ('throw-paper', 'throw-paper', 4))
-msr = (('pen-squirt', 'fountain-pen', 4),
-      ('throw-paper', 'throw-paper', 4),
-      ('quick-jump', 'jump', 4),
-      ('magic1', 'magic1', 4),
+msr = (('magic1', 'magic1', 4),
       ('glower', 'glower', 4),
-      ('speak', 'speak', 4))
+('magic3', 'magic3', 4),
+       ('lose3', 'wrecked', 4),
+      ('frustrated', 'frustrated', 4),
+      ('golf-club-swing', 'golf-club-swing', 4),
+      ('song-and-dance', 'song-and-dance', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
+      ('cigar-smoke', 'cigar-smoke', 4),
+       ('sanction', 'sanction', 4),
+       ('pickpocket', 'sanction', 4))
 kb = (('pen-squirt', 'fountain-pen', 4),
       ('quick-jump', 'jump', 4),
       ('pickpocket', 'sanction', 4),
       ('magic1', 'magic1', 4),
+      ('lose3', 'wrecked', 4),
+      ('layoffs', 'layoffs', 4),
+('summon', 'summon', 4),
+('speak', 'speak', 4),
+       ('cease', 'cease', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
        ('magic3', 'magic3', 4),
        ('snap', 'snap', 4),
 ('throw-paper', 'throw-paper', 4),
@@ -178,8 +219,16 @@ kb = (('pen-squirt', 'fountain-pen', 4),
       ('cigar-smoke', 'cigar-smoke', 4))
 ts = (('quick-jump', 'jump', 4),
       ('pickpocket', 'sanction', 4),
+('summon', 'summon', 4),
+('speak', 'speak', 4),
+      ('lose3', 'wrecked', 4),
+       ('cease', 'cease', 4),
       ('magic1', 'magic1', 4),
-       ('magic3', 'snap', 4),
+       ('snap', 'snap', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
+('layoffs', 'layoffs', 4),
+       ('magic3', 'magic3', 4),
        ('snap', 'snap', 4),
 ('throw-paper', 'throw-paper', 4),
  ('throw-object', 'throw-object', 4),
@@ -192,6 +241,7 @@ tc = (('quick-jump', 'jump', 4),
       ('pickpocket', 'sanction', 4),
 ('throw-paper', 'throw-paper', 4),
  ('throw-object', 'throw-object', 4),
+      ('lose3', 'wrecked', 4),
       ('defense', 'scabbard', 4),
       ('magic1', 'magic1', 4),
       ('glower', 'glower', 4),
@@ -203,6 +253,7 @@ tg = (('golf-club-swing', 'golf-club-swing', 4),
       ('magic1', 'magic1', 4),
       ('glower', 'glower', 4),
       ('speak', 'speak', 4),
+      ('lose3', 'wrecked', 4),
       ('song-and-dance', 'song-and-dance', 4),
       ('cigar-smoke', 'firestarter-cigar-smoke', 4),
       ('sanction', 'sanction', 4))
@@ -212,6 +263,11 @@ tb = (('quick-jump', 'jump', 4),
 ('summon', 'summon', 4),
       ('pickpocket', 'pickpocket', 4),
         ('magic3', 'magic3', 4),
+('summon', 'summon', 4),
+('calculating-costs', 'calculating-costs', 4),
+('speak', 'speak', 4),
+       ('cease', 'cease', 4),
+      ('lose3', 'wrecked', 4),
 ('song-and-dance', 'song-and-dance', 4),
        ('cease2', 'cease2', 4),
         ('finger-wag', 'cease2', 4),
@@ -225,6 +281,7 @@ adc = (('throw-object', 'throw-object', 4),
         ('magic3', 'magic3', 4),
       ('defense', 'scabbard', 4),
       ('roll-o-dex', 'roll-o-dex', 4),
+       ('lose3', 'wrecked', 4),
       ('magic1', 'layoffs', 4),
       ('glower', 'glower', 4),
       ('effort', 'magic3', 4),
@@ -237,6 +294,7 @@ drm = (('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4),
         ('magic3', 'magic3', 4),
       ('defense', 'scabbard', 4),
+       ('lose3', 'wrecked', 4),
       ('roll-o-dex', 'roll-o-dex', 4),
       ('magic1', 'layoffs', 4),
       ('glower', 'glower', 4),
@@ -250,7 +308,13 @@ cp = (('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4),
        ('sanction', 'sanction', 4),
       ('layoffs', 'layoffs', 4),
+      ('rage', 'frustrated', 4),
        ('magic3', 'magic3', 4),
+    ('summon', 'summon', 4),
+      ('lose3', 'wrecked', 4),
+('speak', 'speak', 4),
+('falling-knife', 'falling-knife', 4),
+       ('cease', 'cease', 4),
 ('defense', 'scabbard', 4),
        ('cigar-smoke', 'cigar-smoke', 4),
        ('snap', 'snap', 4),
@@ -265,28 +329,43 @@ fbd = (('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4),
        ('sanction', 'sanction', 4),
 ('summon', 'summon', 4),
+       ('lose3', 'wrecked', 4),
+    ('summon', 'summon', 4),
+('speak', 'speak', 4),
+       ('cease', 'cease', 4),
        ('roll-o-dex', 'roll-o-dex', 4),
 ('layoffs', 'layoffs', 4),
        ('glower', 'glower', 4),
+       ('speak', 'speak', 4),
        ('pickpocket', 'sanction', 4),
        ('magic3', 'magic3', 4),
-       ('cigar-smoke', 'cigar-smoke', 4),
+       ('cigar-smoke', 'firestarter-cigar-smoke', 4),
+       ('effort', 'effort', 4),
 ('cease', 'cease', 4),
+('falling-knife', 'falling-knife', 4),
 ('objection-in', 'cease2', 4),
-       ('snap', 'snap', 4),
+('snap', 'snap', 4),
+       ('magic2', 'magic2', 4),
       ('magic2', 'magic2', 4),
 ('quick-jump', 'jump', 4),
 ('deadwood', 'deadwood', 4),
       ('speak', 'speak', 4))
 frs = (('magic3', 'magic3', 4),
+('calculating-costs', 'calculating-costs', 4),
        ('magic2', 'magic2', 4),
+    ('summon', 'summon', 4),
+('speak', 'speak', 4),
+       ('cease', 'cease', 4),
        ('sanction', 'sanction', 4),
 ('summon', 'summon', 4),
-('deadwood', 'cease', 4),
-       ('finger-wag', 'cease', 4),
-('cease', 'cease', 4),
-('objection-in', 'cease', 4),
-       ('cease2', 'cease', 4),
+('deadwood', 'cease3', 4),
+       ('finger-wag', 'cease3', 4),
+('cease', 'cease3', 4),
+       ('lose3', 'wrecked', 4),
+('falling-knife', 'falling-knife', 4),
+('snap', 'snap', 4),
+('objection-in', 'cease3', 4),
+       ('cease2', 'cease3', 4),
        ('phone', 'phone', 4),
        ('glower', 'glower', 4),
        ('speak', 'speak', 4))
@@ -294,9 +373,14 @@ gtk = (('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4),
        ('sanction', 'sanction', 4),
        ('glower', 'glower', 4),
+    ('summon', 'summon', 4),
+('speak', 'speak', 4),
+       ('lose3', 'wrecked', 4),
+       ('cease', 'cease', 4),
 ('deadwood', 'deadwood', 4),
        ('magic3', 'magic3', 4),
-('objection-in', 'cease2', 4),
+('objection-in', 'cease', 4),
+('falling-knife', 'falling-knife', 4),
 ('summon', 'summon', 4),
        ('pickpocket', 'pickpocket', 4),
 ('magic1', 'magic1', 4),
@@ -305,83 +389,118 @@ gtk = (('throw-object', 'throw-object', 4),
        ('frustrated', 'frustrated', 4),
       ('magic2', 'magic2', 4),
       ('speak', 'speak', 4),
-      ('cease', 'cease', 4))
+      ('cease2', 'cease', 4))
 cc = (('speak', 'speak', 4),
     ('glower', 'glower', 4),
+      ('lose3', 'wrecked', 4),
     ('phone', 'phone', 4))
 tm = (('speak', 'speak', 4),
  ('throw-paper', 'throw-paper', 4),
  ('pickpocket', 'pickpocket', 4),
  ('phone', 'phone', 4),
+      ('lose3', 'wrecked', 4),
  ('roll-o-dex', 'roll-o-dex', 4),
  ('finger-wag', 'finger-wag', 4))
-nd = (('pickpocket', 'pickpocket', 4),
- ('roll-o-dex', 'roll-o-dex', 4),
- ('magic3', 'magic3', 4),
- ('smile', 'smile', 4))
-gh = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
-ms = (('effort', 'effort', 4),
+nd = (('speak', 'speak', 4),
  ('throw-paper', 'throw-paper', 4),
+ ('pickpocket', 'pickpocket', 4),
+('magic3', 'magic3', 4),
+ ('phone', 'phone', 4),
+      ('lose3', 'wrecked', 4),
+ ('roll-o-dex', 'roll-o-dex', 4),
+ ('finger-wag', 'finger-wag', 4))
+gh = (('speak', 'speak', 4),
+ ('smile', 'smile', 4),
+ ('pickpocket', 'pickpocket', 4),
+('throw-paper', 'throw-paper', 4),
+ ('throw-object', 'throw-object', 4),
+      ('lose3', 'wrecked', 4),
+('magic3', 'magic3', 4),
+ ('roll-o-dex', 'roll-o-dex', 4))
+ms = (('speak', 'speak', 4),
+ ('magic3', 'magic3', 4),
+      ('lose3', 'wrecked', 4),
+      ('phone', 'phone', 4),
+ ('pickpocket', 'pickpocket', 4),
+('glower', 'glower', 4),
+('throw-paper', 'throw-paper', 4),
+ ('throw-object', 'throw-object', 4),
+('magic1', 'magic1', 4),
+ ('roll-o-dex', 'roll-o-dex', 4))
+tf = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4), ('lose3', 'wrecked', 4), ('rubber-stamp', 'rubber-stamp', 4))
+m = (('stomp', 'stomp', 4), ('quick-jump', 'jump', 4), ('lose3', 'wrecked', 4), ('phone', 'phone', 4), ('glower', 'glower', 4))
+mh = (('effort', 'effort', 4),
+ ('throw-paper', 'throw-paper', 4),
+      ('lose3', 'wrecked', 4),
  ('stomp', 'stomp', 4),
  ('quick-jump', 'jump', 4))
-tf = (('phone', 'phone', 4),
+ka = (('speak', 'speak', 4),
+ ('song-and-dance', 'song-and-dance', 4),
+      ('lose3', 'wrecked', 4),
+ ('golf-club-swing', 'golf-club-swing', 4),
+ ('smile', 'smile', 4))
+mka = (('phone', 'phone', 4),
  ('smile', 'smile', 4),
  ('throw-object', 'throw-object', 4),
  ('magic3', 'magic3', 4),
+       ('lose3', 'wrecked', 4),
  ('glower', 'glower', 4))
-m = (('speak', 'speak', 4),
+trm = (('phone', 'phone', 4),
  ('magic2', 'magic2', 4),
- ('golf-club-swing', 'golf-club-swing', 4))
-mh = (('smile', 'smile', 4),
- ('speak', 'speak', 4),
- ('golf-club-swing', 'golf-club-swing', 4),
- ('song-and-dance', 'song-and-dance', 4))
-ka = (('speak', 'speak', 4),
-      ('throw-object', 'throw-object', 4))
-mka = (('magic1', 'magic1', 4),
- ('smile', 'smile', 4),
- ('effort', 'effort', 4),
- ('speak', 'speak', 4),
- ('golf-club-swing', 'golf-club-swing', 4),
- ('song-and-dance', 'song-and-dance', 4))
-trm = (('glower', 'glower', 4),
  ('cigar-smoke', 'cigar-smoke', 4),
- ('magic2', 'magic2', 4))
-ssm = (('phone', 'phone', 4),
-('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
+ ('magic3', 'magic3', 4),
  ('glower', 'glower', 4))
-isw = (('hold-pencil', 'hold-pencil', 4),
-       ('hold-eraser', 'hold-eraser', 4),
+ssm = (('speak', 'speak', 4),
+ ('magic2', 'magic2', 4),
+       ('lose3', 'wrecked', 4),
+ ('golf-club-swing', 'golf-club-swing', 4))
+isw = (('phone', 'phone', 4),
  ('glower', 'glower', 4),
-('phone', 'phone', 4))
-ssr = (('phone', 'phone', 4),
- ('glower', 'glower', 4),
-('magic1', 'magic1', 4))
+       ('lose3', 'wrecked', 4),
+ ('magic1', 'magic1', 4),
+ ('song-and-dance', 'song-and-dance', 4))
+ssr = (('smile', 'smile', 4),
+ ('speak', 'speak', 4),
+       ('lose3', 'wrecked', 4),
+       ('cigar-smoke', 'cigar-smoke', 4),
+ ('golf-club-swing', 'golf-club-swing', 4),
+ ('song-and-dance', 'song-and-dance', 4))
 fas = (('throw-paper', 'throw-paper', 4),
        ('magic2', 'magic2', 4),
        ('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
        ('magic3', 'magic3', 4),
+       ('rage', 'rage', 4),
        ('speak', 'speak', 4))
 mdr = (('throw-paper', 'throw-paper', 4),
        ('magic2', 'magic2', 4),
        ('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
        ('frustrated', 'frustrated', 4),
        ('magic3', 'magic3', 4),
        ('speak', 'speak', 4))
-nar = (('magic2', 'magic2', 4),
+nar = (('throw-paper', 'throw-paper', 4),
+       ('magic2', 'magic2', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic1', 'magic1', 4),
+       ('frustrated', 'frustrated', 4),
        ('magic3', 'magic3', 4),
-        ('throw-paper', 'throw-paper', 4),
-        ('speak', 'speak', 4),
-        ('sanction', 'sanction', 4),
-        ('smile', 'smile', 4))
+       ('speak', 'speak', 4))
 fd = (('glower', 'glower', 4),
         ('speak', 'speak', 4),
-('effort', 'effort', 4),
+('summon', 'effort', 4),
+('speak', 'speak', 4),
+('calculating-costs', 'phone', 4),
+('cease', 'mob-mentality', 4),
+      ('lose3', 'wrecked', 4),
+       ('cease', 'glower', 4),
         ('magic3', 'magic2', 4),
         ('throw-paper', 'throw-paper', 4),
         ('magic1', 'magic1', 4))
 fm = (('glower', 'glower', 4),
         ('speak', 'speak', 4),
+      ('lose3', 'wrecked', 4),
         ('magic3', 'magic2', 4),
         ('throw-paper', 'throw-paper', 4),
         ('magic1', 'magic1', 4))
@@ -389,10 +508,12 @@ th = (('magic1', 'magic1', 4),
         ('effort', 'effort', 4),
         ('glower', 'glower', 4),
         ('magic2', 'transformation', 4),
+      ('lose3', 'wrecked', 4),
         ('pickpocket', 'rushjob', 4))
 kc = (('pickpocket', 'sanction', 4),
         ('sanction', 'sanction', 4),
         ('speak', 'speak', 4),
+      ('lose3', 'wrecked', 4),
         ('throw-object', 'throw-object', 4),
         ('throw-paper', 'throw-paper', 4),
         ('magic1', 'magic1', 4))
@@ -401,6 +522,7 @@ tr = (('glower', 'glower', 4),
         ('sanction', 'sanction', 4),
         ('throw-object', 'throw-object', 4),
         ('throw-paper', 'throw-paper', 4),
+      ('lose3', 'wrecked', 4),
         ('cease2', 'cease2', 4),
         ('magic3', 'magic3', 4),
       ('cease', 'cease', 4),
@@ -409,7 +531,11 @@ prr = (('pickpocket', 'sanction', 4),
         ('sanction', 'sanction', 4),
        ('song-and-dance', 'song-and-dance', 4),
         ('glower', 'glower', 4),
+('calculating-costs', 'calculating-costs', 4),
+       ('lose3', 'wrecked', 4),
 ('cease2', 'cease2', 4),
+('falling-knife', 'falling-knife', 4),
+('cease', 'cease', 4),
 ('summon', 'summon', 4),
        ('frustrated', 'frustrated', 4),
        ('magic3', 'magic3', 4),
@@ -421,8 +547,14 @@ blr = (('throw-paper', 'throw-paper', 4),
 ('throw-object', 'throw-object', 4),
 ('defense', 'scabbard', 4),
 ('summon', 'summon', 4),
+       ('lose3', 'wrecked', 4),
+('calculating-costs', 'calculating-costs', 4),
+   ('summon', 'summon', 4),
+('speak', 'speak', 4),
+       ('cease', 'cease', 4),
 ('effort', 'effort', 4),
 ('smile', 'smile', 4),
+('falling-knife', 'falling-knife', 4),
        ('song-and-dance', 'song-and-dance', 4),
        ('roll-o-dex', 'roll-o-dex', 4),
 ('sanction', 'sanction', 4),
@@ -434,9 +566,16 @@ blr = (('throw-paper', 'throw-paper', 4),
 dvp = (('magic3', 'magic3', 4),
        ('magic2', 'magic2', 4),
 ('summon', 'summon', 4),
+('calculating-costs', 'calculating-costs', 4),
        ('magic1', 'magic1', 4),
+('falling-knife', 'falling-knife', 4),
+       ('cease', 'cease', 4),
        ('layoffs', 'layoffs', 4),
+       ('lose3', 'wrecked', 4),
        ('glower', 'glower', 4),
+   ('summon', 'summon', 4),
+('speak', 'speak', 4),
+       ('cease', 'cease', 4),
        ('finger-wag', 'cease2', 4),
        ('sanction', 'sanction', 4),
        ('pickpocket', 'sanction', 4),
@@ -448,7 +587,14 @@ dsk = (('cigar-smoke', 'firestarter-cigar-smoke', 4),
 ('glower', 'glower', 4),
        ('layoffs', 'layoffs', 4),
 ('deadwood', 'deadwood', 4),
+       ('lose3', 'wrecked', 4),
+('falling-knife', 'falling-knife', 4),
+   ('summon', 'summon', 4),
+('speak', 'speak', 4),
+('calculating-costs', 'calculating-costs', 4),
+       ('cease', 'cease', 4),
 ('frustrated', 'frustrated', 4),
+('objection-in', 'cease2', 4),
 ('summon', 'summon', 4),
 ('quick-jump', 'jump', 4),
 ('cease', 'cease', 4),
@@ -461,6 +607,11 @@ ffm = (('cigar-smoke', 'firestarter-cigar-smoke', 4),
 ('magic1', 'magic1', 4),
        ('magic3', 'magic3', 4),
        ('pickpocket', 'pickpocket', 4),
+   ('summon', 'summon', 4),
+('speak', 'speak', 4),
+       ('lose3', 'wrecked', 4),
+       ('cease', 'cease', 4),
+('objection-in', 'cease2', 4),
 ('summon', 'summon', 4),
         ('throw-paper', 'throw-paper', 4),
 ('glower', 'glower', 4),
@@ -475,80 +626,89 @@ sft = (('glower', 'glower', 4),
       ('speak', 'speak', 4),
       ('magic3', 'magic3', 4),
     ('sanction', 'rushjob', 4),
+       ('lose3', 'wrecked', 4),
     ('smile', 'smile', 4),
       ('neutral', 'pace', 4))
-sc = (('throw-paper', 'throw-paper', 4), ('watercooler', 'watercooler', 4), ('pickpocket', 'pickpocket', 4))
-pp = (('throw-paper', 'throw-paper', 4), ('glower', 'glower', 4), ('finger-wag', 'finger-wag', 4))
-tw = (('throw-paper', 'throw-paper', 4),
+sc = (('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4), ('watercooler', 'watercooler', 4), ('pickpocket', 'pickpocket', 4))
+pp = (('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4), ('glower', 'glower', 4), ('finger-wag', 'finger-wag', 4))
+tw = (('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4), ('magic3', 'magic3', 4), ('throw-object', 'throw-object', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4))
+bc = (('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
  ('glower', 'glower', 4),
  ('magic2', 'magic2', 4),
  ('finger-wag', 'finger-wag', 4))
-bc = (('phone', 'phone', 4), ('hold-pencil', 'hold-pencil', 4))
-nc = (('phone', 'phone', 4), ('throw-object', 'throw-object', 4))
-mb = (('magic1', 'magic1', 4), ('throw-paper', 'throw-paper', 4), ('throw-object', 'throw-object', 4))
-ls = (('magic1', 'magic1', 4), ('throw-paper', 'throw-paper', 4), ('throw-object', 'throw-object', 4), ('hold-pencil', 'hold-pencil', 4))
-rb = (('cigar-smoke', 'cigar-smoke', 4), ('magic3', 'magic3', 4), ('pickpocket', 'pickpocket', 4), ('golf-club-swing', 'golf-club-swing', 4))
-gm = (('phone', 'phone', 4), ('glower', 'glower', 4))
-ad = (('pickpocket', 'pickpocket', 4), ('magic3', 'magic3', 4), ('throw-paper', 'throw-paper', 4), ('glower', 'glower', 4))
-cvy = (('phone', 'phone', 4), ('glower', 'glower', 4), ('magic1', 'magic1', 4))
-ptr = (('phone', 'phone', 4),
- ('glower', 'glower', 4),
-('magic1', 'magic1', 4))
-mld = (('watercooler', 'watercooler', 4),
-('magic1', 'magic1', 4),
+nc = (('phone', 'phone', 4),
+ ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
+ ('magic3', 'magic3', 4),
+ ('pickpocket', 'pickpocket', 4))
+mb = (('phone', 'phone', 4), ('hold-pencil', 'hold-pencil', 4), ('lose3', 'wrecked', 4), ('pickpocket', 'pickpocket', 4))
+ls = (('phone', 'phone', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('lose3', 'wrecked', 4), ('glower', 'glower', 4))
+rb = (('phone', 'phone', 4), ('lose3', 'wrecked', 4), ('throw-object', 'throw-object', 4))
+gm = (('phone', 'phone', 4),
+      ('throw-paper', 'throw-paper', 4),
+ ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
+ ('magic2', 'magic2', 4),
+ ('pickpocket', 'pickpocket', 4))
+ad = (('magic1', 'magic1', 4), ('glower', 'glower', 4), ('lose3', 'wrecked', 4), ('throw-paper', 'throw-paper', 4), ('throw-object', 'throw-object', 4))
+cvy = (('watercooler', 'watercooler', 4),
+('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
+('magic2', 'magic2', 4),
  ('pickpocket', 'pickpocket', 4),
  ('throw-paper', 'throw-paper', 4))
-pht = (('magic3', 'magic3', 4),
-('effort', 'effort', 4),
- ('smile', 'smile', 4),
- ('magic1', 'magic1', 4))
-csh = (('magic3', 'magic3', 4),
-       ('magic2', 'magic2', 4),
-('phone', 'phone', 4),
-       ('magic1', 'magic1', 4),
-       ('sanction', 'sanction', 4),
-       ('pickpocket', 'sanction', 4))
-bgr = (('magic3', 'magic2', 4),
+ptr = (('magic1', 'magic1', 4), ('lose3', 'wrecked', 4), ('throw-paper', 'throw-paper', 4), ('throw-object', 'throw-object', 4), ('hold-pencil', 'hold-pencil', 4))
+mld = (('watercooler', 'watercooler', 4),
+('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
+ ('pickpocket', 'pickpocket', 4),
+ ('throw-paper', 'throw-paper', 4))
+pht = (('cigar-smoke', 'cigar-smoke', 4), ('lose3', 'wrecked', 4), ('magic3', 'magic3', 4), ('pickpocket', 'pickpocket', 4), ('golf-club-swing', 'golf-club-swing', 4))
+csh = (('magic3', 'magic2', 4), ('lose3', 'wrecked', 4),
        ('magic2', 'magic2', 4),
 ('phone', 'phone', 4),
 ('victory', 'victory', 4),
        ('magic1', 'magic1', 4),
        ('sanction', 'sanction', 4),
        ('pickpocket', 'sanction', 4))
-mes = (('throw-paper', 'throw-paper', 4),
-       ('defense', 'defense', 4),
-       ('hold-eraser', 'hold-eraser', 4),
-       ('throw-object', 'throw-object', 4),
-        ('mob-mentality', 'mob-mentality', 4),
-       ('magic1', 'magic1', 4))
+bgr = (('magic3', 'magic2', 4),
+       ('magic2', 'magic2', 4), ('lose3', 'wrecked', 4),
+('phone', 'phone', 4),
+('victory', 'victory', 4),
+       ('magic1', 'magic1', 4),
+       ('sanction', 'sanction', 4),
+       ('pickpocket', 'sanction', 4))
+mes = (('magic3', 'magic2', 4),
+       ('magic2', 'magic2', 4),
+('phone', 'phone', 4), ('lose3', 'wrecked', 4),
+('victory', 'victory', 4),
+       ('magic1', 'magic1', 4),
+       ('sanction', 'sanction', 4),
+       ('pickpocket', 'sanction', 4))
 dm = (('effort', 'wheelspin', 4),
         ('sanction', 'sanction', 4),
-        ('magic3', 'magic3', 4),
+        ('magic3', 'magic3', 4), ('lose3', 'wrecked', 4),
         ('finger-wag', 'cease2', 4),
         ('magic2', 'snap', 4),
         ('magic1', 'magic3', 5),
         ('pickpocket', 'sanction', 4))
 tcc = (('mob-mentality', 'mob-mentality', 4),
-      ('magic3', 'magic2', 4),
+      ('magic3', 'magic2', 4), ('lose3', 'wrecked', 4),
       ('magic2', 'magic2', 4),
       ('watercooler', 'watercooler', 4),
       ('magic1', 'magic1', 4),
       ('glower', 'glower', 4))
 fb = (('throw-paper', 'throw-paper', 4),
-       ('defense', 'defense', 4),
+       ('defense', 'defense', 4), ('lose3', 'wrecked', 4),
        ('hold-eraser', 'hold-eraser', 4),
        ('throw-object', 'throw-object', 4),
         ('mob-mentality', 'mob-mentality', 4),
        ('magic1', 'magic1', 4))
 jl = (('throw-paper', 'throw-paper', 4),
         ('throw-object', 'throw-paper', 4),
-       ('magic3', 'magic2', 4),
+       ('magic3', 'magic2', 4), ('lose3', 'wrecked', 4),
         ('mob-mentality', 'mob-mentality', 4),
        ('magic1', 'magic1', 4))
 gb = (('magic1', 'rake', 4),
         ('mob-mentality', 'mob-mentality', 4),
         ('throw-object', 'throw-object', 4),
-('pickpocket', 'pickpocket', 4),
+('pickpocket', 'pickpocket', 4), ('lose3', 'wrecked', 4),
         ('magic2', 'magic2', 4),
         ('magic3', 'magic3', 4),
 ('defense', 'scabbard', 4),
@@ -556,7 +716,7 @@ gb = (('magic1', 'rake', 4),
         ('throw-paper', 'throw-paper', 4))
 lbs = (('throw-paper', 'throw-paper', 4),
        ('throw-object', 'throw-object', 4),
-       ('magic1', 'magic1', 4),
+       ('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
        ('defense', 'scabbard', 4),
        ('mob-mentality', 'mob-mentality', 4),
        ('quick-jump', 'jump', 4),
@@ -565,7 +725,7 @@ lbs = (('throw-paper', 'throw-paper', 4),
        ('pickpocket', 'sanction', 4))
 trk = (('magic1', 'magic1', 4),
         ('effort', 'effort', 4),
-('pickpocket', 'pickpocket', 4),
+('pickpocket', 'pickpocket', 4), ('lose3', 'wrecked', 4),
         ('glower', 'glower', 4),
       ('mob-mentality', 'mob-mentality', 4),
         ('throw-object', 'throw-paper', 4),
@@ -573,28 +733,34 @@ trk = (('magic1', 'magic1', 4),
          ('throw-paper', 'throw-paper', 4),
         ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 dsf = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4),
+ ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
  ('golf-club-swing', 'golf-club-swing', 4),
  ('magic1', 'magic1', 4))
-msp = (('quick-jump', 'jump', 4),
-      ('effort', 'wheelspin', 4),
-        ('pickpocket', 'sanction', 4),
-        ('magic3', 'magic3', 4),
-('song-and-dance', 'song-and-dance', 4),
-       ('cease', 'cease2', 4),
-        ('finger-wag', 'cease2', 4),
-        ('magic2', 'magic2', 4),
-('magic1', 'magic1', 4),
-        ('speak', 'speak', 5),
+msp = (('effort', 'wheelspin', 4),
         ('sanction', 'sanction', 4),
+        ('magic3', 'shot5', 4),
+('falling-knife', 'falling-knife', 4),
+('summon', 'summon', 4), ('lose3', 'wrecked', 4),
+       ('cease', 'cease', 4),
+('snap', 'snap', 4),
+('song-and-dance', 'shot5', 4),
+        ('finger-wag', 'cease', 4),
+        ('snap', 'snap', 4),
+        ('magic1', 'magic1', 4),
+        ('pickpocket', 'sanction', 4),
         ('neutral', 'rolled', 4))
 mad = (('magic3', 'magic3', 4),
        ('effort', 'scabbard', 4),
         ('mob-mentality', 'mob-mentality', 4),
        ('magic1', 'magic1', 4),
        ('glower', 'glower', 4),
-('snap', 'snap', 4),
+('snap', 'snap', 4), ('lose3', 'wrecked', 4),
 ('defense', 'scabbard', 4),
+('summon', 'summon', 4),
+('objection-in', 'cease2', 4),
+('speak', 'speak', 4),
+       ('cease', 'cease', 4),
+('falling-knife', 'falling-knife', 4),
 ('summon', 'summon', 4),
        ('pickpocket', 'pickpocket', 4),
        ('smile', 'smile', 4),
@@ -608,10 +774,15 @@ mad = (('magic3', 'magic3', 4),
        ('neutral', 'rolled', 4))
 crf = (('effort', 'wheelspin', 4),
         ('sanction', 'sanction', 4),
+('wheelspin', 'wheelspin', 4),
         ('magic3', 'shot5', 4),
-('summon', 'summon', 4),
+('summon', 'summon', 4), ('lose3', 'wrecked', 4),
        ('cease', 'cease', 4),
 ('snap', 'snap', 4),
+('falling-knife', 'falling-knife', 4),
+('summon', 'summon', 4),
+('speak', 'speak', 4),
+       ('cease', 'cease', 4),
 ('song-and-dance', 'shot5', 4),
         ('finger-wag', 'cease', 4),
         ('snap', 'snap', 4),
@@ -620,77 +791,83 @@ crf = (('effort', 'wheelspin', 4),
         ('neutral', 'rolled', 4))
 bf = (('speak', 'speak', 4),
  ('throw-object', 'throw-object', 4),
+ ('hold-pencil', 'hold-pencil', 4), ('lose3', 'wrecked', 4),
+ ('finger-wag', 'finger-wag', 4))
+b = (('magic1', 'magic1', 4),
+ ('throw-paper', 'throw-paper', 4),
+     ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
+ ('pickpocket', 'pickpocket', 4))
+dt = (('speak', 'speak', 4),
+ ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
  ('hold-pencil', 'hold-pencil', 4),
  ('finger-wag', 'finger-wag', 4))
-b = (('rubber-stamp', 'rubber-stamp', 4),
- ('throw-paper', 'throw-paper', 4),
- ('speak', 'speak', 4))
-dt = (('throw-paper', 'throw-paper', 4),
+ac = (('rubber-stamp', 'rubber-stamp', 4), ('lose3', 'wrecked', 4),
+      ('throw-paper', 'throw-paper', 4),
  ('speak', 'speak', 4),
  ('roll-o-dex', 'roll-o-dex', 4))
-ac = (('pen-squirt', 'fountain-pen', 4),
-      ('rubber-stamp', 'rubber-stamp', 4),
- ('phone', 'phone', 4),
- ('speak', 'speak', 4))
-bs = (('magic1', 'magic1', 4),
-      ('throw-paper', 'throw-paper', 4),
-      ('pickpocket', 'pickpocket', 4),
-      ('finger-wag', 'fingerwag', 4))
+bs = (('throw-paper', 'throw-paper', 4),
+ ('speak', 'speak', 4), ('lose3', 'wrecked', 4),
+ ('roll-o-dex', 'roll-o-dex', 4))
 sd = (('magic2', 'magic2', 4),
- ('quick-jump', 'jump', 4),
+ ('quick-jump', 'jump', 4), ('lose3', 'wrecked', 4),
  ('magic3', 'magic3', 4),
  ('hold-pencil', 'hold-pencil', 4))
-le = (('magic1', 'magic1', 4),
+le = (('pen-squirt', 'fountain-pen', 4),
+      ('rubber-stamp', 'rubber-stamp', 4), ('lose3', 'wrecked', 4),
+ ('phone', 'phone', 4),
+ ('speak', 'speak', 4))
+bw = (('magic1', 'magic1', 4),
       ('throw-paper', 'throw-paper', 4),
-      ('hold-eraser', 'hold-eraser', 4))
-bw = (('shredder', 'shredder', 4),
+      ('pickpocket', 'pickpocket', 4), ('lose3', 'wrecked', 4),
+      ('finger-wag', 'fingerwag', 4))
+brv = (('shredder', 'shredder', 4),
     ('magic1', 'magic1', 4),
-    ('watercooler', 'watercooler', 4),
+    ('watercooler', 'watercooler', 4), ('lose3', 'wrecked', 4),
     ('glower', 'glower', 4))
-brv = (('speak', 'speak', 4),
- ('throw-object', 'throw-object', 4),
+sb = (('magic2', 'magic2', 4),
+ ('quick-jump', 'jump', 4),
+ ('magic3', 'magic3', 4), ('lose3', 'wrecked', 4),
+ ('hold-pencil', 'hold-pencil', 4))
+cfp = (('magic1', 'magic1', 4),
+      ('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
+      ('hold-eraser', 'hold-eraser', 4))
+arb = (('speak', 'speak', 4),
+ ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
  ('glower', 'glower', 4))
-sb = (('quick-jump', 'jump', 4),
-        ('throw-paper', 'throw-paper', 4),
+sjg = (('quick-jump', 'jump', 4),
+        ('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
 ('throw-object', 'throw-object', 4),
         ('glower', 'glower', 4))
-cfp = (('finger-wag', 'fingerwag', 4),
- ('cigar-smoke', 'cigar-smoke', 4),
+lsc = (('finger-wag', 'fingerwag', 4),
+ ('cigar-smoke', 'cigar-smoke', 4), ('lose3', 'wrecked', 4),
  ('magic1', 'magic1', 4),
  ('throw-object', 'throw-object', 4))
-arb = (('throw-object', 'throw-object', 4),
-('magic1', 'magic1', 4),
- ('magic3', 'magic3', 4),
- ('phone', 'phone', 4))
-sjg = (('throw-paper', 'throw-paper', 4),
-('magic1', 'magic1', 4),
- ('throw-object', 'throw-object', 4))
-lsc = (('phone', 'phone', 4),
- ('speak', 'speak', 4))
-jdg = (('magic2', 'magic2', 4),
-        ('magic3', 'magic3', 4),
-       ('throw-object', 'throw-object', 4),
-       ('throw-paper', 'throw-paper', 4),
-       ('magic1', 'magic1', 4),
-       ('quick-jump', 'jump', 4))
-jur = (('magic2', 'magic2', 4),
-       ('objection-in', 'objection-in', 4),
-       ('objection-out', 'objection-out', 4),
-        ('quick-jump', 'jump', 4),
-       ('magic3', 'magic3', 4),
-       ('throw-object', 'throw-object', 5),
-       ('throw-paper', 'throw-paper', 5),
-       ('magic1', 'magic1', 4))
-tlr = (('magic3', 'magic3', 4),
-       ('cease2', 'cease2', 4),
+jdg = (('magic3', 'magic3', 4),
+       ('cease2', 'cease2', 4), ('lose3', 'wrecked', 4),
        ('phone', 'phone', 4),
        ('cease', 'cease', 4),
        ('finger-wag', 'cease', 4),
        ('pickpocket', 'sanction', 4),
        ('sanction', 'sanction', 4),
        ('speak', 'speak', 4))
+jur = (('magic2', 'magic2', 4),
+       ('objection-in', 'objection-in', 4), ('lose3', 'wrecked', 4),
+       ('objection-out', 'objection-out', 4),
+        ('quick-jump', 'jump', 4),
+       ('magic3', 'magic3', 4),
+       ('throw-object', 'throw-object', 5),
+       ('throw-paper', 'throw-paper', 5),
+       ('magic1', 'magic1', 4))
+tlr = (('magic2', 'magic2', 4),
+       ('objection-in', 'objection-in', 4), ('lose3', 'wrecked', 4),
+       ('objection-out', 'objection-out', 4),
+        ('quick-jump', 'jump', 4),
+       ('magic3', 'magic3', 4),
+       ('throw-object', 'throw-object', 5),
+       ('throw-paper', 'throw-paper', 5),
+       ('magic1', 'magic1', 4))
 cm = (('magic2', 'snap', 4),
-      ('bellow', 'bellow', 4),
+      ('bellow', 'bellow', 4), ('lose3', 'wrecked', 4),
       ('glower', 'glower', 4),
       ('magic1', 'magic1', 4),
       ('magic3', 'snap', 4),
@@ -698,37 +875,38 @@ cm = (('magic2', 'snap', 4),
       ('throw-paper', 'throw-paper', 4))
 ggm = (('magic2', 'snap', 4),
        ('sanction', 'sanction', 4),
-       ('defense', 'scabbard', 4),
+       ('defense', 'scabbard', 4), ('lose3', 'wrecked', 4),
        ('magic3', 'snap', 4),
        ('pickpocket', 'sanction', 4),
        ('throw-object', 'throw-object', 5),
        ('throw-paper', 'throw-paper', 5),
        ('magic1', 'magic1', 4))
-jb = (('magic1', 'magic1', 4),
+jb = (('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
         ('magic2', 'magic2', 4),
         ('throw-paper', 'throw-paper', 4))
 jg = (('pickpocket', 'rushjob', 4),
         ('sanction', 'rushjob', 4),
-        ('effort', 'effort', 4),
+        ('effort', 'effort', 4), ('lose3', 'wrecked', 4),
         ('magic3', 'magic3', 4),
         ('magic2', 'magic2', 4),
         ('speak', 'speak', 4))
 jr = (('throw-paper', 'throw-paper', 4),
       ('magic1', 'magic1', 4),
       ('defense', 'scabbard', 4),
-      ('magic3', 'magic3', 4),
+      ('magic3', 'magic3', 4), ('lose3', 'wrecked', 4),
       ('glower', 'glower', 4),
       ('sanction', 'sanction', 4),
       ('pickpocket', 'sanction', 4),
       ('song-and-dance', 'song-and-dance', 4),
       ('neutral', 'rolled', 4))
 mp = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4),
+ ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
  ('golf-club-swing', 'golf-club-swing', 4),
  ('magic1', 'magic1', 4))
 laa = (('glower', 'glower', 4),
         ('pickpocket', 'sanction', 4),
-        ('sanction', 'sanction', 4),
+        ('sanction', 'sanction', 4), ('lose3', 'wrecked', 4),
+('falling-knife', 'falling-knife', 4),
         ('throw-object', 'throw-object', 4),
         ('throw-paper', 'throw-paper', 4),
         ('cease2', 'cease2', 4),
@@ -740,87 +918,87 @@ scg = (('stomp', 'stomp', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
        ('finger-wag', 'finger-wag', 4),
-       ('magic1', 'magic1', 4),
+       ('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
+       ('speak', 'speak', 4),
+       ('summon', 'objection-in', 4),
 ('magic2', 'magic2', 4),
+       ('cease', 'objection-in', 4),
        ('defense', 'defense', 4),
        ('glower', 'glower', 4))
 csm = (('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
-       ('effort', 'effort', 4),
+       ('effort', 'effort', 4), ('lose3', 'wrecked', 4),
+       ('summon', 'summon', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
+('objection-in', 'cease', 4),
+('falling-knife', 'falling-knife', 4),
+       ('speak', 'speak', 4),
        ('roll-o-dex', 'roll-o-dex', 4),
 ('sanction', 'sanction', 4),
         ('pen-squirt', 'fountain-pen', 4),
        ('magic1', 'magic1', 4))
 ste = (('magic3', 'magic3', 4),
-       ('cease2', 'cease2', 4),
+       ('cease2', 'cease3', 4),
        ('phone', 'phone', 4),
-       ('cease', 'cease', 4),
-       ('finger-wag', 'cease', 4),
-       ('pickpocket', 'sanction', 4),
-       ('sanction', 'sanction', 4),
-       ('speak', 'speak', 4))
+       ('summon', 'summon', 4),
+('speak', 'speak', 4),
+('calculating-costs', 'calculating-costs', 4),
+       ('cease', 'cease3', 4),
+       ('finger-wag', 'cease3', 4),
+       ('pickpocket', 'sanction2', 4), ('lose3', 'wrecked', 4),
+       ('sanction', 'sanction2', 4))
 lit = (('magic2', 'magic2', 4),
       ('bellow', 'bellow', 4),
+('speak', 'speak', 4),
       ('glower', 'glower', 4),
-      ('magic1', 'magic1', 4),
+('summon', 'summon', 4),
+       ('cease', 'cease', 4),
+      ('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
       ('snap', 'snap', 4),
       ('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4))
 ca = (('pickpocket', 'pickpocket', 4),
- ('speak', 'speak', 4),
+ ('speak', 'speak', 4), ('lose3', 'wrecked', 4),
  ('throw-paper', 'throw-paper', 4),
  ('pen-squirt', 'fountain-pen', 4))
 cn = (('speak', 'speak', 4),
- ('throw-paper', 'throw-paper', 4),
+ ('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
  ('effort', 'effort', 4),
  ('finger-wag', 'finger-wag', 4))
-sw = (('phone', 'phone', 4),
- ('pickpocket', 'pickpocket', 4),
+sw = (('pickpocket', 'pickpocket', 4),
+ ('speak', 'speak', 4), ('lose3', 'wrecked', 4),
  ('throw-paper', 'throw-paper', 4),
- ('roll-o-dex', 'roll-o-dex', 4))
+ ('pen-squirt', 'fountain-pen', 4))
 mdm = (('smile', 'smile', 4),
  ('roll-o-dex', 'roll-o-dex', 4),
+       ('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
  ('magic3', 'magic3', 4))
-txm = (('pen-squirt', 'fountain-pen', 4),
- ('glower', 'glower', 4),
+txm = (('magic3', 'magic3', 4),
+       ('pen-squirt', 'fountain-pen', 4),
+ ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
+       ('magic1', 'magic1', 4),
+       ('magic2', 'magic2', 4),
  ('magic1', 'magic1', 4))
 mg = (('speak', 'speak', 4),
- ('glower', 'glower', 4),
+ ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
  ('phone', 'phone', 5),
  ('throw-object', 'throw-object', 4),
  ('magic1', 'magic1', 4))
-bfh = (('magic1', 'magic1', 4), ('throw-paper', 'throw-paper', 4), ('watercooler', 'watercooler', 4))
-hho = (('cigar-smoke', 'cigar-smoke', 4),
+bfh =  (('pen-squirt', 'fountain-pen', 4),
+ ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
+ ('magic1', 'magic1', 4))
+hho = (('cigar-smoke', 'cigar-smoke', 4), ('lose3', 'wrecked', 4),
  ('throw-paper', 'throw-paper', 4),
  ('magic1', 'magic1', 4),
  ('magic2', 'magic2', 4),
  ('golf-club-swing', 'golf-club-swing', 5))
-bdb = (('cigar-smoke', 'cigar-smoke', 4),
+bdb = (('speak', 'speak', 4),
  ('glower', 'glower', 4),
+ ('phone', 'phone', 5),
+ ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
  ('magic1', 'magic1', 4))
-bgh = (('glower', 'glower', 4),
-        ('magic3', 'magic3', 4))
-dfh = (('magic3', 'magic3', 4),
-('quick-jump', 'jump', 4),
-        ('speak', 'speak', 5))
-rng = (('glower', 'glower', 4),
-('magic1', 'magic1', 4),
- ('throw-paper', 'throw-paper', 4),
- ('quick-jump', 'jump', 4))
-cps = (('glower', 'glower', 4),
-('smile', 'smile', 4),
- ('song-and-dance', 'song-and-dance', 4))
-tld = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4),
-('magic1', 'magic1', 4),
- ('magic2', 'magic2', 4))
-gkp = (('pen-squirt', 'fountain-pen', 4),
-       ('throw-object', 'throw-object', 4),
-       ('throw-paper', 'throw-paper', 4),
-       ('magic1', 'magic1', 4),
-       ('magic3', 'magic3', 4),
-       ('glower', 'glower', 4))
-ddv = (('pen-squirt', 'fountain-pen', 4),
+bgh = (('pen-squirt', 'fountain-pen', 4), ('lose3', 'wrecked', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
        ('magic1', 'magic1', 4),
@@ -828,16 +1006,52 @@ ddv = (('pen-squirt', 'fountain-pen', 4),
 ('cigar-smoke', 'cigar-smoke', 4),
        ('magic3', 'magic3', 4),
        ('glower', 'glower', 4))
-dty = (('magic3', 'magic3', 4),
-       ('cease2', 'cease2', 4),
-       ('phone', 'phone', 4),
-       ('cease', 'cease', 4),
-       ('finger-wag', 'cease', 4),
-       ('pickpocket', 'sanction', 4),
-       ('sanction', 'sanction', 4),
-       ('speak', 'speak', 4))
+dfh = (('magic1', 'magic1', 4), ('lose3', 'wrecked', 4), ('throw-paper', 'throw-paper', 4), ('watercooler', 'watercooler', 4))
+rng = (('speak', 'speak', 4), ('lose3', 'wrecked', 4),
+ ('glower', 'glower', 4),
+ ('phone', 'phone', 5),
+ ('throw-object', 'throw-object', 4),
+ ('magic1', 'magic1', 4))
+cps = (('cigar-smoke', 'cigar-smoke', 4),
+ ('glower', 'glower', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
+('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
+ ('magic2', 'magic2', 4))
+tld = (('cigar-smoke', 'cigar-smoke', 4),
+ ('glower', 'glower', 4),
+('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
+ ('magic2', 'magic2', 4))
+gkp = (('pen-squirt', 'fountain-pen', 4),
+       ('throw-object', 'throw-object', 4),
+       ('throw-paper', 'throw-paper', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
+       ('magic1', 'magic1', 4),
+       ('magic3', 'magic3', 4), ('lose3', 'wrecked', 4),
+       ('glower', 'glower', 4))
+ddv = (('pen-squirt', 'fountain-pen', 4),
+       ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('magic1', 'magic1', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
+('quick-jump', 'jump', 4),
+('cigar-smoke', 'cigar-smoke', 4),
+       ('magic3', 'magic3', 4),
+       ('glower', 'glower', 4))
+dty = (('pen-squirt', 'fountain-pen', 4),
+       ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
+       ('throw-paper', 'throw-paper', 4),
+('calculating-costs', 'calculating-costs', 4),
+('cease', 'cease', 4),
+       ('magic1', 'magic1', 4),
+('quick-jump', 'jump', 4),
+('cigar-smoke', 'cigar-smoke', 4),
+       ('magic3', 'magic3', 4),
+       ('glower', 'glower', 4))
 dfg = (('magic2', 'snap', 4),
-      ('bellow', 'bellow', 4),
+      ('bellow', 'bellow', 4), ('lose3', 'wrecked', 4),
       ('glower', 'glower', 4),
       ('magic1', 'magic1', 4),
       ('magic3', 'snap', 4),
@@ -846,59 +1060,105 @@ dfg = (('magic2', 'snap', 4),
 dfr = (('stomp', 'rage', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
-       ('magic1', 'magic1', 4),
+       ('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
        ('defense', 'defense', 4),
        ('glower', 'glower', 4))
 bsh = (('magic2', 'snap', 4),
-       ('sanction', 'sanction', 4),
+       ('sanction', 'sanction', 4), ('lose3', 'wrecked', 4),
        ('defense', 'scabbard', 4),
        ('quick-jump', 'jump', 4),
+       ('summon', 'summon', 4),
+('summon', 'summon', 4),
+('calculating-costs', 'calculating-costs', 4),
+('speak', 'speak', 4),
+       ('cease', 'cease', 4),
+('objection-in', 'cease2', 4),
+('cease', 'cease', 4),
        ('pickpocket', 'sanction', 4),
        ('magic3', 'magic3', 4),
        ('throw-object', 'throw-object', 5),
        ('throw-paper', 'throw-paper', 5),
        ('magic1', 'magic1', 4))
-ghd = (('pickpocket', 'rushjob', 4),
+ghd = (('pickpocket', 'pickpocket', 4),
         ('sanction', 'rushjob', 4),
-        ('effort', 'effort', 4),
+       ('summon', 'effort', 4),
+        ('phone', 'phone', 4),
+       ('magic3', 'magic3', 4),
+('falling-knife', 'falling-knife', 4),
+       ('glower', 'glower', 4),
+('defense', 'defense', 4),
+('cease', 'objection-in', 4),
+       ('objection-in', 'objection-in', 4),
+       ('objection-out', 'objection-out', 4), ('lose3', 'wrecked', 4),
         ('snap', 'snap', 4),
         ('quick-jump', 'jump', 4),
-        ('speak', 'speak', 4),
-      ('neutral', 'rolled', 4))
-tyh = (('throw-paper', 'throw-paper', 4),
-      ('magic1', 'magic1', 4),
-      ('defense', 'scabbard', 4),
-      ('magic3', 'magic3', 4),
-      ('glower', 'glower', 4),
-      ('sanction', 'sanction', 4),
-      ('pickpocket', 'sanction', 4),
-      ('song-and-dance', 'song-and-dance', 4),
-      ('neutral', 'rolled', 4))
-jgd = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4),
- ('golf-club-swing', 'golf-club-swing', 4),
- ('magic1', 'magic1', 4))
-bby = (('glower', 'glower', 4),
-        ('pickpocket', 'sanction', 4),
+        ('speak', 'speak', 4))
+tyh = (('pickpocket', 'pickpocket', 4),
         ('sanction', 'sanction', 4),
-        ('throw-object', 'throw-object', 4),
-        ('throw-paper', 'throw-paper', 4),
-        ('cease2', 'cease2', 4),
-        ('magic3', 'magic3', 4),
-      ('cease', 'cease', 4),
-        ('magic1', 'magic1', 4))
+       ('summon', 'summon', 4),
+        ('phone', 'phone', 4),
+       ('magic3', 'magic3', 4),
+       ('glower', 'glower', 4),
+('calculating-costs', 'calculating-costs', 4),
+('falling-knife', 'falling-knife', 4),
+('defense', 'defense', 4),
+('cease', 'cease3', 4),
+       ('cease2', 'cease3', 4),
+       ('objection-out', 'objection-out', 4), ('lose3', 'wrecked', 4),
+        ('snap', 'snap', 4),
+        ('quick-jump', 'jump', 4),
+        ('speak', 'speak', 4))
+jgd = (('pickpocket', 'pickpocket', 4),
+        ('sanction', 'sanction', 4),
+       ('summon', 'summon', 4),
+        ('phone', 'phone', 4),
+       ('magic3', 'magic3', 4),
+('magic1', 'magic1', 4),
+       ('glower', 'glower', 4),
+       ('throw-object', 'throw-object', 4),
+       ('throw-paper', 'throw-paper', 4),
+('defense', 'defense', 4),
+('cease', 'cease', 4),
+       ('cease2', 'cease2', 4),
+       ('objection-out', 'objection-out', 4), ('lose3', 'wrecked', 4),
+        ('snap', 'snap', 4),
+        ('quick-jump', 'jump', 4),
+        ('speak', 'speak', 4))
+bby = (('pickpocket', 'sanction2', 4),
+        ('sanction', 'sanction', 4),
+('falling-knife', 'falling-knife', 4),
+       ('summon', 'summon', 4),
+       ('effort', 'effort', 4),
+        ('phone', 'phone', 4),
+       ('magic3', 'magic3', 4),
+('magic2', 'magic2', 4),
+('magic1', 'magic1', 4),
+('cigar-smoke', 'cigar-smoke', 4),
+('layoffs', 'layoffs', 4),
+       ('glower', 'glower', 4),
+       ('golf-club-swing', 'golf-club-swing', 4),
+       ('throw-paper', 'throw-paper', 4),
+('throw-object', 'throw-object', 4),
+('defense', 'defense', 4),
+('cease', 'cease', 4),
+       ('cease2', 'cease2', 4),
+       ('objection-out', 'objection-out', 4), ('lose3', 'wrecked', 4),
+        ('snap', 'snap', 4),
+        ('quick-jump', 'jump', 4),
+        ('speak', 'speak', 4))
 dvk = (('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4),
-('layoffs', 'layoffs', 4),
+('layoffs', 'layoffs', 4), ('lose3', 'wrecked', 4),
 ('deadwood', 'deadwood', 4),
       ('defense', 'scabbard', 4),
       ('magic3', 'snap', 4),
        ('finger-wag', 'cease2', 4),
+('falling-knife', 'falling-knife', 4),
       ('glower', 'glower', 4),
       ('speak', 'speak', 4))
 otm = (('pickpocket', 'pickpocket', 4),
        ('magic1', 'magic1', 4),
- ('effort', 'effort', 4),
+ ('effort', 'effort', 4), ('lose3', 'wrecked', 4),
 ('glower', 'glower', 4),
       ('defense', 'defense', 4),
        ('layoffs', 'layoffs', 4),
@@ -913,18 +1173,20 @@ otm = (('pickpocket', 'pickpocket', 4),
  ('throw-paper', 'throw-paper', 4))
 cry = (('magic3', 'magic3', 4),
        ('phone', 'phone', 4),
-       ('finger-wag', 'cease2', 4),
+('calculating-costs', 'calculating-costs', 4),
+       ('finger-wag', 'cease3', 4),
        ('pickpocket', 'sanction', 4),
-       ('sanction', 'sanction', 4),
-       ('cease', 'cease', 4),
+       ('sanction', 'sanction', 4), ('lose3', 'wrecked', 4),
+       ('cease', 'cease3', 4),
        ('speak', 'speak', 4))
 tcm = (('magic3', 'magic3', 4),
        ('golf-club-swing', 'golf-club-swing', 4),
+('falling-knife', 'falling-knife', 4),
       ('pickpocket', 'sanction', 4),
       ('magic1', 'magic1', 4),
        ('snap', 'snap', 4),
        ('throw-paper', 'throw-paper', 4),
-('layoffs', 'layoffs', 4),
+('layoffs', 'layoffs', 4), ('lose3', 'wrecked', 4),
 ('deadwood', 'deadwood', 4),
        ('throw-object', 'throw-object', 4),
        ('finger-wag', 'cease2', 4),
@@ -1878,6 +2140,16 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(5.0)
         elif dna.name == 'ym':
+            self.scale = 4.0 / aSize
+            self.handColor = VBase4(0.749, 0.647, 0.518, 1)
+            self.generateBody()
+            self.generateHead('yesman')
+            texture = loader.loadTexture('phase_4/maps/bookkeeper.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.generateHead('downsizerHat')
+            self.setHeight(5.7)
+        elif dna.name == 'mm':
             self.scale = 4.125 / aSize
             self.handColor = SuitDNA.corpPolyColor
             self.generateBody()
@@ -1886,52 +2158,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.28)
-        elif dna.name == 'mm':
-            self.scale = 2.5 / cSize
-            self.handColor = SuitDNA.corpPolyColor
-            self.generateFemaleBody()
-            self.generateHead('micromanager')
-            texture = loader.loadTexture('phase_3.5/maps/tutorial_suits_palette_3cmla_1.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(3.25)
         elif dna.name == 'ds':
-            self.scale = 4.5 / bSize
-            self.handColor = VBase4(0.388, 0.388, 0.388, 1)
-            self.generateBody()
-            self.generateHead('beancounter')
-            texture = loader.loadTexture('phase_4/maps/downsizer.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(6.08)
-        elif dna.name == 'hh':
-            self.scale = 6.5 / aSize
-            self.handColor = SuitDNA.corpPolyColor
-            self.generateBody()
-            self.generateHead('headhunter')
-            texture = loader.loadTexture('phase_3.5/maps/suit-heads_palette_3cmla_2.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.45)
-        elif dna.name == 'cr':
-            self.scale = 6.75 / cSize
-            self.handColor = SuitDNA.corpPolyColor
-            self.generateBody()
-            self.generateHead('flunky')
-            texture = loader.loadTexture('phase_4/maps/corporate-raider.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(8.23)
-        elif dna.name == 'tbc':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.749, 0.859, 0.525, 1.0)
-            self.generateBody()
-            self.generateHead('bigcheese')
-            texture = loader.loadTexture('phase_3.5/maps/suit-heads_palette_3cmla_1.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(9.34)
-        elif dna.name == 'trb':
             self.scale = 4.75 / aSize
             self.handColor = (1, 0.839, 0.627, 1)
             self.generateFemaleBody()
@@ -1940,8 +2167,17 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.23)
-        elif dna.name == 'dot':
-            self.scale = 6.5 / aSize
+        elif dna.name == 'hh':
+            self.scale = 2.5 / cSize
+            self.handColor = SuitDNA.corpPolyColor
+            self.generateFemaleBody()
+            self.generateHead('micromanager')
+            texture = loader.loadTexture('phase_3.5/maps/tutorial_suits_palette_3cmla_1.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(3.25)
+        elif dna.name == 'cr':
+            self.scale = 5.5 / aSize
             self.handColor = VBase4(0.663, 0.631, 0.624, 1)
             self.generateBody()
             self.generateHead2('telemarketer')
@@ -1950,49 +2186,70 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.headTexture = 'DS_hat.png'
             self.generateHead2('hatjp187187')
-            self.setHeight(8.54)
-        elif dna.name == 'dvg':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.851, 0.184, 0.184, 1)
+            self.setHeight(7.54)
+        elif dna.name == 'tbc':
+            self.scale = 4.5 / bSize
+            self.handColor = VBase4(0.388, 0.388, 0.388, 1)
             self.generateBody()
-            self.generateHead2('head')
-            self.generateHead2('ear01')
-            self.generateHead2('ear02')
-            self.generateHead2('ear03')
-            self.generateHead2('ear04')
-            self.generateHead2('antenna_stick')
-            self.generateHead2('antenna_ball')
-            self.generateHead2('eye_mouth')
-            self.generateHead2('pupils')
-            self.setHeight(8.7)
-        elif dna.name == 'cpl':
-            self.scale = 7.0 / aSize
+            self.generateHead('beancounter')
+            texture = loader.loadTexture('phase_4/maps/downsizer.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(6.08)
+        elif dna.name == 'trb':
+            self.scale = 6.0 / aSize
             self.handColor = VBase4(0.776, 0.757, 0.537, 1)
             self.generateBody()
             self.generateHead('bigwig')
             texture = loader.loadTexture('phase_4/maps/affiliate.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.7)
-        elif dna.name == 'bkp':
-            self.scale = 5.0 / aSize
-            self.handColor = VBase4(0.749, 0.647, 0.518, 1)
+            self.setHeight(7.5)
+        elif dna.name == 'dot':
+            self.scale = 6.5 / aSize
+            self.handColor = SuitDNA.corpPolyColor
             self.generateBody()
-            self.generateHead('yesman')
-            texture = loader.loadTexture('phase_4/maps/bookkeeper.jpg')
+            self.generateHead('headhunter')
+            texture = loader.loadTexture('phase_3.5/maps/suit-heads_palette_3cmla_2.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.generateHead('downsizerHat')
-            self.setHeight(6.7)
-        elif dna.name == 'kpn':
-            self.scale = 7.0 / aSize
+            self.setHeight(7.45)
+        elif dna.name == 'dvg':
+            self.scale = 6.0 / aSize
             self.handColor = VBase4(0.749, 0.647, 0.518, 1)
             self.generateBody()
             self.generateHead('yesman')
             texture = loader.loadTexture('phase_4/maps/enforcer.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.7)
+            self.setHeight(7.5)
+        elif dna.name == 'cpl':
+            self.scale = 6.75 / cSize
+            self.handColor = SuitDNA.corpPolyColor
+            self.generateBody()
+            self.generateHead('flunky')
+            texture = loader.loadTexture('phase_4/maps/corporate-raider.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(8.23)
+        elif dna.name == 'bkp':
+            self.scale = 6.5 / aSize
+            self.handColor = VBase4(0.882, 0.894, 0.004, 1)
+            self.generateBody()
+            self.generateHead('toxicleader')
+            texture = loader.loadTexture('phase_3.5/maps/skull.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(8.2)
+        elif dna.name == 'kpn':
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(0.749, 0.859, 0.525, 1.0)
+            self.generateBody()
+            self.generateHead('bigcheese')
+            texture = loader.loadTexture('phase_3.5/maps/suit-heads_palette_3cmla_1.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(9.34)
         elif dna.name == 'cg':
             self.scale = 4.5 / aSize
             self.handColor = VBase4(1, 1, 1, 1)
@@ -2003,16 +2260,19 @@ class Suit(Avatar.Avatar):
             self.setHeight(6.0)
         elif dna.name == 'bg':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
+            self.handColor = VBase4(0.608, 0.525, 0.431, 1)
             self.generateBody()
             self.makeExecutive()
             self.generateHead('clubpresident', animated=True)
             self.setHeight(8.7)
         elif dna.name == 'msr':
             self.scale = 4.5 / aSize
-            self.handColor = VBase4(0.573, 0.384, 0.204, 1)
-            self.generateBody()
-            self.generateHead('derrickman', animated=True)
+            self.handColor = VBase4(0.816, 0.643, 0.537, 1)
+            self.generateFemaleBody()
+            self.makeExecutive()
+            self.generateHead2('bossbotClubPresidentHead')
+            self.generateHead2('bossbotClubPresidentEarrings')
+            self.generateHead2('bossbotClubPresidentHair')
             self.setHeight(6.0)
         elif dna.name == 'kb':
             self.scale = 7.0 / aSize
@@ -2054,7 +2314,7 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'tb':
             self.scale = 7.3 / aSize
-            self.handColor = VBase4(1, 1, 1, 1)
+            self.handColor = VBase4(0.675, 0.584, 0.478, 1)
             self.generateBody()
             self.makeMajorPlayer()
             self.generateHead('majorplayer', animated=True)
@@ -2064,16 +2324,11 @@ class Suit(Avatar.Avatar):
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'adc':
-            self.scale = 7.5 / aSize
-            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
+            self.scale = 4.5 / aSize
+            self.handColor = VBase4(0.573, 0.384, 0.204, 1)
             self.generateBody()
-            self.makeChainsaw()
-            self.generateHead('chainsaw', animated=True)
-            texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_a.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(11.0)
-            self.setTransparency(1)
+            self.generateHead('derrickman', animated=True)
+            self.setHeight(6.0)
         elif dna.name == 'drm':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
@@ -2087,25 +2342,25 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'cp':
             self.scale = 5.5 / aSize
-            self.handColor = VBase4(1, 0.486, 0, 1)
+            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead('dola', animated=True)
-            texture = loader.loadTexture('phase_14/maps/ttcc_ene_dola.png')
+            self.generateHead('circuitbreaker', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_circuitbreaker.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(7.5)
             self.setTransparency(1)
         elif dna.name == 'fbd':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
+            self.scale = 7.2 / aSize
+            self.handColor = VBase4(0.784, 0.816, 0.847, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead('chainsaw_c', animated=True)
-            texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_a.png')
+            self.generateHead('paperhands', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_paperhands.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(10.0)
+            self.setHeight(9.5)
             self.setTransparency(1)
         elif dna.name == 'frs':
             self.scale = 7.2 / aSize
@@ -2127,6 +2382,24 @@ class Suit(Avatar.Avatar):
             self.setHeight(9.1)
             self.setTransparency(1)
         elif dna.name == 'bf':
+            self.scale = 4.2 / cSize
+            self.handColor = SuitDNA.legalPolyColor
+            self.generateBody()
+            self.generateHead('bottom_feeder', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_bottom_feeder.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(5.6)
+        elif dna.name == 'b':
+            self.scale = 4.25 / bSize
+            self.handColor = VBase4(1, 1, 1, 1)
+            self.generateBody()
+            self.generateHead('bloodsucker', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_bloodsucker.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(5.63)
+        elif dna.name == 'dt':
             self.scale = 4.0 / bSize
             self.handColor = SuitDNA.legalPolyColor
             self.generateBody()
@@ -2135,7 +2408,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.6)
-        elif dna.name == 'b':
+        elif dna.name == 'ac':
             self.scale = 4.25 / aSize
             self.handColor = SuitDNA.legalPolyColor
             self.generateBody()
@@ -2144,7 +2417,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.63)
-        elif dna.name == 'dt':
+        elif dna.name == 'bs':
             self.scale = 4.75 / aSize
             self.handColor = VBase4(0.318, 0.333, 0.431, 1)
             self.generateBody()
@@ -2153,9 +2426,18 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_conveyancer.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            #self.generateHead2('belt')
+            # self.generateHead2('belt')
             self.setHeight(6.4)
-        elif dna.name == 'ac':
+        elif dna.name == 'sd':
+            self.scale = 4.2 / bSize
+            self.handColor = SuitDNA.legalPolyColor
+            self.generateBody()
+            self.generateHead('ambulance_chaser', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_ambulance_chaser.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(6.1)
+        elif dna.name == 'le':
             self.scale = 5.0 / cSize
             self.handColor = VBase4(0.255, 0.318, 0.549, 1)
             self.generateFemaleBody()
@@ -2164,8 +2446,8 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.6)
-        elif dna.name == 'bs':
-            self.scale = 4.5 / aSize
+        elif dna.name == 'bw':
+            self.scale = 5.2 / aSize
             self.handColor = VBase4(0.647, 0.639, 0.788, 1)
             self.generateBody()
             self.generateHead('backstabber', animated=True)
@@ -2173,25 +2455,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.71)
-        elif dna.name == 'sd':
-            self.scale = 5.65 / bSize
-            self.handColor = VBase4(0.678, 0.91, 0.808, 1)
-            self.generateBody()
-            self.generateHead('spin_doctor', animated=True)
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_spin_doctor.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.9)
-        elif dna.name == 'le':
-            self.scale = 5.65 / bSize
-            self.handColor = VBase4(0.647, 0.639, 0.788, 1)
-            self.generateFemaleBody()
-            self.generateHead('shyster', animated=True)
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_shyster.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.4)
-        elif dna.name == 'bw':
+        elif dna.name == 'brv':
             self.scale = 5.5 / cSize
             self.handColor = VBase4(0.098, 0.098, 0.153, 1)
             self.generateBody()
@@ -2200,7 +2464,25 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(7.0)
-        elif dna.name == 'brv':
+        elif dna.name == 'sb':
+            self.scale = 5.65 / bSize
+            self.handColor = VBase4(0.678, 0.91, 0.808, 1)
+            self.generateBody()
+            self.generateHead('spin_doctor', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_spin_doctor.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.9)
+        elif dna.name == 'cfp':
+            self.scale = 5.65 / bSize
+            self.handColor = VBase4(0.647, 0.639, 0.788, 1)
+            self.generateFemaleBody()
+            self.generateHead('shyster', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_shyster.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.4)
+        elif dna.name == 'arb':
             self.scale = 6.8 / aSize
             self.handColor = VBase4(0.25, 0.25, 0.5, 1.0)
             self.generateBody()
@@ -2209,7 +2491,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.57)
-        elif dna.name == 'sb':
+        elif dna.name == 'sjg':
             self.scale = 6.9 / aSize
             self.handColor = VBase4(1, 1, 1, 1)
             self.generateBody()
@@ -2218,7 +2500,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.3)
-        elif dna.name == 'cfp':
+        elif dna.name == 'lsc':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.573, 0.557, 0.761, 1)
             self.generateBody()
@@ -2227,40 +2509,16 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.69)
-        elif dna.name == 'arb':
+        elif dna.name == 'jdg':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.584, 0.573, 0.671, 1)
             self.generateFemaleBody()
+            self.makeExecutive()
             self.generateHead('clo', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_clo.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.7)
-        elif dna.name == 'sjg':
-            self.scale = 6.0 / aSize
-            self.handColor = VBase4(0.29, 0.655, 0.804, 1)
-            self.generateFemaleBody()
-            self.generateHead('twoface')
-            texture = loader.loadTexture('phase_3.5/maps/mingler.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.7)
-        elif dna.name == 'lsc':
-            self.scale = 6.0 / aSize
-            self.handColor = VBase4(0.412, 0.482, 0.737, 1)
-            self.generateFemaleBody()
-            self.generateHead('judy', animated=True)
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_judy.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.7)
-        elif dna.name == 'jdg':
-            self.scale = 4.5 / aSize
-            self.handColor = VBase4(1, 0.486, 0, 1)
-            self.generateSkeletonBody()
-            self.makeExecutive()
-            self.setTransparency(1)
-            self.setHeight(6.0)
         elif dna.name == 'jur':
             self.scale = 7.2 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -2269,11 +2527,12 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
             self.setHeight(8.7)
         elif dna.name == 'tlr':
-            self.scale = 4.5 / aSize
-            self.handColor = VBase4(1, 0.486, 0, 1)
-            self.generateSkeletonBody()
-            self.setTransparency(1)
-            self.setHeight(6.0)
+            self.scale = 6.4 / bSize
+            self.handColor = VBase4(0.608, 0.678, 0.686, 1)
+            self.generateFemaleBody()
+            self.makeExecutive()
+            self.generateHead2('ttr_m_ene_lawbotClerk')
+            self.setHeight(8.7)
         elif dna.name == 'cm':
             self.scale = 7.2 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -2327,7 +2586,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.69)
             self.setTransparency(1)
         elif dna.name == 'scg':
-            self.scale = 5.5 / bSize
+            self.scale = 5.2 / bSize
             self.handColor = VBase4(0.486, 0.522, 0.686, 1)
             self.generateBody()
             self.makeExecutive()
@@ -2335,7 +2594,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_scapegoat.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(7.0)
+            self.setHeight(6.8)
         elif dna.name == 'csm':
             self.scale = 6.9 / aSize
             self.handColor = VBase4(0.294, 0.208, 0.149, 1)
@@ -2382,18 +2641,45 @@ class Suit(Avatar.Avatar):
             self.generateHead('pennypincher')
             self.setHeight(5.26)
         elif dna.name == 'tw':
+            self.scale = 4.0 / aSize
+            self.handColor = VBase4(0.616, 0.761, 0.576, 1)
+            self.generateBody()
+            self.generateHead('twoface')
+            texture = loader.loadTexture('phase_3.5/maps/consig.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(5.5)
+        elif dna.name == 'bc':
             self.scale = 4.5 / cSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
             self.generateHead('tightwad')
             self.setHeight(5.41)
-        elif dna.name == 'bc':
+        elif dna.name == 'nc':
+            self.scale = 4.34 / aSize
+            self.handColor = SuitDNA.boardPolyColor
+            self.generateBody()
+            self.generateHead('pennypincher')
+            texture = loader.loadTexture('phase_3.5/maps/swindler.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(5.45)
+        elif dna.name == 'mb':
             self.scale = 4.4 / bSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
             self.generateHead('beancounter')
             self.setHeight(5.95)
-        elif dna.name == 'nc':
+        elif dna.name == 'ls':
+            self.scale = 5.0 / bSize
+            self.handColor = VBase4(0.616, 0.761, 0.576, 1)
+            self.generateBody()
+            self.generateHead('movershaker')
+            texture = loader.loadTexture('phase_3.5/maps/enter.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.2)
+        elif dna.name == 'rb':
             self.scale = 5.25 / aSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateFemaleBody()
@@ -2402,7 +2688,12 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(7.22)
-        elif dna.name == 'mb':
+        elif dna.name == 'gm':
+            self.scale = 7.0 / cSize
+            self.handColor = SuitDNA.moneyPolyColor
+            self.generateSkeletonBody()
+            self.setHeight(8.88)
+        elif dna.name == 'ad':
             self.scale = 5.3 / cSize
             self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
@@ -2411,30 +2702,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.97)
-        elif dna.name == 'ls':
-            self.scale = 6.5 / bSize
-            self.handColor = SuitDNA.moneyPolyColor
-            self.generateBody()
-            self.generateHead2('loanshark')
-            texture = loader.loadTexture('phase_3.5/maps/suit-heads_palette_3cmla_2.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(8.58)
-        elif dna.name == 'rb':
-            self.scale = 7.0 / aSize
-            self.handColor = SuitDNA.moneyPolyColor
-            self.generateBody()
-            self.generateHead('yesman', animated=False)
-            texture = loader.loadTexture('phase_4/maps/robber-baron.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(8.95)
-        elif dna.name == 'gm':
-            self.scale = 7.0 / bSize
-            self.handColor = SuitDNA.moneyPolyColor
-            self.generateSkeletonBody()
-            self.setHeight(8.58)
-        elif dna.name == 'ad':
+        elif dna.name == 'cvy':
             self.scale = 6.0 / aSize
             self.handColor = VBase4(0.745, 0.863, 0.659, 1)
             self.generateFemaleBody()
@@ -2443,41 +2711,38 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.0)
-        elif dna.name == 'cvy':
-            self.scale = 7.0 / cSize
-            self.handColor = SuitDNA.moneyPolyColor
-            self.generateSkeletonBody()
-            self.setHeight(8.95)
         elif dna.name == 'ptr':
-            self.scale = 6.5 / aSize
-            self.handColor = VBase4(0.616, 0.761, 0.576, 1)
+            self.scale = 6.5 / bSize
+            self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
-            self.generateHead('twoface')
-            texture = loader.loadTexture('phase_3.5/maps/consig.png')
+            self.generateHead2('loanshark')
+            texture = loader.loadTexture('phase_3.5/maps/suit-heads_palette_3cmla_2.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.5)
+            self.setHeight(8.58)
         elif dna.name == 'mld':
             self.scale = 7.5 / cSize
-            self.handColor = VBase4(0.608, 0.008, 0.204, 1)
+            self.handColor = VBase4(0.659, 0, 0, 1)
             self.generateBody()
             self.generateHead('bigfish')
             self.setHeight(10.7)
         elif dna.name == 'pht':
-            self.scale = 6.0 / bSize
-            self.handColor = VBase4(0.616, 0.761, 0.576, 1)
+            self.scale = 7.0 / aSize
+            self.handColor = SuitDNA.moneyPolyColor
             self.generateBody()
-            self.generateHead('movershaker')
-            texture = loader.loadTexture('phase_3.5/maps/enter.jpg')
+            self.generateHead('yesman', animated=False)
+            texture = loader.loadTexture('phase_4/maps/robber-baron.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.2)
+            self.setHeight(8.95)
         elif dna.name == 'csh':
-            self.scale = 4.5 / aSize
-            self.handColor = VBase4(1, 1, 1, 1)
-            self.generateSkeletonBody()
+            self.scale = 5.5 / cSize
+            self.handColor = VBase4(0.604, 0.71, 0.675, 1)
+            self.generateBody()
             self.makeExecutive()
-            self.setHeight(6.0)
+            self.generateHead2('ttr_m_ene_cashbotAuditor')
+            self.setHeight(7.0)
+            self.setTransparency(1)
         elif dna.name == 'bgr':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(0.286, 0.29, 0.286, 1)
@@ -2486,11 +2751,11 @@ class Suit(Avatar.Avatar):
             self.makeExecutive()
             self.setTransparency(1)
         elif dna.name == 'mes':
-            self.scale = 5.0 / bSize
-            self.handColor = VBase4(1.0, 0.5, 0.6, 1.0)
-            self.generateBody()
-            self.generateHead('duckshuffler', animated=True)
-            self.setHeight(7.0)
+            self.scale = 7.0 / cSize
+            self.handColor = VBase4(0.286, 0.29, 0.286, 1)
+            self.generateSkeletonBody()
+            self.setHeight(9.0)
+            self.makeExecutive()
             self.setTransparency(1)
         elif dna.name == 'dm':
             self.scale = 5.5 / cSize
@@ -2563,7 +2828,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(10.0)
         elif dna.name == 'mad':
             self.scale = 7.3 / aSize
-            self.handColor = VBase4(1, 1, 1, 1)
+            self.handColor = VBase4(0.478, 0.588, 0.314, 1)
             self.generateBody()
             self.makeDuckShuffler()
             self.generateHead('chainsaw_c', animated=True)
@@ -2588,7 +2853,7 @@ class Suit(Avatar.Avatar):
             self.headColor = VBase4(0.25, 0.35, 1.0, 1.0)
             self.handColor = VBase4(0.55, 0.65, 1.0, 1.0)
             self.generateBody()
-            self.generateHead('coldcaller')
+            self.generateHead2('coldcaller')
             self.setHeight(4.63)
         elif dna.name == 'tm':
             self.scale = 3.75 / bSize
@@ -2600,6 +2865,11 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(5.24)
         elif dna.name == 'nd':
+            self.scale = 4.5 / aSize
+            self.handColor = VBase4(0.255, 0.318, 0.549, 1)
+            self.generateSkeletonBody()
+            self.setHeight(5.65)
+        elif dna.name == 'gh':
             self.scale = 4.35 / aSize
             self.handColor = SuitDNA.salesPolyColor
             self.generateFemaleBody()
@@ -2608,7 +2878,16 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.98)
-        elif dna.name == 'gh':
+        elif dna.name == 'ms':
+            self.scale = 4.75 / aSize
+            self.handColor = VBase4(0.373, 0.286, 0.227, 1)
+            self.generateBody()
+            self.generateHead('numbercruncher')
+            texture = loader.loadTexture('phase_4/maps/software-simian.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(6.2)
+        elif dna.name == 'tf':
             self.scale = 4.75 / cSize
             self.handColor = VBase4(0.918, 0.886, 0.875, 1)
             self.generateBody()
@@ -2617,7 +2896,16 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.4)
-        elif dna.name == 'ms':
+        elif dna.name == 'm':
+            self.scale = 5.0 / bSize
+            self.handColor = VBase4(0.918, 0.796, 0.996, 1)
+            self.generateBody()
+            self.generateHead('movershaker')
+            texture = loader.loadTexture('phase_4/maps/installation-wizard.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.1)
+        elif dna.name == 'mh':
             self.scale = 4.75 / bSize
             self.handColor = VBase4(0.965, 0.859, 0.831, 1)
             self.generateBody()
@@ -2626,40 +2914,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.7)
-        elif dna.name == 'tf':
-            self.scale = 5.25 / aSize
-            self.handColor = VBase4(0.965, 0.859, 0.831, 1)
-            self.generateBody()
-            self.generateHead('twoface')
-            texture = loader.loadTexture('phase_4/maps/twoface.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(6.95)
-        elif dna.name == 'm':
-            self.scale = 5.75 / aSize
-            self.handColor = VBase4(0.918, 0.808, 0.871, 1)
-            self.generateFemaleBody()
-            self.generateHead('twoface')
-            texture = loader.loadTexture('phase_4/maps/mingler2.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.61)
-        elif dna.name == 'mh':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.918, 0.886, 0.875, 1)
-            self.generateBody()
-            self.generateHead('yesman')
-            texture = loader.loadTexture('phase_4/maps/mr_hollywood.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.generateHead('shades')
-            self.setHeight(8.95)
         elif dna.name == 'ka':
-            self.scale = 5.0 / aSize
-            self.handColor = VBase4(0.255, 0.318, 0.549, 1)
-            self.generateSkeletonBody()
-            self.setHeight(6.45)
-        elif dna.name == 'mka':
             self.scale = 6.0 / aSize
             self.handColor = VBase4(0.992, 0.851, 0.757, 1)
             self.generateBody()
@@ -2668,6 +2923,15 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(7.95)
+        elif dna.name == 'mka':
+            self.scale = 5.25 / aSize
+            self.handColor = VBase4(0.965, 0.859, 0.831, 1)
+            self.generateBody()
+            self.generateHead('twoface')
+            texture = loader.loadTexture('phase_4/maps/twoface.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(6.95)
         elif dna.name == 'trm':
             self.scale = 6.5 / cSize
             self.handColor = VBase4(0.718, 0.451, 0.451, 1)
@@ -2679,41 +2943,42 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.5)
         elif dna.name == 'ssm':
             self.scale = 5.75 / aSize
-            self.handColor = VBase4(0.373, 0.286, 0.227, 1)
-            self.generateBody()
-            self.makePrethinker()
-            self.generateHead('numbercruncher')
-            texture = loader.loadTexture('phase_4/maps/software-simian.jpg')
+            self.handColor = VBase4(0.918, 0.808, 0.871, 1)
+            self.generateFemaleBody()
+            self.generateHead('twoface')
+            texture = loader.loadTexture('phase_4/maps/mingler2.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(7.5)
+            self.setHeight(7.61)
         elif dna.name == 'isw':
-            self.scale = 6.0 / bSize
-            self.handColor = VBase4(0.918, 0.796, 0.996, 1)
-            self.generateBody()
-            self.makePrethinker()
-            self.generateHead('movershaker')
-            texture = loader.loadTexture('phase_4/maps/installation-wizard.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(8.1)
-        elif dna.name == 'ssr':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.522, 0.482, 0.435, 1)
             self.generateBody()
-            self.makePrethinker()
             self.generateHead2('telemarketer')
             texture = loader.loadTexture('phase_4/maps/rootuser.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(9.0)
+            self.setHeight(9.5)
+        elif dna.name == 'ssr':
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(0.918, 0.886, 0.875, 1)
+            self.generateBody()
+            self.generateHead('yesman')
+            texture = loader.loadTexture('phase_4/maps/mr_hollywood.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.generateHead('shades')
+            self.setHeight(8.95)
         elif dna.name == 'fas':
-            self.scale = 4.5 / aSize
-            self.handColor = VBase4(1, 0.486, 0, 1)
-            self.generateSkeletonBody()
+            self.scale = 6.0 / bSize
+            self.handColor = VBase4(0.918, 0.808, 0.871, 1)
+            self.generateBody()
             self.makeExecutive()
-            self.setHeight(6.0)
-            self.setTransparency(1)
+            self.generateHead2('sellbotForemanHead')
+            self.generateHead2('sellbotForemanGlasses')
+            self.generateHead2('sellbotForemanEyebrows')
+            self.generateHead2('sellbotForemanHat')
+            self.setHeight(8.55)
         elif dna.name == 'mdr':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(1, 0.486, 0, 1)
@@ -2722,16 +2987,12 @@ class Suit(Avatar.Avatar):
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'nar':
-            self.scale = 6.0 / cSize
-            self.handColor = VBase4(0.369, 0.369, 0.369, 1)
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(1, 0.486, 0, 1)
             self.generateSkeletonBody()
-            self.generateHead('dopr', animated=True)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.8)
-            self.isSkeleton = 1
-            self.makeDOPA()
+            self.makeExecutive()
+            self.setHeight(9.0)
+            self.setTransparency(1)
         elif dna.name == 'fd':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(1, 1, 1, 1.0)
@@ -2773,7 +3034,7 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'prr':
             self.scale = 7.3 / aSize
-            self.handColor = VBase4(1,1, 1, 1)
+            self.handColor = VBase4(0.663, 0.678, 0.682, 1)
             self.generateBody()
             self.makePrethinker()
             self.generateHead('multislacker', animated=True)
@@ -2815,14 +3076,14 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'ffm':
             self.scale = 7.3 / aSize
-            self.handColor = VBase4(0.702, 0.776, 0.788, 1)
+            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead('plutocrat', animated=True)
-            texture = loader.loadTexture('phase_10/maps/ttcc_ene_plutocrat.png')
+            self.generateHead('sharkwatcher', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_sharkwatcher2.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(9.0)
+            self.setHeight(9.7)
             self.setTransparency(1)
         elif dna.name == 'sft':
             self.scale = 6.2 / bSize
@@ -2838,30 +3099,40 @@ class Suit(Avatar.Avatar):
             self.scale = 4.0 / cSize
             self.handColor = SuitDNA.boardPolyColor
             self.generateBody()
+            self.generateHead('bagholder', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_bagholder.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(4.88)
+        elif dna.name == 'cn':
+            self.scale = 3.75 / bSize
+            self.handColor = VBase4(1, 1, 1, 1)
+            self.generateBody()
+            self.generateHead('paperhands', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_paperhands.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(5.24)
+        elif dna.name == 'sw':
+            self.scale = 4.0 / cSize
+            self.handColor = SuitDNA.boardPolyColor
+            self.generateBody()
             self.generateHead('flunky')
             texture = loader.loadTexture('phase_3.5/maps/conartist.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead('beret')
             self.setHeight(4.88)
-        elif dna.name == 'cn':
-            self.scale = 3.75 / bSize
-            self.handColor = VBase4(0.95, 0.95, 1.0, 1.0)
-            self.generateBody()
-            self.generateHead2('connoisseur_hat')
-            self.generateHead2('connoisseur_head')
-            self.generateHead2('connoisseur_monocle')
-            self.setHeight(5.24)
-        elif dna.name == 'sw':
-            self.scale = 4.34 / aSize
-            self.handColor = SuitDNA.boardPolyColor
-            self.generateBody()
-            self.generateHead('pennypincher')
-            texture = loader.loadTexture('phase_3.5/maps/swindler.jpg')
+        elif dna.name == 'mdm':
+            self.scale = 5.0 / bSize
+            self.handColor = VBase4(0.031, 0.035, 0.035, 1)
+            self.generateHighCollarBody()
+            self.generateHead('insider', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_insider.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(5.45)
-        elif dna.name == 'mdm':
+            self.setHeight(6.7)
+        elif dna.name == 'txm':
             self.scale = 5.0 / aSize
             self.handColor = SuitDNA.boardPolyColor
             self.generateBody()
@@ -2870,13 +3141,31 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.7)
-        elif dna.name == 'txm':
+        elif dna.name == 'mg':
+            self.scale = 4.8 / aSize
+            self.handColor = VBase4(0.416, 0.463, 0.459, 1)
+            self.generateBody()
+            self.generateHead('circuitbreaker', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_circuitbreaker.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(6.66)
+        elif dna.name == 'bfh':
             self.scale = 5.25 / cSize
             self.handColor = VBase4(0.78, 0.769, 0.02, 1)
             self.generateBody()
             self.generateHead('toxicleader')
             self.setHeight(7.2)
-        elif dna.name == 'mg':
+        elif dna.name == 'hho':
+            self.scale = 5.5 / cSize
+            self.handColor = SuitDNA.boardPolyColor
+            self.generateBody()
+            self.generateHead('deadlock', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_deadlock.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.2)
+        elif dna.name == 'bdb':
             self.scale = 6.5 / aSize
             self.handColor = VBase4(0.031, 0.035, 0.035, 1)
             self.generateBody()
@@ -2884,14 +3173,34 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_14/maps/ttcc_ene_magnate.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
+            self.headTexture = 'DS_hat.png'
+            self.generateHead2('hatjp187187')
             self.setHeight(7.56)
-        elif dna.name == 'bfh':
+        elif dna.name == 'bgh':
+            self.scale = 6.0 / cSize
+            self.handColor = SuitDNA.boardPolyColor
+            self.generateBody()
+            self.generateHead('sharkwatcher', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_sharkwatcher.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(8.58)
+        elif dna.name == 'dfh':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(0.635, 0.62, 0.651, 1)
             self.generateBody()
             self.generateHead2('bigfish')
             self.setHeight(10.0)
-        elif dna.name == 'hho':
+        elif dna.name == 'rng':
+            self.scale = 6.5 / aSize
+            self.handColor = VBase4(0.031, 0.035, 0.035, 1)
+            self.generateBody()
+            self.generateHead('magnate', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_magnate.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.68)
+        elif dna.name == 'cps':
             self.scale = 7.0 / aSize
             self.handColor = SuitDNA.boardPolyColor
             self.generateBody()
@@ -2899,53 +3208,16 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_3.5/maps/head-honcho.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.2)
-        elif dna.name == 'bdb':
-            self.scale = 5.8 / aSize
-            self.handColor = SuitDNA.boardPolyColor
-            self.generateSkeletonBody()
-            self.setHeight(7.08)
-        elif dna.name == 'bgh':
-            self.scale = 6.5 / aSize
-            self.handColor = VBase4(0.663, 0.576, 0.569, 1)
-            self.generateBody()
-            self.generateHead2('connoisseur_hat')
-            self.generateHead2('connoisseur_head')
-            self.generateHead2('connoisseur_monocle')
-            texture = loader.loadTexture('phase_14/maps/ttcc_ene_connoisseur.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(8.2)
-        elif dna.name == 'dfh':
-            self.scale = 5.5 / aSize
-            self.handColor = SuitDNA.boardPolyColor
-            self.generateSkeletonBody()
-            self.setHeight(6.58)
-        elif dna.name == 'rng':
-            self.scale = 6.5 / aSize
-            self.handColor = VBase4(0.576, 0.639, 0.639, 1)
-            self.generateBody()
-            self.generateHead('legaleagle')
-            texture = loader.loadTexture('phase_4/maps/affiliate2.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.headTexture = 'DS_hat.png'
-            self.generateHead2('hatjp187187')
-            self.setHeight(7.7)
-        elif dna.name == 'cps':
-            self.scale = 6.0 / aSize
-            self.handColor = SuitDNA.boardPolyColor
-            self.generateSkeletonBody()
-            self.setHeight(7.58)
+            self.setHeight(8.7)
         elif dna.name == 'tld':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.882, 0.894, 0.004, 1)
+            self.handColor = VBase4(0.388, 0.388, 0.388, 1)
             self.generateBody()
-            self.generateHead('toxicleader')
-            texture = loader.loadTexture('phase_3.5/maps/skull.jpg')
+            self.generateHead('headhoncho', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.7)
+            self.setHeight(10.61)
         elif dna.name == 'gkp':
             self.scale = 4.5 / aSize
             self.handColor = VBase4(1, 0.486, 0, 1)
@@ -2961,12 +3233,12 @@ class Suit(Avatar.Avatar):
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'dty':
-            self.scale = 7.0 / cSize
-            self.handColor = VBase4(0.345, 0.561, 0.549, 1)
-            self.generateFemaleBody()
-            self.makeDeepDiver()
-            self.generateHead('deepdiver', animated=True)
-            self.setHeight(10.0)
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(1, 0.486, 0, 1)
+            self.generateSkeletonBody()
+            self.makeExecutive()
+            self.setHeight(9.0)
+            self.setTransparency(1)
         elif dna.name == 'dfg':
             self.scale = 5.5 / aSize
             self.handColor = VBase4(0.612, 0.612, 0.612, 1)
@@ -2993,36 +3265,47 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
             self.setHeight(9.31)
         elif dna.name == 'ghd':
-            self.scale = 4.0 / aSize
-            self.handColor = VBase4(1, 1, 1, 1)
-            self.generateBody()
-            self.makeExecutive()
-            self.generateHead('dummy', animated=True)
-            self.setHeight(6.0)
+            self.scale = 6.0 / bSize
+            self.handColor = VBase4(0.09, 0.09, 0.09, 1)
+            self.generateLongcoatBody()
+            self.generateHead('insider', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_insider_mgr.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(8.0)
             self.setTransparency(1)
         elif dna.name == 'tyh':
             self.scale = 7.2 / aSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateFemaleBody()
             self.makeExecutive()
-            self.generateHead('rainmaker', animated=True)
-            self.setHeight(9.0)
+            self.generateHead('stenographer', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_crystalline.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(10.7)
             self.setTransparency(1)
         elif dna.name == 'jgd':
             self.scale = 7.2 / aSize
-            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
-            self.generateFemaleBody()
+            self.handColor = VBase4(0.09, 0.09, 0.09, 1)
+            self.generateBody()
             self.makeExecutive()
-            self.generateHead('rainmaker', animated=True)
+            self.generateHead('magnate', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_magnate.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'bby':
             self.scale = 7.3 / aSize
-            self.handColor = VBase4(0.678, 0.604, 0.765, 1)
+            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead('prethinker', animated=True)
-            self.setHeight(9.1)
+            self.generateHead('headhoncho', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho_exe.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(10.9)
             self.setTransparency(1)
         elif dna.name == 'dvk':
             self.scale = 6.5 / aSize
@@ -3152,6 +3435,36 @@ class Suit(Avatar.Avatar):
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         self.setBlend(frameBlend=base.wantSmoothAnims)
 
+    def generateHighCollarBody(self):
+        animDict = self.generateAnimDict()
+        filePrefix, bodyPhase = ModelDict[self.style.body]
+        if base.config.GetBool('want-new-cogs', 0):
+            if cogExists(filePrefix + 'zero.bam'):
+                self.loadModel('phase_3.5' + filePrefix + 'zero')
+            else:
+                self.loadModel('phase_3.5' + filePrefix + 'highcollar-mod')
+        else:
+            self.loadModel('phase_3.5' + filePrefix + 'highcollar-mod')
+        self.loadAnims(animDict)
+        self.setSuitClothes()
+        self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
+        self.setBlend(frameBlend=base.wantSmoothAnims)
+
+    def generateLongcoatBody(self):
+        animDict = self.generateAnimDict()
+        filePrefix, bodyPhase = ModelDict[self.style.body]
+        if base.config.GetBool('want-new-cogs', 0):
+            if cogExists(filePrefix + 'zero.bam'):
+                self.loadModel('phase_3.5' + filePrefix + 'zero')
+            else:
+                self.loadModel('phase_3.5' + filePrefix + 'longcoat-mod')
+        else:
+            self.loadModel('phase_3.5' + filePrefix + 'longcoat-mod')
+        self.loadAnims(animDict)
+        self.setSuitClothesRaincoat()
+        self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
+        self.setBlend(frameBlend=base.wantSmoothAnims)
+
     def generateHighRollerBody(self):
         animDict = self.generateAnimDict()
         filePrefix, bodyPhase = ModelDict[self.style.body]
@@ -3252,12 +3565,19 @@ class Suit(Avatar.Avatar):
         dept = self.style.dept
         phase = 3.5
         texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s.png' % self.style.dept)
-        if self.isExecutive:
+        if self.isExecutive and not self.style.name == 'mdm':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_e.png' % self.style.dept)
         elif self.isManager and not self.style.name == 'crf':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_e.png' % self.style.dept)
-        elif self.isGovernaught:
-            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_gov.png' % self.style.dept) # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
+        elif self.isGovernaught and not self.style.name == 'mdm':
+            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_gov.png' % self.style.dept)
+        elif self.style.name == 'mdm':
+            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_highcollar_%s.png' % self.style.dept)
+        elif self.isGovernaught and self.style.name == 'mdm':
+            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_highcollar_%s_gov.png' % self.style.dept)
+        elif self.isExecutive and self.style.name == 'mdm':
+            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_highcollar_%s_e.png' % self.style.dept)
+        # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
         texture.setMinfilter(Texture.FTLinearMipmapLinear)
         texture.setMagfilter(Texture.FTLinear)
         modelRoot.find('**/hands').setColor(self.handColor)
@@ -3275,6 +3595,9 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'crf':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'mdm':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'msp':
@@ -3380,7 +3703,116 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'mad':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'mdm':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'msp':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        else:
+            modelRoot.find('**/necktie-w').show()
+        modelRoot.find('**/body').setTexture(texture, 1)
+
+        def __doItTheOldWay__():
+            self.leftHand = self.find('**/joint_Lhold')
+            self.rightHand = self.find('**/joint_Rhold')
+            self.shadowJoint = self.find('**/joint_shadow')
+            self.nametagJoint = self.find('**/joint_nameTag')
+
+        if base.config.GetBool('want-new-cogs', 0):
+            if dept == 'c':
+                texType = 'bossbot'
+            elif dept == 'm':
+                texType = 'cashbot'
+            elif dept == 'l':
+                texType = 'lawbot'
+            elif dept == 's':
+                texType = 'sellbot'
+            elif dept == 'g':
+                texType = 'boardbot'
+            if self.find('**/body').isEmpty():
+                __doItTheOldWay__()
+            else:
+                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
+                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
+                    bodyTex = loader.loadTexture(filepath)
+                    self.find('**/body').setTexture(bodyTex, 1)
+                self.leftHand = self.find('**/def_joint_left_hold')
+                self.rightHand = self.find('**/def_joint_right_hold')
+                self.shadowJoint = self.find('**/def_shadow')
+                self.nametagJoint = self.find('**/def_nameTag')
+        else:
+            __doItTheOldWay__()
+
+        def __doItTheOldWay__():
+            self.leftHand = self.find('**/joint_Lhold')
+            self.rightHand = self.find('**/joint_Rhold')
+            self.shadowJoint = self.find('**/joint_shadow')
+            self.nametagJoint = self.find('**/joint_nameTag')
+
+        if base.config.GetBool('want-new-cogs', 0):
+            if dept == 'c':
+                texType = 'bossbot'
+            elif dept == 'm':
+                texType = 'cashbot'
+            elif dept == 'l':
+                texType = 'lawbot'
+            elif dept == 's':
+                texType = 'sellbot'
+            elif dept == 'g':
+                texType = 'boardbot'
+            if self.find('**/body').isEmpty():
+                __doItTheOldWay__()
+            else:
+                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
+                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
+                    bodyTex = loader.loadTexture(filepath)
+                    self.find('**/body').setTexture(bodyTex, 1)
+                self.leftHand = self.find('**/def_joint_left_hold')
+                self.rightHand = self.find('**/def_joint_right_hold')
+                self.shadowJoint = self.find('**/def_shadow')
+                self.nametagJoint = self.find('**/def_nameTag')
+        else:
+            __doItTheOldWay__()
+
+    def setSuitClothesRaincoat(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        dept = self.style.dept
+        phase = 3.5
+        texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_rainmake.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
+        texture.setMinfilter(Texture.FTLinearMipmapLinear)
+        texture.setMagfilter(Texture.FTLinear)
+        modelRoot.find('**/hands').setColor(self.handColor)
+        modelRoot.find('**/necktie-s').hide()
+        modelRoot.find('**/necktie-w').hide()
+        modelRoot.find('**/bowtie').hide()
+        modelRoot.find('**/necktie-s').setTexture(texture, 1)
+        modelRoot.find('**/necktie-w').setTexture(texture, 1)
+        modelRoot.find('**/bowtie').setTexture(texture, 1)
+        if self.style.dept == 'l':
+            modelRoot.find('**/bowtie').show()
+        elif self.style.dept == 's':
+            modelRoot.find('**/necktie-s').show()
+        elif self.style.name == 'sft':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'prr':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'crf':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'tb':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'mad':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'mdm':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'ghd':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
         else:
@@ -3781,6 +4213,22 @@ class Suit(Avatar.Avatar):
             elif headType == 'chairman-a':
                 headModel.setScale(.7)
                 headModel.setY(-.2)
+            elif headType == 'magnate' and self.style.name == 'rng' :
+                headModel.setZ(-.1)
+            elif headType == 'magnate' and self.style.name == 'jgd' :
+                headModel.setZ(-.1)
+            elif headType == 'bagholder' and self.style.name == 'ca' :
+                headModel.setZ(.5)
+            elif headType == 'paperhands' and self.style.name == 'cn' :
+                headModel.setScale(.6)
+            elif headType == 'paperhands' and self.style.name == 'fbd' :
+                headModel.setScale(.7)
+                headModel.setY(-.2)
+                headModel.setZ(-.1)
+            elif headType == 'deadlock' and self.style.name == 'hho':
+                headModel.setZ(-.1)
+            elif headType == 'sharkwatcher' and self.style.name == 'ffm':
+                headModel.setY(-.1)
             elif headType == 'chairman':
                 headModel.setScale(.7)
                 headModel.setY(-.2)
@@ -3855,10 +4303,6 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(-.1)
             elif headType == 'duckshuffler':
                 headModel.setScale(1)
-                headModel.setZ(-.1)
-                headModel.setY(-.1)
-            elif headType == 'backstabber':
-                headModel.setScale(1.05)
                 headModel.setZ(-.1)
                 headModel.setY(-.1)
             elif headType == 'chainsaw':
@@ -4004,7 +4448,7 @@ class Suit(Avatar.Avatar):
                 headModel = loader.loadModel('phase_4/models/char/suitB-heads')
         if headType == 'hatjp187187' and self.style.body == 'a':
                 headModel = loader.loadModel('phase_4/models/char/suitB-heads')
-        if headType == 'bigfish' and self.style.name == 'bfh':
+        if headType == 'bigfish' and self.style.name == 'dfh':
                 headModel = loader.loadModel('phase_14/models/char/ttcc_ene_bigfish-zero')
         if headType == 'flunky' and self.style.body == 'a':
                 headModel = loader.loadModel('phase_3.5/models/char/suitC-heads')
@@ -4012,8 +4456,8 @@ class Suit(Avatar.Avatar):
                 headModel = loader.loadModel('phase_3.5/models/char/suitC-heads')
         if headType == 'connoisseur_hat' and self.style.name == 'bgh':
                 headModel = loader.loadModel('phase_14/models/char/ttcc_ene_connoisseur')
-        if headType == 'magnate' and self.style.name == 'mg':
-                headModel = loader.loadModel('phase_14/models/char/ttcc_ene_magnate-zero')
+        if headType == 'magnate' and self.style.name == 'bdb':
+                headModel = loader.loadModel('phase_14/models/char/ttcc_ene_magnate-zero2')
         if headType == 'camera' and self.style.name == 'cps':
                 headModel = loader.loadModel('phase_4/models/accessories/newstoon_camera')
         if headType == 'connoisseur_head' and self.style.name == 'bgh':
@@ -4032,6 +4476,24 @@ class Suit(Avatar.Avatar):
                 headModel = loader.loadModel('phase_3.5/models/char/suitC-heads')
         if headType == 'ambulancechaser' and self.style.body == 'a':
                 headModel = loader.loadModel('phase_4/models/char/suitB-heads')
+        if headType == 'ttr_m_ene_lawbotClerk' and self.style.body == 'b':
+            headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_lawbotClerk')
+        if headType == 'ttr_m_ene_cashbotAuditor' and self.style.body == 'c':
+            headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_cashbotAuditor')
+        if headType == 'bossbotClubPresidentEarrings' and self.style.body == 'a':
+            headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_bossbotClubPresident')
+        if headType == 'bossbotClubPresidentHead' and self.style.body == 'a':
+            headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_bossbotClubPresident')
+        if headType == 'bossbotClubPresidentHair' and self.style.body == 'a':
+            headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_bossbotClubPresident')
+        if headType == 'sellbotForemanHead' and self.style.body == 'b':
+            headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_sellbotForeman')
+        if headType == 'sellbotForemanGlasses' and self.style.body == 'b':
+            headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_sellbotForeman')
+        if headType == 'sellbotForemanEyebrows' and self.style.body == 'b':
+            headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_sellbotForeman')
+        if headType == 'sellbotForemanHat' and self.style.body == 'b':
+            headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_sellbotForeman')
         if headType == 'ear01' and self.style.body == 'a':
             headModel = loader.loadModel('phase_4/models/char/mole_cog')
             headModel.setZ(-.4)
@@ -4085,36 +4547,17 @@ class Suit(Avatar.Avatar):
         for i in xrange(0, headReferences.getNumPaths()):
             headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'joint_head')
             headPart.setTwoSided(True)
-            if self.style.name == 'dvg':
-                headPart.setZ(-.4)
-                headPart.setScale(.7)
-                headPart.setH(180)
-            if self.style.name == 'dot':
+            if self.style.name == 'cr':
                 headPart.setZ(-.1)
                 headPart.setY(-.1)
                 headPart.setScale(1.05)
                 headPart.setH(0)
-            if self.style.name == 'dfh':
+            if self.style.name == 'isw':
                 headPart.setZ(-.1)
                 headPart.setY(-.1)
                 headPart.setScale(1.05)
                 headPart.setH(0)
-            if self.style.name == 'bgh':
-                headPart.setZ(-.1)
-                headPart.setY(-.1)
-                headPart.setScale(1.05)
-                headPart.setH(0)
-            if self.style.name == 'ssr':
-                headPart.setZ(-.1)
-                headPart.setY(-.1)
-                headPart.setScale(1.05)
-                headPart.setH(0)
-            if self.style.name == 'cps':
-                headPart.setZ(1)
-                headPart.setY(0)
-                headPart.setScale(2.5)
-                headPart.setH(90)
-            if headType == 'hatjp187187' and self.style.name == 'rng':
+            if headType == 'hatjp187187' and self.style.name == 'bdb':
                 headPart.setZ(-.7)
             if self.headTexture:
                 headTex = loader.loadTexture('phase_' + str(phase) + '/maps/' + self.headTexture)
@@ -4585,7 +5028,7 @@ class Suit(Avatar.Avatar):
         self.isExecutive = 1
         if self.isSkeleton:
             self.setSuitClothesSkeleton()
-            if self.style.body == 'a':
+            if self.style.body == 'a' and not self.style.name == 'cg':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
@@ -5112,25 +5555,22 @@ class Suit(Avatar.Avatar):
             return SkelecogDialogArray
         if self.style.name == 'msr':
             loadDialog(1)
-            return DerrickManDialogArray
+            return FemaleDialogArray
         if self.style.name == 'kb':
             loadDialog(1)
             return DerrickHandDialogArray
         if self.style.name == 'ts':
             loadDialog(1)
             return DerrickSkeleDialogArray
-        if self.style.name == 'arb':
+        if self.style.name == 'jdg':
             loadDialog(1)
             return CLODialogArray
-        if self.style.name == 'sjg':
+        if self.style.name == 'cfp':
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'ad':
+        if self.style.name == 'le':
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'lsc':
-            loadDialog(1)
-            return StenographerDialogArray
         if self.style.name == 'tc' and not self.isSkeleton:
             loadDialog(1)
             return GatekeeperDialogArray
@@ -5151,7 +5591,7 @@ class Suit(Avatar.Avatar):
             return ReddDialogArray
         if self.style.name == 'fbd' and not self.isSkeleton:
             loadDialog(1)
-            return ChainsawORDialogArray
+            return CaseManagerDialogArray
         if self.style.name == 'otm' and not self.isSkeleton:
             loadDialog(1)
             return OttomanDialogArray
@@ -5164,28 +5604,22 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'tcm' and not self.isSkeleton:
             loadDialog(1)
             return ChairmanDialogArray
-        if self.style.name == 'ac':
+        if self.style.name == 'ds':
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'le':
+        if self.style.name == 'hh':
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'mm':
+        if self.style.name == 'rb':
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'nc':
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'trb':
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'nd':
+        if self.style.name == 'gh':
             loadDialog(1)
             return FemaleDialogArray
         if self.style.name == 'adc' and not self.isSkeleton:
             loadDialog(1)
             return ChainsawDialogArray
-        if self.style.name == 'm':
+        if self.style.name == 'ssm':
             loadDialog(1)
             return FemaleDialogArray
         if self.style.name == 'dfr' and not self.isSkeleton:
@@ -5196,7 +5630,7 @@ class Suit(Avatar.Avatar):
             return DOLDDialogArray
         if self.style.name == 'tlr':
             loadDialog(1)
-            return SkelecogDialogArray
+            return FemaleDialogArray
         if self.style.name == 'cm':
             loadDialog(1)
             return SkelecogDialogArray
@@ -5230,15 +5664,9 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'lit' and not self.isSkeleton:
             loadDialog(1)
             return LitigatorDialogArray
-        if self.style.name == 'csh':
-            loadDialog(1)
-            return SkelecogDialogArray
         if self.style.name == 'bgr':
             loadDialog(1)
             return SkelecogDialogArray
-        if self.style.name == 'mes' and not self.isSkeleton:
-            loadDialog(1)
-            return DuckShufflerDialogArray
         if self.style.name == 'dm' and not self.isSkeleton:
             loadDialog(1)
             return TreekillerDialogArray
@@ -5247,7 +5675,7 @@ class Suit(Avatar.Avatar):
             return SkelecogDialogArray
         if self.style.name == 'cvy':
             loadDialog(1)
-            return SkelecogDialogArray
+            return FemaleDialogArray
         if self.style.name == 'fb':
             loadDialog(1)
             return SkelecogDialogArray
@@ -5275,18 +5703,21 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'crf' and not self.isSkeleton:
             loadDialog(1)
             return HighRollerDialogArray
-        if self.style.name == 'ka':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'fas' and not self.isSkeleton:
-            loadDialog(1)
-            return DOLDDialogArray
         if self.style.name == 'mdr':
             loadDialog(1)
             return SkelecogDialogArray
-        if self.style.name == 'nar' and not self.isSkeleton:
+        if self.style.name == 'ghd':
             loadDialog(1)
-            return DOPRDialogArray
+            return OttomanDialogArray
+        if self.style.name == 'tyh':
+            loadDialog(1)
+            return StenographerDialogArray
+        if self.style.name == 'jgd':
+            loadDialog(1)
+            return FeatherbedderDialogArray
+        if self.style.name == 'bby':
+            loadDialog(1)
+            return ChairmanDialogArray
         if self.style.name == 'fd':
             loadDialog(1)
             return DOPADialogArray

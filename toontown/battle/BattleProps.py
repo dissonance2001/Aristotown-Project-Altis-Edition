@@ -56,16 +56,20 @@ Props = ((5, 'partyBall', 'partyBall'),
   'tnt-chan'),
  (5, 'trapdoor', 'trapdoor'),
  (5, 'quicksand', 'quicksand'),
+         (5, 'wreckingball', 'wreckingball'),
+         (5, 'wreckingball-ball', 'wreckingball-ball'),
  (5, 'traintrack', 'traintrack2'),
  (5, 'train', 'train'),
  (5, 'megaphone', 'megaphone'),
  (5, 'aoogah', 'aoogah'),
  (5, 'bikehorn', 'bikehorn'),
  (5, 'bugle', 'bugle'),
+(5, 'cake-slice', 'cream-pie-slice'),
  (5, 'elephant', 'elephant'),
  (5, 'fog_horn', 'fog_horn'),
  (5, 'whistle', 'whistle'),
  (5, 'singing', 'singing'),
+         (5, 'kazoo', 'kazoo'),
 (5, 'wreckingball', 'wreckingball'),
  (3.5, 'creampie', 'tart'),
  (3.5, 'cupcake', 'cupcake'),
@@ -82,6 +86,7 @@ Props = ((5, 'partyBall', 'partyBall'),
   'glass-mod',
   'glass-chan'),
  (4, 'water-gun', 'water-gun'),
+(5, 'water-balloon', 'water-balloon'),
  (3.5, 'bottle', 'bottle'),
  (5,
   'firehose',
@@ -102,6 +107,10 @@ Props = ((5, 'partyBall', 'partyBall'),
   'sandbag',
   'sandbag-mod',
   'sandbag-chan'),
+         (5,
+          'bowlingball',
+          'bowlingball-mod',
+          'bowlingball-chan'),
  (4,
   'anvil',
   'anvil-mod',
@@ -191,8 +200,8 @@ Props = ((5, 'partyBall', 'partyBall'),
   'teeth-chan'),
          (5,
           'litigator-teeth',
-          'teeth-mod',
-          'teeth-chan'),
+          'litigator-teeth-mod',
+          'litigator-teeth-chan'),
  (5, 'power-tie', 'power-tie'),
  (3.5, 'spray', 'spray'),
  (3.5, 'splash', 'splash'),
@@ -217,13 +226,15 @@ Props = ((5, 'partyBall', 'partyBall'),
   'splashdown',
   'SZ_splashdown-mod',
   'SZ_splashdown-chan'))
+TartColor = VBase4(255.0 / 255.0, 195.0 / 255.0, 125.0 / 255.0, 1.0)
 CreampieColor = VBase4(250.0 / 255.0, 241.0 / 255.0, 24.0 / 255.0, 1.0)
 FruitpieColor = VBase4(55.0 / 255.0, 40.0 / 255.0, 148.0 / 255.0, 1.0)
 BirthdayCakeColor = VBase4(253.0 / 255.0, 119.0 / 255.0, 220.0 / 255.0, 1.0)
 SnowballColor = VBase4(1.0, 1.0, 1.0, 1.0)
-Splats = {'cupcake': (0.3, FruitpieColor),
+Splats = {'cupcake': (0.3, TartColor),
  'fruitpie-slice': (0.5, FruitpieColor),
  'creampie-slice': (0.5, CreampieColor),
+'cake-slice': (0.6, BirthdayCakeColor),
  'fruitpie': (0.7, FruitpieColor),
  'creampie': (0.7, CreampieColor),
  'birthday-cake': (0.9, BirthdayCakeColor)}
@@ -244,6 +255,7 @@ Variants = ('cupcake',
  'small-magnet',
  '5dollar',
  '10dollar',
+            '50dollar',
  'suit_explosion',
  'quicksand',
  'trapdoor',
@@ -364,6 +376,11 @@ class PropPool:
             tex.setMagfilter(Texture.FTLinear)
             self.props[name].setTexture(tex, 1)
         elif name == '10dollar':
+            tex = loader.loadTexture('phase_5/maps/dollar_10.jpg')
+            tex.setMinfilter(Texture.FTLinearMipmapLinear)
+            tex.setMagfilter(Texture.FTLinear)
+            self.props[name].setTexture(tex, 1)
+        elif name == '50dollar':
             tex = loader.loadTexture('phase_5/maps/dollar_10.jpg')
             tex.setMinfilter(Texture.FTLinearMipmapLinear)
             tex.setMagfilter(Texture.FTLinear)

@@ -96,30 +96,30 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
         if numAvatars == 1:
             self.avatarButtons[0].setX(0)
         elif numAvatars == 2:
-            self.avatarButtons[0].setX(0.2)
-            self.avatarButtons[1].setX(-0.2)
+            self.avatarButtons[0].setX(0.25)
+            self.avatarButtons[1].setX(-0.25)
         elif numAvatars == 3:
-            self.avatarButtons[0].setX(0.4)
+            self.avatarButtons[0].setX(0.5)
             self.avatarButtons[1].setX(0.0)
-            self.avatarButtons[2].setX(-0.4)
+            self.avatarButtons[2].setX(-0.5)
         elif numAvatars == 4:
-            self.avatarButtons[0].setX(0.6)
-            self.avatarButtons[1].setX(0.2)
-            self.avatarButtons[2].setX(-0.2)
-            self.avatarButtons[3].setX(-0.6)
+            self.avatarButtons[0].setX(0.75)
+            self.avatarButtons[1].setX(0.25)
+            self.avatarButtons[2].setX(-0.25)
+            self.avatarButtons[3].setX(-0.75)
         elif numAvatars == 5:
-            self.avatarButtons[0].setX(0.7)
-            self.avatarButtons[1].setX(0.35)
-            self.avatarButtons[2].setX(0.0)
-            self.avatarButtons[3].setX(-0.35)
-            self.avatarButtons[4].setX(-0.7)
-        elif numAvatars == 6:
-            self.avatarButtons[0].setX(0.8)
+            self.avatarButtons[0].setX(1.0)
             self.avatarButtons[1].setX(0.5)
-            self.avatarButtons[2].setX(0.2)
-            self.avatarButtons[3].setX(-0.2)
-            self.avatarButtons[4].setX(-0.5)
-            self.avatarButtons[5].setX(-0.8)
+            self.avatarButtons[2].setX(0.0)
+            self.avatarButtons[3].setX(-0.5)
+            self.avatarButtons[4].setX(-1.0)
+        elif numAvatars == 6:
+            self.avatarButtons[0].setX(1.25)
+            self.avatarButtons[1].setX(0.75)
+            self.avatarButtons[2].setX(0.25)
+            self.avatarButtons[3].setX(-0.25)
+            self.avatarButtons[4].setX(-0.75)
+            self.avatarButtons[5].setX(-1.25)
         else:
             self.notify.error('Invalid number of avatars: %s' % numAvatars)
         return None

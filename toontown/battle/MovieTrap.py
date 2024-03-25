@@ -47,21 +47,19 @@ def doTraps(traps):
                 rake2.pose('rake', 0)
                 trapPropList.append([rake, rake2])
             elif level == 2:
+                trapPropList.append([globalPropPool.getProp('quicksand')])
+            elif level == 3:
                 marbles = globalPropPool.getProp('marbles')
                 marbles2 = MovieUtil.copyProp(marbles)
                 trapPropList.append([marbles, marbles2])
-            elif level == 3:
-                trapPropList.append([globalPropPool.getProp('quicksand')])
             elif level == 4:
-                trapPropList.append([globalPropPool.getProp('trapdoor')])
-            #elif level == 5:
-                #trapPropList.append([globalPropPool.getProp('wreckingball')])
+                trapPropList.append([globalPropPool.getProp('quicksand')])
             elif level == 5:
-                tnt = globalPropPool.getProp('tnt')
-                tnt2 = MovieUtil.copyProp(tnt)
-                trapPropList.append([tnt, tnt2])
+                trapPropList.append([globalPropPool.getProp('trapdoor')])
             elif level == 6:
-                tnt = globalPropPool.getProp('traintrack')
+                trapPropList.append([globalPropPool.getProp('wreckingball')])
+            elif level == 7:
+                tnt = globalPropPool.getProp('tnt')
                 tnt2 = MovieUtil.copyProp(tnt)
                 trapPropList.append([tnt, tnt2])
             else:
@@ -99,15 +97,15 @@ def __doTrapLevel(trap, trapProps, explode = 0):
     elif level == 2:
         return __trapMarbles(trap, trapProps, explode)
     elif level == 3:
-        return __trapQuicksand(trap, trapProps, explode)
+        return __trapMarbles(trap, trapProps, explode)
     elif level == 4:
-        return __trapTrapdoor(trap, trapProps, explode)
-    #elif level == 5:
-        #return __trapWreckingBall(trap, trapProps, explode)
+        return __trapQuicksand(trap, trapProps, explode)
     elif level == 5:
-        return __trapTNT(trap, trapProps, explode)
+        return __trapTrapdoor(trap, trapProps, explode)
     elif level == 6:
-        return __trapTrain(trap, trapProps, explode)
+        return __trapWreckingBall(trap, trapProps, explode)
+    elif level == 7:
+        return __trapTNT(trap, trapProps, explode)
     return None
 
 
@@ -243,7 +241,7 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
             trapProp.pose(trapName, trapProp.getNumFrames(trapName) - 1)
         elif trapName == 'tnt':
             trapProp.setHpr(0, 90, 0)
-            trapProp.setPos(0, MovieUtil.SUIT_TRAP_TNT_DISTANCE, 0.4)
+            trapProp.setPos(0, MovieUtil.SUIT_TRAP_TNT_DISTANCE, 0.1)
         else:
             notify.warning('placeTrap() - Incorrect trap: %s placed on a suit' % trapName)
 
@@ -386,22 +384,16 @@ def __trapQuicksand(trap, trapProps, explode):
 
 def __trapTrapdoor(trap, trapProps, explode):
     toon = trap['toon']
-    if 'npc' in trap:
-        toon = trap['npc']
-    targets = trap['target']
-    for target in targets:
-        suit = target['suit']
-        notify.debug('toon: %s lays trapdoor in front of suit: %d' % (toon.getName(), suit.doId))
+    suit = trap['target'][0]['suit']
+    notify.debug('toon: %s lays quicksand in front of suit: %d' % (toon.getName(), suit.doId))
 
     trapdoor = trapProps[0]
     return __createPlacedTrapMultiTrack(trap, trapdoor, 'trapdoor', explode=explode)
 
 def __trapWreckingBall(trap, trapProps, explode):
     toon = trap['toon']
-    if 'npc' in trap:
-        toon = trap['npc']
-    suit = trap['target']['suit']
-    notify.debug('toon: %s lays a wrecking ball in front of suit: %d' % (toon.getName(), suit.doId))
+    suit = trap['target'][0]['suit']
+    notify.debug('toon: %s lays quicksand in front of suit: %d' % (toon.getName(), suit.doId))
 
     wreckingball = trapProps[0]
     return __createPlacedTrapMultiTrack(trap, wreckingball, 'wreckingball', explode=explode)

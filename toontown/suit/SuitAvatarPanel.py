@@ -35,7 +35,12 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
         d = p2 - p1
         biggest = max(d[0], d[1], d[2])
         s = 0.3 / biggest
-        self.head.setPosHprScale(0, 0, 0.04, 180, 0, 0, s, s, s)
+        if self.avatar.dna.name == 'ptr':
+            self.head.setPosHprScale(0, 0, 0.04, 270, 0, 0, s, s, s)
+        elif self.avatar.dna.name == 'dfh':
+            self.head.setPosHprScale(0, 0, 0.04, 270, 0, 0, s, s, s)
+        else:
+            self.head.setPosHprScale(0, 0, 0.04, 180, 0, 0, s, s, s)
         self.nameLabel = DirectLabel(parent=self.frame, pos=(0, 0, 0.35), relief=None, text=SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name'],
                                      text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
                                      text_scale=0.05, text_wordwrap=8.0, text_shadow=(1, 1, 1, 1))
@@ -50,11 +55,11 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
         relativelevel = avatar.getLevel()
         revives = avatar.getMaxSkeleRevives() + 1
         attributes = SuitBattleGlobals.SuitAttributes[avatar.getStyleName()]
-        if avatar.getCurrentHealth() > 0:
-            health = avatar.getCurrentHealth()
+        if avatar.currHP > 0:
+            health = avatar.currHP
         else:
             health = 0
-        maxHealth = avatar.getMaxHealth()
+        maxHealth = avatar.maxHP
         currHP = attributes['hp'][relativelevel]
         maxHP = attributes['hp'][relativelevel]
         dept = SuitDNA.getSuitDeptFullname(avatar.dna.name)
@@ -81,46 +86,16 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
         corpIcon = avatar.corpMedallion.copyTo(hidden)
         corpIcon.setPosHprScale(0, 0, 0, 0, 0, 0, 0, 0, 0)
         self.corpIcon = DirectLabel(parent=self.frame, geom=corpIcon, geom_scale=0.13, pos=(0, 0, -0.20), relief=None)
-        if avatar.dna.name == 'adc':
+        if avatar.maxHP >= 9999:
             self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
                                        text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
                                        text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
                                        text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif avatar.dna.name == 'drm':
+        elif avatar.currHP >= 9999:
             self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
                                        text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
                                        text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
                                        text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif avatar.dna.name == 'sft':
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif avatar.dna.name == 'tcm':
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif avatar.dna.name == 'cry':
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif avatar.dna.name == 'dvk':
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif avatar.dna.name == 'otm':
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        #elif avatar.dna.name == 'crf':
-            #self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       #text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       #text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       #text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
         else:
             self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
                                    text=TTLocalizer.AvatarPanelCogHealth % (health, maxHealth),

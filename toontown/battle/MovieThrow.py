@@ -13,9 +13,9 @@ from toontown.battle import MovieUtil
 from toontown.battle.MovieUtil import calcAvgSuitPos
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieThrow')
-hitSoundFiles = ('AA_tart_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_wholepie_only.ogg', 'AA_wholepie_only.ogg')
+hitSoundFiles = ('AA_tart_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_wholepie_only.ogg', 'AA_wholepie_only.ogg', 'AA_wholepie_only.ogg')
 splatDict = {0: 'tiny_splat_cake', 1: 'tiny_splat_fruit', 2: 'tiny_splat_cream',
-             3: 'splat_fruit', 4: 'splat_cream', 5: 'splat_cake', 6: 'splat_cake', 7: 'splat_cake'}
+             3: 'splat_cake', 4: 'splat_fruit', 5: 'splat_cream', 6: 'splat_cake', 7: 'splat_cake'}
 tPieLeavesHand = 2.7
 tPieHitsSuit = 3.0
 tSuitDodges = 2.45
@@ -89,7 +89,7 @@ def doThrows(throws):
             ival = __doSuitThrows(st, npcs)
             if ival:
                 mtrack.append(Sequence(Wait(delay), ival))
-            delay = delay + TOON_THROW_SUIT_DELAY
+            delay = delay + 0
 
     retTrack = Sequence()
     retTrack.append(npcArrivals)
@@ -257,10 +257,45 @@ def __getWeddingCakeSoundTrack(level, hitSuit, node = None):
         throwTrack.append(SoundInterval(throwSound, node=node))
     return throwTrack
 
+def __getBirthdayCakeSoundTrack(level, hitSuit, node = None):
+    throwSound = globalBattleSoundCache.getSound('AA_pie_throw_only.ogg')
+    throwTrack = Sequence(Wait(2.6), SoundInterval(throwSound, node=node))
+    splatSound = globalBattleSoundCache.getSound('AA_throw_wedding_cake_cog.ogg')
+    splatTrack = Sequence()
+    splatTrack.append(Wait(tPieHitsSuit))
+    splatTrack.append(SoundInterval(splatSound, node=node))
+    throwTrack.append(Parallel(splatTrack))
+    if hitSuit:
+        hitSound = globalBattleSoundCache.getSound('AA_throw_wedding_cake_cog.ogg')
+        hitTrack = Sequence(Wait(tPieLeavesHand), SoundInterval(hitSound, node=node))
+        return Parallel(hitTrack)
+    else:
+        return throwTrack
+
+
+def __getCreamPieSoundTrack(level, hitSuit, node = None):
+    throwSound = globalBattleSoundCache.getSound('AA_pie_throw_only.ogg')
+    throwTrack = Sequence(Wait(2.6), SoundInterval(throwSound, node=node))
+    splatSound = globalBattleSoundCache.getSound('AA_throw_cream_pie_cog.ogg')
+    splatTrack = Sequence()
+    splatTrack.append(Wait(tPieHitsSuit))
+    splatTrack.append(SoundInterval(splatSound, node=node))
+    throwTrack.append(Parallel(splatTrack))
+    if hitSuit:
+        hitSound = globalBattleSoundCache.getSound('AA_throw_cream_pie_cog.ogg')
+        hitTrack = Sequence(Wait(tPieLeavesHand), SoundInterval(hitSound, node=node))
+        return Parallel(hitTrack)
+    else:
+        return throwTrack
+
 
 def __getSoundTrack(level, hitSuit, node = None):
-    if level == UBER_GAG_LEVEL_INDEX:
+    if level == 7:
         return __getWeddingCakeSoundTrack(level, hitSuit, node)
+    if level == 6:
+        return __getBirthdayCakeSoundTrack(level, hitSuit, node)
+    if level == 5:
+        return __getCreamPieSoundTrack(level, hitSuit, node)
     throwSound = globalBattleSoundCache.getSound('AA_pie_throw_only.ogg')
     throwTrack = Sequence(Wait(2.6), SoundInterval(throwSound, node=node))
     if hitSuit:
@@ -350,8 +385,8 @@ def __throwPie(throw, delay, hitCount, npcs):
         pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
     if hitSuit:
         suitResponseTrack = Sequence()
-        showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=THROW_TRACK)
-        markDamage = Func(showMarkRounds, suit, level)
+        showDamage = Func(suit.showHpTextThrow, -hp, openEnded=0, attackTrack=THROW_TRACK)
+        #markDamage = Func(showMarkRounds, suit, level)
         value = hp
         #if kbbonus > 0:
             #value = kbbonus
@@ -382,8 +417,8 @@ def __throwPie(throw, delay, hitCount, npcs):
         suitResponseTrack.append(Func(__splatSuit, suit, level))
         suitResponseTrack.append(updateHealthBar)
         suitResponseTrack.append(sival)
-        suitResponseTrack.append(Wait(0))
-        suitResponseTrack.append(markDamage)
+        #suitResponseTrack.append(Wait(0))
+        #suitResponseTrack.append(markDamage)
         bonusTrack = Sequence(Wait(delay + tPieHitsSuit))
         if kbbonus > 0:
             bonusTrack.append(Wait(0.75))
@@ -394,11 +429,24 @@ def __throwPie(throw, delay, hitCount, npcs):
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=THROW_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
         if revived != 0:
-            suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
+            suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died != 0:
-            suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
+            suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             suitResponseTrack.append(Func(suit.loop, 'neutral'))
+            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+                    and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
+                    and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
+                    and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
+                    and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
+                    and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
+                    and not suit.style.name == 'msr' and not suit.style.name == 'tlr' and not suit.style.name == 'cvy' and not suit.style.name == 'cps' and not suit.style.name == 'dfh' and not suit.style.name == 'fas' and not suit.style.name == 'csh':
+                for headPart in suit.headParts:
+                    suitResponseTrack.append(
+                    Func(headPart.loop,
+                         'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',))
+                )
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
     else:
         suitResponseTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
@@ -595,9 +643,9 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
                 bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=THROW_TRACK))
                 bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
             if revived != 0:
-                singleSuitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
+                singleSuitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
             elif died != 0:
-                singleSuitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
+                singleSuitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
             else:
                 singleSuitResponseTrack.append(Func(suit.loop, 'neutral'))
             singleSuitResponseTrack = Parallel(singleSuitResponseTrack, bonusTrack)

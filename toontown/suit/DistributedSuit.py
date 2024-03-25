@@ -726,13 +726,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if not self.style.name == 'm' and not self.style.name == 'tf' and not self.style.name == 'ad' and not self.style.name == 'bfh' and not self.style.name == 'dvg' and not self.style.name == 'f' and not self.style.name == 'p' and not self.style.name == 'ym' and not self.style.name == 'mm' \
                 and not self.style.name == 'ds' and not self.style.name == 'hh' and not self.style.name == 'cr' and not self.style.name == 'tbc'\
-                and not self.style.name == 'trb' and not self.style.name == 'dot' and not self.style.name == 'dvg' and not self.style.name == 'cpl' and not self.style.name == 'bkp' and not self.style.name == 'kpn' and not self.style.name == 'sjg' \
-                and not self.style.name == 'sc' and not self.style.name == 'sjg' and not self.style.name == 'pp' and not self.style.name == 'tw' and not self.style.name == 'bc' and not self.style.name == 'nc' and not self.style.name == 'mb' \
+                and not self.style.name == 'trb' and not self.style.name == 'dot' and not self.style.name == 'dvg' and not self.style.name == 'cpl' and not self.style.name == 'bkp' and not self.style.name == 'kpn' and not self.style.name == 'tlr' \
+                and not self.style.name == 'sc' and not self.style.name == 'pp' and not self.style.name == 'tw' and not self.style.name == 'bc' and not self.style.name == 'nc' and not self.style.name == 'mb' \
                 and not self.style.name == 'ls' and not self.style.name == 'rb' and not self.style.name == 'ptr' and not self.style.name == 'mld' and not self.style.name == 'pht' and not self.style.name == 'cc' and not self.style.name == 'tm' \
-                and not self.style.name == 'nd' and not self.style.name == 'gh' and not self.style.name == 'ms' and not self.style.name == 'tf' and not self.style.name == 'mka' and not self.style.name == 'mh' and not self.style.name == 'trm' \
-                and not self.style.name == 'ssm' and not self.style.name == 'isw' and not self.style.name == 'ssr' and not self.style.name == 'ca' and not self.style.name == 'cn' and not self.style.name == 'sw' and not self.style.name == 'mdm' \
-                and not self.style.name == 'txm' and not self.style.name == 'mg' and not self.style.name == 'bfh' and not self.style.name == 'hho' and not self.style.name == 'bgh' and not self.style.name == 'rng' \
-                and not self.style.name == 'tld':
+                and not self.style.name == 'ka' and not self.style.name == 'gh' and not self.style.name == 'ms' and not self.style.name == 'tf' and not self.style.name == 'mka' and not self.style.name == 'mh' and not self.style.name == 'trm' \
+                and not self.style.name == 'ssm' and not self.style.name == 'isw' and not self.style.name == 'ssr' and not self.style.name == 'sw' and not self.style.name == 'txm' and not self.style.name == 'bfh' and not self.style.name == 'bdb' \
+                and not self.style.name == 'dfh' and not self.style.name == 'cps' and not self.style.name == 'csh' and not self.style.name == 'fas' and not self.style.name == 'cvy' and not self.style.name == 'msr':
             for headPart in self.headParts: Sequence(
                 ActorInterval(headPart, self.animHead),
                 Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))

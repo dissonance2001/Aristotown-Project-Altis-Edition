@@ -7,7 +7,7 @@ from otp.otpbase import OTPGlobals
 levels = [0]
 for level in xrange(1,100):
     level += 1
-    exp = int(15 * level * (level+5))
+    exp = int(15 * level * (level+7))
     levels.append(exp)
 
 class ToonExperience:
@@ -44,4 +44,4 @@ class ToonExperience:
         if int(level + 1) in exp:
             return exp[level+1]
         level += 1
-        return int(15 * level * (level+5))
+        return int(15 * level * (level+7))

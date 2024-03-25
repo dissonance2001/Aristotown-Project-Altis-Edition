@@ -17,7 +17,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase.ToontownBattleGlobals import AvPropDamage
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieHeal')
-soundFiles = ('AA_heal_tickle.ogg', 'AA_heal_telljoke.ogg', 'AA_heal_smooch.ogg', 'AA_heal_happydance.ogg', 'AA_heal_pixiedust.ogg', 'AA_heal_juggle.ogg', 'AA_heal_High_Dive.ogg')
+soundFiles = ('AA_heal_tickle.ogg', 'AA_heal_telljoke.ogg', 'AA_heal_smooch.ogg', 'AA_heal_happydance.ogg', 'AA_heal_pixiedust.ogg', 'AA_heal_juggle.ogg', 'AA_heal_pixiedust.ogg', 'AA_heal_High_Dive.ogg')
 healPos = Point3(0, 0, 0)
 healHpr = Vec3(180.0, 0, 0)
 runHealTime = 1.0
@@ -51,6 +51,8 @@ def __doHealLevel(heal, hasInteractivePropHealBonus):
     elif level == 5:
         return __healJuggle(heal, hasInteractivePropHealBonus)
     elif level == 6:
+        return __healSprinkle(heal, hasInteractivePropHealBonus)
+    elif level == 7:
         return __healDive(heal, hasInteractivePropHealBonus)
     return None
 

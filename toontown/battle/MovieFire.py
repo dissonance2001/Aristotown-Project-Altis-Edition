@@ -104,7 +104,7 @@ def doFires(fires):
             ival = __doSuitFires(sf)
             if ival:
                 mtrack.append(Sequence(Wait(delay), ival))
-            delay = delay + TOON_FIRE_SUIT_DELAY
+            delay = delay + 0
 
     retTrack = Sequence()
     retTrack.append(npcArrivals)
@@ -165,7 +165,7 @@ def __doSuitFires(fires):
                     for track in tracks:
                         toonTracks.append(track)
 
-                delay = delay + TOON_THROW_DELAY
+                delay = delay + 0
         else:
             if fire['target']['suit'] not in suitList:
                 showSuitCannon = 0
@@ -176,7 +176,7 @@ def __doSuitFires(fires):
                 for track in tracks:
                     toonTracks.append(track)
 
-            delay = delay + TOON_THROW_DELAY
+            delay = delay + 0
 
     return toonTracks
 
