@@ -74,6 +74,7 @@ Props = ((5, 'partyBall', 'partyBall'),
  (3.5, 'creampie', 'tart'),
  (3.5, 'cupcake', 'cupcake'),
  (5, 'fruitpie-slice', 'fruit-pie-slice'),
+         (5, 'fruitpie', 'fruit-pie'),
  (5, 'creampie-slice', 'cream-pie-slice'),
  (5,
   'birthday-cake',
@@ -160,6 +161,7 @@ Props = ((5, 'partyBall', 'partyBall'),
  (5, 'redtape-tube', 'redtape-tube'),
  (5, 'bounced-check', 'bounced-check'),
 (3.5, 'explosion', 'explosion'),
+(5, 'playing-card', 'cc_a_prp_bat_playcard'),
  (5,
   'calculator',
   'calculator-mod',
@@ -295,7 +297,7 @@ class PropPool:
         self.propStrings[propName] = (self.getPath(3.5, 'cupcake'),)
         self.propTypes[propName] = 'model'
         propName = 'fruitpie'
-        self.propStrings[propName] = (self.getPath(3.5, 'tart'),)
+        self.propStrings[propName] = (self.getPath(5, 'fruit-pie'),)
         self.propTypes[propName] = 'model'
         propName = 'double-windsor'
         self.propStrings[propName] = (self.getPath(5, 'half-windsor'),)

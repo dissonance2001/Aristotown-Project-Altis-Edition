@@ -420,6 +420,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         elif track == SQUIRT_TRACK and 'squirtBoost' in base.localAvatar.battleConditions:
             damage = math.ceil(damage * ((base.localAvatar.battleConditions['squirtBoost'][0] * 0.01) + 1.0))
             damageAppendStr = labelColorize(damage, 'squirtBoost')
+        elif track == ZAP_TRACK and 'zapBoost' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['zapBoost'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'zapBoost')
         elif track == DROP_TRACK and 'dropBoost' in base.localAvatar.battleConditions:
             damage = math.ceil(damage * ((base.localAvatar.battleConditions['dropBoost'][0] * 0.01) + 1.0))
             damageAppendStr = labelColorize(damage, 'dropBoost')
@@ -540,7 +543,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
              'damageString': self.getToonupDmgStr(track, level),
-             'damage': str(damage) + damageAppendStr + '+Varies',
+             'damage': str(damage) + damageAppendStr + '(Varies)',
              'bonus': damageBonusStr,
              'singleOrGroup': self.getSingleGroupStr(track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.365)

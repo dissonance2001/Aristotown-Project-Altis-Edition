@@ -627,8 +627,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.detachPropeller()
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
-        anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
-                 'stun']
+        anims = ['bellow', 'neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
+                 'stun', 'enraged', 'insurance', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revved-up', 'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive',
+                 'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'overclocked', 'come-on', 'zero']
         for anim in additionalAnims:
             anims.append(anim)
         animList = {}
@@ -649,7 +650,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 if self.soundChatBubble != None:
                     base.playSfx(self.soundChatBubble, node=self)
             elif self.nametag.getStompChatText():
-                self.playDialogueForString(self.nametag.getStompChatText(), self.nametag.CHAT_STOMP_DELAY)
+                self.playDialogueForString(self.nametag.getStompChatText(), 0)
             if hasattr(base.cr, 'chatLog'):
                 base.cr.chatLog.addToLog("\1cogGray\1%s\2: %s" %(self.name, self.nametag.getChatText()))
 
@@ -695,7 +696,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif type == 'exclamation':
             sfxIndex = 4
         elif type == 'special':
-            sfxIndex = 5
+            sfxIndex = 1
         else:
             notify.error('unrecognized dialogue type: ', type)
         if sfxIndex != None and sfxIndex < len(dialogueArray) and dialogueArray[sfxIndex] != None:
@@ -725,13 +726,13 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.nametag.setChatText(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if not self.style.name == 'm' and not self.style.name == 'tf' and not self.style.name == 'ad' and not self.style.name == 'bfh' and not self.style.name == 'dvg' and not self.style.name == 'f' and not self.style.name == 'p' and not self.style.name == 'ym' and not self.style.name == 'mm' \
-                and not self.style.name == 'ds' and not self.style.name == 'hh' and not self.style.name == 'cr' and not self.style.name == 'tbc'\
-                and not self.style.name == 'trb' and not self.style.name == 'dot' and not self.style.name == 'dvg' and not self.style.name == 'cpl' and not self.style.name == 'bkp' and not self.style.name == 'kpn' and not self.style.name == 'tlr' \
+                and not self.style.name == 'ds' and not self.style.name == 'hh' and not self.style.name == 'cr'  and not self.style.name == 'nd' and not self.style.name == 'tbc' and not self.style.name == 'gm'\
+                and not self.style.name == 'trb' and not self.style.name == 'dot' and not self.style.name == 'dvg' and not self.style.name == 'cpl' and not self.style.name == 'bkp' and not self.style.name == 'kpn' \
                 and not self.style.name == 'sc' and not self.style.name == 'pp' and not self.style.name == 'tw' and not self.style.name == 'bc' and not self.style.name == 'nc' and not self.style.name == 'mb' \
                 and not self.style.name == 'ls' and not self.style.name == 'rb' and not self.style.name == 'ptr' and not self.style.name == 'mld' and not self.style.name == 'pht' and not self.style.name == 'cc' and not self.style.name == 'tm' \
                 and not self.style.name == 'ka' and not self.style.name == 'gh' and not self.style.name == 'ms' and not self.style.name == 'tf' and not self.style.name == 'mka' and not self.style.name == 'mh' and not self.style.name == 'trm' \
                 and not self.style.name == 'ssm' and not self.style.name == 'isw' and not self.style.name == 'ssr' and not self.style.name == 'sw' and not self.style.name == 'txm' and not self.style.name == 'bfh' and not self.style.name == 'bdb' \
-                and not self.style.name == 'dfh' and not self.style.name == 'cps' and not self.style.name == 'csh' and not self.style.name == 'fas' and not self.style.name == 'cvy' and not self.style.name == 'msr':
+                and not self.style.name == 'dfh' and not self.style.name == 'cps' and not self.style.name == 'cvy' and not self.style.name == 'jb':
             for headPart in self.headParts: Sequence(
                 ActorInterval(headPart, self.animHead),
                 Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))

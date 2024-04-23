@@ -157,9 +157,17 @@ class SuitPlannerInteriorAI:
             suit.setExecutive(1)
         if suit.dna.name == 'gkp':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp':
+        if suit.dna.name == 'fas':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp':
+        if suit.dna.name == 'csh':
+            suit.setExecutive(1)
+        if suit.dna.name == 'msp':
+            suit.setExecutive(1)
+        if suit.dna.name == 'jb':
+            suit.setExecutive(1)
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'msp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
+            suit.setExecutive(1)
+        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'msp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
             suit.setGovernaught(1)
         return flags
 

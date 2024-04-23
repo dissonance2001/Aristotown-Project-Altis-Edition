@@ -84,7 +84,7 @@ class WhisperQuitButton(Clickable2d):
 class WhisperPopup(Clickable2d, MarginVisible):
     CONTENTS_SCALE = 0.25
 
-    TEXT_MAX_ROWS = 8
+    TEXT_MAX_ROWS = 12
     TEXT_WORD_WRAP = 8
 
     QUIT_BUTTON_SHIFT = (-0.42, 0, -0.42)
@@ -210,7 +210,7 @@ class WhisperPopup(Clickable2d, MarginVisible):
         left, right, bottom, top = self.textNode.getFrameActual()
         center = self.contents.getRelativePoint(
             self.chatBalloon.textNodePath,
-            ((left+right) / 2.0, 0, (bottom+top) / 2.0))
+            ((left+right) / 1.0, 0, (bottom+top) / 2.0))
 
         # Translate the chat balloon along the inverse:
         self.chatBalloon.setPos(self.chatBalloon, -center)

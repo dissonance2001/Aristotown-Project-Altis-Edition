@@ -110,7 +110,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     SUIT_HOOD_INFO_HEIGHTS = 10
     SUIT_HOOD_INFO_ECHANCE = 11
     MAX_SUIT_TYPES = 8
-    MAX_SUIT_TYPES_HQ = 17
+    MAX_SUIT_TYPES_HQ = 16
     HQ_SKELE_CHANCE = 0
     POP_UPKEEP_DELAY = 10
     POP_ADJUST_DELAY = 200
@@ -436,11 +436,19 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'gkp':
             newSuit.setExecutive(1)
+        if newSuit.dna.name == 'fas':
+            newSuit.setExecutive(1)
+        if newSuit.dna.name == 'csh':
+            newSuit.setExecutive(1)
+        if newSuit.dna.name == 'msp':
+            newSuit.setExecutive(1)
+        if newSuit.dna.name == 'jb':
+            newSuit.setExecutive(1)
         if executive and not newSuit.getManager():
             newSuit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp':
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'msp' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
             newSuit.setExecutive(1)
-        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'msp' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
             newSuit.setGovernaught(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         if revives is not None:
@@ -1113,12 +1121,12 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             self.isElite = True
         if type is None:
             if ZoneUtil.isCogHQZone(self.zoneId):
-                typeChoices = range(max(level - 13, 5), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
+                typeChoices = range(max(level - 15, 5), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
                 type = random.choice(typeChoices)
                 if random.random() < self.HQ_SKELE_CHANCE:
                     self.skeleChance = 1
             else:
-                typeChoices = range(max(level - 13, 1), min(level, self.MAX_SUIT_TYPES) + 1)
+                typeChoices = range(max(level - 15, 1), min(level, self.MAX_SUIT_TYPES) + 1)
                 type = random.choice(typeChoices)
 
         if level < type:

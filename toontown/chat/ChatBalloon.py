@@ -6,7 +6,7 @@ class ChatBalloon(NodePath):
 
     # Proportion of the Z offset based on the default line height, and the new
     # line height:
-    TEXT_Z_OFFSET = -(4.0/33.0)
+    TEXT_Z_OFFSET = -(2.0/16.5)
 
     TEXT_MIN_WIDTH = 1
     TEXT_MIN_HEIGHT = 1
@@ -16,8 +16,8 @@ class ChatBalloon(NodePath):
     BALLOON_X_PADDING = 0.5
     BALLOON_Z_PADDING = 0.6
 
-    BUTTON_SCALE = 6
-    BUTTON_SHIFT = (0, 0, 0.6)
+    BUTTON_SCALE = 5
+    BUTTON_SHIFT = (0, 0.6, 0)
 
     def __init__(self, model, modelWidth, modelHeight, textNode,
                  foreground=VBase4(0, 0, 0, 1), background=VBase4(1, 1, 1, 1),

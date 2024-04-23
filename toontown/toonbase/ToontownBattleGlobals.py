@@ -36,6 +36,7 @@ DROP_TRACK = 7
 NPC_RESTOCK_GAGS = 8
 NPC_TOONS_HIT = 9
 NPC_COGS_MISS = 10
+NPC_DAMAGE_BOOST = 11
 MIN_TRACK_INDEX = 0
 MAX_TRACK_INDEX = 7
 MIN_LEVEL_INDEX = 0
@@ -522,6 +523,7 @@ AvZapJumps = ((3, 2.25, 1.5),
               (3, 2.5, 2),
               (3, 2.75, 2.5))
 InstaKillChance = [2, 3, 5, 8, 10, 15, 20, 20]
+DropMissChance = [40, 40, 35, 35, 35, 30, 30, 25]
 AvSoakRounds = (2, 2, 3, 3, 4, 4, 5, 5)
 AvMarkRounds = (1, 1, 1, 1, 1, 1, 1, 1)
 AvDazeRounds = (2, 2, 2, 2, 2, 2, 2, 2)
@@ -727,6 +729,7 @@ ValidStatusConditions = (
     'soaked',   # decreases afflicted targets' dodge rates by 15%
     'lured',
     'marked',
+    'immune',
     'dazed',
     # battle specific
     'corruption',   # increases damage taken from attacks (toons only)

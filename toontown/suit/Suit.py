@@ -59,36 +59,60 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('run', 'walk'), ('neutral', 'neutral'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'),  ('headless-death', 'headless-death'))
+AllSuits = (('walk', 'walk'),
+            ('run', 'walk'),
+('calculator', 'calculator'),
+('calculating-costs', 'calculating-costs'),
+('blue-chip', 'blue-chip'),
+('falling-knife', 'falling-knife'),
+('throw-object', 'throw-object'),
+('throw-paper', 'throw-paper'),
+('mob-mentality', 'mob-mentality'),
+            ('neutral', 'neutral'),
+            ('neutral-hurt', 'neutral-hurt'),
+            ('neutral-unstable', 'neutral-unstable'),
+            ('wrecked', 'wrecked'),
+            ('lose3', 'wrecked'),
+            ('headless-death', 'headless-death'))
 AllSuitsMinigame = (('victory', 'victory'),
- ('flail', 'flailing'),
- ('tug-o-war', 'tug-o-war'),
- ('slip-backward', 'slip-backward'),
-('lose3', 'wrecked'),
- ('slip-forward', 'slip-forward'))
-AllSuitsTutorialBattle = (('lose', 'lose'), ('lose2', 'headless-death'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'), ('dance', 'song-and-dance'),  ('pie-small-react', 'pie-small'), ('squirt-small-react', 'squirt-small'))
+                    ('flail', 'flailing'),
+                    ('tug-o-war', 'tug-o-war'),
+                    ('slip-backward', 'slip-backward'),
+                    ('lose3', 'wrecked'),
+                    ('slip-forward', 'slip-forward'))
+AllSuitsTutorialBattle = (('lose', 'lose'),
+                          ('lose2', 'headless-death'),
+                          ('wrecked', 'wrecked'),
+                          ('lose3', 'wrecked'),
+                          ('dance', 'song-and-dance'),
+                          ('pie-small-react', 'pie-small'),
+                          ('squirt-small-react', 'squirt-small'))
 AllSuitsBattle = (('drop-react', 'anvil-drop'),
  ('flatten', 'drop'),
-('headless-death', 'headless-death'),
-('dance', 'song-and-dance'),
-('lose3', 'wrecked'),
-('wrecked', 'wrecked'),
+ ('headless-death', 'headless-death'),
+ ('dance', 'song-and-dance'),
+ ('lose3', 'wrecked'),
+                  ('gag-miss', 'gag-miss'),
+                  ('pie-large', 'pie-large'),
+                  ('pie-large-lured', 'pie-large-lured'),
+ ('wrecked', 'wrecked'),
  ('sidestep-left', 'sidestep-left'),
  ('sidestep-right', 'sidestep-right'),
  ('squirt-large-react', 'squirt-large'),
-                  ('sound-react', 'sound-react'),
+ ('sound-react', 'sound-react-nt'),
  ('landing', 'landing'),
  ('reach', 'walknreach'),
  ('rake-react', 'rake'),
  ('hypnotized', 'hypnotize'),
  ('shock', 'shock'),
  ('soak', 'soak'),
- ('lured', 'lured'))
+                  ('lured', 'lured2'),
+ ('lured2', 'lured'))
 SuitsCEOBattle = (('sit', 'sit'),
  ('sit-eat-in', 'sit-eat-in'),
  ('sit-eat-loop', 'sit-eat-loop'),
  ('sit-eat-out', 'sit-eat-out'),
-('lose3', 'wrecked'),
+ ('lose3', 'wrecked'),
  ('sit-angry', 'sit-angry'),
  ('sit-hungry-left', 'leftsit-hungry'),
  ('sit-hungry-right', 'rightsit-hungry'),
@@ -96,383 +120,291 @@ SuitsCEOBattle = (('sit', 'sit'),
  ('tray-walk', 'tray-walk'),
  ('tray-neutral', 'tray-neutral'),
  ('sit-lose', 'sit-lose'),
-                  ('headless-death', 'headless-death'))
-f = (('throw-paper', 'throw-paper', 4), ('phone', 'phone', 4), ('lose3', 'wrecked', 4), ('shredder', 'shredder', 4))
-p = (('pencil-sharpener', 'pencil-sharpener', 4),
-    ('pen-squirt', 'pen-squirt', 4),
+ ('headless-death', 'headless-death'))
+f = (('throw-paper', 'throw-paper', 4),
+     ('phone', 'phone', 4),
      ('lose3', 'wrecked', 4),
-    ('hold-eraser', 'hold-eraser', 4),
-    ('finger-wag', 'finger-wag', 4),
-    ('hold-pencil', 'hold-pencil', 4))
+     ('shredder', 'shredder', 4))
+p = (('pencil-sharpener', 'pencil-sharpener', 4),
+     ('pen-squirt', 'pen-squirt', 4),
+     ('lose3', 'wrecked', 4),
+     ('hold-eraser', 'hold-eraser', 4),
+     ('finger-wag', 'finger-wag', 4),
+     ('hold-pencil', 'hold-pencil', 4))
 ym = (('magic3', 'magic3', 4),
       ('finger-wag', 'finger-wag', 4),
       ('throw-paper', 'throw-paper', 4),
       ('lose3', 'wrecked', 4),
       ('throw-object', 'throw-object', 4))
 mm = (('golf-club-swing', 'golf-club-swing', 4),
- ('magic3', 'magic3', 4),
+      ('magic3', 'magic3', 4),
       ('lose3', 'wrecked', 4),
- ('rubber-stamp', 'rubber-stamp', 4),
- ('smile', 'smile', 4))
+      ('rubber-stamp', 'rubber-stamp', 4),
+      ('smile', 'smile', 4))
 ds =  (('roll-o-dex', 'roll-o-dex', 4),
- ('magic3', 'magic3', 4),
+       ('magic3', 'magic3', 4),
        ('lose3', 'wrecked', 4),
- ('smile', 'smile', 4))
+       ('smile', 'smile', 4))
 hh = (('speak', 'speak', 4),
- ('effort', 'effort', 4),
+      ('effort', 'effort', 4),
       ('lose3', 'wrecked', 4),
- ('magic1', 'magic1', 4),
- ('pen-squirt', 'fountain-pen', 4),
- ('finger-wag', 'finger-wag', 4))
+      ('magic1', 'magic1', 4),
+      ('pen-squirt', 'fountain-pen', 4))
 cr = (('glower', 'glower', 4),
- ('finger-wag', 'finger-wag', 4),
+      ('finger-wag', 'finger-wag', 4),
       ('lose3', 'wrecked', 4),
- ('speak', 'speak', 4))
+      ('speak', 'speak', 4))
 tbc = (('magic2', 'magic2', 4),
- ('throw-paper', 'throw-paper', 4),
-       ('lose3', 'wrecked', 4),
- ('magic3', 'magic3', 4))
+       ('throw-paper', 'throw-paper', 4),
+       ('throw-object', 'throw-object', 4),
+       ('lose3', 'wrecked', 4))
 trb = (('magic1', 'magic1', 4),
- ('speak', 'speak', 4),
-       ('finger-wag', 'finger-wag', 4),
+       ('speak', 'speak', 4),
        ('lose3', 'wrecked', 4),
- ('glower', 'glower', 4),
- ('magic3', 'magic3', 4))
-dot = (('pen-squirt', 'fountain-pen', 4),
- ('glower', 'glower', 4),
- ('throw-paper', 'throw-paper', 4),
+       ('glower', 'glower', 4),
+       ('magic3', 'magic3', 4))
+dot = (('glower', 'glower', 4),
+       ('throw-paper', 'throw-paper', 4),
        ('lose3', 'wrecked', 4),
- ('magic1', 'magic1', 4),
- ('magic3', 'magic3', 4),
- ('roll-o-dex', 'roll-o-dex', 4))
+       ('magic1', 'magic1', 4),
+       ('magic3', 'magic3', 4),
+       ('roll-o-dex', 'roll-o-dex', 4))
 dvg = (('glower', 'glower', 4),
- ('magic2', 'magic2', 4),
        ('lose3', 'wrecked', 4),
+       ('magic2', 'magic2', 4),
        ('golf-club-swing', 'golf-club-swing', 4),
- ('quick-jump', 'jump', 4))
+       ('quick-jump', 'jump', 4))
 cpl = (('glower', 'glower', 4),
- ('throw-paper', 'throw-paper', 4),
+       ('throw-paper', 'throw-paper', 4),
        ('lose3', 'wrecked', 4),
        ('throw-object', 'throw-object', 4),
- ('pickpocket', 'pickpocket', 4))
+       ('pickpocket', 'pickpocket', 4))
 bkp = (('glower', 'glower', 4),
- ('magic2', 'magic2', 4),
+       ('magic2', 'magic2', 4),
        ('magic1', 'magic1', 4),
        ('lose3', 'wrecked', 4),
- ('cigar-smoke', 'cigar-smoke', 4))
+       ('cigar-smoke', 'cigar-smoke', 4))
 kpn = (('glower', 'glower', 4),
- ('golf-club-swing', 'golf-club-swing', 4),
+       ('golf-club-swing', 'golf-club-swing', 4),
        ('lose3', 'wrecked', 4),
+       ('magic3', 'magic3', 4),
        ('magic1', 'magic1', 4),
- ('cigar-smoke', 'cigar-smoke', 4))
+       ('cigar-smoke', 'cigar-smoke', 4))
 cg = (('magic1', 'magic1', 4),
       ('glower', 'glower', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
-('magic3', 'magic3', 4),
+      ('calculating-costs', 'calculating-costs', 4),
+      ('cease', 'cease', 4),
+      ('magic3', 'magic3', 4),
       ('lose3', 'wrecked', 4),
       ('golf-club-swing', 'golf-club-swing', 4),
       ('song-and-dance', 'song-and-dance', 4),
       ('cigar-smoke', 'cigar-smoke', 4))
 bg = (('magic1', 'magic1', 4),
       ('glower', 'glower', 4),
-('magic3', 'magic3', 4),
+      ('falling-knife', 'falling-knife', 4),
       ('lose3', 'wrecked', 4),
       ('frustrated', 'frustrated', 4),
       ('golf-club-swing', 'golf-club-swing', 4),
       ('song-and-dance', 'song-and-dance', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
       ('cigar-smoke', 'cigar-smoke', 4),
-       ('throw-paper', 'throw-paper', 4))
+      ('throw-paper', 'throw-paper', 4))
 msr = (('magic1', 'magic1', 4),
-      ('glower', 'glower', 4),
-('magic3', 'magic3', 4),
-       ('lose3', 'wrecked', 4),
-      ('frustrated', 'frustrated', 4),
-      ('golf-club-swing', 'golf-club-swing', 4),
-      ('song-and-dance', 'song-and-dance', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
-      ('cigar-smoke', 'cigar-smoke', 4),
-       ('sanction', 'sanction', 4),
-       ('pickpocket', 'sanction', 4))
+      ('pen-squirt', 'fountain-pen', 4),
+      ('lose3', 'wrecked', 4),
+      ('quick-jump', 'jump', 4))
 kb = (('pen-squirt', 'fountain-pen', 4),
       ('quick-jump', 'jump', 4),
       ('pickpocket', 'sanction', 4),
       ('magic1', 'magic1', 4),
+      ('magic3', 'magic3', 4),
       ('lose3', 'wrecked', 4),
-      ('layoffs', 'layoffs', 4),
-('summon', 'summon', 4),
-('speak', 'speak', 4),
-       ('cease', 'cease', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
-       ('magic3', 'magic3', 4),
-       ('snap', 'snap', 4),
-('throw-paper', 'throw-paper', 4),
- ('throw-object', 'throw-object', 4),
+      ('falling-knife', 'falling-knife', 4),
+      ('objection-in', 'cease', 4),
       ('glower', 'glower', 4),
-      ('sanction', 'sanction', 4),
-('cease', 'cease', 4),
-      ('song-and-dance', 'song-and-dance', 4),
-      ('cigar-smoke', 'cigar-smoke', 4))
-ts = (('quick-jump', 'jump', 4),
-      ('pickpocket', 'sanction', 4),
-('summon', 'summon', 4),
-('speak', 'speak', 4),
-      ('lose3', 'wrecked', 4),
-       ('cease', 'cease', 4),
-      ('magic1', 'magic1', 4),
-       ('snap', 'snap', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
-('layoffs', 'layoffs', 4),
-       ('magic3', 'magic3', 4),
-       ('snap', 'snap', 4),
-('throw-paper', 'throw-paper', 4),
- ('throw-object', 'throw-object', 4),
-      ('glower', 'glower', 4),
-      ('sanction', 'sanction', 4),
-('cease', 'cease', 4),
-      ('song-and-dance', 'song-and-dance', 4),
-      ('cigar-smoke', 'cigar-smoke', 4))
-tc = (('quick-jump', 'jump', 4),
-      ('pickpocket', 'sanction', 4),
-('throw-paper', 'throw-paper', 4),
- ('throw-object', 'throw-object', 4),
-      ('lose3', 'wrecked', 4),
-      ('defense', 'scabbard', 4),
-      ('magic1', 'magic1', 4),
-      ('glower', 'glower', 4),
-      ('magic2', 'magic2', 4),
-      ('pen-squirt', 'fountain-pen', 4),
-      ('sanction', 'sanction', 4))
-tg = (('golf-club-swing', 'golf-club-swing', 4),
-      ('cigar-smoke', 'cigar-smoke', 4),
-      ('magic1', 'magic1', 4),
-      ('glower', 'glower', 4),
+      ('summon', 'summon', 4),
       ('speak', 'speak', 4),
+      ('cease', 'cease', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('throw-object', 'throw-object', 4),
+      ('layoffs', 'layoffs', 4))
+ts = (('pen-squirt', 'fountain-pen', 4),
+      ('quick-jump', 'jump', 4),
+      ('pickpocket', 'sanction', 4),
+      ('magic1', 'magic1', 4),
+      ('magic3', 'magic3', 4),
       ('lose3', 'wrecked', 4),
-      ('song-and-dance', 'song-and-dance', 4),
+      ('defense', 'defense', 4),
+      ('objection-in', 'cease', 4),
+      ('glower', 'glower', 4),
+      ('summon', 'summon', 4),
+      ('speak', 'speak', 4),
+      ('cease', 'cease', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('throw-object', 'throw-object', 4),
+      ('layoffs', 'layoffs', 4))
+tc = (('speak', 'speak', 4),
       ('cigar-smoke', 'firestarter-cigar-smoke', 4),
-      ('sanction', 'sanction', 4))
+      ('magic2', 'magic2', 4),
+      ('magic1', 'magic1', 4))
+tg = (('throw-object', 'throw-object', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('magic1', 'magic1', 4))
 tb = (('quick-jump', 'jump', 4),
-      ('effort', 'wheelspin', 4),
-      ('deadwood', 'song-and-dance', 4),
-('summon', 'summon', 4),
+      ('speak', 'speak', 4),
+      ('snap', 'snap', 4),
+      ('song-and-dance', 'song-and-dance', 4),
+      ('summon', 'summon', 4),
       ('pickpocket', 'pickpocket', 4),
-        ('magic3', 'magic3', 4),
-('summon', 'summon', 4),
-('calculating-costs', 'calculating-costs', 4),
-('speak', 'speak', 4),
-       ('cease', 'cease', 4),
-      ('lose3', 'wrecked', 4),
-('song-and-dance', 'song-and-dance', 4),
-       ('cease2', 'cease2', 4),
-        ('finger-wag', 'cease2', 4),
-        ('magic2', 'magic2', 4),
-        ('speak', 'speak', 5),
-        ('sanction', 'sanction', 4),
-('snap', 'snap', 4),
-        ('neutral', 'rolled', 4))
+      ('magic3', 'magic3', 4),
+      ('neutral', 'rolled', 4))
 adc = (('throw-object', 'throw-object', 4),
-      ('throw-paper', 'throw-paper', 4),
-        ('magic3', 'magic3', 4),
-      ('defense', 'scabbard', 4),
-      ('roll-o-dex', 'roll-o-dex', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('snap', 'snap', 4),
+       ('defense', 'scabbard', 4),
+       ('roll-o-dex', 'roll-o-dex', 4),
        ('lose3', 'wrecked', 4),
-      ('magic1', 'layoffs', 4),
-      ('glower', 'glower', 4),
-      ('effort', 'magic3', 4),
-('quick-jump', 'jump', 4),
-      ('finger-wag', 'cease', 4),
-      ('snap', 'snap', 4),
-      ('revvedup', 'revvedup', 4),
-      ('pickpocket', 'sanction', 4))
+       ('glower', 'glower', 4),
+       ('quick-jump', 'jump', 4),
+       ('finger-wag', 'cease', 4),
+       ('revvedup', 'revvedup', 4))
 drm = (('throw-object', 'throw-object', 4),
-      ('throw-paper', 'throw-paper', 4),
-        ('magic3', 'magic3', 4),
-      ('defense', 'scabbard', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('snap', 'snap', 4),
+       ('defense', 'scabbard', 4),
+       ('roll-o-dex', 'roll-o-dex', 4),
        ('lose3', 'wrecked', 4),
-      ('roll-o-dex', 'roll-o-dex', 4),
-      ('magic1', 'layoffs', 4),
-      ('glower', 'glower', 4),
-      ('effort', 'magic3', 4),
-('quick-jump', 'jump', 4),
-      ('finger-wag', 'cease', 4),
-      ('snap', 'snap', 4),
-      ('revvedup', 'revvedup', 4),
-      ('pickpocket', 'sanction', 4))
+       ('glower', 'glower', 4),
+       ('quick-jump', 'jump', 4),
+       ('finger-wag', 'cease', 4),
+       ('revvedup', 'revvedup', 4))
 cp = (('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4),
-       ('sanction', 'sanction', 4),
       ('layoffs', 'layoffs', 4),
       ('rage', 'frustrated', 4),
-       ('magic3', 'magic3', 4),
-    ('summon', 'summon', 4),
       ('lose3', 'wrecked', 4),
-('speak', 'speak', 4),
-('falling-knife', 'falling-knife', 4),
-       ('cease', 'cease', 4),
-('defense', 'scabbard', 4),
-       ('cigar-smoke', 'cigar-smoke', 4),
-       ('snap', 'snap', 4),
+      ('sanction', 'sanction', 4),
+      ('speak', 'speak', 4),
+      ('summon', 'summon', 4),
+      ('defense', 'defense', 4),
+      ('snap', 'snap', 4),
       ('glower', 'glower', 4),
       ('magic2', 'magic2', 4),
       ('pickpocket', 'sanction', 4),
-('quick-jump', 'jump', 4),
-('summon', 'summon', 4),
-      ('speak', 'speak', 4),
-      ('cease', 'cease', 4))
+      ('quick-jump', 'jump', 4))
 fbd = (('throw-object', 'throw-object', 4),
-      ('throw-paper', 'throw-paper', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('falling-knife', 'falling-knife', 4),
        ('sanction', 'sanction', 4),
-('summon', 'summon', 4),
        ('lose3', 'wrecked', 4),
-    ('summon', 'summon', 4),
-('speak', 'speak', 4),
-       ('cease', 'cease', 4),
-       ('roll-o-dex', 'roll-o-dex', 4),
-('layoffs', 'layoffs', 4),
-       ('glower', 'glower', 4),
-       ('speak', 'speak', 4),
-       ('pickpocket', 'sanction', 4),
-       ('magic3', 'magic3', 4),
-       ('cigar-smoke', 'firestarter-cigar-smoke', 4),
+       ('frustrated', 'frustrated', 4),
        ('effort', 'effort', 4),
-('cease', 'cease', 4),
-('falling-knife', 'falling-knife', 4),
-('objection-in', 'cease2', 4),
-('snap', 'snap', 4),
-       ('magic2', 'magic2', 4),
-      ('magic2', 'magic2', 4),
-('quick-jump', 'jump', 4),
-('deadwood', 'deadwood', 4),
-      ('speak', 'speak', 4))
+       ('speak', 'speak', 4),
+       ('roll-o-dex', 'roll-o-dex', 4),
+       ('glower', 'glower', 4),
+       ('pickpocket', 'sanction', 4),
+       ('cigar-smoke', 'cigar-smoke', 4),
+       ('snap', 'snap', 4),
+       ('cease', 'cease', 4),
+       ('magic2', 'magic2', 4))
 frs = (('magic3', 'magic3', 4),
-('calculating-costs', 'calculating-costs', 4),
+       ('calculating-costs', 'calculating-costs', 4),
        ('magic2', 'magic2', 4),
-    ('summon', 'summon', 4),
-('speak', 'speak', 4),
-       ('cease', 'cease', 4),
-       ('sanction', 'sanction', 4),
-('summon', 'summon', 4),
-('deadwood', 'cease3', 4),
-       ('finger-wag', 'cease3', 4),
-('cease', 'cease3', 4),
+       ('speak', 'speak', 4),
+       ('snap', 'snap', 4),
+       ('frustrated', 'frustrated-f', 4),
+       ('sanction', 'sanction2', 4),
+       ('cease', 'cease3', 4),
        ('lose3', 'wrecked', 4),
-('falling-knife', 'falling-knife', 4),
-('snap', 'snap', 4),
-('objection-in', 'cease3', 4),
-       ('cease2', 'cease3', 4),
-       ('phone', 'phone', 4),
+       ('phone', 'phone', 4))
+gtk = (('magic3', 'magic3', 4),
+       ('throw-object', 'throw-object', 4),
+       ('throw-paper', 'throw-paper', 4),
        ('glower', 'glower', 4),
-       ('speak', 'speak', 4))
-gtk = (('throw-object', 'throw-object', 4),
-      ('throw-paper', 'throw-paper', 4),
-       ('sanction', 'sanction', 4),
-       ('glower', 'glower', 4),
-    ('summon', 'summon', 4),
-('speak', 'speak', 4),
+       ('summon', 'summon', 4),
+       ('speak', 'speak', 4),
+       ('frustrated', 'frustrated', 4),
        ('lose3', 'wrecked', 4),
+       ('cease2', 'sanction', 4),
+       ('objection-in', 'cease', 4),
+       ('summon', 'summon', 4),
        ('cease', 'cease', 4),
-('deadwood', 'deadwood', 4),
-       ('magic3', 'magic3', 4),
-('objection-in', 'cease', 4),
-('falling-knife', 'falling-knife', 4),
-('summon', 'summon', 4),
        ('pickpocket', 'pickpocket', 4),
-('magic1', 'magic1', 4),
+       ('magic1', 'magic1', 4),
        ('effort', 'effort', 4),
        ('snap', 'snap', 4),
-       ('frustrated', 'frustrated', 4),
-      ('magic2', 'magic2', 4),
-      ('speak', 'speak', 4),
-      ('cease2', 'cease', 4))
-cc = (('speak', 'speak', 4),
-    ('glower', 'glower', 4),
-      ('lose3', 'wrecked', 4),
-    ('phone', 'phone', 4))
-tm = (('speak', 'speak', 4),
- ('throw-paper', 'throw-paper', 4),
- ('pickpocket', 'pickpocket', 4),
- ('phone', 'phone', 4),
-      ('lose3', 'wrecked', 4),
- ('roll-o-dex', 'roll-o-dex', 4),
- ('finger-wag', 'finger-wag', 4))
-nd = (('speak', 'speak', 4),
- ('throw-paper', 'throw-paper', 4),
- ('pickpocket', 'pickpocket', 4),
-('magic3', 'magic3', 4),
- ('phone', 'phone', 4),
-      ('lose3', 'wrecked', 4),
- ('roll-o-dex', 'roll-o-dex', 4),
- ('finger-wag', 'finger-wag', 4))
-gh = (('speak', 'speak', 4),
- ('smile', 'smile', 4),
- ('pickpocket', 'pickpocket', 4),
-('throw-paper', 'throw-paper', 4),
- ('throw-object', 'throw-object', 4),
-      ('lose3', 'wrecked', 4),
-('magic3', 'magic3', 4),
- ('roll-o-dex', 'roll-o-dex', 4))
-ms = (('speak', 'speak', 4),
- ('magic3', 'magic3', 4),
-      ('lose3', 'wrecked', 4),
-      ('phone', 'phone', 4),
- ('pickpocket', 'pickpocket', 4),
-('glower', 'glower', 4),
-('throw-paper', 'throw-paper', 4),
- ('throw-object', 'throw-object', 4),
-('magic1', 'magic1', 4),
- ('roll-o-dex', 'roll-o-dex', 4))
-tf = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4), ('lose3', 'wrecked', 4), ('rubber-stamp', 'rubber-stamp', 4))
-m = (('stomp', 'stomp', 4), ('quick-jump', 'jump', 4), ('lose3', 'wrecked', 4), ('phone', 'phone', 4), ('glower', 'glower', 4))
-mh = (('effort', 'effort', 4),
- ('throw-paper', 'throw-paper', 4),
-      ('lose3', 'wrecked', 4),
- ('stomp', 'stomp', 4),
- ('quick-jump', 'jump', 4))
-ka = (('speak', 'speak', 4),
- ('song-and-dance', 'song-and-dance', 4),
-      ('lose3', 'wrecked', 4),
- ('golf-club-swing', 'golf-club-swing', 4),
- ('smile', 'smile', 4))
-mka = (('phone', 'phone', 4),
- ('smile', 'smile', 4),
- ('throw-object', 'throw-object', 4),
- ('magic3', 'magic3', 4),
-       ('lose3', 'wrecked', 4),
- ('glower', 'glower', 4))
-trm = (('phone', 'phone', 4),
- ('magic2', 'magic2', 4),
- ('cigar-smoke', 'cigar-smoke', 4),
-       ('lose3', 'wrecked', 4),
- ('magic3', 'magic3', 4),
- ('glower', 'glower', 4))
-ssm = (('speak', 'speak', 4),
- ('magic2', 'magic2', 4),
-       ('lose3', 'wrecked', 4),
- ('golf-club-swing', 'golf-club-swing', 4))
-isw = (('phone', 'phone', 4),
- ('glower', 'glower', 4),
-       ('lose3', 'wrecked', 4),
- ('magic1', 'magic1', 4),
- ('song-and-dance', 'song-and-dance', 4))
-ssr = (('smile', 'smile', 4),
- ('speak', 'speak', 4),
-       ('lose3', 'wrecked', 4),
-       ('cigar-smoke', 'cigar-smoke', 4),
- ('golf-club-swing', 'golf-club-swing', 4),
- ('song-and-dance', 'song-and-dance', 4))
-fas = (('throw-paper', 'throw-paper', 4),
        ('magic2', 'magic2', 4),
-       ('magic1', 'magic1', 4),
-       ('lose3', 'wrecked', 4),
-       ('magic3', 'magic3', 4),
-       ('rage', 'rage', 4),
        ('speak', 'speak', 4))
+cc = (('speak', 'speak', 4),
+      ('glower', 'glower', 4),
+      ('lose3', 'wrecked', 4),
+      ('phone', 'phone', 4))
+tm = (('speak', 'speak', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('throw-object', 'throw-object', 4),
+      ('pickpocket', 'pickpocket', 4),
+      ('phone', 'phone', 4),
+      ('lose3', 'wrecked', 4),
+      ('roll-o-dex', 'roll-o-dex', 4),
+      ('finger-wag', 'finger-wag', 4))
+nd = (('speak', 'speak', 4),
+      ('magic3', 'magic3', 4),
+      ('phone', 'phone', 4),
+      ('lose3', 'wrecked', 4))
+gh = (('smile', 'smile', 4),
+      ('lose3', 'wrecked', 4),
+      ('magic3', 'magic3', 4),
+      ('roll-o-dex', 'roll-o-dex', 4))
+ms = (('lose3', 'wrecked', 4),
+      ('phone', 'phone', 4),
+      ('glower', 'glower', 4),
+      ('magic1', 'magic1', 4),
+      ('magic3', 'magic3', 4))
+tf = (('speak', 'speak', 4),
+      ('pen-squirt', 'fountain-pen', 4),
+      ('lose3', 'wrecked', 4),
+      ('rubber-stamp', 'rubber-stamp', 4))
+m = (('stomp', 'stomp', 4),
+     ('quick-jump', 'jump', 4),
+     ('lose3', 'wrecked', 4),
+     ('phone', 'phone', 4),
+     ('glower', 'glower', 4))
+mh = (('effort', 'effort', 4),
+      ('lose3', 'wrecked', 4),
+      ('stomp', 'stomp', 4),
+      ('quick-jump', 'jump', 4))
+ka = (('speak', 'speak', 4),
+      ('song-and-dance', 'song-and-dance', 4),
+      ('lose3', 'wrecked', 4),
+      ('golf-club-swing', 'golf-club-swing', 4),
+      ('smile', 'smile', 4))
+mka = (('phone', 'phone', 4),
+       ('smile', 'smile', 4),
+       ('throw-object', 'throw-object', 4),
+       ('magic3', 'magic3', 4),
+       ('lose3', 'wrecked', 4),
+       ('glower', 'glower', 4))
+trm = (('magic2', 'magic2', 4),
+       ('cigar-smoke', 'cigar-smoke', 4),
+       ('lose3', 'wrecked', 4),
+       ('glower', 'glower', 4))
+ssm = (('speak', 'speak', 4),
+       ('magic2', 'magic2', 4),
+       ('lose3', 'wrecked', 4),
+       ('golf-club-swing', 'golf-club-swing', 4))
+isw = (('phone', 'phone', 4),
+       ('glower', 'glower', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic1', 'magic1', 4))
+ssr = (('smile', 'smile', 4),
+       ('speak', 'speak', 4),
+       ('lose3', 'wrecked', 4),
+       ('golf-club-swing', 'golf-club-swing', 4),
+       ('song-and-dance', 'song-and-dance', 4))
+fas = (('magic2', 'magic2', 4),
+       ('pickpocket', 'sanction', 4),
+       ('cease2', 'sanction', 4),
+       ('lose3', 'wrecked', 4),
+       ('cigar-smoke', 'cigar-smoke', 4))
 mdr = (('throw-paper', 'throw-paper', 4),
        ('magic2', 'magic2', 4),
        ('magic1', 'magic1', 4),
@@ -488,36 +420,34 @@ nar = (('throw-paper', 'throw-paper', 4),
        ('magic3', 'magic3', 4),
        ('speak', 'speak', 4))
 fd = (('glower', 'glower', 4),
-        ('speak', 'speak', 4),
-('summon', 'effort', 4),
-('speak', 'speak', 4),
-('calculating-costs', 'phone', 4),
-('cease', 'mob-mentality', 4),
+      ('speak', 'speak', 4),
+      ('frustrated', 'effort', 4),
+      ('speak', 'speak', 4),
+      ('calculating-costs', 'phone', 4),
+      ('cease', 'mob-mentality', 4),
       ('lose3', 'wrecked', 4),
-       ('cease', 'glower', 4),
-        ('magic3', 'magic2', 4),
-        ('throw-paper', 'throw-paper', 4),
-        ('magic1', 'magic1', 4))
-fm = (('glower', 'glower', 4),
-        ('speak', 'speak', 4),
+      ('summon', 'glower', 4),
+      ('magic3', 'magic2', 4),
+      ('effort', 'effort', 4),
+      ('magic1', 'magic1', 4))
+fm = (('quick-jump', 'jump', 4),
+      ('phone', 'phone', 4),
       ('lose3', 'wrecked', 4),
-        ('magic3', 'magic2', 4),
-        ('throw-paper', 'throw-paper', 4),
-        ('magic1', 'magic1', 4))
-th = (('magic1', 'magic1', 4),
+      ('roll-o-dex', 'roll-o-dex', 4))
+th = (('magic1', 'magic1', 4), #Rainmaker
         ('effort', 'effort', 4),
         ('glower', 'glower', 4),
         ('magic2', 'transformation', 4),
       ('lose3', 'wrecked', 4),
         ('pickpocket', 'rushjob', 4))
-kc = (('pickpocket', 'sanction', 4),
+kc = (('pickpocket', 'sanction', 4), #Witch Hunter
         ('sanction', 'sanction', 4),
         ('speak', 'speak', 4),
       ('lose3', 'wrecked', 4),
         ('throw-object', 'throw-object', 4),
         ('throw-paper', 'throw-paper', 4),
         ('magic1', 'magic1', 4))
-tr = (('glower', 'glower', 4),
+tr = (('glower', 'glower', 4), #Count Erclaim
         ('pickpocket', 'sanction', 4),
         ('sanction', 'sanction', 4),
         ('throw-object', 'throw-object', 4),
@@ -527,196 +457,200 @@ tr = (('glower', 'glower', 4),
         ('magic3', 'magic3', 4),
       ('cease', 'cease', 4),
         ('magic1', 'magic1', 4))
-prr = (('pickpocket', 'sanction', 4),
-        ('sanction', 'sanction', 4),
-       ('song-and-dance', 'song-and-dance', 4),
-        ('glower', 'glower', 4),
-('calculating-costs', 'calculating-costs', 4),
+prr = (('song-and-dance', 'song-and-dance', 4),
+       ('glower', 'glower', 4),
+       ('calculating-costs', 'calculating-costs', 4),
        ('lose3', 'wrecked', 4),
-('cease2', 'cease2', 4),
-('falling-knife', 'falling-knife', 4),
-('cease', 'cease', 4),
-('summon', 'summon', 4),
+       ('speak', 'speak', 4),
+       ('cease2', 'sanction', 4),
+       ('falling-knife', 'falling-knife', 4),
+       ('cease', 'cease', 4),
        ('frustrated', 'frustrated', 4),
        ('magic3', 'magic3', 4),
-        ('throw-object', 'throw-object', 4),
-        ('throw-paper', 'throw-paper', 4),
-        ('magic1', 'magic1', 4),
-('neutral', 'rolled', 4))
-blr = (('throw-paper', 'throw-paper', 4),
-('throw-object', 'throw-object', 4),
-('defense', 'scabbard', 4),
-('summon', 'summon', 4),
+       ('neutral', 'rolled', 4))
+blr = (('defense', 'defense', 4),
        ('lose3', 'wrecked', 4),
-('calculating-costs', 'calculating-costs', 4),
-   ('summon', 'summon', 4),
-('speak', 'speak', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('speak', 'speak', 4),
        ('cease', 'cease', 4),
-('effort', 'effort', 4),
-('smile', 'smile', 4),
-('falling-knife', 'falling-knife', 4),
+('summon', 'summon', 4),
+       ('frustrated', 'frustrated', 4),
+       ('smile', 'smile', 4),
        ('song-and-dance', 'song-and-dance', 4),
        ('roll-o-dex', 'roll-o-dex', 4),
-('sanction', 'sanction', 4),
-('deadwood', 'deadwood', 4),
-('snap', 'snap', 4),
- ('glower', 'glower', 4),
+       ('snap', 'snap', 4),
+       ('glower', 'glower', 4),
        ('magic3', 'magic3', 4),
- ('magic1', 'magic1', 4))
+       ('neutral', 'neutral-override', 4))
 dvp = (('magic3', 'magic3', 4),
        ('magic2', 'magic2', 4),
-('summon', 'summon', 4),
-('calculating-costs', 'calculating-costs', 4),
        ('magic1', 'magic1', 4),
-('falling-knife', 'falling-knife', 4),
-       ('cease', 'cease', 4),
-       ('layoffs', 'layoffs', 4),
+       ('effort', 'effort', 4),
+       ('cease', 'objection', 4),
+       ('layoffs', 'objection', 4),
+       ('frustrated', 'frustrated', 4),
        ('lose3', 'wrecked', 4),
        ('glower', 'glower', 4),
-   ('summon', 'summon', 4),
-('speak', 'speak', 4),
-       ('cease', 'cease', 4),
-       ('finger-wag', 'cease2', 4),
-       ('sanction', 'sanction', 4),
-       ('pickpocket', 'sanction', 4),
        ('speak', 'speak', 4))
-dsk = (('cigar-smoke', 'firestarter-cigar-smoke', 4),
-       ('sanction', 'sanction', 4),
+dsk = (('objection-in', 'cease', 4),
        ('magic3', 'magic3', 4),
-('snap', 'snap', 4),
-('glower', 'glower', 4),
-       ('layoffs', 'layoffs', 4),
-('deadwood', 'deadwood', 4),
-       ('lose3', 'wrecked', 4),
-('falling-knife', 'falling-knife', 4),
-   ('summon', 'summon', 4),
-('speak', 'speak', 4),
-('calculating-costs', 'calculating-costs', 4),
-       ('cease', 'cease', 4),
-('frustrated', 'frustrated', 4),
-('objection-in', 'cease2', 4),
+       ('snap', 'snap', 4),
+       ('glower', 'glower', 4),
 ('summon', 'summon', 4),
-('quick-jump', 'jump', 4),
-('cease', 'cease', 4),
-       ('defense', 'scabbard', 4),
-       ('throw-paper', 'throw-paper', 4),
+       ('lose3', 'wrecked', 4),
+       ('deadwood', 'deadwood', 4),
+       ('effort', 'effort', 4),
+       ('speak', 'speak', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('cease', 'cease', 4),
+       ('frustrated', 'frustrated', 4),
+       ('quick-jump', 'jump', 4),
+       ('snap', 'snap', 4),
        ('magic1', 'magic1', 4),
-       ('magic2', 'magic2', 4))
-ffm = (('cigar-smoke', 'firestarter-cigar-smoke', 4),
        ('magic2', 'magic2', 4),
-('magic1', 'magic1', 4),
+       ('neutral', 'neutral-unstable', 4))
+ffm = (('cigar-smoke', 'cigar-smoke', 4),
+       ('frustrated', 'frustrated', 4),
+       ('magic2', 'magic2', 4),
        ('magic3', 'magic3', 4),
+       ('firestarter-cigar-smoke', 'firestarter-cigar-smoke', 4),
+       ('snap', 'snap', 4),
        ('pickpocket', 'pickpocket', 4),
-   ('summon', 'summon', 4),
-('speak', 'speak', 4),
+       ('summon', 'summon', 4),
+       ('speak', 'speak', 4),
        ('lose3', 'wrecked', 4),
        ('cease', 'cease', 4),
-('objection-in', 'cease2', 4),
-('summon', 'summon', 4),
-        ('throw-paper', 'throw-paper', 4),
-('glower', 'glower', 4),
-        ('speak', 'speak', 4),
-        ('sanction', 'sanction', 4),
-('cease', 'cease2', 4),
-('objection-in', 'cease', 4),
-        ('smile', 'smile', 4))
-sft = (('glower', 'glower', 4),
-    ('pickpocket', 'rushjob', 4),
-      ('finger-wag', 'rushjob', 4),
-      ('speak', 'speak', 4),
-      ('magic3', 'magic3', 4),
-    ('sanction', 'rushjob', 4),
+       ('glower', 'glower', 4))
+sft = (('speak', 'speak', 4),
+       ('magic3', 'magic3', 4),
        ('lose3', 'wrecked', 4),
-    ('smile', 'smile', 4),
-      ('neutral', 'pace', 4))
-sc = (('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4), ('watercooler', 'watercooler', 4), ('pickpocket', 'pickpocket', 4))
-pp = (('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4), ('glower', 'glower', 4), ('finger-wag', 'finger-wag', 4))
-tw = (('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4), ('magic3', 'magic3', 4), ('throw-object', 'throw-object', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4))
-bc = (('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
- ('glower', 'glower', 4),
- ('magic2', 'magic2', 4),
- ('finger-wag', 'finger-wag', 4))
+       ('smile', 'smile', 4),
+       ('neutral', 'pace', 4))
+sc = (('throw-paper', 'throw-paper', 4),
+      ('lose3', 'wrecked', 4),
+      ('watercooler', 'watercooler', 4),
+      ('pickpocket', 'pickpocket', 4))
+pp = (('throw-paper', 'throw-paper', 4),
+      ('lose3', 'wrecked', 4),
+      ('glower', 'glower', 4),
+      ('finger-wag', 'finger-wag', 4))
+tw = (('throw-paper', 'throw-paper', 4),
+      ('lose3', 'wrecked', 4),
+      ('magic3', 'magic3', 4),
+      ('throw-object', 'throw-object', 4),
+      ('magic1', 'magic1', 4),
+      ('speak', 'speak', 4))
+bc = (('throw-paper', 'throw-paper', 4),
+      ('lose3', 'wrecked', 4),
+      ('glower', 'glower', 4),
+      ('magic2', 'magic2', 4),
+      ('finger-wag', 'finger-wag', 4))
 nc = (('phone', 'phone', 4),
- ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
- ('magic3', 'magic3', 4),
- ('pickpocket', 'pickpocket', 4))
-mb = (('phone', 'phone', 4), ('hold-pencil', 'hold-pencil', 4), ('lose3', 'wrecked', 4), ('pickpocket', 'pickpocket', 4))
-ls = (('phone', 'phone', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('lose3', 'wrecked', 4), ('glower', 'glower', 4))
-rb = (('phone', 'phone', 4), ('lose3', 'wrecked', 4), ('throw-object', 'throw-object', 4))
+      ('lose3', 'wrecked', 4),
+      ('magic3', 'magic3', 4),
+      ('pickpocket', 'pickpocket', 4))
+mb = (('phone', 'phone', 4),
+      ('hold-pencil', 'hold-pencil', 4),
+      ('lose3', 'wrecked', 4),
+      ('pickpocket', 'pickpocket', 4))
+ls = (('phone', 'phone', 4),
+      ('speak', 'speak', 4),
+      ('smile', 'smile', 4),
+      ('lose3', 'wrecked', 4),
+      ('glower', 'glower', 4))
+rb = (('phone', 'phone', 4),
+      ('lose3', 'wrecked', 4),
+      ('throw-object', 'throw-object', 4))
 gm = (('phone', 'phone', 4),
       ('throw-paper', 'throw-paper', 4),
- ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
- ('magic2', 'magic2', 4),
- ('pickpocket', 'pickpocket', 4))
-ad = (('magic1', 'magic1', 4), ('glower', 'glower', 4), ('lose3', 'wrecked', 4), ('throw-paper', 'throw-paper', 4), ('throw-object', 'throw-object', 4))
-cvy = (('watercooler', 'watercooler', 4),
-('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
-('magic2', 'magic2', 4),
- ('pickpocket', 'pickpocket', 4),
- ('throw-paper', 'throw-paper', 4))
-ptr = (('magic1', 'magic1', 4), ('lose3', 'wrecked', 4), ('throw-paper', 'throw-paper', 4), ('throw-object', 'throw-object', 4), ('hold-pencil', 'hold-pencil', 4))
-mld = (('watercooler', 'watercooler', 4),
-('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
- ('pickpocket', 'pickpocket', 4),
- ('throw-paper', 'throw-paper', 4))
-pht = (('cigar-smoke', 'cigar-smoke', 4), ('lose3', 'wrecked', 4), ('magic3', 'magic3', 4), ('pickpocket', 'pickpocket', 4), ('golf-club-swing', 'golf-club-swing', 4))
-csh = (('magic3', 'magic2', 4), ('lose3', 'wrecked', 4),
-       ('magic2', 'magic2', 4),
-('phone', 'phone', 4),
-('victory', 'victory', 4),
-       ('magic1', 'magic1', 4),
-       ('sanction', 'sanction', 4),
-       ('pickpocket', 'sanction', 4))
-bgr = (('magic3', 'magic2', 4),
-       ('magic2', 'magic2', 4), ('lose3', 'wrecked', 4),
-('phone', 'phone', 4),
-('victory', 'victory', 4),
-       ('magic1', 'magic1', 4),
-       ('sanction', 'sanction', 4),
-       ('pickpocket', 'sanction', 4))
-mes = (('magic3', 'magic2', 4),
-       ('magic2', 'magic2', 4),
-('phone', 'phone', 4), ('lose3', 'wrecked', 4),
-('victory', 'victory', 4),
-       ('magic1', 'magic1', 4),
-       ('sanction', 'sanction', 4),
-       ('pickpocket', 'sanction', 4))
-dm = (('effort', 'wheelspin', 4),
-        ('sanction', 'sanction', 4),
-        ('magic3', 'magic3', 4), ('lose3', 'wrecked', 4),
-        ('finger-wag', 'cease2', 4),
-        ('magic2', 'snap', 4),
-        ('magic1', 'magic3', 5),
-        ('pickpocket', 'sanction', 4))
-tcc = (('mob-mentality', 'mob-mentality', 4),
-      ('magic3', 'magic2', 4), ('lose3', 'wrecked', 4),
+      ('glower', 'glower', 4),
+      ('lose3', 'wrecked', 4),
       ('magic2', 'magic2', 4),
-      ('watercooler', 'watercooler', 4),
-      ('magic1', 'magic1', 4),
-      ('glower', 'glower', 4))
-fb = (('throw-paper', 'throw-paper', 4),
-       ('defense', 'defense', 4), ('lose3', 'wrecked', 4),
-       ('hold-eraser', 'hold-eraser', 4),
+      ('pickpocket', 'pickpocket', 4))
+ad = (('magic1', 'magic1', 4),
+      ('glower', 'glower', 4),
+      ('lose3', 'wrecked', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('throw-object', 'throw-object', 4))
+cvy = (('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic2', 'magic2', 4),
+       ('pickpocket', 'pickpocket', 4),
+       ('throw-paper', 'throw-paper', 4))
+ptr = (('lose3', 'wrecked', 4),
+       ('throw-paper', 'throw-paper', 4),
        ('throw-object', 'throw-object', 4),
-        ('mob-mentality', 'mob-mentality', 4),
-       ('magic1', 'magic1', 4))
+       ('hold-pencil', 'hold-pencil', 4))
+mld = (('watercooler', 'watercooler', 4),
+       ('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
+       ('pickpocket', 'pickpocket', 4),
+       ('throw-paper', 'throw-paper', 4))
+pht = (('cigar-smoke', 'cigar-smoke', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic3', 'magic3', 4),
+       ('pickpocket', 'pickpocket', 4),
+       ('golf-club-swing', 'golf-club-swing', 4))
+csh = (('magic3', 'magic3', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic2', 'magic2', 4),
+       ('phone', 'phone', 4),
+       ('victory', 'victory', 4),
+       ('magic1', 'magic1', 4),
+       ('sanction', 'sanction', 4),
+       ('pickpocket', 'sanction', 4))
+bgr = (('magic1', 'magic1', 4),
+('magic2', 'magic2', 4),
+('calculating-costs', 'calculator', 4),
+('magic3', 'magic2', 4),
+       ('lose3', 'wrecked', 4))
+mes = (('magic3', 'magic2', 4),
+       ('magic1', 'magic1', 4),
+       ('phone', 'phone', 4),
+       ('lose3', 'wrecked', 4),)
+dm = (('effort', 'wheelspin', 4),
+      ('sanction', 'sanction', 4),
+      ('magic3', 'magic3', 4),
+      ('lose3', 'wrecked', 4),
+      ('finger-wag', 'cease2', 4),
+      ('magic2', 'snap', 4),
+      ('magic1', 'magic3', 5),
+      ('pickpocket', 'sanction', 4))
+tcc = (('mob-mentality', 'mob-mentality', 4),
+       ('magic3', 'magic2', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic2', 'magic2', 4),
+       ('watercooler', 'watercooler', 4),
+       ('magic1', 'magic1', 4),
+       ('glower', 'glower', 4))
+fb = (('throw-paper', 'throw-paper', 4),
+      ('defense', 'defense', 4),
+      ('lose3', 'wrecked', 4),
+      ('hold-eraser', 'hold-eraser', 4),
+      ('throw-object', 'throw-object', 4),
+      ('mob-mentality', 'mob-mentality', 4),
+      ('magic1', 'magic1', 4))
 jl = (('throw-paper', 'throw-paper', 4),
-        ('throw-object', 'throw-paper', 4),
-       ('magic3', 'magic2', 4), ('lose3', 'wrecked', 4),
-        ('mob-mentality', 'mob-mentality', 4),
-       ('magic1', 'magic1', 4))
+      ('throw-object', 'throw-paper', 4),
+      ('magic3', 'magic2', 4),
+      ('lose3', 'wrecked', 4),
+      ('mob-mentality', 'mob-mentality', 4),
+      ('magic1', 'magic1', 4))
 gb = (('magic1', 'rake', 4),
-        ('mob-mentality', 'mob-mentality', 4),
-        ('throw-object', 'throw-object', 4),
-('pickpocket', 'pickpocket', 4), ('lose3', 'wrecked', 4),
-        ('magic2', 'magic2', 4),
-        ('magic3', 'magic3', 4),
-('defense', 'scabbard', 4),
-        ('sanction', 'sanction', 4),
-        ('throw-paper', 'throw-paper', 4))
+      ('mob-mentality', 'mob-mentality', 4),
+      ('throw-object', 'throw-object', 4),
+      ('pickpocket', 'pickpocket', 4),
+      ('lose3', 'wrecked', 4),
+      ('magic2', 'magic2', 4),
+      ('magic3', 'magic3', 4),
+      ('defense', 'scabbard', 4),
+      ('sanction', 'sanction', 4),
+      ('throw-paper', 'throw-paper', 4))
 lbs = (('throw-paper', 'throw-paper', 4),
        ('throw-object', 'throw-object', 4),
-       ('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
+       ('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
        ('defense', 'scabbard', 4),
        ('mob-mentality', 'mob-mentality', 4),
        ('quick-jump', 'jump', 4),
@@ -724,153 +658,164 @@ lbs = (('throw-paper', 'throw-paper', 4),
        ('sanction', 'sanction', 4),
        ('pickpocket', 'sanction', 4))
 trk = (('magic1', 'magic1', 4),
-        ('effort', 'effort', 4),
-('pickpocket', 'pickpocket', 4), ('lose3', 'wrecked', 4),
-        ('glower', 'glower', 4),
-      ('mob-mentality', 'mob-mentality', 4),
-        ('throw-object', 'throw-paper', 4),
-        ('magic3', 'magic2', 4),
-         ('throw-paper', 'throw-paper', 4),
-        ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
+       ('effort', 'effort', 4),
+       ('pickpocket', 'pickpocket', 4),
+       ('lose3', 'wrecked', 4),
+       ('glower', 'glower', 4),
+       ('mob-mentality', 'mob-mentality', 4),
+       ('throw-object', 'throw-paper', 4),
+       ('magic3', 'magic2', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 dsf = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
- ('golf-club-swing', 'golf-club-swing', 4),
- ('magic1', 'magic1', 4))
-msp = (('effort', 'wheelspin', 4),
-        ('sanction', 'sanction', 4),
-        ('magic3', 'shot5', 4),
-('falling-knife', 'falling-knife', 4),
-('summon', 'summon', 4), ('lose3', 'wrecked', 4),
-       ('cease', 'cease', 4),
-('snap', 'snap', 4),
-('song-and-dance', 'shot5', 4),
-        ('finger-wag', 'cease', 4),
-        ('snap', 'snap', 4),
-        ('magic1', 'magic1', 4),
-        ('pickpocket', 'sanction', 4),
-        ('neutral', 'rolled', 4))
+       ('glower', 'glower', 4),
+       ('lose3', 'wrecked', 4),
+       ('golf-club-swing', 'golf-club-swing', 4),
+       ('magic1', 'magic1', 4))
+msp = (('phone', 'phone', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('throw-object', 'throw-object', 4),
+       ('shredder', 'shredder', 4))
 mad = (('magic3', 'magic3', 4),
        ('effort', 'scabbard', 4),
-        ('mob-mentality', 'mob-mentality', 4),
        ('magic1', 'magic1', 4),
        ('glower', 'glower', 4),
-('snap', 'snap', 4), ('lose3', 'wrecked', 4),
-('defense', 'scabbard', 4),
-('summon', 'summon', 4),
-('objection-in', 'cease2', 4),
-('speak', 'speak', 4),
+('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
+('highroller-neutral-levitate-in-out', 'highroller-neutral-levitate-in-out', 4),
+('wheelspin', 'wheelspin', 4),
+       ('speak', 'speak', 4),
+       ('lose3', 'wrecked', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('objection-in', 'cease', 4),
        ('cease', 'cease', 4),
-('falling-knife', 'falling-knife', 4),
-('summon', 'summon', 4),
        ('pickpocket', 'pickpocket', 4),
-       ('smile', 'smile', 4),
-('deadwood', 'deadwood', 4),
-('song-and-dance', 'song-and-dance', 4),
-       ('sanction', 'sanction', 4),
-('revvedup', 'revvedup', 4),
-('cease', 'cease2', 4),
-       ('pickpocket', 'sanction', 4),
-('defense', 'scabbard', 4),
+       ('song-and-dance', 'song-and-dance', 4),
+       ('frustrated', 'frustrated', 4),
+       ('revvedup', 'revvedup', 4),
        ('neutral', 'rolled', 4))
 crf = (('effort', 'wheelspin', 4),
-        ('sanction', 'sanction', 4),
-('wheelspin', 'wheelspin', 4),
-        ('magic3', 'shot5', 4),
-('summon', 'summon', 4), ('lose3', 'wrecked', 4),
+       ('wheelspin', 'wheelspin', 4),
        ('cease', 'cease', 4),
-('snap', 'snap', 4),
-('falling-knife', 'falling-knife', 4),
-('summon', 'summon', 4),
-('speak', 'speak', 4),
+       ('magic3', 'magic3', 4),
+       ('frustrated', 'frustrated', 4),
+       ('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
+('highroller-neutral-levitate-in-out', 'highroller-neutral-levitate-in-out', 4),
+       ('lose3', 'wrecked', 4),
        ('cease', 'cease', 4),
-('song-and-dance', 'shot5', 4),
-        ('finger-wag', 'cease', 4),
-        ('snap', 'snap', 4),
-        ('magic1', 'magic1', 4),
-        ('pickpocket', 'sanction', 4),
-        ('neutral', 'rolled', 4))
-bf = (('speak', 'speak', 4),
- ('throw-object', 'throw-object', 4),
- ('hold-pencil', 'hold-pencil', 4), ('lose3', 'wrecked', 4),
- ('finger-wag', 'finger-wag', 4))
+       ('snap', 'snap', 4),
+       ('speak', 'speak', 4),
+       ('song-and-dance', 'song-and-dance', 4),
+       ('finger-wag', 'cease', 4),
+       ('magic1', 'magic1', 4),
+       ('neutral', 'rolled', 4))
+bf = (('shredder', 'shredder', 4),
+      ('lose3', 'wrecked', 4),
+      ('phone', 'phone', 4))
 b = (('magic1', 'magic1', 4),
- ('throw-paper', 'throw-paper', 4),
-     ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
- ('pickpocket', 'pickpocket', 4))
+     ('throw-paper', 'throw-paper', 4),
+     ('throw-object', 'throw-object', 4),
+     ('lose3', 'wrecked', 4),
+     ('pickpocket', 'pickpocket', 4))
 dt = (('speak', 'speak', 4),
- ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
- ('hold-pencil', 'hold-pencil', 4),
- ('finger-wag', 'finger-wag', 4))
-ac = (('rubber-stamp', 'rubber-stamp', 4), ('lose3', 'wrecked', 4),
+      ('throw-object', 'throw-object', 4),
+      ('lose3', 'wrecked', 4),
+      ('hold-pencil', 'hold-pencil', 4),
+      ('finger-wag', 'finger-wag', 4))
+ac = (('rubber-stamp', 'rubber-stamp', 4),
+      ('lose3', 'wrecked', 4),
       ('throw-paper', 'throw-paper', 4),
- ('speak', 'speak', 4),
- ('roll-o-dex', 'roll-o-dex', 4))
+      ('speak', 'speak', 4),
+      ('roll-o-dex', 'roll-o-dex', 4))
 bs = (('throw-paper', 'throw-paper', 4),
- ('speak', 'speak', 4), ('lose3', 'wrecked', 4),
- ('roll-o-dex', 'roll-o-dex', 4))
+      ('speak', 'speak', 4),
+      ('lose3', 'wrecked', 4),
+      ('roll-o-dex', 'roll-o-dex', 4))
 sd = (('magic2', 'magic2', 4),
- ('quick-jump', 'jump', 4), ('lose3', 'wrecked', 4),
- ('magic3', 'magic3', 4),
- ('hold-pencil', 'hold-pencil', 4))
+      ('quick-jump', 'jump', 4),
+      ('lose3', 'wrecked', 4),
+      ('magic3', 'magic3', 4),
+      ('hold-pencil', 'hold-pencil', 4))
 le = (('pen-squirt', 'fountain-pen', 4),
-      ('rubber-stamp', 'rubber-stamp', 4), ('lose3', 'wrecked', 4),
- ('phone', 'phone', 4),
- ('speak', 'speak', 4))
+      ('rubber-stamp', 'rubber-stamp', 4),
+      ('lose3', 'wrecked', 4),
+      ('phone', 'phone', 4),
+      ('speak', 'speak', 4))
 bw = (('magic1', 'magic1', 4),
       ('throw-paper', 'throw-paper', 4),
-      ('pickpocket', 'pickpocket', 4), ('lose3', 'wrecked', 4),
+      ('throw-object', 'throw-object', 4),
+      ('pickpocket', 'pickpocket', 4),
+      ('lose3', 'wrecked', 4),
       ('finger-wag', 'fingerwag', 4))
 brv = (('shredder', 'shredder', 4),
-    ('magic1', 'magic1', 4),
-    ('watercooler', 'watercooler', 4), ('lose3', 'wrecked', 4),
-    ('glower', 'glower', 4))
+       ('magic1', 'magic1', 4),
+       ('watercooler', 'watercooler', 4),
+       ('lose3', 'wrecked', 4),
+       ('glower', 'glower', 4))
 sb = (('magic2', 'magic2', 4),
- ('quick-jump', 'jump', 4),
- ('magic3', 'magic3', 4), ('lose3', 'wrecked', 4),
- ('hold-pencil', 'hold-pencil', 4))
+      ('quick-jump', 'jump', 4),
+      ('magic3', 'magic3', 4),
+      ('lose3', 'wrecked', 4),
+      ('hold-pencil', 'hold-pencil', 4))
 cfp = (('magic1', 'magic1', 4),
-      ('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
-      ('hold-eraser', 'hold-eraser', 4))
+       ('throw-paper', 'throw-paper', 4),
+       ('lose3', 'wrecked', 4),
+       ('hold-eraser', 'hold-eraser', 4))
 arb = (('speak', 'speak', 4),
- ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
- ('glower', 'glower', 4))
+       ('throw-object', 'throw-object', 4),
+       ('lose3', 'wrecked', 4),
+       ('glower', 'glower', 4))
 sjg = (('quick-jump', 'jump', 4),
-        ('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
-('throw-object', 'throw-object', 4),
-        ('glower', 'glower', 4))
+       ('throw-paper', 'throw-paper', 4),
+       ('lose3', 'wrecked', 4),
+       ('throw-object', 'throw-object', 4),
+       ('glower', 'glower', 4))
 lsc = (('finger-wag', 'fingerwag', 4),
- ('cigar-smoke', 'cigar-smoke', 4), ('lose3', 'wrecked', 4),
- ('magic1', 'magic1', 4),
- ('throw-object', 'throw-object', 4))
+       ('cigar-smoke', 'cigar-smoke', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic1', 'magic1', 4),
+       ('throw-object', 'throw-object', 4))
 jdg = (('magic3', 'magic3', 4),
-       ('cease2', 'cease2', 4), ('lose3', 'wrecked', 4),
+       ('lose3', 'wrecked', 4),
        ('phone', 'phone', 4),
        ('cease', 'cease', 4),
-       ('finger-wag', 'cease', 4),
-       ('pickpocket', 'sanction', 4),
+       ('calculating-costs', 'calculating-costs', 4),
        ('sanction', 'sanction', 4),
        ('speak', 'speak', 4))
 jur = (('magic2', 'magic2', 4),
-       ('objection-in', 'objection-in', 4), ('lose3', 'wrecked', 4),
+       ('objection-in', 'objection-in', 4),
+       ('lose3', 'wrecked', 4),
        ('objection-out', 'objection-out', 4),
-        ('quick-jump', 'jump', 4),
+       ('quick-jump', 'jump', 4),
        ('magic3', 'magic3', 4),
        ('throw-object', 'throw-object', 5),
        ('throw-paper', 'throw-paper', 5),
        ('magic1', 'magic1', 4))
-tlr = (('magic2', 'magic2', 4),
-       ('objection-in', 'objection-in', 4), ('lose3', 'wrecked', 4),
-       ('objection-out', 'objection-out', 4),
-        ('quick-jump', 'jump', 4),
-       ('magic3', 'magic3', 4),
-       ('throw-object', 'throw-object', 5),
-       ('throw-paper', 'throw-paper', 5),
-       ('magic1', 'magic1', 4))
+tlr = (('magic3', 'magic3', 4),
+       ('objection-in', 'cease', 4),
+       ('phone', 'phone', 4),
+       ('frustrated', 'frustrated', 4),
+       ('speak', 'speak', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('cease', 'cease', 4),
+       ('finger-wag', 'cease', 4),
+       ('pickpocket', 'sanction', 4),
+       ('lose3', 'wrecked', 4),
+       ('sanction', 'sanction', 4))
 cm = (('magic2', 'snap', 4),
       ('bellow', 'bellow', 4), ('lose3', 'wrecked', 4),
       ('glower', 'glower', 4),
       ('magic1', 'magic1', 4),
-      ('magic3', 'snap', 4),
+      ('sanction', 'sanction', 4),
+      ('falling-knife', 'falling-knife', 4),
+      ('blue-chip', 'blue-chip', 4),
+      ('summon', 'summon', 4),
+      ('snap', 'snap', 4),
+      ('cease', 'cease', 4),
+      ('sanction', 'sanction', 4),
+      ('effort', 'effort', 4),
+      ('phone', 'phone', 4),
+      ('calculating-costs', 'calculating-costs', 4),
+      ('snap', 'snap', 4),
       ('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4))
 ggm = (('magic2', 'snap', 4),
@@ -881,16 +826,19 @@ ggm = (('magic2', 'snap', 4),
        ('throw-object', 'throw-object', 5),
        ('throw-paper', 'throw-paper', 5),
        ('magic1', 'magic1', 4))
-jb = (('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
-        ('magic2', 'magic2', 4),
-        ('throw-paper', 'throw-paper', 4))
-jg = (('pickpocket', 'rushjob', 4),
+jb = (('smile', 'smile', 4), #Mr. Hollywood (MP)
+       ('speak', 'speak', 4),
+       ('lose3', 'wrecked', 4),
+       ('golf-club-swing', 'golf-club-swing', 4),
+       ('song-and-dance', 'song-and-dance', 4),
+      ('neutral', 'rolled', 4))
+jg = (('pickpocket', 'rushjob', 4), #Prethinker
         ('sanction', 'rushjob', 4),
         ('effort', 'effort', 4), ('lose3', 'wrecked', 4),
         ('magic3', 'magic3', 4),
         ('magic2', 'magic2', 4),
         ('speak', 'speak', 4))
-jr = (('throw-paper', 'throw-paper', 4),
+jr = (('throw-paper', 'throw-paper', 4), # Multislacker
       ('magic1', 'magic1', 4),
       ('defense', 'scabbard', 4),
       ('magic3', 'magic3', 4), ('lose3', 'wrecked', 4),
@@ -900,154 +848,168 @@ jr = (('throw-paper', 'throw-paper', 4),
       ('song-and-dance', 'song-and-dance', 4),
       ('neutral', 'rolled', 4))
 mp = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
- ('golf-club-swing', 'golf-club-swing', 4),
- ('magic1', 'magic1', 4))
+     ('glower', 'glower', 4),
+     ('lose3', 'wrecked', 4),
+     ('golf-club-swing', 'golf-club-swing', 4),
+     ('magic1', 'magic1', 4))
 laa = (('glower', 'glower', 4),
-        ('pickpocket', 'sanction', 4),
-        ('sanction', 'sanction', 4), ('lose3', 'wrecked', 4),
-('falling-knife', 'falling-knife', 4),
-        ('throw-object', 'throw-object', 4),
-        ('throw-paper', 'throw-paper', 4),
-        ('cease2', 'cease2', 4),
-        ('magic3', 'magic3', 4),
-      ('cease', 'cease', 4),
-        ('magic1', 'magic1', 4))
+       ('pickpocket', 'sanction', 4),
+       ('sanction', 'sanction', 4),
+       ('lose3', 'wrecked', 4),
+       ('falling-knife', 'falling-knife', 4),
+       ('throw-object', 'throw-object', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('cease2', 'cease2', 4),
+       ('magic3', 'magic3', 4),
+       ('cease', 'cease', 4),
+       ('magic1', 'magic1', 4),
+       ('neutral', 'neutral-override-glitched', 4))
 scg = (('stomp', 'stomp', 4),
-('rage', 'rage', 4),
+       ('rage', 'rage', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
        ('finger-wag', 'finger-wag', 4),
-       ('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
+       ('frustrated', 'defense', 4),
+       ('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
+       ('neutral-enraged', 'neutral-enraged', 5),
        ('speak', 'speak', 4),
-       ('summon', 'objection-in', 4),
-('magic2', 'magic2', 4),
+       ('magic2', 'magic2', 4),
        ('cease', 'objection-in', 4),
        ('defense', 'defense', 4),
        ('glower', 'glower', 4))
 csm = (('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
-       ('effort', 'effort', 4), ('lose3', 'wrecked', 4),
-       ('summon', 'summon', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
-('objection-in', 'cease', 4),
-('falling-knife', 'falling-knife', 4),
+       ('effort', 'effort', 4),
+       ('lose3', 'wrecked', 4),
+       ('cease', 'cease', 4),
+       ('frustrated', 'frustrated', 4),
+       ('objection-in', 'cease', 4),
+       ('falling-knife', 'throw-insurance', 4),
+       ('throw-insurance', 'throw-insurance', 4),
        ('speak', 'speak', 4),
        ('roll-o-dex', 'roll-o-dex', 4),
-('sanction', 'sanction', 4),
-        ('pen-squirt', 'fountain-pen', 4),
+       ('sanction', 'sanction', 4),
+       ('pen-squirt', 'fountain-pen', 4),
        ('magic1', 'magic1', 4))
 ste = (('magic3', 'magic3', 4),
        ('cease2', 'cease3', 4),
        ('phone', 'phone', 4),
-       ('summon', 'summon', 4),
-('speak', 'speak', 4),
-('calculating-costs', 'calculating-costs', 4),
+       ('frustrated', 'frustrated-f', 4),
+       ('speak', 'speak', 4),
+       ('calculating-costs', 'calculating-costs', 4),
        ('cease', 'cease3', 4),
        ('finger-wag', 'cease3', 4),
-       ('pickpocket', 'sanction2', 4), ('lose3', 'wrecked', 4),
+       ('pickpocket', 'sanction', 4),
+       ('lose3', 'wrecked', 4),
        ('sanction', 'sanction2', 4))
 lit = (('magic2', 'magic2', 4),
-      ('bellow', 'bellow', 4),
-('speak', 'speak', 4),
-      ('glower', 'glower', 4),
-('summon', 'summon', 4),
+       ('bellow', 'bellow', 4),
+       ('speak', 'speak', 4),
+       ('glower', 'glower', 4),
+       ('summon', 'summon', 4),
+       ('frustrated', 'frustrated', 4),
        ('cease', 'cease', 4),
-      ('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
-      ('snap', 'snap', 4),
-      ('throw-object', 'throw-object', 4),
-      ('throw-paper', 'throw-paper', 4))
-ca = (('pickpocket', 'pickpocket', 4),
- ('speak', 'speak', 4), ('lose3', 'wrecked', 4),
- ('throw-paper', 'throw-paper', 4),
- ('pen-squirt', 'fountain-pen', 4))
-cn = (('speak', 'speak', 4),
- ('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
- ('effort', 'effort', 4),
- ('finger-wag', 'finger-wag', 4))
-sw = (('pickpocket', 'pickpocket', 4),
- ('speak', 'speak', 4), ('lose3', 'wrecked', 4),
- ('throw-paper', 'throw-paper', 4),
- ('pen-squirt', 'fountain-pen', 4))
-mdm = (('smile', 'smile', 4),
- ('roll-o-dex', 'roll-o-dex', 4),
-       ('throw-paper', 'throw-paper', 4), ('lose3', 'wrecked', 4),
- ('magic3', 'magic3', 4))
-txm = (('magic3', 'magic3', 4),
-       ('pen-squirt', 'fountain-pen', 4),
- ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
        ('magic1', 'magic1', 4),
-       ('magic2', 'magic2', 4),
- ('magic1', 'magic1', 4))
-mg = (('speak', 'speak', 4),
- ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
- ('phone', 'phone', 5),
- ('throw-object', 'throw-object', 4),
- ('magic1', 'magic1', 4))
+       ('lose3', 'wrecked', 4),
+       ('snap', 'snap', 4),
+       ('throw-object', 'throw-object', 4),
+       ('throw-paper', 'throw-paper', 4))
+ca = (('pickpocket', 'pickpocket', 4),
+      ('speak', 'speak', 4),
+      ('lose3', 'wrecked', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('pen-squirt', 'fountain-pen', 4))
+cn = (('speak', 'speak', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('lose3', 'wrecked', 4),
+      ('effort', 'effort', 4),
+      ('finger-wag', 'finger-wag', 4))
+sw = (('pickpocket', 'pickpocket', 4),
+      ('speak', 'speak', 4),
+      ('lose3', 'wrecked', 4),
+      ('throw-paper', 'throw-paper', 4),
+      ('pen-squirt', 'fountain-pen', 4))
+mdm = (('pickpocket', 'pickpocket', 4),
+       ('phone', 'phone', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic1', 'magic1', 4))
+txm = (('magic3', 'magic3', 4),
+       ('glower', 'glower', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('lose3', 'wrecked', 4),
+       ('roll-o-dex', 'roll-o-dex', 4))
+mg = (('quick-jump', 'jump', 4),
+      ('effort', 'effort', 4),
+      ('lose3', 'wrecked', 4),
+      ('glower', 'glower', 5),
+      ('magic1', 'magic1', 4))
 bfh =  (('pen-squirt', 'fountain-pen', 4),
- ('glower', 'glower', 4), ('lose3', 'wrecked', 4),
- ('magic1', 'magic1', 4))
-hho = (('cigar-smoke', 'cigar-smoke', 4), ('lose3', 'wrecked', 4),
- ('throw-paper', 'throw-paper', 4),
- ('magic1', 'magic1', 4),
- ('magic2', 'magic2', 4),
- ('golf-club-swing', 'golf-club-swing', 5))
-bdb = (('speak', 'speak', 4),
- ('glower', 'glower', 4),
- ('phone', 'phone', 5),
- ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
- ('magic1', 'magic1', 4))
-bgh = (('pen-squirt', 'fountain-pen', 4), ('lose3', 'wrecked', 4),
+        ('glower', 'glower', 4),
+        ('lose3', 'wrecked', 4),
+        ('magic1', 'magic1', 4))
+hho = (('glower', 'glower', 4),
+        ('lose3', 'wrecked', 4),
+        ('throw-paper', 'throw-paper', 4),
+        ('throw-object', 'throw-object', 4),
+        ('magic1', 'magic1', 4))
+bdb = (('glower', 'glower', 4),
+       ('phone', 'phone', 5),
+       ('lose3', 'wrecked', 4),
+       ('magic1', 'magic1', 4))
+bgh = (('lose3', 'wrecked', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
        ('magic1', 'magic1', 4),
-('quick-jump', 'jump', 4),
-('cigar-smoke', 'cigar-smoke', 4),
-       ('magic3', 'magic3', 4),
+       ('watercooler', 'watercooler', 4),
        ('glower', 'glower', 4))
-dfh = (('magic1', 'magic1', 4), ('lose3', 'wrecked', 4), ('throw-paper', 'throw-paper', 4), ('watercooler', 'watercooler', 4))
-rng = (('speak', 'speak', 4), ('lose3', 'wrecked', 4),
- ('glower', 'glower', 4),
- ('phone', 'phone', 5),
- ('throw-object', 'throw-object', 4),
- ('magic1', 'magic1', 4))
+dfh = (('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('watercooler', 'watercooler', 4))
+rng = (('magic2', 'magic2', 4),
+       ('lose3', 'wrecked', 4),
+       ('golf-club-swing', 'golf-club-swing', 4),
+       ('phone', 'phone', 5),
+       ('throw-object', 'throw-object', 4),)
 cps = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
-('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
- ('magic2', 'magic2', 4))
-tld = (('cigar-smoke', 'cigar-smoke', 4),
- ('glower', 'glower', 4),
-('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
- ('magic2', 'magic2', 4))
+       ('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic2', 'magic2', 4))
+tld = (('headhoncho-cigar-smoke', 'headhoncho-cigar-smoke', 4),
+       ('throw-object', 'throw-object', 4),
+       ('magic1', 'magic1', 4),
+       ('lose3', 'wrecked', 4),
+       ('magic2', 'magic2', 4))
 gkp = (('pen-squirt', 'fountain-pen', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('cease', 'cease', 4),
        ('magic1', 'magic1', 4),
-       ('magic3', 'magic3', 4), ('lose3', 'wrecked', 4),
+       ('magic3', 'magic3', 4),
+       ('lose3', 'wrecked', 4),
        ('glower', 'glower', 4))
 ddv = (('pen-squirt', 'fountain-pen', 4),
-       ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
+       ('throw-object', 'throw-object', 4),
+       ('lose3', 'wrecked', 4),
        ('throw-paper', 'throw-paper', 4),
        ('magic1', 'magic1', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
-('quick-jump', 'jump', 4),
-('cigar-smoke', 'cigar-smoke', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('cease', 'cease', 4),
+       ('quick-jump', 'jump', 4),
+       ('cigar-smoke', 'cigar-smoke', 4),
        ('magic3', 'magic3', 4),
        ('glower', 'glower', 4))
 dty = (('pen-squirt', 'fountain-pen', 4),
-       ('throw-object', 'throw-object', 4), ('lose3', 'wrecked', 4),
+       ('throw-object', 'throw-object', 4),
+       ('lose3', 'wrecked', 4),
        ('throw-paper', 'throw-paper', 4),
-('calculating-costs', 'calculating-costs', 4),
-('cease', 'cease', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('cease', 'cease', 4),
        ('magic1', 'magic1', 4),
-('quick-jump', 'jump', 4),
-('cigar-smoke', 'cigar-smoke', 4),
+       ('quick-jump', 'jump', 4),
+       ('cigar-smoke', 'cigar-smoke', 4),
        ('magic3', 'magic3', 4),
        ('glower', 'glower', 4))
 dfg = (('magic2', 'snap', 4),
@@ -1063,139 +1025,149 @@ dfr = (('stomp', 'rage', 4),
        ('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
        ('defense', 'defense', 4),
        ('glower', 'glower', 4))
-bsh = (('magic2', 'snap', 4),
-       ('sanction', 'sanction', 4), ('lose3', 'wrecked', 4),
-       ('defense', 'scabbard', 4),
+bsh = (('lose3', 'wrecked', 4),
        ('quick-jump', 'jump', 4),
        ('summon', 'summon', 4),
-('summon', 'summon', 4),
-('calculating-costs', 'calculating-costs', 4),
-('speak', 'speak', 4),
+       ('frustrated', 'frustrated', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('speak', 'speak', 4),
        ('cease', 'cease', 4),
-('objection-in', 'cease2', 4),
-('cease', 'cease', 4),
-       ('pickpocket', 'sanction', 4),
+       ('objection-in', 'cease', 4),
+       ('cease2', 'sanction', 4),
        ('magic3', 'magic3', 4),
        ('throw-object', 'throw-object', 5),
        ('throw-paper', 'throw-paper', 5),
        ('magic1', 'magic1', 4))
 ghd = (('pickpocket', 'pickpocket', 4),
-        ('sanction', 'rushjob', 4),
+       ('frustrated', 'rage', 4),
+       ('rage', 'rage', 4),
+       ('sanction', 'rushjob', 4),
        ('summon', 'effort', 4),
-        ('phone', 'phone', 4),
+       ('phone', 'phone', 4),
        ('magic3', 'magic3', 4),
-('falling-knife', 'falling-knife', 4),
+       ('calculating-costs', 'phone', 4),
        ('glower', 'glower', 4),
-('defense', 'defense', 4),
-('cease', 'objection-in', 4),
+       ('defense', 'defense', 4),
+       ('cease', 'objection-in', 4),
        ('objection-in', 'objection-in', 4),
-       ('objection-out', 'objection-out', 4), ('lose3', 'wrecked', 4),
-        ('snap', 'snap', 4),
-        ('quick-jump', 'jump', 4),
-        ('speak', 'speak', 4))
+       ('objection-out', 'objection-out', 4),
+       ('lose3', 'wrecked', 4),
+       ('quick-jump', 'jump', 4),
+       ('speak', 'speak', 4))
 tyh = (('pickpocket', 'pickpocket', 4),
-        ('sanction', 'sanction', 4),
-       ('summon', 'summon', 4),
-        ('phone', 'phone', 4),
+       ('sanction', 'sanction', 4),
+       ('phone', 'phone', 4),
        ('magic3', 'magic3', 4),
+       ('frustrated', 'frustrated-f', 4),
        ('glower', 'glower', 4),
-('calculating-costs', 'calculating-costs', 4),
-('falling-knife', 'falling-knife', 4),
-('defense', 'defense', 4),
-('cease', 'cease3', 4),
+       ('calculating-costs', 'calculating-costs', 4),
+       ('cease', 'cease3', 4),
        ('cease2', 'cease3', 4),
-       ('objection-out', 'objection-out', 4), ('lose3', 'wrecked', 4),
-        ('snap', 'snap', 4),
-        ('quick-jump', 'jump', 4),
-        ('speak', 'speak', 4))
+       ('objection-out', 'objection-out', 4),
+       ('lose3', 'wrecked', 4),
+       ('speak', 'speak', 4))
 jgd = (('pickpocket', 'pickpocket', 4),
-        ('sanction', 'sanction', 4),
+       ('sanction', 'sanction', 4),
        ('summon', 'summon', 4),
-        ('phone', 'phone', 4),
+       ('frustrated', 'frustrated', 4),
+       ('phone', 'phone', 4),
        ('magic3', 'magic3', 4),
-('magic1', 'magic1', 4),
+       ('magic1', 'magic1', 4),
        ('glower', 'glower', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
-('defense', 'defense', 4),
-('cease', 'cease', 4),
+       ('defense', 'defense', 4),
+       ('cease', 'cease', 4),
        ('cease2', 'cease2', 4),
        ('objection-out', 'objection-out', 4), ('lose3', 'wrecked', 4),
-        ('snap', 'snap', 4),
-        ('quick-jump', 'jump', 4),
-        ('speak', 'speak', 4))
+       ('snap', 'snap', 4),
+       ('quick-jump', 'jump', 4),
+       ('speak', 'speak', 4))
 bby = (('pickpocket', 'sanction2', 4),
-        ('sanction', 'sanction', 4),
-('falling-knife', 'falling-knife', 4),
+       ('sanction', 'sanction', 4),
+       ('falling-knife', 'falling-knife', 4),
        ('summon', 'summon', 4),
        ('effort', 'effort', 4),
-        ('phone', 'phone', 4),
+       ('frustrated', 'frustrated', 4),
+       ('phone', 'phone', 4),
        ('magic3', 'magic3', 4),
-('magic2', 'magic2', 4),
-('magic1', 'magic1', 4),
-('cigar-smoke', 'cigar-smoke', 4),
-('layoffs', 'layoffs', 4),
+       ('magic2', 'magic2', 4),
+       ('magic1', 'magic1', 4),
+       ('cigar-smoke', 'cigar-smoke', 4),
+       ('layoffs', 'layoffs', 4),
        ('glower', 'glower', 4),
        ('golf-club-swing', 'golf-club-swing', 4),
        ('throw-paper', 'throw-paper', 4),
-('throw-object', 'throw-object', 4),
-('defense', 'defense', 4),
-('cease', 'cease', 4),
+       ('throw-object', 'throw-object', 4),
+       ('defense', 'defense', 4),
+       ('cease', 'cease', 4),
        ('cease2', 'cease2', 4),
-       ('objection-out', 'objection-out', 4), ('lose3', 'wrecked', 4),
-        ('snap', 'snap', 4),
-        ('quick-jump', 'jump', 4),
-        ('speak', 'speak', 4))
+       ('objection-out', 'objection-out', 4),
+       ('lose3', 'wrecked', 4),
+       ('snap', 'snap', 4),
+       ('quick-jump', 'jump', 4),
+       ('speak', 'speak', 4))
 dvk = (('throw-object', 'throw-object', 4),
-      ('throw-paper', 'throw-paper', 4),
-('layoffs', 'layoffs', 4), ('lose3', 'wrecked', 4),
-('deadwood', 'deadwood', 4),
-      ('defense', 'scabbard', 4),
-      ('magic3', 'snap', 4),
+       ('throw-paper', 'throw-paper', 4),
+       ('layoffs', 'layoffs', 4),
+       ('lose3', 'wrecked', 4),
+       ('deadwood', 'deadwood', 4),
+       ('defense', 'defense', 4),
+       ('snap', 'snap', 4),
+       ('frustrated', 'frustrated', 4),
        ('finger-wag', 'cease2', 4),
-('falling-knife', 'falling-knife', 4),
-      ('glower', 'glower', 4),
-      ('speak', 'speak', 4))
+       ('falling-knife', 'falling-knife', 4),
+       ('glower', 'glower', 4),
+       ('speak', 'speak', 4))
 otm = (('pickpocket', 'pickpocket', 4),
        ('magic1', 'magic1', 4),
- ('effort', 'effort', 4), ('lose3', 'wrecked', 4),
-('glower', 'glower', 4),
-      ('defense', 'defense', 4),
+       ('effort', 'effort', 4),
+       ('lose3', 'wrecked', 4),
+       ('glower', 'glower', 4),
+       ('frustrated', 'frustrated', 4),
+       ('defense', 'defense', 4),
        ('layoffs', 'layoffs', 4),
-('deadwood', 'deadwood', 4),
-      ('throw-object', 'throw-object', 4),
-      ('sanction', 'rushjob', 4),
+       ('deadwood', 'deadwood', 4),
+       ('throw-object', 'throw-object', 4),
+       ('sanction', 'rushjob', 4),
        ('finger-wag', 'rushjob', 4),
-('cease', 'come-on', 4),
- ('throw-paper', 'throw-paper', 4),
+       ('cease', 'come-on', 4),
+       ('throw-paper', 'throw-paper', 4),
        ('song-and-dance', 'song-and-dance', 4),
- ('magic3', 'magic3', 4),
- ('throw-paper', 'throw-paper', 4))
+       ('magic3', 'magic3', 4),
+       ('throw-paper', 'throw-paper', 4))
 cry = (('magic3', 'magic3', 4),
        ('phone', 'phone', 4),
-('calculating-costs', 'calculating-costs', 4),
+       ('calculating-costs', 'calculating-costs', 4),
        ('finger-wag', 'cease3', 4),
        ('pickpocket', 'sanction', 4),
-       ('sanction', 'sanction', 4), ('lose3', 'wrecked', 4),
+       ('effort', 'effort', 4),
+       ('sanction', 'sanction', 4),
+       ('frustrated', 'frustrated-f', 4),
+       ('sanction', 'sanction', 4),
+       ('lose3', 'wrecked', 4),
        ('cease', 'cease3', 4),
        ('speak', 'speak', 4))
 tcm = (('magic3', 'magic3', 4),
        ('golf-club-swing', 'golf-club-swing', 4),
-('falling-knife', 'falling-knife', 4),
-      ('pickpocket', 'sanction', 4),
-      ('magic1', 'magic1', 4),
+       ('falling-knife', 'falling-knife', 4),
+       ('pickpocket', 'sanction', 4),
+       ('magic1', 'magic1', 4),
        ('snap', 'snap', 4),
        ('throw-paper', 'throw-paper', 4),
-('layoffs', 'layoffs', 4), ('lose3', 'wrecked', 4),
-('deadwood', 'deadwood', 4),
+('summon', 'summon', 4),
+       ('frustrated', 'frustrated', 4),
+       ('layoffs', 'layoffs', 4),
+       ('lose3', 'wrecked', 4),
+       ('deadwood', 'deadwood', 4),
        ('throw-object', 'throw-object', 4),
        ('finger-wag', 'cease2', 4),
-('cease', 'cease', 4),
-      ('glower', 'glower', 4),
-      ('sanction', 'sanction', 4),
-      ('song-and-dance', 'song-and-dance', 4),
-      ('cigar-smoke', 'cigar-smoke', 4),
-      ('sanction', 'sanction', 4))
+       ('cease', 'cease', 4),
+       ('glower', 'glower', 4),
+       ('sanction', 'sanction', 4),
+       ('song-and-dance', 'song-and-dance', 4),
+       ('cigar-smoke', 'cigar-smoke', 4),
+       ('sanction', 'sanction', 4))
 if not base.config.GetBool('want-new-cogs', 0):
     ModelDict = {'a': ('/models/char/suitA-', 4),
      'b': ('/models/char/suitB-', 4),
@@ -1352,7 +1324,7 @@ def loadDialog(level):
     else:
         loadPath = 'phase_3.5/audio/dial/'
         HighRollerDialogFiles = ['ttcc_ene_hroller_grunt',
-         'ttcc_ene_hroller_laugh',
+         'ttcc_ene_hroller_murmur',
          'ttcc_ene_hroller_statement',
          'ttcc_ene_hroller_question',
          'ttcc_ene_hroller_grunt']
@@ -2197,14 +2169,13 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(6.08)
         elif dna.name == 'trb':
-            self.scale = 6.0 / aSize
-            self.handColor = VBase4(0.776, 0.757, 0.537, 1)
-            self.generateBody()
-            self.generateHead('bigwig')
-            texture = loader.loadTexture('phase_4/maps/affiliate.jpg')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.5)
+            self.scale = 4.5 / aSize
+            self.handColor = VBase4(0.816, 0.643, 0.537, 1)
+            self.generateFemaleBody()
+            self.generateHead2('bossbotClubPresidentHead')
+            self.generateHead2('bossbotClubPresidentEarrings')
+            self.generateHead2('bossbotClubPresidentHair')
+            self.setHeight(6.0)
         elif dna.name == 'dot':
             self.scale = 6.5 / aSize
             self.handColor = SuitDNA.corpPolyColor
@@ -2267,12 +2238,10 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.7)
         elif dna.name == 'msr':
             self.scale = 4.5 / aSize
-            self.handColor = VBase4(0.816, 0.643, 0.537, 1)
-            self.generateFemaleBody()
+            self.handColor = VBase4(0.573, 0.384, 0.204, 1)
+            self.generateBody()
             self.makeExecutive()
-            self.generateHead2('bossbotClubPresidentHead')
-            self.generateHead2('bossbotClubPresidentEarrings')
-            self.generateHead2('bossbotClubPresidentHair')
+            self.generateHead('derrickman', animated=True)
             self.setHeight(6.0)
         elif dna.name == 'kb':
             self.scale = 7.0 / aSize
@@ -2298,25 +2267,26 @@ class Suit(Avatar.Avatar):
             self.makeAutocaddie()
             self.setTransparency(1)
         elif dna.name == 'tc':
-            self.scale = 5.5 / aSize
-            self.handColor = VBase4(0.612, 0.612, 0.612, 1)
-            self.generateFemaleBody()
-            self.makeGatekeeper()
-            self.generateHead('gatekeeper', animated=True)
-            self.setHeight(6.9)
-        elif dna.name == 'tg':
-            self.scale = 7.5 / aSize
+            self.scale = 7.0 / aSize
             self.handColor = VBase4(0.894, 0.235, 0.043, 1)
             self.generateBody()
             self.makeFirestarter()
             self.generateHead('firestarter', animated=True)
-            self.setHeight(10.5)
+            self.setHeight(9.5)
+            self.setTransparency(1)
+        elif dna.name == 'tg':
+            self.scale = 6.2 / cSize
+            self.handColor = VBase4(0.235, 0.149, 0.125, 1)
+            self.generateBody()
+            self.makeFeatherbedder()
+            self.generateHead('featherbedder', animated=True)
+            self.setHeight(8.0)
             self.setTransparency(1)
         elif dna.name == 'tb':
             self.scale = 7.3 / aSize
-            self.handColor = VBase4(0.675, 0.584, 0.478, 1)
+            self.handColor = VBase4(1, 1, 1, 1)
             self.generateBody()
-            self.makeMajorPlayer()
+            self.makeExecutive()
             self.generateHead('majorplayer', animated=True)
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_majorplayer.png')
             for headPart in self.headParts:
@@ -2324,11 +2294,16 @@ class Suit(Avatar.Avatar):
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'adc':
-            self.scale = 4.5 / aSize
-            self.handColor = VBase4(0.573, 0.384, 0.204, 1)
+            self.scale = 7.5 / aSize
+            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateBody()
-            self.generateHead('derrickman', animated=True)
-            self.setHeight(6.0)
+            self.makeChainsaw()
+            self.generateHead('chainsaw', animated=True)
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_a.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(11.0)
+            self.setTransparency(1)
         elif dna.name == 'drm':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
@@ -2353,11 +2328,11 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'fbd':
             self.scale = 7.2 / aSize
-            self.handColor = VBase4(0.784, 0.816, 0.847, 1)
+            self.handColor = VBase4(0.784, 0.745, 0.69, 1)
             self.generateBody()
             self.makeExecutive()
             self.generateHead('paperhands', animated=True)
-            texture = loader.loadTexture('phase_14/maps/cc_t_ene_paperhands.png')
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_stockbroker.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(9.5)
@@ -2447,7 +2422,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(6.6)
         elif dna.name == 'bw':
-            self.scale = 5.2 / aSize
+            self.scale = 4.5 / aSize
             self.handColor = VBase4(0.647, 0.639, 0.788, 1)
             self.generateBody()
             self.generateHead('backstabber', animated=True)
@@ -2493,7 +2468,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.57)
         elif dna.name == 'sjg':
             self.scale = 6.9 / aSize
-            self.handColor = VBase4(1, 1, 1, 1)
+            self.handColor = VBase4(0.784, 0.816, 0.847, 1)
             self.generateBody()
             self.generateHead('barrister', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_barrister.png')
@@ -2527,11 +2502,14 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
             self.setHeight(8.7)
         elif dna.name == 'tlr':
-            self.scale = 6.4 / bSize
-            self.handColor = VBase4(0.608, 0.678, 0.686, 1)
-            self.generateFemaleBody()
+            self.scale = 7.2 / aSize
+            self.handColor = VBase4(0.529, 0.529, 0.612, 1)
+            self.generateBody()
+            self.generateHead('magnate', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_magnate.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.makeExecutive()
-            self.generateHead2('ttr_m_ene_lawbotClerk')
             self.setHeight(8.7)
         elif dna.name == 'cm':
             self.scale = 7.2 / bSize
@@ -2689,10 +2667,11 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(7.22)
         elif dna.name == 'gm':
-            self.scale = 7.0 / cSize
-            self.handColor = SuitDNA.moneyPolyColor
-            self.generateSkeletonBody()
-            self.setHeight(8.88)
+            self.scale = 5.0 / cSize
+            self.handColor = VBase4(0.604, 0.71, 0.675, 1)
+            self.generateBody()
+            self.generateHead2('ttr_m_ene_cashbotAuditor')
+            self.setHeight(6.88)
         elif dna.name == 'ad':
             self.scale = 5.3 / cSize
             self.handColor = SuitDNA.moneyPolyColor
@@ -2736,13 +2715,11 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.95)
         elif dna.name == 'csh':
-            self.scale = 5.5 / cSize
-            self.handColor = VBase4(0.604, 0.71, 0.675, 1)
-            self.generateBody()
+            self.scale = 4.5 / aSize
+            self.handColor = VBase4(0.286, 0.29, 0.286, 1)
+            self.generateSkeletonBody()
             self.makeExecutive()
-            self.generateHead2('ttr_m_ene_cashbotAuditor')
-            self.setHeight(7.0)
-            self.setTransparency(1)
+            self.setHeight(6.0)
         elif dna.name == 'bgr':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(0.286, 0.29, 0.286, 1)
@@ -2752,8 +2729,10 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'mes':
             self.scale = 7.0 / cSize
-            self.handColor = VBase4(0.286, 0.29, 0.286, 1)
-            self.generateSkeletonBody()
+            self.handColor = VBase4(0.714, 0.118, 0.055, 1)
+            self.generateBody()
+            self.makeDuckShuffler()
+            self.generateHead('duckshuffler', animated=True)
             self.setHeight(9.0)
             self.makeExecutive()
             self.setTransparency(1)
@@ -2817,22 +2796,17 @@ class Suit(Avatar.Avatar):
             self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'msp':
+            self.scale = 4.5 / cSize
+            self.handColor = VBase4(1, 1, 1, 1.0)
+            self.generateBody()
+            self.generateHead('dummy', animated=True)
+            self.setHeight(7.0)
+        elif dna.name == 'mad':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(1, 1, 1, 1)
-            self.generateHighRollerBody()
-            self.makeHighRollerWhite()
+            self.generateHighRollerBodyWhite()
             self.generateHead('highroller', animated=True)
             texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(10.0)
-        elif dna.name == 'mad':
-            self.scale = 7.3 / aSize
-            self.handColor = VBase4(0.478, 0.588, 0.314, 1)
-            self.generateBody()
-            self.makeDuckShuffler()
-            self.generateHead('chainsaw_c', animated=True)
-            texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_c.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(10.0)
@@ -2865,10 +2839,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(5.24)
         elif dna.name == 'nd':
-            self.scale = 4.5 / aSize
-            self.handColor = VBase4(0.255, 0.318, 0.549, 1)
-            self.generateSkeletonBody()
-            self.setHeight(5.65)
+            self.scale = 4.0 / bSize
+            self.handColor = VBase4(0.918, 0.808, 0.871, 1)
+            self.generateBody()
+            self.generateHead2('sellbotForemanHead')
+            self.generateHead2('sellbotForemanGlasses')
+            self.generateHead2('sellbotForemanEyebrows')
+            self.generateHead2('sellbotForemanHat')
+            self.setHeight(5.55)
         elif dna.name == 'gh':
             self.scale = 4.35 / aSize
             self.handColor = SuitDNA.salesPolyColor
@@ -2970,15 +2948,12 @@ class Suit(Avatar.Avatar):
             self.generateHead('shades')
             self.setHeight(8.95)
         elif dna.name == 'fas':
-            self.scale = 6.0 / bSize
-            self.handColor = VBase4(0.918, 0.808, 0.871, 1)
-            self.generateBody()
+            self.scale = 4.5 / aSize
+            self.handColor = VBase4(1, 0.486, 0, 1)
+            self.generateSkeletonBody()
             self.makeExecutive()
-            self.generateHead2('sellbotForemanHead')
-            self.generateHead2('sellbotForemanGlasses')
-            self.generateHead2('sellbotForemanEyebrows')
-            self.generateHead2('sellbotForemanHat')
-            self.setHeight(8.55)
+            self.setHeight(6.0)
+            self.setTransparency(1)
         elif dna.name == 'mdr':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(1, 0.486, 0, 1)
@@ -2987,11 +2962,16 @@ class Suit(Avatar.Avatar):
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'nar':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(1, 0.486, 0, 1)
+            self.scale = 7.0 / cSize
+            self.handColor = VBase4(1, 1, 1, 1.0)
             self.generateSkeletonBody()
-            self.makeExecutive()
-            self.setHeight(9.0)
+            self.generateHead('dopr', animated=True)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(9.5)
+            self.isSkeleton = 1
+            self.makeDOPA()
             self.setTransparency(1)
         elif dna.name == 'fd':
             self.scale = 7.0 / cSize
@@ -3013,11 +2993,15 @@ class Suit(Avatar.Avatar):
             self.generateHead('deepdiver', animated=True)
             self.setHeight(10.0)
         elif dna.name == 'jb':
-            self.scale = 5.0 / bSize
-            self.handColor = VBase4(0.886, 0.749, 0.451, 1)
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(0.918, 0.886, 0.875, 1)
             self.generateBody()
-            self.generateHead('bellringer', animated=True)
-            self.setHeight(6.8)
+            self.generateHead('yesman')
+            texture = loader.loadTexture('phase_4/maps/mr_hollywood.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.generateHead('shades')
+            self.setHeight(8.95)
         elif dna.name == 'jg':
             self.scale = 4.5 / cSize
             self.handColor = VBase4(1, 1, 1, 1.0)
@@ -3034,9 +3018,9 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'prr':
             self.scale = 7.3 / aSize
-            self.handColor = VBase4(0.663, 0.678, 0.682, 1)
+            self.handColor = VBase4(1, 1, 1, 1)
             self.generateBody()
-            self.makePrethinker()
+            self.makeExecutive()
             self.generateHead('multislacker', animated=True)
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_multislacker.png')
             for headPart in self.headParts:
@@ -3056,12 +3040,11 @@ class Suit(Avatar.Avatar):
             self.makeDOPA()
             self.setTransparency(1)
         elif dna.name == 'dvp':
-            self.scale = 5.0 / aSize
+            self.scale = 5.5 / bSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
-            self.generateFemaleBody()
-            self.makeExecutive()
+            self.generateLongcoatBody()
             self.generateHead('rainmaker', animated=True)
-            self.setHeight(6.5)
+            self.setHeight(7.0)
         elif dna.name == 'dsk':
             self.scale = 7.2 / aSize
             self.handColor = VBase4(0.894, 0.235, 0.043, 1)
@@ -3076,14 +3059,11 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'ffm':
             self.scale = 7.3 / aSize
-            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
+            self.handColor = VBase4(0.945, 0.29, 0.102, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead('sharkwatcher', animated=True)
-            texture = loader.loadTexture('phase_14/maps/cc_t_ene_sharkwatcher2.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(9.7)
+            self.generateHead('firestarter', animated=True)
+            self.setHeight(9.2)
             self.setTransparency(1)
         elif dna.name == 'sft':
             self.scale = 6.2 / bSize
@@ -3233,12 +3213,12 @@ class Suit(Avatar.Avatar):
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'dty':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(1, 0.486, 0, 1)
-            self.generateSkeletonBody()
-            self.makeExecutive()
-            self.setHeight(9.0)
-            self.setTransparency(1)
+            self.scale = 7.0 / cSize
+            self.handColor = VBase4(0.404, 0.647, 0.635, 1)
+            self.generateFemaleBody()
+            self.makeDeepDiver()
+            self.generateHead('deepdiver', animated=True)
+            self.setHeight(10.0)
         elif dna.name == 'dfg':
             self.scale = 5.5 / aSize
             self.handColor = VBase4(0.612, 0.612, 0.612, 1)
@@ -3603,6 +3583,9 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'msp':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'dvk':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         else:
             modelRoot.find('**/necktie-w').show()
         modelRoot.find('**/body').setTexture(texture, 1)
@@ -3887,9 +3870,10 @@ class Suit(Avatar.Avatar):
         dept = self.style.dept
         phase = 3.5
         texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_suit.png')
+        texture2 = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body2.png')
         texture.setMinfilter(Texture.FTLinearMipmapLinear)
         texture.setMagfilter(Texture.FTLinear)
-        texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body2.png')
+        #texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body2.png')
         # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
         texture.setMinfilter(Texture.FTLinearMipmapLinear)
         texture.setMagfilter(Texture.FTLinear)
@@ -3908,6 +3892,8 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-s').hide()
         elif self.style.name == 'dfh':
             modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'mad':
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'crf':
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'msp':
@@ -3915,6 +3901,7 @@ class Suit(Avatar.Avatar):
         else:
             modelRoot.find('**/necktie-w').show()
         modelRoot.find('**/body').setTexture(texture, 1)
+        modelRoot.find('**/highroller_body').setTexture(texture2, 1)
 
         def __doItTheOldWay__():
             self.leftHand = self.find('**/joint_Lhold')
@@ -3997,6 +3984,7 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/necktie-s').setTexture(texture, 1)
         modelRoot.find('**/necktie-w').setTexture(texture, 1)
         modelRoot.find('**/bowtie').setTexture(texture, 1)
+        modelRoot.find('**/emblem_healthmeter').show()
         if self.style.dept == 'l':
             modelRoot.find('**/bowtie').show()
         elif self.style.dept == 's':
@@ -4217,6 +4205,8 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(-.1)
             elif headType == 'magnate' and self.style.name == 'jgd' :
                 headModel.setZ(-.1)
+            elif headType == 'magnate' and self.style.name == 'tlr' :
+                headModel.setZ(-.1)
             elif headType == 'bagholder' and self.style.name == 'ca' :
                 headModel.setZ(.5)
             elif headType == 'paperhands' and self.style.name == 'cn' :
@@ -4233,7 +4223,7 @@ class Suit(Avatar.Avatar):
                 headModel.setScale(.7)
                 headModel.setY(-.2)
             elif headType == 'highroller':
-                headModel.setScale(1.1)
+                headModel.setScale(1.2)
             elif self.style.name == 'tb':
                 headModel.setZ(-.05)
                 headModel.setY(-.3)
@@ -4257,10 +4247,6 @@ class Suit(Avatar.Avatar):
                 headModel.setScale(.85)
                 headModel.setZ(-.1)
                 headModel.setY(-.1)
-            elif headType == 'rainmaker' and self.style.name == 'dvp':
-                headModel.setScale(1.05)
-                headModel.setZ(-.1)
-                headModel.setY(0)
             elif headType == 'advocate' and self.style.name == 'bdb':
                 headModel.setScale(1.05)
                 headModel.setZ(-.1)
@@ -4301,6 +4287,10 @@ class Suit(Avatar.Avatar):
             elif headType == 'derrickman':
                 headModel.setScale(1)
                 headModel.setZ(-.1)
+            elif headType == 'backstabber':
+                headModel.setScale(1.1)
+                headModel.setZ(-.1)
+                headModel.setY(-.1)
             elif headType == 'duckshuffler':
                 headModel.setScale(1)
                 headModel.setZ(-.1)
@@ -4573,7 +4563,10 @@ class Suit(Avatar.Avatar):
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
         anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
-                 'stun']
+                 'stun', 'enraged', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revved-up',
+                 'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive',
+                 'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'gsnap', 'overclocked',
+                 'come-on', 'zero' ]
         for anim in additionalAnims:
             anims.append(anim)
         animList = {}
@@ -4740,7 +4733,7 @@ class Suit(Avatar.Avatar):
         self.healthBar = button
         glow = modelRoot.find('**/glow')
         glow.reparentTo(self.healthBar)
-        glow.setScale(1)
+        glow.setScale(.25)
         glow.setPos(0, 0, 0)
         glow.setColor(self.healthGlowColors[0])
         self.healthBarGlow = glow
@@ -4753,8 +4746,8 @@ class Suit(Avatar.Avatar):
     def updateHealthBar(self, hp, forceUpdate = 0):
         self.currHP -= hp
         health = float(self.currHP) / float(self.maxHP)
-        print('UpdateHealthBar MHP %i HP %i' % (self.maxHP, self.currHP))
-        print('UpdateHealthBar - health is %f' % health)
+        #print('UpdateHealthBar MHP %i HP %i' % (self.maxHP, self.currHP))
+        #print('UpdateHealthBar - health is %f' % health)
         if health > 1.5:
             condition = 13
         elif health > 1.0:
@@ -4783,7 +4776,7 @@ class Suit(Avatar.Avatar):
             condition = 10
         else:
             condition = 11
-        print('UpdateHealthBar - condition is %i' % condition)
+        #print('UpdateHealthBar - condition is %i' % condition)
 
         if self.healthCondition != condition or forceUpdate:
             if condition in (10, 11):
@@ -5555,160 +5548,166 @@ class Suit(Avatar.Avatar):
             return SkelecogDialogArray
         if self.style.name == 'msr':
             loadDialog(1)
-            return FemaleDialogArray
+            return DerrickManDialogArray
         if self.style.name == 'kb':
             loadDialog(1)
             return DerrickHandDialogArray
         if self.style.name == 'ts':
             loadDialog(1)
             return DerrickSkeleDialogArray
-        if self.style.name == 'jdg':
-            loadDialog(1)
-            return CLODialogArray
-        if self.style.name == 'cfp':
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'le':
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'tc' and not self.isSkeleton:
-            loadDialog(1)
-            return GatekeeperDialogArray
-        if self.style.name == 'tg' and not self.isSkeleton:
+        if self.style.name == 'tc':
             loadDialog(1)
             return FirestarterDialogArray
-        if self.style.name == 'tb' and not self.isSkeleton:
+        if self.style.name == 'tg':
+            loadDialog(1)
+            return FeatherbedderDialogArray
+        if self.style.name == 'tb':
             loadDialog(1)
             return MajorPlayerDialogArray
-        if self.style.name == 'drm' and not self.isSkeleton:
+        if self.style.name == 'adc':
+            loadDialog(1)
+            return ChainsawDialogArray
+        if self.style.name == 'drm':
             loadDialog(1)
             return ChainsawORDialogArray
-        if self.style.name == 'cp' and not self.isSkeleton:
+        if self.style.name == 'cp':
             loadDialog(1)
             return DOLADialogArray
-        if self.style.name == 'dvk' and not self.isSkeleton:
-            loadDialog(1)
-            return ReddDialogArray
-        if self.style.name == 'fbd' and not self.isSkeleton:
+        if self.style.name == 'fbd':
             loadDialog(1)
             return CaseManagerDialogArray
-        if self.style.name == 'otm' and not self.isSkeleton:
-            loadDialog(1)
-            return OttomanDialogArray
-        if self.style.name == 'frs' and not self.isSkeleton:
+        if self.style.name == 'frs':
             loadDialog(1)
             return StenographerDialogArray
-        if self.style.name == 'gtk' and not self.isSkeleton:
+        if self.style.name == 'gtk':
             loadDialog(1)
             return PrethinkerDialogArray
-        if self.style.name == 'tcm' and not self.isSkeleton:
-            loadDialog(1)
-            return ChairmanDialogArray
-        if self.style.name == 'ds':
+        if self.style.name == 'trb':
             loadDialog(1)
             return FemaleDialogArray
         if self.style.name == 'hh':
             loadDialog(1)
             return FemaleDialogArray
+        if self.style.name == 'ds':
+            loadDialog(1)
+            return FemaleDialogArray
+        if self.style.name == 'le':
+            loadDialog(1)
+            return FemaleDialogArray
+        if self.style.name == 'cfp':
+            loadDialog(1)
+            return FemaleDialogArray
+        if self.style.name == 'jdg':
+            loadDialog(1)
+            return CLODialogArray
+        if self.style.name == 'ggm':
+            loadDialog(1)
+            return MouthpieceDialogArray
+        if self.style.name == 'kc':
+            loadDialog(1)
+            return WitchHunterDialogArray
+        if self.style.name == 'tr':
+            loadDialog(1)
+            return CountErfitDialogArray
+        if self.style.name == 'mp':
+            loadDialog(1)
+            return ReddDialogArray
+        if self.style.name == 'scg':
+            loadDialog(1)
+            return ScapegoatDialogArray
+        if self.style.name == 'csm':
+            loadDialog(1)
+            return CaseManagerDialogArray
+        if self.style.name == 'ste':
+            loadDialog(1)
+            return StenographerDialogArray
+        if self.style.name == 'lit':
+            loadDialog(1)
+            return LitigatorDialogArray
         if self.style.name == 'rb':
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'gh':
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'adc' and not self.isSkeleton:
-            loadDialog(1)
-            return ChainsawDialogArray
-        if self.style.name == 'ssm':
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'dfr' and not self.isSkeleton:
-            loadDialog(1)
-            return DOLADialogArray
-        if self.style.name == 'bsh' and not self.isSkeleton:
-            loadDialog(1)
-            return DOLDDialogArray
         if self.style.name == 'tlr':
             loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'cm':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'ggm' and not self.isSkeleton:
-            loadDialog(1)
-            return MouthpieceDialogArray
-        if self.style.name == 'th' and not self.isSkeleton:
-            loadDialog(1)
-            return RainmakerDialogArray
-        if self.style.name == 'kc' and not self.isSkeleton:
-            loadDialog(1)
-            return WitchHunterDialogArray
-        if self.style.name == 'tr' and not self.isSkeleton:
-            loadDialog(1)
-            return CountErfitDialogArray
-        if self.style.name == 'mp' and not self.isSkeleton:
-            loadDialog(1)
-            return ReddDialogArray
-        if self.style.name == 'laa':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'scg' and not self.isSkeleton:
-            loadDialog(1)
-            return ScapegoatDialogArray
-        if self.style.name == 'csm' and not self.isSkeleton:
-            loadDialog(1)
-            return CaseManagerDialogArray
-        if self.style.name == 'ste' and not self.isSkeleton:
-            loadDialog(1)
-            return StenographerDialogArray
-        if self.style.name == 'lit' and not self.isSkeleton:
-            loadDialog(1)
-            return LitigatorDialogArray
-        if self.style.name == 'bgr':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'dm' and not self.isSkeleton:
-            loadDialog(1)
-            return TreekillerDialogArray
-        if self.style.name == 'tcc':
-            loadDialog(1)
-            return SkelecogDialogArray
+            return FeatherbedderDialogArray
         if self.style.name == 'cvy':
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'fb':
+        if self.style.name == 'mes':
             loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'jl':
+            return DuckShufflerDialogArray
+        if self.style.name == 'dm':
             loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'gb':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'lbs':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'trk' and not self.isSkeleton:
+            return TreekillerDialogArray
+        if self.style.name == 'trk':
             loadDialog(1)
             return PlutocratDialogArray
-        if self.style.name == 'dsf' and not self.isSkeleton:
+        if self.style.name == 'dsf':
             loadDialog(1)
             return CountErfitDialogArray
-        if self.style.name == 'msp' and not self.isSkeleton:
+        if self.style.name == 'mad':
             loadDialog(1)
             return HighRollerDialogArray
-        if self.style.name == 'mad' and not self.isSkeleton:
-            loadDialog(1)
-            return ChainsawORDialogArray
-        if self.style.name == 'crf' and not self.isSkeleton:
+        if self.style.name == 'crf':
             loadDialog(1)
             return HighRollerDialogArray
-        if self.style.name == 'mdr':
+        if self.style.name == 'gh':
             loadDialog(1)
-            return SkelecogDialogArray
+            return FemaleDialogArray
+        if self.style.name == 'ssm':
+            loadDialog(1)
+            return FemaleDialogArray
+        if self.style.name == 'nar':
+            loadDialog(1)
+            return DOPRDialogArray
+        if self.style.name == 'fd':
+            loadDialog(1)
+            return DOPADialogArray
+        if self.style.name == 'fm':
+            loadDialog(1)
+            return BellringerDialogArray
+        if self.style.name == 'msp':
+            loadDialog(1)
+            return DeskJockeyDialogArray
+        if self.style.name == 'jg':
+            loadDialog(1)
+            return PrethinkerDialogArray
+        if self.style.name == 'jr':
+            loadDialog(1)
+            return MultislackerDialogArray
+        if self.style.name == 'prr':
+            loadDialog(1)
+            return PacesetterDialogArray
+        if self.style.name == 'blr':
+            loadDialog(1)
+            return DOPADialogArray
+        if self.style.name == 'dvp':
+            loadDialog(1)
+            return RainmakerDialogArray
+        if self.style.name == 'dsk':
+            loadDialog(1)
+            return DOPRDialogArray
+        if self.style.name == 'ffm':
+            loadDialog(1)
+            return FirestarterDialogArray
+        if self.style.name == 'sft':
+            loadDialog(1)
+            return PacesetterDialogArray
+        if self.style.name == 'dty':
+            loadDialog(1)
+            return DeepDiverDialogArray
+        if self.style.name == 'dfg':
+            loadDialog(1)
+            return GatekeeperDialogArray
+        if self.style.name == 'dfr':
+            loadDialog(1)
+            return DOLADialogArray
+        if self.style.name == 'bsh':
+            loadDialog(1)
+            return DOLDDialogArray
         if self.style.name == 'ghd':
             loadDialog(1)
-            return OttomanDialogArray
+            return WitchHunterDialogArray
         if self.style.name == 'tyh':
             loadDialog(1)
             return StenographerDialogArray
@@ -5718,54 +5717,18 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'bby':
             loadDialog(1)
             return ChairmanDialogArray
-        if self.style.name == 'fd':
+        if self.style.name == 'dvk':
             loadDialog(1)
-            return DOPADialogArray
-        if self.style.name == 'fm' and not self.isSkeleton:
+            return ReddDialogArray
+        if self.style.name == 'otm':
             loadDialog(1)
-            return DeepDiverDialogArray
-        if self.style.name == 'jb' and not self.isSkeleton:
-            loadDialog(1)
-            return BellringerDialogArray
-        if self.style.name == 'jg' and not self.isSkeleton:
-            loadDialog(1)
-            return DeskJockeyDialogArray
-        if self.style.name == 'jr' and not self.isSkeleton:
-            loadDialog(1)
-            return PrethinkerDialogArray
-        if self.style.name == 'prr' and not self.isSkeleton:
-            loadDialog(1)
-            return PacesetterDialogArray
-        if self.style.name == 'blr':
-            loadDialog(1)
-            return DOPADialogArray
-        if self.style.name == 'dvp' and not self.isSkeleton:
-            loadDialog(1)
-            return RainmakerDialogArray
-        if self.style.name == 'frs' and not self.isSkeleton:
-            loadDialog(1)
-            return RainmakerDialogArray
-        if self.style.name == 'ffm' and not self.isSkeleton:
-            loadDialog(1)
-            return PlutocratDialogArray
-        if self.style.name == 'dsk':
-            loadDialog(1)
-            return DOPRDialogArray
-        if self.style.name == 'gtk' and not self.isSkeleton:
-            loadDialog(1)
-            return PrethinkerDialogArray
-        if self.style.name == 'cp' and not self.isSkeleton:
-            loadDialog(1)
-            return DOLADialogArray
-        if self.style.name == 'cry' and not self.isSkeleton:
+            return OttomanDialogArray
+        if self.style.name == 'cry':
             loadDialog(1)
             return StenographerDialogArray
-        if self.style.name == 'ffm' and not self.isSkeleton:
+        if self.style.name == 'tcm':
             loadDialog(1)
-            return PlutocratDialogArray
-        if self.style.name == 'sft' and not self.isSkeleton:
-            loadDialog(1)
-            return PacesetterDialogArray
+            return ChairmanDialogArray
         elif self.isSkeleton:
             loadSkelDialog()
             return SkelSuitDialogArray

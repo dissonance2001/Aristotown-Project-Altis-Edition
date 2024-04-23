@@ -14,8 +14,8 @@ from toontown.battle.MovieUtil import calcAvgSuitPos
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieThrow')
 hitSoundFiles = ('AA_tart_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_wholepie_only.ogg', 'AA_wholepie_only.ogg', 'AA_wholepie_only.ogg')
-splatDict = {0: 'tiny_splat_cake', 1: 'tiny_splat_fruit', 2: 'tiny_splat_cream',
-             3: 'splat_cake', 4: 'splat_fruit', 5: 'splat_cream', 6: 'splat_cake', 7: 'splat_cake'}
+splatDict = {0: 'splat_cake', 1: 'splat_fruit', 2: 'splat_cream',
+             3: 'splat_cake', 4: 'splat_fruit', 5: 'splat_cream', 6: 'splat_cake', 7: 'splat_wedding'}
 tPieLeavesHand = 2.7
 tPieHitsSuit = 3.0
 tSuitDodges = 2.45
@@ -398,18 +398,18 @@ def __throwPie(throw, delay, hitCount, npcs):
             suitPos, suitHpr = battle.getActorPosHpr(suit)
             suitType = getSuitBodyType(suit.getStyleName())
             animTrack = Sequence()
-            animTrack.append(ActorInterval(suit, 'pie-small-react', duration=0.2))
+            #animTrack.append(ActorInterval(suit, 'pie-small-react', duration=0.2))
             if suitType == 'a':
-                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.43))
+                animTrack.append(ActorInterval(suit, 'pie-large-lured', startTime=0))
             elif suitType == 'b':
-                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=1.94))
+                animTrack.append(ActorInterval(suit, 'pie-large-lured', startTime=0))
             elif suitType == 'c':
-                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.58))
+                animTrack.append(ActorInterval(suit, 'pie-large-lured', startTime=0))
             animTrack.append(Func(battle.unlureSuit, suit))
             moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
             sival = Parallel(animTrack, moveTrack)
         elif hitCount == 1:
-            sival = Parallel(ActorInterval(suit, 'pie-small-react'), MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
+            sival = Parallel(ActorInterval(suit, 'pie-large'), MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
         else:
             sival = ActorInterval(suit, 'pie-small-react')
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
@@ -433,15 +433,16 @@ def __throwPie(throw, delay, hitCount, npcs):
         elif died != 0:
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
-            suitResponseTrack.append(Func(suit.loop, 'neutral'))
-            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+            suitResponseTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'ad' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' and not suit.style.name == 'gm' \
                     and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
                     and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
                     and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
                     and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
-                    and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
-                    and not suit.style.name == 'msr' and not suit.style.name == 'tlr' and not suit.style.name == 'cvy' and not suit.style.name == 'cps' and not suit.style.name == 'dfh' and not suit.style.name == 'fas' and not suit.style.name == 'csh':
+                    and not suit.style.name == 'ssm' and not suit.style.name == 'nd' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
+                    and not suit.style.name == 'dfh' and not suit.style.name == 'cps' and not suit.style.name == 'cvy' \
+                    and not suit.style.name == 'jb':
                 for headPart in suit.headParts:
                     suitResponseTrack.append(
                     Func(headPart.loop,
@@ -647,7 +648,7 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
             elif died != 0:
                 singleSuitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
             else:
-                singleSuitResponseTrack.append(Func(suit.loop, 'neutral'))
+                singleSuitResponseTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
             singleSuitResponseTrack = Parallel(singleSuitResponseTrack, bonusTrack)
         else:
             groupHitValues = groupHitDict.values()
@@ -663,11 +664,12 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
      groupSuitResponseTrack]
 
 def __splatSuit(suit, level):
-    splatTex = loader.loadTexture('phase_5/maps/' + splatDict[level] + '.png')
+    splatTex = loader.loadTexture('phase_5/maps/' + splatDict[level] + '_%s.png' % random.randint(1, 6))
     splat = TextureStage(splatDict[level])
     splat.setMode(TextureStage.MDecal)
     #splat.setSavedResult()
     suit.find('**/body').setTexture(splat, splatTex)
+    suit.find('**/joint_head').setTexture(splat, splatTex)
 
 
 def reparentCakePart(pie, cakeParts):

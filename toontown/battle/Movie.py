@@ -635,7 +635,7 @@ class Movie(DirectObject.DirectObject):
                         target = None
                         adict['targetType'] = 'observer'
                     adict['target'] = target
-                elif track == NPCSOS or track == NPC_COGS_MISS or track == NPC_TOONS_HIT or track == NPC_RESTOCK_GAGS or track == PETSOS:
+                elif track == NPCSOS or track == NPC_COGS_MISS or track == NPC_TOONS_HIT or track == NPC_RESTOCK_GAGS or track == NPC_DAMAGE_BOOST or track == PETSOS:
                     adict['special'] = 1
                     toonHandles = []
                     for t in toons:

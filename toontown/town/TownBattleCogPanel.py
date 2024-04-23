@@ -164,6 +164,12 @@ class TownBattleCogPanel(DirectFrame):
             self.head.setPosHprScale(-0.27, 0.5, 0.13, 180, 0, 0, s, s, s)
         elif self.cog.dna.name == 'csm':
             self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'ffm':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'gm':
+            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
+        elif self.cog.dna.name == 'dvp':
+            self.head.setPosHprScale(-0.27, 0.5, 0.16, 180, 0, 0, s, s, s)
         else:
             self.head.setPosHprScale(-0.27, 0.5, 0.12, 180, 0, 0, s, s, s)
         self.setLevelText()

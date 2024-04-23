@@ -172,11 +172,11 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             animTrack = Sequence()
             animTrack.append(ActorInterval(suit, anim, duration=0.2))
             if suitType == 'a':
-                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.43))
+                animTrack.append(ActorInterval(suit, 'slip-backward', startTime=0))
             elif suitType == 'b':
-                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=1.94))
+                animTrack.append(ActorInterval(suit, 'slip-backward', startTime=0))
             elif suitType == 'c':
-                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.58))
+                animTrack.append(ActorInterval(suit, 'slip-backward', startTime=0))
             animTrack.append(Func(battle.unlureSuit, suit))
             moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
             sival = Parallel(animTrack, moveTrack)
@@ -201,7 +201,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             sival = Parallel(ActorInterval(suit, anim), MovieUtil.createSuitStunInterval(suit, beforeStun, afterStun))
         else:
             sival = ActorInterval(suit, anim)
-        soakTracks.append(__soakSuit(suit))
+        soakTracks.append(__soakSuit(suit, tContact))
         #suitIndex = battle.activeSuits.index(suit)
         #soakTracks.append(__soakNearby(suit, suitIndex + 1, battle.activeSuits, tContact, hp, level))
         #soakTracks.append(__soakNearby(suit, suitIndex - 1, battle.activeSuits, tContact, hp, level))
@@ -240,15 +240,16 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         if died != 0:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
-            suitTrack.append(Func(suit.loop, 'neutral'))
-            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+            suitTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'ad' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' and not suit.style.name == 'gm' \
                     and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
                     and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
                     and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
                     and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
-                    and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
-                    and not suit.style.name == 'msr' and not suit.style.name == 'tlr' and not suit.style.name == 'cvy' and not suit.style.name == 'cps' and not suit.style.name == 'dfh' and not suit.style.name == 'fas' and not suit.style.name == 'csh':
+                    and not suit.style.name == 'ssm' and not suit.style.name == 'nd' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
+                    and not suit.style.name == 'dfh' and not suit.style.name == 'cps' and not suit.style.name == 'cvy' \
+                    and not suit.style.name == 'jb':
                 for headPart in suit.headParts:
                     suitTrack.append(
                     Func(headPart.loop,
@@ -290,7 +291,7 @@ def __getSoundTrack(level, hitSuit, delay, node = None):
 def showSoakRounds(suit, level):
     suit.showHpTextWhite("SOAKED %i ROUNDS" % ToontownBattleGlobals.AvSoakRounds[level])
 
-def __soakSuit(suit, remove=0):
+def __soakSuit(suit, tContact, remove=0):
     if remove:
         color = Point4(1.0, 1.0, 1.0)
     else:
@@ -300,6 +301,7 @@ def __soakSuit(suit, remove=0):
     else:
         suitBody = [suit.find('**/body'), suit.find('**/hands')]
     suitInterval = Sequence()
+    suitInterval.append(Wait(tContact))
     for bodyPart in suitBody:
         if bodyPart:
             suitInterval.append(Func(bodyPart.setColor, color))

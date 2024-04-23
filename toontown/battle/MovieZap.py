@@ -199,7 +199,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         else:
             suitTrack.append(Wait(1.0))
             suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
-            suitTrack.append(Func(suit.loop, 'neutral'))
+            suitTrack.append(Func(suit.loop, 'neutral-unstable'))
             #suitTrack.append(__soakRemoval(suit))
         if revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))

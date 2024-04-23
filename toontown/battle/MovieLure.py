@@ -112,7 +112,7 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
             opos, ohpr = battle.getActorPosHpr(suit)
             reachDist = MovieUtil.SUIT_LURE_DISTANCE
             reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-            suitTrack.append(Func(suit.loop, 'neutral'))
+            suitTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
             suitTrack.append(Wait(3.5))
             suitName = suit.getStyleName()
             retardPos, retardHpr = battle.getActorPosHpr(suit)
@@ -131,18 +131,19 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
                 suitTrack.append(Func(trapProp.wrtReparentTo, suit))
                 suit.battleTrapProp = trapProp
             if trapProp:
-                suitTrack.append(Func(suit.loop, 'lured'))
+                suitTrack.append(Func(suit.loop, 'lured2'))
             else:
-                suitTrack.append(Func(suit.loop, 'lured'))
-                suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 2))
-            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+                suitTrack.append(Parallel(ActorInterval(suit, 'lured2'), MovieUtil.createSuitStunInterval(suit, 0, 2)))
+                suitTrack.append(Func(suit.loop, 'lured2'))
+            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'ad' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' and not suit.style.name == 'gm' \
                     and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
                     and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
                     and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
                     and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
-                    and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
-                    and not suit.style.name == 'msr' and not suit.style.name == 'tlr' and not suit.style.name == 'cvy' and not suit.style.name == 'cps' and not suit.style.name == 'dfh' and not suit.style.name == 'fas' and not suit.style.name == 'csh':
+                    and not suit.style.name == 'ssm' and not suit.style.name == 'nd' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
+                    and not suit.style.name == 'dfh' and not suit.style.name == 'cps' and not suit.style.name == 'cvy' \
+                    and not suit.style.name == 'jb':
                 for headPart in suit.headParts:
                     #suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 1))
                     #suitTrack.append(Wait(1.5))
@@ -153,7 +154,7 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
             tracks.append(suitTrack)
     else:
         tracks.append(Sequence(Wait(2.3), Func(MovieUtil.indicateMissed, suit, 1.1)))
-        tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, 2.3))
+        tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, 3.3))
     tracks.append(getSoundTrack('TL_fishing_pole.ogg', delay=0.5, node=toon))
     return tracks
 
@@ -190,7 +191,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 numShakes = 3
                 shakeTotalDuration = 0.8
                 shakeDuration = shakeTotalDuration / float(numShakes)
-                suitTrack.append(Func(suit.loop, 'neutral'))
+                suitTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                 suitTrack.append(Wait(suitDelay))
                 suitTrack.append(Func(showLureRounds, suit, lure['level']))
                 suitTrack.append(ActorInterval(suit, 'landing', startTime=2.37, endTime=1.82))
@@ -200,18 +201,20 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 suitTrack.append(ActorInterval(suit, 'landing', startTime=1.16, endTime=0.7))
                 suitTrack.append(ActorInterval(suit, 'landing', startTime=0.7, duration=1.3))
                 if trapProp:
-                    suitTrack.append(Func(suit.loop, 'lured'))
+                    suitTrack.append(Func(suit.loop, 'lured2'))
                 else:
-                    suitTrack.append(Func(suit.loop, 'lured'))
-                    suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 2))
-                if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-                        and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+                    suitTrack.append(
+                        Parallel(ActorInterval(suit, 'lured2'), MovieUtil.createSuitStunInterval(suit, 0, 2)))
+                    suitTrack.append(Func(suit.loop, 'lured2'))
+                if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'ad' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                        and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' and not suit.style.name == 'gm' \
                         and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
                         and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
                         and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
                         and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
-                        and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
-                        and not suit.style.name == 'msr' and not suit.style.name == 'tlr' and not suit.style.name == 'cvy' and not suit.style.name == 'cps' and not suit.style.name == 'dfh' and not suit.style.name == 'fas' and not suit.style.name == 'csh':
+                        and not suit.style.name == 'ssm' and not suit.style.name == 'nd' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
+                        and not suit.style.name == 'dfh' and not suit.style.name == 'cps' and not suit.style.name == 'cvy' \
+                        and not suit.style.name == 'jb':
                     for headPart in suit.headParts:
                         #suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 1))
                         # suitTrack.append(Wait(1.5))
@@ -264,24 +267,26 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-                suitTrack.append(Func(suit.loop, 'neutral'))
+                suitTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                 suitTrack.append(Wait(suitDelay))
                 suitTrack.append(Func(showLureRounds, suit, lure['level']))
                 suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
                 suitTrack.append(Func(suit.setPos, battle, reachPos))
                 if trapProp:
-                    suitTrack.append(Func(suit.loop, 'lured'))
+                    suitTrack.append(Func(suit.loop, 'lured2'))
                 else:
-                    suitTrack.append(Func(suit.loop, 'lured'))
-                    suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 2))
-                if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-                        and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+                    suitTrack.append(
+                        Parallel(ActorInterval(suit, 'lured2'), MovieUtil.createSuitStunInterval(suit, 0, 2)))
+                    suitTrack.append(Func(suit.loop, 'lured2'))
+                if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'ad' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                        and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' and not suit.style.name == 'gm' \
                         and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
                         and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
                         and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
                         and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
-                        and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
-                        and not suit.style.name == 'msr' and not suit.style.name == 'tlr' and not suit.style.name == 'cvy' and not suit.style.name == 'cps' and not suit.style.name == 'dfh' and not suit.style.name == 'fas' and not suit.style.name == 'csh':
+                        and not suit.style.name == 'ssm' and not suit.style.name == 'nd' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
+                        and not suit.style.name == 'dfh' and not suit.style.name == 'cps' and not suit.style.name == 'cvy' \
+                        and not suit.style.name == 'jb':
                     for headPart in suit.headParts:
                         #suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 1))
                         # suitTrack.append(Wait(1.5))
@@ -478,56 +483,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         sinkPos.setZ(sinkPos.getZ() + 9.1)
         sinkPos.setY(sinkPos.getZ() + 9.1)
         dropPos.setZ(dropPos.getZ() + 15)
-        #retval = Parallel()
-        #y = sinkPos.getY()
-        #train = globalPropPool.getProp('wreckingball-ball')
-        #train.hide()
-        #train.reparentTo(trapProp)
-        #tempScale = trapProp.getScale()
-        #trainScale = Vec3(1.0 / tempScale[0], 1.0 / tempScale[1], 1.0 / tempScale[2])
-        #endingX = TRAIN_STARTING_X + TRAIN_TRAVEL_DISTANCE
-        #trainIval = Sequence()
-        #trainIval.append(Func(train.setScale, trainScale))
-        #ainIval.append(Func(train.setZ, dropPos))
-        #rainIval.append(Func(train.setY, sinkPos))
-        #trainIval.append(Func(train.setX, dropPos))
-        #trainIval.append(Func(train.setTransparency, 1))
-        #trainIval.append(Func(train.setColorScale, Point4(1, 1, 1, 0)))
-        #trainIval.append(Func(train.show))
-        #materializeIval = Parallel()
-        #materializeIval.append(LerpColorScaleInterval(train, TRAIN_MATERIALIZE_TIME, Point4(1, 1, 1, 0)))
-        #trainIval.append(materializeIval)
-        #trainIval.append(LerpPosInterval(train, TRAIN_DURATION, Point3(dropPos, 0, 0), other=battle))
-        #trainIval.append(LerpPosInterval(train, TRAIN_DURATION, Point3(dropPos, 0, 0), other=battle))
-        #trainIval.append(LerpColorScaleInterval(train, TRAIN_MATERIALIZE_TIME, Point4(1, 1, 1, 0)))
-        #retval.append(trainIval)
-        #tempScale = trapProp.getScale()
-        #wreckingballScale = Vec(1.0 / tempScale[0], 1.0 / tempScalke [1], 1.0 / tempScale[2])
-        #wreckingball.hide()
-        #wreckingballPosition = LerpHprInterval(wreckingball, 0, Point3(90, 0, 0))
-        #wreckingballPos = [Point3(sinkPos.getX(), y, 30.0), suit.getHpr(battle)]
-        #wreckingball.reparentTo(trapProp)
-        #wreckingIval = Parallel()
-        #wreckingIval.append(Func(wreckingball.setScale, wreckingballScale))
-        #wreckingIval.append(Func(wreckingball.setX, sinkPos.getZ()))
-        #wreckingIval.append(Func(wreckingball.setY, sinkPos.getZ() + 9.1))
-        #wreckingIval.append(Func(wreckingball.show))
-        #wreckingballPropTrack = Sequence(Parallel(wreckingballPosition),
-            #Parallel(
-                #wreckingball.posInterval(1.5, Point3(sinkPos.getX(), y, 0.1), blendType='easeIn'),
-            #LerpFunctionInterval(wreckingball.setAlphaScale, fromData=1, toData=0, duration=1.0),
-            #Func(MovieUtil.removeProp, wreckingball)))
-        #wreckingIval.append(Sequence(Wait(4.6)))
-        #wreckingIval.append(Func(Sequence(Wait(4.6), LerpScaleInterval(wreckingball, 0.8, Point3(0.01, 0.01, 0.01)))))
-        #wreckingIval.append(Func(wreckingball.hide))
-        #wreckingIval.append(wreckingballPropTrack)
-        trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
-        moveTrack = Sequence(Wait(2.2), LerpPosInterval(suit, 0.4, sinkPos, other=battle),
-                             Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.6))
-        soundTrack = Sequence(Wait(2.2),
-                              SoundInterval(globalBattleSoundCache.getSound('AA_trap_wreckingball_nonfatal.ogg'),
-                                            node=suit))
-        #soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('AA_trap_wreckingball_nonfatal.ogg'), node=suit))
         if died:
             suitGone = 1
             damageTrack = Sequence()
@@ -536,8 +491,15 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                                  ActorInterval(suit, 'flail', startTime=0.7, endTime=0),
                                  ActorInterval(suit, 'flail', startTime=0.7, duration=0.5))
             animTrack.append(MovieUtil.createSuitWreckingDeathTrack(suit, battle))
+            result.append(Parallel(animTrack, damageTrack))
 
         else:
+            trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
+            moveTrack = Sequence(Wait(2.2), LerpPosInterval(suit, 0.4, sinkPos, other=battle),
+                                 Func(suit.setPos, battle, dropPos), Wait(1.6))
+            soundTrack = Sequence(Wait(2.2),
+                                  SoundInterval(globalBattleSoundCache.getSound('AA_trap_wreckingball_nonfatal.ogg'),
+                                                node=suit))
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
             animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail', 0.7, 0.25),
@@ -549,7 +511,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
             soundTrack.append(Wait(0.8))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
-        result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
+            result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'tnt':
         tntTrack = ActorInterval(trapProp, 'tnt')
         explosionTrack = Sequence(Wait(2.3), createTNTExplosionTrack(battle, trapProp=trapProp, relativeTo=parent))
@@ -640,7 +602,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
     else:
         result.append(Func(battle.unlureSuit, suit))
         #result.append(MovieUtil.createSuitResetPosTrack(suit, battle))
-        result.append(Func(suit.loop, 'neutral'))
+        result.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
         if revived:
             result.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died and not suitGone:
@@ -881,24 +843,26 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-                suitTrack.append(Func(suit.loop, 'neutral'))
+                suitTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                 suitTrack.append(Wait(suitDelay))
                 suitTrack.append(Func(showLureRounds, suit, lure['level']))
                 suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
                 suitTrack.append(Func(suit.setPos, battle, reachPos))
                 if trapProp:
-                    suitTrack.append(Func(suit.loop, 'lured'))
+                    suitTrack.append(Func(suit.loop, 'lured2'))
                 else:
-                    suitTrack.append(Func(suit.loop, 'lured'))
-                    suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 2))
-                if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-                        and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'ad' and not suit.style.name == 'tbc' \
+                    suitTrack.append(
+                        Parallel(ActorInterval(suit, 'lured2'), MovieUtil.createSuitStunInterval(suit, 0, 2)))
+                    suitTrack.append(Func(suit.loop, 'lured2'))
+                if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'ad' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
+                        and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' and not suit.style.name == 'gm' \
                         and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
                         and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
                         and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
                         and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
-                        and not suit.style.name == 'ssm' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
-                        and not suit.style.name == 'msr' and not suit.style.name == 'tlr' and not suit.style.name == 'cvy' and not suit.style.name == 'cps' and not suit.style.name == 'dfh' and not suit.style.name == 'fas' and not suit.style.name == 'csh':
+                        and not suit.style.name == 'ssm' and not suit.style.name == 'nd' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
+                        and not suit.style.name == 'dfh' and not suit.style.name == 'cps' and not suit.style.name == 'cvy' \
+                        and not suit.style.name == 'jb':
                     for headPart in suit.headParts:
                         #suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 1))
                         # suitTrack.append(Wait(1.5))
