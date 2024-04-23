@@ -128,6 +128,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return __makeRubOut(color)
     elif name == 'SplashLines':
         return loadParticleFile('splashlines.ptf')
+    elif name == 'Shred2':
+        return loadParticleFile('shred2.ptf')
     elif name == 'Withdrawal':
         return loadParticleFile('withdrawal.ptf')
     else:

@@ -415,6 +415,12 @@ def chooseSuitShot(attack, attackDuration):
         else:
             return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration, 'suit')
 
+    def fromBehindCamera(attack=attack, attackDuration=attackDuration, openShotDuration=3.5, target=target):
+        return fromBehindGroupCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
+
+    def managerCamera(attack=attack, attackDuration=attackDuration, openShotDuration=3.5, target=target):
+        return randomManagerCheatCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
+
     if name == ACID_RAIN:
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == AUDIT:
@@ -460,73 +466,71 @@ def chooseSuitShot(attack, attackDuration):
     elif name == DEMOTION:
         camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name in (DETONATE, DETONATE_2, DETONATE_3):
-        camTrack.append(suitCameraShakeShot(suit, attackDuration, 0))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name in (CHAINSAW_DETONATE, CHAINSAW_DETONATE_2, CHAINSAW_DETONATE_3):
-        camTrack.append(suitCameraShakeShot(suit, attackDuration, 0))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name in (HEAD_ROLLER, HEAD_ROLLER_2, HEAD_ROLLER_3):
-        shakeIntensity = 0.25
-        quake = 1
-        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity, quake))
-        camTrack.append(defaultCamera(openShotDuration=6.8))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name in (UNION_BUST, UNION_BUST_2, UNION_BUST_3):
-        shakeIntensity = 0.25
-        quake = 1
-        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity, quake))
-        camTrack.append(defaultCamera(openShotDuration=6.8))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == DOUBLE_TALK:
         camTrack.append(defaultCamera(openShotDuration=3.9))
     elif name == EVICTION_NOTICE:
         camTrack.append(defaultCamera(openShotDuration=3.2))
     elif name == LD_EVICTION_NOTICE:
         camTrack.append(defaultCamera(openShotDuration=3.2))
-    elif name == INSURANCE_PLAN:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+    #elif name == INSURANCE_PLAN:
+        #camTrack.append(defaultCamera(openShotDuration=3.2))
     elif name == OIL_RAIN:
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == EMBEZZLE:
-        camTrack.append(defaultCamera(openShotDuration=2.2))
+        camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == FLOOD_THE_MARKET:
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == WHEEL_SPIN:
-        camTrack.append(defaultCamera(openShotDuration=2.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == INSURANCE_PLAN:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == WHEEL_SPIN:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == SNAP_WET:
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == ACCUSATIONS:
-        camTrack.append(defaultCamera(openShotDuration=2.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == ACCUSATIONS_2:
-        camTrack.append(defaultCamera(openShotDuration=2.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == GAME_SHOW:
-        camTrack.append(defaultCamera(openShotDuration=2.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == CAGE:
-        camTrack.append(defaultCamera(openShotDuration=2.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == EXTRA_TIP:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == REFINEMENT:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == LIFE_INSURANCE:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == WORKERS_COMPENSATION:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == COURT_RECORD_1:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == COURT_RECORD_2:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == COURT_RECORD_3:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == COURT_RECORD_4:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == COURT_RECORD_5:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == SPOTLIGHT:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == COURT_MANDATE:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == COURT_MANDATE_1:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == COURT_MANDATE_2:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == COURT_MANDATE_3:
-        camTrack.append(defaultCamera(openShotDuration=4.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == EVIL_EYE:
         camTrack.append(defaultCamera(openShotDuration=2.7))
     elif name == EVIL_EYE_WSI:
@@ -562,7 +566,65 @@ def chooseSuitShot(attack, attackDuration):
     elif name == MP_HOT_AIR:
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == POISON_SPRAY:
-        camTrack.append(defaultCamera(openShotDuration=1.6))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == MOB_MENTALITY:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == QUALITY_CONTROL_GAG:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == QUALITY_CONTROL_GAG_1:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == QUALITY_CONTROL_GAG_2:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == QUALITY_CONTROL_GAG_3:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == QUALITY_CONTROL_LEVEL:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == QUALITY_CONTROL_LEVEL_1:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == QUALITY_CONTROL_LEVEL_2:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == QUALITY_CONTROL_LEVEL_3:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == MANAGERIAL_PROTECTION:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == RADIO_INFREQUENCY:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == VOICEMAIL:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == WIRE_CUT:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == PAPER_CUT:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == EXPLODING_BILL:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == FIRE_COG:
+        camTrack.append(defaultCamera(openShotDuration=1.0))
+    elif name == GOOD_MORNING_TOONTOWN:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == CARESS:
+        camTrack.append(defaultCamera(openShotDuration=0.5))
+    elif name == COLLECT_CALL_FEES:
+        camTrack.append(defaultCamera(openShotDuration=1.7))
+    elif name == COLLECT_CALL:
+        camTrack.append(defaultCamera(openShotDuration=1.0))
+    elif name == SLUSH_FUND:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == JURY_NOTICE:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == CEASE_AND_DESIST:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == INVESTMENT:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == FIELD_PROMOTION:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == WIRETAPPED:
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == SHORT_SQUEEZE:
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == BLUE_CHIP:
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == FALLING_KNIFE:
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == JARGON:
         camTrack.append(defaultCamera())
     elif name == LEGALESE:
@@ -584,7 +646,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == PICK_POCKET:
         camTrack.append(allGroupLowShot(suit, 2.7))
     elif name == COURT_SANCTION:
-        camTrack.append(defaultCamera(openShotDuration=0.6))
+        camTrack.append(defaultCamera(openShotDuration=0.3))
     elif name == CHAINSAW_REVVING_UP:
         camTrack.append(defaultCamera(openShotDuration=1.6))
     elif name == PINK_SLIP:
@@ -670,28 +732,33 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == UNION_BUSTER:
         camTrack.append(defaultCamera(openShotDuration=1.7))
+    elif name == BOMB:
+        camTrack.append(defaultCamera(openShotDuration=0.3))
     elif name == LEGAL_BINDINGS:
         camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == TABULATE:
         camTrack.append(defaultCamera())
     elif name == TEE_OFF:
         camTrack.append(defaultCamera(openShotDuration=4.5))
+    elif name == CLOCK_CHANGE:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == TREMOR:
         shakeIntensity = 0.25
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
     elif name == WHITE_POWDER:
-        shakeIntensity = 0.25
-        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == WATERCOOLER:
         camTrack.append(defaultCamera())
     elif name == WITHDRAWAL:
         camTrack.append(defaultCamera(openShotDuration=1.2))
     elif name == INK_DRAIN:
-        camTrack.append(defaultCamera(openShotDuration=1.2))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == WRITE_OFF:
         camTrack.append(defaultCamera())
     elif name == OVERDRAFT:
         camTrack.append(defaultCamera())
+    elif name == ENRAGED:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == THROW_BOOK:
         camTrack.append(defaultCamera(openShotDuration=2.9))
     else:
@@ -1051,6 +1118,20 @@ def randomAttackCam(suit, toon, battle, attackDuration, openShotDuration, attack
         closeShot = randomSplitShot(attacker, defender, battle, closeShotDuration)
     return Sequence(openShot, closeShot)
 
+def fromBehindGroupCam(suit, targets, battle, attackDuration, openShotDuration):
+    if openShotDuration > attackDuration:
+        openShotDuration = attackDuration
+    closeShotDuration = attackDuration - openShotDuration
+    openShot = fromForwardGroupShot(targets, suit, openShotDuration, battle)
+    closeShot = fromBehindGroupShot(targets, suit, closeShotDuration, battle)
+    return Sequence(openShot, closeShot)
+
+def randomManagerCheatCam(suit, targets, battle, attackDuration, openShotDuration):
+    if openShotDuration > attackDuration:
+        openShotDuration = attackDuration
+    openShot = randomActorShot(suit, battle, openShotDuration, 'suit', groupShot=0)
+    return Sequence(openShot)
+
 
 def randomGroupAttackCam(suit, targets, battle, attackDuration, openShotDuration):
     if openShotDuration > attackDuration:
@@ -1161,6 +1242,28 @@ def chooseFireShot(throws, suitThrowsDict, attackDuration, enterDuration = 0, ex
     exitShot = chooseNPCExitShot(throws, exitDuration)
     track = Sequence(enterShot, openShot, closeShot, exitShot)
     return track
+
+def fromBehindGroupShot(toons, suit, duration, battle):
+    sum = 0
+    for t in toons:
+        toon = t['toon']
+        height = toon.getHeight()
+        sum = sum + height
+
+    avgHeight = sum / len(toons) * 0.75
+    focalPoint = Point3(0, -4, avgHeight)
+    return focusShot(0, 2, avgHeight * 2, duration, focalPoint)
+
+def fromForwardGroupShot(toons, suit, duration, battle):
+    sum = 0
+    for t in toons:
+        toon = t['toon']
+        height = toon.getHeight()
+        sum = sum + height
+
+    avgHeight = sum / len(toons) * 0.75
+    focalPoint = Point3(0, 0, avgHeight)
+    return focusShot(random.choice([40, -40]), 0, avgHeight * 1.5, duration, focalPoint)
 
 
 def chooseFireOpenShot(throws, suitThrowsDict, attackDuration):

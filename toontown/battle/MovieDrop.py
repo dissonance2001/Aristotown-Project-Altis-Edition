@@ -254,8 +254,7 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, npcs
     node.setFinal(1)
     died = target['died']
     soundTrack = __getSoundTrack(level, delay, hitSuit, toon, died or not lastDrop)
-    if not repeatNPC:
-        toonTrack, buttonTrack = MovieUtil.createButtonInterval(battle, delay, origHpr, suitPos, toon)
+    toonTrack, buttonTrack = MovieUtil.createButtonInterval(battle, delay, origHpr, suitPos, toon)
     objectTrack = Sequence()
 
     def posObject(object, miss):
@@ -418,11 +417,11 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         elif died != 0:
             suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
         else:
-            suitTrack.append(Func(suit.loop, 'neutral'))
+            suitTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
         if bonusTrack != None:
             suitTrack = Parallel(suitTrack, bonusTrack)
     elif kbbonus == 0:
-        suitTrack = Sequence(Wait(delay + tObjectAppears), Func(MovieUtil.indicateMissed, suit, 0.6), Func(suit.loop, 'neutral'))
+        suitTrack = Sequence(Wait(delay + tObjectAppears), Func(MovieUtil.indicateMissed, suit, 0.6), Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
     else:
         if alreadyDodged > 0:
             return

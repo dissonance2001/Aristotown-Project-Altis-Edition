@@ -16,11 +16,11 @@ them until they are completely fixed.
 BOSSBOTS:
 f- Flunky Level 1-8
 p - Pencil Pusher Level 2-9
-ym - Bookkeeper Level 2-10 (Operations Analyst)
+ym - Stockbroker Level 2-10 (Operations Analyst)
 mm - Yesman Level 3-10
 ds - Affiliate Level 3-12 (Operations Analyst)
 hh - Micromanager Level 4-12
-cr - The Overseer Level 4-15 (Field Specialist)
+cr - Overseer Level 4-15 (Field Specialist)
 tbc - Downsizer Level 5-15
 trb - Capitalist Level 5-20 (Operations Analyst)
 dot - Head Hunter Level 6-18
@@ -30,16 +30,16 @@ bkp - Toxic Leader Level 7-20 (Field Specialist)
 kpn - The Big Cheese Level 8-25
 cg - Autocaddie Level 14-15.exe
 bg - Club President Level 18.mgr
-msr - Club President (TTR) Level 24.mgr
+msr - Derrick Man Level 5.mgr
 kb - Derrick Hand Level 25.mgr
 ts - Derrick Hybrid Level 25.mgr
 tc - Firestarter Level 20.mgr
 tg - Featherbedder Level 30.mgr
-tb - Major Player Level 28.mgr
-adc - Derrick Man Level 5.mgr
+tb - Major Player Level 88.mgr
+adc - Chainsaw Consultant Level 50.mgr
 drm - Chainsaw Consultant (OR) Level 50.mgr
 cp - Powerhouse Level 38.mgr
-fbd - Shareholder Level 44.mgr
+fbd - Bookkeeper Level 44.mgr
 frs - Wiretapper Level 44.mgr
 gtk - Ambassador Level 48.mgr
 
@@ -55,13 +55,13 @@ bw - Back Stabber Level 5-15
 brv - Advocate Level 5-20 (Operations Analyst)
 sb - Spin Doctor Level 6-18
 cfp - Shyster Level 6-18 (Field Specialist)
-arb - Legal Eagle Level 7-20
+arb - Legal Eagle Level 7-20run
 sjg - Barrister Level 7-20 (Field Specialist)
 lsc - Big Wig Level 8-25
 jdg - Arbitrator Level 15-20.exe
 jur - Head Attorney Level 16.mgr
-tlr - Clerk (TTR) Level 22.mgr
-cm - Secretary Level 20.mgr
+tlr - Atticus Wing Level 50.mgr
+cm - Tester Cog (temporary) Level 20.mgr
 ggm - Mouthpiece Level 16.mgr
 th - Rainmaker Level 16.mgr
 kc - Witch Hunter Level 20.mgr
@@ -88,9 +88,9 @@ cvy - Treasurer Level 6-18 (Field Specialist)
 ptr - Loan Shark Level 7-20
 mld - Big Fish Level 7-20 (Field Specialist)
 pht - Robber Baron Level 8-25
-csh - Mint Auditor (TTR) Level 20.mgr
+csh - Mint Auditor Level 10-12.exe
 bgr - Mint Supervisor Level 13.mgr
-mes - Mint Supervisor 2 Level 13.mgr
+mes - Duck Shuffler Level 5.mgr
 dm - Treekiller Level 24.mgr
 tcc - Styx Level 20.mgr
 fb - Nix Level 21.mgr
@@ -99,14 +99,14 @@ gb - Kerberos Level 23.mgr
 lbs - Charon Level 25.mgr
 trk - Plutocrat Level 38.mgr
 dsf - Count Erfit Level 10-20.mgr
-msp - High Roller Silhouettes Level 12-25.mgr
-mad - Broadcaster Level 50.mgr
+msp - Desk Jockey Level 3-12.exe
+mad - Low Baller Level 75.mgr
 crf - High Roller Level 100.mgr
 
 SELLBOTS:
 cc - Cold Caller Level 1-8
 tm - Telemarketer Level 2-9
-nd - Lobbyist Level 2-10 (Field Specialist)
+nd - Lobbyist Level 2-10 (Field Specialist) CHANGE
 gh - Name Dropper Level 3-10
 ms - Prospector Level 3-12 (Operations Analyst)
 tf - Glad Hander Level 4-12
@@ -118,19 +118,19 @@ trm - Assembly Assassin Level 6-18 (Field Specialist)
 ssm - The Mingler Level 7-20
 isw - Aggressive Achiever Level 7-20 (Field Specialist)
 ssr - Mr. Hollywood Level 8-25
-fas - Factory Foreman (TTR) Level 18.mgr
+fas - Safe-ty Supervisor Level 8-10.exe CHANGE
 mdr - Factory Foreman Level 11.mgr
-nar - Factory Foreman 2 Level 11.mgr
+nar - Director Of Public Relations Level 10.mgr
 fd - Director Of Public Affairs Level 30.mgr
 fm - Bellringer Level 13.mgr
-jb - Desk Jockey Level 3-8.exe
+jb - Mr. Hollywood (Major Player) Level 8-25.exe
 jg - Prethinker Level 12.mgr
 jr - Multislacker Level 24.mgr
-prr - Videographer Level 50.mgr
+prr - Videographer Level 90.mgr
 blr - Radiographer Level 28.mgr
-dvp - Perpetrator Level 32.mgr
+dvp - Pluviculturist Level 32.mgr
 dsk - Union Buster Level 32.mgr
-ffm - Bureaucrat Level 38.mgr
+ffm - Pyromaniac Level 38.mgr
 sft - Pacesetter Level 66.mgr
 
 BOARDBOTS(WIP):
@@ -148,9 +148,9 @@ dfh - Big Fish Level 6-18 (Field Specialist)
 rng - Magnate Level 7-20
 cps - Chairwarmer Level 7-20 (Field Specialist)
 tld - Head Honcho Level 8-25
-gkp - Chairperson Level 18.mgr
+gkp - Chairperson Level 15-18.exe
 ddv - Board Director Level 20.mgr
-dty - Board Director 2 Level 20.mgr
+dty - Deep Diver Level 7.mgr
 dfg - Gatekeeper Level 10.mgr
 dfr - Land Acquisition Architect Level 7.mgr
 bsh - Director Of Land Development Level 25.mgr

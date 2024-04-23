@@ -21,6 +21,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
+        self.offsetNP = None
         self.bldgRequest = None
         self.toonRequests = {}
         self.deferredSlots = []
@@ -66,6 +67,11 @@ class DistributedElevator(DistributedObject.DistributedObject):
         self.elevatorSphereNodePath = self.getElevatorModel().attachNewNode(self.elevatorSphereNode)
         self.elevatorSphereNodePath.reparentTo(self.getElevatorModel())
         self.elevatorSphereNodePath.stash()
+        try:
+            self.leftDoor = self.elevatorModel.find('**/left_door')
+            self.rightDoor = self.elevatorModel.find('**/right_door')
+        except:
+            pass
         self.boardedAvIds = {}
         self.openDoors = getOpenInterval(self, self.leftDoor, self.rightDoor, self.openSfx, self.finalOpenSfx, self.type)
         self.closeDoors = getCloseInterval(self, self.leftDoor, self.rightDoor, self.closeSfx, self.finalCloseSfx, self.type)
@@ -123,7 +129,8 @@ class DistributedElevator(DistributedObject.DistributedObject):
         self.fillSlotTrack = None
         if not self.offsetNp:
             return
-        self.offsetNP.removeNode()
+        if self.offsetNP:
+            self.offsetNP.removeNode()
         if hasattr(base.localAvatar, 'elevatorNotifier'):
             base.localAvatar.elevatorNotifier.cleanup()
         DistributedObject.DistributedObject.delete(self)
@@ -200,7 +207,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
                     return
                 place.detectedElevatorCollision(self)
                 elevator = self.getPlaceElevator()
-                if elevator == None:
+                if elevator is None:
                     if place.fsm.hasStateNamed('elevator'):
                         place.fsm.request('elevator')
                     elif place.fsm.hasStateNamed('Elevator'):

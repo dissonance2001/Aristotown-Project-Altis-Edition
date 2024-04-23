@@ -29,8 +29,8 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
             state.addTransition('factoryExterior')
 
         self.musicFile = 'phase_11/audio/bgm/LB_courtyard.ogg'
-        self.cogHQExteriorModelPath = 'phase_11/models/lawbotHQ/LawbotPlaza'
-        self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_DA_Lobby'
+        self.cogHQExteriorModelPath = 'phase_11/models/lawbotHQ/LB_courtyard'
+        self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_lawfice_Lobby'
         self.cogHQLobbyModelPath = 'phase_11/models/lawbotHQ/LB_CH_Lobby'
         self.geom = None
 
@@ -50,22 +50,21 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.notify.debug('zoneId = %d ToontownGlobals.LawbotHQ=%d' % (zoneId, ToontownGlobals.LawbotHQ))
         if zoneId == ToontownGlobals.LawbotHQ:
             self.geom = loader.loadModel(self.cogHQExteriorModelPath)
-            ug = self.geom.find('**/underground')
-            ug.setBin('ground', -10)
-            brLinkTunnel = self.geom.find('**/TunnelEntrance1')
+            # ug = self.geom.find('**/underground')
+            # ug.setBin('ground', -10)
+            brLinkTunnel = self.geom.find('**/tunnel-lawbot')
             brLinkTunnel.setName('linktunnel_br_3326_DNARoot')
         elif zoneId == ToontownGlobals.LawbotOfficeExt:
             self.geom = loader.loadModel(self.factoryExteriorModelPath)
-            ug = self.geom.find('**/underground')
-            ug.setBin('ground', -10)
-            self.geom.flattenMedium()
+            #ug = self.geom.find('**/underground')
+            #ug.setBin('ground', -10)
         elif zoneId == ToontownGlobals.LawbotLobby:
             if base.config.GetBool('want-qa-regression', 0):
                 self.notify.info('QA-REGRESSION: COGHQ: Visit LawbotLobby')
             self.notify.debug('cogHQLobbyModelPath = %s' % self.cogHQLobbyModelPath)
             self.geom = loader.loadModel(self.cogHQLobbyModelPath)
-            ug = self.geom.find('**/underground')
-            ug.setBin('ground', -10)
+            #ug = self.geom.find('**/underground')
+            #ug.setBin('ground', -10)
         else:
             self.notify.warning('loadPlaceGeom: unclassified zone %s' % zoneId)
         CogHQLoader.CogHQLoader.loadPlaceGeom(self, zoneId)

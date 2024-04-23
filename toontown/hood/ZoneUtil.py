@@ -242,7 +242,7 @@ def getWakeInfo(hoodId = None, zoneId = None):
         pass
 
     return (showWake, wakeWaterHeight)
-    
+
 def genDNAFileName(zoneId):
     zoneId = getCanonicalZoneId(zoneId)
     hoodId = getCanonicalHoodId(zoneId)

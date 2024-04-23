@@ -40,6 +40,18 @@ class BossbotHQExterior(CogHQExterior.CogHQExterior):
         self.elevator.exit()
         del self.elevator
 
+    def enter(self, requestStatus):
+        CogHQExterior.CogHQExterior.enter(self, requestStatus)
+        self.loader.hood.startSky()
+        self.loader.hood.setWhiteFog()
+        self.loader.startCollisionDetection()
+
+    def exit(self):
+        #self.loader.hood.setNoFog()
+        #self.loader.hood.stopSky()
+        self.loader.stopCollisionDetection()
+        CogHQExterior.CogHQExterior.exit(self)
+
     def detectedElevatorCollision(self, distElevator):
         self.fsm.request('elevator', [distElevator])
 

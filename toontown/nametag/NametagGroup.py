@@ -26,15 +26,15 @@ class NametagGroup:
         self.nametagColor = NametagGlobals.NametagColors[NametagGlobals.CCNormal]
         self.chatColor = NametagGlobals.ChatColors[NametagGlobals.CCNormal]
         self.speedChatColor = VBase4(1, 1, 1, 1)
-        self.wordWrap = 9
-        self.chatWordWrap = 12
+        self.wordWrap = 8
+        self.chatWordWrap = 8
         self.text = ''
         self.name = ''
         self.chatPages = []
         self.chatPageIndex = 0
         self.chatTimeoutTask = None
         self.chatTimeoutTaskName = self.getUniqueName() + '-timeout'
-        self.stompChatText = ''
+        self.stompChatText = None
         self.stompTask = None
         self.stompTaskName = self.getUniqueName() + '-stomp'
         self.icon = PandaNode('icon')
@@ -300,7 +300,7 @@ class NametagGroup:
             taskMgr.remove(self.stompTask)
             self.stompTask = None
 
-        self.stompChatText = ''
+        self.stompChatText = None
 
         if self.chatTimeoutTask is not None:
             taskMgr.remove(self.chatTimeoutTask)
@@ -427,4 +427,4 @@ class NametagGroup:
 
     def __chatStomp(self, timeout=False):
         self.setChatText(self.stompChatText, timeout=timeout)
-        self.stompChatText = ''
+        self.stompChatText = None

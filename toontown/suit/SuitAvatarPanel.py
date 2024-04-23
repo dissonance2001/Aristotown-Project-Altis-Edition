@@ -69,13 +69,18 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
                                           text_font=avatar.getFont(), text_align=TextNode.ACenter,
                                           text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
         elif avatar.dna.name == 'crf':
-            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.06), relief=None,
-                                          text=TTLocalizer.AvatarPanelCogLevel100 % level,
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level,
                                           text_font=avatar.getFont(), text_align=TextNode.ACenter,
                                           text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
         elif avatar.dna.name == 'tcm':
-            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.06), relief=None,
-                                          text=TTLocalizer.AvatarPanelCogLevel100 % level,
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level,
+                                          text_font=avatar.getFont(), text_align=TextNode.ACenter,
+                                          text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
+        elif avatar.dna.name == 'mad':
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level,
                                           text_font=avatar.getFont(), text_align=TextNode.ACenter,
                                           text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
         else:
