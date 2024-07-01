@@ -15,6 +15,7 @@ A customized version of Project Altis that's is heavily based on the predecessor
 - Gag damages mirror what they are in Clash, level 8s have not been added yet but it is on the todo list.
 - Trap damage reflects what prestige trap damage is in Clash, prestiges don't exist (yet).
 - Zap is present ingame, but needs to be revamped.
+- test
 
 ## 💻 Windows
 Run the [Start.bat](Start.bat) file to launch the game.
