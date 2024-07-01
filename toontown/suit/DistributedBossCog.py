@@ -965,7 +965,9 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.transitions.IrisModelName = 'phase_3/models/misc/iris'
         self.transitions.FadeModelName = 'phase_3/models/misc/fade'
         self.transitions.fadeScreen(alpha=1)
-        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
 
     def __doneWaitForToons(self):
         self.doneBarrier('WaitForToons')
@@ -975,6 +977,11 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.transitions.noFade()
         del self.transitions
         NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
 
     def enterElevator(self):
         for toonId in self.involvedToons:
@@ -1005,7 +1012,12 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
     def enterIntroduction(self):
         self.controlToons()
         ElevatorUtils.openDoors(self.leftDoor, self.rightDoor, self.elevatorType)
-        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
         intervalName = 'IntroductionMovie'
         delayDeletes = []
         seq = Sequence(self.makeIntroductionMovie(delayDeletes), Func(self.__beginBattleOne), name=intervalName)
@@ -1017,6 +1029,12 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         intervalName = 'IntroductionMovie'
         self.clearInterval(intervalName)
         self.doneBarrier('Introduction')
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
 
     def exitIntroduction(self):
         self.notify.debug('DistributedBossCog.exitIntroduction:')
@@ -1025,6 +1043,11 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.unstickToons()
         self.releaseToons()
         NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
         ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, self.elevatorType)
 
     def enterBattleOne(self):
@@ -1034,6 +1057,12 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.toonsToBattlePosition(self.toonsA, self.battleANode)
         self.toonsToBattlePosition(self.toonsB, self.battleBNode)
         self.releaseToons()
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
         base.playMusic(self.battleOneMusic, looping=1, volume=0.9)
 
     def exitBattleOne(self):
@@ -1044,11 +1073,12 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
     def enterBattleThree(self):
         self.cleanupIntervals()
         self.releaseToons(finalBattle=1)
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        NametagGlobals.setWant2dNametags(False)
-        NametagGlobals.setWantActiveNametags(True)
 
     def exitBattleThree(self):
         self.ignore('clickedNameTag')
@@ -1092,16 +1122,20 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
     def enterBattleFour(self):
         self.cleanupIntervals()
         self.releaseToons(finalBattle=1)
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        NametagGlobals.setWant2dNametags(False)
-        NametagGlobals.setWantActiveNametags(True)
 
     def exitBattleFour(self):
-        self.ignore('clickedNameTag')
-        self.ignore('friendAvatar')
-        self.ignore('avatarDetails')
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
         self.cleanupIntervals()
 
     def enterFrolic(self):

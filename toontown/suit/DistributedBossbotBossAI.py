@@ -343,8 +343,8 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
                 info = self.notDeadList[i]
-                suitType = info[2] - 25
-                suitLevel = random.randint(info[2] - 1, info[2] + 3)
+                suitType = info[2] - 4
+                suitLevel = info[2]
                 suit = self.__genSuitObject(self.zoneId, suitType, None, suitLevel, 0)
                 if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE:
                     suit.b_setExecutive(1)
@@ -357,18 +357,6 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             if simbase.config.GetBool('bossbot-boss-cheat', 0):
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
-                suitType1 = 20
-                suitType2 = 21
-                suitType = random.choice([suitType1, suitType2])
-                suitLevel1 = 50
-                suitLevel2 = 50
-                suitLevel = random.choice([suitLevel1, suitLevel2])
-                if 38 <= suitLevel <= 38:
-                    suitType = 22
-                elif 44 <= suitLevel <= 44:
-                    suitType = random.randint(23, 24)
-                elif 50 <= suitLevel <= 50:
-                    suitType = random.randint(20, 21)
                 suit = self.__genSuitObjectBoss(self.zoneId, suitType, 'c', suitLevel, 0)
                 suit.b_setManager(1)
             active.append(suit)
@@ -398,16 +386,6 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def __setupSuitInfo(self, suit, bldgTrack, suitLevel, suitType):
         dna = SuitDNA.SuitDNA()
-        if 9 <= suitType < 12:
-            suitType = random.choice([6, 7, 8, 9, 10, 11])
-        elif 12 <= suitType <= 15:
-            suitType = random.choice([7, 8, 9, 10, 11])
-        elif 20 <= suitType <= 20:
-            suitType = 20
-        elif 21 <= suitType <= 21:
-            suitType = 21
-        else:
-            suitType = random.choice([6, 7, 8, 9, 10, 11])
         dna.newSuitRandom(level=suitType, dept=bldgTrack)
         suit.dna = dna
         self.notify.debug('Creating suit type ' + suit.dna.name + ' of level ' + str(suitLevel) + ' from type ' + str(suitType) + ' and track ' + str(bldgTrack))
@@ -503,7 +481,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         if not self.validate(avId, avId in self.involvedToons, 'hitBoss from unknown avatar'):
             return
         if self.attackCode == ToontownGlobals.BossCogDizzyNow:
-            bossDamage *= 2
+            bossDamage *= 3
         if bossDamage >= 3 and self.attackCode != ToontownGlobals.BossCogDizzyNow:
             if random.random() <= self.speedDamage/self.maxSpeedDamage:
                 self.b_setAttackCode(ToontownGlobals.BossCogDizzyNow)
@@ -960,7 +938,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def getDamageMultiplier(self):
         mult = ToontownGlobals.BossbotBossDamageMultipliers[self.battleDifficulty]
         if self.doneOvertimeOneAttack and not self.doneOvertimeTwoAttack:
-            mult *= 1.25
+            mult *= 1.5
         elif self.doneOvertimeOneAttack and self.doneOvertimeTwoAttack:
             mult *= 2
         return mult

@@ -49,10 +49,10 @@ SuitBuildingInfo = (((1, 1), (1, 3), (4, 4), (8, 10), (1,)), # Buildings
  ((1, 1), (5, 14), (14, 14), (150, 150), (1, 1, 1, 1, 1)), # CFO Round 1 Cogs
  ((1, 1), (8, 14), (14, 14), (200, 200), (1, 1, 1, 1, 1)), # CFO Round 1 Skelecogs
  ((1, 1), (5, 16), (16, 16), (300, 300), (1, 1, 1, 1, 1)), # CJ Round 1 Cogs
- ((1, 1), (11, 20), (28, 28), (300, 300), (1, 1, 1, 1, 1)), # CEO Round 1 Cogs
+ ((1, 1), (11, 20), (20, 20), (300, 300), (1, 1, 1, 1, 1)), # CEO Round 1 Cogs
  ((1, 1), (1, 5), (5, 5), (33, 33), (1, 1, 1, 1, 1)), # Storm Sellbot VP Round 1
  ((1, 1), (4, 7), (5, 5), (50, 50), (1, 1, 1, 1, 1)), # Storm Sellbot VP Round 2
- ((1, 1), (10, 20), (50, 50), (306, 306), (1, 1, 1, 1, 1)), # CEO Diner Cogs (Only uses level range and revives flag, cogs are decided based on tables served)
+ ((1, 1), (10, 20), (20, 20), (306, 306), (1, 1, 1, 1, 1)), # CEO Diner Cogs (Only uses level range and revives flag, cogs are decided based on tables served)
  ((1, 1), (5, 20), (20, 20), (206, 206), (1, 1, 1, 1, 1)), # Chairman Cogs
  ((1, 1), (10, 20), (20, 20), (206, 206), (1, 1, 1, 1, 1)), # Chairman Skelecogs
  ((1, 1), (5, 12), (12, 12), (100, 100), (1, 1, 1, 1, 1)), # VP Round 1 Easy

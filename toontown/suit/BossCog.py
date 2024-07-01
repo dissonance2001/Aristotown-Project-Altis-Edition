@@ -110,8 +110,8 @@ class BossCog(Avatar.Avatar):
          self.murmur,
          self.statement,
          self.question,
-         self.statement,
-         self.statement]
+         self.grunt,
+         self.grunt]
         dna = self.style
         filePrefix = ModelDict[dna.dept]
         self.loadModel(GenericModel + '-legs-zero', 'legs')
@@ -135,7 +135,7 @@ class BossCog(Avatar.Avatar):
         self.backAttack = self.rotateNode.attachNewNode('frontAttack')
         self.backAttack.setPos(0, 10, 10)
         self.backAttack.setScale(2)
-        self.setHeight(26)
+        self.setHeight(30)
         self.nametag3d.setScale(2)
         for partName in ('legs', 'torso', 'head'):
             animDict = {}

@@ -165,6 +165,44 @@ def chooseSoundOpenShot(sounds, targets, attackDuration):
     track = apply(random.choice(shotChoices), [av, duration])
     return track
 
+def cameraActorShot(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
+    previousParent = camera.getParent()
+    path = 'phase_3.5/models/misc/camera_actor'
+    cameraActor = Actor.Actor(path, {anim: path + '-' + anim})
+    node = cameraActor.find('**/CameraBone')
+    track = Sequence(
+        Func(cameraActor.reparentTo, parent),
+        Func(camera.reparentTo, node),
+        Func(camera.setPosHpr, 0, -1, 2, 0, 0, 0),
+        ActorInterval(cameraActor, anim),
+        Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
+        Wait(remainTime),
+        Func(camera.reparentTo, previousParent),
+        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
+        Func(cameraActor.cleanup),
+        name=name
+    )
+    return track
+
+def cameraActorShot2(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
+    previousParent = camera.getParent()
+    path = 'phase_3.5/models/misc/camera_actor'
+    cameraActor = Actor.Actor(path, {anim: path + '-' + anim})
+    node = cameraActor.find('**/CameraBone')
+    track = Sequence(
+        Func(cameraActor.reparentTo, parent),
+        Func(camera.reparentTo, node),
+        Func(camera.setPosHpr, 0, -25, -10, 180, 0, 0),
+        ActorInterval(cameraActor, anim),
+        Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
+        Wait(remainTime),
+        Func(camera.reparentTo, previousParent),
+        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
+        Func(cameraActor.cleanup),
+        name=name
+    )
+    return track
+
 
 def chooseSoundCloseShot(sounds, targets, openDuration, openName, attackDuration):
     numSuits = len(targets)
@@ -440,13 +478,34 @@ def chooseSuitShot(attack, attackDuration):
     elif name == BLACK_ORB:
         camTrack.append(defaultCamera(openShotDuration=2.7))
     elif name == HEAVY_RAINFALL:
-        camTrack.append(defaultCamera(openShotDuration=2.7))
+        camTrack2 = defaultCamera(openShotDuration=2.2)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('The weather is starting to pick up!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Heavy Rain!', 3.5)
+        pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Level 6 and 7 gags are off-limits!', 3.5)))
+        pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == AFTERSHOCK:
-        camTrack.append(defaultCamera(openShotDuration=0.7))
+        camTrack2 = defaultCamera(openShotDuration=2.2)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('Reduces your gag power!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('After Shock!', 3.5)
+        pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Your gags will be less effective!', 3.5)))
+        pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == DROWNING:
         camTrack.append(defaultCamera(openShotDuration=2.7))
     elif name == FREEZING_RAIN:
-        camTrack.append(defaultCamera(openShotDuration=2.7))
+        camTrack2 = defaultCamera(openShotDuration=2.2)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc("You're starting to slow down!", 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Freezing Rain!', 3.5)
+        pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Your gags will be half as effective!', 3.5)))
+        pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == CHAINSAW_CANNED:
         camTrack.append(defaultCamera(openShotDuration=2.9))
     elif name == CALCULATE:
@@ -456,7 +515,23 @@ def chooseSuitShot(attack, attackDuration):
     elif name == CHOMP:
         camTrack.append(defaultCamera(openShotDuration=2.8))
     elif name == SNAP:
-        camTrack.append(defaultCamera(openShotDuration=2.8))
+        camTrack2 = Sequence(defaultCamera(openShotDuration=3.0))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = Sequence(Wait(6.0), pbpDc.getShowIntervalDesc('The Litigator absolutely swamps you with cogs!', 3.5))
+        pbpTrack2 = Sequence(Wait(6.0), pbpText.getShowIntervalCheat('Bayou Bash!', 3.5))
+        pbpDesc = pbpDc.getShowIntervalDesc('The Litigator retaliates against the most\ndangerous toon!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Snap!', 3.5)
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
+    elif name == SNAP_WET:
+        camTrack2 = Sequence(defaultCamera(openShotDuration=3.0))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = Sequence(Wait(6.0), pbpDc.getShowIntervalDesc('The Litigator absolutely swamps you with cogs!', 3.5))
+        pbpTrack2 = Sequence(Wait(6.0), pbpText.getShowIntervalCheat('Bayou Bash!', 3.5))
+        pbpDesc = pbpDc.getShowIntervalDesc('The Litigator retaliates when soaked!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Snap!', 3.5)
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == CIGAR_SMOKE:
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == CLIPON_TIE:
@@ -479,24 +554,64 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera(openShotDuration=3.2))
     elif name == LD_EVICTION_NOTICE:
         camTrack.append(defaultCamera(openShotDuration=3.2))
-    #elif name == INSURANCE_PLAN:
-        #camTrack.append(defaultCamera(openShotDuration=3.2))
-    elif name == OIL_RAIN:
+    elif name == BASH:
+        shakeIntensity = 5.0
+        quake = 1
+        camTrack.append(suitCameraShakeShot(suit, 4, shakeIntensity, quake))
+        camTrack.append(defaultCamera(openShotDuration=2.8))
+    elif name == DISASSEMBLE:
         camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == DATA_CORRUPTION:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == CLOUD_STORAGE:
+        camTrack.append(defaultCamera(openShotDuration=3.2))
+    elif name == DISK_SCRATCH:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == VOODOO_MAGIC:
+        camTrack.append(defaultCamera(openShotDuration=0.5))
+    elif name == ELECTROSTATIC_ENERGY:
+        camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name == INSURANCE_PLAN:
+        camTrack2 = Sequence(randomActorShot(suit, battle, attackDuration, 'suit'))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = Sequence(Wait(8.0), pbpDc.getShowIntervalDesc('The Case Manager binds a toon to take extra damage!', 3.5))
+        pbpTrack2 = Sequence(Wait(8.0), pbpText.getShowIntervalCheat('Legal Bindings!', 3.5))
+        pbpDesc = pbpDc.getShowIntervalDesc('The Case Manager insures that the cogs are healed!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Insurance Plan!', 3.5)
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
+    elif name == OIL_RAIN:
+        camTrack2 = defaultCamera(openShotDuration=2.2)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('The weather is starting to pick up!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Oil Rain!', 3.5)
+        pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Your offensive gags will be less effective!', 3.5)))
+        pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
+    elif name == HEAT_WAVE:
+        camTrack2 = defaultCamera(openShotDuration=1.2)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc("It's getting hot in here!", 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Heat Wave!', 3.5)
+        pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Level 6 and 7 gags are off-limits!', 3.5)))
+        pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == EMBEZZLE:
         camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == FLOOD_THE_MARKET:
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == WHEEL_SPIN:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
-    elif name == INSURANCE_PLAN:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
-    elif name == WHEEL_SPIN:
+    elif name == SWIRL_BATH:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == SNAP_WET:
-        camTrack.append(defaultCamera(openShotDuration=2.2))
+        camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == ACCUSATIONS:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == INSURANCE_PLAN:
+        camTrack.append(defaultCamera(openShotDuration=6.0))
     elif name == ACCUSATIONS_2:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == GAME_SHOW:
@@ -594,17 +709,33 @@ def chooseSuitShot(attack, attackDuration):
     elif name == WIRE_CUT:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == PAPER_CUT:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
-    elif name == EXPLODING_BILL:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
-    elif name == FIRE_COG:
         camTrack.append(defaultCamera(openShotDuration=1.0))
+    elif name == EXPLODING_BILL:
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == FIRE_COG:
+        camTrack2 = defaultCamera(openShotDuration=0.5)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('The Ambassador retaliates against the least\ndangerous toon!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Whirlwind!', 3.5)
+        pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Your offensive gags will be less effective!', 3.5)))
+        pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == GOOD_MORNING_TOONTOWN:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == CARESS:
         camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == COLLECT_CALL_FEES:
-        camTrack.append(defaultCamera(openShotDuration=1.7))
+        camTrack2 = Sequence(randomActorShot(suit, battle, 3.0, 'suit'), defaultCamera(openShotDuration=2.7))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('An audit is approaching!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Calculating Calling Fees!', 3.5)
+        pbpDesc = Sequence(Wait(5.0), (pbpDc.getShowIntervalDesc('The collect call fees are racking up!', 3.5)))
+        pbpTrack = Sequence(Wait(5.0), (pbpText.getShowIntervalCheat('Collect Call Costs!', 3.5)))
+        pbpDesc3 = Sequence(Wait(9.0), (pbpDc.getShowIntervalDesc('Level 6 and 8 gags are off-limits!', 3.5)))
+        pbpTrack3 = Sequence(Wait(9.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack3, pbpDesc3, pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == COLLECT_CALL:
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == SLUSH_FUND:
@@ -646,7 +777,14 @@ def chooseSuitShot(attack, attackDuration):
     elif name == PICK_POCKET:
         camTrack.append(allGroupLowShot(suit, 2.7))
     elif name == COURT_SANCTION:
-        camTrack.append(defaultCamera(openShotDuration=0.3))
+        camTrack2 = defaultCamera(openShotDuration=0.3)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('The Stenographer retaliates against the least\ndangerous toon!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Court Sanction!', 3.5)
+        pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Your gags will be less effective!', 3.5)))
+        pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Court Record!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == CHAINSAW_REVVING_UP:
         camTrack.append(defaultCamera(openShotDuration=1.6))
     elif name == PINK_SLIP:
@@ -727,11 +865,47 @@ def chooseSuitShot(attack, attackDuration):
     elif name == DUCK_SPIN:
         camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == SYNERGY:
-        camTrack.append(defaultCamera(openShotDuration=1.7))
+        camTrack2 = Sequence(randomActorShot(suit, battle, 3.0, 'suit'), defaultCamera(openShotDuration=2.7))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('An audit is approaching!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Calculating Interest Fees!', 3.5)
+        pbpDesc = Sequence(Wait(5.0), (pbpDc.getShowIntervalDesc('The interest fees are racking up!', 3.5)))
+        pbpTrack = Sequence(Wait(5.0), (pbpText.getShowIntervalCheat('Compounding Interest!', 3.5)))
+        pbpDesc3 = Sequence(Wait(9.0), (pbpDc.getShowIntervalDesc('Level 7 and 8 gags are off-limits!', 3.5)))
+        pbpTrack3 = Sequence(Wait(9.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack3, pbpDesc3, pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == UNION_DUES:
-        camTrack.append(defaultCamera(openShotDuration=1.7))
+        camTrack2 = Sequence(randomActorShot(suit, battle, 3.0, 'suit'), defaultCamera(openShotDuration=2.7))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('An audit is approaching!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Calculating Union Dues!', 3.5)
+        pbpDesc = Sequence(Wait(5.0), (pbpDc.getShowIntervalDesc('The dues are racking up!', 3.5)))
+        pbpTrack = Sequence(Wait(5.0), (pbpText.getShowIntervalCheat('Union Dues!', 3.5)))
+        pbpDesc3 = Sequence(Wait(9.0), (pbpDc.getShowIntervalDesc('Level 7 and 8 gags are off-limits!', 3.5)))
+        pbpTrack3 = Sequence(Wait(9.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack3, pbpDesc3, pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
+    elif name == COURT_COSTS:
+        camTrack2 = Sequence(randomActorShot(suit, battle, 3.0, 'suit'), defaultCamera(openShotDuration=2.7))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('An audit is approaching!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Calculating Costs!', 3.5)
+        pbpDesc = Sequence(Wait(5.0), (pbpDc.getShowIntervalDesc('The fees are racking up!', 3.5)))
+        pbpTrack = Sequence(Wait(5.0), (pbpText.getShowIntervalCheat('Court Costs!', 3.5)))
+        pbpDesc3 = Sequence(Wait(9.0), (pbpDc.getShowIntervalDesc('Level 6 and 8 gags are off-limits!', 3.5)))
+        pbpTrack3 = Sequence(Wait(9.0), (pbpText.getShowIntervalCheat('Court Record!', 3.5)))
+        return Parallel(pbpTrack3, pbpDesc3, pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == UNION_BUSTER:
-        camTrack.append(defaultCamera(openShotDuration=1.7))
+        camTrack2 = defaultCamera(openShotDuration=0.5)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc('The Union Buster retaliates against the least\ndangerous toon!', 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Union Buster!', 3.5)
+        pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Your offensive gags will be less effective!', 3.5)))
+        pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == BOMB:
         camTrack.append(defaultCamera(openShotDuration=0.3))
     elif name == LEGAL_BINDINGS:
@@ -746,13 +920,22 @@ def chooseSuitShot(attack, attackDuration):
         shakeIntensity = 0.25
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
     elif name == WHITE_POWDER:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = Sequence(randomActorShot(suit, battle, 3.5, 'suit'), cameraActorShot(suit, 'litigator-bellow', remainTime=attackDuration - cameraActorShot(suit, 'litigator-bellow').getDuration()))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = Sequence(Wait(3.5),
+                            pbpDc.getShowIntervalDesc('The Litigator removes all negative effects from the\ncogs!', 3.5))
+        pbpTrack2 = Sequence(Wait(3.5), pbpText.getShowIntervalCheat('Bayou Bellow!', 3.5))
+        pbpDesc = pbpDc.getShowIntervalDesc('The Litigator absolutely swamps you with cogs!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Bayou Bash!', 3.5)
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == WATERCOOLER:
         camTrack.append(defaultCamera())
     elif name == WITHDRAWAL:
         camTrack.append(defaultCamera(openShotDuration=1.2))
     elif name == INK_DRAIN:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack.append(defaultCamera(openShotDuration=2))
+        camTrack.append(randomActorShot(suit, battle, 4, 'suit'))
     elif name == WRITE_OFF:
         camTrack.append(defaultCamera())
     elif name == OVERDRAFT:
@@ -797,7 +980,7 @@ def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
             pbpText = attack['playByPlayText']
             diedText = av.getName() + ' was defeated!'
             diedTextList = [diedText]
-            diedTrack = pbpText.getToonsDiedInterval(diedTextList, duration)
+            diedTrack = pbpText.getToonsDiedInterval(diedTextList, 3.5)
     elif groupStatus == ATK_TGT_GROUP:
         av = None
         shotChoices = [allGroupLowShot, suitGroupThreeQuarterLeftBehindShot]
@@ -815,7 +998,7 @@ def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
                 pbpText = attack['playByPlayText']
                 diedTextList.append(toon.getName() + ' was defeated!')
 
-            diedTrack = pbpText.getToonsDiedInterval(diedTextList, duration)
+            diedTrack = pbpText.getToonsDiedInterval(diedTextList, 3.5)
     else:
         notify.error('Bad groupStatus: %s' % groupStatus)
     track = apply(random.choice(shotChoices), [av, duration])

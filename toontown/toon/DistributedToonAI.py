@@ -124,16 +124,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.glasses = (0, 0, 0)
         self.backpack = (0, 0, 0)
         self.shoes = (0, 0, 0)
-        self.cogTypes = [0, 0, 0, 0, 0]
-        self.cogLevels = [0, 0, 0, 0, 0]
-        self.cogReviveLevels = [0, 0, 0, 0, 0]
-        self.cogParts = [0, 0, 0, 0, 0]
-        self.cogRadar = [0, 0, 0, 0, 0]
+        self.cogTypes = [0, 0, 0, 0, 0, 0]
+        self.cogLevels = [0, 0, 0, 0, 0, 0]
+        self.cogReviveLevels = [0, 0, 0, 0, 0, 0]
+        self.cogParts = [0, 0, 0, 0, 0, 0]
+        self.cogRadar = [0, 0, 0, 0, 0, 0]
         self.trackBonusLevel = [0] * 9
         self.cogIndex = -1
         self.disguisePageFlag = 0
         self.sosPageFlag = 0
-        self.buildingRadar = [0, 0, 0, 0, 0]
+        self.buildingRadar = [0, 0, 0, 0, 0, 0]
         self.fishingRod = 0
         self.fishingTrophies = []
         self.trackArray = []
@@ -203,7 +203,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self._dbCheckDoLater = None
         self.teleportOverride = 0
         self._gmDisabled = False
-        self.promotionStatus = [0, 0, 0, 0, 0]
+        self.promotionStatus = [0, 0, 0, 0, 0, 0]
         self.magicWordTeleportRequests = []
         self.buffs = []
         self.stats = [0] * ToontownGlobals.TOTAL_STATS
@@ -1211,6 +1211,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
              0,
              0,
              0,
+             0,
              0]
         else:
             self.cogRadar = radar
@@ -1229,6 +1230,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not radar:
             self.notify.warning('buildingRadar set to bad value: %s. Resetting to [0,0,0,0,0]' % radar)
             self.buildingRadar = [0,
+             0,
              0,
              0,
              0,
@@ -1253,6 +1255,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
              0,
              0,
              0,
+             0,
              0]
         else:
             self.cogTypes = types
@@ -1271,6 +1274,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not levels:
             self.notify.warning('cogLevels set to bad value: %s. Resetting to [0,0,0,0,0]' % levels)
             self.cogLevels = [0,
+             0,
              0,
              0,
              0,
@@ -1332,6 +1336,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not levels:
             self.notify.warning('cogLevels set to bad value: %s. Resetting to [0,0,0,0,0]' % levels)
             self.cogReviveLevels = [0,
+             0,
              0,
              0,
              0,
@@ -1402,6 +1407,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
              0,
              0,
              0,
+             0,
              0]
         else:
             self.cogParts = parts
@@ -1465,6 +1471,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not merits:
             self.notify.warning('cogMerits set to bad value: %s. Resetting to [0,0,0,0,0]' % merits)
             self.cogMerits = [0,
+             0,
              0,
              0,
              0,
@@ -4951,7 +4958,7 @@ def maxToon(missingTrack=None):
             return 'You are required to have Throw and Squirt.'
         gagTracks[index] = 0
     target.b_setTrackAccess(gagTracks)
-    target.b_setMaxCarry(110)
+    target.b_setMaxCarry(150)
 
     # Next, max out their experience for the tracks they have:
     experience = Experience.Experience(target.getExperience(), target)
@@ -4987,19 +4994,20 @@ def maxToon(missingTrack=None):
         CogDisguiseGlobals.PartsPerSuitBitmasks[1], # Lawbot
         CogDisguiseGlobals.PartsPerSuitBitmasks[2], # Cashbot
         CogDisguiseGlobals.PartsPerSuitBitmasks[3], # Sellbot
-        CogDisguiseGlobals.PartsPerSuitBitmasks[4]  # Boardbots
+        CogDisguiseGlobals.PartsPerSuitBitmasks[4],
+        CogDisguiseGlobals.PartsPerSuitBitmasks[5]# Boardbots
     ])
-    target.b_setCogLevels([ToontownGlobals.MaxCogSuitLevel] * 5)
-    target.b_setCogReviveLevels([ToontownGlobals.MaxCogSuitLevel] * 5)
-    target.b_setCogTypes([SuitDNA.suitsPerDept-1] * 5)
+    target.b_setCogLevels([ToontownGlobals.MaxCogSuitLevel] * 6)
+    target.b_setCogReviveLevels([ToontownGlobals.MaxCogSuitLevel] * 6)
+    target.b_setCogTypes([SuitDNA.suitsPerDept-1] * 6)
 
     # Max their Cog gallery:
     deptCount = len(SuitDNA.suitDepts)
     target.b_setCogCount(list(CogPageGlobals.COG_QUOTAS[1]) * deptCount)
     cogStatus = [CogPageGlobals.COG_COMPLETE2] * SuitDNA.suitsPerDept
     target.b_setCogStatus(cogStatus * deptCount)
-    target.b_setCogRadar([1, 1, 1, 1, 1])
-    target.b_setBuildingRadar([1, 1, 1, 1, 1])
+    target.b_setCogRadar([1, 1, 1, 1, 1, 1])
+    target.b_setBuildingRadar([1, 1, 1, 1, 1, 1])
 
     # Max out their racing tickets:
     target.b_setTickets(99999)
@@ -5402,7 +5410,7 @@ def cogIndex(index):
     """
     Modifies the invoker's Cog index.
     """
-    if not -1 <= index <= 4:
+    if not -1 <= index <= 5:
         return 'Invalid Cog index.'
     invoker = spellbook.getInvoker()
     invoker.b_setCogIndex(index)

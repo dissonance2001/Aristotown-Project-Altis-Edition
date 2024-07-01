@@ -1,6 +1,7 @@
 from panda3d.core import *
 from panda3d.direct import *
 from toontown.toonbase import ToontownGlobals
+from toontown.suit import Suit
 from toontown.toonbase.ToontownBattleGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 import string
@@ -72,6 +73,7 @@ class TownBattleCogPanel(DirectFrame):
         self.initialiseoptions(TownBattleCogPanel)
         self.hidden = False
         self.cog = None
+        self.suit = None
         self.isLoaded = 0
         self.notify.info("Loading Cog Battle Panel!")
         self.healthText = DirectLabel(parent=self, text='', pos=(0.11, 1.0, 0.244), text_scale=0.065)
@@ -86,8 +88,8 @@ class TownBattleCogPanel(DirectFrame):
         self.healthNode.setPos(0.125, 0.0, 0.19)
         self.healthNode.setTransparency(1)
         button.reparentTo(self.healthNode)
-        self.hpText = DirectLabel(parent=self, text='', pos=(0.115, 0.1, 0.132), text_scale=0.075)
-        self.setScale(0.5)
+        self.hpText = DirectLabel(parent=self, text='', text_fg=Vec4(0, 0, 0, 1), pos=(0.115, 0.1, 0.132), text_scale=0.075)
+        self.setScale(0.525)
         #glow = BattleProps.globalPropPool.getProp('glow')
         #glow.reparentTo(button)
         #glow.setScale(0.28)
@@ -96,99 +98,33 @@ class TownBattleCogPanel(DirectFrame):
         self.button = button
         #self.glow = glow
         self.head = None
+        self.suitHead = None
         self.blinkTask = None
         self.hide()
         healthGui.removeNode()
         gui.removeNode()
 
     def setCogInformation(self, cog):
+        self.cleanupHead()
         self.cog = cog
         self.updateHealthBar()
-        if self.head:
-            self.head.removeNode()
+        #if self.head:
+            #self.head.removeNode()
 
-        self.head = self.attachNewNode('head')
-        for part in cog.headParts:
-            copyPart = part.copyTo(self.head)
-            copyPart.setDepthTest(1)
-            copyPart.setDepthWrite(1)
-
-        p1, p2 = Point3(), Point3()
-        self.head.calcTightBounds(p1, p2)
-        d = p2 - p1
-        biggest = max(d[0], d[1], d[2])
-        s = 0.19 / biggest
-        if self.cog.dna.name == 'ptr':
-            self.head.setPosHprScale(-0.27, 0.5, 0.12, 270, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'dfh':
-            self.head.setPosHprScale(-0.27, 0.5, 0.12, 270, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'bf':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'b':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'dt':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'ac':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'bs':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'cp':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'le':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'brv':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'arb':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'jgd':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'sjg':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'mg':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'ca':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'dvk':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'lsc':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'jdg':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'lit':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'ste':
-            self.head.setPosHprScale(-0.27, 0.5, 0.13, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'tyh':
-            self.head.setPosHprScale(-0.27, 0.5, 0.13, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'ghd':
-            self.head.setPosHprScale(-0.27, 0.5, 0.13, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'csm':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'ffm':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'gm':
-            self.head.setPosHprScale(-0.27, 0.5, 0.14, 180, 0, 0, s, s, s)
-        elif self.cog.dna.name == 'dvp':
-            self.head.setPosHprScale(-0.27, 0.5, 0.16, 180, 0, 0, s, s, s)
-        else:
-            self.head.setPosHprScale(-0.27, 0.5, 0.12, 180, 0, 0, s, s, s)
+        self.generateSuitHead(cog.getStyleName())
         self.setLevelText()
 
     def setLevelText(self):
         t = 'Level ' + str(self.cog.getActualLevel())
-        if self.cog.getSkeleRevives() > 0:
-            #self['image_color'] = Vec4(0.5, 0.5, 0.5, 1.0)
-            t += TTLocalizer.SkeleRevivePostFix
         if self.cog.getExecutive() or self.cog.getManager() or self.cog.getGovernaught():
             if self.cog.getExecutive():
-                #self['image_color'] = Vec4(0.3, 0.3, 0.3, 1.0)
                 t += TTLocalizer.ExecutivePostFix
             elif self.cog.getManager():
-                #self['image_color'] = Vec4(0.7, 0.4, 0.4, 1.0)
                 t += TTLocalizer.ManagerPostFix
             else:
-                #self['image_color'] = Vec4(0.361, 0.635, 0.839, 1.0)
                 t += TTLocalizer.GovernaughtPostFix
+        if self.cog.getSkeleRevives() > 0:
+            t += TTLocalizer.SkeleRevivePostFix % (self.cog.getSkeleRevives() + 1)
         self.healthText['text'] = t
 
     def updateHealthBar(self):
@@ -196,26 +132,108 @@ class TownBattleCogPanel(DirectFrame):
         if condition == 7:
             self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(1.2), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
+            self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
         elif condition == 8:
             self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(1.2), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
+            self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
         elif condition == 9:
             self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.75), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
+            self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
         elif condition == 10:
             taskMgr.remove(self.uniqueName('blink-task'))
             blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.25), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+            self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
+        elif condition == 13:
+            taskMgr.remove(self.uniqueName('blink-task'))
+            if not self.button.isEmpty():
+                self.button.setColor(self.healthColors[condition], 1)
+            self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
         else:
             taskMgr.remove(self.uniqueName('blink-task'))
             if not self.button.isEmpty():
                 self.button.setColor(self.healthColors[condition], 1)
+            self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
             
             #if not self.glow.isEmpty():
                 #self.glow.setColor(self.healthGlowColors[condition], 1)
         self.hp = self.cog.getHP()
         self.maxHp = self.cog.getMaxHP()
         self.hpText['text'] = str(self.hp) + '/' + str(self.maxHp)
+
+    def generateSuitHead(self, name):
+        self.suitHead = Suit.attachSuitHead(self, name)
+        needBigScaledHeads = 'dot', 'bc', 'cps'
+        needMedScaledHeads = 'bf', 'cc', 'sc', 'dsk', 'nar'
+        needSmallScaledHeads = 'bg'
+        needSmallerScaledHeads = 'csm', 'mka', 'txm', 'ym', 'bs', 'tw', 'ssm', 'kyl', 'kpn', 'blr', 'fd', 'tb', 'adc', 'drm', 'ffm', 'frs', 'fbd'
+        needEvenSmallerScaledHeads = 'ste', 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb'
+        if name in needBigScaledHeads:
+            self.suitHead.setScale(.13)
+        elif name in needMedScaledHeads:
+            self.suitHead.setScale(0.12)
+        elif name in needSmallScaledHeads:
+            self.suitHead.setScale(0.11)
+        elif name in needSmallerScaledHeads:
+            self.suitHead.setScale(0.09)
+        elif name in needEvenSmallerScaledHeads:
+            self.suitHead.setScale(0.08)
+        elif name == 'cpl':
+            self.suitHead.setScale(0.15)
+        elif name == 'dvg':
+            self.suitHead.setScale(0.15)
+        elif name == 'skd':
+            self.suitHead.setScale(0.15)
+        elif name == 'trm':
+            self.suitHead.setScale(0.15)
+        elif name == 'cp':
+            self.suitHead.setScale(0.065)
+        elif name == 'mg':
+            self.suitHead.setScale(0.065)
+        else:
+            self.suitHead.setScale(0.1)
+        if name == 'dfh':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -90, 0, 0, .1, .1, .1)
+        elif name == 'ptr':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -90, 0, 0, .1, .1, .1)
+        elif name == 'bg':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'scg':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
+        elif name == 'crf':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
+        elif name == 'mad':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
+        elif name == 'cg':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'ant':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .25, .25, .25)
+        elif name == 'sya':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'cm':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'laa':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'mdr':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'fas':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'jur':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .25, .25, .25)
+        elif name == 'bgr':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .3, .3, .3)
+        elif name == 'gkp':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'ddv':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'csh':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'csm':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .09, .09, .09)
+        else:
+            self.suitHead.setPos(-0.27, 0.5, 0.13)
 
     def show(self):
         if settings.get('show-cog-levels', True):
@@ -279,9 +297,7 @@ class TownBattleCogPanel(DirectFrame):
 
     def cleanup(self):
         self.ignoreAll()
-        if self.head:
-            self.head.removeNode()
-            del self.head
+        self.cleanupHead()
         
         if self.blinkTask:
             taskMgr.remove(self.blinkTask)
@@ -292,3 +308,8 @@ class TownBattleCogPanel(DirectFrame):
         self.button.removeNode()
         #self.glow.removeNode()
         DirectFrame.destroy(self)
+
+    def cleanupHead(self):
+        if self.suitHead:
+            self.suitHead.removeNode()
+            del self.suitHead

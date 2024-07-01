@@ -714,6 +714,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.__hideWitnessToon()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
         if not self.mainDoor.isEmpty():
             self.mainDoor.stash()
         if not self.reflectedMainDoor.isEmpty():
@@ -733,9 +736,11 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleOne(self):
         self.notify.debug('----- LawbotBoss.enterBattleOne ')
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleOnePosHpr)
-        self.clearChat()
         self.loop('Ff_neutral')
         self.notify.debug('self.battleANode = %s' % self.battleANode)
         self.__hideWitnessToon()
@@ -834,6 +839,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleTwo(self):
         self.notify.debug('----- enterBattleTwo')
         self.cleanupIntervals()
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(2)
         localAvatar.inventory.setBattleCreditMultiplier(mult)
         self.reparentTo(render)

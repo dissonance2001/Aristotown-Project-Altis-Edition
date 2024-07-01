@@ -15,22 +15,29 @@ BUILDING_RADAR_POS = (0.4,
  0.1,
  -0.18,
  -0.5,
- -0.51)
+ -0.51,
+                      -.6)
 PANEL_COLORS = (Vec4(0.8, 0.78, 0.77, 1),
  Vec4(0.75, 0.78, 0.8, 1),
  Vec4(0.75, 0.82, 0.79, 1),
  Vec4(0.825, 0.76, 0.77, 1),
- Vec4(.85, 0.85, .85, 1.0))
+ Vec4(.85, 0.85, .85, 1.0),
+                Vec4(.85, 0.85, .85, 1.0)
+                )
 PANEL_COLORS_COMPLETE1 = (Vec4(0.7, 0.725, 0.545, 1),
  Vec4(0.625, 0.725, 0.65, 1),
  Vec4(0.6, 0.75, 0.525, 1),
  Vec4(0.675, 0.675, 0.55, 1),
- Vec4(0.7, 0.7, 0.7, 1))
+ Vec4(0.7, 0.7, 0.7, 1),
+                          Vec4(.85, 0.85, .85, 1.0)
+                          )
 PANEL_COLORS_COMPLETE2 = (Vec4(0.9, 0.725, 0.32, 1),
  Vec4(0.825, 0.725, 0.45, 1),
  Vec4(0.8, 0.75, 0.325, 1),
  Vec4(0.875, 0.675, 0.35, 1),
- Vec4(0.7375, 0.6, 0.3625, 1),)
+ Vec4(0.7375, 0.6, 0.3625, 1),
+                          Vec4(.85, 0.85, .85, 1.0)
+                          )
 SHADOW_SCALE_POS = ((1.225, 0, 10, -0.03),# Flunky
  (0.9, 0, 10, 0),# Pencil Pusher
  (1.125, 0, 10, -0.015),# Yesman
@@ -216,6 +223,12 @@ class SuitPage(ShtikerPage.ShtikerPage):
         icon = icons.find('**/board_icon')
         self.boardRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED, image=(icon, icon, icon), image_scale=(0.03375, 1, 0.045), image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.615), command=self.toggleRadar, extraArgs=[4])
         self.radarButtons.append(self.boardRadarButton)
+        icon = icons.find('**/sales_icon')
+        self.techRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED,
+                                             image=(icon, icon, icon), image_scale=(0.03375, 1, 0.045),
+                                             image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.715),
+                                             command=self.toggleRadar, extraArgs=[4])
+        self.radarButtons.append(self.boardRadarButton)
         for radarButton in self.radarButtons:
             radarButton.building = 0
             radarButton.buildingRadarLabel = None
@@ -227,6 +240,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         del gui
         self.makePanels()
         self.radarOn = [0,
+         0,
          0,
          0,
          0,
@@ -252,6 +266,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         self.moneyRadarButton.destroy()
         self.salesRadarButton.destroy()
         self.boardRadarButton.destroy()
+        self.techRadarButton.destroy()
         self.rolloverFrame.destroy()
         for panel in self.panels:
             panel.destroy()
@@ -413,7 +428,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
             panel.shadow = shadow
         except:
             pass
-        panel.head = Suit.attachSuitHead(panel, suitName)
+        panel.head = None
 
     def addCogRadarLabel(self, panel):
         cogRadarLabel = DirectLabel(parent=panel, pos=(0.0, 0.0, -0.172), relief=None, state=DGG.DISABLED, text='', text_scale=0.05, text_fg=(0, 0, 0, 1), text_font=ToontownGlobals.getSuitFont())
@@ -461,8 +476,6 @@ class SuitPage(ShtikerPage.ShtikerPage):
             panel.cogRadarLabel.hide()
         if panel.quotaLabel:
             panel.quotaLabel.hide()
-        if panel.head:
-            panel.head.hide()
         if panel.shadow:
             panel.shadow.hide()
         if panel.summonButton:
@@ -488,11 +501,6 @@ class SuitPage(ShtikerPage.ShtikerPage):
                 panel.quotaLabel.show()
             else:
                 self.addQuotaLabel(panel)
-            if panel.head and panel.shadow:
-                panel.head.show()
-                panel.shadow.show()
-            else:
-                self.addSuitHead(panel, suitName)
             if base.localAvatar.hasCogSummons(index):
                 if panel.summonButton:
                     panel.summonButton.show()
@@ -599,6 +607,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
             buildingList = base.cr.currSuitPlanner.buildingList
         else:
             buildingList = [0,
+             0,
              0,
              0,
              0,

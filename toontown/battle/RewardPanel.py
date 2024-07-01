@@ -594,6 +594,8 @@ class RewardPanel(DirectFrame):
             self.deptIcon = icons.find('**/SalesIcon').copyTo(self.promotionFrame)
         elif dept == 4:
             self.deptIcon = icons.find('**/BoardIcon').copyTo(self.promotionFrame)
+        elif dept == 5:
+            self.deptIcon = icons.find('**/cog').copyTo(self.promotionFrame)
         icons.removeNode()
         self.deptIcon.setPos(0, 0, -0.225)
         self.deptIcon.setScale(0.33)

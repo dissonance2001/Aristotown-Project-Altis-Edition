@@ -198,11 +198,48 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             suitTrack.append(shortCircuitTrack(suit, battle))
         else:
             suitTrack.append(Wait(1.0))
+            if suit.maxHP > 0:
+                if float(suit.currHP - hp) / float(suit.maxHP) <= 0.25:
+                    suitTrack.append(Func(suit.loop, 'neutral-hurt'))
+                    if suit.style.name == 'crf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(
+                                Func(headPart.loop,
+                                     'neutral-hurt', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'mad':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(
+                                Func(headPart.loop,
+                                     'neutral-hurt', fromFrame=0, toFrame=22))
+                    else:
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(
+                                Func(headPart.loop,
+                                     'neutral-hurt')
+                            )
+                else:
+                    suitTrack.append(
+                        Func(suit.loop, 'neutral'))
+                    if suit.style.name == 'crf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(
+                                Func(headPart.loop,
+                                     'neutral', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'mad':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(
+                                Func(headPart.loop,
+                                     'neutral', fromFrame=0, toFrame=22))
+                    else:
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(
+                                Func(headPart.loop,
+                                     'neutral')
+                            )
             suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
-            suitTrack.append(Func(suit.loop, 'neutral-unstable'))
             #suitTrack.append(__soakRemoval(suit))
         if revived != 0:
-            suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
+            suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         return Parallel(suitTrack, bonusTrack, zapTracks)
     elif dodge:
         return MovieUtil.createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits)

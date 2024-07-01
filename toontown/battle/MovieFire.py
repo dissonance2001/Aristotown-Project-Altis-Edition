@@ -418,7 +418,7 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
     else:
         suitResponseTrack = Parallel(suitResponseTrack, Sequence(Wait(4.25), Func(suit.setChatAbsolute, random.choice(
         OTPLocalizerEnglish.SuitFireManager), CFSpeech | CFTimeout), Func(MovieUtil.indicateMissed, suit, 0.6),
-                                                                 ActorInterval(suit, 'gag-miss')))
+                                                                 ActorInterval(suit, 'gag-miss'), ActorInterval(suit, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))))
     return [toonTrack,
      soundTrack,
      buttonTrack,

@@ -33,9 +33,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
     ShadowColor = Vec4(0, 0, 0, 0)
     ShadowBuffedColor = Vec4(1, 1, 1, 1)
     UnpressableShadowBuffedColor = Vec4(1, 1, 1, 0.3)
-    TrackYOffset = 0.092
-    TrackYSpacing = -0.12
-    ButtonXOffset = -0.441
+    TrackYOffset = 0.095
+    TrackYSpacing = -0.13
+    ButtonXOffset = -0.411
     ButtonXSpacing = 0.178
 
     def __init__(self, toon, invStr = None, ShowSuperGags = 1):
@@ -202,7 +202,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         invModel.removeNode()
         del invModel
         self.buttonModels = loader.loadModel('phase_3.5/models/gui/inventory_gui')
-        self.rowModel = self.buttonModels.find('**/InventoryRow')
+        self.rowModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+        self.rowModel = self.rowModels.find('**/track_toon-up')
         self.upButton = self.buttonModels.find('**/InventoryButtonUp')
         self.downButton = self.buttonModels.find('**/InventoryButtonDown')
         self.rolloverButton = self.buttonModels.find('**/InventoryButtonRollover')
@@ -220,8 +221,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.deleteHelpText = DirectLabel(parent=self.invFrame, relief=None, pos=(0.272, 0.3, -0.907), text=TTLocalizer.InventoryDeleteHelp, text_fg=(0, 0, 0, 1), text_scale=0.08, textMayChange=0)
         self.deleteHelpText.hide()
         self.detailFrame = DirectFrame(parent=self.invFrame, relief=None, pos=(1.05, 0, -0.08))
-        self.detailNameLabel = DirectLabel(parent=self.detailFrame, text='', text_scale=TTLocalizer.INdetailNameLabel, text_fg=(0.05, 0.14, 0.4, 1), scale=0.045, pos=(0, 0, 0), text_font=getInterfaceFont(), relief=None, image=self.invModels[0][0])
-        self.detailAmountLabel = DirectLabel(parent=self.detailFrame, text='', text_fg=(0.05, 0.14, 0.4, 1), scale=0.04, pos=(0.16, 0, -0.155), text_font=getInterfaceFont(), text_align=TextNode.ARight, relief=None)
+        self.detailNameLabel = DirectLabel(parent=self.detailFrame, text='', text_scale=TTLocalizer.INdetailNameLabel, text_fg=(0.05, 0.14, 0.4, 1), scale=0.045, pos=(0, 0, 0), text_font=getSignFont(), relief=None, image=self.invModels[0][0])
+        self.detailAmountLabel = DirectLabel(parent=self.detailFrame, text='', text_fg=(0.05, 0.14, 0.4, 1), scale=0.04, pos=(0.16, 0, -0.155), text_font=getSignFont(), text_align=TextNode.ARight, relief=None)
         self.detailDataLabel = DirectLabel(parent=self.detailFrame, text='', text_fg=(0.05, 0.14, 0.4, 1), scale=0.04, pos=(-0.22, 0, -0.18), text_font=getInterfaceFont(), text_align=TextNode.ALeft, relief=None)
         self.detailCreditLabel = DirectLabel(parent=self.detailFrame, text=TTLocalizer.InventorySkillCreditNone, text_fg=(0.05, 0.14, 0.4, 1), scale=0.04, pos=(-0.22, 0, -0.365), text_font=getInterfaceFont(), text_align=TextNode.ALeft, relief=None)
         self.detailCreditLabel.hide()
@@ -231,9 +232,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.trackRows = []
         self.trackNameLabels = []
         self.trackBars = []
+
         self.buttons = []
         for track in range(0, len(Tracks)):
-            trackFrame = DirectFrame(parent=self.invFrame, image=self.rowModel, scale=(1.0, 1.0, 1.1), pos=(0, 0, self.TrackYOffset + track * self.TrackYSpacing), image_color=(TrackColors[track][0],
+            trackFrame = DirectFrame(parent=self.invFrame, image=self.rowModel, image_scale=(2.12, .5, .13), scale=(1.0, 1.0, 1.1), image_pos=(-0.01, 0, -0.0035), pos=(-0.15, 0, self.TrackYOffset + track * self.TrackYSpacing), image_color=(TrackColors[track][0],
              TrackColors[track][1],
              TrackColors[track][2],
              1), state=DGG.NORMAL, relief=None)
@@ -241,8 +243,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             trackFrame.bind(DGG.WITHOUT, self.exitTrackFrame, extraArgs=[track])
             self.trackRows.append(trackFrame)
             adjustLeft = -0.065
-            self.trackNameLabels.append(DirectLabel(text=TextEncoder.upper(Tracks[track]), parent=self.trackRows[track], pos=(-0.9 + adjustLeft, -0.1, 0.01), scale=TTLocalizer.INtrackNameLabels, relief=None, text_fg=(0.2, 0.2, 0.2, 1), text_font=getInterfaceFont(), text_align=TextNode.ALeft, textMayChange=0))
-            self.trackBars.append(DirectWaitBar(parent=self.trackRows[track], pos=(-0.73 + adjustLeft, -0.1, -0.025), relief=DGG.SUNKEN, frameSize=(-0.6,
+            self.trackNameLabels.append(DirectLabel(text=TextEncoder.upper(Tracks[track]), parent=self.trackRows[track], pos=(-0.9 + adjustLeft, -0.1, 0.01), scale=TTLocalizer.INtrackNameLabels, relief=None, text_fg=(0.2, 0.2, 0.2, 1), text_font=getSignFont(), text_align=TextNode.ALeft, textMayChange=0))
+            self.trackBars.append(DirectWaitBar(parent=self.trackRows[track], pos=(-0.775 + adjustLeft, -0.1, -0.025), relief=DGG.SUNKEN, frameSize=(-0.6,
              0.6,
              -0.1,
              0.1), borderWidth=(0.02, 0.02), scale=0.25, frameColor=(TrackColors[track][0] * 0.6,
@@ -257,7 +259,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                 button = DirectButton(parent=self.trackRows[track], image=(self.upButton,
                  self.downButton,
                  self.rolloverButton,
-                 self.flatButton), geom=self.invModels[track][item], text='50', text_scale=0.05, text_align=TextNode.ARight, geom_scale=0.7, geom_pos=(-0.01, -0.1, 0), text_fg=Vec4(1, 1, 1, 1), text_pos=(0.07, -0.04), textMayChange=1, relief=None, image_color=(0, 0.6, 1, 1), pos=(self.ButtonXOffset + item * self.ButtonXSpacing + adjustLeft, -0.1, 0), command=self.__handleSelection, extraArgs=[track, item])
+                 self.flatButton), geom=self.invModels[track][item], text='50', text_scale=0.06, text_align=TextNode.ARight, geom_scale=0.7, geom_pos=(-0.01, -0.1, 0), text_fg=Vec4(1, 1, 1, 1), text_font=getSignFont(), text_pos=(0.08, -0.045), textMayChange=1, relief=None, image_color=(0.071, 0, 1, 1), image_scale=1.02, pos=(self.ButtonXOffset + item * self.ButtonXSpacing + adjustLeft, -0.1, 0), command=self.__handleSelection, extraArgs=[track, item])
                 button.bind(DGG.ENTER, self.showDetail, extraArgs=[track, item])
                 button.bind(DGG.EXIT, self.hideDetail)
                 self.buttons[track].append(button)
@@ -1394,11 +1396,6 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
         bonus = organicBonus or propBonus
-        if bonus:
-            textScale = 0.05
-        else:
-            textScale = 0.04
-        button.configure(text_scale=textScale)
 
     def buttonBoing(self, track, level):
         button = self.buttons[track][level]

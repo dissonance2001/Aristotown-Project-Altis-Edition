@@ -5,9 +5,9 @@ MAX_TOON_CAPACITY = 4
 MAX_SUIT_CAPACITY = 6
 BattleCamFaceOffFov = 40.0
 BattleCamFaceOffPos = Point3(0, -10, 4)
-BattleCamDefaultPos1 = Point3(0, -8.6, 16.5)
+BattleCamDefaultPos1 = Point3(0, -6.6, 16.5)
 BattleCamDefaultHpr1 = Vec3(0, 0, 0)
-BattleCamDefaultPos2 = Point3(0, -8.6, 16.5)
+BattleCamDefaultPos2 = Point3(0, -6.6, 16.5)
 BattleCamDefaultHpr2 = Vec3(0, -61, 0)
 BattleCamDefaultFov = 100.0
 BattleCamMenuFov = 100.0
@@ -99,12 +99,12 @@ CarryLimits = (
   ( # Trap
       (10, 0, 0, 0, 0, 0, 0, 0),
       (10, 5, 0, 0, 0, 0, 0, 0),
-      (15, 10, 5, 0, 0, 0, 0, 0),
-      (20, 15, 10, 5, 0, 0, 0, 0),
-      (25, 20, 15, 10, 3, 0, 0, 0),
-      (30, 25, 20, 15, 7, 3, 0, 0),
-(30, 25, 20, 15, 7, 3, 2, 1),
-      (30, 25, 20, 15, 7, 3, 2, 1)
+      (15, 10, 0, 0, 0, 0, 0, 0),
+      (20, 15, 0, 5, 0, 0, 0, 0),
+      (25, 20, 0, 10, 3, 0, 0, 0),
+      (30, 25, 0, 15, 7, 3, 0, 0),
+(30, 25, 0, 15, 7, 3, 2, 1),
+      (30, 25, 0, 15, 7, 3, 2, 1)
   ),
   ( # Lure
       (10, 0, 0, 0, 0, 0, 0, 0),
@@ -178,9 +178,10 @@ DLF_ELITE = 64
 EXECUTIVE_HP_MULT = 1.5
 EXECUTIVE_DMG_MULT = 1.2
 EXECUTIVE_BASE_CHANCE = 40
-GOVERNAUGHT_HP_MULT = 2
+GOVERNAUGHT_HP_MULT = 1.2
 GOVERNAUGHT_DMG_MULT = 1.5
-GOVERNAUGHT_BASE_CHANCE = 15
+GOVERNAUGHT_BASE_CHANCE = 20
+V2_BASE_CHANCE = 50
 pieNames = ['cupcake',
  'fruitpie-slice',
  'creampie-slice',
@@ -399,7 +400,7 @@ AvPropDamage = ((((8, 10), (Levels[0][0], Levels[0][1])),
   ((24, 24), (Levels[0][2], Levels[0][3])),
   ((45, 45), (Levels[0][3], Levels[0][4])),
   ((60, 60), (Levels[0][4], Levels[0][5])),
-  ((84, 84), (Levels[0][5], Levels[0][6])),
+  ((90, 90), (Levels[0][5], Levels[0][6])),
   ((90, 90), (Levels[0][6], Levels[0][7])),
 ((135, 135), (Levels[0][7], MaxSkill))),
  (((23, 23), (Levels[1][0], Levels[1][1])),
@@ -692,6 +693,7 @@ ValidStatusConditions = (
     'alwaysDodge',  # set dodge rate to 100%
     # both types, special conditions
     'dodgy',
+    'noUnites',
     'enraged',
     'absorbing',
 'desperation',

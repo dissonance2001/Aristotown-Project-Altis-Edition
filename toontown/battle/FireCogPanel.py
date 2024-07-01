@@ -19,20 +19,34 @@ class FireCogPanel(StateData.StateData):
         self.loaded = 0
 
     def load(self):
-        gui = loader.loadModel('phase_3.5/models/gui/battle_gui_new')
-        self.frame = DirectFrame(relief=None, image=gui.find('**/BtlPick_TAB'), image_color=Vec4(1, 0.2, 0.2, 1))
+        gui = loader.loadModel('phase_3.5/models/gui/battlegui/targeting')
+        gui2 = loader.loadModel('phase_3.5/models/gui/battle_gui_new')
+        self.frame = DirectFrame(relief=None, image=gui.find('**/targeting_main'), text_align=TextNode.ALeft,
+                                 pos=(0, 0, 0), scale=0.65)
         self.frame.hide()
-        self.statusFrame = DirectFrame(parent=self.frame, relief=None, image=gui.find('**/ToonBtl_Status_BG'), image_color=Vec4(0.5, 0.9, 0.5, 1), pos=(0.611, 0, 0))
-        self.textFrame = DirectFrame(parent=self.frame, relief=None, image=gui.find('**/PckMn_Select_Tab'), image_color=Vec4(1, 1, 0, 1), image_scale=(1.0, 1.0, 2.0), text='', text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0.02, 0), text_scale=TTLocalizer.FCPtextFrame, pos=(-0.013, 0, 0.013))
-        self.textFrame['text'] = TTLocalizer.FireCogTitle % localAvatar.getPinkSlips()
+        self.statusFrame = DirectFrame(parent=self.frame, relief=None, image=gui2.find('**/ToonBtl_Status_BG'),
+                                       image_color=Vec4(0, 0, 0, 0), pos=(0.611, 0, 0))
+        self.textFrame = DirectFrame(parent=self.frame, relief=None, image=gui2.find('**/PckMn_Select_Tab'),
+                                     image_color=Vec4(1, 0, 0, 1), text='', text_fg=Vec4(1, 1, 1, 1),
+                                     text_pos=(0, -0.025, -0.5), text_scale=0.08, pos=(-0.013, 0, -0.3))
+        if self.toon:
+            self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarToonTitle
+        else:
+            self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarCogTitle
         self.avatarButtons = []
         for i in xrange(6):
-            button = DirectButton(parent=self.frame, relief=None, text='', text_fg=Vec4(0, 0, 0, 1), text_scale=0.067, text_pos=(0, -0.015, 0), textMayChange=1, image_scale=(1.0, 1.0, 1.0), image=(gui.find('**/PckMn_Arrow_Up'), gui.find('**/PckMn_Arrow_Dn'), gui.find('**/PckMn_Arrow_Rlvr')), command=self.__handleAvatar, extraArgs=[i])
-            button.setScale(1, 1, 1)
-            button.setPos(0, 0, 0.2)
+            button = DirectButton(parent=self.frame, relief=None, image=(
+            gui.find('**/arrow_neutral'), gui.find('**/arrow_press'), gui.find('**/arrow_hover')),
+                                  command=self.__handleAvatar, extraArgs=[i])
+            button.setScale(.5, .5, .5)
+            button.setPos(0, 0, 0.7)
             self.avatarButtons.append(button)
 
-        self.backButton = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/PckMn_BackBtn'), gui.find('**/PckMn_BackBtn_Dn'), gui.find('**/PckMn_BackBtn_Rlvr')), pos=(-0.647, 0, 0.006), scale=1.05, text=TTLocalizer.TownBattleChooseAvatarBack, text_scale=0.05, text_pos=(0.01, -0.012), text_fg=Vec4(0, 0, 0.8, 1), command=self.__handleBack)
+        self.backButton = DirectButton(parent=self.frame, relief=None, image=(
+        gui.find('**/back_neutral'), gui.find('**/back_press'), gui.find('**/back_hover')), pos=(-0.847, -0.3, -0.011),
+                                       scale=.5, text=TTLocalizer.TownBattleChooseAvatarBack, text_scale=0.3,
+                                       text_pos=(0.01, -0.015), text_fg=Vec4(0, 0, 0, 1), command=self.__handleBack)
+
         gui.removeNode()
         self.loaded = 1
 
@@ -109,29 +123,29 @@ class FireCogPanel(StateData.StateData):
         if numAvatars == 1:
             self.avatarButtons[0].setX(0)
         elif numAvatars == 2:
-            self.avatarButtons[0].setX(0.2)
-            self.avatarButtons[1].setX(-0.2)
-        elif numAvatars == 3:
             self.avatarButtons[0].setX(0.4)
+            self.avatarButtons[1].setX(-0.4)
+        elif numAvatars == 3:
+            self.avatarButtons[0].setX(0.75)
             self.avatarButtons[1].setX(0.0)
-            self.avatarButtons[2].setX(-0.4)
+            self.avatarButtons[2].setX(-0.75)
         elif numAvatars == 4:
-            self.avatarButtons[0].setX(0.6)
-            self.avatarButtons[1].setX(0.2)
-            self.avatarButtons[2].setX(-0.2)
-            self.avatarButtons[3].setX(-0.6)
+            self.avatarButtons[0].setX(1.15)
+            self.avatarButtons[1].setX(0.4)
+            self.avatarButtons[2].setX(-0.4)
+            self.avatarButtons[3].setX(-1.15)
         elif numAvatars == 5:
-            self.avatarButtons[0].setX(0.7)
-            self.avatarButtons[1].setX(0.35)
+            self.avatarButtons[0].setX(1.5)
+            self.avatarButtons[1].setX(0.75)
             self.avatarButtons[2].setX(0.0)
-            self.avatarButtons[3].setX(-0.35)
-            self.avatarButtons[4].setX(-0.7)
+            self.avatarButtons[3].setX(-0.75)
+            self.avatarButtons[4].setX(-1.5)
         elif numAvatars == 6:
-            self.avatarButtons[0].setX(0.8)
-            self.avatarButtons[1].setX(0.5)
-            self.avatarButtons[2].setX(0.2)
-            self.avatarButtons[3].setX(-0.2)
-            self.avatarButtons[4].setX(-0.5)
-            self.avatarButtons[5].setX(-0.8)
+            self.avatarButtons[0].setX(1.9)
+            self.avatarButtons[1].setX(1.15)
+            self.avatarButtons[2].setX(0.4)
+            self.avatarButtons[3].setX(-0.4)
+            self.avatarButtons[4].setX(-1.15)
+            self.avatarButtons[5].setX(-1.9)
         else:
             self.notify.error('Invalid number of avatars: %s' % numAvatars)

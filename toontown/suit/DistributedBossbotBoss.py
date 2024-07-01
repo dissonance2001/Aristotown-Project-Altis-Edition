@@ -713,7 +713,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.clearChat()
         self.controlToons()
         self.setToonsToNeutral(self.involvedToons)
-        self.happy = 0
+        self.happy = 1
         self.raised = 0
         self.forward = 1
         intervalName = 'VictoryMovie'
@@ -1017,6 +1017,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         elif attackCode == ToontownGlobals.BossCogGolfAreaAttack:
             self.interruptMove()
             self.setDizzy(0)
+            self.doAnimate('areaAttack', now=1)
             self.doGolfAreaAttack()
         elif attackCode == ToontownGlobals.BossCogNoAttack:
             self.setDizzy(0)
