@@ -84,6 +84,7 @@ class BossCog(Avatar.Avatar):
             self.style = dna
             self.generateBossCog()
             self.initializeDropShadow()
+            self.setBlend(frameBlend=base.wantSmoothAnims)
             if base.wantNametags:
                 self.initializeNametag3d()
 
@@ -163,6 +164,7 @@ class BossCog(Avatar.Avatar):
         self.treadsRight = treadsModel.find('**/left_tread')
         self.doorA.request('Closed')
         self.doorB.request('Closed')
+        self.setBlend(frameBlend=base.wantSmoothAnims)
 
     def initializeBodyCollisions(self, collIdStr):
         Avatar.Avatar.initializeBodyCollisions(self, collIdStr)

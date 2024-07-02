@@ -4187,6 +4187,8 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/body').setTexture(texture, 1)
         self.shadowJoint = self.find('**/joint_shadow')
         self.nametagJoint = self.find('**/joint_nameTag')
+        self.leftHand = self.find('**/joint_Lhold')
+        self.rightHand = self.find('**/joint_Rhold')
 
     def setSuitClothesHighRoller(self, modelRoot=None):
         if not modelRoot:
@@ -4236,6 +4238,8 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/body').setTexture(texture, 1)
         self.shadowJoint = self.find('**/joint_shadow')
         self.nametagJoint = self.find('**/joint_nameTag')
+        self.leftHand = self.find('**/joint_Lhold')
+        self.rightHand = self.find('**/joint_Rhold')
 
     def setSuitClothesRaincoat(self, modelRoot=None):
         if not modelRoot:
@@ -4282,6 +4286,8 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/body').setTexture(texture, 1)
         self.shadowJoint = self.find('**/joint_shadow')
         self.nametagJoint = self.find('**/joint_nameTag')
+        self.leftHand = self.find('**/joint_Lhold')
+        self.rightHand = self.find('**/joint_Rhold')
 
     def setSuitClothesHighRollerWhite(self, modelRoot=None):
         if not modelRoot:
@@ -4330,6 +4336,8 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
         self.shadowJoint = self.find('**/joint_shadow')
         self.nametagJoint = self.find('**/joint_nameTag')
+        self.leftHand = self.find('**/joint_Lhold')
+        self.rightHand = self.find('**/joint_Rhold')
 
 
     def setSuitClothesSkeleton(self, modelRoot=None):
@@ -4364,6 +4372,8 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/body').setTexture(texture, 1)
         self.shadowJoint = self.find('**/joint_shadow')
         self.nametagJoint = self.find('**/joint_nameTag')
+        self.leftHand = self.find('**/joint_Lhold')
+        self.rightHand = self.find('**/joint_Rhold')
 
     def makeWaiter(self, modelRoot = None):
         if not modelRoot:
