@@ -885,8 +885,7 @@ jr = (('throw-paper', 'throw-paper', 4), # Multislacker
       ('glower', 'glower', 4),
       ('sanction', 'sanction', 4),
       ('pickpocket', 'sanction', 4),
-      ('song-and-dance', 'song-and-dance', 4),
-      ('neutral', 'rolled', 4))
+      ('song-and-dance', 'song-and-dance', 4))
 mp = (('cigar-smoke', 'cigar-smoke', 4),
      ('glower', 'glower', 4),
      ('lose3', 'wrecked', 4),
@@ -2604,6 +2603,9 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeFirestarter()
             self.generateHead3('firestarter', animated=True)
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_firestarter.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(9.5)
             self.setTransparency(1)
         elif dna.name == 'tg':
@@ -2612,6 +2614,9 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeFeatherbedder()
             self.generateHead3('featherbedder', animated=True)
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_featherbedder.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(8.0)
             self.setTransparency(1)
         elif dna.name == 'tb':
@@ -2865,8 +2870,7 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'th':
             self.scale = 5.5 / bSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
-            self.generateFemaleBody()
-            self.makeExecutive()
+            self.generateLongcoatBody()
             self.generateHead3('rainmaker', animated=True)
             self.setHeight(7.5)
             self.setTransparency(1)
@@ -2882,7 +2886,7 @@ class Suit(Avatar.Avatar):
             self.scale = 6.7 / bSize
             self.handColor = VBase4(1, 1, 1, 1)
             self.generateBody()
-            self.makeGovernaught()
+            self.makeExecutive()
             self.generateHead3('counterclaim', animated=True)
             self.setHeight(8.69)
             self.setTransparency(1)
@@ -3069,19 +3073,17 @@ class Suit(Avatar.Avatar):
             self.makeExecutive()
             self.setTransparency(1)
         elif dna.name == 'mes':
-            self.scale = 7.0 / cSize
+            self.scale = 5.0 / bSize
             self.handColor = VBase4(0.714, 0.118, 0.055, 1)
             self.generateBody()
             self.makeDuckShuffler()
             self.generateHead3('duckshuffler', animated=True)
-            self.setHeight(9.0)
-            self.makeExecutive()
-            self.setTransparency(1)
+            self.setHeight(7.0)
         elif dna.name == 'dm':
             self.scale = 5.5 / cSize
             self.handColor = VBase4(0.647, 0.796, 0.627, 1)
             self.generateBody()
-            self.makeExecutive()
+            self.makeTreekiller()
             self.generateHead3('treekiller', animated=True)
             self.setHeight(7.5)
         elif dna.name == 'tcc':
@@ -3320,12 +3322,15 @@ class Suit(Avatar.Avatar):
             self.makeDOPA()
             self.setTransparency(1)
         elif dna.name == 'fm':
-            self.scale = 7.0 / cSize
-            self.handColor = VBase4(0.345, 0.561, 0.549, 1)
-            self.generateFemaleBody()
-            self.makeExecutive()
-            self.generateHead3('deepdiver', animated=True)
-            self.setHeight(10.0)
+            self.scale = 5.0 / bSize
+            self.handColor = VBase4(0.886, 0.749, 0.451, 1)
+            self.generateHighCollarBody()
+            self.makeBellringer()
+            self.generateHead3('bellringer', animated=True)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_bellringer.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.0)
         elif dna.name == 'jb':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.918, 0.886, 0.875, 1)
@@ -3337,21 +3342,25 @@ class Suit(Avatar.Avatar):
             self.generateHead('shades')
             self.setHeight(8.95)
         elif dna.name == 'jg':
-            self.scale = 4.5 / cSize
-            self.handColor = VBase4(1, 1, 1, 1.0)
+            self.scale = 4.5 / bSize
+            self.handColor = VBase4(0.682, 0.604, 0.765, 1)
             self.generateBody()
-            self.generateHead3('dummy', animated=True)
-            self.setHeight(7.0)
-        elif dna.name == 'jr':
-            self.scale = 5.0 / bSize
-            self.handColor = VBase4(0.816, 0.663, 0.859, 1)
-            self.generateBody()
-            self.makePrethinker()
             self.generateHead3('prethinker', animated=True)
+            self.makePrethinker()
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker3.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(6.5)
+            self.setHeight(6.2)
+        elif dna.name == 'jr':
+            self.scale = 5.0 / cSize
+            self.handColor = VBase4(0.553, 0.404, 0.537, 1)
+            self.generateBody()
+            self.makeMultislacker()
+            self.generateHead3('multislacker', animated=True)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_multislacker.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.5)
             self.setTransparency(1)
         elif dna.name == 'prr':
             self.scale = 7.3 / aSize
@@ -3448,9 +3457,6 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.031, 0.035, 0.035, 1)
             self.generateHighCollarBody()
             self.generateHead3('insider', animated=True)
-            texture = loader.loadTexture('phase_14/maps/cc_t_ene_insider.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
             self.setHeight(6.7)
         elif dna.name == 'txm':
             self.scale = 5.0 / aSize
@@ -3534,9 +3540,6 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.388, 0.388, 0.388, 1)
             self.generateBody()
             self.generateHead3('headhoncho', animated=True)
-            texture = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
             self.setHeight(10.61)
         elif dna.name == 'gkp':
             self.scale = 4.5 / aSize
@@ -3558,6 +3561,9 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeDeepDiver()
             self.generateHead3('deepdiver', animated=True)
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_ddiver.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(10.0)
         elif dna.name == 'dfg':
             self.scale = 5.5 / aSize
@@ -3565,6 +3571,9 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeGatekeeper()
             self.generateHead3('gatekeeper', animated=True)
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_gatekeeper.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(6.9)
         elif dna.name == 'dfr':
             self.scale = 6.0 / bSize
@@ -3957,7 +3966,7 @@ class Suit(Avatar.Avatar):
                 #texture.setMinfilter(Texture.FTNearestMipmapLinear)
                 #texture.setMagfilter(Texture.FTNearest)
                 headPart.setTexture(texture, 1)
-        if self.style.body == 'c' and not self.style.name == 'fd':
+        if self.style.body == 'c' and not self.style.name == 'fd' and not self.style.name == 'nar':
             self.generateHead3('skullC', animated=True)
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                 self.style.dept)
@@ -4129,7 +4138,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_suit.png')
         elif self.isGovernaught and not self.style.name == 'mdm':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_gov.png' % self.style.dept)
-        elif self.style.name == 'mdm':
+        elif not self.isGovernaught and not self.isExecutive and self.style.name == 'mdm':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_highcollar_%s.png' % self.style.dept)
         elif self.isGovernaught and self.style.name == 'mdm':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_highcollar_%s_gov.png' % self.style.dept)
@@ -4167,75 +4176,17 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'dvk':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'dty':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'dfg':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         else:
             modelRoot.find('**/necktie-w').show()
         modelRoot.find('**/body').setTexture(texture, 1)
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            elif dept == 't':
-                texType = 'techbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            elif dept == 't':
-                texType = 'techbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
+        self.shadowJoint = self.find('**/joint_shadow')
+        self.nametagJoint = self.find('**/joint_nameTag')
 
     def setSuitClothesHighRoller(self, modelRoot=None):
         if not modelRoot:
@@ -4283,72 +4234,8 @@ class Suit(Avatar.Avatar):
         else:
             modelRoot.find('**/necktie-w').show()
         modelRoot.find('**/body').setTexture(texture, 1)
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            elif dept == 't':
-                texType = 'techbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            elif dept == 't':
-                texType = 'techbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
+        self.shadowJoint = self.find('**/joint_shadow')
+        self.nametagJoint = self.find('**/joint_nameTag')
 
     def setSuitClothesRaincoat(self, modelRoot=None):
         if not modelRoot:
@@ -4393,70 +4280,8 @@ class Suit(Avatar.Avatar):
         else:
             modelRoot.find('**/necktie-w').show()
         modelRoot.find('**/body').setTexture(texture, 1)
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            elif dept == 't':
-                texType = 'techbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
+        self.shadowJoint = self.find('**/joint_shadow')
+        self.nametagJoint = self.find('**/joint_nameTag')
 
     def setSuitClothesHighRollerWhite(self, modelRoot=None):
         if not modelRoot:
@@ -4503,72 +4328,8 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/highroller_body').setTexture(texture3, 1)
         else:
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            elif dept == 't':
-                texType = 'techbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            elif dept == 't':
-                texType = 'techbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
+        self.shadowJoint = self.find('**/joint_shadow')
+        self.nametagJoint = self.find('**/joint_nameTag')
 
 
     def setSuitClothesSkeleton(self, modelRoot=None):
@@ -4601,72 +4362,8 @@ class Suit(Avatar.Avatar):
         else:
             modelRoot.find('**/necktie-w').show()
         modelRoot.find('**/body').setTexture(texture, 1)
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            elif dept == 't':
-                texType = 'techbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
-
-        def __doItTheOldWay__():
-            self.leftHand = self.find('**/joint_Lhold')
-            self.rightHand = self.find('**/joint_Rhold')
-            self.shadowJoint = self.find('**/joint_shadow')
-            self.nametagJoint = self.find('**/joint_nameTag')
-
-        if base.config.GetBool('want-new-cogs', 0):
-            if dept == 'c':
-                texType = 'bossbot'
-            elif dept == 'm':
-                texType = 'cashbot'
-            elif dept == 'l':
-                texType = 'lawbot'
-            elif dept == 's':
-                texType = 'sellbot'
-            elif dept == 'g':
-                texType = 'boardbot'
-            elif dept == 't':
-                texType = 'techbot'
-            if self.find('**/body').isEmpty():
-                __doItTheOldWay__()
-            else:
-                filepath = 'phase_3.5/maps/tt_t_ene_' + texType + '.jpg'
-                if cogExists('/maps/tt_t_ene_' + texType + '.jpg'):
-                    bodyTex = loader.loadTexture(filepath)
-                    self.find('**/body').setTexture(bodyTex, 1)
-                self.leftHand = self.find('**/def_joint_left_hold')
-                self.rightHand = self.find('**/def_joint_right_hold')
-                self.shadowJoint = self.find('**/def_shadow')
-                self.nametagJoint = self.find('**/def_nameTag')
-        else:
-            __doItTheOldWay__()
+        self.shadowJoint = self.find('**/joint_shadow')
+        self.nametagJoint = self.find('**/joint_nameTag')
 
     def makeWaiter(self, modelRoot = None):
         if not modelRoot:
@@ -4810,6 +4507,16 @@ class Suit(Avatar.Avatar):
                 headModel.setScale(.7)
                 headModel.setZ(-.4)
                 headModel.setH(180)
+            elif headType == 'firestarter':
+                textureFire = loader.loadTexture('phase_12/maps/ttcc_ene_firestarter_fire.png')
+                headModel.find('**/fire0').setTexture(textureFire, 1)
+                headModel.find('**/fire1').setTexture(textureFire, 1)
+                headModel.find('**/fire2').setTexture(textureFire, 1)
+                headModel.find('**/fire3').setTexture(textureFire, 1)
+                headModel.find('**/fire4').setTexture(textureFire, 1)
+                headModel.find('**/fire5').setTexture(textureFire, 1)
+                headModel.setScale(1)
+                headModel.setZ(-.1)
             elif headType == 'chairman-a':
                 headModel.setScale(.7)
                 headModel.setY(-.2)
@@ -5076,6 +4783,20 @@ class Suit(Avatar.Avatar):
                     #texture.setMinfilter(Texture.FTNearestMipmapLinear)
                     #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
+            elif headType == 'insider':
+                if headTexture:
+                    try:
+                        texture = loader.loadTexture('phase_14/maps/cc_t_ene_insider%s.png' % ('_exe' if self.isExecutive or self.isGovernaught else '',))
+                    except:
+                        texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_unemployed.png')
+                else:
+                    try:
+                        texture = loader.loadTexture('phase_14/maps/cc_t_ene_insider%s.png' % ('_exe' if self.isExecutive or self.isGovernaught else '',))
+                    except:
+                        texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_unemployed.png')
+                for headPart in self.headParts:
+                    headPart.setTexture(texture, 1)
+
             else:
                 headModel = Actor.Actor('phase_14/models/char/ttcc_ene_' + headType + '-zero')
                 self.generateHeadAnims('phase_14/models/char/ttcc_ene_' + headType + '-', headModel,
@@ -5915,23 +5636,35 @@ class Suit(Avatar.Avatar):
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
-                    #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                    #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
             if self.style.body == 'b':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
-                    #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                    #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
             if self.style.body == 'c':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
-                    #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                    #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
+        elif self.style.name == 'mdm':
+            self.setSuitClothes()
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_insider%s.png' % (
+                '_exe' if self.isExecutive or self.isGovernaught else '',))
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+        elif self.style.name == 'tld':
+            self.setSuitClothes()
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho%s.png' % (
+                '_exe' if self.isExecutive or self.isGovernaught else '',))
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+        elif self.style.name == 'ca':
+            self.setSuitClothes()
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_bagholder%s.png' % (
+                '_exe' if self.isExecutive or self.isGovernaught else '',))
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
         else:
             self.setSuitClothes()
 
@@ -5944,24 +5677,18 @@ class Suit(Avatar.Avatar):
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
-                    #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                    #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
                 modelRoot.find('**/body').setTexture(texture, 1)
             if self.style.body == 'b':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
-                    #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                    #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
                 modelRoot.find('**/body').setTexture(texture, 1)
-            if self.style.body == 'c' and not self.style.name == 'fd':
+            if self.style.body == 'c' and not self.style.name == 'fd' and not self.style.name == 'nar':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
-                    #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                    #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
                 modelRoot.find('**/body').setTexture(texture, 1)
         else:
@@ -5975,19 +5702,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_suit_black.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeDuckShuffler(self, modelRoot=None):
         if not modelRoot:
@@ -5997,19 +5713,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_10/maps/ttcc_ene_suittex_duckshfl.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeHighRollerWhite(self, modelRoot=None):
         if not modelRoot:
@@ -6019,19 +5724,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_suit.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeBoardbotManager(self, modelRoot=None):
         if not modelRoot:
@@ -6041,19 +5735,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_g_e.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makePrethinker(self, modelRoot=None):
         if not modelRoot:
@@ -6063,19 +5746,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_suittex_prethink.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeMultislacker(self, modelRoot=None):
         if not modelRoot:
@@ -6085,19 +5757,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_suittex_mslacker.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makePacesetter(self, modelRoot=None):
         if not modelRoot:
@@ -6107,27 +5768,10 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_suittex_pacesetter.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
-        modelRoot.find('**/hands').setColor(self.handColor)
         modelRoot.find('**/necktie-s').hide()
         modelRoot.find('**/necktie-w').hide()
-        modelRoot.find('**/bowtie').hide()
-        modelRoot.find('**/necktie-s').setTexture(texture, 1)
-        modelRoot.find('**/necktie-w').setTexture(texture, 1)
-        modelRoot.find('**/bowtie').setTexture(texture, 1)
-        #modelRoot.find('**/body').setTexture(texture, 1)
 
     def makePlutocrat(self, modelRoot=None):
         if not modelRoot:
@@ -6137,19 +5781,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_10/maps/ttcc_ene_suittex_pcrat.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeMouthpiece(self, modelRoot=None):
         if not modelRoot:
@@ -6159,19 +5792,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_mouthp.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeMajorPlayer(self, modelRoot=None):
         if not modelRoot:
@@ -6181,19 +5803,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_mplayer.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeFeatherbedder(self, modelRoot=None):
         if not modelRoot:
@@ -6203,19 +5814,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_fbed.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeFirestarter(self, modelRoot=None):
         if not modelRoot:
@@ -6225,19 +5825,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_fires.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeChainsaw(self, modelRoot=None):
         if not modelRoot:
@@ -6247,19 +5836,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_chainsaw.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeDeepDiver(self, modelRoot=None):
         if not modelRoot:
@@ -6269,19 +5847,10 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_14/maps/ttcc_ene_suittex_ddiver.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
+        modelRoot.find('**/necktie-s').hide()
+        modelRoot.find('**/necktie-w').hide()
 
     def makeGatekeeper(self, modelRoot=None):
         if not modelRoot:
@@ -6291,19 +5860,10 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_14/maps/ttcc_ene_suittex_gatekeep.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
+        modelRoot.find('**/necktie-s').hide()
+        modelRoot.find('**/necktie-w').hide()
 
     def makeWSI(self, modelRoot=None):
         if not modelRoot:
@@ -6313,19 +5873,32 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_l_exe.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
+
+    def makeBellringer(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isManager = 1
+        try:
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_suittex_bellring.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
+        modelRoot.find('**/necktie-s').hide()
+        modelRoot.find('**/necktie-w').hide()
+
+    def makeTreekiller(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isManager = 1
+        try:
+            texture = loader.loadTexture('phase_10/maps/ttcc_ene_suittex_treek.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
 
     def makeAutocaddie(self, modelRoot=None):
         if not modelRoot:
@@ -6335,19 +5908,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_c_exe.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeDOPA(self, modelRoot=None):
         if not modelRoot:
@@ -6357,19 +5919,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeCountErfit(self, modelRoot=None):
         if not modelRoot:
@@ -6379,19 +5930,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_counterfit.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
-                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
-        torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTNearest)
-        legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        legTex.setMagfilter(Texture.FTNearest)
-        armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
-        armTex.setMagfilter(Texture.FTNearest)
 
     def makeGovernaught(self, modelRoot=None):
         if not modelRoot:
@@ -6417,6 +5957,24 @@ class Suit(Avatar.Avatar):
                     #texture.setMinfilter(Texture.FTNearestMipmapLinear)
                     #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
+        elif self.style.name == 'mdm':
+            self.setSuitClothes()
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_insider%s.png' % (
+                '_exe' if self.isExecutive or self.isGovernaught else '',))
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+        elif self.style.name == 'tld':
+            self.setSuitClothes()
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho%s.png' % (
+                '_exe' if self.isExecutive or self.isGovernaught else '',))
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+        elif self.style.name == 'ca':
+            self.setSuitClothes()
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_bagholder%s.png' % (
+                '_exe' if self.isExecutive or self.isGovernaught else '',))
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
         else:
             self.setSuitClothes()
 
