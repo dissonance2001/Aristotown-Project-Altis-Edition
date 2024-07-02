@@ -98,12 +98,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.disguisePage = None
         self.sosPage = None
         self.gardenPage = None
-        self.buildingRadar = [0, 0, 0, 0, 0]
-        self.cogTypes = [0, 0, 0, 0, 0]
-        self.cogLevels = [0, 0, 0, 0, 0]
-        self.cogReviveLevels = [0, 0, 0, 0, 0]
-        self.cogParts = [0, 0, 0, 0, 0]
-        self.cogMerits = [0, 0, 0, 0, 0]
+        self.buildingRadar = [0, 0, 0, 0, 0, 0]
+        self.cogTypes = [0, 0, 0, 0, 0, 0]
+        self.cogLevels = [0, 0, 0, 0, 0, 0]
+        self.cogReviveLevels = [0, 0, 0, 0, 0, 0]
+        self.cogParts = [0, 0, 0, 0, 0, 0]
+        self.cogMerits = [0, 0, 0, 0, 0, 0]
         self.hat = [0, 0, 0]
         self.glasses = [0, 0, 0]
         self.backpack = [0, 0, 0]
@@ -191,7 +191,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.gmNameTagString = ''
         self.achievements = []
         self.canEarnAchievements = False
-        self.promotionStatus = [0, 0, 0, 0, 0]
+        self.promotionStatus = [0, 0, 0, 0, 0, 0]
         self.buffs = []
         self.stats = [0] * ToontownGlobals.TOTAL_STATS
         self.trueFriends = []

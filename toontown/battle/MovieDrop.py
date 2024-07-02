@@ -384,7 +384,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
             anim = 'flatten'
         else:
             anim = 'drop-react'
-        if died and lastDrop and majorObject:
+        if died and majorObject:
             suitReact = ActorInterval(suit, anim, endTime=0.55)
         elif not lastDrop:
             suitReact = ActorInterval(suit, anim, endTime=TOON_DROP_DELAY)
@@ -397,7 +397,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         if level == UBER_GAG_LEVEL_INDEX:
             gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
             suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
-        if died and lastDrop:
+        if died:
             if majorObject:
                 suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit))
                 suitTrack.append(suitGettingHit)
@@ -416,12 +416,48 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died != 0:
             suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
-        else:
-            suitTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+        elif suit.maxHP > 0:
+            if (float(suit.currHP - (hp + hpbonus)) / float(suit.maxHP)) <= 0.25:
+                suitTrack.append(Func(suit.loop, 'neutral-hurt'))
+                if suit.style.name == 'crf':
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(
+                            Func(headPart.loop,
+                                 'neutral-hurt', fromFrame=0, toFrame=22))
+                elif suit.style.name == 'mad':
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(
+                            Func(headPart.loop,
+                                 'neutral-hurt', fromFrame=0, toFrame=22))
+                else:
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(
+                            Func(headPart.loop,
+                                 'neutral-hurt')
+                        )
+            else:
+                suitTrack.append(
+                    Func(suit.loop, 'neutral'))
+                if suit.style.name == 'crf':
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(
+                            Func(headPart.loop,
+                                 'neutral', fromFrame=0, toFrame=22))
+                elif suit.style.name == 'mad':
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(
+                            Func(headPart.loop,
+                                 'neutral', fromFrame=0, toFrame=22))
+                else:
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(
+                            Func(headPart.loop,
+                                 'neutral')
+                        )
         if bonusTrack != None:
             suitTrack = Parallel(suitTrack, bonusTrack)
     elif kbbonus == 0:
-        suitTrack = Sequence(Wait(delay + tObjectAppears), Func(MovieUtil.indicateMissed, suit, 0.6), Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+        suitTrack = Sequence(Wait(delay + tObjectAppears), Func(MovieUtil.indicateMissed, suit, 0.6))
     else:
         if alreadyDodged > 0:
             return

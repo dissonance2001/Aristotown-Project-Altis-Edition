@@ -23,8 +23,8 @@ from toontown.battle import FireCogPanel
 
 class TownBattle(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('TownBattle')
-    evenPos = (1.1, 0.65, 0.20, -0.20, -0.65, -1.1)
-    oddPos = (0.35, 0, -0.35, -7, 7)
+    evenPos = (1.1, 0.85, 0.30, -0.30, -0.85, -1.1)
+    oddPos = (0.55, 0, -0.55, -7, 7)
 
     def __init__(self, doneEvent):
         StateData.StateData.__init__(self, doneEvent)
@@ -96,7 +96,7 @@ class TownBattle(StateData.StateData):
         self.cogPanels = [TownBattleCogPanel.TownBattleCogPanel(self) for i in xrange(6)]
         self.timer = ToontownTimer.ToontownTimer()
         self.timer.reparentTo(base.a2dTopRight)
-        self.timer.setPos(-0.151, 0, -0.158)
+        self.timer.setPos(-0.151, 0, -1.808)
         self.timer.setScale(0.4)
         self.timer.hide()
 
@@ -193,7 +193,7 @@ class TownBattle(StateData.StateData):
     def __cogPanels(self, num):
         for panel in self.cogPanels:
             panel.hide()
-            panel.setPos(0, 0, 0.7)
+            panel.setPos(0, 0, 0.8)
 
         for i in range(num):
             self.cogPanels[i].setX(((num - 1) * 0.25) - (i * 0.5))
@@ -206,7 +206,7 @@ class TownBattle(StateData.StateData):
             if settings['newGui'] == True:
                 z = -0.3
             else:
-                z = -0.9
+                z = -0.7
             toonPanel.setPos(0, 0, z)
 
         if num == 1:

@@ -138,9 +138,7 @@ def getItemValue(textId):
 
 
 def getRandomId():
-    menuIndex = random.choice(allowedResistanceMessages)
-    itemIndex = random.choice(getItems(menuIndex))
-    return encodeId(menuIndex, itemIndex)
+    return
 
 def getDanceId():
     return encodeId(RESISTANCE_DANCE, getItems(RESISTANCE_DANCE))

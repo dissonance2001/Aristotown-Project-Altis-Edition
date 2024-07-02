@@ -4,14 +4,18 @@ from otp.ai.MagicWordGlobal import *
 from toontown.suit import DistributedBossCogAI
 from direct.directnotify import DirectNotifyGlobal
 from otp.avatar import DistributedAvatarAI
+from toontown.battle import DistributedBattleMinibossAI
 from toontown.suit import DistributedSuitAI
 from toontown.battle import BattleExperienceAI
+from toontown.suit import DistributedMinibossAI
+from toontown.building import SuitPlannerInteriorAI
 from direct.fsm import FSM
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import InventoryBase
 from toontown.toonbase import TTLocalizer
 from toontown.battle import BattleBase
 from toontown.toon import NPCToons
+from toontown.battle import BattleBase
 from toontown.building import SuitBuildingGlobals
 from toontown.suit import SuitDNA
 import random
@@ -22,7 +26,7 @@ from toontown.coghq import DistributedLawbotChairAI
 from toontown.toonbase import ToontownBattleGlobals
 import math
 
-class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM):
+class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotBossAI')
     limitHitCount = 6
     hitCountDamage = 35
@@ -30,12 +34,15 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
     maxToonLevels = 77
 
     def __init__(self, air):
-        DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, 'l')
+        DistributedMinibossAI.DistributedMinibossAI.__init__(self, air, 'l')
         FSM.FSM.__init__(self, 'DistributedLawbotBossAI')
         self.lawyers = []
         self.cannons = None
         self.chairs = None
         self.gavels = None
+        self.suits = []
+        self.activeSuits = []
+        self.reserveSuits = []
         self.cagedToonNpcId = random.choice(NPCToons.npcFriends.keys())
         self.bossMaxDamage = ToontownGlobals.LawbotBossMaxDamage
         self.recoverRate = 0
@@ -65,7 +72,7 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         self.__deleteBattleTwoObjects()
         taskName = self.uniqueName('clearBonus')
         taskMgr.remove(taskName)
-        return DistributedBossCogAI.DistributedBossCogAI.delete(self)
+        return  DistributedMinibossAI.DistributedMinibossAI.delete(self)
 
     def getHoodId(self):
         return ToontownGlobals.LawbotHQ
@@ -266,46 +273,64 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         self.initializeBattles(1, ToontownGlobals.LawbotBossBattleOnePosHpr)
 
     def generateSuits(self, battleNumber):
-        if battleNumber == 1:
-            weakenedValue = ((1, 1),
-             (2, 2),
-             (2, 2),
-             (1, 1),
-             (1, 1, 1, 1, 1))
-            listVersion = list(SuitBuildingGlobals.SuitBuildingInfo)
-            if simbase.config.GetBool('lawbot-boss-cheat', 0):
-                listVersion[13] = weakenedValue
-                SuitBuildingGlobals.SuitBuildingInfo = tuple(listVersion)
-            return self.invokeSuitPlanner(SuitBuildingGlobals.SUIT_PLANNER_CJ, 0)
-        else:
-            return self.invokeSuitPlanner(SuitBuildingGlobals.SUIT_PLANNER_CJ, 1)
+        cogs = self.invokeEmptyPlanner(11, 'lit')
+        activeSuits = cogs['activeSuits']
+        reserveSuits = cogs['reserveSuits']
+        random.shuffle(activeSuits)
+        while len(activeSuits) > 6:
+            suit = activeSuits.pop()
+            reserveSuits.append((suit, 100))
+
+        def compareJoinChance(a, b):
+            return cmp(a[1], b[1])
+
+        reserveSuits.sort(compareJoinChance)
+        return {'activeSuits': activeSuits,
+                'reserveSuits': reserveSuits}
+
+    def generateNewReserves(self, battleNumber):
+        cogs = self.invokeReservesPlanner(11, 'lit')
+        reserveSuits = cogs['reserveSuits']
+        return {'reserveSuits': reserveSuits}
+
+    def invokeSuitPlanner(self, buildingCode, skelecog):
+        suits = DistributedMinibossAI.DistributedMinibossAI.invokeSuitPlanner(self, buildingCode, skelecog)
+        activeSuits = suits['activeSuits'][:]
+        reserveSuits = suits['reserveSuits'][:]
+        if len(activeSuits) + len(reserveSuits) >= 6:
+            while len(activeSuits) < 6:
+                activeSuits.append(reserveSuits.pop()[0])
+
+        retval = {'activeSuits': activeSuits,
+                  'reserveSuits': reserveSuits}
+        return retval
 
     def removeToon(self, avId):
         toon = simbase.air.doId2do.get(avId)
         if toon:
             toon.b_setNumPies(0)
-        DistributedBossCogAI.DistributedBossCogAI.removeToon(self, avId)
+        DistributedMinibossAI.DistributedMinibossAI.removeToon(self, avId)
 
     def enterOff(self):
         self.notify.debug('enterOff')
-        DistributedBossCogAI.DistributedBossCogAI.enterOff(self)
+        DistributedMinibossAI.DistributedMinibossAI.enterOff(self)
         self.__deleteBattleThreeObjects()
         self.__resetLawyers()
 
     def enterElevator(self):
         self.notify.debug('enterElevatro')
-        DistributedBossCogAI.DistributedBossCogAI.enterElevator(self)
+        DistributedMinibossAI.DistributedMinibossAI.enterElevator(self)
         self.b_setBossDamage(ToontownGlobals.LawbotBossInitialDamage, 0, 0)
 
     def enterIntroduction(self):
         self.notify.debug('enterIntroduction')
-        DistributedBossCogAI.DistributedBossCogAI.enterIntroduction(self)
+        DistributedMinibossAI.DistributedMinibossAI.enterIntroduction(self)
         self.b_setBossDamage(ToontownGlobals.LawbotBossInitialDamage, 0, 0)
         self.__makeChairs()
 
     def exitIntroduction(self):
         self.notify.debug('exitIntroduction')
-        DistributedBossCogAI.DistributedBossCogAI.exitIntroduction(self)
+        DistributedMinibossAI.DistributedMinibossAI.exitIntroduction(self)
 
     def enterRollToBattleTwo(self):
         self.divideToons()
@@ -424,10 +449,8 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
 
             self.barrier = self.beginBarrier('BattleTwo', self.involvedToons, ToontownGlobals.LawbotBossJuryBoxMoveTime + 1, self.__doneBattleTwo)
         if not self.useCannons:
-            if self.battleA:
-                self.battleA.startBattle(self.toonsA, self.suitsA)
-            if self.battleB:
-                self.battleB.startBattle(self.toonsB, self.suitsB)
+            if self.battle:
+                self.battle.startBattle(self.toons, self.suits)
 
     def __doneBattleTwo(self, avIds):
         if self.useCannons:

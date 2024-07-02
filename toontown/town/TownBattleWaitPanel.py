@@ -10,10 +10,10 @@ class TownBattleWaitPanel(StateData.StateData):
         StateData.StateData.__init__(self, doneEvent)
 
     def load(self):
-        gui = loader.loadModel('phase_3.5/models/gui/battle_gui_new')
-        self.frame = DirectFrame(relief=None, image=gui.find('**/Waiting4Others'), text_align=TextNode.ALeft, pos=(0, 0, 0), scale=0.65)
+        gui = loader.loadModel('phase_3.5/models/gui/battlegui/targeting')
+        self.frame = DirectFrame(relief=None, image=gui.find('**/targeting_main'), text_align=TextNode.ALeft, pos=(0, 0, 0), scale=0.65)
         self.frame.hide()
-        self.backButton = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/PckMn_BackBtn'), gui.find('**/PckMn_BackBtn_Dn'), gui.find('**/PckMn_BackBtn_Rlvr')), pos=(-0.647, 0, -0.011), scale=1.05, text=TTLocalizer.TownBattleWaitBack, text_scale=0.05, text_pos=(0.01, -0.012), text_fg=Vec4(0, 0, 0.8, 1), command=self.__handleBack)
+        self.backButton = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/back_neutral'), gui.find('**/back_press'), gui.find('**/back_hover')), pos=(-0.847, -0.3, -0.011), scale=.5, text=TTLocalizer.TownBattleWaitBack, text_scale=0.3, text_pos=(0.01, -0.015), text_fg=Vec4(0, 0, 0, 1), command=self.__handleBack)
         gui.removeNode()
 
     def unload(self):
@@ -24,12 +24,12 @@ class TownBattleWaitPanel(StateData.StateData):
     def enter(self, numParticipants):
         if numParticipants > 1:
             self.frame['text'] = TTLocalizer.TownBattleWaitTitle
-            self.frame['text_pos'] = (0, 0.01, 0)
-            self.frame['text_scale'] = 0.1
+            self.frame['text_pos'] = (0, 0.15, 0.5)
+            self.frame['text_scale'] = 0.08
         else:
             self.frame['text'] = TTLocalizer.TownSoloBattleWaitTitle
-            self.frame['text_pos'] = (0, -0.05, 0)
-            self.frame['text_scale'] = 0.13
+            self.frame['text_pos'] = (0, 0.12, 0.5)
+            self.frame['text_scale'] = 0.08
         self.frame.show()
 
     def exit(self):

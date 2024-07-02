@@ -408,6 +408,8 @@ def __throwPie(throw, delay, hitCount, npcs):
             animTrack.append(Func(battle.unlureSuit, suit))
             moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
             sival = Parallel(animTrack, moveTrack)
+        elif hitCount == 1 and level <= 5:
+            sival = Parallel(ActorInterval(suit, 'pie-small-react'), MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
         elif hitCount == 1:
             sival = Parallel(ActorInterval(suit, 'pie-large'), MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
         else:
@@ -430,24 +432,46 @@ def __throwPie(throw, delay, hitCount, npcs):
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
         if revived != 0:
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0:
+        if died != 0:
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        else:
-            suitResponseTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-            if not suit.style.name == 'm' and not suit.style.name == 'tf' and not suit.style.name == 'ad' and not suit.style.name == 'bfh' and not suit.style.name == 'dvg' and not suit.style.name == 'f' and not suit.style.name == 'p' and not suit.style.name == 'ym' and not suit.style.name == 'mm' \
-                    and not suit.style.name == 'ds' and not suit.style.name == 'hh' and not suit.style.name == 'cr' and not suit.style.name == 'tbc' and not suit.style.name == 'gm' \
-                    and not suit.style.name == 'trb' and not suit.style.name == 'dot' and not suit.style.name == 'dvg' and not suit.style.name == 'cpl' and not suit.style.name == 'bkp' and not suit.style.name == 'kpn' \
-                    and not suit.style.name == 'sc' and not suit.style.name == 'pp' and not suit.style.name == 'tw' and not suit.style.name == 'bc' and not suit.style.name == 'nc' and not suit.style.name == 'mb' \
-                    and not suit.style.name == 'ls' and not suit.style.name == 'rb' and not suit.style.name == 'ptr' and not suit.style.name == 'mld' and not suit.style.name == 'pht' and not suit.style.name == 'cc' and not suit.style.name == 'tm' \
-                    and not suit.style.name == 'ka' and not suit.style.name == 'gh' and not suit.style.name == 'ms' and not suit.style.name == 'tf' and not suit.style.name == 'mka' and not suit.style.name == 'mh' and not suit.style.name == 'trm' \
-                    and not suit.style.name == 'ssm' and not suit.style.name == 'nd' and not suit.style.name == 'isw' and not suit.style.name == 'ssr' and not suit.style.name == 'sw' and not suit.style.name == 'txm' and not suit.style.name == 'bfh' and not suit.style.name == 'bdb' \
-                    and not suit.style.name == 'dfh' and not suit.style.name == 'cps' and not suit.style.name == 'cvy' \
-                    and not suit.style.name == 'jb':
-                for headPart in suit.headParts:
-                    suitResponseTrack.append(
-                    Func(headPart.loop,
-                         'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',))
-                )
+        if suit.maxHP > 0:
+            if float(suit.currHP - (value + kbbonus + hpbonus)) / float(suit.maxHP) <= 0.25:
+                suitResponseTrack.append(Func(suit.loop, 'neutral-hurt'))
+                if suit.style.name == 'crf':
+                    for headPart in suit.animatedHeadParts:
+                        suitResponseTrack.append(
+                            Func(headPart.loop,
+                                 'neutral-hurt', fromFrame=0, toFrame=22))
+                elif suit.style.name == 'mad':
+                    for headPart in suit.animatedHeadParts:
+                        suitResponseTrack.append(
+                            Func(headPart.loop,
+                                 'neutral-hurt', fromFrame=0, toFrame=22))
+                else:
+                    for headPart in suit.animatedHeadParts:
+                        suitResponseTrack.append(
+                            Func(headPart.loop,
+                                 'neutral-hurt')
+                        )
+            else:
+                suitResponseTrack.append(
+                    Func(suit.loop, 'neutral'))
+                if suit.style.name == 'crf':
+                    for headPart in suit.animatedHeadParts:
+                        suitResponseTrack.append(
+                            Func(headPart.loop,
+                                 'neutral', fromFrame=0, toFrame=22))
+                elif suit.style.name == 'mad':
+                    for headPart in suit.animatedHeadParts:
+                        suitResponseTrack.append(
+                            Func(headPart.loop,
+                                 'neutral', fromFrame=0, toFrame=22))
+                else:
+                    for headPart in suit.animatedHeadParts:
+                        suitResponseTrack.append(
+                            Func(headPart.loop,
+                                 'neutral')
+                        )
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
     else:
         suitResponseTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
@@ -669,7 +693,9 @@ def __splatSuit(suit, level):
     splat.setMode(TextureStage.MDecal)
     #splat.setSavedResult()
     suit.find('**/body').setTexture(splat, splatTex)
-    suit.find('**/joint_head').setTexture(splat, splatTex)
+    suit.find('**/necktie-s').setTexture(splat, splatTex)
+    suit.find('**/necktie-w').setTexture(splat, splatTex)
+    suit.find('**/bowtie').setTexture(splat, splatTex)
 
 
 def reparentCakePart(pie, cakeParts):

@@ -157,15 +157,13 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.adjustingTimer.stop()
 
     def __removeSuit(self, suit):
-        if suit in self.suits:
-            self.suits.remove(suit)
-        if suit in self.activeSuits:
-            self.activeSuits.remove(suit)
-        if self.luredSuits.count(suit) == 1 and suit in self.luredSuits:
+        self.notify.debug('__removeSuit(%d)' % suit.doId)
+        self.suits.remove(suit)
+        self.activeSuits.remove(suit)
+        if self.luredSuits.count(suit) == 1:
             self.luredSuits.remove(suit)
         self.suitGone = 1
-        if hasattr(suit, 'battleTrap'):
-            del suit.battleTrap
+        del suit.battleTrap
 
     def findSuit(self, id):
         for s in self.suits:
@@ -536,6 +534,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
              0,
              0,
              0,
+             0,
              0]
         if avId not in self.toonOrigQuests:
             flattenedQuests = []
@@ -649,6 +648,18 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         else:
             self.needAdjust = 1
             self.__requestAdjust()
+
+    def __removeSuit(self, suit):
+        self.notify.debug('__removeSuit(%d)' % suit.doId)
+        if suit in self.suits:
+            self.suits.remove(suit)
+        if suit in self.activeSuits:
+            self.activeSuits.remove(suit)
+        if self.luredSuits.count(suit) == 1 and suit in self.luredSuits:
+            self.luredSuits.remove(suit)
+        self.suitGone = 1
+        if hasattr(suit, 'battleTrap'):
+            del suit.battleTrap
 
     def __removeToon(self, toonId, userAborted = 0):
         self.notify.debug('__removeToon(%d)' % toonId)
@@ -1454,7 +1465,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                                     self.notify.warning('Invalid targetIndex %s in hps %s.' % (targetIndex, hps))
                                     hp = 0
                                 toonHpDict[toon.doId][0] += hp
-                    elif attackAffectsGroup(track, level, attack[TOON_TRACK_COL]):
+                    elif attackAffectsGroup(track, level, attack[TOON_TRACK_COL]) or track == ZAP:
                         for suit in self.activeSuits:
                             targetIndex = self.activeSuits.index(suit)
                             if targetIndex < 0 or targetIndex >= len(hps):

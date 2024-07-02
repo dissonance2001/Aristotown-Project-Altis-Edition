@@ -9,22 +9,20 @@ pool, if you try to spawn one above the cog's
 level pool it will only go to it's max level,
 revives is to spawn a cog with multiple revives 
 or version 2 cogs, but you can spawn them with as
-many layers as you like. Version 2 cogs are a 
-little buggy atm so I wouldn't suggest spawning 
-them until they are completely fixed.
+many layers as you like.
 
 BOSSBOTS:
 f- Flunky Level 1-8
 p - Pencil Pusher Level 2-9
 ym - Stockbroker Level 2-10 (Operations Analyst)
 mm - Yesman Level 3-10
-ds - Affiliate Level 3-12 (Operations Analyst)
+ds - Enforcer Level 3-12 (Operations Analyst)
 hh - Micromanager Level 4-12
 cr - Overseer Level 4-15 (Field Specialist)
 tbc - Downsizer Level 5-15
-trb - Capitalist Level 5-20 (Operations Analyst)
+trb - The Molder Level 5-20 (Operations Analyst)
 dot - Head Hunter Level 6-18
-dvg - The Enforcer Level 6-18 (Field Specialist)
+dvg - Blowhard Level 6-18 (Field Specialist)
 cpl - Corporate Raider Level 7-20
 bkp - Toxic Leader Level 7-20 (Field Specialist)
 kpn - The Big Cheese Level 8-25
@@ -61,7 +59,7 @@ lsc - Big Wig Level 8-25
 jdg - Arbitrator Level 15-20.exe
 jur - Head Attorney Level 16.mgr
 tlr - Atticus Wing Level 50.mgr
-cm - Tester Cog (temporary) Level 20.mgr
+cm - Tester Cog (temporary) Level 69420.mgr
 ggm - Mouthpiece Level 16.mgr
 th - Rainmaker Level 16.mgr
 kc - Witch Hunter Level 20.mgr
@@ -98,39 +96,39 @@ jl - Hydra Level 22.mgr
 gb - Kerberos Level 23.mgr
 lbs - Charon Level 25.mgr
 trk - Plutocrat Level 38.mgr
-dsf - Count Erfit Level 10-20.mgr
+dsf - Low Baller(HR) Level 25.mgr v2.0
 msp - Desk Jockey Level 3-12.exe
-mad - Low Baller Level 75.mgr
+mad - Low Roller Level 50.mgr v2.0
 crf - High Roller Level 100.mgr
 
 SELLBOTS:
 cc - Cold Caller Level 1-8
 tm - Telemarketer Level 2-9
-nd - Lobbyist Level 2-10 (Field Specialist) CHANGE
+nd - Connoisseur Level 2-10 (Field Specialist) CHANGE
 gh - Name Dropper Level 3-10
-ms - Prospector Level 3-12 (Operations Analyst)
+ms - Lobbyist Level 3-12 (Operations Analyst)
 tf - Glad Hander Level 4-12
 m - Quota Crusher Level 4-15 (Operations Analyst)
 mh - Mover & Shaker Level 5-15
-ka - The Candidate Level 5-20 (Field Specialist)
+ka - Candidate Level 5-20 (Field Specialist)
 mka - Two-Face Level 6-18
 trm - Assembly Assassin Level 6-18 (Field Specialist)
 ssm - The Mingler Level 7-20
-isw - Aggressive Achiever Level 7-20 (Field Specialist)
+isw - Overtimer Level 7-20 (Field Specialist)
 ssr - Mr. Hollywood Level 8-25
 fas - Safe-ty Supervisor Level 8-10.exe CHANGE
 mdr - Factory Foreman Level 11.mgr
 nar - Director Of Public Relations Level 10.mgr
 fd - Director Of Public Affairs Level 30.mgr
 fm - Bellringer Level 13.mgr
-jb - Mr. Hollywood (Major Player) Level 8-25.exe
+jb - Mr. Hollywood (MP) Level 25.exe v2.0
 jg - Prethinker Level 12.mgr
 jr - Multislacker Level 24.mgr
 prr - Videographer Level 90.mgr
-blr - Radiographer Level 28.mgr
-dvp - Pluviculturist Level 32.mgr
-dsk - Union Buster Level 32.mgr
-ffm - Pyromaniac Level 38.mgr
+blr - Radiographer Level 30.mgr
+dvp - Perpetrator Level 35.mgr
+dsk - Union Buster Level 35.mgr
+ffm - Streamliner Level 40.mgr
 sft - Pacesetter Level 66.mgr
 
 BOARDBOTS(WIP):
@@ -154,13 +152,42 @@ dty - Deep Diver Level 7.mgr
 dfg - Gatekeeper Level 10.mgr
 dfr - Land Acquisition Architect Level 7.mgr
 bsh - Director Of Land Development Level 25.mgr
-ghd - Black Hat Level 40.mgr
-tyh - Typographer Level 45.mgr 
-jgd - Tyrannizer Level 45.mgr
-bby - Directorate Level 50.mgr
+ghd - NOTHING Level 40.mgr
+tyh - NOTHING Level 45.mgr 
+jgd - NOTHING Level 45.mgr
+bby - NOTHING Level 50.mgr
 dvk - Dividend King Level 65.mgr
 otm - The Ottoman Level 75.mgr
 cry - Crystalline Level 77.mgr
 tcm - The Chairman Level 100.mgr
 
+TECHBOTS:
+skd- Script Kiddie Level 1-8 
+cmk - Code Monkey Level 2-9 
+phs - Phisher Level 2-10 (Operations Analyst) 
+vpr - Voodoo Programmer Level 3-10 
+kyl - Computerist Level 3-12 (Field Specialist) 
+sdb - Shotgun Debugger Level 4-12 
+gry - Grey Hat Level 4-15 (Operations Analyst) 
+kbc - Keyboard Cowboy Level 5-15 
+shp - Sharp Seer Level 5-20 (Field Specialist) 
+sfs - Software Simian Level 6-18 
+pyc - Python Charmer Level 6-18 (Field Specialist) 
+inw - Installer Wizard Level 7-20 
+sys - Sysadmin Level 7-20 (Field Specialist) 
+rus - Root User Level 8-25 
+ant - Antivirus Level 15-20.exe 
+sya - Senior Developer Level 20.mgr 
+yuh - PLACEHOLDER Level 5.mgr 
+yhi - PLACEHOLDER Level 25.mgr 
+jas - PLACEHOLDER Level 25.mgr
+tas - PLACEHOLDER Level 20.mgr 
+fhu - PLACEHOLDER Level 30.mgr 
+fsh - PLACEHOLDER Level 88.mgr
+fhj - PLACEHOLDER Level 50.mgr
+kdh - PLACEHOLDER (OR) Level 50.mgr
+dar - Black Hat Level 40.mgr
+nhy - Security Supervisor Level 45.mgr
+wrt - Keylogger Level 45.mgr
+auh - Technocrat Level 50.mgr
 

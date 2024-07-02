@@ -725,15 +725,18 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
-        if not self.style.name == 'm' and not self.style.name == 'tf' and not self.style.name == 'ad' and not self.style.name == 'bfh' and not self.style.name == 'dvg' and not self.style.name == 'f' and not self.style.name == 'p' and not self.style.name == 'ym' and not self.style.name == 'mm' \
-                and not self.style.name == 'ds' and not self.style.name == 'hh' and not self.style.name == 'cr'  and not self.style.name == 'nd' and not self.style.name == 'tbc' and not self.style.name == 'gm'\
-                and not self.style.name == 'trb' and not self.style.name == 'dot' and not self.style.name == 'dvg' and not self.style.name == 'cpl' and not self.style.name == 'bkp' and not self.style.name == 'kpn' \
-                and not self.style.name == 'sc' and not self.style.name == 'pp' and not self.style.name == 'tw' and not self.style.name == 'bc' and not self.style.name == 'nc' and not self.style.name == 'mb' \
-                and not self.style.name == 'ls' and not self.style.name == 'rb' and not self.style.name == 'ptr' and not self.style.name == 'mld' and not self.style.name == 'pht' and not self.style.name == 'cc' and not self.style.name == 'tm' \
-                and not self.style.name == 'ka' and not self.style.name == 'gh' and not self.style.name == 'ms' and not self.style.name == 'tf' and not self.style.name == 'mka' and not self.style.name == 'mh' and not self.style.name == 'trm' \
-                and not self.style.name == 'ssm' and not self.style.name == 'isw' and not self.style.name == 'ssr' and not self.style.name == 'sw' and not self.style.name == 'txm' and not self.style.name == 'bfh' and not self.style.name == 'bdb' \
-                and not self.style.name == 'dfh' and not self.style.name == 'cps' and not self.style.name == 'cvy' and not self.style.name == 'jb':
-            for headPart in self.headParts: Sequence(
+        if self.style.name == 'crf':
+            for headPart in self.animatedHeadParts: Sequence(
+                ActorInterval(headPart, self.animHead),
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+            ).start()
+        if self.style.name == 'mad':
+            for headPart in self.animatedHeadParts: Sequence(
+                ActorInterval(headPart, self.animHead),
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+            ).start()
+        else:
+            for headPart in self.animatedHeadParts: Sequence(
                 ActorInterval(headPart, self.animHead),
                 Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()

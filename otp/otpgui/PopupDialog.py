@@ -15,7 +15,7 @@ class PopupDialog:
         gui = base.matGui
         shuffleUp = gui.find('**/tt_t_gui_mat_shuffleUp')
         shuffleDown = gui.find('**/tt_t_gui_mat_shuffleDown')
-        self.dialogText = OnscreenText(text='put text here', font = ToontownGlobals.getMinnieFont(), style = 3, align=TextNode.ACenter, scale=0.1, pos=(0, .2, 0), wordwrap = 5)
+        self.dialogText = OnscreenText(text='put text here', font = ToontownGlobals.getMinnieFont(), style = 3, align=TextNode.ACenter, scale=0.1, pos=(0, .2, 0), wordwrap = 20)
         self.background = OnscreenImage(image = 'phase_3.5/maps/loading/toon.jpg', parent = aspect2d)
         self.background.setBin('background', 1)
         self.background.reparentTo(aspect2d)

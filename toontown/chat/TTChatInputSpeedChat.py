@@ -529,7 +529,11 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         self.toPlayer = 0
 
     def handleResistanceMsg(self, textId):
-        self.chatMgr.sendSCResistanceChatMessage(textId)
+        noUnites = False
+        if 'noUnites' in base.localAvatar.battleConditions:
+            noUnites = True
+        if not noUnites:
+            self.chatMgr.sendSCResistanceChatMessage(textId)
 
     def handleSpeedChatStyleChange(self):
         nameKey, arrowColor, rolloverColor, frameColor = speedChatStyles[base.localAvatar.getSpeedChatStyleIndex()]

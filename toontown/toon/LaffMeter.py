@@ -86,35 +86,35 @@ class LaffMeter(DirectFrame):
         if self.isToon:
             hType = self.style.getType()
             if hType == 'dog':
-                headModel = gui.find('**/doghead')
+                headModel = gui.find('**/laffMeter_dog')
             elif hType == 'cat':
-                headModel = gui.find('**/cathead')
+                headModel = gui.find('**/laffMeter_cat')
             elif hType == 'mouse':
-                headModel = gui.find('**/mousehead')
+                headModel = gui.find('**/laffMeter_mouse')
             elif hType == 'horse':
-                headModel = gui.find('**/horsehead')
+                headModel = gui.find('**/laffMeter_horse')
             elif hType == 'rabbit':
-                headModel = gui.find('**/bunnyhead')
+                headModel = gui.find('**/laffMeter_rabbit')
             elif hType == 'duck':
-                headModel = gui.find('**/duckhead')
+                headModel = gui.find('**/laffMeter_duck')
             elif hType == 'monkey':
-                headModel = gui.find('**/monkeyhead')
+                headModel = gui.find('**/laffMeter_monkey')
             elif hType == 'bear':
-                headModel = gui.find('**/bearhead')
+                headModel = gui.find('**/laffMeter_bear')
             elif hType == 'pig':
-                headModel = gui.find('**/pighead')
+                headModel = gui.find('**/laffMeter_pig')
             elif hType == 'deer':
-                headModel = gui.find('**/deerhead')
+                headModel = gui.find('**/laffMeter_deer')
             elif hType == 'beaver':
-                headModel = gui.find('**/beaverhead')
+                headModel = gui.find('**/laffMeter_beaver')
             elif hType == 'alligator':
-                headModel = gui.find('**/gatorhead')
+                headModel = gui.find('**/laffMeter_alligator')
             elif hType == 'fox':
-                headModel = gui.find('**/foxhead')
+                headModel = gui.find('**/laffMeter_fox')
             elif hType == 'bat':
-                headModel = gui.find('**/bathead')
+                headModel = gui.find('**/laffMeter_bat')
             elif hType == 'raccoon':
-                headModel = gui.find('**/raccoonhead')
+                headModel = gui.find('**/laffMeter_raccoon')
             else:
                 raise StandardError('unknown toon species: ', hType)
             self.color = self.style.getHeadColor()
@@ -129,6 +129,7 @@ class LaffMeter(DirectFrame):
             self.eyes = DirectFrame(parent=self.container, relief=None, image=gui.find('**/eyes'))
             self.eyes.setY(-0.1)
             self.openSmile = DirectFrame(parent=self.container, relief=None, image=gui.find('**/open_smile'))
+            self.openSmile.setY(-.5)
             self.tooth1 = DirectFrame(parent=self.openSmile, relief=None, image=gui.find('**/tooth_1'))
             self.tooth2 = DirectFrame(parent=self.openSmile, relief=None, image=gui.find('**/tooth_2'))
             self.tooth3 = DirectFrame(parent=self.openSmile, relief=None, image=gui.find('**/tooth_3'))
@@ -146,7 +147,7 @@ class LaffMeter(DirectFrame):
              self.tooth2,
              self.tooth1]
             for tooth in self.teeth:
-                tooth.setY(-0.1)
+                tooth.setY(-0.6)
             self.fractions = [0.0,
              0.166666,
              0.333333,

@@ -53,7 +53,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.propInSound = None
         self.propOutSound = None
         self.reparentTo(hidden)
-        self.loop('neutral')
+        self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
         self.skeleRevives = 0
         self.maxSkeleRevives = 0
         self.executive = 0
@@ -79,8 +79,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.executive
 
     def processExecutive(self):
-        self.maxHP = int(self.maxHP * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
-        self.currHP = self.maxHP
+        if not self.dna.name == 'jb':
+            self.maxHP = int(self.maxHP * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
+            self.currHP = self.maxHP
         self.makeExecutive()
         nameInfo = self.createNameInfo()
         self.setDisplayName(nameInfo)
@@ -133,7 +134,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.getGovernaught():
             level += TTLocalizer.GovernaughtPostFix
         if self.getSkeleRevives() > 0:
-            level += TTLocalizer.SkeleRevivePostFix
+            level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
         nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
                                                         'dept': dept,
                                                         'level': level}
@@ -183,7 +184,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.maxHP
 
     def setHP(self, hp):
-        print('calling setHP from dist. suit base')
         self.currHP = hp
 
     def setHealthForMe(self, health):
@@ -395,13 +395,15 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.setParent(ToontownGlobals.SPRender)
         self.showNametag3d()
         self.showNametag2d()
-        self.loop('neutral', 0)
+        self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), 0)
 
     def enterBattle(self):
-        self.loop('neutral', 0)
+        self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), 0)
         self.disableBattleDetect()
         self.healthBar.show()
         if self.currHP < self.maxHP:
+            self.updateHealthBar(0, 1)
+        if self.currHP >= self.maxHP:
             self.updateHealthBar(0, 1)
 
     def exitBattle(self):
@@ -411,7 +413,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.interactivePropTrackBonus = -1
 
     def enterWaitForBattle(self):
-        self.loop('neutral', 0)
+        self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), 0)
 
     def exitWaitForBattle(self):
         pass
@@ -437,10 +439,21 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.currHP = int(hp)
 			
     def resetNameForElite(self):
-        nameWLevel = TTLocalizer.SuitBaseNameWithLevel % {'name': self.name,
-         'dept': self.getStyleDept(),
-         'level': str(self.getActualLevel())}
-        self.setDisplayName(nameWLevel)
+        name = self.name
+        dept = self.getStyleDept()
+        level = str(self.getActualLevel())
+        if self.getExecutive():
+            level += TTLocalizer.ExecutivePostFix
+        if self.getManager():
+            level += TTLocalizer.ManagerPostFix
+        if self.getGovernaught():
+            level += TTLocalizer.GovernaughtPostFix
+        if self.getSkeleRevives() > 0:
+            level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': 'Skelecog',
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
 
     def showHpText(self, number, bonus = 0, scale = 1, attackTrack = -1):
         if self.HpTextEnabled and not self.ghostMode:

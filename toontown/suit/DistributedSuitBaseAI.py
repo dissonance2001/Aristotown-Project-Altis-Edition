@@ -1,4 +1,5 @@
 from otp.ai.AIBaseGlobal import *
+import random
 from otp.avatar import DistributedAvatarAI
 from toontown.suit import SuitPlannerBase
 from toontown.suit import SuitBase
@@ -145,7 +146,23 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         if executive == None:
             executive = 0
         self.executive = executive
-        if self.executive:
+        if self.dna.name == 'jb':
+            self.maxHP = int(((self.maxHP * random.choice((.5, .51,
+                                                           .52, .53, .54, .55, .56, .57, .58, .59, .6, .61, .62,
+                                                           .63, .64, .65, .66, .67, .68, .69,
+                                                           .7, .71, .72, .73, .74, .75, .76, .77, .78, .79, .8, .81,
+                                                           .82, .83, .84, .85, .86, .87, .88, .89, .90, .91, .92,
+                                                           .93,
+                                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04,
+                                                           1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13,
+                                                           1.14, 1.15, 1.16,
+                                                           1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25,
+                                                           1.26, 1.27, 1.28, 1.29, 1.3, 1.31, 1.32, 1.33, 1.34,
+                                                           1.35, 1.36, 1.37, 1.38, 1.39, 1.4
+                                                           , 1.41, 1.42, 1.43, 1.44, 1.45, 1.46, 1.47, 1.48, 1.49,
+                                                           1.5)))))
+            self.currHP = self.maxHP
+        if self.executive and not self.dna.name == 'jb':
             self.maxHP = int(self.maxHP * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
             self.currHP = self.maxHP
 
@@ -185,6 +202,22 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         if manager == None:
             manager = 0
         self.manager = manager
+        if self.dna.name == 'dsf':
+            self.maxHP = int(((self.maxHP * random.choice((.5, .51,
+                                                        .52, .53, .54, .55, .56, .57, .58, .59, .6, .61, .62, .63, .64, .65, .66, .67, .68, .69,
+                                                        .7, .71, .72, .73, .74, .75, .76, .77, .78, .79, .8, .81, .82, .83, .84, .85, .86, .87, .88, .89, .90, .91, .92, .93,
+                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16,
+                                           1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25, 1.26, 1.27, 1.28, 1.29, 1.3, 1.31, 1.32, 1.33, 1.34, 1.35, 1.36, 1.37, 1.38, 1.39, 1.4
+                                                           , 1.41, 1.42, 1.43, 1.44, 1.45, 1.46, 1.47, 1.48, 1.49, 1.5)))))
+            self.currHP = self.maxHP
+        if self.dna.name == 'mad':
+            self.maxHP = int(((self.maxHP * random.choice((.5, .51,
+                                                        .52, .53, .54, .55, .56, .57, .58, .59, .6, .61, .62, .63, .64, .65, .66, .67, .68, .69,
+                                                        .7, .71, .72, .73, .74, .75, .76, .77, .78, .79, .8, .81, .82, .83, .84, .85, .86, .87, .88, .89, .90, .91, .92, .93,
+                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16,
+                                           1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25, 1.26, 1.27, 1.28, 1.29, 1.3, 1.31, 1.32, 1.33, 1.34, 1.35, 1.36, 1.37, 1.38, 1.39, 1.4
+                                                           , 1.41, 1.42, 1.43, 1.44, 1.45, 1.46, 1.47, 1.48, 1.49, 1.5)))))
+            self.currHP = self.maxHP
 
     def b_setSkeleRevives(self, num):
         if num == None:
@@ -213,7 +246,9 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         self.currHP = self.maxHP
         self.reviveFlag = 1
         self.setDamageMultiplier(self.getDamageMultiplier() * 1.5)
-        self.b_setMaxHP(int(self.maxHP/2))
+        self.b_setMaxHP(int(self.maxHP * random.choice((.3, .31, .32, .33, .34, .35, .36, .37, .38, .39, .4, .41, .42, .43, .44, .45, .46, .47, .48, .49, .5, .51,
+                                                        .52, .53, .54, .55, .56, .57, .58, .59, .6, .61, .62, .63, .64, .65, .66, .67, .68, .69,
+                                                        .7))))
 
     def reviveCheckAndClear(self):
         returnValue = 0
@@ -276,6 +311,9 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
 
     def setSkelecog(self, flag):
         SuitBase.SuitBase.setSkelecog(self, flag)
+        self.maxHP = int(self.maxHP * random.choice((.7, .71, .72, .73, .74, .75, .76, .77, .78, .79, .8, .81, .82, .83, .84, .85, .86, .87, .88, .89, .90, .91, .92, .93,
+                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16,
+                                           1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25, 1.26, 1.27, 1.28, 1.29, 1.3)))
 
     def d_setSkelecog(self, flag):
         self.sendUpdate('setSkelecog', [flag])

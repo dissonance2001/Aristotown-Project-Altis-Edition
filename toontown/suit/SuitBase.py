@@ -33,14 +33,12 @@ class SuitBase:
         if hasattr(self, 'dna') and self.dna:
             return self.dna.name
         else:
-            self.notify.error('called getStyleName() before dna was set!')
             return 'unknown'
 
     def getStyleDept(self):
         if hasattr(self, 'dna') and self.dna:
             return SuitDNA.getDeptFullname(self.dna.dept)
         else:
-            self.notify.error('called getStyleDept() before dna was set!')
             return 'unknown'
 
     def getCurrentHealth(self):
@@ -59,7 +57,6 @@ class SuitBase:
          'level': self.getActualLevel()}
         self.setDisplayName(nameWLevel)
         attributes = SuitBattleGlobals.SuitAttributes[self.dna.name]
-        nameWLevel = TTLocalizer.SuitBaseNameWithLevelHP % {'currHP': attributes['hp'][self.level]}
         self.maxHP = attributes['hp'][self.level]
         self.currHP = self.maxHP
 
@@ -82,7 +79,6 @@ class SuitBase:
         if hasattr(self, 'dna'):
             return SuitBattleGlobals.getActualFromRelativeLevel(self.getStyleName(), self.level) + 1
         else:
-            self.notify.warning('called getActualLevel with no DNA, returning 1 for level')
             return 1
 
     def setPath(self, path):

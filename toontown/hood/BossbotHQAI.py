@@ -1,10 +1,12 @@
 from toontown.building import DistributedBBElevatorAI
+from toontown.building import DistributedRenegadeElevatorAI
 from toontown.building import FADoorCodes
 from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPartyAI
 from toontown.coghq import DistributedCogKartAI
 from toontown.hood import CogHQAI
 from toontown.suit import DistributedBossbotBossAI
 from toontown.suit import DistributedSuitPlannerAI
+from toontown.suit import DistributedRenegadeMinibossAI
 from toontown.toonbase import ToontownGlobals
 
 class BossbotHQAI(CogHQAI.CogHQAI):
@@ -15,6 +17,11 @@ class BossbotHQAI(CogHQAI.CogHQAI):
             FADoorCodes.BB_DISGUISE_INCOMPLETE,
             DistributedBBElevatorAI.DistributedBBElevatorAI,
             DistributedBossbotBossAI.DistributedBossbotBossAI)
+        CogHQAI.CogHQAI.__init__(
+            self, air, ToontownGlobals.BossbotHQ, ToontownGlobals.BossbotLobby,
+            FADoorCodes.BB_DISGUISE_INCOMPLETE,
+            DistributedRenegadeElevatorAI.DistributedRenegadeElevatorAI,
+            DistributedRenegadeMinibossAI.DistributedRenegadeMinibossAI)
 
         self.cogKarts = []
         self.courseBoardingParty = None
@@ -32,8 +39,11 @@ class BossbotHQAI(CogHQAI.CogHQAI):
             self.createSuitPlanners()
 
     def createCogKarts(self):
-        posList = ((-26.5658, 237.459, 0), (132.197, 227.845, 0), (-28.725, -235.706, 0))
-        hprList = ((-159, 0, 0), (172, 0, 0), (-21, 0, 0))
+        posList = (
+            (154.762, 37.169, 0), (141.403, -81.887, 0),
+            (-48.44, 15.308, 0)
+        )
+        hprList = ((110.815, 0, 0), (61.231, 0, 0), (-105.481, 0, 0))
         mins = ToontownGlobals.FactoryLaffMinimums[3]
         for cogCourse in xrange(len(posList)):
             pos = posList[cogCourse]

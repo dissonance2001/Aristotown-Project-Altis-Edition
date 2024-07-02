@@ -38,8 +38,8 @@ clickSound = None
 
 me = None
 want2dNametags = True
-forceOnscreenChat = False
-force2dNametags = False
+forceOnscreenChat = True
+force2dNametags = True
 wantActiveNametags = True
 
 

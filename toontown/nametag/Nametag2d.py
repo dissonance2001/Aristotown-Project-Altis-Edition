@@ -11,8 +11,8 @@ from toontown.toontowngui.Clickable2d import Clickable2d
 class Nametag2d(Nametag, Clickable2d, MarginVisible):
     CONTENTS_SCALE = 0.25
 
-    CHAT_TEXT_MAX_ROWS = 6
-    CHAT_TEXT_WORD_WRAP = 8
+    CHAT_TEXT_MAX_ROWS = 8
+    CHAT_TEXT_WORD_WRAP = 10
 
     CHAT_BALLOON_ALPHA = 0.4
 
@@ -24,13 +24,12 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
         Clickable2d.__init__(self, 'Nametag2d')
         MarginVisible.__init__(self)
 
-        self.actualChatText = ''
+        self.actualChatText = None
 
         self.arrow = None
         self.textNodePath = None
 
         self.contents.setScale(self.CONTENTS_SCALE)
-        self.hideThought()
 
         self.accept('MarginVisible-update', self.update)
 
@@ -88,7 +87,7 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
             self.region.setActive(True)
         else:
             if self.region is not None:
-                self.region.setActive(False)
+                self.region.setActive(True)
 
     def isClickable(self):
         if self.getChatText() and self.hasChatButton():
@@ -125,7 +124,7 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
             # We aren't in the margin display. Disable the click region if one
             # is present:
             if self.region is not None:
-                self.region.setActive(False)
+                self.region.setActive(True)
 
     def tick(self, task):
         if (self.avatar is None) or self.avatar.isEmpty():
@@ -254,7 +253,7 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
             # We aren't in the margin display. Disable the click region if one
             # is present:
             if self.region is not None:
-                self.region.setActive(False)
+                self.region.setActive(True)
 
     def reposition(self):
         if self.contents is None:
@@ -271,12 +270,9 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
             self.contents.node().removeAllChildren()
 
             if (self.cell in base.leftCells) or (self.cell in base.rightCells):
-                text = self.getChatText().replace('\x01WLDisplay\x01', '').replace('\x02', '')
-                textWidth = self.chatTextNode.calcWidth(text)
-                if (textWidth / self.CHAT_TEXT_WORD_WRAP) > self.CHAT_TEXT_MAX_ROWS:
-                    self.chatTextNode.setWordwrap(textWidth / (self.CHAT_TEXT_MAX_ROWS-0.5))
+                self.chatTextNode.setWordwrap(8)
             else:
-                self.chatTextNode.setWordwrap(self.CHAT_TEXT_WORD_WRAP)
+                self.chatTextNode.setWordwrap(8)
 
             model = self.getChatBalloonModel()
             modelWidth = self.getChatBalloonWidth()
