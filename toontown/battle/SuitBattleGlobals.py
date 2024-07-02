@@ -28,6 +28,8 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 34
     elif name == 'csm':
         actualLevel = relLevel + 34
+    elif name == 'fm':
+        actualLevel = relLevel + 34
     elif name == 'scg':
         actualLevel = relLevel + 29
     elif name == 'lit':
@@ -128,6 +130,8 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 3
     elif name == 'rb':
         actualLevel = relLevel + 4
+    elif name == 'tc':
+        actualLevel = relLevel + 19
     elif name == 'gm':
         actualLevel = relLevel + 4
     elif name == 'ad':
@@ -274,8 +278,14 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 7
     elif name == 'mdr':
         actualLevel = relLevel + 10
+    elif name == 'mdr':
+        actualLevel = relLevel + 12
+    elif name == 'jg':
+        actualLevel = relLevel + 11
+    elif name == 'jr':
+        actualLevel = relLevel + 23
     elif name == 'nar':
-        actualLevel = relLevel + 10
+        actualLevel = relLevel + 9
     elif name == 'fd':
         actualLevel = relLevel + 29
     elif name == 'prr':

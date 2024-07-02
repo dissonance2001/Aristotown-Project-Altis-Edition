@@ -231,8 +231,8 @@ class SuitPlannerInteriorAI:
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 1)
             miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 1)
             miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 1)
-            activeSuits.append(random.choice((miniboss, miniboss3)))
-            activeSuits.append(random.choice((miniboss2, miniboss4)))
+            activeSuits.append(random.choice((miniboss, miniboss2, miniboss3, miniboss4)))
+            activeSuits.append(random.choice((miniboss, miniboss2, miniboss3, miniboss4)))
         elif specialCode == 'crf':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'm', 28, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)
