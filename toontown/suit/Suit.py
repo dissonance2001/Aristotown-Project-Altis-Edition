@@ -851,7 +851,7 @@ cm = (('magic2', 'snap', 4),
       ('pickpocket', 'pickpocket', 4),
       ('speak', 'speak', 4),
       ('cease', 'cease', 4),
-      ('sanction', 'sanction', 4),
+      ('sanction', 'sanction3', 4),
       ('effort', 'effort', 4),
       ('magic1', 'magic1', 4),
       ('phone', 'phone', 4),
@@ -6241,6 +6241,9 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'tcm' and not self.isSkeleton:
             loadDialog(1)
             return ChairmanDialogArray
+        if self.style.name == 'cm' and not self.isSkeleton:
+            loadDialog(1)
+            return StenographerDialogArray
         if self.style.name == 'gry' and not self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogArray

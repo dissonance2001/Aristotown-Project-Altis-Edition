@@ -3707,11 +3707,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(75,),
 		'attacks':
-            (('Snap',
+            (('CourtSanction',
               (1,),
               (100,),
               (50,)),
-             ('Snap2',
+             ('CourtSanction',
               (1,),
               (100,),
               (50,))

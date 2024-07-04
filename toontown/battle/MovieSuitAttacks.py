@@ -3947,7 +3947,7 @@ def doCourtSanction(attack):
         Func(battle.movie.needRestoreRenderProp, sanctioned),
         Func(sanctioned.reparentTo, render),
         Func(sanctioned.setScale, 0.6),
-        Func(sanctioned.setPosHpr, suit.getLeftHand(), 0.81, -1.11, -0.16, 0, 65, 90),
+        Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
         Func(sanctioned.setP, 0),
         Func(sanctioned.setR, 0),
         getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint]),
