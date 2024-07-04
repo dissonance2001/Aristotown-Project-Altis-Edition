@@ -169,7 +169,7 @@ class TownBattleCogPanel(DirectFrame):
         needMedScaledHeads = 'bf', 'cc', 'sc', 'dsk', 'nar'
         needSmallScaledHeads = 'bg'
         needSmallerScaledHeads = 'csm', 'mka', 'txm', 'ym', 'bs', 'tw', 'ssm', 'kyl', 'kpn', 'blr', 'fd', 'tb', 'adc', 'drm', 'ffm', 'frs', 'fbd'
-        needEvenSmallerScaledHeads = 'ste', 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb'
+        needEvenSmallerScaledHeads = 'ste', 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb', 'yuh'
         if name in needBigScaledHeads:
             self.suitHead.setScale(.13)
         elif name in needMedScaledHeads:

@@ -27,7 +27,7 @@ class NametagGroup:
         self.chatColor = NametagGlobals.ChatColors[NametagGlobals.CCNormal]
         self.speedChatColor = VBase4(1, 1, 1, 1)
         self.wordWrap = 8
-        self.chatWordWrap = 8
+        self.chatWordWrap = 10
         self.text = ''
         self.name = ''
         self.chatPages = []
@@ -288,7 +288,7 @@ class NametagGroup:
             elif delay > self.CHAT_TIMEOUT_MAX:
                 delay = self.CHAT_TIMEOUT_MAX
             self.chatTimeoutTask = taskMgr.doMethodLater(
-                delay, self.clearChatText, self.chatTimeoutTaskName)
+                delay, self.clearChatText2, self.chatTimeoutTaskName)
 
     def getChatText(self):
         if self.chatPageIndex >= self.getNumChatPages():
@@ -309,6 +309,11 @@ class NametagGroup:
         self.chatPages = []
         self.chatPageIndex = 0
 
+
+        if task is not None:
+            return Task.done
+
+    def clearChatText2(self, task=None):
         for nametag in self.nametags:
             nametag.setChatText('')
             nametag.update()

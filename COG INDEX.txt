@@ -53,7 +53,7 @@ bw - Back Stabber Level 5-15
 brv - Advocate Level 5-20 (Operations Analyst)
 sb - Spin Doctor Level 6-18
 cfp - Shyster Level 6-18 (Field Specialist)
-arb - Legal Eagle Level 7-20run
+arb - Legal Eagle Level 7-20
 sjg - Barrister Level 7-20 (Field Specialist)
 lsc - Big Wig Level 8-25
 jdg - Arbitrator Level 15-20.exe
@@ -116,7 +116,7 @@ trm - Assembly Assassin Level 6-18 (Field Specialist)
 ssm - The Mingler Level 7-20
 isw - Overtimer Level 7-20 (Field Specialist)
 ssr - Mr. Hollywood Level 8-25
-fas - Safe-ty Supervisor Level 8-10.exe CHANGE
+fas - Safe-ty Supervisor Level 8-10.exe
 mdr - Factory Foreman Level 11.mgr
 nar - Director Of Public Relations Level 10.mgr
 fd - Director Of Public Affairs Level 30.mgr
@@ -178,7 +178,7 @@ sys - Sysadmin Level 7-20 (Field Specialist)
 rus - Root User Level 8-25 
 ant - Antivirus Level 15-20.exe 
 sya - Senior Developer Level 20.mgr 
-yuh - PLACEHOLDER Level 5.mgr 
+yuh - Desk Jockey Level 3-10 (No .gov Variant)
 yhi - PLACEHOLDER Level 25.mgr 
 jas - PLACEHOLDER Level 25.mgr
 tas - PLACEHOLDER Level 20.mgr 

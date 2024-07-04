@@ -345,9 +345,9 @@ MockupFactoryId = 0
 MintNumFloors = {CashbotMintIntA: 20,
  CashbotMintIntB: 20,
  CashbotMintIntC: 20}
-CashbotMintCogLevel = 10
-CashbotMintSkelecogLevel = 11
-CashbotMintBossLevel = 12
+CashbotMintCogLevel = 20
+CashbotMintSkelecogLevel = 25
+CashbotMintBossLevel = 28
 MintNumBattles = {CashbotMintIntA: 4,
  CashbotMintIntB: 6,
  CashbotMintIntC: 8}
@@ -361,9 +361,9 @@ MintNumRooms = {CashbotMintIntA: 2 * (6,) + 5 * (7,) + 5 * (8,) + 5 * (9,) + 3 *
 BoardOfficeNumFloors = {BoardOfficeIntA: 20,
  BoardOfficeIntB: 20,
  BoardOfficeIntC: 20}
-BoardOfficeCogLevel = 10
-BoardOfficeSkelecogLevel = 11
-BoardOfficeBossLevel = 20
+BoardOfficeCogLevel = 14
+BoardOfficeSkelecogLevel = 15
+BoardOfficeBossLevel = 28
 BoardOfficeNumBattles = {BoardOfficeIntA: 4,
  BoardOfficeIntB: 6,
  BoardOfficeIntC: 8}
@@ -374,9 +374,9 @@ BoardOfficeNumRooms = {BoardOfficeIntA: 2 * (6,) + 5 * (7,) + 5 * (8,) + 5 * (9,
  BoardOfficeIntB: 3 * (8,) + 6 * (9,) + 6 * (10,) + 5 * (11,),
  BoardOfficeIntC: 4 * (10,) + 10 * (11,) + 6 * (12,)}
  
-BossbotCountryClubCogLevel = 11
-BossbotCountryClubSkelecogLevel = 12
-BossbotCountryClubBossLevel = 12
+BossbotCountryClubCogLevel = 15
+BossbotCountryClubSkelecogLevel = 16
+BossbotCountryClubBossLevel = 16
 CountryClubNumRooms = {BossbotCountryClubIntA: (4,),
  BossbotCountryClubIntB: 3 * (8,) + 6 * (9,) + 6 * (10,) + 5 * (11,),
  BossbotCountryClubIntC: 4 * (10,) + 10 * (11,) + 6 * (12,)}
@@ -386,9 +386,9 @@ CountryClubNumBattles = {BossbotCountryClubIntA: 3,
 CountryClubCogBuckRewards = {BossbotCountryClubIntA: 8,
  BossbotCountryClubIntB: 14,
  BossbotCountryClubIntC: 20}
-LawbotStageCogLevel = 10
-LawbotStageSkelecogLevel = 11
-LawbotStageBossLevel = 12
+LawbotStageCogLevel = 18
+LawbotStageSkelecogLevel = 20
+LawbotStageBossLevel = 28
 StageNumBattles = {LawbotStageIntA: 0,
  LawbotStageIntB: 0,
  LawbotStageIntC: 0,

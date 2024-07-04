@@ -279,19 +279,23 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
     def isSuitLured(self, suit):
         if self.luredSuits.count(suit) != 0:
+            suit.setDizzy(1)
             return 1
-        
-        return 0
+        else:
+            suit.setDizzy(0)
+            return 0
 
     def unlureSuit(self, suit):
         self.notify.debug('movie unluring suit %s' % suit.doId)
         if self.luredSuits.count(suit) != 0:
+            suit.setDizzy(0)
             self.luredSuits.remove(suit)
             self.needAdjustTownBattle = 1
 
     def lureSuit(self, suit):
         self.notify.debug('movie luring suit %s' % suit.doId)
         if self.luredSuits.count(suit) == 0:
+            suit.setDizzy(1)
             self.luredSuits.append(suit)
             self.needAdjustTownBattle = 1
 
@@ -541,6 +545,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 self.localToonFsm.request('NoLocalToon')
         for suit in self.luredSuits:
             suit.loop('lured')
+            suit.setDizzy(1)
             if suit.style.name == 'crf':
                 for headPart in suit.animatedHeadParts:
                     headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
@@ -921,6 +926,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     spos = Point3(suitPos[0], suitPos[1] - MovieUtil.SUIT_LURE_DISTANCE, suitPos[2])
                     suit.setPosHpr(self, spos, suitHpr)
                 suit.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+                suit.setDizzy(0)
                 if suit.style.name == 'crf':
                     for headPart in suit.animatedHeadParts:
                         headPart.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''), fromFrame=0, toFrame=22)

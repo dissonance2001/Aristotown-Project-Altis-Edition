@@ -6,6 +6,7 @@ from pandac.PandaModules import *
 from otp.ai import MagicWordManager
 from otp.ai.MagicWordGlobal import *
 from otp.avatar.ShadowCaster import ShadowCaster
+from direct.interval.IntervalGlobal import *
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 from otp.otpbase import OTPRender
@@ -360,6 +361,7 @@ class Avatar(Actor, ShadowCaster):
 
     def setChatAbsolute(self, chatString, chatFlags, dialogue=None, interrupt=1):
         self.clearChat()
+        searchString = chatString.lower()
 
         if chatFlags & CFQuicktalker:
             self.nametag.setChatType(NametagGlobals.SPEEDCHAT)
@@ -381,8 +383,39 @@ class Avatar(Actor, ShadowCaster):
         else:
             self.nametag.setChatReversed(False)
 
+        if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
+            self.animHead = 'murmur'
+        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
+            self.animHead = 'grunt'
+        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
+            self.animHead = 'question'
+        else:
+            stringLength = len(chatString)
+            if stringLength <= OTPLocalizer.DialogLength1:
+                self.animHead = 'grunt'
+            elif stringLength <= OTPLocalizer.DialogLength2:
+                self.animHead = 'murmur'
+            elif stringLength <= OTPLocalizer.DialogLength3:
+                self.animHead = 'statement'
+            else:
+                self.animHead = 'statement'
         self.nametag.setChatText(chatString, timeout=(chatFlags & CFTimeout))
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
+        if self.style.name == 'crf':
+            for headPart in self.animatedHeadParts: Sequence(
+                ActorInterval(headPart, self.animHead),
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+            ).start()
+        if self.style.name == 'mad':
+            for headPart in self.animatedHeadParts: Sequence(
+                ActorInterval(headPart, self.animHead),
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+            ).start()
+        else:
+            for headPart in self.animatedHeadParts: Sequence(
+                ActorInterval(headPart, self.animHead),
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
 
     def setChatMuted(self, chatString, chatFlags, dialogue = None, interrupt = 1, quiet = 0):
         pass

@@ -421,7 +421,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setSkelecog(1)
         if newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
             newSuit.setManager(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not newSuit.getManager():
+        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg':
             newSuit.setSkeleRevives(1)
         if newSuit.dna.name == 'cg':
             newSuit.setExecutive(1)
@@ -445,7 +445,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setExecutive(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'msp' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
             newSuit.setExecutive(1)
-        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant'  and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'msp' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant'  and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'msp' and not newSuit.dna.name == 'yuh' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
             newSuit.setGovernaught(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         if revives is not None:
