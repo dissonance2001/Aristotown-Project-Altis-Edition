@@ -152,7 +152,7 @@ class SuitPlannerInteriorAI:
         suit.setLevel(suitLevel)
         if suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             suit.setManager(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager():
+        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg':
             suit.setSkeleRevives(1)
         if suit.dna.name == 'cg':
             suit.setExecutive(1)
@@ -174,7 +174,7 @@ class SuitPlannerInteriorAI:
             suit.setExecutive(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.dna.name == 'ant' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'msp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'msp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
+        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'yuh' and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'msp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
             suit.setGovernaught(1)
         return flags
 
@@ -226,13 +226,26 @@ class SuitPlannerInteriorAI:
         suitHandles = {}
         activeSuits = []
         reserveSuits = []
-        if specialCode == 'lit':
+        if specialCode == 'ffm':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 's', 28, 0)
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)
+            miniboss4 = self.__genSuitObject(self.zoneId, 10, 's', 10, 0)
+            activeSuits.append(miniboss4)
+        elif specialCode == 'lit':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 1)
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 1)
             miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 1)
             miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 1)
-            activeSuits.append(random.choice((miniboss, miniboss2, miniboss3, miniboss4)))
-            activeSuits.append(random.choice((miniboss, miniboss2, miniboss3, miniboss4)))
+            activeSuits.append(random.choice((miniboss, miniboss2)))
+            activeSuits.append(random.choice((miniboss2, miniboss4, miniboss3)))
+        elif specialCode == 'ffm2':
+            miniboss2 = self.__genSuitObject(self.zoneId, 19, 's', 27, 1)
+            miniboss3 = self.__genSuitObject(self.zoneId, 21, 's', 26, 1)
+            miniboss4 = self.__genSuitObject(self.zoneId, 22, 's', 25, 1)
+            activeSuits.append(miniboss3)
+            activeSuits.append(miniboss2)
+            activeSuits.append(miniboss4)
         elif specialCode == 'crf':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'm', 28, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)
@@ -274,6 +287,10 @@ class SuitPlannerInteriorAI:
         if specialCode == 'lit':
             # generate random cashbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, suitKind, 'l', suitLevel, random.choice((0, 1)))
+            reserveSuits.append(suit)
+        if specialCode == 'ffm':
+            # generate random cashbot from lv 12 to 20
+            suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, random.choice((0, 1)))
             reserveSuits.append(suit)
         if specialCode == 'crf2':
             suit = self.__genSuitObject(self.zoneId, 27, 't', 27, 1)

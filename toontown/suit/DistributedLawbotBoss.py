@@ -9,6 +9,7 @@ from toontown.toonbase.ToonPythonUtil import StackTrace
 from direct.showbase.ShowBase import *
 from direct.task import Task
 import math
+from toontown.friends import FriendsListManager
 from pandac.PandaModules import *
 import random
 
@@ -714,9 +715,12 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.__hideWitnessToon()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
         if not self.mainDoor.isEmpty():
             self.mainDoor.stash()
         if not self.reflectedMainDoor.isEmpty():
@@ -726,6 +730,12 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('----- exitIntroduction')
         DistributedBossCog.DistributedBossCog.exitIntroduction(self)
         self.promotionMusic.stop()
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
         if not self.mainDoor.isEmpty():
             pass
         if not self.reflectedMainDoor.isEmpty():
@@ -736,9 +746,12 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleOne(self):
         self.notify.debug('----- LawbotBoss.enterBattleOne ')
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleOnePosHpr)
         self.loop('Ff_neutral')
@@ -771,6 +784,27 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.storeInterval(seq, intervalName)
         base.playMusic(self.betweenBattleMusic, looping=1, volume=0.9)
         taskMgr.doMethodLater(0.01, self.unstashBoss, 'unstashBoss')
+
+    def __clickedNameTag(self, avatar):
+        self.notify.debug('__clickedNameTag')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
+
+    def __handleFriendAvatar(self, avId, avName, avDisableName):
+        self.notify.debug('__handleFriendAvatar')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleFriendAvatar(place, avId, avName, avDisableName)
+
+    def __handleAvatarDetails(self, avId, avName, playerId = None):
+        self.notify.debug('__handleAvatarDetails')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleAvatarDetails(place, avId, avName, playerId)
 
     def __onToPrepareBattleTwo(self):
         self.notify.debug('----- __onToPrepareBattleTwo')
@@ -839,7 +873,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleTwo(self):
         self.notify.debug('----- enterBattleTwo')
         self.cleanupIntervals()
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(2)

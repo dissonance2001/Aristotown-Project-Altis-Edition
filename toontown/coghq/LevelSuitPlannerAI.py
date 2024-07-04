@@ -2,7 +2,10 @@ from pandac.PandaModules import *
 from direct.showbase import DirectObject
 from toontown.suit import SuitDNA
 from direct.directnotify import DirectNotifyGlobal
+from toontown.battle import SuitBattleGlobals
 from toontown.coghq import LevelBattleManagerAI
+from toontown.suit import DistributedSuitAI
+from toontown.toonbase import ToontownBattleGlobals
 import types
 import random
 
@@ -79,14 +82,38 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         dna.newSuitRandom(level=SuitDNA.getRandomSuitType(suitDict['level']), dept=suitDict['track'])
         suit.dna = dna
         suit.setLevel(suitDict['level'])
+        if suit.dna.name in SuitBattleGlobals.SpecialCogDict:
+            suit.setManager(1)
+        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg':
+            suit.setSkeleRevives(1)
+        if suit.dna.name == 'cg':
+            suit.setExecutive(1)
+        if suit.dna.name == 'dsf':
+            suit.setSkeleRevives(1)
+        if suit.dna.name == 'jdg':
+            suit.setExecutive(1)
+        if suit.dna.name == 'gkp':
+            suit.setExecutive(1)
+        if suit.dna.name == 'fas':
+            suit.setExecutive(1)
+        if suit.dna.name == 'csh':
+            suit.setExecutive(1)
+        if suit.dna.name == 'msp':
+            suit.setExecutive(1)
+        if suit.dna.name == 'ant':
+            suit.setExecutive(1)
+        if suit.dna.name == 'jb':
+            suit.setExecutive(1)
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.dna.name == 'ant' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'msp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
+            suit.setExecutive(1)
+        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'yuh' and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'msp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
+            suit.setGovernaught(1)
         suit.setSkeleRevives(suitDict.get('revives'))
         suit.setLevelDoId(self.level.doId)
         suit.setCogId(suitDict['cogId'])
         suit.setReserve(reserve)
         if suitDict['skeleton']:
             suit.setSkelecog(1)
-        if random.random() < 0.2 or suitDict['boss']:
-            suit.setElite(1)
         suit.generateWithRequired(suitDict['zoneId'])
         suit.boss = suitDict['boss']
         return suit
@@ -96,8 +123,6 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         activeSuits = []
         for activeSuitInfo in self.suitInfos['activeSuits']:
             suit = self.__genSuitObject(activeSuitInfo, 0)
-            if suit.getElite():
-                suit.d_setElite(1)
             suit.setBattleCellIndex(activeSuitInfo['battleCell'])
             activeSuits.append(suit)
 
@@ -122,7 +147,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         cellSpec = self.battleCellSpecs[cellIndex]
         pos = cellSpec['pos']
         zone = self.level.getZoneId(self.level.getEntityZoneEntId(cellSpec['parentEntId']))
-        maxSuits = 4
+        maxSuits = 6
         self.battleMgr.newBattle(cellIndex, zone, pos, suit, toonId, self.__handleRoundFinished, self.__handleBattleFinished, maxSuits)
         for otherSuit in self.battleCellId2suits[cellIndex]:
             if otherSuit is not suit:
@@ -149,14 +174,19 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
             totalMaxHp += suit.maxHP
 
         for suit in deadSuits:
-            level.suits.remove(suit)
+            if suit in battle.suits:
+                battle.suits.remove(suit)
+
+        for suit in battle.suits:
+            if suit.getHP() <= 0:
+                deadSuits.append(suit)
 
         cellReserves = []
         for info in level.reserveSuits:
             if info[2] == cellId:
                 cellReserves.append(info)
 
-        numSpotsAvailable = 4 - len(battle.suits)
+        numSpotsAvailable = 6 - len(battle.suits)
         if len(cellReserves) > 0 and numSpotsAvailable > 0:
             self.joinedReserves = []
             if __dev__:

@@ -962,7 +962,7 @@ class DistributedMiniboss(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         ElevatorUtils.openDoors(self.leftDoor, self.rightDoor, self.elevatorType)
         intervalName = 'IntroductionMovie'
         delayDeletes = []
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
         self.accept('clickedNametag', self.__clickedNameTag)
@@ -995,12 +995,13 @@ class DistributedMiniboss(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         localAvatar.inventory.setBattleCreditMultiplier(mult)
         self.toonsToBattlePosition(self.toons, self.battleNode)
         self.releaseToons()
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
         base.playMusic(self.battleOneMusic, looping=1, volume=0.9)
-        NametagGlobals.setWantActiveNametags(True)
-        base.localAvatar.setFriendsListButtonActive(1)
 
     def exitBattleOne(self):
         self.cleanupBattles()
@@ -1050,7 +1051,7 @@ class DistributedMiniboss(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
 

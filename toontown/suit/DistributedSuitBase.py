@@ -41,6 +41,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.activeShadow = 0
         self.virtual = 0
         self.battleDetectName = None
+        self.stars = BattleProps.globalPropPool.getProp('stun')
+        self.stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+        self.stars.loop('stun')
+        self.stars.adjustAllPriorities(100)
         self.cRay = None
         self.cRayNode = None
         self.cRayNodePath = None
@@ -69,6 +73,17 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def getVirtual(self):
         return 0
+
+    def setDizzy(self, dizzy):
+        head = self.find('**/to_head')
+        #head = self.getHeadParts()[0]
+
+
+        self.dizzy = dizzy
+        if dizzy:
+            self.stars.reparentTo(head)
+        else:
+            self.stars.detachNode()
 
     def setExecutive(self, executive):
         self.executive = executive

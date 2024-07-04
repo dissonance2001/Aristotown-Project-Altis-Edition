@@ -327,9 +327,7 @@ def createSuitReviveTrack(suit, battle):
     elif suit.style.name == 'lit' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
     elif suit.style.name == 'fm' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
-    elif suit.style.name == 'fm' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
     elif suit.style.name == 'kc' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'ghd' and not deathSuit.isSkeleton:
@@ -347,7 +345,7 @@ def createSuitReviveTrack(suit, battle):
     elif suit.style.name == 'tg' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'jg' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ptjockey_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
     elif suit.style.name == 'mes' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'mad' and not deathSuit.isSkeleton:
@@ -412,6 +410,8 @@ def createSuitReviveTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'tyh' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
+    elif suit.style.name == 'yuh' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
     elif suit.style.name == 'wrt' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'dar' and not deathSuit.isSkeleton:
@@ -542,9 +542,7 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'lit' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
     elif suit.style.name == 'fm' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
-    elif suit.style.name == 'fm' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
     elif suit.style.name == 'kc' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'ghd' and not deathSuit.isSkeleton:
@@ -562,7 +560,7 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'tg' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'jg' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ptjockey_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
     elif suit.style.name == 'mes' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'mad' and not deathSuit.isSkeleton:
@@ -594,10 +592,6 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'frs' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'frs' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
-    elif suit.style.name == 'hh' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
-    elif suit.style.name == 'hh' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'dsf' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
@@ -631,6 +625,8 @@ def createSuitDeathTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'tyh' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
+    elif suit.style.name == 'yuh' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
     elif suit.style.name == 'wrt' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'dar' and not deathSuit.isSkeleton:
@@ -680,6 +676,10 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'le' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'le' and deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
+    elif suit.style.name == 'hh' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+    elif suit.style.name == 'hh' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
@@ -764,14 +764,32 @@ def createSuitCrashTrack(suit):
     soundTrack = base.loadSfx('phase_5/audio/sfx/drop_react.ogg')
     deathSoundTrack = Sequence(Wait(0), SoundInterval(soundTrack, volume=1.0))
     hasAnimatedHead = False
-    suitTrack = Sequence(Wait(hitTime),
-                         Func(suit.setScale, Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
-                         Func(suit.setPos, Point3(suitPos[0], suitPos[1], suitPos[2] + 0.02)),
-                         Func(suit.setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
+    if suit.isSkeleton:
+        suitTrack = Sequence(Wait(hitTime),
+                         Func(suit.find('**/body').setScale, Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
+                         Func(suit.find('**/joint_head').setScale,
+                              Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
+                         Func(suit.find('**/body').setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
+                         Func(suit.find('**/joint_head').setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
                          Func(suit.deleteDropShadow),
                          Wait(shrinkStartDelay),
                          LerpScaleInterval(suit, 0.8, Point3(0.0001, 0.0001, 0.0001), blendType='easeIn'),
                          Func(suit.hide))
+    else:
+        suitTrack = Sequence(Wait(hitTime),
+                             Func(suit.find('**/body').setScale,
+                                  Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
+                             Func(suit.find('**/hands').setScale,
+                                  Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
+                             Func(suit.find('**/joint_head').setScale,
+                                  Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
+                             Func(suit.find('**/body').setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
+                             Func(suit.find('**/hands').setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
+                             Func(suit.find('**/joint_head').setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
+                             Func(suit.deleteDropShadow),
+                             Wait(shrinkStartDelay),
+                             LerpScaleInterval(suit, 0.8, Point3(0.0001, 0.0001, 0.0001), blendType='easeIn'),
+                             Func(suit.hide))
     for headPart in suit.animatedHeadParts:
         headInterval = ActorInterval(headPart, 'neutral', startTime=0, endTime=0)
         hasAnimatedHead = True
@@ -1319,7 +1337,8 @@ def createSuitStunInterval(suit, before, after):
     stars = globalPropPool.getProp('stun')
     stars.setColor(1, 1, 1, 1)
     stars.adjustAllPriorities(100)
-    head = suit.getHeadParts()[0]
+    stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+    head = suit.find('**/to_head')
     head.calcTightBounds(p1, p2)
     hasAnimatedHead = False
     if suit.style.name == 'crf':
@@ -1335,12 +1354,13 @@ def createSuitStunInterval(suit, before, after):
             headInterval = Func(headPart.loop, 'stun')
             hasAnimatedHead = True
     if hasAnimatedHead:
-        return Sequence(Wait(before), Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)),
+        return Sequence(Wait(before), Func(stars.reparentTo, head),
                         Func(stars.loop, 'stun'), headInterval, Wait(after), Func(stars.cleanup),
                         Func(stars.removeNode))
     else:
-        return Sequence(Wait(before), Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)),
-                        Func(stars.loop, 'stun'), Wait(after), Func(stars.cleanup), Func(stars.removeNode))
+        return Sequence(Wait(before), Func(stars.reparentTo, head),
+                        Func(stars.loop, 'stun'), Wait(after), Func(stars.cleanup),
+                        Func(stars.removeNode))
 
 def createSuitStunIntervalFired(suit, before, after):
     p1 = Point3(0)
@@ -1348,7 +1368,8 @@ def createSuitStunIntervalFired(suit, before, after):
     stars = globalPropPool.getProp('stun')
     stars.setColor(1, 1, 1, 1)
     stars.adjustAllPriorities(100)
-    head = suit.getHeadParts()[0]
+    stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+    head = suit.find('**/to_head')
     head.calcTightBounds(p1, p2)
     hasAnimatedHead = False
     for headPart in suit.animatedHeadParts:
@@ -1357,12 +1378,13 @@ def createSuitStunIntervalFired(suit, before, after):
                             'neutral-hurt')
         hasAnimatedHead = True
     if hasAnimatedHead:
-        return Sequence(Wait(before), Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)),
+        return Sequence(Wait(before), Func(stars.reparentTo, head),
                         Func(stars.loop, 'stun'), headInterval, Wait(after), Func(stars.cleanup),
-                        Func(stars.removeNode), headLoop)
+                        Func(stars.removeNode))
     else:
-        return Sequence(Wait(before), Func(stars.reparentTo, head), Func(stars.setZ, max(0.0, p2[2] - 1.0)),
-                        Func(stars.loop, 'stun'), Wait(after), Func(stars.cleanup), Func(stars.removeNode))
+        return Sequence(Wait(before), Func(stars.reparentTo, head),
+                        Func(stars.loop, 'stun'), Wait(after), Func(stars.cleanup),
+                        Func(stars.removeNode))
 
 def createSuitLureInterval(suit):
     p1 = Point3(0)

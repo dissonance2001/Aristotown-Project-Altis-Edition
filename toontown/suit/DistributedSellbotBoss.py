@@ -9,6 +9,7 @@ from toontown.toonbase.ToonPythonUtil import Functor
 from direct.showutil import Rope
 from direct.task import Task
 import math
+from toontown.friends import FriendsListManager
 from pandac.PandaModules import *
 import random
 from toontown.suit import DistributedBossCog
@@ -702,6 +703,11 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         self.rampA.request('extended')
         self.rampB.request('extended')
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         self.rampC.request('retracted')
         self.setCageIndex(0)
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
@@ -714,6 +720,11 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         self.clearChat()
         self.cagedToon.clearChat()
         self.rampA.request('retract')
@@ -808,6 +819,11 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(2)
         localAvatar.inventory.setBattleCreditMultiplier(mult)
         self.reparentTo(render)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         self.setPosHpr(*ToontownGlobals.SellbotBossBattleTwoPosHpr)
         self.clearChat()
         self.cagedToon.clearChat()
@@ -823,6 +839,27 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             cageIndex = 2
         self.setCageIndex(cageIndex)
         base.playMusic(self.battleTwoMusic, looping=1, volume=0.9)
+
+    def __clickedNameTag(self, avatar):
+        self.notify.debug('__clickedNameTag')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
+
+    def __handleFriendAvatar(self, avId, avName, avDisableName):
+        self.notify.debug('__handleFriendAvatar')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleFriendAvatar(place, avId, avName, avDisableName)
+
+    def __handleAvatarDetails(self, avId, avName, playerId = None):
+        self.notify.debug('__handleAvatarDetails')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleAvatarDetails(place, avId, avName, playerId)
 
     def exitBattleTwo(self):
         intervalName = self.uniqueName('cageDrop')

@@ -7,6 +7,7 @@ from toontown.battle.BattleSounds import *
 from toontown.battle import MovieCamera
 from toontown.battle import SuitBattleGlobals
 from direct.directnotify import DirectNotifyGlobal
+from toontown.suit import Suit
 from toontown.battle import MovieUtil
 from toontown.chat.ChatGlobals import *
 from toontown.toonbase import ToontownBattleGlobals
@@ -135,7 +136,6 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
             if trapProp:
                 suitTrack.append(Func(suit.loop, 'lured2'))
             else:
-                suitTrack.append(Parallel(ActorInterval(suit, 'lured2'), MovieUtil.createSuitStunInterval(suit, 0, 2)))
                 suitTrack.append(Func(suit.loop, 'lured2'))
             if suit.style.name == 'crf':
                 for headPart in suit.animatedHeadParts:
@@ -203,8 +203,6 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 if trapProp:
                     suitTrack.append(Func(suit.loop, 'lured2'))
                 else:
-                    suitTrack.append(
-                        Parallel(ActorInterval(suit, 'lured2'), MovieUtil.createSuitStunInterval(suit, 0, 2)))
                     suitTrack.append(Func(suit.loop, 'lured2'))
                 if suit.style.name == 'crf':
                     for headPart in suit.animatedHeadParts:
@@ -273,8 +271,6 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 if trapProp:
                     suitTrack.append(Func(suit.loop, 'lured2'))
                 else:
-                    suitTrack.append(
-                        Parallel(ActorInterval(suit, 'lured2'), MovieUtil.createSuitStunInterval(suit, 0, 2)))
                     suitTrack.append(Func(suit.loop, 'lured2'))
                 if suit.style.name == 'crf':
                     for headPart in suit.animatedHeadParts:
@@ -1075,8 +1071,6 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 if trapProp:
                     suitTrack.append(Func(suit.loop, 'lured2'))
                 else:
-                    suitTrack.append(
-                        Parallel(ActorInterval(suit, 'lured2'), MovieUtil.createSuitStunInterval(suit, 0, 2)))
                     suitTrack.append(Func(suit.loop, 'lured2'))
                 if suit.style.name == 'crf':
                     for headPart in suit.animatedHeadParts:

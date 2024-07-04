@@ -1310,14 +1310,15 @@ sya = (('pen-squirt', 'fountain-pen', 4),
        ('glower', 'glower', 4))
 yuh = (('pen-squirt', 'fountain-pen', 4),
        ('throw-object', 'throw-object', 4),
+('throw-paper', 'throw-paper', 4),
        ('lose3', 'wrecked', 4),
        ('throw-paper', 'throw-paper', 4),
        ('calculating-costs', 'calculating-costs', 4),
-       ('cease', 'cease', 4),
+       ('shredder', 'shredder', 4),
        ('magic1', 'magic1', 4),
        ('quick-jump', 'jump', 4),
        ('cigar-smoke', 'cigar-smoke', 4),
-       ('magic3', 'magic3', 4),
+       ('phone', 'phone', 4),
        ('glower', 'glower', 4))
 yhi = (('magic2', 'snap', 4),
       ('bellow', 'bellow', 4), ('lose3', 'wrecked', 4),
@@ -3596,22 +3597,17 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'ghd':
             self.scale = 6.0 / bSize
             self.handColor = VBase4(0.09, 0.09, 0.09, 1)
-            self.generateLongcoatBody()
-            self.generateHead3('insider', animated=True)
-            texture = loader.loadTexture('phase_14/maps/cc_t_ene_insider_mgr.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+            self.generateBody()
+            self.makeExecutive()
+            self.generateHead3('vp', animated=True)
             self.setHeight(8.0)
             self.setTransparency(1)
         elif dna.name == 'tyh':
             self.scale = 7.2 / aSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
-            self.generateFemaleBody()
+            self.generateBody()
             self.makeExecutive()
-            self.generateHead3('stenographer', animated=True)
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_crystalline.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+            self.generateHead3('cfo', animated=True)
             self.setHeight(10.7)
             self.setTransparency(1)
         elif dna.name == 'jgd':
@@ -3619,10 +3615,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.09, 0.09, 0.09, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead3('magnate', animated=True)
-            texture = loader.loadTexture('phase_14/maps/cc_t_ene_magnate.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+            self.generateHead3('ceo-a', animated=True)
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'bby':
@@ -3630,10 +3623,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead3('headhoncho', animated=True)
-            texture = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho_exe.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+            self.generateHead3('ceo', animated=True)
             self.setHeight(10.9)
             self.setTransparency(1)
         elif dna.name == 'dvk':
@@ -3818,12 +3808,15 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
             self.setHeight(8.5)
         elif dna.name == 'yuh':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.generateSkeletonBody()
-            self.makeExecutive()
-            self.setTransparency(1)
-            self.setHeight(8.5)
+            self.scale = 5.0 / cSize
+            self.handColor = VBase4(0.882, 0.847, 0.784, 1)
+            self.generateBody()
+            self.makeDummy()
+            self.generateHead3('dummy', animated=True)
+            texture = loader.loadTexture('phase_4/maps/schoolhouse/dummy/ttcc_ene_djockey.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(8.0)
         elif dna.name == 'yhi':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -3955,24 +3948,18 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                                          self.style.dept)
             for headPart in self.headParts:
-                #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                #texture.setMagfilter(Texture.FTNearest)
                 headPart.setTexture(texture, 1)
         if self.style.body == 'b':
             self.generateHead3('skullB', animated=True)
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                                          self.style.dept)
             for headPart in self.headParts:
-                #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                #texture.setMagfilter(Texture.FTNearest)
                 headPart.setTexture(texture, 1)
         if self.style.body == 'c' and not self.style.name == 'fd' and not self.style.name == 'nar':
             self.generateHead3('skullC', animated=True)
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                 self.style.dept)
             for headPart in self.headParts:
-                #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                #texture.setMagfilter(Texture.FTNearest)
                 headPart.setTexture(texture, 1)
         self.loadAnims(animDict)
         self.setSuitClothesSkeleton()
@@ -4130,12 +4117,14 @@ class Suit(Avatar.Avatar):
         dept = self.style.dept
         phase = 3.5
         texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s.png' % self.style.dept)
-        if self.isExecutive and not self.style.name == 'mdm' and not self.style.name == 'dsf':
+        if self.isExecutive and not self.style.name == 'mdm' and not self.style.name == 'dsf' and not self.style.name == 'yuh':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_e.png' % self.style.dept)
         elif self.isManager and not self.style.name == 'crf':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_e.png' % self.style.dept)
         elif self.isExecutive and self.style.name == 'dsf':
             texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_suit.png')
+        elif self.isExecutive and self.style.name == 'yuh':
+            texture = loader.loadTexture('phase_4/maps/schoolhouse/dummy/ttcc_ene_suittex_ptjockey_e.png')
         elif self.isGovernaught and not self.style.name == 'mdm':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_gov.png' % self.style.dept)
         elif not self.isGovernaught and not self.isExecutive and self.style.name == 'mdm':
@@ -4144,9 +4133,6 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_highcollar_%s_gov.png' % self.style.dept)
         elif self.isExecutive and self.style.name == 'mdm':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_highcollar_%s_e.png' % self.style.dept)
-        # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
         modelRoot.find('**/hands').setColor(self.handColor)
         modelRoot.find('**/necktie-s').hide()
         modelRoot.find('**/necktie-w').hide()
@@ -4195,9 +4181,7 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         dept = self.style.dept
         phase = 3.5
-        texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_suit_black.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+        texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_suit_black.png')
         modelRoot.find('**/hands').setColor(self.handColor)
         modelRoot.find('**/necktie-s').hide()
         modelRoot.find('**/necktie-w').hide()
@@ -4246,9 +4230,7 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         dept = self.style.dept
         phase = 3.5
-        texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_rainmake.png')  # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
+        texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_rainmake.png')
         modelRoot.find('**/hands').setColor(self.handColor)
         modelRoot.find('**/necktie-s').hide()
         modelRoot.find('**/necktie-w').hide()
@@ -4298,12 +4280,6 @@ class Suit(Avatar.Avatar):
         texture2 = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body2.png')
         texture3 = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body3.png')
         texture4 = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body3.png')
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
-        #texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body2.png')
-        # This will only work if you have the texture ttcc_ene_suittex_unemployed.png in phase_3.5/maps, which is the texture that Cogs wear when fired.  This is just in case it can't properly load the above texture.
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
         modelRoot.find('**/hands').setColor(self.handColor)
         modelRoot.find('**/necktie-s').hide()
         modelRoot.find('**/necktie-w').hide()
@@ -4352,8 +4328,6 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.isGovernaught:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_gov.png')
-        #texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        #texture.setMagfilter(Texture.FTLinear)
         modelRoot.find('**/necktie-s').hide()
         modelRoot.find('**/necktie-w').hide()
         modelRoot.find('**/bowtie').hide()
@@ -4581,6 +4555,35 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(-.1)
                 headModel.setY(-.2)
                 headModel.setY(0)
+            elif headType == 'ceo':
+                headModel.setZ(-.2)
+                headModel.setY(-.2)
+                headModel.setX(0)
+                headModel.setR(-90)
+                headModel.setH(90)
+                headModel.setScale(.3)
+            elif headType == 'ceo-a':
+                headModel.setZ(-.2)
+                headModel.setY(-.2)
+                headModel.setX(0)
+                headModel.setR(-90)
+                headModel.setH(90)
+                headModel.setScale(.3)
+            elif headType == 'cfo':
+                headModel.setZ(-.2)
+                headModel.setY(-.2)
+                headModel.setX(0)
+                headModel.setR(-90)
+                headModel.setH(90)
+                headModel.setScale(.35)
+                headModel.setTwoSided(True)
+            elif headType == 'vp':
+                headModel.setZ(-.2)
+                headModel.setY(-.2)
+                headModel.setX(0)
+                headModel.setR(-90)
+                headModel.setH(90)
+                headModel.setScale(.35)
             elif headType == 'redd':
                 headModel.setScale(.8)
             elif headType == 'witchhunter':
@@ -4880,6 +4883,34 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(-.05)
                 headModel.setY(-.3)
             elif headType == 'clo':
+                headModel.setZ(-.1)
+                headModel.setY(-.1)
+                headModel.setX(0)
+                headModel.setR(-90)
+                headModel.setH(90)
+                headModel.setScale(.4)
+            elif headType == 'ceo':
+                headModel.setZ(-.1)
+                headModel.setY(-.1)
+                headModel.setX(0)
+                headModel.setR(-90)
+                headModel.setH(90)
+                headModel.setScale(.4)
+            elif headType == 'ceo-a':
+                headModel.setZ(-.1)
+                headModel.setY(-.1)
+                headModel.setX(0)
+                headModel.setR(-90)
+                headModel.setH(90)
+                headModel.setScale(.4)
+            elif headType == 'cfo':
+                headModel.setZ(-.1)
+                headModel.setY(-.1)
+                headModel.setX(0)
+                headModel.setR(-90)
+                headModel.setH(90)
+                headModel.setScale(.4)
+            elif headType == 'vp':
                 headModel.setZ(-.1)
                 headModel.setY(-.1)
                 headModel.setX(0)
@@ -5943,6 +5974,17 @@ class Suit(Avatar.Avatar):
                 'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
 
+    def makeDummy(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isGovernaught = 1
+        try:
+            texture = loader.loadTexture('phase_4/maps/schoolhouse/dummy/ttcc_ene_suittex_djockey.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
+
     def makeGovernaught(self, modelRoot=None):
         if not modelRoot:
             modelRoot = self
@@ -5952,20 +5994,14 @@ class Suit(Avatar.Avatar):
             if self.style.body == 'a':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_gov.png')
                 for headPart in self.headParts:
-                    #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                    #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
             if self.style.body == 'b':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_gov.png')
                 for headPart in self.headParts:
-                    #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                    #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
             if self.style.body == 'c':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_gov.png')
                 for headPart in self.headParts:
-                    #texture.setMinfilter(Texture.FTNearestMipmapLinear)
-                    #texture.setMagfilter(Texture.FTNearest)
                     headPart.setTexture(texture, 1)
         elif self.style.name == 'mdm':
             self.setSuitClothes()
@@ -6250,6 +6286,9 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'tyh' and self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogFemaleArray
+        if self.style.name == 'yuh' and not self.isSkeleton:
+            loadDialog(1)
+            return DeskJockeyDialogArray
         if self.style.name == 'phs' and self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogFemaleArray
