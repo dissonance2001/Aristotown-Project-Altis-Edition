@@ -163,7 +163,7 @@ class Movie(DirectObject.DirectObject):
 
         for suit in self.battle.activeSuits:
             if suit._Actor__animControlDict != None:
-                suit.loop('neutral')
+                suit.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
                 suit.battleTrapIsFresh = 0
                 origPos, origHpr = self.battle.getActorPosHpr(suit)
                 suit.setPosHpr(self.battle, origPos, origHpr)

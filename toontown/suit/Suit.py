@@ -451,25 +451,24 @@ fm = (('quick-jump', 'jump', 4),
 th = (('magic1', 'magic1', 4), #Rainmaker
         ('effort', 'effort', 4),
         ('glower', 'glower', 4),
-        ('magic2', 'transformation', 4),
+('cease', 'objection', 4),
+        ('magic3', 'magic3', 4),
       ('lose3', 'wrecked', 4),
-        ('pickpocket', 'rushjob', 4))
-kc = (('pickpocket', 'sanction', 4), #Witch Hunter
+        ('glower', 'glower', 4))
+kc = (('mob-mentality', 'mob-mentality', 4), #Witch Hunter
         ('sanction', 'sanction', 4),
         ('speak', 'speak', 4),
       ('lose3', 'wrecked', 4),
         ('throw-object', 'throw-object', 4),
         ('throw-paper', 'throw-paper', 4),
         ('magic1', 'magic1', 4))
-tr = (('glower', 'glower', 4), #Count Erclaim
-        ('pickpocket', 'sanction', 4),
-        ('sanction', 'sanction', 4),
+tr = (('snap', 'mob-mentality', 4), #Count Erclaim
+        ('pickpocket', 'defense', 4),
         ('throw-object', 'throw-object', 4),
+('effort', 'effort', 4),
         ('throw-paper', 'throw-paper', 4),
       ('lose3', 'wrecked', 4),
-        ('cease2', 'cease2', 4),
-        ('magic3', 'magic3', 4),
-      ('cease', 'cease', 4),
+      ('quick-jump', 'jump', 4),
         ('magic1', 'magic1', 4))
 prr = (('song-and-dance', 'song-and-dance', 4),
        ('glower', 'glower', 4),
@@ -701,13 +700,16 @@ dsf = (('falling-knife', 'falling-knife', 4),
 ('pickpocket', 'sanction', 4),
        ('magic1', 'magic1', 4),
        ('neutral', 'rolled', 4))
-msp = (('phone', 'phone', 4),
+msp = (('magic3', 'magic3', 4),
+       ('mob-mentality', 'mob-mentality', 4),
        ('throw-paper', 'throw-paper', 4),
-('song-and-dance', 'song-and-dance', 4),
        ('throw-object', 'throw-object', 4),
+('quick-jump', 'jump', 4),
+('cease', 'cease', 4),
+('glower', 'glower', 4),
 ('defense', 'defense', 4),
-('sanction', 'sanction', 4),
-       ('shredder', 'shredder', 4))
+('pickpocket', 'sanction', 4),
+       ('finger-wag', 'finger-wag', 4))
 mad = (('magic3', 'magic3', 4),
        ('effort', 'scabbard', 4),
        ('magic1', 'magic1', 4),
@@ -859,10 +861,11 @@ cm = (('magic2', 'snap', 4),
       ('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4))
 ggm = (('magic2', 'snap', 4),
-       ('sanction', 'sanction', 4),
-       ('defense', 'scabbard', 4), ('lose3', 'wrecked', 4),
+       ('calculating-costs', 'phone', 4),
+       ('cease', 'objection', 4), ('lose3', 'wrecked', 4),
        ('magic3', 'snap', 4),
        ('pickpocket', 'sanction', 4),
+('finger-wag', 'finger-wag', 4),
        ('throw-object', 'throw-object', 5),
        ('throw-paper', 'throw-paper', 5),
        ('magic1', 'magic1', 4))
@@ -886,13 +889,20 @@ jr = (('throw-paper', 'throw-paper', 4), # Multislacker
       ('sanction', 'sanction', 4),
       ('pickpocket', 'sanction', 4),
       ('song-and-dance', 'song-and-dance', 4))
-mp = (('cigar-smoke', 'cigar-smoke', 4),
-     ('glower', 'glower', 4),
+mp = (('hold-pencil', 'hold-pencil', 4),
+     ('magic1', 'magic1', 4),
      ('lose3', 'wrecked', 4),
-     ('golf-club-swing', 'golf-club-swing', 4),
+('effort', 'effort', 4),
+      ('stomp', 'stomp', 4),
+      ('glower', 'glower', 4),
+('pickpocket', 'defense', 4),
+('cease', 'objection', 4),
+     ('speak', 'speak', 4),
      ('magic1', 'magic1', 4))
 laa = (('glower', 'glower', 4),
        ('pickpocket', 'sanction', 4),
+       ('effort', 'effort', 4),
+       ('summon', 'summon', 4),
        ('sanction', 'sanction', 4),
        ('lose3', 'wrecked', 4),
        ('falling-knife', 'falling-knife', 4),
@@ -1062,6 +1072,8 @@ dfg = (('magic2', 'snap', 4),
 dfr = (('stomp', 'rage', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
+       ('neutral-enraged', 'neutral-enraged', 4),
+       ('enraged', 'enraged', 4),
        ('magic1', 'magic1', 4), ('lose3', 'wrecked', 4),
        ('defense', 'defense', 4),
        ('glower', 'glower', 4))
@@ -2355,6 +2367,10 @@ class Suit(Avatar.Avatar):
         self.isGovernaught = 0
         self.isExecutive = 0
         self.isManager = 0
+        self.isImmune = 0
+        self.isSoaked = 0
+        self.isEnraged = 0
+        self.isAbsorbing = 0
         self.isRental = 0
         self.splats = set()
 
@@ -2419,6 +2435,10 @@ class Suit(Avatar.Avatar):
         self.loseActor = None
         self.zapActor = None
         self.isSkeleton = 0
+        self.isImmune = 0
+        self.isEnraged = 0
+        self.isAbsorbing = 0
+        self.isSoaked = 0
 
         if dna.name == 'f':
             self.scale = 4.0 / cSize
@@ -2867,6 +2887,9 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.makeExecutive()
             self.generateHead3('mouthpiece', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_mouthpiece.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(6.8)
         elif dna.name == 'th':
             self.scale = 5.5 / bSize
@@ -2881,22 +2904,31 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead3('witchhunter', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_witchhunter.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(8.0)
             self.setTransparency(1)
         elif dna.name == 'tr':
             self.scale = 6.7 / bSize
             self.handColor = VBase4(1, 1, 1, 1)
             self.generateBody()
-            self.makeExecutive()
+            self.makeCountErclaim()
             self.generateHead3('counterclaim', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_counterclaim1.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(8.69)
             self.setTransparency(1)
         elif dna.name == 'mp':
-            self.scale = 5.7 / aSize
-            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
+            self.scale = 6.2 / bSize
+            self.handColor = VBase4(1, 1, 1, 1)
             self.generateBody()
-            self.makeExecutive()
+            self.makeRedd()
             self.generateHead3('redd', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_redd.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(7.69)
             self.setTransparency(1)
         elif dna.name == 'laa':
@@ -3138,11 +3170,15 @@ class Suit(Avatar.Avatar):
             self.setHeight(9.0)
             self.setTransparency(1)
         elif dna.name == 'msp':
-            self.scale = 4.5 / cSize
+            self.scale = 7.2 / aSize
             self.handColor = VBase4(1, 1, 1, 1.0)
             self.generateBody()
-            self.generateHead3('dummy', animated=True)
-            self.setHeight(7.0)
+            self.makeCountErclaim()
+            self.generateHead3('counterclaim', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_counterclaim.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(9.0)
         elif dna.name == 'mad':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(1, 1, 1, 1)
@@ -4153,6 +4189,12 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'mdm':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'mp':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'tr':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'dsf':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
@@ -4374,12 +4416,16 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/necktie-s').setTexture(texture, 1)
         modelRoot.find('**/necktie-w').setTexture(texture, 1)
         modelRoot.find('**/bowtie').setTexture(texture, 1)
-        if self.style.dept == 'l':
+        if self.style.dept == 'l' and not self.style.name == 'mp' and not self.style.name == 'tr':
             modelRoot.find('**/bowtie').show()
         elif self.style.dept == 's':
             modelRoot.find('**/necktie-s').show()
         elif self.style.name == 'sft':
             modelRoot.find('**/necktie-s').hide()
+        elif self.style.name == 'mp':
+            modelRoot.find('**/bowtie').hide()
+        elif self.style.name == 'tr':
+            modelRoot.find('**/bowtie').hide()
         elif self.style.name == 'dfh':
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'crf':
@@ -5516,8 +5562,12 @@ class Suit(Avatar.Avatar):
                 taskMgr.add(blinkTask, 'blink-task-%s' % id(self))
             else:
                 taskMgr.remove(self.uniqueName('blink-task'))
-                self.healthBar.setColor(self.healthColors[condition], 1)
-                self.healthBarGlow.setColor(self.healthGlowColors[condition], 1)
+                if self.isImmune:
+                    self.healthBar.setColor(1, 1, 1, 1)
+                    self.healthBarGlow.setColor(1, 1, 1, 1)
+                else:
+                    self.healthBar.setColor(self.healthColors[condition], 1)
+                    self.healthBarGlow.setColor(self.healthGlowColors[condition], 1)
             self.healthCondition = condition
 
     def __blinkRed(self, task):
@@ -5814,6 +5864,32 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/necktie-s').hide()
         modelRoot.find('**/necktie-w').hide()
 
+    def makeCountErclaim(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isManager = 1
+        try:
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_count.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
+        modelRoot.find('**/bowtie').hide()
+        modelRoot.find('**/necktie-s').hide()
+        modelRoot.find('**/necktie-w').hide()
+
+    def makeRedd(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isManager = 1
+        try:
+            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_l_e.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
+        modelRoot.find('**/bowtie').hide()
+
     def makePlutocrat(self, modelRoot=None):
         if not modelRoot:
             modelRoot = self
@@ -6024,6 +6100,31 @@ class Suit(Avatar.Avatar):
         else:
             self.setSuitClothes()
 
+    def makeIntoImmune(self):
+        self.isImmune = 1
+
+    def removeImmune(self):
+        self.isImmune = 0
+
+    def makeIntoEnraged(self):
+        self.loop('neutral-enraged')
+        self.isEnraged = 1
+
+    def removeEnraged(self):
+        self.isEnraged = 0
+
+    def makeIntoAbsorbing(self):
+        self.isAbsorbing = 1
+
+    def removeAbsorbing(self):
+        self.isAbsorbing = 0
+
+    def makeIntoSoaked(self):
+        self.isSoaked= 1
+
+    def removeSoaked(self):
+        self.isSoaked = 0
+
     def getHeadParts(self):
         return self.headParts
 
@@ -6109,6 +6210,9 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'tr' and not self.isSkeleton:
             loadDialog(1)
             return CountErfitDialogArray
+        if self.style.name == 'th' and not self.isSkeleton:
+            loadDialog(1)
+            return RainmakerDialogArray
         if self.style.name == 'mp' and not self.isSkeleton:
             loadDialog(1)
             return ReddDialogArray
@@ -6168,7 +6272,7 @@ class Suit(Avatar.Avatar):
             return BellringerDialogArray
         if self.style.name == 'msp' and not self.isSkeleton:
             loadDialog(1)
-            return DeskJockeyDialogArray
+            return CountErfitDialogArray
         if self.style.name == 'jg' and not self.isSkeleton:
             loadDialog(1)
             return PrethinkerDialogArray

@@ -397,21 +397,23 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         if level == UBER_GAG_LEVEL_INDEX:
             gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
             suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
+        bonusTrack = None
         if died:
             if majorObject:
+                bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
+                                      Func(suit.showHpText, -hpbonus, 1),
+                                      Func(suit.updateHealthBar, hpbonus))
                 suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit))
                 suitTrack.append(suitGettingHit)
-                return suitTrack
+                return Parallel(suitTrack, bonusTrack)
             elif not suit.getSkelecog():
                 #headless = True
                 sequence = Sequence(Wait(random.uniform(0.25, 2.0)))
                 thing = Parallel(sequence, MovieUtil.spawnHeadExplosion(suit, battle))
                 suitGettingHit.append(thing)
         suitTrack.append(suitGettingHit)
-        bonusTrack = None
         if hpbonus > 0:
-            bonusTrack = Sequence(Wait(delay + tObjectAppears + 0.75), Func(suit.showHpText, -hpbonus, 1, openEnded=0), Func(suit.updateHealthBar, hpbonus))
-            #bonusTrack.append(updateHealthBar)
+            bonusTrack = Sequence(Wait(delay + tObjectAppears + 1), Func(suit.showHpText, -hpbonus, 1), Func(suit.updateHealthBar, hpbonus))
         if revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died != 0:

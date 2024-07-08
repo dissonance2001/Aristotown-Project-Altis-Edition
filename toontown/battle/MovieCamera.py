@@ -716,7 +716,7 @@ def chooseSuitShot(attack, attackDuration):
         camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc2 = pbpDc.getShowIntervalDesc('The Ambassador retaliates against the least\ndangerous toon!', 3.5)
+        pbpDesc2 = pbpDc.getShowIntervalDesc("You're beginning to feel dizzy!", 3.5)
         pbpTrack2 = pbpText.getShowIntervalCheat('Whirlwind!', 3.5)
         pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Your offensive gags will be less effective!', 3.5)))
         pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))

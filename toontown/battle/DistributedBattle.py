@@ -57,10 +57,10 @@ class DistributedBattle(DistributedBattleBase.DistributedBattleBase):
             else:
                 self.notify.warning('No hood? self.interactiveProp is None')
 
-    def setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, timestamp):
+    def setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, immuneSuits, enragedSuits, absorbingSuits, soakedSuits, timestamp):
         if self.battleCleanedUp():
             return
-        oldtoons = DistributedBattleBase.DistributedBattleBase.setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, timestamp)
+        oldtoons = DistributedBattleBase.DistributedBattleBase.setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, immuneSuits, enragedSuits, absorbingSuits, soakedSuits, timestamp)
         if len(self.toons) == 4 and len(oldtoons) < 4:
             self.notify.debug('setMembers() - battle is now full of toons')
             self.closeBattleCollision()
@@ -131,6 +131,7 @@ class DistributedBattle(DistributedBattleBase.DistributedBattleBase):
         suitTrack.append(LerpPosInterval(suit, faceoffTime, suitPos, other=self))
         suitTrack.append(Func(suit.loop, 'neutral'))
         suitTrack.append(Func(suit.setHpr, self, suitHpr))
+        suitTrack.append(Func(suit.setChatAbsolute, '', CFSpeech | CFTimeout))
         toonTrack.append(Func(toon.loop, 'run'))
         toonTrack.append(LerpPosInterval(toon, faceoffTime, toonPos, other=self))
         toonTrack.append(Func(toon.loop, 'neutral'))

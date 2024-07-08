@@ -129,24 +129,27 @@ class TownBattleCogPanel(DirectFrame):
 
     def updateHealthBar(self):
         condition = self.cog.healthCondition
-        if condition == 7:
+        if self.cog.getImmuneStatus():
+            if not self.button.isEmpty():
+                self.button.setColor(1, 1, 1, 1)
+        elif condition == 7 and not self.cog.getImmuneStatus():
             self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(1.2), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
             self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
-        elif condition == 8:
+        elif condition == 8 and not self.cog.getImmuneStatus():
             self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(1.2), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
             self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
-        elif condition == 9:
+        elif condition == 9 and not self.cog.getImmuneStatus():
             self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.75), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
             self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
-        elif condition == 10:
+        elif condition == 10 and not self.cog.getImmuneStatus():
             taskMgr.remove(self.uniqueName('blink-task'))
             blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.25), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(blinkTask, self.uniqueName('blink-task'))
             self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
-        elif condition == 13:
+        elif condition == 13 and not self.cog.getImmuneStatus():
             taskMgr.remove(self.uniqueName('blink-task'))
             if not self.button.isEmpty():
                 self.button.setColor(self.healthColors[condition], 1)
@@ -159,7 +162,10 @@ class TownBattleCogPanel(DirectFrame):
             
             #if not self.glow.isEmpty():
                 #self.glow.setColor(self.healthGlowColors[condition], 1)
-        self.hp = self.cog.getHP()
+        if self.cog.getHP() >= 0:
+            self.hp = self.cog.getHP()
+        else:
+            self.hp = 0
         self.maxHp = self.cog.getMaxHP()
         self.hpText['text'] = str(self.hp) + '/' + str(self.maxHp)
 
@@ -169,7 +175,7 @@ class TownBattleCogPanel(DirectFrame):
         needMedScaledHeads = 'bf', 'cc', 'sc', 'dsk', 'nar'
         needSmallScaledHeads = 'bg'
         needSmallerScaledHeads = 'csm', 'mka', 'txm', 'ym', 'bs', 'tw', 'ssm', 'kyl', 'kpn', 'blr', 'fd', 'tb', 'adc', 'drm', 'ffm', 'frs', 'fbd'
-        needEvenSmallerScaledHeads = 'ste', 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb', 'yuh'
+        needEvenSmallerScaledHeads = 'ste', 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb', 'yuh', 'kc'
         if name in needBigScaledHeads:
             self.suitHead.setScale(.13)
         elif name in needMedScaledHeads:

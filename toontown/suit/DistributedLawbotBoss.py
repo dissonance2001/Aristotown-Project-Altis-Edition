@@ -292,6 +292,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         myInterval = base.camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), startPos=Point3(-22, -90, 35), startHpr=Point3(-10, -13, 0), blendType='easeInOut')
         chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempJury1, CFSpeech), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1))
         bossTrack.append(Func(self.getGeomNode().setH, 180))
+        chatTrack.append(Func(self.setChatAbsolute, '', CFSpeech))
         track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
         bossTrack.append(track)
         track, hpr = self.rollBossToPoint(battlePos, hpr, battlePos, battleHpr, 0)
@@ -307,6 +308,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         bossTrack = Sequence()
         myInterval = base.camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), startPos=Point3(-22, -90, 35), startHpr=Point3(-10, -13, 0), blendType='easeInOut')
         chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTrialChat1, CFSpeech), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1))
+        bossTrack.append(Func(self.setChatAbsolute, '', CFSpeech))
         bossTrack.append(Func(self.getGeomNode().setH, 180))
         bossTrack.append(Func(self.loop, 'Ff_neutral'))
         track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
@@ -347,7 +349,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
              Func(base.camera.setHpr, 0, 0, 0)]
         seq.append(Func(self.setChatAbsolute, TTLocalizer.LawbotBossPassExam, CFSpeech))
         seq.append(Wait(5.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
         return seq
 
     def __makeBossDamageMovie(self):
@@ -753,7 +755,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.LawbotBossBattleOnePosHpr)
+        self.setPosHpr(*ToontownGlobals.LawbotBossBattleFourPosHpr)
         self.loop('Ff_neutral')
         self.notify.debug('self.battleANode = %s' % self.battleANode)
         self.__hideWitnessToon()
@@ -823,6 +825,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('----- enterPrepareBattleTwo')
         self.cleanupIntervals()
         self.controlToons()
+        NametagGlobals.setWant2dNametags(False)
         self.setToonsToNeutral(self.involvedToons)
         self.clearChat()
         self.reparentTo(render)
@@ -889,9 +892,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             self.toonsToBattlePosition(self.toonsB, self.battleBNode)
         base.playMusic(self.battleTwoMusic, looping=1, volume=0.9)
         self.startJuryBoxMoving()
-        for index in xrange(len(self.cannons)):
-            cannon = self.cannons[index]
-            cannon.cannon.show()
 
     def getChairParent(self):
         return self.juryBox
@@ -899,13 +899,10 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def startJuryBoxMoving(self):
         curPos = self.juryBox.getPos()
         endingAbsPos = Point3(curPos[0] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[0], curPos[1] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[1], curPos[2] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[2])
-        curReflectedPos = self.reflectedJuryBox.getPos()
-        reflectedEndingAbsPos = Point3(curReflectedPos[0] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[0], curReflectedPos[1] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[1], curReflectedPos[2] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[2])
-        self.juryBoxIval = Parallel(self.juryBox.posInterval(ToontownGlobals.LawbotBossJuryBoxMoveTime, endingAbsPos), self.reflectedJuryBox.posInterval(ToontownGlobals.LawbotBossJuryBoxMoveTime, reflectedEndingAbsPos), SoundInterval(self.juryMovesSfx, node=self.chairs[2].nodePath, duration=ToontownGlobals.LawbotBossJuryBoxMoveTime, loop=1, volume=1.0))
+        #reflectedEndingAbsPos = Point3(curReflectedPos[0] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[0], curReflectedPos[1] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[1], curReflectedPos[2] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[2])
+        self.juryBoxIval = Parallel(self.juryBox.posInterval(ToontownGlobals.LawbotBossJuryBoxMoveTime, endingAbsPos), SoundInterval(self.juryMovesSfx, node=self.chairs[2].nodePath, duration=ToontownGlobals.LawbotBossJuryBoxMoveTime, loop=1, volume=1.0))
         self.juryBoxIval.start()
-        self.juryTimer = ToontownTimer.ToontownTimer()
-        self.juryTimer.posInTopRightCorner()
-        self.juryTimer.countdown(ToontownGlobals.LawbotBossJuryBoxMoveTime)
+        self.juryBox.hide()
 
     def exitBattleTwo(self):
         self.notify.debug('----- exitBattleTwo')
@@ -927,6 +924,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('----- enterRollToBattleThree')
         self.reparentTo(render)
         self.stickBossToFloor()
+        self.startJuryBoxMoving()
         intervalName = 'RollToBattleThree'
         seq = Sequence(self.__makeRollToBattleThreeMovie(), Func(self.__onToPrepareBattleThree), name=intervalName)
         seq.start()
@@ -1428,6 +1426,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             (12, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro2, CFSpeech)),
             (18, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro3, CFSpeech)),
             (22, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro4, CFSpeech)),
+            (5.5, Func(self.setChatAbsolute, '', CFSpeech)),
             (24, Sequence(
                 Func(self.clearChat),
                 self.loseCogSuits(self.toonsA + self.toonsB, render, (-2.798, -70, 10, 180, 0, 0)))),
@@ -1635,6 +1634,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                        SoundInterval(dropSfx),
                        Func(self.stash)),
                        Func(paperwork.detachNode))))),
+            (5.5, Func(self.setChatAbsolute, '', CFSpeech)),
             (17, Sequence(self.door3.posInterval(1, doorStartPos))))
         retTrack = Parallel(bossTrack, ActorInterval(self, 'Ff_speech', loop=1))
         return bossTrack

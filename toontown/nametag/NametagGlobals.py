@@ -37,9 +37,9 @@ rolloverSound = None
 clickSound = None
 
 me = None
-want2dNametags = True
-forceOnscreenChat = True
-force2dNametags = True
+want2dNametags = False
+forceOnscreenChat = False
+force2dNametags = False
 wantActiveNametags = True
 
 

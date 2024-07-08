@@ -17,6 +17,10 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         self.sp = suitPlanner
         self.maxHP = 10
         self.currHP = 10
+        self.immune = 0
+        self.enraged = 0
+        self.absorbing = 0
+        self.soaked = 0
         self.zoneId = 0
         self.dna = SuitDNA.SuitDNA()
         self.virtual = 0
@@ -116,6 +120,82 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         else:
             self.notify.debug('No dna has been created for suit %d!' % self.getDoId())
             return ''
+
+    def b_setImmuneStatus(self, num):
+        if num == None:
+            num = 0
+        self.setImmuneStatus(num)
+        self.d_setImmuneStatus(self.getImmuneStatus())
+        return
+
+    def d_setImmuneStatus(self, num):
+        self.sendUpdate('setImmuneStatus', [num])
+
+    def getImmuneStatus(self):
+        return self.immune
+
+    def setImmuneStatus(self, num):
+        if num == None:
+            num = 0
+        self.immune = num
+        return
+
+    def b_setEnragedStatus(self, num):
+        if num == None:
+            num = 0
+        self.setEnragedStatus(num)
+        self.d_setEnragedStatus(self.getEnragedStatus())
+        return
+
+    def d_setEnragedStatus(self, num):
+        self.sendUpdate('setEnragedStatus', [num])
+
+    def getEnragedStatus(self):
+        return self.enraged
+
+    def setEnragedStatus(self, num):
+        if num == None:
+            num = 0
+        self.enraged = num
+        return
+
+    def b_setAbsorbingStatus(self, num):
+        if num == None:
+            num = 0
+        self.setAbsorbingStatus(num)
+        self.d_setAbsorbingStatus(self.getAbsorbingStatus())
+        return
+
+    def d_setAbsorbingStatus(self, num):
+        self.sendUpdate('setAbsorbingStatus', [num])
+
+    def getAbsorbinigStatus(self):
+        return self.absorbing
+
+    def setAbsorbingStatus(self, num):
+        if num == None:
+            num = 0
+        self.absorbing = num
+        return
+
+    def b_setSoakedStatus(self, num):
+        if num == None:
+            num = 0
+        self.setSoakedStatus(num)
+        self.d_setSoakedStatus(self.getSoakedStatus())
+        return
+
+    def d_setSoakedStatus(self, num):
+        self.sendUpdate('setSoakedStatus', [num])
+
+    def getSoakedStatus(self):
+        return self.soaked
+
+    def setSoakedStatus(self, num):
+        if num == None:
+            num = 0
+        self.soaked = num
+        return
 
     def b_setBrushOff(self, index):
         self.setBrushOff(index)

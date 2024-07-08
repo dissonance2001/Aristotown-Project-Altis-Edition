@@ -435,17 +435,15 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'csh':
             newSuit.setExecutive(1)
-        if newSuit.dna.name == 'msp':
-            newSuit.setExecutive(1)
         if newSuit.dna.name == 'ant':
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'jb':
             newSuit.setExecutive(1)
         if executive and not newSuit.getManager():
             newSuit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'msp' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
             newSuit.setExecutive(1)
-        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant'  and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'msp' and not newSuit.dna.name == 'yuh' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant'  and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'yuh' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
             newSuit.setGovernaught(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         if revives is not None:

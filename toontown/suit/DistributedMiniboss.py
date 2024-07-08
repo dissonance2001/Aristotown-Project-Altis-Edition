@@ -916,7 +916,7 @@ class DistributedMiniboss(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.transitions.IrisModelName = 'phase_3/models/misc/iris'
         self.transitions.FadeModelName = 'phase_3/models/misc/fade'
         self.transitions.fadeScreen(alpha=1)
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
 
@@ -927,7 +927,7 @@ class DistributedMiniboss(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.show()
         self.transitions.noFade()
         del self.transitions
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
 
@@ -984,7 +984,7 @@ class DistributedMiniboss(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.clearInterval(intervalName)
         self.unstickToons()
         self.releaseToons()
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
         ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, self.elevatorType)
@@ -1014,7 +1014,7 @@ class DistributedMiniboss(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
 
