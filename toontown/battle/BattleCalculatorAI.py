@@ -51,6 +51,10 @@ class BattleCalculatorAI:
         self.SuitAttackers = {}
         self.currentlyLuredSuits = {}
         self.currentlyWetSuits = {}
+        self.currentlySoakedSuits = {}
+        self.currentlyImmuneSuits = {}
+        self.currentlyEnragedSuits = {}
+        self.currentlyAbsorbingSuits = {}
         self.successfulLures = {}
         self.toonAtkOrder = []
         self.toonHPAdjusts = {}
@@ -745,48 +749,55 @@ class BattleCalculatorAI:
             else:
                 targetId = targetList[currTarget].getDoId()
             if atkTrack == LURE:
-                if self.getSuitTrapType(targetId) == NO_TRAP:
-                    if self.notify.getDebug():
-                        self.notify.debug('Suit lured, but no trap exists')
-                    if self.SUITS_UNLURED_IMMEDIATELY:
-                        if not self.__suitIsLured(targetId, prevRound=1):
-                            if not self.__combatantDead(targetId, toon=toonTarget):
-                                validTargetAvail = 1
-                            rounds = self.NumRoundsLured[atkLevel]
-                            lureKBValue = (ToontownBattleGlobals.AvLureKnockback[atkLevel] * 100)
-                            #lureKBValue = (ToontownBattleGlobals.LURE_KNOCKBACK_VALUE * 100)
-                            if self.toonHasCondition(toonId, 'lureBoost'):
-                                lureKBValue += self.getToonConditionModifier(toonId, 'lureBoost')
-                            self.setSuitCondition(targetId, 'lured', lureKBValue, self.NumRoundsLured[atkLevel] + 1, 'setBoth')
-                            wakeupChance = 100 - atkAcc * 2
-                            npcLurer = attack[TOON_TRACK_COL] == NPCSOS
-                            currLureId = self.__addLuredSuitInfo(targetId, -1, rounds, wakeupChance, toonId, atkLevel,
-                                                                 lureId=currLureId, npc=npcLurer)
-                            if self.notify.getDebug():
-                                self.notify.debug('Suit lured for ' + str(rounds) + ' rounds max with ' + str(
-                                    wakeupChance) + '% chance to wake up each round')
-                            targetLured = 1
-                else:
-                    attackTrack = TRAP
-                    if targetId in self.traps:
-                        trapInfo = self.traps[targetId]
-                        attackLevel = trapInfo[0]
+                self.currentlyImmuneSuits = self.getImmuneSuits()
+                if targetId not in self.currentlyImmuneSuits:
+                    if self.getSuitTrapType(targetId) == NO_TRAP:
+                        if self.notify.getDebug():
+                            self.notify.debug('Suit lured, but no trap exists')
+                        if self.SUITS_UNLURED_IMMEDIATELY:
+                            if not self.__suitIsLured(targetId, prevRound=1):
+                                if not self.__combatantDead(targetId, toon=toonTarget):
+                                    validTargetAvail = 1
+                                rounds = self.NumRoundsLured[atkLevel]
+                                lureKBValue = (ToontownBattleGlobals.AvLureKnockback[atkLevel] * 100)
+                                # lureKBValue = (ToontownBattleGlobals.LURE_KNOCKBACK_VALUE * 100)
+                                if self.toonHasCondition(toonId, 'lureBoost'):
+                                    lureKBValue += self.getToonConditionModifier(toonId, 'lureBoost')
+                                self.setSuitCondition(targetId, 'lured', lureKBValue, self.NumRoundsLured[atkLevel] + 1,
+                                                      'setBoth')
+                                wakeupChance = 100 - atkAcc * 2
+                                npcLurer = attack[TOON_TRACK_COL] == NPCSOS
+                                currLureId = self.__addLuredSuitInfo(targetId, -1, rounds, wakeupChance, toonId,
+                                                                     atkLevel,
+                                                                     lureId=currLureId, npc=npcLurer)
+                                if self.notify.getDebug():
+                                    self.notify.debug('Suit lured for ' + str(rounds) + ' rounds max with ' + str(
+                                        wakeupChance) + '% chance to wake up each round')
+                                targetLured = 1
                     else:
-                        attackLevel = NO_TRAP
-                    attackDamage = self.__suitTrapDamage(targetId)
-                    trapCreatorId = self.__trapCreator(targetId)
-                    if trapCreatorId > 0:
-                        self.notify.debug('Giving trap EXP to toon ' + str(trapCreatorId))
-                        self.__addAttackExp(attack, track=TRAP, level=attackLevel, attackerId=trapCreatorId)
-                    self.__clearTrapCreator(trapCreatorId, targetId)
-                    lureDidDamage = 1
-                    if self.notify.getDebug():
-                        self.notify.debug(
-                            'Suit lured right onto a trap! (' + str(AvProps[attackTrack][attackLevel]) + ',' + str(
-                                attackLevel) + ')')
-                    if not self.__combatantDead(targetId, toon=toonTarget):
-                        validTargetAvail = 1
-                    targetLured = 1
+                        attackTrack = TRAP
+                        if targetId in self.traps:
+                            trapInfo = self.traps[targetId]
+                            attackLevel = trapInfo[0]
+                        else:
+                            attackLevel = NO_TRAP
+                        attackDamage = self.__suitTrapDamage(targetId)
+                        self.setSuitCondition(targetId, 'dazed', 1, self.NumRoundsDazed[atkLevel] + 1, 'alternateBoth')
+                        trapCreatorId = self.__trapCreator(targetId)
+                        if trapCreatorId > 0:
+                            self.notify.debug('Giving trap EXP to toon ' + str(trapCreatorId))
+                            self.__addAttackExp(attack, track=TRAP, level=attackLevel, attackerId=trapCreatorId)
+                        self.__clearTrapCreator(trapCreatorId, targetId)
+                        lureDidDamage = 1
+                        if lureDidDamage >= 1:
+                            self.setSuitCondition(targetId, 'dazed', 1, self.NumRoundsDazed[atkLevel] + 1, 'alternateBoth')
+                        if self.notify.getDebug():
+                            self.notify.debug(
+                                'Suit lured right onto a trap! (' + str(AvProps[attackTrack][attackLevel]) + ',' + str(
+                                    attackLevel) + ')')
+                        if not self.__combatantDead(targetId, toon=toonTarget):
+                            validTargetAvail = 1
+                        targetLured = 1
                 if not self.SUITS_UNLURED_IMMEDIATELY:
                     if not self.__suitIsLured(targetId, prevRound=1):
                         if not self.__combatantDead(targetId, toon=toonTarget):
@@ -1032,6 +1043,23 @@ class BattleCalculatorAI:
 
             return 0
 
+    def __addEnragedSuitInfo(self, suitId, currRounds, maxRounds, decreasedDef = False):
+        self.currentlyEnragedSuits[suitId] = [currRounds, maxRounds, decreasedDef,]
+
+    def __isEnraged(self, suit):
+        if suit in self.currentlyEnragedSuits:
+            return True
+        else:
+            return False
+    def __addAbsorbingSuitInfo(self, suitId, currRounds, maxRounds, decreasedDef = False):
+        self.currentlyAbsorbingSuits[suitId] = [currRounds, maxRounds, decreasedDef,]
+
+    def __isAbsorbing(self, suit):
+        if suit in self.currentlyAbsorbingSuits:
+            return True
+        else:
+            return False
+
     def __addWetSuitInfo(self, suitId, currRounds, maxRounds, decreasedDef = False):
         self.currentlyWetSuits[suitId] = [currRounds, maxRounds, decreasedDef,]
         self.notify.debug('__addWetSuitInfo: currWetSuits -> %s' % repr(self.currentlyWetSuits))
@@ -1114,7 +1142,11 @@ class BattleCalculatorAI:
                     totalDamages = totalDamages + damageDone
                     continue
                 currTarget = targets[position]
-                currTarget.setHP(currTarget.getHP() - damageDone)
+                currentlyImmuneSuits = self.getImmuneSuits()
+                if currTarget.getImmuneStatus() == 1:
+                    currTarget.setHP(currTarget.getHP())
+                else:
+                    currTarget.setHP(currTarget.getHP() - damageDone)
                 targetId = currTarget.getDoId()
                 if self.notify.getDebug():
                     if hpbonus:
@@ -1149,6 +1181,54 @@ class BattleCalculatorAI:
     def __combatantJustRevived(self, avId):
         suit = self.battle.findSuit(avId)
         if suit.reviveCheckAndClear():
+            return 1
+        else:
+            return 0
+
+    def checkRevertImmuneCogs(self):
+        currentlyImmuneSuits = self.getImmuneSuits()
+        immuneNum = 0
+        for suit in self.battle.activeSuits:
+            if suit.getImmuneStatus() == 1:
+                immuneNum += 1
+        if immuneNum == len(self.battle.activeSuits) and len(self.battle.joiningSuits) == 0 and len(
+                self.battle.pendingSuits) == 0:
+            return 1
+        else:
+            return 0
+
+    def checkRevertEnragedCogs(self):
+        currentlyEnragedSuits = self.getEnragedSuits()
+        enragedNum = 0
+        for suit in self.battle.activeSuits:
+            if suit.getEnragedStatus() == 1:
+                enragedNum += 1
+        if enragedNum == len(self.battle.activeSuits) and len(self.battle.joiningSuits) == 0 and len(
+                self.battle.pendingSuits) == 0:
+            return 1
+        else:
+            return 0
+
+    def checkRevertAbsorbingCogs(self):
+        currentlyAbsorbingSuits = self.getAbsorbingSuits()
+        absorbingNum = 0
+        for suit in self.battle.activeSuits:
+            if suit.getAbsorbingStatus() == 1:
+                absorbingNum += 1
+        if absorbingNum == len(self.battle.activeSuits) and len(self.battle.joiningSuits) == 0 and len(
+                self.battle.pendingSuits) == 0:
+            return 1
+        else:
+            return 0
+
+    def checkRevertSoakedCogs(self):
+        currentlySoakedSuits = self.getSoakedSuits()
+        soakedNum = 0
+        for suit in self.battle.activeSuits:
+            if suit.getSoakedStatus() == 1:
+                soakedNum += 1
+        if soakedNum == len(self.battle.activeSuits) and len(self.battle.joiningSuits) == 0 and len(
+                self.battle.pendingSuits) == 0:
             return 1
         else:
             return 0
@@ -1562,10 +1642,8 @@ class BattleCalculatorAI:
                 boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                 return 2
             if len(self.battle.activeSuits) >= 6 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                 return 0
             if len(self.battle.activeSuits) >= 6 and x % 2 == 0:
-                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                 return 0
             if len(self.battle.activeSuits) >= 5 and x % 2 == 0 and self.suitHasCondition(theSuit.doId, 'desperation'):
                 boss.appendSuitsToBattle(boss.battleNumber, 'lit')
@@ -1574,7 +1652,6 @@ class BattleCalculatorAI:
                 boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                 return 0
             if self.suitHasCondition(theSuit.doId, 'dazed') and x % 3 == 0:
-                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                 return 0
             if self.suitHasCondition(theSuit.doId, 'soaked') and x % 2 == 0:
                 boss.appendSuitsToBattle(boss.battleNumber, 'lit')
@@ -1659,7 +1736,6 @@ class BattleCalculatorAI:
                 if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'csm':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                #self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
                 return 6
             if x % 2 == 0 and self.suitHasCondition(theSuit.doId, 'desperation'):
                 boss.appendSuitsToBattle(boss.battleNumber, 'lit')
@@ -1668,6 +1744,7 @@ class BattleCalculatorAI:
             if x % 4 == 0:
                 return 7
             if x % 3 == 0:
+                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                 return 4
         if theSuit.dna.name == 'kb':
             x = self.TurnsElapsed
@@ -2054,6 +2131,10 @@ class BattleCalculatorAI:
             if self.suitHasCondition(theSuit.doId, 'soaked') and x % 2 == 0:
                 boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
                 return 4
+        if theSuit.dna.name == 'cm':
+            x = self.TurnsElapsed
+            if x % 3 == 0:
+                return 1
         if theSuit.dna.name == 'bby':
             x = self.TurnsElapsed
             if x % 99 == 0:
@@ -2162,6 +2243,29 @@ class BattleCalculatorAI:
                 return 1
             if len(self.battle.activeSuits) >= 4 and x % 2 == 0:
                 return 0
+        if theSuit.dna.name == 'laa':
+            from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+
+            boss = None
+            for do in simbase.air.doId2do.values():
+                if isinstance(do, DistributedLawbotBossAI):
+                    for toon in self.battle.activeToons:
+                        if toon in do.involvedToons:
+                            boss = do
+                            break
+            x = self.TurnsElapsed
+            if x % 99 == 0:
+                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                return atk
+            if x % 4 == 0:
+                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                return 6
+            if x % 3 == 0:
+                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                return 4
+            if len(self.battle.activeSuits) >= 5 and x % 2 == 0:
+                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                return 2
         return atk
 
 
@@ -2299,6 +2403,7 @@ class BattleCalculatorAI:
                 #self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
                 #self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
             elif atkInfo['name'] == 'Accusations':
+                theSuit.setHP(int(theSuit.currHP + 1000))
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'immune', 1, 2, 'setBoth')
             elif atkInfo['name'] == 'Accusations2':
@@ -2428,17 +2533,17 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
             elif atkInfo['name'] == 'Synergy':
-                result = (24 + (self.TurnsElapsed * 2)) * theSuit.getDamageMultiplier()
+                result = (20 + (self.TurnsElapsed * 1.3)) * theSuit.getDamageMultiplier()
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'nolevel6s', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'nolevel7s', 1, 2, 'setBoth')
             elif atkInfo['name'] == 'CollectCallFees':
-                result = (24 + (self.TurnsElapsed * 2)) * theSuit.getDamageMultiplier()
+                result = (20 + (self.TurnsElapsed * 1.3)) * theSuit.getDamageMultiplier()
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'nolevel6s', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'nolevel8s', 1, 2, 'setBoth')
             elif atkInfo['name'] == 'HeavyRainfall':
-                result = (17 + (self.TurnsElapsed * 2)) * theSuit.getDamageMultiplier()
+                result = (20 + (self.TurnsElapsed * 1.3)) * theSuit.getDamageMultiplier()
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'nolevel6s', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'nolevel7s', 1, 2, 'setBoth')
@@ -2446,13 +2551,13 @@ class BattleCalculatorAI:
                 self.setToonCondition(toon.doId, 'soundBoost', -50, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'lureBoost', -50, 2, 'setBoth')
             elif atkInfo['name'] == 'CourtCosts':
-                result = (24 + (self.TurnsElapsed * 2)) * theSuit.getDamageMultiplier()
+                result = (20 + (self.TurnsElapsed * 1.3)) * theSuit.getDamageMultiplier()
                 attack[SUIT_HP_COL][targetIndex] = result
                 #attack[SUIT_HP_COL][targetIndex] = (24 + (self.TurnsElapsed * 2))
                 self.setToonCondition(toon.doId, 'nolevel6s', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'nolevel8s', 1, 2, 'setBoth')
             elif atkInfo['name'] == 'UnionDues':
-                result = (24 + (self.TurnsElapsed * 2)) * theSuit.getDamageMultiplier()
+                result = (20 + (self.TurnsElapsed * 1.3)) * theSuit.getDamageMultiplier()
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'nolevel8s', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'nolevel7s', 1, 2, 'setBoth')
@@ -2852,6 +2957,38 @@ class BattleCalculatorAI:
         if self.notify.getDebug():
             self.notify.debug('Wet suits: ' + str(self.currentlyWetSuits))
 
+    def __updateEnragedTimeouts(self):
+        if self.notify.getDebug():
+            self.notify.debug('__updateEnragedTimeouts()')
+            self.notify.debug('Wet suits: ' + str(self.currentlyEnragedSuits))
+        noLongerEnraged = []
+        for currentlyEnragedSuit in self.currentlyEnragedSuits.keys():
+            self.__incEnragedCurrRound(currentlyEnragedSuit)
+            if self.__enragedMaxRoundsReached(currentlyEnragedSuit):
+                noLongerEnraged.append(currentlyEnragedSuit)
+
+        for currentlyEnragedSuit in noLongerEnraged:
+            self.__removeEnraged(currentlyEnragedSuit)
+
+        if self.notify.getDebug():
+            self.notify.debug('Wet suits: ' + str(self.currentlyEnragedSuits))
+
+    def __updateAbsorbingTimeouts(self):
+        if self.notify.getDebug():
+            self.notify.debug('__updateEnragedTimeouts()')
+            self.notify.debug('Wet suits: ' + str(self.currentlyAbsorbingSuits))
+        noLongerAbsorbing = []
+        for currentlyAbsorbingSuit in self.currentlyAbsorbingSuits.keys():
+            self.__incAbsorbingCurrRound(currentlyAbsorbingSuit)
+            if self.__absorbingMaxRoundsReached(currentlyAbsorbingSuit):
+                noLongerAbsorbing.append(currentlyAbsorbingSuit)
+
+        for currentlyAbsorbingSuit in noLongerAbsorbing:
+            self.__removeAbsorbing(currentlyAbsorbingSuit)
+
+        if self.notify.getDebug():
+            self.notify.debug('Wet suits: ' + str(self.currentlyAbsorbingSuits))
+
     def __initRound(self):
         if CLEAR_SUIT_ATTACKERS:
             self.SuitAttackers = {}
@@ -2959,6 +3096,8 @@ class BattleCalculatorAI:
         self.__calculateToonAttacks()
         self.__updateLureTimeouts()
         self.__updateWetTimeouts()
+        self.__updateAbsorbingTimeouts()
+        self.__updateEnragedTimeouts()
         self.__calculateSuitAttacks()
         if self.roundsToonsHit > 0:
             self.roundsToonsHit -= 1
@@ -3042,6 +3181,62 @@ class BattleCalculatorAI:
         inList = suitId in self.currentlyLuredSuits
         if prevRound:
             return inList and self.currentlyLuredSuits[suitId][0] != -1
+        return inList
+
+    def getImmuneSuits(self):
+        gottenImmuneSuits = []
+        for suit in self.battle.activeSuits:
+            if suit.getImmuneStatus() == 1:
+                gottenImmuneSuits.append(suit.doId)
+        self.notify.debug('Immune suits reported to battle: ' + repr(gottenImmuneSuits))
+        return gottenImmuneSuits
+
+    def getEnragedSuits(self):
+        gottenEnragedSuits = []
+        for suit in self.battle.activeSuits:
+            if suit.getEnragedStatus() == 1:
+                gottenEnragedSuits.append(suit.doId)
+        self.notify.debug('Enraged suits reported to battle: ' + repr(gottenEnragedSuits))
+        return gottenEnragedSuits
+
+    def getAbsorbingSuits(self):
+        gottenAbsorbingSuits = []
+        for suit in self.battle.activeSuits:
+            if suit.getAbsorbingStatus() == 1:
+                gottenAbsorbingSuits.append(suit.doId)
+        self.notify.debug('Absorbing suits reported to battle: ' + repr(gottenAbsorbingSuits))
+        return gottenAbsorbingSuits
+
+    def getSoakedSuits(self):
+        gottenSoakedSuits = []
+        for suit in self.battle.activeSuits:
+            if suit.getSoakedStatus() == 1:
+                gottenSoakedSuits.append(suit.doId)
+        self.notify.debug('Soaked suits reported to battle: ' + repr(gottenSoakedSuits))
+        return gottenSoakedSuits
+
+    def __suitIsImmune(self, suitId, prevRound=0):
+        inList = suitId in self.currentlyImmuneSuits
+        if prevRound:
+            return inList and self.currentlyImmuneSuits[suitId][0] != -1
+        return inList
+
+    def __suitIsEnraged(self, suitId, prevRound=0):
+        inList = suitId in self.currentlyEnragedSuits
+        if prevRound:
+            return inList and self.currentlyEnragedSuits[suitId][0] != -1
+        return inList
+
+    def __suitIsAbsorbing(self, suitId, prevRound=0):
+        inList = suitId in self.currentlyAbsorbingSuits
+        if prevRound:
+            return inList and self.currentlyAbsorbingSuits[suitId][0] != -1
+        return inList
+
+    def __suitIsSoaked(self, suitId, prevRound=0):
+        inList = suitId in self.currentlySoakedSuits
+        if prevRound:
+            return inList and self.currentlySoakedSuits[suitId][0] != -1
         return inList
 
     def __suitIsWet(self, suitId, prevRound = 0):
@@ -3176,6 +3371,28 @@ class BattleCalculatorAI:
 
     def __wetMaxRoundsReached(self, suitId):
         return self.__suitIsWet(suitId) and self.currentlyWetSuits[suitId][0] >= self.currentlyWetSuits[suitId][1]
+
+    def __incEnragedCurrRound(self, suitId):
+        if self.__suitIsEnraged(suitId):
+            self.currentlyEnragedSuits[suitId][0] += 1
+
+    def __removeEnraged(self, suitId):
+        if self.__suitIsEnraged(suitId):
+            del self.currentlyEnragedSuits[suitId]
+
+    def __enragedMaxRoundsReached(self, suitId):
+        return self.__suitIsEnraged(suitId) and self.currentlyEnragedSuits[suitId][0] >= self.currentlyEnragedSuits[suitId][1]
+
+    def __incAbsorbingCurrRound(self, suitId):
+        if self.__suitIsAbsorbing(suitId):
+            self.currentlyAbsorbingSuits[suitId][0] += 1
+
+    def __removeAbsorbing(self, suitId):
+        if self.__suitIsAbsorbing(suitId):
+            del self.currentlyAbsorbingSuits[suitId]
+
+    def __absorbingMaxRoundsReached(self, suitId):
+        return self.__suitIsAbsorbing(suitId) and self.currentlyAbsorbingSuits[suitId][0] >= self.currentlyAbsorbingSuits[suitId][1]
 
     def __luredWakeupTime(self, suitId):
         return self.__suitIsLured(suitId) and self.currentlyLuredSuits[suitId][0] > 0 and random.randint(0, 99) < self.currentlyLuredSuits[suitId][2]

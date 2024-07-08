@@ -647,7 +647,7 @@ class TownBattle(StateData.StateData):
             self.fsm.request('SOS')
 
     def __isCogChoiceNecessary(self):
-        if not self.__isGroupAttack(self.track, self.level):
+        if self.numCogs > 1 and not self.__isGroupAttack(self.track, self.level):
             return 1
         else:
             return 0

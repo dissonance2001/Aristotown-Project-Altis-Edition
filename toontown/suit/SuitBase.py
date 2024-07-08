@@ -24,6 +24,10 @@ class SuitBase:
         self.isSkelecog = 0
         self.isElite = 0
         self.isWaiter = 0
+        self.isImmune = 0
+        self.isSoaked = 0
+        self.isEnraged = 0
+        self.isAbsorbing = 0
 
     def delete(self):
         if hasattr(self, 'legList'):
@@ -74,6 +78,42 @@ class SuitBase:
 
     def setElite(self, flag):
         self.isElite = flag
+
+    def setImmuneStatus(self, num):
+        if num == None:
+            num = 0
+        else:
+            self.isImmune = num
+
+    def getImmuneStatus(self):
+        return self.isImmune
+
+    def setEnragedStatus(self, num):
+        if num == None:
+            num = 0
+        else:
+            self.isEnraged = num
+
+    def getEnragedStatus(self):
+        return self.isEnraged
+
+    def setAbsorbingStatus(self, num):
+        if num == None:
+            num = 0
+        else:
+            self.isAbsorbing = num
+
+    def getAbsorbingStatus(self):
+        return self.isAbsorbing
+
+    def setSoakedStatus(self, num):
+        if num == None:
+            num = 0
+        else:
+            self.isSoaked = num
+
+    def getSoakedStatus(self):
+        return self.isSoaked
 
     def getActualLevel(self):
         if hasattr(self, 'dna'):

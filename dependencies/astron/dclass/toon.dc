@@ -1297,6 +1297,10 @@ dclass DistributedSuitBase : DistributedObject {
   setSkeleRevives(uint8) required broadcast ram;
   setHP(int32) required broadcast ram;
   setElite(uint8) required broadcast ram;
+  setImmuneStatus(uint8) required broadcast ram;
+  setEnragedStatus(uint8) required broadcast ram;
+  setAbsorbingStatus(uint8) required broadcast ram;
+  setSoakedStatus(uint8) required broadcast ram;
   setExecutive(uint8) required broadcast ram;
   setManager(uint8) required broadcast ram;
   setGovernaught(uint8) required broadcast ram;
@@ -1487,7 +1491,7 @@ dclass DistributedBattleBase : DistributedObject {
   setPosition(int16/10, int16/10, int16/10) required broadcast ram;
   setZoneId(uint32) required broadcast ram;
   setInitialSuitPos(int16/10, int16/10, int16/10) required broadcast ram;
-  setMembers(uint32[], string, string, string, string, string, uint32[], string, string, string, string, int16) required broadcast ram;
+  setMembers(uint32[], string, string, string, string, string, uint32[], string, string, string, string, string, string, string, string, int16) required broadcast ram;
   adjust(int16) broadcast;
   setMovie(int8, uint32[], uint32[], int8, int8, int8, int32, int64[], int16, int16, int64[], int8, int8, int8, int8, int8, int32, int16[], int16, int16, int16[], int8, int8, int8, int8, int8, int32, int16[], int16, int16, int16[], int8, int8, int8, int8, int8, int32, int16[], int16, int16, int16[], int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8) required broadcast ram;
   setChosenToonAttacks(uint32[], int16[], int16[], int32[]) broadcast ram;

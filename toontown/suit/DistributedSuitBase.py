@@ -40,10 +40,15 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         SuitBase.SuitBase.__init__(self)
         self.activeShadow = 0
         self.virtual = 0
+        self.immune = 0
+        self.enraged = 0
+        self.absorbing = 0
+        self.soaked = 0
         self.battleDetectName = None
         self.stars = BattleProps.globalPropPool.getProp('stun')
         self.stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
         self.stars.loop('stun')
+        self.stars.setBlend(frameBlend=base.wantSmoothAnims)
         self.stars.adjustAllPriorities(100)
         self.cRay = None
         self.cRayNode = None
@@ -154,6 +159,66 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                                                         'dept': dept,
                                                         'level': level}
         return nameInfo
+
+    def setImmuneStatus(self, num):
+        if num == None:
+            num = 0
+        if num == 0 and self.isImmune == 1:
+            SuitBase.SuitBase.setImmuneStatus(self, num)
+            self.removeImmune()
+        self.isImmune = num
+        if self.isImmune == 1:
+            SuitBase.SuitBase.setImmuneStatus(self, self.isImmune)
+            Suit.Suit.makeIntoImmune(self)
+        return
+
+    def getImmuneStatus(self):
+        return self.isImmune
+
+    def setEnragedStatus(self, num):
+        if num == None:
+            num = 0
+        if num == 0 and self.isEnraged == 1:
+            SuitBase.SuitBase.setEnragedStatus(self, num)
+            self.removeEnraged()
+        self.isEnraged = num
+        if self.isEnraged == 1:
+            SuitBase.SuitBase.setEnragedStatus(self, self.isEnraged)
+            Suit.Suit.makeIntoEnraged(self)
+        return
+
+    def getEnragedStatus(self):
+        return self.isEnraged
+
+    def setAbsorbingStatus(self, num):
+        if num == None:
+            num = 0
+        if num == 0 and self.isAbsorbing == 1:
+            SuitBase.SuitBase.setAbsorbingStatus(self, num)
+            self.removeAbsorbing()
+        self.isAbsorbing = num
+        if self.isAbsorbing == 1:
+            SuitBase.SuitBase.setAbsorbingStatus(self, self.isAbsorbing)
+            Suit.Suit.makeIntoAbsorbing(self)
+        return
+
+    def getAbsorbingStatus(self):
+        return self.isAbsorbing
+
+    def setSoakedStatus(self, num):
+        if num == None:
+            num = 0
+        if num == 0 and self.isSoaked == 1:
+            SuitBase.SuitBase.setSoakedStatus(self, num)
+            self.removeSoaked()
+        self.isSoaked = num
+        if self.isSoaked == 1:
+            SuitBase.SuitBase.setSoakedStatus(self, self.isSoaked)
+            Suit.Suit.makeIntoSoaked(self)
+        return
+
+    def getSoakedStatus(self):
+        return self.isSoaked
 
     def getSkeleRevives(self):
         return self.skeleRevives

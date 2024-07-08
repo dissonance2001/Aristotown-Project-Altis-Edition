@@ -4120,12 +4120,14 @@ def doAccusations(attack):
     toonPos = toon.getPos(battle)
     #cameraTrack = LerpPosHprInterval(camera, duration=1, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut')
     suitTrack = getSuitAnimTrack(attack)
+    suit.setHealthForMe(int(suit.currHP + 1000))
+    selfDamageTrack = Sequence(Wait(5), Func(suit.showHpText, + 1000), Func(suit.updateHealthBar, 0))
     notifyTrack = Sequence(Wait(2.5), Func(suit.showHpText, "Desperation!\n+1 Round Lure Resistance!\n1.4x Damage Multiplier", 2, openEnded=0))
-    talkTrack = Sequence(Wait(2.5), Func(suit.setChatAbsolute, "I'm not going down that easily.", CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute, "Let's see how much power you really have. I will be immune to all gags for 1 turn.", CFSpeech | CFTimeout))
+    talkTrack = Sequence(Wait(2.5), Func(suit.setChatAbsolute, "You may have defeated my partner, however I'm not going down that easily.", CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute, "Let's see how much power you really have. I will be immune to all gags for 1 turn.", CFSpeech | CFTimeout))
     animTrack = Sequence(Wait(5.0), Func(suit.play, 'frustrated'), Func(suit.loop, 'neutral%s' % (
         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=5.0, node=suit)
-    return Parallel(talkTrack, suitTrack, animTrack, soundTrack, notifyTrack)
+    return Parallel(talkTrack, suitTrack, animTrack, soundTrack, notifyTrack, selfDamageTrack)
 
 def doGavel(attack):
     suit = attack['suit']

@@ -63,8 +63,8 @@ cm - Tester Cog (temporary) Level 69420.mgr
 ggm - Mouthpiece Level 16.mgr
 th - Rainmaker Level 16.mgr
 kc - Witch Hunter Level 20.mgr
-tr - Count Erclaim Level 10-20.mgr
-mp - Redd "Heir" Wing Level 10-20.mgr
+tr - Count Erclaim Level 20.mgr v2.0 
+mp - Redd "Heir" Wing Level 20.mgr v2.0
 laa - The Witness Stand-In Level 50.mgr
 scg - Scapegoat Level 30.mgr
 csm - Case Manager Level 35.mgr
@@ -97,7 +97,7 @@ gb - Kerberos Level 23.mgr
 lbs - Charon Level 25.mgr
 trk - Plutocrat Level 38.mgr
 dsf - Low Baller(HR) Level 25.mgr v2.0
-msp - Desk Jockey Level 3-12.exe
+msp - Count Erfit Level 20.mgr
 mad - Low Roller Level 50.mgr v2.0
 crf - High Roller Level 100.mgr
 

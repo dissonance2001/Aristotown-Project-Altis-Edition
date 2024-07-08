@@ -721,9 +721,9 @@ suitIndex = {
 'bfh' : 38,
 'hho' : 39
 }
-BossCogRollSpeed = 7.5
-BossCogTurnSpeed = 20
-BossCogTreadSpeed = 3.5
+BossCogRollSpeed = 25.5
+BossCogTurnSpeed = 40
+BossCogTreadSpeed = 15.5
 BossCogDizzy = 0
 BossCogElectricFence = 1
 BossCogSwatLeft = 2
@@ -796,15 +796,15 @@ BossCogNerfedDamageLevels = {BossCogElectricFence: 1,
  BossCogGearDirectedAttack: 8,
  BossCogOvertimeAttack: 10}
 BossCogBattleAPosHpr = (0,
- - 25,
+ - 75,
  0,
- 0,
+ 180,
  0,
  0)
 BossCogBattleBPosHpr = (0,
- 25,
+ 75,
  0,
- 180,
+ 0,
  0,
  0)
 SellbotBossMaxDamage = 100
@@ -1195,12 +1195,30 @@ LawbotBossBattleOnePosHpr = (-2.798,
  0,
  0,
  0)
+LawbotBossBattleFourPosHpr = (-2.798,
+ -20,
+ 0,
+ 0,
+ 0,
+ 0)
 LawbotBossBattleTwoPosHpr = (-2.798,
  89,
  19.145,
  0,
  0,
  0)
+LawbotBossBattleLitigationPosHpr = (-2.798,
+ 20,
+ 0,
+ 90,
+ 0,
+ 0)
+LawbotBossBattleLitigationBPosHpr = (-52.798,
+ 20,
+ 0,
+ 90,
+ 0,
+ 20)
 LawbotBossTopRampPosA = (-80, -35, 18)
 LawbotBossTopRampTurnPosA = (-80, 10, 18)
 LawbotBossP3PosA = (55, -9, 0)
@@ -1424,6 +1442,24 @@ LawbotBossDifficultySettings = [(38,
   1,
   0,
   0),
+(36,
+  5,
+  8,
+  1,
+  0,
+  0),
+(36,
+  5,
+  8,
+  1,
+  0,
+  0),
+(36,
+  5,
+  8,
+  1,
+  0,
+  0),
  (34,
   5,
   8,
@@ -1593,9 +1629,9 @@ LawbotBossChairRow1PosA = (59.3, -18.2, 14.05)
 LawbotBossChairRow2PosB = (75.1, 48, 28.2)
 LawbotBossChairRow2PosA = (75.1, -18.2, 28.2)
 LawbotBossCannonBallMax = 12
-LawbotBossJuryBoxStartPos = (94, -8, 5)
+LawbotBossJuryBoxStartPos = (394, -8, 5)
 LawbotBossJuryBoxRelativeEndPos = (30, 0, 12.645)
-LawbotBossJuryBoxMoveTime = 70
+LawbotBossJuryBoxMoveTime = 1
 LawbotBossJurorsForBalancedScale = 8
 LawbotBossDamagePerJuror = 68
 LawbotBossCogJurorFlightTime = 10

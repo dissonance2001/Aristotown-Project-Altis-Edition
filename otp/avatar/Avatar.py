@@ -401,21 +401,6 @@ class Avatar(Actor, ShadowCaster):
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, timeout=(chatFlags & CFTimeout))
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
-        if self.style.name == 'crf':
-            for headPart in self.animatedHeadParts: Sequence(
-                ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
-            ).start()
-        if self.style.name == 'mad':
-            for headPart in self.animatedHeadParts: Sequence(
-                ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
-            ).start()
-        else:
-            for headPart in self.animatedHeadParts: Sequence(
-                ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-            ).start()
 
     def setChatMuted(self, chatString, chatFlags, dialogue = None, interrupt = 1, quiet = 0):
         pass

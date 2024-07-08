@@ -270,23 +270,39 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
 
     def makeBattleOneBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(1, ToontownGlobals.LawbotBossBattleOnePosHpr)
+        self.initializeBattles(1, ToontownGlobals.LawbotBossBattleFourPosHpr)
 
     def generateSuits(self, battleNumber):
-        cogs = self.invokeEmptyPlanner(11, 'lit')
-        activeSuits = cogs['activeSuits']
-        reserveSuits = cogs['reserveSuits']
-        random.shuffle(activeSuits)
-        while len(activeSuits) > 6:
-            suit = activeSuits.pop()
-            reserveSuits.append((suit, 100))
+        if battleNumber == 1:
+            cogs = self.invokeEmptyPlanner(11, 'lit2')
+            activeSuits = cogs['activeSuits']
+            reserveSuits = cogs['reserveSuits']
+            random.shuffle(activeSuits)
+            while len(activeSuits) >= 6:
+                suit = activeSuits.pop()
+                reserveSuits.append((suit, 100))
 
-        def compareJoinChance(a, b):
-            return cmp(a[1], b[1])
+            def compareJoinChance(a, b):
+                return cmp(a[1], b[1])
 
-        reserveSuits.sort(compareJoinChance)
-        return {'activeSuits': activeSuits,
-                'reserveSuits': reserveSuits}
+            reserveSuits.sort(compareJoinChance)
+            return {'activeSuits': activeSuits,
+                    'reserveSuits': reserveSuits}
+        if battleNumber == 2:
+            cogs = self.invokeEmptyPlanner(11, 'lit')
+            activeSuits = cogs['activeSuits']
+            reserveSuits = cogs['reserveSuits']
+            random.shuffle(activeSuits)
+            while len(activeSuits) >= 6:
+                suit = activeSuits.pop()
+                reserveSuits.append((suit, 100))
+
+            def compareJoinChance(a, b):
+                return cmp(a[1], b[1])
+
+            reserveSuits.sort(compareJoinChance)
+            return {'activeSuits': activeSuits,
+                    'reserveSuits': reserveSuits}
 
     def generateNewReserves(self, battleNumber):
         cogs = self.invokeReservesPlanner(11, 'lit')
@@ -334,7 +350,6 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
 
     def enterRollToBattleTwo(self):
         self.divideToons()
-        self.__makeCannons()
         self.barrier = self.beginBarrier('RollToBattleTwo', self.involvedToons, 50, self.__doneRollToBattleTwo)
 
     def __doneRollToBattleTwo(self, avIds):
@@ -343,8 +358,11 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
     def exitRollToBattleTwo(self):
         self.ignoreBarrier(self.barrier)
 
+    def makeBattleTwoBattles(self):
+        self.postBattleState = 'RollToBattleTwo'
+        self.initializeBattles(2, ToontownGlobals.LawbotBossBattleLitigationPosHpr)
+
     def enterPrepareBattleTwo(self):
-        self.__makeCannons()
         self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)
         self.makeBattleTwoBattles()
 
@@ -431,45 +449,17 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         else:
             self.notify.warning('decrementCannonBallsLeft invalid avId: %d' % avId)
 
-    def makeBattleTwoBattles(self):
-        self.postBattleState = 'RollToBattleThree'
-        if self.useCannons:
-            self.__makeBattleTwoObjects()
-        else:
-            self.initializeBattles(2, ToontownGlobals.LawbotBossBattleTwoPosHpr)
-
     def enterBattleTwo(self):
-        if self.useCannons:
-            self.cannonBallsLeft = {}
-            for toonId in self.involvedToons:
-                self.cannonBallsLeft[toonId] = ToontownGlobals.LawbotBossCannonBallMax
-
-            for chair in self.chairs:
-                chair.requestEmptyJuror()
-
-            self.barrier = self.beginBarrier('BattleTwo', self.involvedToons, ToontownGlobals.LawbotBossJuryBoxMoveTime + 1, self.__doneBattleTwo)
-        if not self.useCannons:
-            if self.battle:
-                self.battle.startBattle(self.toons, self.suits)
+        if self.battleA:
+            self.battleA.startBattle(self.toonsA, self.suitsA)
+        if self.battleB:
+            self.battleB.startBattle(self.toonsB, self.suitsB)
 
     def __doneBattleTwo(self, avIds):
-        if self.useCannons:
-            self.b_setState('PrepareBattleThree')
-        else:
-            self.b_setState('RollToBattleThree')
+        self.b_setState('RollToBattleThree')
 
     def exitBattleTwo(self):
         self.resetBattles()
-        self.numToonJurorsSeated = 0
-        for chair in self.chairs:
-            self.notify.debug('chair.state==%s' % chair.state)
-            if chair.state == 'ToonJuror':
-                self.numToonJurorsSeated += 1
-
-        self.notify.debug('numToonJurorsSeated=%d' % self.numToonJurorsSeated)
-        self.air.writeServerEvent('jurorsSeated', self.doId, '%s|%s|%s' % (self.dept, self.involvedToons, self.numToonJurorsSeated))
-        self.__deleteCannons()
-        self.__stopChairs()
 
     def enterRollToBattleThree(self):
         self.divideToons()

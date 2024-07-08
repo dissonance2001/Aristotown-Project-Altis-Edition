@@ -137,6 +137,21 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             for i in range(0, len(conditionNames)):
                 base.localAvatar.battleConditions[conditionNames[i]] = [conditionVals[i], conditionTurns[i]]
 
+    def suitHasCondition(self, suitId, condition):
+        self.notify.debug('suitHasCondition() - checking for \'%s\' on suitId %i' % (condition, suitId))
+        if suitId not in self.suitStatusConditions:
+            self.notify.debug('suitHasCondition() - suit %i is not in the condition dictionary at all' % suitId)
+            return False
+
+        if condition in self.suitStatusConditions[suitId]:
+            self.notify.debug('suitHasCondition() - suit %i has the \'%s\' condition' % (suitId, condition))
+            return True
+        else:
+            self.notify.debug(
+                'suitHasCondition() - suit %i is in the dictionary, but does not have the \'%s\' condition' % (
+                suitId, condition))
+            return False
+
     def disable(self):
         self.notify.debug('disable(%s)' % self.doId)
         self.cleanupBattle()
@@ -299,6 +314,26 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.luredSuits.append(suit)
             self.needAdjustTownBattle = 1
 
+    def isSuitEnraged(self, suit):
+        if self.enragedSuits.count(suit) != 0:
+            suit.loop('neutral-enraged')
+            return 1
+        else:
+            return 0
+
+    def removeEnragedSuit(self, suit):
+        self.notify.debug('movie unluring suit %s' % suit.doId)
+        if self.enragedSuits.count(suit) != 0:
+            self.enragedSuits.remove(suit)
+            self.needAdjustTownBattle = 1
+
+    def enragedSuit(self, suit):
+        self.notify.debug('movie luring suit %s' % suit.doId)
+        if self.enragedSuits.count(suit) == 0:
+            suit.loop('neutral-enraged')
+            self.enragedSuits.append(suit)
+            self.needAdjustTownBattle = 1
+
     def getActorPosHpr(self, actor, actorList = []):
         if isinstance(actor, Suit.Suit):
             if actorList == []:
@@ -354,10 +389,10 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.notify.debug('setState(%s)' % state)
         self.fsm.request(state, [globalClockDelta.localElapsedTime(timestamp)])
 
-    def setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, timestamp):
+    def setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, suitsImmune, suitsEnraged, suitsAbsorbing, suitsSoaked, timestamp):
         if self.__battleCleanedUp:
             return
-        self.notify.debug('setMembers() - suits: %s suitsJoining: %s suitsPending: %s suitsActive: %s suitsLured: %s suitTraps: %s toons: %s toonsJoining: %s toonsPending: %s toonsActive: %s toonsRunning: %s' % (suits,
+        self.notify.debug('setMembers() - suits: %s suitsJoining: %s suitsPending: %s suitsActive: %s suitsLured: %s suitTraps: %s toons: %s toonsJoining: %s toonsPending: %s toonsActive: %s toonsRunning: %s, immuneSuits: %s, enragedSuits: %s, absorbingSuits: %s, soakedSuits: %s,' % (suits,
          suitsJoining,
          suitsPending,
          suitsActive,
@@ -367,7 +402,11 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
          toonsJoining,
          toonsPending,
          toonsActive,
-         toonsRunning))
+         toonsRunning,
+         suitsImmune,
+        suitsEnraged,
+        suitsAbsorbing,
+         suitsSoaked))
         ts = globalClockDelta.localElapsedTime(timestamp)
         oldsuits = self.suits
         self.suits = []
@@ -431,6 +470,62 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         if self.needAdjustTownBattle == 0:
             for s in oldLuredSuits:
                 if self.luredSuits.count(s) == 0:
+                    self.needAdjustTownBattle = 1
+
+        oldImmuneSuits = self.immuneSuits
+        self.immuneSuits = []
+        for s in suitsImmune:
+            suit = self.suits[int(s)]
+            if suit != None:
+                self.immuneSuits.append(suit)
+                if oldImmuneSuits.count(suit) == 0:
+                    self.needAdjustTownBattle = 1
+
+        if self.needAdjustTownBattle == 0:
+            for s in oldImmuneSuits:
+                if self.immuneSuits.count(s) == 0:
+                    self.needAdjustTownBattle = 1
+
+        oldEnragedSuits = self.enragedSuits
+        self.enragedSuits = []
+        for s in suitsEnraged:
+            suit = self.suits[int(s)]
+            if suit != None:
+                self.enragedSuits.append(suit)
+                if oldEnragedSuits.count(suit) == 0:
+                    self.needAdjustTownBattle = 1
+
+        if self.needAdjustTownBattle == 0:
+            for s in oldEnragedSuits:
+                if self.enragedSuits.count(s) == 0:
+                    self.needAdjustTownBattle = 1
+
+        oldAbsorbingSuits = self.absorbingSuits
+        self.absorbingSuits = []
+        for s in suitsAbsorbing:
+            suit = self.suits[int(s)]
+            if suit != None:
+                self.absorbingSuits.append(suit)
+                if oldAbsorbingSuits.count(suit) == 0:
+                    self.needAdjustTownBattle = 1
+
+        if self.needAdjustTownBattle == 0:
+            for s in oldAbsorbingSuits:
+                if self.absorbingSuits.count(s) == 0:
+                    self.needAdjustTownBattle = 1
+
+        oldSoakedSuits = self.soakedSuits
+        self.soakedSuits = []
+        for s in suitsSoaked:
+            suit = self.suits[int(s)]
+            if suit != None:
+                self.soakedSuits.append(suit)
+                if oldSoakedSuits.count(suit) == 0:
+                    self.needAdjustTownBattle = 1
+
+        if self.needAdjustTownBattle == 0:
+            for s in oldSoakedSuits:
+                if self.soakedSuits.count(s) == 0:
                     self.needAdjustTownBattle = 1
 
         index = 0
@@ -1420,6 +1515,25 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 if suit.battleTrap != NO_TRAP:
                     trappedSuits.append(self.activeSuits.index(suit))
 
+            immuneSuits = []
+            for suit in self.activeSuits:
+                if suit.getImmuneStatus() == 1:
+                    immuneSuits.append(self.activeSuits.index(suit))
+
+            enragedSuits = []
+            for suit in self.activeSuits:
+                if suit.getEnragedStatus() == 1:
+                    enragedSuits.append(self.activeSuits.index(suit))
+
+            absorbingSuits = []
+            for suit in self.activeSuits:
+                if suit.getAbsorbingStatus() == 1:
+                    absorbingSuits.append(self.activeSuits.index(suit))
+
+            soakedSuits = []
+            for suit in self.activeSuits:
+                if suit.getSoakedStatus() == 1:
+                    soakedSuits.append(self.activeSuits.index(suit))
             self.townBattle.adjustCogsAndToons(self.activeSuits, luredSuits, trappedSuits, self.activeToons)
             if hasattr(self, 'townBattleAttacks'):
                 self.townBattle.updateChosenAttacks(self.townBattleAttacks[0], self.townBattleAttacks[1], self.townBattleAttacks[2], self.townBattleAttacks[3])

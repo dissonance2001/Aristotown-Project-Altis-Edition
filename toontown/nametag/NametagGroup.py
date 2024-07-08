@@ -96,12 +96,12 @@ class NametagGroup:
                 not base.cam.node().isInView(self.avatar.getPos(base.cam))):
                 visible3d = False
             else:
-                visible3d = True
+                visible3d = False
         elif NametagGlobals.force2dNametags:
             visible3d = False
         elif (not NametagGlobals.want2dNametags and
               ((not chatText) or (self.chatBalloonType != NametagGlobals.CHAT_BALLOON))):
-            visible3d = True
+            visible3d = False
         elif self.avatar.isHidden():
             visible3d = False
         else:

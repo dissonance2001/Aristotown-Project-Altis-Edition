@@ -301,6 +301,11 @@ class BattleBase:
         self.joiningSuits = []
         self.activeSuits = []
         self.luredSuits = []
+        self.wetSuits = []
+        self.absorbingSuits = []
+        self.enragedSuits = []
+        self.soakedSuits = []
+        self.immuneSuits = []
         self.suitGone = 0
         self.toons = []
         self.joiningToons = []

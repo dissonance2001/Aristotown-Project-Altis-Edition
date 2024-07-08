@@ -356,6 +356,8 @@ def createSuitReviveTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'dm' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
+    elif suit.style.name == 'ggm' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
     elif suit.style.name == 'crf' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'th' and not deathSuit.isSkeleton:
@@ -368,8 +370,6 @@ def createSuitReviveTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'sft' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
-    elif suit.style.name == 'dvk' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'fbd' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'cp' and not deathSuit.isSkeleton:
@@ -621,6 +621,8 @@ def createSuitDeathTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'ghd' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
+    elif suit.style.name == 'ggm' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
     elif suit.style.name == 'tyh' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'tyh' and deathSuit.isSkeleton:
@@ -1338,6 +1340,7 @@ def createSuitStunInterval(suit, before, after):
     stars.setColor(1, 1, 1, 1)
     stars.adjustAllPriorities(100)
     stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+    stars.setBlend(frameBlend=base.wantSmoothAnims)
     head = suit.find('**/to_head')
     head.calcTightBounds(p1, p2)
     hasAnimatedHead = False
@@ -1369,6 +1372,7 @@ def createSuitStunIntervalFired(suit, before, after):
     stars.setColor(1, 1, 1, 1)
     stars.adjustAllPriorities(100)
     stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+    stars.setBlend(frameBlend=base.wantSmoothAnims)
     head = suit.find('**/to_head')
     head.calcTightBounds(p1, p2)
     hasAnimatedHead = False
@@ -1379,7 +1383,7 @@ def createSuitStunIntervalFired(suit, before, after):
         hasAnimatedHead = True
     if hasAnimatedHead:
         return Sequence(Wait(before), Func(stars.reparentTo, head),
-                        Func(stars.loop, 'stun'), headInterval, Wait(after), Func(stars.cleanup),
+                        Func(stars.loop, 'stun'), headInterval, headLoop, Wait(after), Func(stars.cleanup),
                         Func(stars.removeNode))
     else:
         return Sequence(Wait(before), Func(stars.reparentTo, head),
