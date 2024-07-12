@@ -10,6 +10,8 @@ from direct.showutil import Rope
 from direct.task import Task
 import math
 from toontown.friends import FriendsListManager
+from toontown.nametag import NametagGlobals
+from toontown.nametag import NametagGroup
 from pandac.PandaModules import *
 import random
 from toontown.suit import DistributedBossCog
@@ -727,9 +729,9 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWantActiveNametags(True)
         self.clearChat()
         self.cagedToon.clearChat()
-        self.rampA.request('retract')
-        self.rampB.request('retract')
-        self.rampC.request('retract')
+        self.rampA.request('extend')
+        self.rampB.request('extend')
+        self.rampC.request('extend')
         if self.battleA == None or self.battleB == None:
             cageIndex = 1
         else:

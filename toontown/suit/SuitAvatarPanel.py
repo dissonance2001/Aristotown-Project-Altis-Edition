@@ -1,28 +1,33 @@
-from pandac.PandaModules import *
+from panda3d.core import *
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 from direct.showbase import DirectObject
 from otp.avatar import Avatar
 from direct.distributed import DistributedObject
-from toontown.suit import SuitDNA
+from . import SuitDNA
 from toontown.battle import SuitBattleGlobals
 from toontown.toonbase import TTLocalizer
 from otp.avatar import AvatarPanel
 from toontown.friends import FriendsListPanel
+from toontown.suit import Suit
+from direct.interval.IntervalGlobal import *
+from direct.showbase import DirectObject
+from panda3d.core import *
 
-class SuitAvatarPanel(AvatarPanel.AvatarPanel):
+
+class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
     currentAvatarPanel = None
+
+    POPUP_ANIMATION_DURATION = 0
+    POPOUT_ANIMATION_DURATION = 0
 
     def __init__(self, avatar):
         AvatarPanel.AvatarPanel.__init__(self, avatar, FriendsListPanel=FriendsListPanel)
         self.avName = avatar.getName()
+        self.avatr = avatar
         gui = loader.loadModel('phase_3.5/models/gui/suit_detail_panel')
-        self.frame = DirectFrame(geom=gui.find('**/avatar_panel'), geom_scale=0.21, geom_pos=(0, 0, 0.02), relief=None, pos=(1.1, 100, 0.525))
-        disabledImageColor = Vec4(1, 1, 1, 0.4)
-        text0Color = Vec4(1, 1, 1, 1)
-        text1Color = Vec4(0.5, 1, 0.5, 1)
-        text2Color = Vec4(1, 1, 0.5, 1)
-        text3Color = Vec4(1, 1, 1, 0.2)
+        gui.find('**/shadow').setTransparency(TransparencyAttrib.MAlpha)
+        gui.find('**/shadow').setColor(1, 1, 1, 0.4)
+        self.frame = DirectFrame(geom=gui.find('**/avatar_panel'), geom_scale=0.21, geom_pos=(0, 0, 0.02), relief=None, pos=(-0.2348, 0, -0.475), parent=base.a2dTopRight)
         self.head = self.frame.attachNewNode('head')
         for part in avatar.headParts:
             copyPart = part.copyTo(self.head)
@@ -45,7 +50,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
                 and not self.avatar.dna.name == 'fb' and not self.avatar.dna.name == 'jl' and not self.avatar.dna.name == 'gb' and not self.avatar.dna.name == 'lbs' \
                 and not self.avatar.dna.name == 'fas' and not self.avatar.dna.name == 'mdr' and not self.avatar.dna.name == 'nar' and not self.avatar.dna.name == 'fd' \
                 and not self.avatar.dna.name == 'gkp' and not self.avatar.dna.name == 'ddv' and not self.avatar.dna.name == 'sya' and not self.avatar.dna.name == 'ant' and not self.avatar.dna.name == 'cm':
-            s = 0.5 / biggest
+            s = 0.45 / biggest
         elif avatar.isSkeleton and avatar.dna.body == 'b' and not self.avatar.dna.dept == 'l' and not self.avatar.dna.dept == 'g' and not self.avatar.dna.name == 'cg' and not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'ts' and not self.avatar.dna.name == 'jur' \
                 and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'tcc' \
                 and not self.avatar.dna.name == 'fb' and not self.avatar.dna.name == 'jl' and not self.avatar.dna.name == 'gb' and not self.avatar.dna.name == 'lbs' \
@@ -79,8 +84,8 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
         else:
             self.head.setPosHprScale(0, 0, 0.04, 180, 0, 0, s, s, s)
         self.nameLabel = DirectLabel(parent=self.frame, pos=(0, 0, 0.35), relief=None, text=SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name'],
-                                     text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                     text_scale=0.05, text_wordwrap=8.0, text_shadow=(1, 1, 1, 1))
+                                     text_font=avatar.getFont(), text_pos=(0, 0),
+                                     text_scale=0.05, text_wordwrap=8.0)
         if avatar.getExecutive() and not avatar.getManager():
             level = str(avatar.getActualLevel()) + TTLocalizer.ExecutivePostFix
         elif avatar.getGovernaught() and not avatar.getExecutive() and not avatar.getManager():
@@ -89,81 +94,73 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
             level = str(avatar.getActualLevel()) + TTLocalizer.ManagerPostFix
         else:
             level = str(avatar.getActualLevel())
-        relativelevel = avatar.getLevel()
         revives = avatar.getMaxSkeleRevives() + 1
-        attributes = SuitBattleGlobals.SuitAttributes[avatar.getStyleName()]
+        maxHP = avatar.maxHP
         if avatar.currHP > 0:
-            health = avatar.currHP
+            HP = avatar.currHP
         else:
-            health = 0
-        maxHealth = avatar.maxHP
-        currHP = attributes['hp'][relativelevel]
-        maxHP = attributes['hp'][relativelevel]
+            HP = 0
+        if avatar.currHP >= 9999 and revives > 1:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.115), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+        elif avatar.maxHP >= 9999 and revives > 1:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.115), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+        elif avatar.maxHP >= 9999:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+        elif avatar.currHP >= 9999:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+        elif revives > 1:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.115), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+        else:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
+                                   text=TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
+                                   text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
         dept = SuitDNA.getSuitDeptFullname(avatar.dna.name)
         if revives > 1:
             self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
                                           text=TTLocalizer.AvatarPanelCogLevel % level + TTLocalizer.AvatarPanelCogRevives % revives,
                                           text_font=avatar.getFont(), text_align=TextNode.ACenter,
-                                          text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
+                                          text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
         elif avatar.dna.name == 'crf':
             self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
                                           text=TTLocalizer.AvatarPanelCogLevel % level,
                                           text_font=avatar.getFont(), text_align=TextNode.ACenter,
-                                          text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
+                                          text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
         elif avatar.dna.name == 'tcm':
             self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
                                           text=TTLocalizer.AvatarPanelCogLevel % level,
                                           text_font=avatar.getFont(), text_align=TextNode.ACenter,
-                                          text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
-        elif avatar.dna.name == 'cm':
-            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
-                                          text=TTLocalizer.AvatarPanelCogLevel % level,
-                                          text_font=avatar.getFont(), text_align=TextNode.ACenter,
-                                          text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
+                                          text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
         else:
             self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.06), relief=None,
                                           text=TTLocalizer.AvatarPanelCogLevel % level, text_font=avatar.getFont(),
-                                          text_align=TextNode.ACenter, text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
+                                          text_align=TextNode.ACenter, text_pos=(0, 0),
                                           text_scale=0.05, text_wordwrap=8.0)
         corpIcon = avatar.corpMedallion.copyTo(hidden)
         corpIcon.setPosHprScale(0, 0, 0, 0, 0, 0, 0, 0, 0)
         self.corpIcon = DirectLabel(parent=self.frame, geom=corpIcon, geom_scale=0.13, pos=(0, 0, -0.20), relief=None)
-        if avatar.currHP >= 9999 and revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.115), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif avatar.maxHP >= 9999 and revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.115), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif avatar.maxHP >= 9999:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif avatar.currHP >= 9999:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        elif revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.115), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth % (health, maxHealth),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
-        else:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                   text=TTLocalizer.AvatarPanelCogHealth % (health, maxHealth),
-                                   text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5, text_shadow=(1, 1, 1, 1))
+        corpIcon.removeNode()
         self.deptLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.30), relief=None, text=dept,
                                      text_font=avatar.getFont(), text_align=TextNode.ACenter, text_fg=Vec4(0, 0, 0, 1),
                                      text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
@@ -173,28 +170,97 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
                                         text2_fg=Vec4(1, 0, 0, 1), text_pos=(0, 0), text_scale=0.05,
                                         command=self.__handleClose)
         gui.removeNode()
-        menuX = -0.05
-        menuScale = 0.064
         base.localAvatar.obscureFriendsListButton(1)
+
+        #create a LerpScaleInterval that scales the frame from 0 to 1
+        self.currentInterval = self.__getOpenSequence()
+        self.currentInterval.start()
+
+        self.labelInterval = None
+
+        self.frame.setBin("gui-popup", 0)
         self.frame.show()
         messenger.send('avPanelDone')
-        self.frame.reparentTo(base.a2dTopRight)
-        self.frame.setPos(-0.25, 0, -0.5)
 
+        self.accept(avatar.uniqueName('suitHpUpdate'), self.__updateHp)
+        return
+
+    def __updateHp(self, currHp, maxHp, delta):
+        def __updateLabel(tempHp):
+            if tempHp > 9999:
+                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+            elif maxHp > 9999 and tempHp <= 0:
+                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+            elif maxHp > 9999:
+                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+            elif tempHp <= 0:
+                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogHP % (0, maxHp)
+            else:
+                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogHP % (int(tempHp), maxHp)
+
+        self.labelInterval = Parallel(
+            LerpColorScaleInterval(self.hpLabel, duration=0, startColorScale=(1, 0, 0, 1), colorScale=(1, 1, 1, 1), blendType='easeInOut'),
+            LerpFunctionInterval(__updateLabel, duration=0, fromData=currHp+delta, toData=currHp, blendType='easeInOut')
+        )
+        self.labelInterval.start()
+
+
+
+    def __getOpenSequence(self):
+        return Sequence(
+            LerpScaleInterval(self.frame, self.POPUP_ANIMATION_DURATION, Vec3(1.2, 1.2, 1.2), Vec3(0, 0, 0), blendType='easeIn'),
+            LerpScaleInterval(self.frame, self.POPUP_ANIMATION_DURATION/2.0, Vec3(1, 1, 1), Vec3(1.2, 1.2, 1.2), blendType='easeInOut'),
+        )
+
+    def __getCloseSequence(self):
+        return Sequence(
+            LerpScaleInterval(self.frame, self.POPOUT_ANIMATION_DURATION, Vec3(1.2, 1.2, 1.2), Vec3(1, 1, 1), blendType='easeIn'),
+            LerpScaleInterval(self.frame, self.POPOUT_ANIMATION_DURATION/2.0, Vec3(0, 0, 0), Vec3(1.2, 1.2, 1.2),blendType='easeInOut'),
+            Func(self.cleanup),
+        )
+
+    def __cleanupSequence(self):
+        if self.currentInterval:
+            self.currentInterval.finish()
+            self.currentInterval = None
+
+        if self.labelInterval:
+            self.labelInterval.finish()
+            self.labelInterval = None
 
     def cleanup(self):
-        if self.frame == None:
-            return
-        self.frame.destroy()
-        del self.frame
-        self.frame = None
-        self.head.removeNode()
-        del self.head
-        base.localAvatar.obscureFriendsListButton(-1)
+        self.ignoreAll()
+        self.__cleanupSequence()
+
+        if self.frame:
+            self.frame.destroy()
+            self.frame = None
+            base.localAvatar.obscureFriendsListButton(-1)
+
+        if self.head:
+            self.head.removeNode()
+            self.head = None
+
         AvatarPanel.AvatarPanel.cleanup(self)
+        self.panelNoneFunc()
+        return
+    
+    def panelNoneFunc(self):
+        AvatarPanel.currentAvatarPanel = None
         return
 
     def __handleClose(self):
-        self.cleanup()
-        AvatarPanel.currentAvatarPanel = None
+        self.__cleanupSequence()
+
+        # If someone abuses the GUI enough, frame could get deleted before we have a chance to play an animation :(
+        if self.frame is None:
+            self.cleanup()
+            return
+
+        self.currentInterval = self.__getCloseSequence()
+        self.currentInterval.start()
         return
+
+    @classmethod
+    def getRevives(cls, cog):
+        return cog.getSkeleRevives()

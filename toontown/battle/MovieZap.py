@@ -4,6 +4,7 @@ from toontown.battle.BattleBase import *
 from toontown.battle.BattleProps import *
 from toontown.battle.BattleSounds import *
 from toontown.toon.ToonDNA import *
+from toontown.battle import MovieUtil
 from toontown.suit.SuitDNA import *
 from toontown.battle import MovieUtil
 from toontown.battle import MovieNPCSOS
@@ -195,7 +196,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=ZAP_TRACK))
             bonusTrack.append(updateHealthBar)
         if died != 0:
-            suitTrack.append(shortCircuitTrack(suit, battle))
+            suitTrack.append(MovieUtil.shortCircuitTrack(suit, battle))
         else:
             suitTrack.append(Wait(1.0))
             if suit.maxHP > 0:

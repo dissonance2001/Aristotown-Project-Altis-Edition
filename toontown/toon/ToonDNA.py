@@ -8,79 +8,50 @@ from otp.avatar import AvatarDNA
 
 notify = directNotify.newCategory('ToonDNA')
 mergeMATTailor = config.GetBool('want-mat-all-tailors', 0)
-toonSpeciesTypes = ['d',
- 'c',
- 'h',
- 'm',
- 'r',
- 'f',
- 'p',
- 'b',
- 's',
- 'x',
- 'z',
- 'a',
- 'v',
- 'n',
- 't']
-toonHeadTypes = ['dls',
- 'dss',
- 'dsl',
- 'dll',
- 'cls',
- 'css',
- 'csl',
- 'cll',
- 'hls',
- 'hss',
- 'hsl',
- 'hll',
- 'mls',
- 'mss',
- 'rls',
- 'rss',
- 'rsl',
- 'rll',
- 'fls',
- 'fss',
- 'fsl',
- 'fll',
- 'pls',
- 'pss',
- 'psl',
- 'pll',
- 'bls',
- 'bss',
- 'bsl',
- 'bll',
- 'sls',
- 'sss',
- 'ssl',
- 'sll',
- 'xls',
- 'xss',
- 'xsl',
- 'xll',
- 'zls',
- 'zss',
- 'zsl',
- 'zll',
- 'als',
- 'ass',
- 'asl',
- 'all',
- 'vls',
- 'vss',
- 'vsl',
- 'vll',
- 'nls',
- 'nss',
- 'nsl',
- 'nll',
- 'tls',
- 'tss',
- 'tsl',
- 'tll']
+toonSpeciesTypes = ['d',    # Dog
+                    'c',    # Cat
+                    'h',    # Horse
+                    'm',    # Mouse
+                    'r',    # Rabbit
+                    'f',    # Duck
+                    'p',    # Monkey
+                    'b',    # Bear
+                    's',    # Pig (swine)
+                    'x',    # Deer
+                    'z',    # Beaver
+                    'a',    # Alligator
+                    'v',    # Fox
+                    'n',    # Bat
+                    't',
+                    'g',  # Turkey
+                    'e',  # Koala
+                    'j',  # Kangaroo
+                    'k',  # Kiwi
+                    'l',
+                    # Raccoon
+                    ]
+toonHeadTypes = [ "dls", "dss", "dsl", "dll",  # Dog
+                  "cls", "css", "csl", "cll",  # Cat
+                  "hls", "hss", "hsl", "hll",  # Horse
+                  "mls", "mss", "msl", "mll",  # Mouse
+                  "rls", "rss", "rsl", "rll",  # Rabbit
+                  "fls", "fss", "fsl", "fll",  # Duck (Fowl)
+                  "pls", "pss", "psl", "pll",  # Monkey (Primate)
+                  "bls", "bss", "bsl", "bll",  # Bear
+                  "sls", "sss", "ssl", "sll",  # Pig (swine)
+                  "xls", "xss", "xsl", "xll",  # Deer
+                  "zls", "zss", "zsl", "zll",  # Beaver
+                  "als", "ass", "asl", "all",  # Alligator
+                  "vls", "vss", "vsl", "vll",  # Fox
+                  "nls", "nss", "nsl", "nll",  # Bat
+                  "tls", "tss", "tsl", "tll",
+                  "gls", "gss", "gsl", "gll",  # Turkey
+                  "els", "ess", "esl", "ell",  # Koala
+                  "jls", "jss", "jsl", "jll",  # Kangaroo
+                  "kls", "kss", "ksl", "kll",  # Kiwi
+                  "lls", "lss", "lsl", "lll",
+                  # Raccoon
+]
 
 def getHeadList(species):
     headList = []
@@ -135,24 +106,41 @@ def getSpeciesName(head):
         speciesName = 'bat'
     elif species == 't':
         speciesName = 'raccoon'
+    elif species == 'g':
+        speciesName = 'turkey'
+    elif species == 'e':
+        speciesName = 'koala'
+    elif species == 'j':
+        speciesName = 'kangaroo'
+    elif species == 'k':
+        speciesName = 'kiwi'
+    elif species == 'l':
+        speciesName = 'armadillo'
     return speciesName
 
 
-toonHeadAnimalIndices = [0,
- 4,
- 8,
- 12,
- 14,
- 18,
- 22,
- 26,
- 30,
- 34,
- 38,
- 42,
- 46,
- 50,
- 54]
+toonHeadAnimalIndices = [ 0, # start of dog heads
+                          4, # start of cat heads
+                          8, # start of horse heads
+                          12, # start of mouse heads
+                          16, # start of rabbit heads
+                          20, # start of duck heads
+                          24, # start of monkey heads
+                          28, # start of bear heads
+                          32, # start of pig heads
+                          36, # start of deer heads
+                          40, # start of beaver heads
+                          44, # start of alligator heads
+                          48, # start of fox heads
+                          52, # start of bat heads
+                          56,
+                          60,  # start of turkey heads
+                          64,  # start of koala heads
+                          68,  # start of kangaroo heads
+                          72,  # start of kiwi heads
+                          76,
+                          # start of raccoon heads
+                          ]
 toonHeadAnimalIndicesTrial = [0,
  4,
  12,
@@ -160,64 +148,28 @@ toonHeadAnimalIndicesTrial = [0,
  18,
  30,
  34]
-allToonHeadAnimalIndices = [0,
- 1,
- 2,
- 3,
- 4,
- 5,
- 6,
- 7,
- 8,
- 9,
- 10,
- 11,
- 12,
- 13,
- 14,
- 15,
- 16,
- 17,
- 18,
- 19,
- 20,
- 21,
- 22,
- 23,
- 24,
- 25,
- 26,
- 27,
- 28,
- 29,
- 30,
- 31,
- 32,
- 33,
- 34,
- 35,
- 36,
- 37,
- 38,
- 39,
- 40,
- 41,
- 42,
- 43,
- 44,
- 45,
- 46,
- 47,
- 48,
- 49,
- 50,
- 51,
- 52,
- 53,
- 54,
- 55,
- 56,
- 57]
+allToonHeadAnimalIndices = [ 0, 1, 2, 3,     # Dog
+                             4, 5, 6, 7,     # Cat
+                             8, 9, 10, 11,   # Horse
+                             12, 13, 14, 15,   # Mouse
+                             16, 17, 18, 19, # Rabbit
+                             20, 21, 22, 23, # Duck
+                             24, 25, 26, 27, # Monkey
+                             28, 29, 30, 31, # Bear
+                             32, 33, 34, 35, # Pig
+                             36, 37, 38, 39, # Deer
+                             40, 41, 42, 43,  # Beaver
+                             44, 45, 46, 47, # Alligator
+                             48, 49, 50, 51, # Fox
+                             52, 53, 54, 55,  # Bat
+                             56, 57, 58, 59,
+                             60, 61, 62, 63,  # Turkey
+                             64, 65, 66, 67,  # Koala
+                             68, 69, 70, 71,  # Kangaroo
+                             72, 73, 74, 75,  # Kiwi
+                             76, 77, 78, 79
+                             # Raccoon
+                             ]
 allToonHeadAnimalIndicesTrial = [0,
  1,
  2,
@@ -3053,6 +3005,16 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             return 'bat'
         elif self.head[0] == 't':
             return 'raccoon'
+        elif self.head[0] == 'g':
+            return 'turkey'
+        elif self.head[0] == 'e':
+            return 'koala'
+        elif self.head[0] == 'j':
+            return 'kangaroo'
+        elif self.head[0] == 'k':
+            return 'kiwi'
+        elif self.head[0] == 'l':
+            return 'armadillo'
         else:
             notify.error('unknown headStyle: ', self.head[0])
 

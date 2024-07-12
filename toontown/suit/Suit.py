@@ -826,45 +826,27 @@ jur = (('magic2', 'magic2', 4),
        ('throw-object', 'throw-object', 5),
        ('throw-paper', 'throw-paper', 5),
        ('magic1', 'magic1', 4))
-tlr = (('magic3', 'magic3', 4),
-       ('objection-in', 'cease', 4),
-       ('phone', 'phone', 4),
-       ('frustrated', 'frustrated', 4),
-       ('speak', 'speak', 4),
-       ('calculating-costs', 'calculating-costs', 4),
-       ('cease', 'cease', 4),
-       ('finger-wag', 'cease', 4),
-       ('pickpocket', 'sanction', 4),
-       ('lose3', 'wrecked', 4),
-       ('sanction', 'sanction', 4))
-cm = (('magic2', 'snap', 4),
-      ('bellow', 'bellow', 4), ('lose3', 'wrecked', 4),
-      ('glower', 'glower', 4),
-      ('magic1', 'magic1', 4),
-      ('sanction', 'sanction', 4),
-('hold-eraser', 'hold-eraser', 4),
-      ('falling-knife', 'falling-knife', 4),
-      ('blue-chip', 'blue-chip', 4),
-      ('golf-club-swing', 'golf-club-swing', 4),
-      ('summon', 'summon', 4),
+tlr = (('magic2', 'snap', 4),
+('quick-jump', 'jump', 4),
+      ('sanction', 'sanction3', 4),
       ('snap', 'snap2', 4),
       ('magic3', 'magic3', 4),
-      ('layoffs', 'layoffs', 4),
-      ('pickpocket', 'pickpocket', 4),
       ('speak', 'speak', 4),
-      ('cease', 'cease', 4),
-      ('sanction', 'sanction3', 4),
-      ('effort', 'effort', 4),
+      ('cease', 'cease3', 4),
       ('magic1', 'magic1', 4),
-      ('phone', 'phone', 4),
       ('calculating-costs', 'calculating-costs', 4),
       ('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4))
+cm = (('speak', 'speak', 4),
+       ('phone', 'phone', 4),
+      ('effort', 'effort', 4),
+       ('magic1', 'magic1', 4),
+      ('pen-squirt', 'fountain-pen', 4))
 ggm = (('magic2', 'snap', 4),
        ('calculating-costs', 'phone', 4),
        ('cease', 'objection', 4), ('lose3', 'wrecked', 4),
-       ('magic3', 'snap', 4),
-       ('pickpocket', 'sanction', 4),
+       ('magic3', 'magic3', 4),
+       ('roll-o-dex', 'roll-o-dex', 4),
 ('finger-wag', 'finger-wag', 4),
        ('throw-object', 'throw-object', 5),
        ('throw-paper', 'throw-paper', 5),
@@ -903,8 +885,8 @@ laa = (('glower', 'glower', 4),
        ('pickpocket', 'sanction', 4),
        ('effort', 'effort', 4),
        ('summon', 'summon', 4),
-       ('sanction', 'sanction', 4),
-       ('lose3', 'wrecked', 4),
+       ('quick-jump', 'jump', 4),
+       ('defense', 'defense', 4),
        ('falling-knife', 'falling-knife', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
@@ -919,10 +901,12 @@ scg = (('stomp', 'stomp', 4),
        ('throw-paper', 'throw-paper', 4),
        ('finger-wag', 'finger-wag', 4),
        ('frustrated', 'defense', 4),
+('quick-jump', 'jump', 4),
        ('magic1', 'magic1', 4),
        ('lose3', 'wrecked', 4),
        ('neutral-enraged', 'neutral-enraged', 5),
        ('speak', 'speak', 4),
+       ('effort', 'effort', 4),
        ('magic2', 'magic2', 4),
        ('cease', 'objection', 4),
        ('defense', 'defense', 4),
@@ -2339,8 +2323,8 @@ class Suit(Avatar.Avatar):
      's': Vec4(0.843, 0.745, 0.745, 1.0),
      'l': Vec4(0.749, 0.776, 0.824, 1.0),
      'm': Vec4(0.749, 0.769, 0.749, 1.0),
-     'g': Vec4(0.863, 0.776, 0.769, 1.0),
-     't': Vec4(0.6, 0.48, 0.7, 1.0)
+     'g': Vec4(0.706, 0.773, 0.812, 1.0),
+     't': Vec4(0.765, 0.706, 0.812, 1.0)
                        }
 
     def __init__(self):
@@ -2863,24 +2847,24 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.7)
         elif dna.name == 'tlr':
             self.scale = 7.2 / aSize
-            self.handColor = VBase4(0.529, 0.529, 0.612, 1)
+            self.handColor = VBase4(0.69, 0.678, 0.765, 1)
             self.generateBody()
-            self.generateHead3('magnate', animated=True)
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_magnate.png')
+            self.generateHead3('clo', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_clo.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.makeExecutive()
             self.setHeight(8.7)
         elif dna.name == 'cm':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.486, 0.522, 0.686, 1)
-            self.generateBody()
+            self.scale = 4.5 / cSize
+            self.handColor = VBase4(0.361, 0.435, 0.694, 1)
+            self.generateFemaleBody()
             self.makeExecutive()
-            self.generateHead3('clubpresident', animated=True)
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_l_exe.png')
+            self.generateHead3('judy', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_judy.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.7)
+            self.setHeight(5.5)
         elif dna.name == 'ggm':
             self.scale = 5.0 / bSize
             self.handColor = VBase4(0.42, 0.502, 0.62, 1)
@@ -4640,10 +4624,6 @@ class Suit(Avatar.Avatar):
             elif headType == 'dola' and self.style.name == 'cp':
                 headModel.setZ(-.1)
                 headModel.setY(-.1)
-            elif headType == 'judy':
-                headModel.setScale(1.05)
-                headModel.setZ(-.1)
-                headModel.setY(-.1)
             elif headType == 'dopr' and self.style.name == 'dsk':
                 headModel.setScale(1.3)
             elif headType == 'dopa' and self.style.name == 'blr':
@@ -4653,10 +4633,6 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(-.3)
                 headModel.setY(-.2)
                 headModel.setH(180)
-            elif headType == 'needlenose' and self.style.name == 'dfh':
-                headModel.setScale(1.05)
-                headModel.setZ(-.1)
-                headModel.setY(-.1)
             elif headType == 'featherbedder':
                 headModel.setScale(1)
                 headModel.setZ(-.1)
@@ -5519,10 +5495,8 @@ class Suit(Avatar.Avatar):
 
     def updateHealthBar(self, hp, forceUpdate = 0):
         self.currHP -= hp
-        if self.maxHP > 0:
-            health = float(self.currHP) / float(self.maxHP)
-        else:
-            health = 1
+        messenger.send(self.uniqueName('suitHpUpdate'), [self.currHP, self.maxHP, hp])
+        health = float(self.currHP) / float(self.maxHP)
         #print('UpdateHealthBar MHP %i HP %i' % (self.maxHP, self.currHP))
         #print('UpdateHealthBar - health is %f' % health)
         if health > 1.5:
@@ -6233,7 +6207,10 @@ class Suit(Avatar.Avatar):
             return FemaleDialogArray
         if self.style.name == 'tlr' and not self.isSkeleton:
             loadDialog(1)
-            return FeatherbedderDialogArray
+            return CLODialogArray
+        if self.style.name == 'tlr' and self.isSkeleton:
+            loadDialog(1)
+            return SkelecogDialogFemaleArray
         if self.style.name == 'cvy' and not self.isSkeleton:
             loadDialog(1)
             return FemaleDialogArray
@@ -6347,7 +6324,10 @@ class Suit(Avatar.Avatar):
             return ChairmanDialogArray
         if self.style.name == 'cm' and not self.isSkeleton:
             loadDialog(1)
-            return StenographerDialogArray
+            return FemaleDialogArray
+        if self.style.name == 'cm' and self.isSkeleton:
+            loadDialog(1)
+            return SkelecogDialogFemaleArray
         if self.style.name == 'gry' and not self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogArray

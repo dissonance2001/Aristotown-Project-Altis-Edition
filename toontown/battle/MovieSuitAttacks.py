@@ -146,7 +146,7 @@ def doSuitAttack(attack):
     elif name == CALCULATE:
         suitTrack = doCalculate(attack)
     elif name == ENRAGED:
-        suitTrack = doEnraged(attack)
+        suitTrack = doQuakeEnraged(attack)
     elif name == CANNED:
         suitTrack = doCanned(attack)
     elif name == FREE_CRUISE:
@@ -433,7 +433,7 @@ def doSuitAttack(attack):
     elif name == LAW_BOOK:
         suitTrack = doThrowBook(attack)
     elif name == SNOW:
-        suitTrack = doSnow(attack)
+        suitTrack = doShieldsUp(attack)
     elif name == HEAT_WAVE:
         suitTrack = doHeatWave(attack)
     elif name == LIQUIDATE:
@@ -5778,8 +5778,43 @@ def doQuake(attack):
     suitTrack = getSuitAnimTrack(attack)
     damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
     dodgeAnims = [['jump'], ['jump', 0.01], ['jump', 0.01]]
+    soundTrack = getSoundTrack('SA_quake.ogg', node=suit)
     toonTracks = getToonTracks(attack, damageDelay=1.8, splicedDamageAnims=damageAnims, dodgeDelay=1.1, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
-    return Parallel(suitTrack, toonTracks)
+    return Parallel(suitTrack, toonTracks, soundTrack)
+
+def doQuakeEnraged(attack):
+    tauntIndex = attack['taunt']
+    taunt = random.choice(
+        ["You're on shaky ground now!", "Hey, what's shakin'? You!", "Here it comes, it's the big one!"])
+    suit = attack['suit']
+    suitTrack = Sequence(ActorInterval(suit, 'quick-jump'))
+    tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+
+    damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
+    dodgeAnims = [['jump'], ['jump', 0.01], ['jump', 0.01]]
+    soundTrack = getSoundTrack('SA_quake.ogg', node=suit)
+    suitTrack.append(doEnraged(attack))
+    toonTracks = getToonTracks(attack, damageDelay=1.8, splicedDamageAnims=damageAnims, dodgeDelay=1.1, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
+    return Parallel(suitTrack, toonTracks, tauntInterval, soundTrack)
+
+def doShieldsUp(attack):
+    tauntIndex = attack['taunt']
+    taunt = random.choice(["You're on shaky ground now!", "Hey, what's shakin'? You!", "Here it comes, it's the big one!"])
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    dmg = (attack['target'][0]['hp']) * len(battle.activeToons)
+    suit.setHealthForMe(int(suit.currHP + (dmg * 2)))
+    selfDamageTrack = Sequence(Wait(7), Func(suit.showHpText, +(dmg * 2)), Func(suit.updateHealthBar, 0))
+    tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), Wait(6.0), Func(suit.setChatAbsolute, 'Is this the best you toons can do?', CFSpeech | CFTimeout))
+    suitTrack = Sequence(ActorInterval(suit, 'quick-jump'), ActorInterval(suit, 'defense'))
+    damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
+    dodgeAnims = [['jump'], ['jump', 0.01], ['jump', 0.01]]
+    soundTrack = getSoundTrack('SA_quake.ogg', node=suit)
+    soundTrack2 = getSoundTrack('SA_defense.ogg', delay=6.0, node=suit)
+    soundTrack3 = getSoundTrack('LB_toonup.ogg', delay=7.0, node=suit)
+    toonTracks = getToonTracks(attack, damageDelay=1.8, splicedDamageAnims=damageAnims, dodgeDelay=1.1, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
+    return Parallel(suitTrack, toonTracks, tauntInterval, soundTrack, soundTrack2, soundTrack3, selfDamageTrack)
 
 def doTremor(attack):
     suit = attack['suit']
@@ -5866,16 +5901,15 @@ def doDataCorruption(attack):
 def doEnraged(attack):
     suit = attack['suit']
     tauntIndex = attack['taunt']
+    name = attack['id']
     taunt = getAttackTaunt(attack['name'], tauntIndex)
     damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
     dodgeAnims = [['jump'], ['jump', 0.01]]
     toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
     soundTrack = getSoundTrack('SA_rage.ogg', delay=1.5, node=suit)
-    suitTrack = Sequence(Wait(1.5), ActorInterval(suit, attack['animName'], duration=3.0), Func(suit.loop, 'neutral-enraged'), Wait(2.0), Func(suit.setChatAbsolute, 'Mess with the goat, you get the horns!', CFSpeech | CFTimeout))
+    suitTrack = Sequence(Wait(1.5), ActorInterval(suit, attack['animName'], duration=3.0), Func(suit.loop, 'neutral-enraged'), Wait(3.0), Func(suit.setChatAbsolute, "I'll show you who the 'real' goat is, toons!", CFSpeech | CFTimeout))
     headInterval = Sequence(Wait(1.5), MovieUtil.createSuitEnragedInterval(suit, 0))
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    suitTrack.append(Func(suit.showHpTextRed, "1 ROUND LURE RESISTANCE!\n1.3x DAMAGE MULTIPLIER", 5))
-    suitTrack.append(Func(suit.loop, 'neutral-enraged'))
     return Parallel(suitTrack, soundTrack, headInterval, tauntInterval)
 
 
