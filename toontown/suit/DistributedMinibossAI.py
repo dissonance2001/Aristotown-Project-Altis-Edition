@@ -99,27 +99,26 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
             self.acceptOnce(event, self.__handleUnexpectedExit, extraArgs=[avId])
 
     def removeToon(self, avId):
-        av = self.air.doId2do.get(avId)
-        if not av is None:
-            if av.getHp() <= 0:
-                if avId not in self.punishedToons:
-                    # self.air.cogSuitMgr.removeParts(av, self.deptIndex)
-                    self.punishedToons.append(avId)
-
-        if avId in self.looseToons:
+        try:
             self.looseToons.remove(avId)
+        except:
+            pass
 
-        if avId in self.involvedToons:
+        try:
             self.involvedToons.remove(avId)
+            resendIds = 1
+        except:
+            pass
 
-        if avId in self.toonsA:
-            self.toonsA.remove(avId)
+        try:
+            self.toons.remove(avId)
+        except:
+            pass
 
-        if avId in self.toonsB:
-            self.toonsB.remove(avId)
-
-        if avId in self.nearToons:
+        try:
             self.nearToons.remove(avId)
+        except:
+            pass
 
         event = self.air.getAvatarExitEvent(avId)
         self.ignore(event)

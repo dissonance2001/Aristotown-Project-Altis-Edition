@@ -173,3 +173,7 @@ want-live-updates #t
 
 # SSL
 server-force-ssl #f
+
+# Harfbuzz is good for handling non-latin text.
+# However, this causes odd spacing on Cog nametags, so let's disable it.
+text-use-harfbuzz #f

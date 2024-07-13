@@ -138,21 +138,21 @@ def getModelWidthHeight(model):
 # Foreground, background:
 NametagColors = {
     CCNormal: (
-        (VBase4(0.3, 0.3, 0.7, 1.0), VBase4(0.8, 0.8, 0.8, 0.5)),  # Normal
-        (VBase4(0.3, 0.3, 0.7, 1.0), VBase4(0.2, 0.2, 0.2, 0.6)),  # Down
+        (VBase4(0, 0, 1, 1), VBase4(0.8, 0.8, 0.8, 0.5)),  # Normal
+        (VBase4(0.5, 0.5, 1, 1), VBase4(0.2, 0.2, 0.2, 0.6)),  # Down
         (VBase4(0.5, 0.5, 1.0, 1.0), VBase4(1.0, 1.0, 1.0, 1.0)),  # Rollover
-        (VBase4(0.3, 0.3, 0.7, 1.0), VBase4(1.0, 1.0, 1.0, 0.5)),  # Disabled
+        (VBase4(0.3, 0.3, 0.7, 1), VBase4(0.8, 0.8, 0.8, 0.5)),  # Disabled
         (VBase4(0.3, 0.3, 0.7, 1.0))                               # Arrow Color
     ),
     CCNoChat: (
-        (VBase4(0.8, 0.4, 0.0, 1.0), VBase4(0.8, 0.8, 0.8, 0.5)),  # Normal
+        (VBase4(0.8, 0.4, 0.0, 1.0), VBase4(1, 1, 1, 0.5)),  # Normal
         (VBase4(1.0, 0.5, 0.5, 1.0), VBase4(0.2, 0.2, 0.2, 0.6)),  # Click
         (VBase4(1.0, 0.5, 0.0, 1.0), VBase4(1.0, 1.0, 1.0, 1.0)),  # Rollover
         (VBase4(0.6, 0.4, 0.2, 1.0), VBase4(0.8, 0.8, 0.8, 0.5)),  # Disabled
         (VBase4(0.8, 0.4, 0.0, 1.0))                               # Arrow Color
     ),
     CCNonPlayer: (
-        (VBase4(0.8, 0.4, 0.0, 1.0), VBase4(0.9, 0.9, 0.9, 0.5)),  # Normal
+        (VBase4(0.8, 0.4, 0.0, 1.0), VBase4(1, 1, 1, 0.5)),  # Normal
         (VBase4(1.0, 0.5, 0.5, 1.0), VBase4(0.2, 0.2, 0.2, 0.6)),  # Down
         (VBase4(1.0, 0.5, 0.0, 1.0), VBase4(1.0, 1.0, 1.0, 1.0)),  # Rollover
         (VBase4(0.6, 0.4, 0.2, 1.0), VBase4(0.8, 0.8, 0.8, 0.5)),  # Disabled
@@ -160,8 +160,8 @@ NametagColors = {
     ),
     CCSuit: (
         (VBase4(0.0, 0.0, 0.0, 1.0), VBase4(0.8, 0.8, 0.8, 0.5)),  # Normal
-        (VBase4(0.2, 0.2, 0.2, 1.0), VBase4(0.2, 0.2, 0.2, 0.6)),  # Down
-        (VBase4(0.4, 0.4, 0.4, 1.0), VBase4(1.0, 1.0, 1.0, 1.0)),  # Rollover
+        (VBase4(1, 1, 1, 1), VBase4(0.2, 0.2, 0.2, 0.6)),  # Down
+        (VBase4(0.5, 0.5, 0.5, 1), VBase4(1.0, 1.0, 1.0, 1.0)),  # Rollover
         (VBase4(0.2, 0.2, 0.2, 1.0), VBase4(0.8, 0.8, 0.8, 0.5)),  # Disabled
         (VBase4(0.8, 0.4, 0.0, 1.0))                               # Arrow Color
     ),
