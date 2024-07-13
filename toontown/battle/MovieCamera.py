@@ -910,7 +910,7 @@ def chooseSuitShot(attack, attackDuration):
         camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc2 = pbpDc.getShowIntervalDesc("The Scapegoat's temperature is getting dangerously high!", 3.5)
+        pbpDesc2 = pbpDc.getShowIntervalDesc("The Scapegoat's temperature is starting to simmer down!", 3.5)
         pbpTrack2 = pbpText.getShowIntervalCheat('Quake!', 3.5)
         pbpDesc = Sequence(Wait(6.0), (pbpDc.getShowIntervalDesc("The Scapegoat syphons toon's health when he's alone!", 3.5)))
         pbpTrack = Sequence(Wait(6.0), (pbpText.getShowIntervalCheat('Barnyard Bash!', 3.5)))
@@ -953,7 +953,7 @@ def chooseSuitShot(attack, attackDuration):
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc2 = pbpDc.getShowIntervalDesc("The Scapegoat's temperature is slowly rising!", 3.5)
+        pbpDesc2 = pbpDc.getShowIntervalDesc("The Scapegoat's temperature is about to boil over!", 3.5)
         pbpTrack2 = pbpText.getShowIntervalCheat('Quake!', 3.5)
         pbpDesc = Sequence(Wait(6.0),
                            (pbpDc.getShowIntervalDesc("The Scapegoat's temperature has boiled over!", 3.5)))
