@@ -2222,6 +2222,7 @@ AvatarPanelCogLevel = 'Level: %s'
 AvatarPanelCogLevel100 = 'Level:%s'
 AvatarPanelCogRevives = '\nVersion: %s.0'
 AvatarPanelCogHealth = 'HP: %s/%s'
+AvatarPanelCogHP = 'HP: %s/%s'
 AvatarPanelCogHealth2 = '%s/%s'
 AvatarPanelCogDetailClose = lClose
 AvatarPanelDetail = 'Toon Details'
@@ -3543,7 +3544,7 @@ SuitCheatNames = ('CourtCosts', 'Cage', 'PaperCut', 'WireCut', 'Wiretapped',
                   'StealSafe', 'Synergy', 'HeatWave', 'Refinement', 'ExtraTip', 'LifeInsurance', 'WorkersCompensation')
 SuitCheatDescription = {
 'Blast': 'All toons take a huge loss!',
-    'Gavel': 'The Case Manager has banned all gags for 1 turn!',
+    'Gavel': 'The Secretary has banned all gags for 1 turn!',
 'UnionBuster': 'The Union Buster retaliates against the least\ndangerous toon!',
 'Spotlight': 'The Major Player heals all cogs that can perform!',
     'UnionDues': 'An audit is approaching!',
@@ -4691,7 +4692,7 @@ SuitAttackTaunts = {'AcidRain': ["It's sulfur you.",
  'PoisonSpray': ["My guard is up!",
                  "It's just a scratch!",
 				   "I can take it!",
-				   "Is that the best toons have?"],
+				   "Is that the best these toons have?"],
  'WaterSpray': ["Having a nice spray of water?",
                 "Enjoy your spring water!",
 			    "Spring water only here today.",
@@ -8013,8 +8014,13 @@ AnimalToSpecies = {'dog': 'Dog',
  'alligator': 'Alligator',
  'fox': 'Fox',
  'bat': 'Bat',
- 'raccoon': 'Raccoon'}
-AllSpecies = ('Dog', 'Cat', 'Horse', 'Mouse', 'Rabbit', 'Duck', 'Monkey', 'Bear', 'Pig', 'Deer', 'Beaver', 'Alligator', 'Fox', 'Bat', 'Raccoon')
+ 'raccoon': 'Raccoon',
+                   'turkey': 'Turkey',
+                   'koala': 'Koala',
+                   'kangaroo': 'Kangaroo',
+                   'kiwi': 'Kiwi',
+                   'armadillo': 'Armadillo'}
+AllSpecies = ('Dog', 'Cat', 'Horse', 'Mouse', 'Rabbit', 'Duck', 'Monkey', 'Bear', 'Pig', 'Deer', 'Beaver', 'Alligator', 'Fox', 'Bat', 'Raccoon', 'Turkey', 'Koala', 'Kangaroo', 'Kiwi', 'Armadillo')
 NameTooLong = 'That name is too long. Please try again.'
 ToonAlreadyExists = 'You already have a toon named %s!'
 NameAlreadyInUse = 'That name is already used!'

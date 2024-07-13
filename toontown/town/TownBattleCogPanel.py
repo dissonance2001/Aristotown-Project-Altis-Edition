@@ -173,7 +173,7 @@ class TownBattleCogPanel(DirectFrame):
         self.suitHead = Suit.attachSuitHead(self, name)
         needBigScaledHeads = 'dot', 'bc', 'cps'
         needMedScaledHeads = 'bf', 'cc', 'sc', 'dsk', 'nar'
-        needSmallScaledHeads = 'bg'
+        needSmallScaledHeads = 'jas'
         needSmallerScaledHeads = 'csm', 'mka', 'txm', 'ym', 'bs', 'tw', 'ssm', 'kyl', 'kpn', 'blr', 'fd', 'tb', 'adc', 'drm', 'ffm', 'frs', 'fbd'
         needEvenSmallerScaledHeads = 'ste', 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb', 'yuh', 'kc'
         if name in needBigScaledHeads:
@@ -205,7 +205,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'ptr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -90, 0, 0, .1, .1, .1)
         elif name == 'bg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .13, .13, .13)
         elif name == 'scg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
         elif name == 'crf':
@@ -217,8 +217,6 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'ant':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .25, .25, .25)
         elif name == 'sya':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
-        elif name == 'cm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
         elif name == 'laa':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
@@ -236,8 +234,10 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
         elif name == 'csh':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
-        elif name == 'csm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .09, .09, .09)
+        elif name == 'csh':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'cm':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .11, .11, .11)
         else:
             self.suitHead.setPos(-0.27, 0.5, 0.13)
 

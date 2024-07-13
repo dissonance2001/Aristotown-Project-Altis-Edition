@@ -906,6 +906,15 @@ def chooseSuitShot(attack, attackDuration):
         pbpDesc = Sequence(Wait(4.0), (pbpDc.getShowIntervalDesc('Your offensive gags will be less effective!', 3.5)))
         pbpTrack = Sequence(Wait(4.0), (pbpText.getShowIntervalCheat('Quality Control!', 3.5)))
         return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
+    elif name == SNOW:
+        camTrack2 = defaultCamera(openShotDuration=0.5)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc("The Scapegoat's temperature is starting to simmer down!", 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Quake!', 3.5)
+        pbpDesc = Sequence(Wait(6.0), (pbpDc.getShowIntervalDesc("The Scapegoat syphons toon's health when he's alone!", 3.5)))
+        pbpTrack = Sequence(Wait(6.0), (pbpText.getShowIntervalCheat('Barnyard Bash!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == BOMB:
         camTrack.append(defaultCamera(openShotDuration=0.3))
     elif name == LEGAL_BINDINGS:
@@ -941,7 +950,15 @@ def chooseSuitShot(attack, attackDuration):
     elif name == OVERDRAFT:
         camTrack.append(defaultCamera())
     elif name == ENRAGED:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 = pbpDc.getShowIntervalDesc("The Scapegoat's temperature is about to boil over!", 3.5)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Quake!', 3.5)
+        pbpDesc = Sequence(Wait(6.0),
+                           (pbpDc.getShowIntervalDesc("The Scapegoat's temperature has boiled over!", 3.5)))
+        pbpTrack = Sequence(Wait(6.0), (pbpText.getShowIntervalCheat('Enraged!', 3.5)))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == THROW_BOOK:
         camTrack.append(defaultCamera(openShotDuration=2.9))
     else:

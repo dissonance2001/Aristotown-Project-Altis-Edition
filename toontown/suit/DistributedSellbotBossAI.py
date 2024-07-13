@@ -206,11 +206,11 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
 
     def makeBattleOneBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(1, ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.initializeBattles(1, ToontownGlobals.SellbotBossBattleThreePosHpr)
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            cogs = self.invokeEmptyPlanner(11, 'ffm')
+            cogs = self.invokeEmptyPlanner(11, 'ffm2')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)
@@ -225,7 +225,7 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         else:
-            cogs = self.invokeEmptyPlanner(11, 'ffm2')
+            cogs = self.invokeEmptyPlanner(11, 'ffm')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)
@@ -241,9 +241,14 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
                     'reserveSuits': reserveSuits}
 
     def generateNewReserves(self, battleNumber):
-        cogs = self.invokeReservesPlanner(11, 'ffm')
-        reserveSuits = cogs['reserveSuits']
-        return {'reserveSuits': reserveSuits}
+        if battleNumber == 1:
+            cogs = self.invokeReservesPlanner(11, 'ffm2')
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
+        elif battleNumber == 2:
+            cogs = self.invokeReservesPlanner(11, 'ffm')
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
 
     def invokeSuitPlanner(self, buildingCode, skelecog):
         suits = DistributedMinibossAI.DistributedMinibossAI.invokeSuitPlanner(self, buildingCode, skelecog)

@@ -10,6 +10,7 @@ from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToonPythonUtil import Functor
 from direct.task.Task import Task
 from panda3d.core import *
+from toontown.toon.LaffMeter import LaffMeter
 from toontown.toon.ToonHead import *
 from otp.avatar import Avatar
 from otp.avatar import Emote
@@ -48,9 +49,15 @@ PigDialogueArray = []
 DeerDialogueArray = []
 BeaverDialogueArray = []
 AlligatorDialogueArray = []
-FoxDialogueArray = []
+ArmadilloDialogueArray = []
 BatDialogueArray = []
+FoxDialogueArray = []
+KangarooDialogueArray = []
+KiwiDialogueArray = []
+KoalaDialogueArray = []
 RaccoonDialogueArray = []
+TurkeyDialogueArray = []
+
 LegsAnimDict = {}
 TorsoAnimDict = {}
 HeadAnimDict = {}
@@ -349,10 +356,49 @@ def loadDialog():
     for file in catDialogueFiles:
         CatDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
+    armadilloDialogueFiles = (
+    'AV_armadillo_short', 'AV_armadillo_med', 'AV_armadillo_long', 'AV_armadillo_question', 'AV_armadillo_exclaim',
+    'AV_armadillo_howl')
+    global ArmadilloDialogueArray
+    for file in armadilloDialogueFiles:
+        ArmadilloDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
+
+    beaverDialogueFiles = (
+    'AV_beaver_short', 'AV_beaver_med', 'AV_beaver_long', 'AV_beaver_question', 'AV_beaver_exclaim', 'AV_beaver_howl')
+    global BeaverDialogueArray
+    for file in beaverDialogueFiles:
+        BeaverDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
+
     horseDialogueFiles = ('AV_horse_short', 'AV_horse_med', 'AV_horse_long', 'AV_horse_question', 'AV_horse_exclaim', 'AV_horse_howl')
     global HorseDialogueArray
     for file in horseDialogueFiles:
         HorseDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
+
+    kangarooDialogueFiles = (
+        'AV_kangaroo_short', 'AV_kangaroo_med', 'AV_kangaroo_long', 'AV_kangaroo_question', 'AV_kangaroo_exclaim',
+        'AV_kangaroo_howl')
+    global KangarooDialogueArray
+    for file in kangarooDialogueFiles:
+        KangarooDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
+
+    kiwiDialogueFiles = (
+        'AV_kiwi_short', 'AV_kiwi_med', 'AV_kiwi_long', 'AV_kiwi_question', 'AV_kiwi_exclaim', 'AV_kiwi_howl')
+    global KiwiDialogueArray
+    for file in kiwiDialogueFiles:
+        KiwiDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
+
+    koalaDialogueFiles = (
+        'AV_koala_short', 'AV_koala_med', 'AV_koala_long', 'AV_koala_question', 'AV_koala_exclaim', 'AV_koala_howl')
+    global KoalaDialogueArray
+    for file in koalaDialogueFiles:
+        KoalaDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
+
+    turkeyDialogueFiles = (
+        'AV_turkey_short', 'AV_turkey_med', 'AV_turkey_long', 'AV_turkey_question', 'AV_turkey_exclaim',
+        'AV_turkey_howl')
+    global TurkeyDialogueArray
+    for file in turkeyDialogueFiles:
+        TurkeyDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
     rabbitDialogueFiles = ('AV_rabbit_short', 'AV_rabbit_med', 'AV_rabbit_long', 'AV_rabbit_question', 'AV_rabbit_exclaim', 'AV_rabbit_howl')
     global RabbitDialogueArray
@@ -427,9 +473,15 @@ def unloadDialog():
     global DeerDialogueArray
     global BeaverDialogueArray
     global AlligatorDialogueArray
-    global FoxDialogueArray
     global BatDialogueArray
+    global ArmadilloDialogueArray
+    global DeerDialogueArray
+    global FoxDialogueArray
+    global KangarooDialogueArray
+    global KiwiDialogueArray
+    global KoalaDialogueArray
     global RaccoonDialogueArray
+    global TurkeyDialogueArray
     DogDialogueArray = []
     CatDialogueArray = []
     HorseDialogueArray = []
@@ -442,9 +494,14 @@ def unloadDialog():
     DeerDialogueArray = []
     BeaverDialogueArray = []
     AlligatorDialogueArray = []
+    ArmadilloDialogueArray = []
+    KangarooDialogueArray = []
+    KiwiDialogueArray = []
+    KoalaDialogueArray = []
     FoxDialogueArray = []
     BatDialogueArray = []
     RaccoonDialogueArray = []
+    TurkeyDialogueArray = []
 
 class Toon(Avatar.Avatar, ToonHead):
     notify = DirectNotifyGlobal.directNotify.newCategory('Toon')
@@ -927,6 +984,11 @@ class Toon(Avatar.Avatar, ToonHead):
                 piece = torso.find('**/' + pieceName)
                 piece.setColor(*armColor)
 
+            if self.style.getAnimal() == 'kiwi':
+                torso.find('**/arms').hide()
+            else:
+                torso.find('**/arms').show()
+
             hands = torso.find('**/hands')
             hands.setColor(*gloveColor)
             legs = self.getPart('legs', lodName)
@@ -1266,6 +1328,16 @@ class Toon(Avatar.Avatar, ToonHead):
                 dialogueArray = BatDialogueArray
             elif animalType == 'raccoon':
                 dialogueArray = RaccoonDialogueArray
+            elif animalType == 'armadillo':
+                dialogueArray = ArmadilloDialogueArray
+            elif animalType == 'kangaroo':
+                dialogueArray = KangarooDialogueArray
+            elif animalType == 'kiwi':
+                dialogueArray = KiwiDialogueArray
+            elif animalType == 'koala':
+                dialogueArray = KoalaDialogueArray
+            elif animalType == 'turkey':
+                dialogueArray = TurkeyDialogueArray
             else:
                 dialogueArray = None
         return dialogueArray

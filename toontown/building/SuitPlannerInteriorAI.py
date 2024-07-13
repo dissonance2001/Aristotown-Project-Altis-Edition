@@ -225,35 +225,33 @@ class SuitPlannerInteriorAI:
         activeSuits = []
         reserveSuits = []
         if specialCode == 'ffm':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 's', 28, 0)
+            miniboss = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)
             miniboss3 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)
-            miniboss4 = self.__genSuitObject(self.zoneId, 10, 's', 10, 0)
-            activeSuits.append(miniboss4)
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)
+            activeSuits.append(random.choice((miniboss, miniboss3)))
+            activeSuits.append(random.choice((miniboss2, miniboss4)))
         elif specialCode == 'lit':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)
             miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)
             miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)
-            activeSuits.append(random.choice((miniboss, miniboss2)))
-            activeSuits.append(random.choice((miniboss2, miniboss4, miniboss3)))
+            activeSuits.append(random.choice((miniboss, miniboss3)))
+            activeSuits.append(random.choice((miniboss2, miniboss4)))
         elif specialCode == 'lit2':
             miniboss = self.__genSuitObject(self.zoneId, 22, 'l', 22, 0)
-            miniboss6 = self.__genSuitObject(self.zoneId, 26, 'm', 26, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 23, 'l', 23, 0)
             miniboss4 = self.__genSuitObject(self.zoneId, 24, 'l', 24, 0)
-            miniboss6 = self.__genSuitObject(self.zoneId, 20, 'l', 20, 0)
-            miniboss7 = self.__genSuitObject(self.zoneId, 19, 'l', 19, 0)
-            miniboss5 = self.__genSuitObject(self.zoneId, 21, 'l', 21, 0)
-            activeSuits.append(miniboss4)
-            activeSuits.append(random.choice((miniboss7, miniboss2, miniboss6, miniboss5)))
+            miniboss6 = self.__genSuitObject(self.zoneId, 17, 'l', 17, 0)
+            miniboss7 = self.__genSuitObject(self.zoneId, 18, 'l', 18, 0)
+            activeSuits.append(random.choice((miniboss4, miniboss6)))
+            activeSuits.append(random.choice((miniboss2, miniboss, miniboss7)))
         elif specialCode == 'ffm2':
-            miniboss2 = self.__genSuitObject(self.zoneId, 19, 's', 27, 1)
-            miniboss3 = self.__genSuitObject(self.zoneId, 21, 's', 26, 1)
-            miniboss4 = self.__genSuitObject(self.zoneId, 22, 's', 25, 1)
-            activeSuits.append(miniboss3)
-            activeSuits.append(miniboss2)
+            miniboss2 = self.__genSuitObject(self.zoneId, 19, 's', 19, 0)
+            miniboss3 = self.__genSuitObject(self.zoneId, 21, 's', 21, 0)
+            miniboss4 = self.__genSuitObject(self.zoneId, 22, 's', 22, 0)
             activeSuits.append(miniboss4)
+            activeSuits.append(random.choice((miniboss3, miniboss2)))
         elif specialCode == 'crf':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'm', 28, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)
@@ -298,6 +296,10 @@ class SuitPlannerInteriorAI:
             suit = self.__genSuitObject(self.zoneId, suitKind, 'l', suitLevel, random.choice((0, 1)))
             reserveSuits.append(suit)
         if specialCode == 'lit2':
+            # generate random cashbot from lv 12 to 20
+            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't')), suitLevel, random.choice((0, 1)))
+            reserveSuits.append(suit)
+        if specialCode == 'ffm2':
             # generate random cashbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't')), suitLevel, random.choice((0, 1)))
             reserveSuits.append(suit)

@@ -403,7 +403,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
                 bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
                                       Func(suit.showHpText, -hpbonus, 1),
                                       Func(suit.updateHealthBar, hpbonus))
-                suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit))
+                suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit, battle))
                 suitTrack.append(suitGettingHit)
                 return Parallel(suitTrack, bonusTrack)
             elif not suit.getSkelecog():

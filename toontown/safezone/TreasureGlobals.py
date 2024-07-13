@@ -12,39 +12,39 @@ TreasureETargetGame = 8 # Just for a special sound effect during target game
 
 TreasureModels = {
     TreasureTT: (
-        'phase_4/models/props/icecream',
+        'phase_4/models/props/ttc-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
     TreasureDD: (
-        'phase_6/models/props/starfish_treasure',
+        'phase_4/models/props/bb-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
     TreasureDG: (
-        'phase_8/models/props/flower_treasure',
+        'phase_4/models/props/dg-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
     TreasureBR: (
-        'phase_8/models/props/snowflake_treasure',
+        'phase_4/models/props/tb-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
     TreasureMM: (
-        'phase_6/models/props/music_treasure',
+        'phase_4/models/props/mml-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
     TreasureDL: (
-        'phase_8/models/props/zzz_treasure',
+        'phase_4/models/props/ddl-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
     TreasureOZ: (
-        'phase_6/models/props/acorn_treasure',
+        'phase_4/models/props/aa-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
     TreasureE: (
-        'phase_5.5/models/props/popsicle_treasure',
+        'phase_4/models/props/mg-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
     TreasureETargetGame: (
-        'phase_5.5/models/props/popsicle_treasure',
+        'phase_4/models/props/mg-treasure',
         'phase_5/audio/sfx/tt_s_ara_cfg_propellerBreaks.ogg',
     ),
 }

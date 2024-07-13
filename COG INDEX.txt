@@ -59,12 +59,12 @@ lsc - Big Wig Level 8-25
 jdg - Arbitrator Level 15-20.exe
 jur - Head Attorney Level 16.mgr
 tlr - Atticus Wing Level 50.mgr
-cm - Tester Cog (temporary) Level 69420.mgr
+cm - Judy Level 20.mgr
 ggm - Mouthpiece Level 16.mgr
 th - Rainmaker Level 16.mgr
-kc - Witch Hunter Level 20.mgr
-tr - Count Erclaim Level 20.mgr v2.0 
-mp - Redd "Heir" Wing Level 20.mgr v2.0
+kc - Witch Hunter Level 20.mgr snow
+tr - Count Erclaim Level 20.mgr
+mp - Redd "Heir" Wing Level 20.mgr
 laa - The Witness Stand-In Level 50.mgr
 scg - Scapegoat Level 30.mgr
 csm - Case Manager Level 35.mgr

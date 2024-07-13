@@ -305,9 +305,14 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
                     'reserveSuits': reserveSuits}
 
     def generateNewReserves(self, battleNumber):
-        cogs = self.invokeReservesPlanner(11, 'lit')
-        reserveSuits = cogs['reserveSuits']
-        return {'reserveSuits': reserveSuits}
+        if battleNumber == 1:
+            cogs = self.invokeReservesPlanner(11, 'lit2')
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
+        elif battleNumber == 2:
+            cogs = self.invokeReservesPlanner(11, 'lit')
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
 
     def invokeSuitPlanner(self, buildingCode, skelecog):
         suits = DistributedMinibossAI.DistributedMinibossAI.invokeSuitPlanner(self, buildingCode, skelecog)
