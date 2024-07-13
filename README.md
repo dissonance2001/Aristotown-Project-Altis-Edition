@@ -5,16 +5,21 @@ A customized version of Project Altis that's is heavily based on the predecessor
 # ❓ What does Aristotown: Altis Edition have to offer?
 - There are currently a total of 168 cogs in this game. New cogs have been added to each department, each department has 14 regular cogs, the rest of the cogs have been filled with managers ranging from the ones seen in clash to a few custom managers made by me. There are Operations Analysts and Field Specialists for each department.
 - Executive and Manager cogs have both been implemented working the same as they do in clash. Managers have lure resistance and are completely immune to being fired.
-- Governaughts have been added, they pretty much do the opposite of Executive cogs, they have 1.2x the amount of health and deal 1.5x the amount of damage.
+- Governaughts have been added, they work the opposite of Executive cogs, they have 1.2x the amount of health and deal 1.5x the amount of damage.
 - Version 2 cogs work the same way they do in clash, having half of the amount of health after the first shell is dead, also dealing 1.5x the amount of damage. Cogs can have more than 2 layers, the health deduction and damage multipliers will stack.
 - 99% of the managers from Clash have been added, however most of them do not have their set abilities.
 - The Litigation team with working abilities some mirroring Clash others I have tweaked myself to meet specific needs.
 - Legacy managers including, Count Erclaim, Count Erfit (not with the old model), Redd "Heir" Wing and The Witness Stand-In have been added. (Sads is not present.)
 - Facility managers are present ingame, however are not placed in their desired locations (yet).
-- Litigation managers will go into desperation once their partner is defeated (works the same way as in clash)
-- Gag damages mirror what they are in Clash, level 8s have not been added yet but it is on the todo list.
+- Litigation managers will go into desperation once their partner is defeated (works the same way as in clash), they will receive 1 extra round of lure resistance, will deal 1.4x the amount of damage (this will stack with version 2 damage multipliers if applicable), and will gain 1000HP to prevent cheesability. 
+- Gag damages mirror what they are in Clash, level 8s have been implemented, wrecking ball has a movie to play for it however there is no prop (yet), other various gags that originate from clash have no movies/models associated with them so more than likely it just plays a movie for a gag above/below it.
 - Trap damage reflects what prestige trap damage is in Clash, prestiges don't exist (yet).
-- Zap is present ingame, but needs to be revamped.
+- Zap is single target as of right now, at some point this will be revamped (hopefully).
+- All of Clash's toon species have been added to the game with their respective voices, laff meters, models, etc.
+- Overclocked bosses are in development, each department's boss (excluding Techbots) will include a first battle including some familiar cogs, including some legacy cogs, and a second battle containing a version of a "Litigation Team", and will include a what should be more difficult final round to finish off the boss.
+- I am in the process of implementing several of Clash's ingame models and props, some are present ingame, others I have to tweak in order for them to work.
+- No music has been added/changed (yet).
+- Instakill movies for gags have been implemented to mirror what is present in Clash.
 
 ## 💻 Windows
 Run the [Start.bat](Start.bat) file to launch the game.
