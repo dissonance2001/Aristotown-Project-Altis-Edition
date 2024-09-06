@@ -133,18 +133,23 @@ class TownBattleCogPanel(DirectFrame):
             if not self.button.isEmpty():
                 self.button.setColor(1, 1, 1, 1)
         elif condition == 7 and not self.cog.getImmuneStatus():
-            self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(1.2), Task(self.__blinkGray), Task.pause(0.1))
-            taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
+            if not self.button.isEmpty():
+                self.button.setColor(self.healthColors[condition], 1)
             self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
         elif condition == 8 and not self.cog.getImmuneStatus():
-            self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(1.2), Task(self.__blinkGray), Task.pause(0.1))
-            taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
+            if not self.button.isEmpty():
+                self.button.setColor(self.healthColors[condition], 1)
             self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
         elif condition == 9 and not self.cog.getImmuneStatus():
             self.blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.75), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(self.blinkTask, self.uniqueName('blink-task'))
             self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
         elif condition == 10 and not self.cog.getImmuneStatus():
+            taskMgr.remove(self.uniqueName('blink-task'))
+            blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.25), Task(self.__blinkGray), Task.pause(0.1))
+            taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+            self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
+        elif condition == 11 and not self.cog.getImmuneStatus():
             taskMgr.remove(self.uniqueName('blink-task'))
             blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.25), Task(self.__blinkGray), Task.pause(0.1))
             taskMgr.add(blinkTask, self.uniqueName('blink-task'))
@@ -174,7 +179,7 @@ class TownBattleCogPanel(DirectFrame):
         needBigScaledHeads = 'dot', 'bc', 'cps'
         needMedScaledHeads = 'bf', 'cc', 'sc', 'dsk', 'nar'
         needSmallScaledHeads = 'jas'
-        needSmallerScaledHeads = 'csm', 'mka', 'txm', 'ym', 'bs', 'tw', 'ssm', 'kyl', 'kpn', 'blr', 'fd', 'tb', 'adc', 'drm', 'ffm', 'frs', 'fbd'
+        needSmallerScaledHeads = 'mka', 'txm', 'ym', 'bs', 'tw', 'ssm', 'kyl', 'kpn', 'blr', 'fd', 'tb', 'adc', 'drm', 'ffm', 'frs', 'fbd'
         needEvenSmallerScaledHeads = 'ste', 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb', 'yuh', 'kc'
         if name in needBigScaledHeads:
             self.suitHead.setScale(.13)
@@ -204,28 +209,42 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -90, 0, 0, .1, .1, .1)
         elif name == 'ptr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -90, 0, 0, .1, .1, .1)
+        elif name == 'dvp':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .08, .08, .08)
         elif name == 'bg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .13, .13, .13)
         elif name == 'scg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
         elif name == 'crf':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
+        elif name == 'sjg':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
         elif name == 'mad':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
         elif name == 'cg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
         elif name == 'ant':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .25, .25, .25)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .3, .3, .3)
         elif name == 'sya':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
         elif name == 'laa':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'lbs':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'gb':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+        elif name == 'tcc':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .3, .3, .3)
+        elif name == 'jl':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .3, .3, .3)
+        elif name == 'fb':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .2, .2, .2)
         elif name == 'mdr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
         elif name == 'fas':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
         elif name == 'jur':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .25, .25, .25)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .3, .3, .3)
         elif name == 'bgr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .3, .3, .3)
         elif name == 'gkp':
@@ -233,11 +252,11 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'ddv':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
         elif name == 'csh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
-        elif name == 'csh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.10, -180, 0, 0, .14, .14, .14)
         elif name == 'cm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .11, .11, .11)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.10, -180, 0, 0, .14, .14, .14)
+        elif name == 'csm':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .09, .09, .09)
         else:
             self.suitHead.setPos(-0.27, 0.5, 0.13)
 

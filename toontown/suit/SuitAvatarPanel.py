@@ -27,7 +27,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         gui = loader.loadModel('phase_3.5/models/gui/suit_detail_panel')
         gui.find('**/shadow').setTransparency(TransparencyAttrib.MAlpha)
         gui.find('**/shadow').setColor(1, 1, 1, 0.4)
-        self.frame = DirectFrame(geom=gui.find('**/avatar_panel'), geom_scale=0.21, geom_pos=(0, 0, 0.02), relief=None, pos=(-0.2348, 0, -0.475), parent=base.a2dTopRight)
+        self.frame = DirectFrame(geom=gui.find('**/avatar_panel'), geom_scale=0.21, geom_color=(0.655, 0.686, 0.698, 1), geom_pos=(0, 0, 0.02), relief=None, pos=(-0.2348, 0, -0.475), parent=base.a2dTopRight)
         self.head = self.frame.attachNewNode('head')
         for part in avatar.headParts:
             copyPart = part.copyTo(self.head)
@@ -78,14 +78,19 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         else:
             s = 0.3 / biggest
         if self.avatar.dna.name == 'ptr' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.04, 270, 0, 0, s, s, s)
+            self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
         elif self.avatar.dna.name == 'dfh' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.04, 270, 0, 0, s, s, s)
+            self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
+        elif self.avatar.dna.name == 'dvp' and not avatar.isSkeleton:
+            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
+        elif self.avatar.dna.name == 'th' and not avatar.isSkeleton:
+            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
         else:
-            self.head.setPosHprScale(0, 0, 0.04, 180, 0, 0, s, s, s)
-        self.nameLabel = DirectLabel(parent=self.frame, pos=(0, 0, 0.35), relief=None, text=SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name'],
+            self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
+        self.nameLabel = DirectLabel(parent=self.frame, pos=(0, 0, 0.36), relief=None,
+                                     text=SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name'],
                                      text_font=avatar.getFont(), text_pos=(0, 0),
-                                     text_scale=0.05, text_wordwrap=8.0)
+                                     text_scale=0.0475, text_wordwrap=8.0, text_shadow=(1, 1, 1, 1))
         if avatar.getExecutive() and not avatar.getManager():
             level = str(avatar.getActualLevel()) + TTLocalizer.ExecutivePostFix
         elif avatar.getGovernaught() and not avatar.getExecutive() and not avatar.getManager():
@@ -100,71 +105,96 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             HP = avatar.currHP
         else:
             HP = 0
-        if avatar.currHP >= 9999 and revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.115), relief=None,
+        if revives > 1 and avatar.maxHP > 9999:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.13), relief=None,
                                        text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
                                        text_font=avatar.getFont(), text_pos=(0, 0),
                                        textMayChange=1,
                                        text_scale=0.05, text_wordwrap=7.5)
-        elif avatar.maxHP >= 9999 and revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.115), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
-                                       text_font=avatar.getFont(), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        elif avatar.maxHP >= 9999:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
-                                       text_font=avatar.getFont(), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        elif avatar.currHP >= 9999:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
-                                       text_font=avatar.getFont(), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        elif revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.115), relief=None,
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.03), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives, text_font=avatar.getFont(),
+                                          text_align=TextNode.ACenter, text_pos=(0, 0),
+                                          text_scale=0.05, text_wordwrap=8.0)
+        elif revives > 1 and avatar.maxHP <= 9999:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.13), relief=None,
                                        text=TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
                                        text_font=avatar.getFont(), text_pos=(0, 0),
                                        textMayChange=1,
                                        text_scale=0.05, text_wordwrap=7.5)
-        else:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.11), relief=None,
-                                   text=TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
-                                   text_font=avatar.getFont(), text_pos=(0, 0),
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.03), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives, text_font=avatar.getFont(),
+                                          text_align=TextNode.ACenter, text_pos=(0, 0),
+                                          text_scale=0.05, text_wordwrap=8.0)
+        elif avatar.dna.name == 'dsf':
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.13), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
                                        textMayChange=1,
                                        text_scale=0.05, text_wordwrap=7.5)
-        dept = SuitDNA.getSuitDeptFullname(avatar.dna.name)
-        if revives > 1:
-            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
-                                          text=TTLocalizer.AvatarPanelCogLevel % level + TTLocalizer.AvatarPanelCogRevives % revives,
-                                          text_font=avatar.getFont(), text_align=TextNode.ACenter,
-                                          text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
-        elif avatar.dna.name == 'crf':
-            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
-                                          text=TTLocalizer.AvatarPanelCogLevel % level,
-                                          text_font=avatar.getFont(), text_align=TextNode.ACenter,
-                                          text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
-        elif avatar.dna.name == 'tcm':
-            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.015), relief=None,
-                                          text=TTLocalizer.AvatarPanelCogLevel % level,
-                                          text_font=avatar.getFont(), text_align=TextNode.ACenter,
-                                          text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
-        else:
-            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.06), relief=None,
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.03), relief=None,
                                           text=TTLocalizer.AvatarPanelCogLevel % level, text_font=avatar.getFont(),
                                           text_align=TextNode.ACenter, text_pos=(0, 0),
                                           text_scale=0.05, text_wordwrap=8.0)
+        elif avatar.dna.name == 'tcm':
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.13), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.03), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level, text_font=avatar.getFont(),
+                                          text_align=TextNode.ACenter, text_pos=(0, 0),
+                                          text_scale=0.05, text_wordwrap=8.0)
+        elif avatar.dna.name == 'crf':
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.13), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.03), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level, text_font=avatar.getFont(),
+                                          text_align=TextNode.ACenter, text_pos=(0, 0),
+                                          text_scale=0.05, text_wordwrap=8.0)
+        elif avatar.maxHP >= 9999:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.08), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.03), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level, text_font=avatar.getFont(),
+                                          text_align=TextNode.ACenter, text_pos=(0, 0),
+                                          text_scale=0.05, text_wordwrap=8.0)
+        elif avatar.currHP >= 9999:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.08), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.03), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level, text_font=avatar.getFont(),
+                                          text_align=TextNode.ACenter, text_pos=(0, 0),
+                                          text_scale=0.05, text_wordwrap=8.0)
+        else:
+            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.08), relief=None,
+                                       text=TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 0),
+                                       textMayChange=1,
+                                       text_scale=0.05, text_wordwrap=7.5)
+            self.levelLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.03), relief=None,
+                                          text=TTLocalizer.AvatarPanelCogLevel % level, text_font=avatar.getFont(),
+                                          text_align=TextNode.ACenter, text_pos=(0, 0),
+                                          text_scale=0.05, text_wordwrap=8.0)
+        dept = SuitDNA.getSuitDeptFullname(avatar.dna.name)
         corpIcon = avatar.corpMedallion.copyTo(hidden)
         corpIcon.setPosHprScale(0, 0, 0, 0, 0, 0, 0, 0, 0)
-        self.corpIcon = DirectLabel(parent=self.frame, geom=corpIcon, geom_scale=0.13, pos=(0, 0, -0.20), relief=None)
-        corpIcon.removeNode()
-        self.deptLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.30), relief=None, text=dept,
-                                     text_font=avatar.getFont(), text_align=TextNode.ACenter, text_fg=Vec4(0, 0, 0, 1),
-                                     text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
-        self.closeButton = DirectButton(parent=self.frame, relief=None, pos=(0.0, 0, -0.35),
+        self.corpIcon = DirectLabel(parent=self.frame, geom=corpIcon, geom_scale=0.13, pos=(0, 0, -0.21), relief=None)
+        self.deptLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.31), relief=None,
+                                         text=dept,
+                                         text_font=avatar.getFont(), text_align=TextNode.ACenter,
+                                         text_fg=Vec4(0, 0, 0, 1),
+                                         text_pos=(0, 0), text_scale=0.05, text_wordwrap=8.0)
+        self.closeButton = DirectButton(parent=self.frame, relief=None, pos=(0.0, 0, -0.36),
                                         text=TTLocalizer.AvatarPanelCogDetailClose, text_font=avatar.getFont(),
                                         text0_fg=Vec4(0, 0, 0, 1), text1_fg=Vec4(0.5, 0, 0, 1),
                                         text2_fg=Vec4(1, 0, 0, 1), text_pos=(0, 0), text_scale=0.05,

@@ -174,49 +174,32 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         self.sendUpdate('setTaunt', [tauntIndex, extraInfo])
 
     def doNextAttack(self, task):
-        for lawyer in self.lawyers:
-            lawyer.doNextAttack(self)
-
-        self.waitForNextAttack(ToontownGlobals.LawbotBossLawyerCycleTime)
-        timeSinceLastAttack = globalClock.getFrameTime() - self.lastAreaAttackTime
-        allowedByTime = 15 < timeSinceLastAttack or self.lastAreaAttackTime == 0
-        doAttack = random.randrange(1,101)
-        self.notify.debug('allowedByTime=%d doAttack=%d' % (allowedByTime, doAttack))
-        if doAttack <= ToontownGlobals.LawbotBossChanceToDoAreaAttack and allowedByTime:
-            self.__doAreaAttack()
-            self.numAreaAttacks += 1
-            self.lastAreaAttackTime = globalClock.getFrameTime()
-        else:
-            chanceToDoTaunt = ToontownGlobals.LawbotBossChanceForTaunt
-            action = random.randrange(1,101)
-            if action <= chanceToDoTaunt:
-                self.doTaunt()
-                pass
-        return
         if self.attackCode == ToontownGlobals.BossCogDizzyNow:
             attackCode = ToontownGlobals.BossCogRecoverDizzyAttack
         else:
-            attackCode = random.choice([ToontownGlobals.BossCogAreaAttack,
-             ToontownGlobals.BossCogFrontAttack,
-             ToontownGlobals.BossCogDirectedAttack,
-             ToontownGlobals.BossCogDirectedAttack,
-             ToontownGlobals.BossCogDirectedAttack,
-             ToontownGlobals.BossCogDirectedAttack])
+            attackCode = random.choice([
+                ToontownGlobals.BossCogFrontAttack,
+                ToontownGlobals.BossCogGolfAttack,
+                ToontownGlobals.BossCogAreaAttack,
+                ToontownGlobals.BossCogDirectedAttack])
         if attackCode == ToontownGlobals.BossCogAreaAttack:
             self.__doAreaAttack()
         elif attackCode == ToontownGlobals.BossCogDirectedAttack:
             self.__doDirectedAttack()
+        elif attackCode == ToontownGlobals.BossCogGolfAreaAttack:
+            self.__doGolfAreaAttack()
         else:
             self.b_setAttackCode(attackCode)
+
     def __doAreaAttack(self):
         self.b_setAttackCode(ToontownGlobals.BossCogAreaAttack)
 
+    def __doGolfAreaAttack(self):
+        self.b_setAttackCode(ToontownGlobals.BossCogGolfAreaAttack)
+
     def __doDirectedAttack(self):
-        if self.nearToons:
-            toonId = random.choice(self.nearToons)
-            self.b_setAttackCode(ToontownGlobals.BossCogDirectedAttack, toonId)
-        else:
-            self.__doAreaAttack()
+        toonId = random.choice(self.involvedToons)
+        self.b_setAttackCode(ToontownGlobals.BossCogDirectedAttack, toonId)
 
     def b_setBossDamage(self, bossDamage, recoverRate, recoverStartTime):
         self.d_setBossDamage(bossDamage, recoverRate, recoverStartTime)
@@ -490,15 +473,15 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         self.battleThreeTimeStarted = globalClock.getFrameTime()
         self.calcAndSetBattleDifficulty()
         self.calculateWeightPerToon()
-        diffSettings = ToontownGlobals.LawbotBossDifficultySettings[self.battleDifficulty]
-        self.ammoCount = diffSettings[0]
-        self.numGavels = diffSettings[1]
+        diffSettings = 4
+        self.ammoCount = 99
+        self.numGavels = 6
         if self.numGavels >= len(ToontownGlobals.LawbotBossGavelPosHprs):
             self.numGavels = len(ToontownGlobals.LawbotBossGavelPosHprs)
-        self.numLawyers = diffSettings[2]
+        self.numLawyers = 10
         if self.numLawyers >= len(ToontownGlobals.LawbotBossLawyerPosHprs):
             self.numLawyers = len(ToontownGlobals.LawbotBossLawyerPosHprs)
-        self.toonupValue = diffSettings[3]
+        self.toonupValue = 10
         self.notify.debug('diffLevel=%d ammoCount=%d gavels=%d lawyers = %d, toonup=%d' % (self.battleDifficulty,
          self.ammoCount,
          self.numGavels,

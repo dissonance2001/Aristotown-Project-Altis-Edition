@@ -216,8 +216,6 @@ class RewardPanel(DirectFrame):
         except:
             zoneId = 0
         if hasattr(base.cr, 'newsManager'):
-            if base.cr.newsManager.isHolidayRunning(ToontownGlobals.MORE_XP_HOLIDAY):
-                self.multiplierLabel['text'] = "5x Gag Multiplier"
             if base.cr.newsManager.getInvading():
                 self.hqBonusLabel['text'] = TTLocalizer.CogInvasionBonus
             if ZoneUtil.isCogHQZone(zoneId):
@@ -781,11 +779,6 @@ class RewardPanel(DirectFrame):
                 if origExp[trackIndex] < maxExp and earnedExp[trackIndex] + origExp[trackIndex] >= maxExp:
                     endTracks[trackIndex] = 1
                     trackEnded = 1
-                    
-        self.notify.debug("Appending Merit Interval Lists!")
-        for dept in range(len(SuitDNA.suitDepts)):
-            if meritList[dept]:
-                track += self.getMeritIntervalList(toon, dept, origMeritList[dept], meritList[dept])
 
         track.append(Wait(0.75))
         self.notify.debug("Appending Item Interval Lists!")

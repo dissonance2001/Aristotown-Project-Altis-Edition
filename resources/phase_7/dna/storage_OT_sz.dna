@@ -1,0 +1,39 @@
+place_model "phase_8/models/neighborhoods/daisys_garden_ext" [
+ 	store_node [ "prop" "daisys_garden_ext" "" ]
+	]
+
+place_model "phase_7/models/neighborhoods/olde_toontown" [
+  	store_node [ "prop" "olde_toontown" "" ]
+ 	]
+
+place_model "phase_7/models/modules/safe_zone_tunnel_OT" [
+	store_node [ "prop" "prop_safe_zone_tunnel" ]
+        ]
+
+place_model "phase_4/models/modules/trolley_station_default" [
+	store_node [ "prop" "prop_trolley_station" ]
+	]
+
+place_model "phase_7/models/modules/gagshop_OT" [
+	store_node [ "toon_landmark" "toon_landmark_OT_gag_shop" "" ]
+        ]
+
+place_model "phase_7/models/modules/PetShopExterior_OT" [
+	store_node [ "toon_landmark" "toon_landmark_OT_pet_shop" "" ]
+        ]
+
+place_model "phase_7/models/modules/clothshopOT" [
+	store_node [ "toon_landmark" "toon_landmark_OT_clothes_shop" "" ]
+        ]
+
+place_model "phase_7/models/modules/dungeondoor_yott" [
+	store_node [ "toon_landmark" "toon_landmark_OT_dungeondoor_yott" "" ]
+        ]
+
+place_model "phase_4/models/props/exteriorfish-zero" [
+	store_node [ "prop" "animated_prop_PetShopFishAnimatedProp" "exteriorfish" ]
+	]
+
+place_model "phase_7/models/props/tower_ladder_yott" [
+	store_node [ "prop" "prop_toon_ladder" "" ]
+	]

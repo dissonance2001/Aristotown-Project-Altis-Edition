@@ -76,8 +76,16 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('freezeAssets.ptf')
     elif name == 'GlowerPower':
         return loadParticleFile('glowerPowerKnives.ptf')
+    elif name == 'HostileTakeover':
+        return loadParticleFile('glowerPowerKnives.ptf')
     elif name == 'WaterSpray':
         return loadParticleFile('waterSpray.ptf')
+    elif name == 'NickelDime':
+        return loadParticleFile('nickelDime.ptf')
+    elif name == 'NickelAndDime':
+        return loadParticleFile('nickelDimeWaterfall.ptf')
+    elif name == 'nickelDimeWaterfall':
+        return loadParticleFile('nickelDimeWaterfall.ptf')
     elif name == 'SprayLift':
         return __makeSprayLift()
     elif name == 'HeavyRainfall':

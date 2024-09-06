@@ -784,8 +784,6 @@ from toontown.safezone import DistributedPicnicBasket/AI
 from toontown.safezone import DistributedGameTable/AI
 from toontown.distributed import DistributedTimer/AI
 from toontown.suit import DistributedBossbotBoss/AI
-from toontown.suit import DistributedRenegadeMiniboss/AI
-from toontown.building import DistributedRenegadeElevator/AI
 from toontown.coghq import DistributedCogKart/AI
 from toontown.coghq import DistributedCountryClub/AI
 from toontown.coghq import DistributedCountryClubRoom/AI
@@ -2643,9 +2641,6 @@ dclass DistributedCJElevator : DistributedBossElevator {
 };
 
 dclass DistributedBBElevator : DistributedBossElevator {
-};
-
-dclass DistributedRenegadeElevator : DistributedBossElevator {
 };
 
 dclass DistributedCMElevator : DistributedBossElevator {

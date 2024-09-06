@@ -890,7 +890,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             if not self.twoFaced:
                 neutral = 'Ff_neutral'
             gearTrack = Parallel()
-            for i in xrange(4):
+            for i in xrange(8):
                 nodeName = '%s-%s' % (str(i), globalClock.getFrameTime())
                 node = gearRoot.attachNewNode(nodeName)
                 node.hide()
@@ -1466,7 +1466,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, chatString, CFSpeech))
         seq.append(Wait(4.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
         oldSeq = self.activeIntervals.get(intervalName)
         if oldSeq:
             oldSeq.finish()

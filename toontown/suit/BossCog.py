@@ -4,11 +4,13 @@ from direct.actor import Actor
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import FSM
 from direct.fsm import State
+from toontown.chat.ChatGlobals import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToonPythonUtil import Functor
 from direct.task.Task import Task
 from pandac.PandaModules import *
 from toontown.suit import Suit
+import random
 from toontown.suit import SuitDNA
 from otp.avatar import Avatar
 from toontown.battle import BattleParticles
@@ -60,6 +62,8 @@ class BossCog(Avatar.Avatar):
         self.healthCondition = 0
         self.animDoneEvent = 'BossCogAnimDone'
         self.animIvalName = 'BossCogAnimIval'
+        self.warningSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
+        self.warningSfx2 = loader.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
 
     def delete(self):
         Avatar.Avatar.delete(self)
@@ -540,14 +544,22 @@ class BossCog(Avatar.Avatar):
             if not self.forward:
                 ival = Sequence(Func(self.reverseBody), ival, Func(self.forwardBody))
         elif anim == 'down2Up':
-            ival = Parallel(SoundInterval(self.upSfx, node=self), self.getAngryActorInterval('Fb_down2Up'))
+            ival = Parallel(SoundInterval(self.upSfx), self.getAngryActorInterval('Fb_down2Up'))
             self.raised = 1
         elif anim == 'up2Down':
-            ival = Parallel(SoundInterval(self.downSfx, node=self), self.getAngryActorInterval('Fb_down2Up', playRate=-1))
+            ival = Parallel(SoundInterval(self.downSfx), self.getAngryActorInterval('Fb_down2Up', playRate=-1))
             self.raised = 0
         elif anim == 'throw':
             self.doAnimate(None, raised=1, happy=0, queueNeutral=0)
-            ival = Parallel(Sequence(SoundInterval(self.throwSfx, node=self), duration=0), self.getAngryActorInterval('Fb_UpThrow'))
+            ival = Parallel()
+            if self.dna.dept == 'm' :
+                ival.append(Func(self.setChatAbsolute, random.choice(("Cha-Ching!", "Budget this!", "This isn't legal tender!")), CFSpeech | CFTimeout))
+            elif self.dna.dept == 's':
+                ival.append(Func(self.setChatAbsolute,
+                                 random.choice(("Lemme toss this offer to you!", 'Have a free sample!', 'My products beat out all of Toontown!', "Here's a sale 'geared' towards you!", "Buy one, get the rest free!")),
+                                 CFSpeech | CFTimeout))
+            ival.append(Parallel(Sequence(SoundInterval(self.throwSfx), duration=0),
+                            self.getAngryActorInterval('Fb_UpThrow')))
         elif anim == 'hit':
             if self.raised:
                 self.raised = 0
@@ -570,26 +582,46 @@ class BossCog(Avatar.Avatar):
             pe2.setH(180)
             pe3.setH(90)
             pe4.setH(270)
-            ival = Sequence(Func(self.reverseHead), ActorInterval(self, 'Bb2Ff_spin'), Func(self.forwardHead))
+            ival = Sequence()
+            if self.dna.dept == 'm' :
+                ival.append(Func(self.setChatAbsolute, random.choice(("Why worry about problems when you can shake them off?", "Let me put my spin on this.", "I'm showering you with praise!")), CFSpeech | CFTimeout))
+            elif self.dna.dept == 's' :
+                ival.append(Func(self.setChatAbsolute, random.choice(("You're gonna go nuts and bolts for this offer!",
+                                                                      "Why worry about problems when you can shake them off?",
+                                                                      "Let me put my spin on this.",
+                                                                      "I'm showering you with praise!",
+                                                                      "Let's get these ideas going!")),
+                                 CFSpeech | CFTimeout))
+            ival.append(Sequence(Func(self.reverseHead), Parallel(ActorInterval(self, 'Bb2Ff_spin'), Func(self.forwardHead))))
             if self.forward:
                 ival = Sequence(Func(self.reverseBody), ParallelEndTogether(ival, self.pelvis.hprInterval(0.5, self.pelvisForwardHpr, blendType='easeInOut')))
             ival = Sequence(Track((0, ival), (0, Sequence(SoundInterval(self.spinSfx, node=self))), (1.3, Parallel(SoundInterval(self.rainGearsSfx, node=self), ParticleInterval(pe4, self.leftAttack, worldRelative=0, duration=1.5, cleanup=True), ParticleInterval(pe3, self.rightAttack, worldRelative=0, duration=1.5, cleanup=True), ParticleInterval(pe2, self.backAttack, worldRelative=0, duration=1.5, cleanup=True), ParticleInterval(pe, self.frontAttack, worldRelative=0, duration=1.5, cleanup=True), duration=0)), (1.9, Func(self.bubbleF.unstash)), (1.9, Func(self.bubbleFL.unstash)), (1.9, Func(self.bubbleFR.unstash)), (1.9, Func(self.bubbleB.unstash))), Func(self.bubbleF.stash), Func(self.bubbleFL.stash), Func(self.bubbleFR.stash), Func(self.bubbleB.stash))
             self.forward = 1
-            self.happy = 0
+            self.happy = 1
             self.raised = 1
         elif anim == 'areaAttack':
             if self.twoFaced:
                 self.doAnimate(None, raised=1, happy=0, queueNeutral=0)
             else:
                 self.doAnimate(None, raised=1, happy=1, queueNeutral=1)
-            ival = Parallel(ActorInterval(self, 'Fb_jump'), Sequence(SoundInterval(self.swishSfx, duration=1.1, node=self), SoundInterval(self.boomSfx, duration=1.9)), Sequence(Wait(1.21), Func(self.announceAreaAttack),Wait(.1), Func(self.announceAreaAttack), Wait(.1), Func(self.announceAreaAttack), Wait(.1), Func(self.announceAreaAttack), Wait(.1), Func(self.announceAreaAttack), Wait(.1)))
+            ival = Parallel(ActorInterval(self, 'Fb_jump'),
+                            Sequence(SoundInterval(self.swishSfx, duration=1.1),
+                                     SoundInterval(self.boomSfx, duration=1.9)),
+                            Sequence(Wait(1.21), Func(self.announceAreaAttack), Wait(.1), Func(self.announceAreaAttack),
+                                     Wait(.1), Func(self.announceAreaAttack), Wait(.1), Func(self.announceAreaAttack),
+                                     Wait(.1), Func(self.announceAreaAttack), Wait(.1)))
+
+            if self.dna.dept == 'm' :
+                ival.append(Func(self.setChatAbsolute, "I told you toons to get away from those cranes!", CFSpeech | CFTimeout))
+            elif self.dna.dept == 's' :
+                ival.append(Func(self.setChatAbsolute, random.choice(("It's a clearance sale! All Toons must go!", 'Pay attention to my pitch!', "This deal will knock your socks off!", "We're sweeping the floor with this limited time offer!")), CFSpeech | CFTimeout))
             if self.twoFaced:
                 self.happy = 0
             else:
                 self.happy = 1
             self.raised = 1
         elif anim == 'Fb_fall':
-            ival = Parallel(ActorInterval(self, 'Fb_fall'), Sequence(SoundInterval(self.reelSfx, node=self), SoundInterval(self.deathSfx)))
+            ival = Parallel(ActorInterval(self, 'Fb_fall'), Sequence(SoundInterval(self.reelSfx), SoundInterval(self.deathSfx)))
         elif isinstance(anim, types.StringType):
             ival = ActorInterval(self, anim)
         else:

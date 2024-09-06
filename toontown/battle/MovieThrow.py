@@ -398,11 +398,16 @@ def __throwPie(throw, delay, hitCount, npcs):
             suitPos, suitHpr = battle.getActorPosHpr(suit)
             suitType = getSuitBodyType(suit.getStyleName())
             animTrack = Sequence()
-            #animTrack.append(ActorInterval(suit, 'pie-small-react', duration=0.2))
-            if suitType == 'a':
+            if suitType == 'a' and level <= 5:
+                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.43))
+            elif suitType == 'a':
                 animTrack.append(ActorInterval(suit, 'pie-large-lured', startTime=0))
+            elif suitType == 'b'and level <= 5:
+                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=1.94))
             elif suitType == 'b':
                 animTrack.append(ActorInterval(suit, 'pie-large-lured', startTime=0))
+            elif suitType == 'c' and level <= 5:
+                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.58))
             elif suitType == 'c':
                 animTrack.append(ActorInterval(suit, 'pie-large-lured', startTime=0))
             animTrack.append(Func(battle.unlureSuit, suit))
@@ -430,9 +435,13 @@ def __throwPie(throw, delay, hitCount, npcs):
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=THROW_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
-        if revived != 0:
+        if revived != 0 and suit.isSkeleton:
+            suitResponseTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+        if revived != 0 and not suit.isSkeleton:
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0:
+        if died != 0 and suit.isVirtual:
+            suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
+        if died != 0 and not suit.isVirtual:
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         if suit.maxHP > 0:
             if float(suit.currHP - (value + kbbonus + hpbonus)) / float(suit.maxHP) <= 0.25:
@@ -669,6 +678,8 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
                 bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
             if revived != 0:
                 singleSuitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
+            if suit.virtual and died !=0:
+                singleSuitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
             elif died != 0:
                 singleSuitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
             else:

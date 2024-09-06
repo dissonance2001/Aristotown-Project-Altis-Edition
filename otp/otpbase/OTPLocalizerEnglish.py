@@ -639,6 +639,7 @@ SuitHealingPhrases = ("Thank you.",
 SuitBashPhrases = ("You seem to be in alligator territory.",
                    "Good luck treading theses waters now.",
                    "In just a snap.",
+"It seems we may need a bit of assistance.",
                       "The party's over here fellas!")
 SuitBellowPhrases = ("The outback needs me.",
 "Thank you.",

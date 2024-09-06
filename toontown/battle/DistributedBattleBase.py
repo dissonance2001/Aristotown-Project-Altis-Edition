@@ -457,6 +457,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             suit = self.suits[int(s)]
             if suit != None and self.activeSuits.count(suit) == 0:
                 activeSuits.append(suit)
+                self.needAdjustTownBattle = 1
 
         oldLuredSuits = self.luredSuits
         self.luredSuits = []
@@ -612,6 +613,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 activeToons.append(toon)
 
         if len(activeSuits) > 0 or len(activeToons) > 0:
+            self.__requestAdjustTownBattle()
             self.__makeAvsActive(activeSuits, activeToons)
         if toonGone == 1:
             validToons = []
@@ -638,18 +640,34 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     self.unlockLevelViz()
             if currStateName != 'NoLocalToon':
                 self.localToonFsm.request('NoLocalToon')
-        for suit in self.luredSuits:
-            suit.loop('lured')
-            suit.setDizzy(1)
-            if suit.style.name == 'crf':
-                for headPart in suit.animatedHeadParts:
-                    headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
-            elif suit.style.name == 'mad':
-                for headPart in suit.animatedHeadParts:
-                    headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
-            else:
-                for headPart in suit.animatedHeadParts:
-                    headPart.loop('neutral-lured')
+        self.__requestAdjustTownBattle()
+        for suit in self.activeSuits:
+            if not self.isSuitLured(suit):
+                suit.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+                suit.setDizzy(0)
+                if suit.style.name == 'crf':
+                    for headPart in suit.animatedHeadParts:
+                        headPart.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
+                                      fromFrame=0, toFrame=22)
+                elif suit.style.name == 'mad':
+                    for headPart in suit.animatedHeadParts:
+                        headPart.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
+                                      fromFrame=0, toFrame=22)
+                else:
+                    for headPart in suit.animatedHeadParts:
+                        headPart.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+            elif self.isSuitLured(suit):
+                suit.loop('lured')
+                suit.setDizzy(1)
+                if suit.style.name == 'crf':
+                    for headPart in suit.animatedHeadParts:
+                        headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
+                elif suit.style.name == 'mad':
+                    for headPart in suit.animatedHeadParts:
+                        headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
+                else:
+                    for headPart in suit.animatedHeadParts:
+                        headPart.loop('neutral-lured')
         return oldtoons
 
     def adjust(self, timestamp):
@@ -1002,7 +1020,6 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
     def __makeAvsActive(self, suits, toons):
         self.notify.debug('__makeAvsActive()')
-        self.__stopAdjusting()
         for s in suits:
             if self.joiningSuits.count(s):
                 self.notify.warning('suit: %d was in joining list!' % s.doId)
@@ -1015,22 +1032,37 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         if len(self.activeSuits) >= 1:
             for suit in self.activeSuits:
                 suitPos, suitHpr = self.getActorPosHpr(suit)
-                if self.isSuitLured(suit) == 0:
-                    suit.setPosHpr(self, suitPos, suitHpr)
-                else:
-                    spos = Point3(suitPos[0], suitPos[1] - MovieUtil.SUIT_LURE_DISTANCE, suitPos[2])
-                    suit.setPosHpr(self, spos, suitHpr)
+                suit.setPosHpr(self, suitPos, suitHpr)
                 suit.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
                 suit.setDizzy(0)
                 if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        headPart.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''), fromFrame=0, toFrame=22)
+                        for headPart in suit.animatedHeadParts:
+                            headPart.loop(
+                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
+                                fromFrame=0, toFrame=22)
                 elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        headPart.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''), fromFrame=0, toFrame=22)
+                        for headPart in suit.animatedHeadParts:
+                            headPart.loop(
+                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
+                                fromFrame=0, toFrame=22)
                 else:
-                    for headPart in suit.animatedHeadParts:
-                        headPart.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+                        for headPart in suit.animatedHeadParts:
+                            headPart.loop(
+                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+                if self.isSuitLured(suit) == 1:
+                    spos = Point3(suitPos[0], suitPos[1] - MovieUtil.SUIT_LURE_DISTANCE, suitPos[2])
+                    suit.setPosHpr(self, spos, suitHpr)
+                    suit.loop('lured')
+                    suit.setDizzy(1)
+                    if suit.style.name == 'crf':
+                        for headPart in suit.animatedHeadParts:
+                            headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
+                    elif suit.style.name == 'mad':
+                        for headPart in suit.animatedHeadParts:
+                            headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
+                    else:
+                        for headPart in suit.animatedHeadParts:
+                            headPart.loop('neutral-lured')
 
         for toon in toons:
             if self.joiningToons.count(toon):
@@ -1428,7 +1460,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def __adjust(self, ts, callback):
         self.notify.debug('__adjust(%f)' % ts)
         adjustTrack = Parallel()
-        if len(self.pendingSuits) > 0 or self.suitGone == 1:
+        if len(self.pendingSuits) >= 0 or self.suitGone == 1:
             self.suitGone = 0
             numSuits = len(self.pendingSuits) + len(self.activeSuits) - 1
             index = 0

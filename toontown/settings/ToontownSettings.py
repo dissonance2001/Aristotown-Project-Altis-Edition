@@ -33,7 +33,7 @@ DefaultSettings = {
 'want-Custom-Controls': False
 }
 
-AnistrophicOptions = [0, 2, 4, 8, 16]
+AnistrophicOptions = [16]
 
 # Taken from toontown.options.GraphicsOptions
 AspectRatios = [

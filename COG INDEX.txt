@@ -12,25 +12,25 @@ or version 2 cogs, but you can spawn them with as
 many layers as you like.
 
 BOSSBOTS:
-f- Flunky Level 1-8
-p - Pencil Pusher Level 2-9
-ym - Stockbroker Level 2-10 (Operations Analyst)
-mm - Yesman Level 3-10
-ds - Enforcer Level 3-12 (Operations Analyst)
-hh - Micromanager Level 4-12
-cr - Overseer Level 4-15 (Field Specialist)
-tbc - Downsizer Level 5-15
-trb - The Molder Level 5-20 (Operations Analyst)
-dot - Head Hunter Level 6-18
-dvg - Blowhard Level 6-18 (Field Specialist)
-cpl - Corporate Raider Level 7-20
-bkp - Toxic Leader Level 7-20 (Field Specialist)
+f- Flunky Level 1-5
+p - Pencil Pusher Level 2-6
+ym - Stockbroker Level 2-8 (Operations Analyst)
+mm - Yesman Level 3-7
+ds - Enforcer Level 3-9 (Operations Analyst)
+hh - Micromanager Level 4-8
+cr - Overseer Level 4-10 (Field Specialist)
+tbc - Downsizer Level 5-10
+trb - The Molder Level 5-15 (Operations Analyst)
+dot - Head Hunter Level 6-12
+dvg - Blowhard Level 6-12 (Field Specialist)
+cpl - Corporate Raider Level 7-15
+bkp - Toxic Leader Level 7-15 (Field Specialist)
 kpn - The Big Cheese Level 8-25
 cg - Autocaddie Level 14-15.exe
 bg - Club President Level 18.mgr
 msr - Derrick Man Level 5.mgr
-kb - Derrick Hand Level 25.mgr
-ts - Derrick Hybrid Level 25.mgr
+kb - Derrick Hand Level 25.mgr v2.0 (soon)
+ts - Director Of Ambush Marketing Level 25.mgr
 tc - Firestarter Level 20.mgr
 tg - Featherbedder Level 30.mgr
 tb - Major Player Level 88.mgr
@@ -42,27 +42,27 @@ frs - Wiretapper Level 44.mgr
 gtk - Ambassador Level 48.mgr
 
 LAWBOTS:
-bf - Bottom Feeder Level 1-8
-b - Bloodsucker Level 2-9
-dt - Pettifogger Level 2-10 (Operations Analyst)
-ac - Double Talker Level 3-10
-bs - Conveyancer Level 3-12 (Operations Analyst)
-sd - Ambulance Chaser Level 4-12
-le - Needlenose Level 4-15 (Field Specialist)
-bw - Back Stabber Level 5-15
-brv - Advocate Level 5-20 (Operations Analyst)
-sb - Spin Doctor Level 6-18
-cfp - Shyster Level 6-18 (Field Specialist)
-arb - Legal Eagle Level 7-20
-sjg - Barrister Level 7-20 (Field Specialist)
+bf - Bottom Feeder Level 1-5
+b - Bloodsucker Level 2-6
+dt - Pettifogger Level 2-8 (Operations Analyst)
+ac - Double Talker Level 3-7
+bs - Conveyancer Level 3-9 (Operations Analyst)
+sd - Ambulance Chaser Level 4-8
+le - Needlenose Level 4-10 (Field Specialist)
+bw - Back Stabber Level 5-10
+brv - Advocate Level 5-15 (Operations Analyst)
+sb - Spin Doctor Level 6-12
+cfp - Shyster Level 6-12 (Field Specialist)
+arb - Legal Eagle Level 7-15
+sjg - Barrister Level 7-15 (Field Specialist)
 lsc - Big Wig Level 8-25
-jdg - Arbitrator Level 15-20.exe
+jdg - Magistrate Level 15-20.exe
 jur - Head Attorney Level 16.mgr
 tlr - Atticus Wing Level 50.mgr
 cm - Judy Level 20.mgr
 ggm - Mouthpiece Level 16.mgr
 th - Rainmaker Level 16.mgr
-kc - Witch Hunter Level 20.mgr snow
+kc - Witch Hunter Level 20.mgr 
 tr - Count Erclaim Level 20.mgr
 mp - Redd "Heir" Wing Level 20.mgr
 laa - The Witness Stand-In Level 50.mgr
@@ -72,19 +72,19 @@ ste - Stenographer Level 35.mgr
 lit - Litigator Level 40.mgr
 
 CASHBOTS:
-sc - Short Change Level 1-8
-pp - Penny Pincher Level 2-9
-tw - Patronizer Level 2-10 (Field Specialist)
-bc - Tightwad Level 3-10
-nc - The Swindler Level 3-12 (Field Specialist)
-mb - Bean Counter Level 4-12
-ls - Entrepreneur Level 4-15 (Operations Analyst)
-rb - Number Cruncher Level 5-15
-gm - Mercenary Level 5-20 (Field Specialist)
-ad - Money Bags Level 6-18
-cvy - Treasurer Level 6-18 (Field Specialist)
-ptr - Loan Shark Level 7-20
-mld - Big Fish Level 7-20 (Field Specialist)
+sc - Short Change Level 1-5
+pp - Penny Pincher Level 2-6
+tw - Patronizer Level 2-8 (Field Specialist)
+bc - Tightwad Level 3-7
+nc - The Swindler Level 3-9 (Field Specialist)
+mb - Bean Counter Level 4-8
+ls - Entrepreneur Level 4-10 (Operations Analyst)
+rb - Number Cruncher Level 5-10
+gm - Mercenary Level 5-15 (Field Specialist)
+ad - Money Bags Level 6-12
+cvy - Treasurer Level 6-12 (Field Specialist)
+ptr - Loan Shark Level 7-15
+mld - Big Fish Level 7-15 (Field Specialist)
 pht - Robber Baron Level 8-25
 csh - Mint Auditor Level 10-12.exe
 bgr - Mint Supervisor Level 13.mgr
@@ -96,25 +96,25 @@ jl - Hydra Level 22.mgr
 gb - Kerberos Level 23.mgr
 lbs - Charon Level 25.mgr
 trk - Plutocrat Level 38.mgr
-dsf - Low Baller(HR) Level 25.mgr v2.0
+dsf - Low Roller Level 100.mgr
 msp - Count Erfit Level 20.mgr
-mad - Low Roller Level 50.mgr v2.0
+mad - High Roller Silhouette Level 25.mgr
 crf - High Roller Level 100.mgr
 
 SELLBOTS:
-cc - Cold Caller Level 1-8
-tm - Telemarketer Level 2-9
-nd - Connoisseur Level 2-10 (Field Specialist) CHANGE
-gh - Name Dropper Level 3-10
-ms - Lobbyist Level 3-12 (Operations Analyst)
-tf - Glad Hander Level 4-12
-m - Quota Crusher Level 4-15 (Operations Analyst)
-mh - Mover & Shaker Level 5-15
-ka - Candidate Level 5-20 (Field Specialist)
-mka - Two-Face Level 6-18
-trm - Assembly Assassin Level 6-18 (Field Specialist)
-ssm - The Mingler Level 7-20
-isw - Overtimer Level 7-20 (Field Specialist)
+cc - Cold Caller Level 1-5
+tm - Telemarketer Level 2-6
+nd - Connoisseur Level 2-8 (Field Specialist)
+gh - Name Dropper Level 3-7
+ms - Lobbyist Level 3-9 (Operations Analyst)
+tf - Glad Hander Level 4-8
+m - Quota Crusher Level 4-10 (Operations Analyst)
+mh - Mover & Shaker Level 5-10
+ka - Candidate Level 5-15 (Field Specialist)
+mka - Two-Face Level 6-12
+trm - Assembly Assassin Level 6-12 (Field Specialist)
+ssm - The Mingler Level 7-15
+isw - Overtimer Level 7-15 (Field Specialist)
 ssr - Mr. Hollywood Level 8-25
 fas - Safe-ty Supervisor Level 8-10.exe
 mdr - Factory Foreman Level 11.mgr
@@ -125,26 +125,26 @@ jb - Mr. Hollywood (MP) Level 25.exe v2.0
 jg - Prethinker Level 12.mgr
 jr - Multislacker Level 24.mgr
 prr - Videographer Level 90.mgr
-blr - Radiographer Level 30.mgr
-dvp - Perpetrator Level 35.mgr
-dsk - Union Buster Level 35.mgr
-ffm - Streamliner Level 40.mgr
+blr - Radiographer Level 35.mgr
+dvp - Cloud Seeder Level 40.mgr
+dsk - Union Buster Level 40.mgr
+ffm - Safe-ty Supervisor Level 45.mgr
 sft - Pacesetter Level 66.mgr
 
 BOARDBOTS(WIP):
-ca - Bagholder Level 1-8
-cn - Paper Hands Level 2-9
-sw - Con Artist Level 2-10 (Operations Analyst)
-mdm - The Insider Level 3-10
-txm - Middleman Level 3-12 (Field Specialist)
-mg - Circuit Breaker Level 4-12
-bfh - Toxic Manager Level 4-15 (Operations Analyst) 
-hho - Deadlock Level 5-15
-bdb - Renegade Level 5-20 (Field Specialist)
-bgh - Shark Watcher Level 6-18
-dfh - Big Fish Level 6-18 (Field Specialist) 
-rng - Magnate Level 7-20
-cps - Chairwarmer Level 7-20 (Field Specialist)
+ca - Bagholder Level 1-5
+cn - Paper Hands Level 2-6
+sw - Con Artist Level 2-8 (Operations Analyst)
+mdm - The Insider Level 3-7
+txm - Middleman Level 3-9 (Field Specialist)
+mg - Circuit Breaker Level 4-8
+bfh - Toxic Manager Level 4-10 (Operations Analyst) 
+hho - Deadlock Level 5-10
+bdb - Renegade Level 5-15 (Field Specialist)
+bgh - Shark Watcher Level 6-12
+dfh - Big Fish Level 6-12 (Field Specialist) 
+rng - Magnate Level 7-15
+cps - Chairwarmer Level 7-15 (Field Specialist)
 tld - Head Honcho Level 8-25
 gkp - Chairperson Level 15-18.exe
 ddv - Board Director Level 20.mgr
@@ -162,19 +162,19 @@ cry - Crystalline Level 77.mgr
 tcm - The Chairman Level 100.mgr
 
 TECHBOTS:
-skd- Script Kiddie Level 1-8 
-cmk - Code Monkey Level 2-9 
-phs - Phisher Level 2-10 (Operations Analyst) 
-vpr - Voodoo Programmer Level 3-10 
-kyl - Computerist Level 3-12 (Field Specialist) 
-sdb - Shotgun Debugger Level 4-12 
-gry - Grey Hat Level 4-15 (Operations Analyst) 
-kbc - Keyboard Cowboy Level 5-15 
-shp - Sharp Seer Level 5-20 (Field Specialist) 
-sfs - Software Simian Level 6-18 
-pyc - Python Charmer Level 6-18 (Field Specialist) 
-inw - Installer Wizard Level 7-20 
-sys - Sysadmin Level 7-20 (Field Specialist) 
+skd- Script Kiddie Level 1-5 
+cmk - Code Monkey Level 2-6
+phs - Phisher Level 2-8 (Operations Analyst) 
+vpr - Voodoo Programmer Level 3-7 
+kyl - Computerist Level 3-9 (Field Specialist) 
+sdb - Shotgun Debugger Level 4-8 
+gry - Grey Hat Level 4-10 (Operations Analyst) 
+kbc - Keyboard Cowboy Level 5-10 
+shp - Sharp Seer Level 5-15 (Field Specialist) 
+sfs - Software Simian Level 6-12 
+pyc - Python Charmer Level 6-12 (Field Specialist) 
+inw - Installer Wizard Level 7-15 
+sys - Sysadmin Level 7-15 (Field Specialist) 
 rus - Root User Level 8-25 
 ant - Antivirus Level 15-20.exe 
 sya - Senior Developer Level 20.mgr 

@@ -1,12 +1,10 @@
 from toontown.building import DistributedBBElevatorAI
-from toontown.building import DistributedRenegadeElevatorAI
 from toontown.building import FADoorCodes
 from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPartyAI
 from toontown.coghq import DistributedCogKartAI
 from toontown.hood import CogHQAI
 from toontown.suit import DistributedBossbotBossAI
 from toontown.suit import DistributedSuitPlannerAI
-from toontown.suit import DistributedRenegadeMinibossAI
 from toontown.toonbase import ToontownGlobals
 
 class BossbotHQAI(CogHQAI.CogHQAI):
@@ -20,8 +18,8 @@ class BossbotHQAI(CogHQAI.CogHQAI):
         CogHQAI.CogHQAI.__init__(
             self, air, ToontownGlobals.BossbotHQ, ToontownGlobals.BossbotLobby,
             FADoorCodes.BB_DISGUISE_INCOMPLETE,
-            DistributedRenegadeElevatorAI.DistributedRenegadeElevatorAI,
-            DistributedRenegadeMinibossAI.DistributedRenegadeMinibossAI)
+            DistributedBBElevatorAI.DistributedBBElevatorAI,
+            DistributedBossbotBossAI.DistributedBossbotBossAI)
 
         self.cogKarts = []
         self.courseBoardingParty = None

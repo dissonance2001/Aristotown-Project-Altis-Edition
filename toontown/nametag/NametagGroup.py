@@ -309,6 +309,10 @@ class NametagGroup:
         self.chatPages = []
         self.chatPageIndex = 0
 
+        for nametag in self.nametags:
+            nametag.setChatText('')
+            nametag.update()
+
 
         if task is not None:
             return Task.done

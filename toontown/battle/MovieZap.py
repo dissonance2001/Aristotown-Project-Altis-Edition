@@ -155,7 +155,18 @@ def createSuitResetPosTrack(suit, battle):
 
 def __soakRemoval(suit, remove=0):
     if remove:
-        color = Point4(1.0, 1.0, 1.0, 1.0)
+        if suit.style.name == 'jl':
+            color = Point4((0.729, 0.729, 0.729, 1))
+        elif suit.style.name == 'lbs':
+            color = Point4((0.51, 0.49, 0.467, 1))
+        elif suit.style.name == 'fb':
+            color = Point4((0.6, 0.6, 0.6, 1))
+        elif suit.style.name == 'tcc':
+            color = Point4((0.671, 0.671, 0.671, 1))
+        elif suit.style.name == 'gb':
+            color = Point4((0.62, 0.659, 0.624, 1))
+        else:
+            color = Point4(1.0, 1.0, 1.0, 1.0)
     else:
         color = SoakColor
     if suit.isSkeleton:
@@ -163,6 +174,13 @@ def __soakRemoval(suit, remove=0):
     else:
         suitBody = [suit.find('**/body'), suit.find('**/hands')]
     suitInterval = Sequence()
+    if suit.style.name == 'lit':
+        for headPart in suit.headParts:
+            suitInterval.append(Func(headPart.hide))
+        suit.generateHead3('litigator', animated=True)
+        texture = loader.loadTexture('phase_11/maps/ttcc_ene_litigator.png')
+        for headPart in suit.headParts:
+            headPart.setTexture(texture, 1)
     for bodyPart in suitBody:
         if bodyPart:
             suitInterval.append(Func(bodyPart.setColor, color))
@@ -195,7 +213,9 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=ZAP_TRACK))
             bonusTrack.append(updateHealthBar)
-        if died != 0:
+        if died != 0 and suit.isVirtual:
+            suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
+        if died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.shortCircuitTrack(suit, battle))
         else:
             suitTrack.append(Wait(1.0))
@@ -239,7 +259,9 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
                             )
             suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
             #suitTrack.append(__soakRemoval(suit))
-        if revived != 0:
+        if revived != 0 and suit.isSkeleton:
+            suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+        if revived != 0 and not suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         return Parallel(suitTrack, bonusTrack, zapTracks)
     elif dodge:
