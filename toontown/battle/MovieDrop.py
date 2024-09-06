@@ -352,7 +352,7 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, npcs
         else:
             dropShadow.setPos(suit.getPos(battle))
             dropShadow.setHpr(suit.getHpr(battle))
-            if hp <= 0 and level >= 4:
+            if hp <= 0:
                 dropShadow.setY(dropShadow.getY(battle) + 5)
         dropShadow.setZ(dropShadow.getZ() + 0.5)
 
@@ -398,7 +398,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
             gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
             suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
         bonusTrack = None
-        if died:
+        if died and not suit.isVirtual:
             if majorObject:
                 bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
                                       Func(suit.showHpText, -hpbonus, 1),
@@ -406,7 +406,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
                 suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit, battle))
                 suitTrack.append(suitGettingHit)
                 return Parallel(suitTrack, bonusTrack)
-            elif not suit.getSkelecog():
+            else:
                 #headless = True
                 sequence = Sequence(Wait(random.uniform(0.25, 2.0)))
                 thing = Parallel(sequence, MovieUtil.spawnHeadExplosion(suit, battle))
@@ -414,12 +414,18 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         suitTrack.append(suitGettingHit)
         if hpbonus > 0:
             bonusTrack = Sequence(Wait(delay + tObjectAppears + 1), Func(suit.showHpText, -hpbonus, 1), Func(suit.updateHealthBar, hpbonus))
-        if revived != 0:
+        if revived != 0 and suit.isSkeleton:
+            suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+        elif revived != 0 and not suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0:
+        elif died != 0 and suit.isVirtual:
+            suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
+        elif died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
         elif suit.maxHP > 0:
-            if (float(suit.currHP - (hp + hpbonus)) / float(suit.maxHP)) <= 0.25:
+            if (float(suit.currHP - (hp + hpbonus)) / float(suit.maxHP)) <= 0:
+                suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit, battle))
+            elif (float(suit.currHP - (hp + hpbonus)) / float(suit.maxHP)) <= 0.25:
                 suitTrack.append(Func(suit.loop, 'neutral-hurt'))
                 if suit.style.name == 'crf':
                     for headPart in suit.animatedHeadParts:
@@ -459,17 +465,14 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         if bonusTrack != None:
             suitTrack = Parallel(suitTrack, bonusTrack)
     elif kbbonus == 0:
-        suitTrack = Sequence(Wait(delay + tObjectAppears), Func(MovieUtil.indicateMissed, suit, 0.6))
+        suitTrack = MovieUtil.createSuitTeaseMultiTrack(suit, battle, delay=delay + tObjectAppears)
     else:
-        if alreadyDodged > 0:
+        if hitSuit:
             return
-        if majorObject:
-            if alreadyTeased > 0:
-                return
-            else:
-                suitTrack = MovieUtil.createSuitTeaseMultiTrack(suit, delay=delay + tObjectAppears)
+        if alreadyTeased > 0:
+            return
         else:
-            suitTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
+            suitTrack = MovieUtil.createSuitTeaseMultiTrack(suit, battle, delay=delay + tObjectAppears)
     return suitTrack
 
 def suitCrashTrack(suit):

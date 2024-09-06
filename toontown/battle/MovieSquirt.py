@@ -172,15 +172,16 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             animTrack = Sequence()
             animTrack.append(ActorInterval(suit, anim, duration=0.2))
             if suitType == 'a':
-                animTrack.append(ActorInterval(suit, 'slip-backward', startTime=0))
+                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.43))
             elif suitType == 'b':
-                animTrack.append(ActorInterval(suit, 'slip-backward', startTime=0))
+                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=1.94))
             elif suitType == 'c':
-                animTrack.append(ActorInterval(suit, 'slip-backward', startTime=0))
+                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.58))
             animTrack.append(Func(battle.unlureSuit, suit))
             moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
             sival = Parallel(animTrack, moveTrack)
         elif geyser:
+            animTrack = Sequence()
             suitStartPos = suit.getPos()
             suitFloat = Point3(0, 0, 14)
             suitEndPos = Point3(suitStartPos[0] + suitFloat[0], suitStartPos[1] + suitFloat[1], suitStartPos[2] + suitFloat[2])
@@ -194,6 +195,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             else:
                 startFlailFrame = 15
                 endFlailFrame = 15
+            animTrack.append(Func(battle.unlureSuit, suit))
             sival = Sequence(ActorInterval(suit, 'slip-backward', playRate=0.5, startFrame=0, endFrame=startFlailFrame - 1), Func(suit.pingpong, 'slip-backward', fromFrame=startFlailFrame, toFrame=endFlailFrame), Wait(0.5), ActorInterval(suit, 'slip-backward', playRate=1.0, startFrame=endFlailFrame))
             sUp = LerpPosInterval(suit, 1.1, suitEndPos, startPos=suitStartPos, fluid=1)
             sDown = LerpPosInterval(suit, 0.6, suitStartPos, startPos=suitEndPos, fluid=1)
@@ -201,7 +203,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             sival = Parallel(ActorInterval(suit, anim), MovieUtil.createSuitStunInterval(suit, beforeStun, afterStun))
         else:
             sival = ActorInterval(suit, anim)
-        soakTracks.append(__soakSuit(suit, tContact))
+        #soakTracks.append(__soakSuit(suit, tContact))
         showDamage = Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK)
         value = hp
         #if kbbonus > 0:
@@ -210,6 +212,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             #value += hpbonus
         updateHealthBar = Func(suit.updateHealthBar, value)
         suitTrack.append(Wait(tContact))
+        suitTrack.append(__soakSuit(suit, tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
         durationToWait = 0
@@ -234,9 +237,13 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=SQUIRT_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
-        if revived != 0:
+        if revived != 0 and suit.isSkeleton:
+            suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+        if revived != 0 and not suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0:
+        if died != 0 and suit.isVirtual:
+            suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
+        if died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         if suit.maxHP > 0:
             if float(suit.currHP - (value + kbbonus + hpbonus)) / float(suit.maxHP) <= 0.25:
@@ -324,9 +331,19 @@ def __soakSuit(suit, tContact, remove=0):
     if suit.isSkeleton:
         suitBody = [suit]
     else:
-        suitBody = [suit.find('**/body'), suit.find('**/hands')]
+        if suit.style.name == 'lit':
+            suit.generateHead3('litigator-nf', animated=True)
+            suitBody = [suit.find('**/body'), suit.find('**/hands')]
+        else:
+            suitBody = [suit.find('**/body'), suit.find('**/hands')]
     suitInterval = Sequence()
-    suitInterval.append(Wait(tContact))
+    if suit.style.name == 'lit':
+        for headPart in suit.headParts:
+            suitInterval.append(Func(headPart.hide))
+        suit.generateHead3('litigator-nf', animated=True)
+        texture = loader.loadTexture('phase_11/maps/ttcc_ene_litigator.png')
+        for headPart in suit.headParts:
+            headPart.setTexture(texture, 1)
     for bodyPart in suitBody:
         if bodyPart:
             suitInterval.append(Func(bodyPart.setColor, color))

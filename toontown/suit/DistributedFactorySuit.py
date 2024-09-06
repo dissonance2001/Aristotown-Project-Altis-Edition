@@ -6,6 +6,7 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.suit import DistributedSuitBase
 from direct.task.Task import Task
 import random
+from . import Suit
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from otp.level import LevelConstants
@@ -426,16 +427,7 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
     def setVirtual(self, isVirtual = 1):
         self.virtual = isVirtual
         if self.virtual:
-            actorNode = self.find('**/__Actor_modelRoot')
-            actorCollection = actorNode.findAllMatches('*')
-            parts = ()
-            for thingIndex in xrange(0, actorCollection.getNumPaths()):
-                thing = actorCollection[thingIndex]
-                if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
-                    thing.setColorScale(1.0, 0.0, 0.0, 1.0)
-                    thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
-                    thing.setDepthWrite(False)
-                    thing.setBin('fixed', 1)
+            self.virtualize(self.healthCondition)
 
     def getVirtual(self):
         return self.virtual

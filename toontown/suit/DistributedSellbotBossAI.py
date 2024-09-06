@@ -125,16 +125,19 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
         if self.attackCode == ToontownGlobals.BossCogDizzyNow:
             attackCode = ToontownGlobals.BossCogRecoverDizzyAttack
         else:
-            attackCode = random.choice([ToontownGlobals.BossCogAreaAttack,
+            attackCode = random.choice([
              ToontownGlobals.BossCogFrontAttack,
-             ToontownGlobals.BossCogDirectedAttack,
-             ToontownGlobals.BossCogDirectedAttack,
-             ToontownGlobals.BossCogDirectedAttack,
+                                        ToontownGlobals.BossCogGolfAttack,
+                ToontownGlobals.BossCogGolfAttack,
+                ToontownGlobals.BossCogGolfAreaAttack,
+                                        ToontownGlobals.BossCogGolfAreaAttack,
              ToontownGlobals.BossCogDirectedAttack])
         if attackCode == ToontownGlobals.BossCogAreaAttack:
             self.__doAreaAttack()
         elif attackCode == ToontownGlobals.BossCogDirectedAttack:
             self.__doDirectedAttack()
+        elif attackCode == ToontownGlobals.BossCogGolfAreaAttack:
+            self.__doGolfAreaAttack()
         else:
             self.b_setAttackCode(attackCode)
 
@@ -147,12 +150,20 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
         now = globalClock.getFrameTime()
         self.b_setBossDamage(self.getBossDamage(), newRecoverRate, now)
 
-    def __doDirectedAttack(self):
-        if self.nearToons:
-            toonId = random.choice(self.nearToons)
-            self.b_setAttackCode(ToontownGlobals.BossCogDirectedAttack, toonId)
+    def __doGolfAreaAttack(self):
+        if self.attackCode == ToontownGlobals.BossCogDizzyNow:
+            pass
+        if self.recoverRate:
+            newRecoverRate = min(200, self.recoverRate * 1.2)
         else:
-            self.__doAreaAttack()
+            newRecoverRate = 2
+        now = globalClock.getFrameTime()
+        self.b_setBossDamage(self.getBossDamage(), newRecoverRate, now)
+        self.b_setAttackCode(ToontownGlobals.BossCogGolfAreaAttack)
+
+    def __doDirectedAttack(self):
+        toonId = random.choice(self.involvedToons)
+        self.b_setAttackCode(ToontownGlobals.BossCogDirectedAttack, toonId)
 
     def b_setBossDamage(self, bossDamage, recoverRate, recoverStartTime):
         self.d_setBossDamage(bossDamage, recoverRate, recoverStartTime)
@@ -450,11 +461,6 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
                 toon.b_promote(self.deptIndex)
                 toon.addStat(ToontownGlobals.STATS_VP)
                 simbase.air.questManager.toonDefeatedBoss(toon, ToontownGlobals.dept2cogHQ(self.dept), self.dna.dept, self.involvedToons)
-            if len(self.involvedToons[:]) == 1 and self.begunSolo:
-                isSolo = 1
-            else:
-                isSolo = 0
-            self.air.achievementsManager.vp(toonId, solo = isSolo)
 
     def exitVictory(self):
         self.takeAwayPies()

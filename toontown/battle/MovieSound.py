@@ -105,9 +105,92 @@ def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamag
                 suitTrack.append(updateHealthBar)
                 suitTrack.append(toonTrack)
             if hitCount == 1:
-                suitTrack.append(Parallel(ActorInterval(suit, 'sound-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                if suit.style.dept == 'l':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'th':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dvp':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'msp':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'tr':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'mad':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'crf':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dsf':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'jl':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'fm':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'sft':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'mdm':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dvk':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dfg':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dty':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dar':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                else:
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
             else:
-                suitTrack.append(Parallel(ActorInterval(suit, 'sound-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                if suit.style.dept == 'l':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'th':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dvp':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'msp':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'tr':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'mad':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'crf':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dsf':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'jl':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'fm':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'sft':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'mdm':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dvk':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dfg':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dty':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'dar':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                else:
+                    suitTrack.append(
+                        Parallel(ActorInterval(suit, 'sound-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
             if kbbonus == 0:
                 suitTrack.append(__createSuitResetPosTrack(suit, battle))
                 suitTrack.append(Func(battle.unlureSuit, suit))
@@ -157,8 +240,32 @@ def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamag
             else:
                 tracks.append(Parallel(suitTrack, bonusTrack))
         elif totalDamage <= 0:
+            battle = sound['battle']
+            if battle.isSuitLured(suit) == 1:
+                tracks.append(__createSuitResetPosTrack(suit, battle))
+                tracks.append(Func(battle.unlureSuit, suit))
+                if suit.style.name == 'crf':
+                    for headPart in suit.animatedHeadParts:
+                        headLoop = Func(headPart.loop,
+                                        'neutral%s' % (
+                                            '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
+                                        fromFrame=0, toFrame=22)
+                        tracks.append(headLoop)
+                if suit.style.name == 'mad':
+                    for headPart in suit.animatedHeadParts:
+                        headLoop = Func(headPart.loop,
+                                        'neutral%s' % (
+                                            '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
+                                        fromFrame=0, toFrame=22)
+                        tracks.append(headLoop)
+                else:
+                    for headPart in suit.animatedHeadParts:
+                        headLoop = Func(headPart.loop,
+                                        'neutral%s' % (
+                                            '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+                        tracks.append(headLoop)
             tracks.append(Sequence(Wait(2.9), Func(MovieUtil.indicateMissed, suit, 1.0)))
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, delay + tSuitReact))
+            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, delay + tSuitReact))
 
     return tracks
 	
@@ -227,9 +334,13 @@ def __doSoundsLevel(sounds, delay, hitCount, npcs):
             suit = target['suit']
             died = target['died']
             revived = target['revived']
-            if revived:
+            if revived != 0 and suit.isSkeleton:
+                deathTracks.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+            if revived != 0 and not suit.isSkeleton:
                 deathTracks.append(MovieUtil.createSuitReviveTrack(suit, battle))
-            elif died:
+            if died != 0 and suit.isVirtual:
+                deathTracks.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
+            elif died and not suit.isVirtual:
                 if (sound['level'] >= 7) and (totalDamage >= target['hp']):
                     deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
                 else:

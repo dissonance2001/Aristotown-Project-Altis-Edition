@@ -38,55 +38,72 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     CogdoPopFactor = config.GetFloat('cogdo-pop-factor', 1.5)
     CogdoRatio = 0
     SuitHoodInfo = [
-        [ToontownGlobals.ToontownCentralOld, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (30, 30, 0, 0, 20, 20), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.SillyStreet, 8, 20, 0, 5, 20, 3, (1, 5, 10, 40, 60, 80), (20, 20, 15, 15, 15, 15), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [],
-         0],
-        [ToontownGlobals.LoopyLane, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 40, 5, 5, 10, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.PunchlinePlace, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (5, 5, 30, 30, 10, 20), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [],
-         0],
-        [ToontownGlobals.WackyWay, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 20, 5, 5, 20, 20),(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.BarnacleBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (70, 10, 0, 0, 10, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+        [ToontownGlobals.ToontownCentralOld, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (30, 30, 0, 0, 20, 20),
+         (1, 2, 3, 4, 5), [], 0],
+        [ToontownGlobals.SillyStreet, 8, 20, 0, 5, 20, 3, (1, 5, 10, 40, 60, 80), (20, 20, 15, 15, 15, 15),
+         (1, 2, 3, 4, 5), [], 0],
+        [ToontownGlobals.LoopyLane, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 40, 5, 5, 10, 10), (1, 2, 3, 4, 5),
          [], 0],
-        [ToontownGlobals.SeaweedStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 10, 50, 30, 0, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-         [], 0],
-        [ToontownGlobals.LighthouseLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 40, 10, 10, 30, 0), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.AhoyAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 0, 0, 40, 10, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [],
-         0],
-        [ToontownGlobals.WalrusWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (65, 5, 0, 0, 20, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.SleetStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 30, 40, 10, 20), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-         [], 0],
-        [ToontownGlobals.PolarPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 75, 5, 5, 5, 5), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.ArcticAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 5, 5, 10, 60, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [],
-         0],
-        [ToontownGlobals.AltoAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 25, 50, 20, 5), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.BaritoneBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 40, 10, 45, 5), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-         [], 0],
-        [ToontownGlobals.TenorTerrace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 40, 0, 0, 10, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-         [], 0],
-        [ToontownGlobals.SopranoStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 75, 5, 5, 5), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),  [],
-         0],
-        [ToontownGlobals.ElmStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 40, 10, 10, 30), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.MapleStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (30, 50, 0, 0, 10, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-         [], 0],
-        [ToontownGlobals.OakStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 5, 70, 5, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.RoseValley, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 10, 20, 10, 10, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.AcornAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 10, 10, 20, 40, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [],
-         0],
-        [ToontownGlobals.PeanutPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 20, 30, 30, 10, 10), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-         [], 0],
-        [ToontownGlobals.WalnutWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (75, 5, 5, 5, 5, 5), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),  [],
-         0],
-        [ToontownGlobals.LegumeLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 40, 35, 0, 0, 5), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [],
-         0],
-        [ToontownGlobals.LullabyLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 20, 20, 20, 15, 5), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.PajamaPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 5, 5, 75, 5), (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-         [], 0],
-        [ToontownGlobals.BossbotHQ, 8, 30, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (100, 0, 0, 0, 0, 0), (8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
-        [ToontownGlobals.SellbotHQ, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 15, 20, 15, 15, 15), (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
-        [ToontownGlobals.SellbotFactoryExt, 8, 70, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 15, 20, 15, 15, 15), (8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
-        [ToontownGlobals.CashbotHQ, 8, 100, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 100, 0, 0, 10), (8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
-        [ToontownGlobals.LawbotHQ, 8, 50, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 100, 0, 0, 0, 10), (8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0],
-        [19000, 8, 20, 0, 0, 0, 4, (1, 5, 10, 40, 60, 80), (0, 0, 0, 0, 100, 0), (8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), [], 0]]
+        [ToontownGlobals.PunchlinePlace, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (5, 5, 30, 30, 10, 20),
+         (1, 2, 3, 4, 5), [], 0],
+        [ToontownGlobals.WackyWay, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 20, 5, 5, 20, 20),
+         (1, 2, 3, 4, 5, 6), [], 0],
+        [ToontownGlobals.BarnacleBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (70, 10, 0, 0, 10, 10),
+         (2, 3, 4, 5, 6), [], 0],
+        [ToontownGlobals.SeaweedStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 10, 50, 30, 0, 10),
+         (2, 3, 4, 5, 6), [], 0],
+        [ToontownGlobals.LighthouseLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 40, 10, 10, 30, 0),
+         (2, 3, 4, 5, 6), [], 0],
+        [ToontownGlobals.AhoyAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 0, 0, 40, 10, 10),
+         (3, 4, 5, 6, 7), [], 0],
+        [ToontownGlobals.WalrusWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (65, 5, 0, 0, 20, 10),
+         (6, 7, 8, 9, 10), [], 0],
+        [ToontownGlobals.SleetStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 30, 40, 10, 20),
+         (6, 7, 8, 9), [], 0],
+        [ToontownGlobals.PolarPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 75, 5, 5, 5, 5),
+         (6, 7, 8, 9, 10, 11), [], 0],
+        [ToontownGlobals.ArcticAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 5, 5, 10, 60, 10),
+         (7, 8, 9, 10, 11, 12), [], 0],
+        [ToontownGlobals.AltoAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 25, 50, 20, 5),
+         (5, 6, 7, 8, 9), [], 0],
+        [ToontownGlobals.BaritoneBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 40, 10, 45, 5),
+         (5, 6, 7, 8, 9, 10), [], 0],
+        [ToontownGlobals.TenorTerrace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 40, 0, 0, 10, 10),
+         (5, 6, 7, 8, 9, 10), [], 0],
+        [ToontownGlobals.SopranoStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 75, 5, 5, 5),
+         (5, 6, 7, 8, 9, 10, 11), [], 0],
+        [ToontownGlobals.ElmStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 40, 10, 10, 30),
+         (3, 4, 5, 6, 7), [], 0],
+        [ToontownGlobals.MapleStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (30, 50, 0, 0, 10, 10),
+         (3, 4, 5, 6, 7), [], 0],
+        [ToontownGlobals.OakStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 5, 70, 5, 10),
+         (3, 4, 5, 6, 7, 8), [], 0],
+        [ToontownGlobals.RoseValley, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 10, 20, 10, 10, 10),
+         (3, 4, 5, 6, 7), [], 0],
+        [ToontownGlobals.AcornAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 10, 10, 20, 40, 10),
+         (6, 7, 8, 9, 10, 11, 12), [], 0],
+        [ToontownGlobals.PeanutPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 20, 30, 30, 10, 10),
+         (6, 7, 8, 9, 10, 11, 12), [], 0],
+        [ToontownGlobals.WalnutWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (75, 5, 5, 5, 5, 5),
+         (6, 7, 8, 9, 10, 11, 12), [], 0],
+        [ToontownGlobals.LegumeLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 40, 35, 0, 0, 5),
+         (6, 7, 8, 9, 10, 11, 12), [], 0],
+        [ToontownGlobals.LullabyLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 20, 20, 20, 15, 5),
+         (7, 8, 9, 10, 11, 12, 13, 14), [], 0],
+        [ToontownGlobals.PajamaPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 5, 5, 75, 5),
+         (7, 8, 9, 10, 11, 12, 13, 14), [], 0],
+        [ToontownGlobals.BossbotHQ, 8, 30, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (100, 0, 0, 0, 0, 0),
+         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+        [ToontownGlobals.SellbotHQ, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 15, 20, 15, 15, 15),
+         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+        [ToontownGlobals.SellbotFactoryExt, 8, 70, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 15, 20, 15, 15, 15),
+         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+        [ToontownGlobals.CashbotHQ, 8, 100, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 100, 0, 0, 10),
+         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+        [ToontownGlobals.LawbotHQ, 8, 50, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 100, 0, 0, 0, 10),
+         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+        [19000, 8, 20, 0, 0, 0, 4, (1, 5, 10, 40, 60, 80), (0, 0, 0, 0, 100, 0),
+         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0]]
     
     SUIT_HOOD_INFO_ZONE = 0
     SUIT_HOOD_INFO_MIN = 1
@@ -100,8 +117,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     SUIT_HOOD_INFO_LVL = 9
     SUIT_HOOD_INFO_HEIGHTS = 10
     SUIT_HOOD_INFO_ECHANCE = 11
-    MAX_SUIT_TYPES = 8
-    MAX_SUIT_TYPES_HQ = 16
+    MAX_SUIT_TYPES = 10
+    MAX_SUIT_TYPES_HQ = 14
     HQ_SKELE_CHANCE = 0
     POP_UPKEEP_DELAY = 10
     POP_ADJUST_DELAY = 300
@@ -422,11 +439,9 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
             newSuit.setManager(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg':
-            newSuit.setSkeleRevives(1)
+            newSuit.setSkeleRevives(random.choice((1, 2)))
         if newSuit.dna.name == 'cg':
             newSuit.setExecutive(1)
-        if newSuit.dna.name == 'dsf':
-            newSuit.setSkeleRevives(1)
         if newSuit.dna.name == 'jdg':
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'gkp':
@@ -1120,7 +1135,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             self.isElite = True
         if type is None:
             if ZoneUtil.isCogHQZone(self.zoneId):
-                typeChoices = range(max(level - 15, 8), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
+                typeChoices = range(max(level - 15, 7), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
                 type = random.choice(typeChoices)
                 if random.random() < self.HQ_SKELE_CHANCE:
                     self.skeleChance = 1

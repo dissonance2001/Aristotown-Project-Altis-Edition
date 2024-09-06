@@ -133,9 +133,26 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             self.goons = None
 
     def doNextAttack(self, task):
-        self.__doDirectedAttack()
-        if self.heldObject == None and not self.waitingForHelmet:
-            self.waitForNextHelmet()
+        if self.attackCode == ToontownGlobals.BossCogDizzyNow:
+            attackCode = ToontownGlobals.BossCogRecoverDizzyAttack
+        else:
+            attackCode = random.choice([ToontownGlobals.BossCogAreaAttack,
+                                        ToontownGlobals.BossCogFrontAttack,
+                                        ToontownGlobals.BossCogSlowDirectedAttack,
+                                        ToontownGlobals.BossCogAreaAttack,
+                                        ToontownGlobals.BossCogSlowDirectedAttack,
+                                        ToontownGlobals.BossCogSlowDirectedAttack])
+        if attackCode == ToontownGlobals.BossCogAreaAttack:
+            self.__doAreaAttack()
+        elif attackCode == ToontownGlobals.BossCogSlowDirectedAttack:
+            self.__doDirectedAttack()
+        elif attackCode == ToontownGlobals.BossCogGolfAreaAttack:
+            self.__doGolfAreaAttack()
+        else:
+            self.b_setAttackCode(attackCode)
+
+    def __doAreaAttack(self):
+        self.b_setAttackCode(ToontownGlobals.BossCogAreaAttack)
 
     def __doDirectedAttack(self):
         if self.toonsToAttack:

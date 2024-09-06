@@ -39,6 +39,7 @@ class BattlePlace(Place.Place):
         self.loader.music.stop()
         base.playMusic(self.loader.battleMusic, looping=1, volume=0.9)
         self.enterTownBattle(event)
+        self.enterFLM()
         base.localAvatar.b_setAnimState('off', 1)
         self.accept('teleportQuery', self.handleTeleportQuery)
         base.localAvatar.setTeleportAvailable(1)

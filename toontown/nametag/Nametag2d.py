@@ -87,7 +87,7 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
             self.region.setActive(True)
         else:
             if self.region is not None:
-                self.region.setActive(True)
+                self.region.setActive(False)
 
     def isClickable(self):
         if self.getChatText() and self.hasChatButton():
@@ -253,7 +253,7 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
             # We aren't in the margin display. Disable the click region if one
             # is present:
             if self.region is not None:
-                self.region.setActive(True)
+                self.region.setActive(False)
 
     def reposition(self):
         if self.contents is None:

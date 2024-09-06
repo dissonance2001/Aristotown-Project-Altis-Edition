@@ -7,10 +7,10 @@ BattleCamFaceOffFov = 40.0
 BattleCamFaceOffPos = Point3(0, -10, 4)
 BattleCamDefaultPos1 = Point3(0, -6.6, 16.5)
 BattleCamDefaultHpr1 = Vec3(0, 0, 0)
-BattleCamDefaultPos2 = Point3(0, -6.6, 16.5)
+BattleCamDefaultPos2 = Point3(0, -7.1, 20.5)
 BattleCamDefaultHpr2 = Vec3(0, -61, 0)
 BattleCamDefaultFov = 100.0
-BattleCamMenuFov = 100.0
+BattleCamMenuFov = 70.0
 BattleCamJoinPos = Point3(0, -12, 13)
 BattleCamJoinHpr = Vec3(0, -45, 0)
 SkipMovie = 0
@@ -524,7 +524,7 @@ AvZapJumps = ((3, 2.25, 1.5),
               (3, 2.5, 2),
               (3, 2.75, 2.5))
 InstaKillChance = [2, 3, 5, 8, 10, 15, 20, 20]
-DropMissChance = [40, 40, 35, 35, 35, 30, 30, 25]
+DropMissChance = [40, 40, 40, 40, 40, 40, 40, 40]
 AvSoakRounds = (2, 2, 3, 3, 4, 4, 5, 5)
 AvMarkRounds = (1, 1, 1, 1, 1, 1, 1, 1)
 AvDazeRounds = (2, 2, 2, 2, 2, 2, 2, 2)

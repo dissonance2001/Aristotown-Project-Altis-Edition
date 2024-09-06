@@ -75,9 +75,6 @@ class FriendsListManager:
         self.accept('clickedNametagPlayer', self.__handleClickedNametagPlayer)
         base.localAvatar.setFriendsListButtonActive(0)
         NametagGlobals.setWantActiveNametags(True)
-        if self.avatarPanel:
-            self.avatarPanel.cleanup()
-            self.avatarPanel = None
         self.ignore('gotoAvatar')
         self.ignore('friendAvatar')
         self.ignore('avatarDetails')
@@ -88,7 +85,7 @@ class FriendsListManager:
             base.cr.friendManager.setAvailable(0)
         self.ignore('friendInvitation')
         FriendInviter.hideFriendInviter()
-        ToonAvatarDetailPanel.hideAvatarDetail()
+        #ToonAvatarDetailPanel.hideAvatarDetail()
         ToonTeleportPanel.hideTeleportPanel()
         return
 

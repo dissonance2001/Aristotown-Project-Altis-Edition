@@ -1285,8 +1285,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                         if quest[0] in Quests.PreClarabelleQuestIds and self.mailboxNotify != ToontownGlobals.NewItems and self.awardNotify != ToontownGlobals.NewItems:
                             showClarabelle = 0
 
-                    if base.cr.playGame.getPlace().getState() == 'stickerBook':
-                        showClarabelle = 0
+
                     if showClarabelle:
                         newItemsInMailbox = self.mailboxNotify == ToontownGlobals.NewItems or self.awardNotify == ToontownGlobals.NewItems
                         self.showClarabelleGui(newItemsInMailbox)

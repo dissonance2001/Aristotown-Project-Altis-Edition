@@ -74,8 +74,102 @@ def showLureRounds(suit, battle, level):
             suit.showHpText("LURED 1 ROUND")
         else:
             suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'gtk' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'frs' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'fbd' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'cp' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
     elif suit.style.name == 'crf' and not trapProp:
-        suit.showHpText("LURED 1 ROUND")
+        for s in battle.activeSuits:
+            if s.dna.name == 'dsf' or s.dna.name == 'prr' or s.dna.name == 'tb':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'dsf' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'crf' or s.dna.name == 'prr' or s.dna.name == 'tb':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'prr' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'dsf' or s.dna.name == 'crf' or s.dna.name == 'tb':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'tb' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'dsf' or s.dna.name == 'prr' or s.dna.name == 'crf':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'ffm' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'dvp':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'dsk' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'ffm' or s.dna.name == 'blr' or s.dna.name == 'dvp':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'dvp' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'ffm':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
+    elif suit.style.name == 'blr' and not trapProp:
+        for s in battle.activeSuits:
+            if s.dna.name == 'dsk' or s.dna.name == 'ffm' or s.dna.name == 'dvp':
+                currentBossHealth = s.currHP
+        if currentBossHealth == -1:
+            suit.showHpText("LURED 1 ROUND")
+        else:
+            suit.showHpText("LURED 2 ROUNDS")
     elif suit.style.name in SuitBattleGlobals.SpecialCogDict and not trapProp:
         suit.showHpText("LURED 2 ROUNDS")
     elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
@@ -186,7 +280,7 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
                 suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
             tracks.append(suitTrack)
     else:
-        tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, 3.3))
+        tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
     tracks.append(getSoundTrack('TL_fishing_pole.ogg', delay=0.5, node=toon))
     return tracks
 
@@ -251,7 +345,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
         else:
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, 3.3))
+            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
 
     if isSmallMagnet == 1:
         tracks.append(getSoundTrack('TL_small_magnet.ogg', delay=0.7, node=toon))
@@ -318,7 +412,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
         else:
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, 1.5))
+            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
 
     tracks.append(getSoundTrack('TL_hypnotize.ogg', delay=0.5, node=toon))
     return tracks
@@ -379,6 +473,7 @@ def showDazeRounds(suit):
 def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0):
     if (trapProp is None) or trapProp.isEmpty():
         return Func(suit.loop, 'lured')
+    toon = lure['toon']
     trapProp.wrtReparentTo(battle)
     trapTrack = ToontownBattleGlobals.TRAP_TRACK
     trapLevel = suit.battleTrap
@@ -577,7 +672,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail'), ActorInterval(suit, 'flail', startTime=1.1), Wait(0.7))
         soundTrack = Sequence(Wait(0.7),
                               SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit))
-        if died:
+        if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
             if suit.style.name == 'csm':
@@ -655,7 +750,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                              ActorInterval(suit, 'flail', startTime=0.7, endTime=0),
                              ActorInterval(suit, 'neutral', duration=0.5), ActorInterval(suit, 'flail', startTime=1.1))
         soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('TL_trap_door.ogg'), node=suit))
-        if died:
+        if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
             if suit.style.name == 'csm':
@@ -728,7 +823,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         sinkPos.setZ(sinkPos.getZ() + 9.1)
         sinkPos.setY(sinkPos.getZ() + 9.1)
         dropPos.setZ(dropPos.getZ() + 15)
-        if died:
+        if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
             animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail', 0.7, 0.25),
@@ -830,7 +925,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                  ActorInterval(suit, 'flail', startTime=0.9),
                  LerpPosInterval(suit, 0.3, flyPos),
                  ))
-        if died:
+        if died and not suit.isVirtual:
             suitGone = 1
             suitTrack.append(MovieUtil.midairSuitExplodeTrack(suit, battle))
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
@@ -886,9 +981,13 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         result.append(Func(battle.unlureSuit, suit))
         #result.append(MovieUtil.createSuitResetPosTrack(suit, battle))
         result.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-        if revived:
+        if revived != 0 and suit.isSkeleton:
+            result.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+        elif revived != 0 and not suit.isSkeleton:
             result.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died and not suitGone:
+        elif died != 0 and suit.isVirtual:
+            result.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
+        elif died != 0 and not suit.isVirtual and not suitGone:
             result.append(MovieUtil.createSuitDeathTrack(suit, battle))
     return result
 
@@ -1147,7 +1246,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
         else:
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, 2.3))
+            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
 
     tracks.append(getSoundTrack('TL_presentation.ogg', delay=2.3, node=toon))
     tracks.append(getSoundTrack('AA_drop_trigger_box.ogg', delay=slideshowDelay, node=toon))

@@ -430,11 +430,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             damageAppendStr = labelColorize(damage, 'dropBoost')
         else:
             self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
-            if allGagBoost:
+            if allGagBoost and not track == LURE_TRACK:
                 damage = math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0))
                 lureValue = int(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100)  + base.localAvatar.battleConditions['allGagBoost'][
-                        0]) / 2)
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
                 damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost')
             else:
                 lureValue = int(
@@ -493,7 +492,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
-                                                                                   'damage': str(damage) + damageAppendStr + '(Varies)',
+                                                                                   'damage': str(damage) + damageAppendStr,
                                                                                    'bonus': '\nEncore Gag Bonus: 10%',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})

@@ -876,6 +876,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleTwo(self):
         self.notify.debug('----- enterBattleTwo')
         self.cleanupIntervals()
+        self.scaleNodePath.unstash()
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
@@ -1773,18 +1774,17 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         juryResult += '\x07'
         trialSpeech = juryResult
         trialSpeech += TTLocalizer.WitnessToonPrepareBattleThree
-        diffSettings = ToontownGlobals.LawbotBossDifficultySettings[self.battleDifficulty]
-        if diffSettings[4]:
-            newWeight, self.bonusWeight, self.numJurorsLocalToonSeated = self.calculateWeightOfToon(base.localAvatar.doId)
-            if self.bonusWeight > 0:
-                if self.bonusWeight == 1:
-                    juryWeightBonus = TTLocalizer.WitnessToonJuryWeightBonusSingular.get(self.battleDifficulty)
-                else:
-                    juryWeightBonus = TTLocalizer.WitnessToonJuryWeightBonusPlural.get(self.battleDifficulty)
-                if juryWeightBonus:
-                    weightBonusText = juryWeightBonus % (self.numJurorsLocalToonSeated, self.bonusWeight)
-                    trialSpeech += '\x07'
-                    trialSpeech += weightBonusText
+        diffSettings = 4
+        newWeight, self.bonusWeight, self.numJurorsLocalToonSeated = self.calculateWeightOfToon(base.localAvatar.doId)
+        if self.bonusWeight > 0:
+            if self.bonusWeight == 1:
+                juryWeightBonus = TTLocalizer.WitnessToonJuryWeightBonusSingular.get(self.battleDifficulty)
+            else:
+                juryWeightBonus = TTLocalizer.WitnessToonJuryWeightBonusPlural.get(self.battleDifficulty)
+            if juryWeightBonus:
+                weightBonusText = juryWeightBonus % (self.numJurorsLocalToonSeated, self.bonusWeight)
+                trialSpeech += '\x07'
+                trialSpeech += weightBonusText
         self.witnessToon.setLocalPageChat(trialSpeech, 0)
 
     def __makePrepareBattleThreeMovie(self):

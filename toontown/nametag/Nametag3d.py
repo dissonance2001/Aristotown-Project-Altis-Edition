@@ -74,7 +74,7 @@ class Nametag3d(Nametag, Clickable3d):
 
             left = centerX - (self.panelWidth/2.0)
             right = centerX + (self.panelWidth/2.0)
-            bottom = centerY - (self.panelHeight/2.0)
+            bottom = centerY - (self.panelHeight * 5.0)
             top = centerY + (self.panelHeight/2.0)
 
             self.setClickRegionFrame(left, right, bottom, top)

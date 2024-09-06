@@ -73,8 +73,20 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.sillySurgeText = False
         self.interactivePropTrackBonus = -1
 
-    def setVirtual(self, virtual):
-        pass
+    def setVirtual(self, flag, isVirtual = 1):
+        SuitBase.SuitBase.setVirtual(self, flag)
+        self.virtual = isVirtual
+        if self.virtual:
+            actorNode = self.find('**/__Actor_modelRoot')
+            actorCollection = actorNode.findAllMatches('*')
+            parts = ()
+            for thingIndex in xrange(0, actorCollection.getNumPaths()):
+                thing = actorCollection[thingIndex]
+                if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
+                    thing.setColorScale(1.0, 1.0, 1.0, 1.0)
+                    thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+                    thing.setDepthWrite(False)
+                    thing.setBin('fixed', 1)
 
     def getVirtual(self):
         return 0
@@ -155,6 +167,87 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             level += TTLocalizer.GovernaughtPostFix
         if self.getSkeleRevives() > 0:
             level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoFired(self):
+        name = self.name
+        dept = 'ErRorbot'
+        level = 'ERroR'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoPurple(self):
+        name = 'Purple Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoLightBlue(self):
+        name = 'Light Blue Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoGreen(self):
+        name = 'Green Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoYellow(self):
+        name = 'Yellow Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoOrange(self):
+        name = 'Orange Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoRed(self):
+        name = 'Red Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoBlue(self):
+        name = 'Blue Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoPink(self):
+        name = 'Pink Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
         nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
                                                         'dept': dept,
                                                         'level': level}
@@ -600,7 +693,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     self.nametag3d.setDepthTest(0)
                     self.nametag3d.setBin('fixed', 99)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(2), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
                 seq.start()
 
     def showHpTextSquirt(self, level, number, bonus = 0, scale = 1, attackTrack = -1):
@@ -668,7 +761,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     self.nametag3d.setDepthTest(0)
                     self.nametag3d.setBin('fixed', 99)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(2), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
                 seq.start()
 
     def showHpTextThrow(self, number, bonus = 0, scale = 1, attackTrack = -1):
@@ -736,7 +829,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     self.nametag3d.setDepthTest(0)
                     self.nametag3d.setBin('fixed', 99)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(2), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
                 seq.start()
 
     def showHpTextTrap(self, number, bonus = 0, scale = 1, attackTrack = -1):
@@ -804,7 +897,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     self.nametag3d.setDepthTest(0)
                     self.nametag3d.setBin('fixed', 99)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(2), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
                 seq.start()
 
     def hideHpText(self):

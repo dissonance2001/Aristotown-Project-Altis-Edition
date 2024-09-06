@@ -121,7 +121,7 @@ class DistributedAvatar(DistributedActor, Avatar):
     def setHp(self, hitPoints):
         justRanOutOfHp = (hitPoints is not None and self.hp is not None and self.hp - hitPoints > 0) and (hitPoints <= 0)
         self.hp = hitPoints
-        self.hpChange(quietly=1)
+        self.hpChange(quietly=0)
         if justRanOutOfHp:
             self.died()
 
@@ -214,7 +214,7 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(2), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
                 seq.start()
 
     def showHpTextWhite(self, number, bonus = 0, scale = 1):
@@ -268,7 +268,7 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(2), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
                 seq.start()
 
     def showHpText(self, number, bonus = 0, scale = 1):
@@ -322,7 +322,7 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(2), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
                 seq.start()
 
     def showHpTextVulnerable(self, number, bonus = 0, scale = 1):
@@ -376,7 +376,7 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(2), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
                 seq.start()
 
 
@@ -398,7 +398,7 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setScale(scale)
                 self.hpText.setBillboardAxis()
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Func(self.hideHpText))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.35), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Func(self.hideHpText))
                 seq.start()
 
     def hideHpText(self):

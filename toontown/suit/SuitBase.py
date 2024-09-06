@@ -70,6 +70,9 @@ class SuitBase:
     def setSkelecog(self, flag):
         self.isSkelecog = flag
 
+    def setVirtual(self, flag):
+        self.isVirtual = flag
+
     def setWaiter(self, flag):
         self.isWaiter = flag
 		

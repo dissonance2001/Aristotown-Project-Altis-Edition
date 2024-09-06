@@ -68,11 +68,11 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
         self.announceGenerateName = self.uniqueName('generate')
         self.accept(self.announceGenerateName, self.handleAnnounceGenerate)
         self.elevatorModelIn = loader.loadModel('phase_4/models/modules/elevator')
-        self.leftDoorIn = self.elevatorModelIn.find('**/left-door')
-        self.rightDoorIn = self.elevatorModelIn.find('**/right-door')
+        self.leftDoorIn = self.elevatorModelIn.find('**/left_door')
+        self.rightDoorIn = self.elevatorModelIn.find('**/right_door')
         self.elevatorModelOut = loader.loadModel('phase_4/models/modules/elevator')
-        self.leftDoorOut = self.elevatorModelOut.find('**/left-door')
-        self.rightDoorOut = self.elevatorModelOut.find('**/right-door')
+        self.leftDoorOut = self.elevatorModelOut.find('**/left_door')
+        self.rightDoorOut = self.elevatorModelOut.find('**/right_door')
 
     def setElevatorLights(self, elevatorModel):
         npc = elevatorModel.findAllMatches('**/floor_light_?;+s')

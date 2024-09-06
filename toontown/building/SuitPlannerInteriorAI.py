@@ -153,11 +153,9 @@ class SuitPlannerInteriorAI:
         if suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             suit.setManager(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg':
-            suit.setSkeleRevives(1)
+            suit.setSkeleRevives(random.choice((1, 2)))
         if suit.dna.name == 'cg':
             suit.setExecutive(1)
-        if suit.dna.name == 'dsf':
-            suit.setSkeleRevives(1)
         if suit.dna.name == 'jdg':
             suit.setExecutive(1)
         if suit.dna.name == 'gkp':
@@ -301,7 +299,7 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'ffm2':
             # generate random cashbot from lv 12 to 20
-            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't')), suitLevel, random.choice((0, 1)))
+            suit = self.__genSuitObject(self.zoneId, 17, 't', random.randint(17, 20), random.choice((0, 1)))
             reserveSuits.append(suit)
         if specialCode == 'ffm':
             # generate random cashbot from lv 12 to 20

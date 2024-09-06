@@ -10,11 +10,13 @@ from otp.ai.MagicWordGlobal import *
 from toontown.battle import BattleExperienceAI
 from toontown.battle import DistributedBattleDinersAI
 from toontown.battle import DistributedBattleWaitersAI
+from toontown.battle import DistributedBattleMinibossAI
 from toontown.building import SuitBuildingGlobals
 from toontown.coghq import DistributedBanquetTableAI
 from toontown.coghq import DistributedFoodBeltAI
 from toontown.coghq import DistributedGolfSpotAI
 from toontown.suit import DistributedBossCogAI
+from toontown.building import SuitPlannerInteriorAI
 from toontown.suit import DistributedSuitAI
 from toontown.suit import SuitDNA
 from toontown.toonbase import ToontownBattleGlobals
@@ -98,23 +100,48 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            weakenedValue = ((1, 1),
-             (2, 2),
-             (2, 2),
-             (1, 1),
-             (1, 1, 1, 1, 1))
-            listVersion = list(SuitBuildingGlobals.SuitBuildingInfo)
-            if simbase.config.GetBool('bossbot-boss-cheat', 0):
-                listVersion[14] = weakenedValue
-                SuitBuildingGlobals.SuitBuildingInfo = tuple(listVersion)
-            retval = self.invokeSuitPlanner(SuitBuildingGlobals.SUIT_PLANNER_CEO, 0)
-            return retval
-        else:
-            suits = self.generateDinerSuits()
-            return suits
+            cogs = self.invokeEmptyPlanner(11, 'lit2')
+            activeSuits = cogs['activeSuits']
+            reserveSuits = cogs['reserveSuits']
+            random.shuffle(activeSuits)
+            while len(activeSuits) >= 6:
+                suit = activeSuits.pop()
+                reserveSuits.append((suit, 100))
+
+            def compareJoinChance(a, b):
+                return cmp(a[1], b[1])
+
+            reserveSuits.sort(compareJoinChance)
+            return {'activeSuits': activeSuits,
+                    'reserveSuits': reserveSuits}
+        if battleNumber == 2:
+            cogs = self.invokeEmptyPlanner(11, 'lit')
+            activeSuits = cogs['activeSuits']
+            reserveSuits = cogs['reserveSuits']
+            random.shuffle(activeSuits)
+            while len(activeSuits) >= 6:
+                suit = activeSuits.pop()
+                reserveSuits.append((suit, 100))
+
+            def compareJoinChance(a, b):
+                return cmp(a[1], b[1])
+
+            reserveSuits.sort(compareJoinChance)
+            return {'activeSuits': activeSuits,
+                    'reserveSuits': reserveSuits}
+
+    def generateNewReserves(self, battleNumber):
+        if battleNumber == 1:
+            cogs = self.invokeReservesPlanner(11, 'lit2')
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
+        elif battleNumber == 2:
+            cogs = self.invokeReservesPlanner(11, 'lit')
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
 
     def invokeSuitPlanner(self, buildingCode, skelecog):
-        suits = DistributedBossCogAI.DistributedBossCogAI.invokeSuitPlanner(self, buildingCode, skelecog)
+        suits = DistributedMinibossAI.DistributedMinibossAI.invokeSuitPlanner(self, buildingCode, skelecog)
         activeSuits = suits['activeSuits'][:]
         reserveSuits = suits['reserveSuits'][:]
         if len(activeSuits) + len(reserveSuits) >= 6:
@@ -122,14 +149,12 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                 activeSuits.append(reserveSuits.pop()[0])
 
         retval = {'activeSuits': activeSuits,
-         'reserveSuits': reserveSuits}
+                  'reserveSuits': reserveSuits}
         return retval
 
     def makeBattle(self, bossCogPosHpr, battlePosHpr, roundCallback, finishCallback, battleNumber, battleSide):
-        if battleNumber == 1:
-            battle = DistributedBattleWaitersAI.DistributedBattleWaitersAI(self.air, self, roundCallback, finishCallback, battleSide)
-        else:
-            battle = DistributedBattleDinersAI.DistributedBattleDinersAI(self.air, self, roundCallback, finishCallback, battleSide)
+        battle = DistributedBattleFinalAI.DistributedBattleFinalAI(self.air, self, roundCallback, finishCallback,
+                                                                   battleSide)
         self.setBattlePos(battle, bossCogPosHpr, battlePosHpr)
         battle.suitsKilled = self.suitsKilled
         battle.battleCalc.toonSkillPtsGained = self.toonSkillPtsGained
@@ -142,12 +167,6 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         battle.helpfulToons = self.helpfulToons
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(battleNumber)
         battle.battleCalc.setSkillCreditMultiplier(mult)
-        activeSuits = self.activeSuitsA
-        if battleSide:
-            activeSuits = self.activeSuitsB
-        for suit in activeSuits:
-            battle.addSuit(suit)
-
         battle.generateWithRequired(self.zoneId)
         return battle
 
@@ -161,27 +180,14 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.suitsA = suitHandles['activeSuits']
         self.activeSuitsA = self.suitsA[:]
         self.reserveSuits = suitHandles['reserveSuits']
-        if battleNumber == 3:
-            if self.toonsB:
-                movedSuit = self.suitsA.pop()
-                self.suitsB = [movedSuit]
-                self.activeSuitsB = [movedSuit]
-                self.activeSuitsA.remove(movedSuit)
-            else:
-                self.suitsB = []
-                self.activeSuitsB = []
-        else:
-            suitHandles = self.generateSuits(battleNumber)
-            self.suitsB = suitHandles['activeSuits']
-            self.activeSuitsB = self.suitsB[:]
-            self.reserveSuits += suitHandles['reserveSuits']
+        suitHandles = self.generateSuits(battleNumber)
+        self.suitsB = suitHandles['activeSuits']
+        self.activeSuitsB = self.suitsB[:]
+        self.reserveSuits += suitHandles['reserveSuits']
         if self.toonsA:
-            if battleNumber == 1:
-                self.battleA = self.makeBattle(bossCogPosHpr, ToontownGlobals.WaiterBattleAPosHpr, self.handleRoundADone, self.handleBattleADone, battleNumber, 0)
-                self.battleAId = self.battleA.doId
-            else:
-                self.battleA = self.makeBattle(bossCogPosHpr, ToontownGlobals.DinerBattleAPosHpr, self.handleRoundADone, self.handleBattleADone, battleNumber, 0)
-                self.battleAId = self.battleA.doId
+            self.battleA = self.makeBattle(bossCogPosHpr, ToontownGlobals.BossCogBattleAPosHpr, self.handleRoundADone,
+                                           self.handleBattleADone, battleNumber, 0)
+            self.battleAId = self.battleA.doId
         else:
             self.moveSuits(self.activeSuitsA)
             self.suitsA = []
@@ -189,12 +195,9 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             if self.arenaSide == None:
                 self.b_setArenaSide(0)
         if self.toonsB:
-            if battleNumber == 1:
-                self.battleB = self.makeBattle(bossCogPosHpr, ToontownGlobals.WaiterBattleBPosHpr, self.handleRoundBDone, self.handleBattleBDone, battleNumber, 1)
-                self.battleBId = self.battleB.doId
-            else:
-                self.battleB = self.makeBattle(bossCogPosHpr, ToontownGlobals.DinerBattleBPosHpr, self.handleRoundBDone, self.handleBattleBDone, battleNumber, 1)
-                self.battleBId = self.battleB.doId
+            self.battleB = self.makeBattle(bossCogPosHpr, ToontownGlobals.BossCogBattleBPosHpr, self.handleRoundBDone,
+                                           self.handleBattleBDone, battleNumber, 1)
+            self.battleBId = self.battleB.doId
         else:
             self.moveSuits(self.activeSuitsB)
             self.suitsB = []

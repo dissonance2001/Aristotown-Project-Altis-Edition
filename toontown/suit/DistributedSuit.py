@@ -587,7 +587,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def enterNeutral(self):
         self.notify.debug('DistributedSuit: Neutral (entering a Door)')
         self.resumePath(0)
-        self.loop('neutral', 0)
+        self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), 0)
 
     def exitNeutral(self):
         pass
