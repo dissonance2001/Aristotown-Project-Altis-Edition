@@ -1113,12 +1113,8 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
     return anims
 
 
-def getSoundTrack(fileName, delay = 0.01, duration = None, node = None):
-    soundEffect = globalBattleSoundCache.getSound(fileName)
-    if duration:
-        return Sequence(Wait(delay), SoundInterval(soundEffect, duration=duration, node=node))
-    else:
-        return Sequence(Wait(delay), SoundInterval(soundEffect, node=node))
+def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
+    return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
 
 
 def doClipOnTie(attack):
