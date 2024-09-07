@@ -834,7 +834,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None):
     return track
 
 
-def getSuitAnimTrack(attack, delay = 0):
+def getSuitAnimTrack(attack, delay = 0, splicedAnims = None):
     suit = attack['suit']
     tauntIndex = attack['taunt']
     name = attack['id']
@@ -850,7 +850,10 @@ def getSuitAnimTrack(attack, delay = 0):
                           CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    track.append(ActorInterval(suit, attack['animName']))
+    if splicedAnims:
+        track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
+    else:
+        track.append(ActorInterval(suit, attack['animName']))
     track.append(Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
     return track
 
