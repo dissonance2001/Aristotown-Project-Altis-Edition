@@ -337,7 +337,7 @@ def createSuitReviveTrack(suit, battle):
     elif suit.style.name == 'ghd' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'dvp' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'tcm' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'otm' and not deathSuit.isSkeleton:
@@ -607,10 +607,10 @@ def createVirtualSuitDeathTrack(suit, toon, battle, npcs = []):
     suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
     suitTrack.append(Func(insertDeathSuit, suit, deathSuit, battle, suitPos, suitHpr))
     suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2), headInterval))
-    deathSound = base.loader.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
+    deathSound = base.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
     suitTrack.append(Parallel(ActorInterval(suit, 'slip-forward', duration=2),
         Func(suit.nametag3d.hide),
-        SoundInterval(deathSound, volume=0.2),
+        SoundInterval(deathSound, volume=0.5),
         LerpScaleInterval(deathSuit, 0.3, 0.0001,)))
     suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
     suitTrack.append(Func(removeDeathSuit, suit, deathSuit, name='remove-death-suit'))
@@ -733,7 +733,7 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'ghd' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'dvp' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'tcm' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'otm' and not deathSuit.isSkeleton:

@@ -180,7 +180,7 @@ class TownBattleCogPanel(DirectFrame):
         needMedScaledHeads = 'bf', 'cc', 'sc', 'dsk', 'nar'
         needSmallScaledHeads = 'jas'
         needSmallerScaledHeads = 'mka', 'txm', 'ym', 'bs', 'tw', 'ssm', 'kyl', 'kpn', 'blr', 'fd', 'tb', 'adc', 'drm', 'ffm', 'frs', 'fbd'
-        needEvenSmallerScaledHeads = 'ste', 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb', 'yuh', 'kc'
+        needEvenSmallerScaledHeads = 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb', 'yuh', 'kc'
         if name in needBigScaledHeads:
             self.suitHead.setScale(.13)
         elif name in needMedScaledHeads:
@@ -211,6 +211,12 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -90, 0, 0, .1, .1, .1)
         elif name == 'dvp':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .08, .08, .08)
+        elif name == 'ste':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .07, .07, .07)
+        elif name == 'wrt':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .07, .07, .07)
+        elif name == 'cry':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .07, .07, .07)
         elif name == 'bg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .13, .13, .13)
         elif name == 'scg':

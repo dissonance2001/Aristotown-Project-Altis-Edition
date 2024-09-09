@@ -882,6 +882,8 @@ class BattleCalculatorAI:
                 elif atkTrack == SQUIRT:
                     attackDamage = getAvPropDamage(attackTrack, attackLevel, toon.experience.getExp(attackTrack))
                     suit = self.battle.findSuit(targetId)
+                    if suit.dna.name == 'lit':
+                        self.setToonCondition(toon.doId, 'corruption', 1.2, 3, 'setBoth')
                     self.setSuitCondition(targetId, 'soaked', 1, self.NumRoundsSoaked[attackLevel], 'alternateBoth')
                     if self.toonHasCondition(toonId, 'squirtBoost'):
                         attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'squirtBoost') * 0.01)
@@ -1628,18 +1630,14 @@ class BattleCalculatorAI:
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 theSuit.setHP(int(theSuit.currHP + 1000))
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-            if x % 3 == 0 and not len(self.battle.activeSuits) >= 6:
-                return 2
             if len(self.battle.activeSuits) >= 6 and x % 3 == 0:
                 return 0
+            if x % 3 == 0:
+                return 2
             if len(self.battle.activeSuits) >= 6 and x % 2 == 0 and self.suitHasCondition(theSuit.doId, 'desperation'):
                 return 0
-            if len(self.battle.activeSuits) >= 5 and x % 4 == 0:
+            if len(self.battle.activeSuits) >= 4 and x % 4 == 0:
                 return 0
-            if self.suitHasCondition(theSuit.doId, 'dazed') and x % 3 == 0:
-                return 0
-            if self.suitHasCondition(theSuit.doId, 'soaked'):
-                return 3
             #if x % 2 == 0 and not len(self.battle.activeSuits) >= 6:
                 #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                 #return 1
@@ -1796,7 +1794,7 @@ class BattleCalculatorAI:
         if theSuit.dna.name == 'cp':
             x = self.TurnsElapsed
             if x % 99 == 0:
-                return atk
+                return 1
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
@@ -1804,20 +1802,16 @@ class BattleCalculatorAI:
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 theSuit.setHP(int(theSuit.currHP + 1000))
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-            if x % 5 == 0:
-                return 6
             if x % 4 == 0:
-                return 7
+                return 9
             if x % 3 == 0 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 return 1
             if x % 3 == 0:
                 return 6
-            if self.suitHasCondition(theSuit.doId, 'soaked') and x % 2 == 0:
-                return 9
         if theSuit.dna.name == 'fbd':
             x = self.TurnsElapsed
             if x % 99 == 0:
-                return atk
+                return 0
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'frs' or s.dna.name == 'cp' or s.dna.name == 'gtk':
@@ -1831,12 +1825,10 @@ class BattleCalculatorAI:
                 return 0
             if x % 3 == 0:
                 return 2
-            if len(self.battle.activeSuits) >= 6:
-                return 5
         if theSuit.dna.name == 'frs':
             x = self.TurnsElapsed
             if x % 99 == 0:
-                return atk
+                return 11
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'cp' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
@@ -1858,7 +1850,7 @@ class BattleCalculatorAI:
                 #boss.appendSuitsToBattle(boss.battleNumber, 'gtk')
             if x % 99 == 0:
                 #boss.appendSuitsToBattle(boss.battleNumber, 'gtk')
-                return atk
+                return 8
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'cp' or s.dna.name == 'fbd' or s.dna.name == 'frs':
@@ -2046,7 +2038,7 @@ class BattleCalculatorAI:
             x = self.TurnsElapsed
             if x % 99 == 0:
                 #boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
-                return atk
+                return 5
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'dsk' or s.dna.name == 'dvp' or s.dna.name == 'ffm':
@@ -2057,7 +2049,7 @@ class BattleCalculatorAI:
             #if x % 2 == 0 and not len(self.battle.activeSuits) >= 6 and self.suitHasCondition(theSuit.doId,
                                                                                               #'desperation'):
                 #boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
-            if x % 5 == 0:
+            if x % 5 == 0 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 return 3
             if x % 4 == 0:
                 return 0
@@ -2078,7 +2070,7 @@ class BattleCalculatorAI:
             x = self.TurnsElapsed
             if x % 99 == 0:
                 #boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
-                return atk
+                return 3
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'dsk' or s.dna.name == 'ffm' or s.dna.name == 'blr':
@@ -2090,9 +2082,9 @@ class BattleCalculatorAI:
                                                                                               #'desperation'):
                 #boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
             if x % 5 == 0:
-                return 4
-            if x % 4 == 0:
                 return 5
+            if x % 4 == 0:
+                return 4
             #if x % 3 == 0 and not len(self.battle.activeSuits) >= 4:
                 #boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
             if x % 3 == 0:
@@ -2110,7 +2102,7 @@ class BattleCalculatorAI:
             x = self.TurnsElapsed
             if x % 99 == 0:
                 #boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
-                return atk
+                return 8
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'ffm' or s.dna.name == 'dvp' or s.dna.name == 'blr':
@@ -2146,7 +2138,7 @@ class BattleCalculatorAI:
             x = self.TurnsElapsed
             if x % 99 == 0:
                 #boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
-                return atk
+                return 2
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'dsk' or s.dna.name == 'dvp' or s.dna.name == 'blr':
@@ -2158,15 +2150,13 @@ class BattleCalculatorAI:
               #                                                                                'desperation'):
                 #boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
             if x % 5 == 0:
-                return 0
-            if x % 4 == 0:
                 return 5
+            if x % 4 == 0:
+                return 4
             #if x % 3 == 0 and not len(self.battle.activeSuits) >= 4:
                 #boss.appendSuitsToBattle(boss.battleNumber, 'ffm')
             if x % 3 == 0:
                 return 2
-            if self.suitHasCondition(theSuit.doId, 'soaked') and x % 2 == 0:
-                return 4
         if theSuit.dna.name == 'jr':
             from toontown.suit.DistributedSellbotBossAI import DistributedSellbotBossAI
 
@@ -2760,6 +2750,7 @@ class BattleCalculatorAI:
                 result = 25 * theSuit.getDamageMultiplier()
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'allGagBoost', -50, 2, 'setBoth')
+                self.setToonCondition(toon.doId, 'lureBoost', -50, 2, 'setBoth')
             elif atkInfo['name'] == 'PoisonSpray':
                 #self.notify.debug('Recarmdra Cheat activated')
                 self.setSuitCondition(theSuit.doId, 'enraged', 0, 0, 'none')
@@ -2834,7 +2825,7 @@ class BattleCalculatorAI:
                 theSuit.setHP(int(theSuit.currHP - (result * 4)))
                 self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
             elif atkInfo['name'] == 'WhitePowder':
-                result = 21.5
+                result = 21.5 * theSuit.getDamageMultiplier()
                 self.setToonCondition(toon.doId, 'corruption', 1.4, 3, 'setBoth')
                 for suit in self.battle.activeSuits:
                     if suit.currHP <= 0:

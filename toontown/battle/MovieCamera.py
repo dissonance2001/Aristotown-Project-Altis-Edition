@@ -533,9 +533,9 @@ def chooseSuitShot(attack, attackDuration):
     elif name == CALCULATE:
         camTrack.append(defaultCamera())
     elif name == CANNED:
-        camTrack.append(defaultCamera(openShotDuration=2.9))
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == CHOMP:
-        camTrack.append(defaultCamera(openShotDuration=2.8))
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == NICKEL_AND_DIME:
         camTrack.append(defaultCamera(openShotDuration=2.8))
     elif name == QUASH:
@@ -561,9 +561,9 @@ def chooseSuitShot(attack, attackDuration):
     elif name == CIGAR_SMOKE:
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == CLIPON_TIE:
-        camTrack.append(defaultCamera(openShotDuration=3.3))
+        camTrack.append(defaultCamera(openShotDuration=2.3))
     elif name == CRUNCH:
-        camTrack.append(defaultCamera(openShotDuration=3.4))
+        camTrack.append(defaultCamera(openShotDuration=2.4))
     elif name == DEMOTION:
         camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name in (DETONATE, DETONATE_2, DETONATE_3):
@@ -575,11 +575,11 @@ def chooseSuitShot(attack, attackDuration):
     elif name in (UNION_BUST, UNION_BUST_2, UNION_BUST_3):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == DOUBLE_TALK:
-        camTrack.append(defaultCamera(openShotDuration=3.9))
+        camTrack.append(defaultCamera(openShotDuration=2.9))
     elif name == EVICTION_NOTICE:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == LD_EVICTION_NOTICE:
-        camTrack.append(defaultCamera(openShotDuration=3.2))
+        camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == BASH:
         shakeIntensity = 5.0
         quake = 1
@@ -637,7 +637,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == ACCUSATIONS:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == INSURANCE_PLAN:
-        camTrack.append(defaultCamera(openShotDuration=6.0))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == ACCUSATIONS_2:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == GAME_SHOW:
@@ -687,9 +687,9 @@ def chooseSuitShot(attack, attackDuration):
     elif name == FOUNTAIN_PEN:
         camTrack.append(defaultCamera(openShotDuration=2.6))
     elif name == FREEZE_ASSETS:
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == HALF_WINDSOR:
-        camTrack.append(defaultCamera(openShotDuration=2.8))
+        camTrack.append(defaultCamera(openShotDuration=1.8))
     elif name == HEAD_SHRINK:
         camTrack.append(defaultCamera(openShotDuration=1.3))
     elif name == GLOWER_POWER:
@@ -701,7 +701,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == GUILT_TRIP_WSI:
         camTrack.append(defaultCamera(openShotDuration=0.9))
     elif name == HANG_UP:
-        camTrack.append(defaultCamera(openShotDuration=5.1))
+        camTrack.append(defaultCamera(openShotDuration=4.1))
     elif name == HOT_AIR:
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == MP_HOT_AIR:
@@ -787,19 +787,19 @@ def chooseSuitShot(attack, attackDuration):
     elif name == LEGALESE:
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == LIQUIDATE:
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == HOSTILE_TAKEOVER:
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == MARKET_CRASH:
-        camTrack.append(defaultCamera(openShotDuration=2.9))
+        camTrack.append(defaultCamera(openShotDuration=1.9))
     elif name == MUMBO_JUMBO:
         camTrack.append(defaultCamera(openShotDuration=2.8))
     elif name == PARADIGM_SHIFT:
         camTrack.append(defaultCamera(openShotDuration=1.6))
     elif name == PECKING_ORDER:
-        camTrack.append(defaultCamera(openShotDuration=2.8))
+        camTrack.append(defaultCamera(openShotDuration=2.3))
     elif name == PECKING_ORDER_WSI:
-        camTrack.append(defaultCamera(openShotDuration=2.8))
+        camTrack.append(defaultCamera(openShotDuration=2.3))
     elif name == PLAY_HARDBALL:
         camTrack.append(defaultCamera(openShotDuration=2.3))
     elif name == PICK_POCKET:
@@ -862,9 +862,9 @@ def chooseSuitShot(attack, attackDuration):
     elif name == BEGUILE:
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == RED_TAPE:
-        camTrack.append(defaultCamera(openShotDuration=3.5))
+        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == LD_RED_TAPE:
-        camTrack.append(defaultCamera(openShotDuration=3.5))
+        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == RE_ORG:
         camTrack.append(defaultCamera(openShotDuration=1.1))
     elif name == LD_RE_ORG:
@@ -872,7 +872,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == REARRANGE:
         camTrack.append(defaultCamera(openShotDuration=1.1))
     elif name == RESTRAINING_ORDER:
-        camTrack.append(defaultCamera(openShotDuration=2.8))
+        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == ROLODEX:
         camTrack.append(defaultCamera())
     elif name == RUBBER_STAMP:
@@ -880,9 +880,9 @@ def chooseSuitShot(attack, attackDuration):
     elif name == RUB_OUT:
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == SACKED:
-        camTrack.append(defaultCamera(openShotDuration=2.9))
+        camTrack.append(defaultCamera(openShotDuration=1.9))
     elif name == SCHMOOZE:
-        camTrack.append(defaultCamera(openShotDuration=2.8))
+        camTrack.append(defaultCamera(openShotDuration=1.8))
     elif name == CONE_OF_SHAME:
         camTrack.append(defaultCamera(openShotDuration=0.8))
     elif name == SHAKE:
@@ -954,9 +954,15 @@ def chooseSuitShot(attack, attackDuration):
     elif name == TABULATE:
         camTrack.append(defaultCamera())
     elif name == TEE_OFF:
-        camTrack.append(defaultCamera(openShotDuration=4.5))
+        camTrack.append(defaultCamera(openShotDuration=3.5))
     elif name == MULLIGAN:
-        camTrack.append(defaultCamera(openShotDuration=4.5))
+        camTrack2 = defaultCamera(openShotDuration=3.5)
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpTrack = pbpText.getShowInterval('Tee Off!', 3.5)
+        pbpDesc2 = Sequence(Wait(6.0), pbpDc.getShowIntervalDesc("This cog gets another shot!", 3.5))
+        pbpTrack2 = Sequence(Wait(6.0), pbpText.getShowIntervalCheat('Mulligan!', 3.5))
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, camTrack2)
     elif name == CLOCK_CHANGE:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == TREMOR:

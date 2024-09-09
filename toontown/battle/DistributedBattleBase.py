@@ -1032,23 +1032,6 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         if len(self.activeSuits) >= 1:
             for suit in self.activeSuits:
                 suitPos, suitHpr = self.getActorPosHpr(suit)
-                suit.setPosHpr(self, suitPos, suitHpr)
-                suit.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-                suit.setDizzy(0)
-                if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            headPart.loop(
-                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
-                                fromFrame=0, toFrame=22)
-                elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            headPart.loop(
-                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
-                                fromFrame=0, toFrame=22)
-                else:
-                        for headPart in suit.animatedHeadParts:
-                            headPart.loop(
-                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
                 if self.isSuitLured(suit) == 1:
                     spos = Point3(suitPos[0], suitPos[1] - MovieUtil.SUIT_LURE_DISTANCE, suitPos[2])
                     suit.setPosHpr(self, spos, suitHpr)
@@ -1063,6 +1046,24 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     else:
                         for headPart in suit.animatedHeadParts:
                             headPart.loop('neutral-lured')
+                else:
+                    suit.setPosHpr(self, suitPos, suitHpr)
+                    suit.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+                    suit.setDizzy(0)
+                    if suit.style.name == 'crf':
+                        for headPart in suit.animatedHeadParts:
+                            headPart.loop(
+                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
+                                fromFrame=0, toFrame=22)
+                    elif suit.style.name == 'mad':
+                        for headPart in suit.animatedHeadParts:
+                            headPart.loop(
+                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
+                                fromFrame=0, toFrame=22)
+                    else:
+                        for headPart in suit.animatedHeadParts:
+                            headPart.loop(
+                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
 
         for toon in toons:
             if self.joiningToons.count(toon):

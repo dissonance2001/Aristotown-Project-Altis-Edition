@@ -6,6 +6,8 @@ from toontown.battle.BattleSounds import *
 from toontown.toon.ToonDNA import *
 from toontown.suit.SuitDNA import *
 from toontown.battle import MovieUtil
+import PlayByPlayText
+from toontown.chat.ChatGlobals import *
 from toontown.battle import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import BattleParticles
@@ -160,7 +162,7 @@ def __getSplashTrack(point, scale, delay, battle, splashHold = 0.01):
     return Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(delay), Func(prepSplash, splash, point), ActorInterval(splash, 'splash-from-splat'), Wait(splashHold), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash))
 
 
-def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 1.8, geyser = 0, uberRepeat = 0, revived = 0, level = 0):
+def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 1.8, geyser = 0, uberRepeat = 0, revived = 0, level = 0):
     if hp > 0:
         suitTrack = Sequence()
         soakTracks = Parallel()
@@ -237,6 +239,8 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=SQUIRT_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
+        if suit.dna.name == 'lit' and not died:
+            suitTrack.append(doSnapBellow(attack))
         if revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         if revived != 0 and not suit.isSkeleton:
@@ -349,6 +353,229 @@ def __soakSuit(suit, tContact, remove=0):
             suitInterval.append(Func(bodyPart.setColor, color))
         return suitInterval
 
+def __showProp(prop, parent, pos, hpr = None, scale = None):
+    prop.reparentTo(parent)
+    prop.setPos(pos)
+    if hpr:
+        prop.setHpr(hpr)
+    if scale:
+        prop.setScale(scale)
+
+def __animProp(prop, propName, propType = 'actor'):
+    if 'actor' == propType:
+        prop.play(propName)
+    elif 'model' == propType:
+        pass
+    else:
+        self.notify.error('No such propType as: %s' % propType)
+
+def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None):
+    propTrack = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints))
+    if poseExtraArgs:
+        propTrack.append(Func(prop.pose, *poseExtraArgs))
+    propTrack.append(LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale))
+    return propTrack
+
+def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 0.0001, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, target = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
+    if not target:
+        target = attack['target']
+    toon = attack['toon']
+    battle = attack['battle']
+    suit = target['suit']
+    suitPos = suit.getPos(battle)
+    animTrack = Sequence()
+    animTrack.append(Func(toon.headsUp, battle, suitPos))
+    indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime))
+    return Parallel(animTrack, indicatorTrack)
+
+def getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime):
+    toon = target['toon']
+    toonTrack = Sequence()
+    toonTrack.append(Wait(dodgeDelay))
+    if dodgeAnimNames:
+        for d in dodgeAnimNames:
+            if d == 'sidestep':
+                toonTrack.append(getAllyToonsDodgeParallel(target))
+            else:
+                toonTrack.append(ActorInterval(toon, d))
+
+    else:
+        toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=toon))
+    toonTrack.append(Func(toon.loop, 'neutral'))
+    return toonTrack
+
+def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = None, splicedDamageAnims = None, showDamageExtraTime = 0.01):
+    toonTrack = Sequence()
+    toonTrack.append(Wait(delay))
+    suitResponseTrack = Sequence()
+    if damageAnimNames:
+        for d in damageAnimNames:
+            toonTrack.append(ActorInterval(toon, d))
+
+        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
+    else:
+        splicedAnims = getSplicedAnimsTrack(splicedDamageAnims, actor=toon)
+        toonTrack.append(splicedAnims)
+        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
+    soundTrack = base.loader.loadSfx('phase_4/audio/sfx/laff_loss.ogg')
+    toonTrack.append(Func(toon.loop, 'neutral'))
+    if died:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(3.0), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(3.0), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
+
+def doSnapBellow(attack):
+    battle = attack['battle']
+    target = attack['target']
+    suit = target['suit']
+    toon = attack['toon']
+    dmg = target['hp']
+    pbpText = attack['playByPlayText']
+    pbpDc = PlayByPlayText.PlayByPlayText()
+
+    pbpDesc = pbpDc.getShowIntervalDesc('The Litigator retaliates when soaked!', 3.5)
+    pbpTrack = pbpText.getShowIntervalCheat('Snap!', 3.5)
+    teeth = globalPropPool.getProp('litigator-teeth')
+    propDelay = 0.8
+    propScaleUpTime = 0.5
+    suitDelay = 1.13
+    throwDelay = propDelay + propScaleUpTime + suitDelay
+    throwDuration = 0.4
+    posPoints = [Point3(-0.05, 0.41, -0.54), VBase3(4.465, -3.563, 51.479)]
+    teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(3, 3, 3),
+                                                   scaleUpTime=propScaleUpTime))
+    teethAppearTrack.append(Wait(suitDelay))
+    teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
+    teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
+    if dmg > 0:
+        x = toon.getX(battle)
+        y = toon.getY(battle)
+        z = toon.getZ(battle)
+        toonHeight = z + toon.getHeight()
+        flyPoint = Point3(x, y + 2.7, toonHeight * 0.7)
+        teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.4, pos=Point3(x, y + 3.2, toonHeight * 0.7)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.3, pos=Point3(x, y + 4.7, toonHeight * 0.5)))
+        teethAppearTrack.append(Wait(0.2))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y, toonHeight + 3)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 1.2, toonHeight * 0.7)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 0.7, toonHeight * 0.4)))
+        teethAppearTrack.append(Wait(0.4))
+        scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(teeth, throwDuration, Point3(6, 6, 6)), Wait(0.9),
+                              LerpScaleInterval(teeth, 0.2, Point3(10, 10, 10)), Wait(1.2),
+                              LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO))
+        hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.2),
+                            LerpHprInterval(teeth, 0.4, Point3(180, -35, 0), startHpr=Point3(180, 0, 0)), Wait(0.6),
+                            LerpHprInterval(teeth, 0.1, Point3(0, -35, 0), startHpr=Point3(180, -35, 0)))
+        animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'litigator-teeth', duration=throwDuration),
+                             ActorInterval(teeth, 'litigator-teeth', duration=0.3), Func(teeth.pose, 'litigator-teeth', 1), Wait(0.7),
+                             ActorInterval(teeth, 'litigator-teeth', duration=0.9))
+        propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack),
+                             Func(MovieUtil.removeProp, teeth), Func(battle.movie.clearRenderProp, teeth))
+    else:
+        x = toon.getX(battle)
+        y = toon.getY(battle)
+        z = toon.getZ(battle)
+        z = z + 0.2
+        flyPoint = Point3(x, y - 2.1, z)
+        teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
+        teethAppearTrack.append(Wait(0.2))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 0.5, y - 2.5, z)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 1.0, y - 3.0, z + 0.4)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 1.3, y - 3.6, z)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 0.9, y - 3.1, z + 0.4)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 0.3, y - 2.6, z)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.1, y - 2.2, z + 0.4)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.4, y - 1.9, z)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.7, y - 2.1, z + 0.4)))
+        teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.8, y - 2.3, z)))
+        teethAppearTrack.append(LerpScaleInterval(teeth, 0.6, MovieUtil.PNT3_NEARZERO))
+        hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.5),
+                            LerpHprInterval(teeth, 0.4, Point3(80, 0, 0), startHpr=Point3(180, 0, 0)),
+                            LerpHprInterval(teeth, 0.8, Point3(-10, 0, 0), startHpr=Point3(80, 0, 0)))
+        animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'litigator-teeth', duration=3.6))
+        propTrack = Sequence(Parallel(teethAppearTrack, hprTrack, animTrack), Func(MovieUtil.removeProp, teeth),
+                             Func(battle.movie.clearRenderProp, teeth))
+    damageAnims = [['cringe',
+                    0.01,
+                    0.7,
+                    1.2],
+                   ['spit',
+                    0.01,
+                    2.95,
+                    1.47],
+                   ['spit',
+                    0.01,
+                    4.42,
+                    0.07],
+                   ['spit',
+                    0.08,
+                    4.49,
+                    -0.07],
+                   ['spit',
+                    0.08,
+                    4.42,
+                    0.07],
+                   ['spit',
+                    0.08,
+                    4.49,
+                    -0.07],
+                   ['spit',
+                    0.08,
+                    4.42,
+                    0.07],
+                   ['spit',
+                    0.08,
+                    4.49,
+                    -0.07],
+                   ['spit', 0.01, 4.42]]
+    dodgeAnims = [['cringe',
+                    0.01,
+                    0.7,
+                    1.2],
+                   ['spit',
+                    0.01,
+                    2.95,
+                    1.47],
+                   ['spit',
+                    0.01,
+                    4.42,
+                    0.07],
+                   ['spit',
+                    0.08,
+                    4.49,
+                    -0.07],
+                   ['spit',
+                    0.08,
+                    4.42,
+                    0.07],
+                   ['spit',
+                    0.08,
+                    4.49,
+                    -0.07],
+                   ['spit',
+                    0.08,
+                    4.42,
+                    0.07],
+                   ['spit',
+                    0.08,
+                    4.49,
+                    -0.07],
+                   ['spit', 0.01, 4.42]]
+    toonTrack = Sequence(Wait(3.4), Func(toon.play, 'cringe'), ActorInterval(toon, 'spit', startTime=2.95))
+    soundEffect = globalBattleSoundCache.getSound('SA_chomp.ogg')
+    soundTrack = Sequence()
+    soundTrack.append(Wait(2))
+    soundTrack.append(SoundInterval(soundEffect, node=suit))
+    notifyTrack = Sequence(Wait(6), Func(toon.showHpTextWhite, "VULNERABLE!", 10))
+    speechTrack = Sequence(Func(suit.setChatAbsolute, random.choice(('These chompers can cut out diamonds!', "My colleagues don't like it when I get snappy.", 'This may hurt a little, but what comes next will hurt a lot.', "I've had enough with you!")), CFSpeech | CFTimeout))
+    suitTrack = Sequence(ActorInterval(suit, 'throw-object', playRate=1.25))
+    return Parallel(suitTrack, toonTrack, propTrack, pbpTrack, pbpDesc, notifyTrack, soundTrack, speechTrack)
+
 
 def __doFlower(squirt, delay, fShowStun):
     toon = squirt['toon']
@@ -419,7 +646,7 @@ def __doFlower(squirt, delay, fShowStun):
     if hp > 0:
         tracks.append(__getSplashTrack(targetPoint, scale, tSprayStarts + dSprayScale, battle))
     if hp > 0 or delay <= 0:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=0))
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=0))
     return tracks
 
 
@@ -483,7 +710,7 @@ def __doWaterGlass(squirt, delay, fShowStun):
     if hp > 0:
         tracks.append(__getSplashTrack(targetPoint, scale, tSpray + dSprayScale, battle))
     if hp > 0 or delay <= 0:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=1))
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=1))
     return tracks
 
 
@@ -545,7 +772,7 @@ def __doWaterGun(squirt, delay, fShowStun):
         tracks.append(__getSplashTrack(targetPoint, 0.3, tSpray + dSprayScale, battle))
     if hp > 0 or delay <= 0:
         tracks.append(
-            __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits,
+            __getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits,
                            rightSuits, battle, toon, fShowStun, revived=revived, level=2))
     return tracks
 
@@ -606,7 +833,7 @@ def __doWaterBalloon(squirt, delay, fShowStun):
         tracks.append(__getSplashTrack(targetPoint, scale, tContact, battle))
     if hp > 0 or delay <= 0:
         tracks.append(
-            __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'squirt-small-react', died, leftSuits,
+            __getSuitTrack(suit, tContact, tSuitDodges, attack, squirt, hpBonus, kbBonus, 'squirt-small-react', died, leftSuits,
                            rightSuits, battle, fShowStun, level=3, revived=revived,))
     return tracks
 
@@ -670,7 +897,7 @@ def __doSeltzerBottle(squirt, delay, fShowStun):
     if hp > 0:
         tracks.append(__getSplashTrack(targetPoint, scale, tSpray + dSprayScale, battle))
     if (hp > 0 or delay <= 0) and suit:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=3))
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=3))
     return tracks
 
 
@@ -753,7 +980,7 @@ def __doFireHose(squirt, delay, fShowStun):
     if hp > 0:
         tracks.append(__getSplashTrack(targetPoint, 0.4, 2.7, battle, splashHold=1.5))
     if hp > 0 or delay <= 0:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'squirt-large-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=4))
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'squirt-large-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=4))
     return tracks
 
 
@@ -832,7 +1059,7 @@ def __doStormCloud(squirt, delay, fShowStun):
     tracks.append(getCloudTrack(cloud, suit, cloudPosPoint, scaleUpPoint, rainEffects, rainDelay, effectDelay, cloudHold, useEffect=1))
     tracks.append(getCloudTrack(cloud2, suit, cloudPosPoint, scaleUpPoint, rainEffects, rainDelay, effectDelay, cloudHold, useEffect=0))
     if hp > 0 or delay <= 0:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'soak', died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, revived=revived, level=5))
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'soak', died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, revived=revived, level=5))
     return tracks
 
 
@@ -907,7 +1134,7 @@ def __doGeyser(squirt, delay, fShowStun, uberClone = 0):
     if not uberClone:
         tracks.append(Sequence(Wait(delayTime), getGeyserTrack(cloud, suit, geyserPosPoint, scaleUpPoint, rainEffects, rainDelay, effectDelay, geyserHold, useEffect=1)))
     if hp > 0 or delay <= 0:
-        tracks.append(Sequence(Wait(delayTime), __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'soak', died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, geyser=1, uberRepeat=uberClone, revived=revived, level=6)))
+        tracks.append(Sequence(Wait(delayTime), __getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'soak', died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, geyser=1, uberRepeat=uberClone, revived=revived, level=6)))
 
     return tracks
 
