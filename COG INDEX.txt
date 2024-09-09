@@ -126,7 +126,7 @@ jg - Prethinker Level 12.mgr
 jr - Multislacker Level 24.mgr
 prr - Videographer Level 90.mgr
 blr - Radiographer Level 35.mgr
-dvp - Cloud Seeder Level 40.mgr
+dvp - Perpetrator Level 40.mgr
 dsk - Union Buster Level 40.mgr
 ffm - Safe-ty Supervisor Level 45.mgr
 sft - Pacesetter Level 66.mgr
