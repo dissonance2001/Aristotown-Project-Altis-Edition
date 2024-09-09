@@ -174,18 +174,7 @@ class TownBattleCogPanel(DirectFrame):
         self.maxHp = self.cog.getMaxHP()
         self.hpText['text'] = str(self.hp) + '/' + str(self.maxHp)
 
-    def generateSuitHead(self, name):
-        self.suitHead = Suit.attachSuitHead(self, name)
-        needBigScaledHeads = 'dot', 'bc', 'cps'
-        needMedScaledHeads = 'bf', 'cc', 'sc', 'dsk', 'nar'
-        needSmallScaledHeads = 'jas'
-        needSmallerScaledHeads = 'mka', 'txm', 'ym', 'bs', 'tw', 'ssm', 'kyl', 'kpn', 'blr', 'fd', 'tb', 'adc', 'drm', 'ffm', 'frs', 'fbd'
-        needEvenSmallerScaledHeads = 'sd', 'b', 'ac', 'prr', 'wrt', 'jr', 'dvp', 'sb', 'yuh', 'kc'
-        if name in needBigScaledHeads:
-            self.suitHead.setScale(.13)
-        elif name in needMedScaledHeads:
-            self.suitHead.setScale(0.12)
-        elif name in needSmallScaledHeads:
+
             self.suitHead.setScale(0.11)
         elif name in needSmallerScaledHeads:
             self.suitHead.setScale(0.09)
@@ -196,36 +185,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'dvg':
             self.suitHead.setScale(0.15)
         elif name == 'skd':
-            self.suitHead.setScale(0.15)
-        elif name == 'trm':
-            self.suitHead.setScale(0.15)
-        elif name == 'cp':
-            self.suitHead.setScale(0.065)
-        elif name == 'mg':
-            self.suitHead.setScale(0.065)
-        else:
-            self.suitHead.setScale(0.1)
-        if name == 'dfh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -90, 0, 0, .1, .1, .1)
-        elif name == 'ptr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -90, 0, 0, .1, .1, .1)
-        elif name == 'dvp':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .08, .08, .08)
-        elif name == 'ste':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .07, .07, .07)
-        elif name == 'wrt':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .07, .07, .07)
-        elif name == 'cry':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .07, .07, .07)
-        elif name == 'bg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .13, .13, .13)
-        elif name == 'scg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
-        elif name == 'crf':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
-        elif name == 'sjg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
-        elif name == 'mad':
+       
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
         elif name == 'cg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .14, .14, .14)

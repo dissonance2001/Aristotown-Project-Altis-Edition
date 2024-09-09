@@ -232,27 +232,7 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(Wait(5.5))
         bonusTrack = Sequence(Wait(tContact))
         if kbbonus > 0:
-            bonusTrack.append(Wait(0.75))
-            bonusTrack.append(Func(suit.showHpText, -kbbonus, 2, openEnded=0, attackTrack=SQUIRT_TRACK))
-            bonusTrack.append(Func(suit.updateHealthBar, kbbonus))
-        if hpbonus > 0:
-            bonusTrack.append(Wait(0.75))
-            bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=SQUIRT_TRACK))
-            bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
-        if suit.dna.name == 'lit' and not died:
-            suitTrack.append(doSnapBellow(attack))
-        if revived != 0 and suit.isSkeleton:
-            suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton:
-            suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0 and suit.isVirtual:
-            suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
-        if died != 0 and not suit.isVirtual:
-            suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        if suit.maxHP > 0:
-            if float(suit.currHP - (value + kbbonus + hpbonus)) / float(suit.maxHP) <= 0.25:
-                suitTrack.append(Func(suit.loop, 'neutral-hurt'))
-                if suit.style.name == 'crf':
+
                     for headPart in suit.animatedHeadParts:
                         suitTrack.append(
                             Func(headPart.loop,

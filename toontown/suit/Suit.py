@@ -6588,7 +6588,7 @@ class Suit(Avatar.Avatar):
             return DOPADialogArray
         if self.style.name == 'dvp' and not self.isSkeleton:
             loadDialog(1)
-            return RainmakerDialogArray
+            return StenographerDialogArray
         if self.style.name == 'dsk':
             loadDialog(1)
             return DOPRDialogArray
