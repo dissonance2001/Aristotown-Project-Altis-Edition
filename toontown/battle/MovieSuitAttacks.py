@@ -7838,7 +7838,12 @@ def doEvictionNotice(attack):
     toon = target['toon']
     paper = globalPropPool.getProp('shredder-paper')
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    if suit.dna.name == 'csm':
+        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
+    elif suit.dna.name == 'fbd':
+        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
+    else:
+        taunt = getAttackTaunt(attack['name'], tauntIndex)
     suitTrack = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
                          ActorInterval(suit, attack['animName'], playRate=1.25))
     posPoints = [Point3(-0.04, 0.15, -1.38), VBase3(10.584, -11.945, 18.316)]
@@ -8335,7 +8340,12 @@ def doExplodingBill(attack):
     dmg = target['hp']
     tnt = globalPropPool.getProp('shredder-paper')
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    if suit.dna.name == 'csm':
+        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
+    elif suit.dna.name == 'fbd':
+        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
+    else:
+        taunt = getAttackTaunt(attack['name'], tauntIndex)
     suitTrack = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
                          ActorInterval(suit, attack['animName'], playRate=1.25))
     suitTrack.append(Parallel(Func(suit.setChatAbsolute,
@@ -8782,7 +8792,12 @@ def doThrowBook(attack):
     throwDuration = 1.0
     paper = globalPropPool.getProp('lawbook')
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    if suit.dna.name == 'csm':
+        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
+    elif suit.dna.name == 'fbd':
+        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
+    else:
+        taunt = getAttackTaunt(attack['name'], tauntIndex)
     suitTrack = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
                          ActorInterval(suit, attack['animName'], playRate=1.25))
     posPoints = [Point3(0.00, 0, -1), VBase3(180.00, -45.00, -45.00)]
@@ -9064,7 +9079,12 @@ def doRestrainingOrder(attack):
     dmg = target['hp']
     paper = globalPropPool.getProp('shredder-paper')
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    if suit.dna.name == 'csm':
+        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
+    elif suit.dna.name == 'fbd':
+        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
+    else:
+        taunt = getAttackTaunt(attack['name'], tauntIndex)
     suitTrack = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
                          ActorInterval(suit, attack['animName'], playRate=1.25))
     posPoints = [Point3(-0.04, 0.15, -1.38), VBase3(10.584, -11.945, 18.316)]
