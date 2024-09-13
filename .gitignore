@@ -1,0 +1,24 @@
+# Ignore Compiled Python Files
+*.pyc
+
+# Logs are Spam
+logs/
+*.log
+preferences.json
+
+# Git Needs to know my district
+streamerinfo_district.txt
+
+# Toon Databases are Ugly
+backups/
+user/
+dependencies/astron/databases/
+dependencies/astron/databases/info.yaml
+dependencies/astron/databases/account-bridge.db
+
+# Pip logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDEA pycharm/intellij
+.idea/

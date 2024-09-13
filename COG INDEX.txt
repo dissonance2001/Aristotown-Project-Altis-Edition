@@ -1,0 +1,85 @@
+Down below are a list of every cog that you can
+spawn in this game, to spawn a cog, simply use
+the command ~spawncog (prefix) (level) (revives)
+in the chat box. Prefix is the letter in front
+of the cog's name shown below, you can spawn
+the cogs from the level pools also listed below, 
+you can't spawn a cog outside of the cog's level
+pool, if you try to spawn one above the cog's
+level pool it will only go to it's max level,
+revives is to spawn a cog with multiple revives 
+or version 2 cogs, but you can spawn them with as
+many layers as you like.
+
+BOSSBOTS:
+f- Flunky Level 1-5
+p - Pencil Pusher Level 2-6
+ym - Stockbroker Level 2-8 (Operations Analyst)
+mm - Yesman Level 3-7
+ds - Enforcer Level 3-9 (Operations Analyst)
+hh - Micromanager Level 4-8
+cr - Overseer Level 4-10 (Field Specialist)
+tbc - Downsizer Level 5-10
+trb - The Molder Level 5-15 (Operations Analyst)
+dot - Head Hunter Level 6-12
+dvg - Blowhard Level 6-12 (Field Specialist)
+cpl - Corporate Raider Level 7-15
+bkp - Toxic Leader Level 7-15 (Field Specialist)
+kpn - The Big Cheese Level 8-25
+cg - Autocaddie Level 14-15.exe
+bg - Club President Level 18.mgr
+msr - Derrick Man Level 5.mgr
+kb - Derrick Hand Level 25.mgr v2.0 (soon)
+ts - Director Of Ambush Marketing Level 25.mgr
+tc - Firestarter Level 20.mgr
+tg - Featherbedder Level 30.mgr
+
+dfh - Big Fish Level 6-12 (Field Specialist) 
+rng - Magnate Level 7-15
+cps - Chairwarmer Level 7-15 (Field Specialist)
+tld - Head Honcho Level 8-25
+gkp - Chairperson Level 15-18.exe
+ddv - Board Director Level 20.mgr
+dty - Deep Diver Level 7.mgr
+dfg - Gatekeeper Level 10.mgr
+dfr - Land Acquisition Architect Level 7.mgr
+bsh - Director Of Land Development Level 25.mgr
+ghd - NOTHING Level 40.mgr
+tyh - NOTHING Level 45.mgr 
+jgd - NOTHING Level 45.mgr
+bby - NOTHING Level 50.mgr
+dvk - Dividend King Level 65.mgr
+otm - The Ottoman Level 75.mgr
+cry - Crystalline Level 77.mgr
+tcm - The Chairman Level 100.mgr
+
+TECHBOTS:
+skd- Script Kiddie Level 1-5 
+cmk - Code Monkey Level 2-6
+phs - Phisher Level 2-8 (Operations Analyst) 
+vpr - Voodoo Programmer Level 3-7 
+kyl - Computerist Level 3-9 (Field Specialist) 
+sdb - Shotgun Debugger Level 4-8 
+gry - Grey Hat Level 4-10 (Operations Analyst) 
+kbc - Keyboard Cowboy Level 5-10 
+shp - Sharp Seer Level 5-15 (Field Specialist) 
+sfs - Software Simian Level 6-12 
+pyc - Python Charmer Level 6-12 (Field Specialist) 
+inw - Installer Wizard Level 7-15 
+sys - Sysadmin Level 7-15 (Field Specialist) 
+rus - Root User Level 8-25 
+ant - Antivirus Level 15-20.exe 
+sya - Senior Developer Level 20.mgr 
+yuh - Desk Jockey Level 3-10 (No .gov Variant)
+yhi - PLACEHOLDER Level 25.mgr 
+jas - PLACEHOLDER Level 25.mgr
+tas - PLACEHOLDER Level 20.mgr 
+fhu - PLACEHOLDER Level 30.mgr 
+fsh - PLACEHOLDER Level 88.mgr
+fhj - PLACEHOLDER Level 50.mgr
+kdh - PLACEHOLDER (OR) Level 50.mgr
+dar - Black Hat Level 40.mgr
+nhy - Security Supervisor Level 45.mgr
+wrt - Keylogger Level 45.mgr
+auh - Technocrat Level 50.mgr
+

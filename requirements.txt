@@ -1,0 +1,7 @@
+raven
+requests
+pymongo
+pycryptodome
+pyyaml
+semidbm
+six
