@@ -1,4 +1,3 @@
-
 # Aristotown: Altis Edition
 A customized version of Project Altis that's is heavily based on the predecessor Toontown: Corporate Clash. Although this version of the game may not reflect what comes directly from Clash, it does have very similar features to what Clash has to offer. This game is in no way, shape or form intended to be a Toontown: Corporate Clash mirror or duplicate (it is very far from being so), this version of the game uses various assets from Clash such as select gui panels, cog models, animated cog heads, cog abilities, cog animations, and prop models. 
 
