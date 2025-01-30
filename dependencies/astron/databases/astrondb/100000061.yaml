@@ -1,0 +1,11 @@
+id: 100000061
+class: Account
+fields:
+  ACCOUNT_AV_SET: "[0, 0, 0, 0, 0, 0]"
+  ESTATE_ID: 0
+  ACCOUNT_AV_SET_DEL: "[]"
+  CREATED: "\"Thu Apr 18 11:55:17 2024\""
+  LAST_LOGIN: "\"Thu Apr 18 12:05:24 2024\""
+  ACCOUNT_ID: "\"sanjayta\""
+  ACCESS_LEVEL: 500
+  MONEY: 0

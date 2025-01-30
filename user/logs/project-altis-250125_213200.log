@@ -1,0 +1,177 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x00000000259C2DC8>}
+__handleAvatarChooserDone: 100000082, 'KOALALALALA', ('ess', 'sd', 's', 'f', (0.8039, 0.6862, 0.5843, 1.0), (1.0, 1.0, 1.0, 1.0), (0.8039, 0.6862, 0.5843, 1.0), (0.8039, 0.6862, 0.5843, 1.0), 13, 24, 11, 24, 2, 1), 5
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019A61E48>
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019A61B38>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 54.4 fps|0.021d|49 avs||330|331||0x0000|0x0000|887.0MB|1782.1MB|32717.5MB|1199|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 55.5 fps|0.010d|55 avs||630|631||0x0000|0x0000|976.7MB|1944.4MB|32717.5MB|1307|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+frame rate: 50.8 fps|0.008d|60 avs||930|931||0x0000|0x0000|1047.2MB|2052.1MB|32717.5MB|1354|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Found manager... using it...
+frame rate: 49.8 fps|0.005d|70 avs||1230|1231||0x0000|0x0000|1108.9MB|2178.2MB|32717.5MB|1414|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+Battle Event localtoon-battle-event-9
+frame rate: 41.4 fps|0.008d|75 avs||1530|1531||0x0000|0x0000|1173.7MB|2253.3MB|32717.5MB|1441|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019A61B38>
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019A61B38>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 47.5 fps|0.008d|90 avs||1830|1831||0x0000|0x0000|1226.6MB|2307.5MB|32717.5MB|1456|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 45.9 fps|0.003d|120 avs||2130|2131||0x0000|0x0000|1113.6MB|2511.3MB|32717.5MB|1577|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Battle Event localtoon-battle-event-21
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019A61B38>
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019A61B38>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 43.6 fps|0.012d|137 avs||2430|2431||0x0000|0x0000|1167.7MB|2573.8MB|32717.5MB|1593|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 36.9 fps|0.005d|152 avs||2730|2731||0x0000|0x0000|1238.3MB|2654.1MB|32717.5MB|1625|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 35.1 fps|0.013d|163 avs||3030|3031||0x0000|0x0000|1057.5MB|2751.4MB|32717.5MB|1658|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 34.4 fps|0.005d|170 avs||3330|3331||0x0000|0x0000|1098.5MB|2805.8MB|32717.5MB|1682|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 32.0 fps|0.007d|183 avs||3630|3631||0x0000|0x0000|1171.9MB|2893.5MB|32717.5MB|1711|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019A61B38>
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019A61E48>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 29.8 fps|0.005d|204 avs||3930|3931||0x0000|0x0000|1085.0MB|2960.8MB|32717.5MB|1728|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 26.7 fps|0.004d|272 avs||4230|4231||0x0000|0x0000|1122.4MB|3140.0MB|32717.5MB|1840|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Battle Event localtoon-battle-event-27
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_DG.pdna
+Reading DNA file... phase_8/dna/storage_DG_sz.pdna
+Reading DNA file... phase_8/dna/daisys_garden_sz.pdna
+DNALandmarkBuilding sb2:toon_landmark_hqDG_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb3:toon_landmark_DG_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-33
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019A61E48>
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019A61E48>
+frame rate: 27.4 fps|0.024d|335 avs||4530|4531||0x0000|0x0000|1332.3MB|3339.3MB|32717.5MB|2234|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 26.1 fps|0.013d|340 avs||4830|4831||0x0000|0x0000|1327.0MB|3519.4MB|32717.5MB|2332|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 26.1 fps|0.011d|347 avs||5130|5131||0x0000|0x0000|1330.8MB|3591.2MB|32717.5MB|2353|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 24.5 fps|0.008d|355 avs||5430|5431||0x0000|0x0000|1333.6MB|3650.6MB|32717.5MB|2368|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019A61B38>
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019A61B38>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 23.8 fps|0.006d|368 avs||5730|5731||0x0000|0x0000|1349.4MB|3740.2MB|32717.5MB|2404|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 24.0 fps|0.004d|383 avs||6030|6031||0x0000|0x0000|1268.3MB|3783.2MB|32717.5MB|2415|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019A61E48>
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019A61B38>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Battle Event localtoon-battle-event-57
+frame rate: 24.7 fps|0.008d|407 avs||6330|6331||0x0000|0x0000|1297.2MB|3857.5MB|32717.5MB|2448|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 23.0 fps|0.010d|409 avs||6630|6631||0x0000|0x0000|1220.9MB|3923.2MB|32717.5MB|2467|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_DG.pdna
+Reading DNA file... phase_8/dna/storage_DG_sz.pdna
+Reading DNA file... phase_8/dna/daisys_garden_sz.pdna
+DNALandmarkBuilding sb2:toon_landmark_hqDG_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb3:toon_landmark_DG_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+frame rate: 26.5 fps|0.003d|413 avs||6930|6931||0x0000|0x0000|1287.4MB|3845.9MB|32717.5MB|2699|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 25.8 fps|0.003d|414 avs||7230|7231||0x0000|0x0000|1264.5MB|3849.0MB|32717.5MB|2705|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 26.0 fps|0.003d|414 avs||7530|7531||0x0000|0x0000|1138.0MB|3852.9MB|32717.5MB|2706|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 26.3 fps|0.003d|414 avs||7830|7831||0x0000|0x0000|914.6MB|3856.7MB|32717.5MB|2707|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 26.2 fps|0.003d|414 avs||8130|8131||0x0000|0x0000|824.3MB|3860.4MB|32717.5MB|2708|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL

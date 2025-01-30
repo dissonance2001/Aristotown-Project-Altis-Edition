@@ -1,0 +1,247 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x00000000277F6B08>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_6/dna/storage_MM.pdna
+Reading DNA file... phase_6/dna/storage_MM_sz.pdna
+Reading DNA file... phase_6/dna/minnies_melody_land_sz.pdna
+DNALandmarkBuilding sb4:toon_landmark_hqMM_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb6:toon_landmark_MM_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+Reading DNA file... phase_5/dna/storage_town.pdna
+Reading DNA file... phase_6/dna/storage_MM_town.pdna
+Reading DNA file... phase_6/dna/minnies_melody_land_4100.pdna
+DNALandmarkBuilding sb59:toon_landmark_hqMM_DNARoot did not find **/*suit_building_origin
+Battle Event localtoon-battle-event-3
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1731, in handleMessageType
+    self.handleGoGetLost(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 494, in handleGoGetLost
+    self.lostConnection()
+  File "otp\distributed\OTPClientRepository.py", line 1643, in lostConnection
+    self.loginFSM.request('noConnection')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 228, in __transition
+    self.__exitCurrent(exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 186, in __exitCurrent
+    self.__currentState.exit(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 209, in exit
+    self.__exitChildren(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 188, in __exitChildren
+    fsm.request((fsm.getFinalState()).getName())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\distributed\ToontownClientRepository.py", line 516, in enterGameOff
+    OTPClientRepository.OTPClientRepository.enterGameOff(self)
+  File "otp\distributed\OTPClientRepository.py", line 1236, in enterGameOff
+    self._abandonShard()
+  File "toontown\distributed\ToontownClientRepository.py", line 1085, in _abandonShard
+    self.deleteObject(doId)
+  File "toontown\distributed\ToontownClientRepository.py", line 1074, in deleteObject
+    obj.deleteOrDelay()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 202, in deleteOrDelay
+    self.disableAnnounceAndDelete()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 205, in disableAnnounceAndDelete
+    self.disableAndAnnounce()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 231, in disableAndAnnounce
+    self.disable()
+  File "toontown\cogdominium\DistCogdoGame.py", line 118, in disable
+    self.loadFSM.requestFinalState()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 149, in requestFinalState
+    self.request(self.getFinalState().getName())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 228, in __transition
+    self.__exitCurrent(exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 186, in __exitCurrent
+    self.__currentState.exit(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 213, in exit
+    self.__exitFunc(*argList)
+  File "toontown\cogdominium\DistCogdoFlyingGame.py", line 119, in exitLoaded
+    self.game.unload()
+  File "toontown\cogdominium\CogdoFlyingGame.py", line 97, in unload
+    self.audioMgr.destroy()
+  File "toontown\cogdominium\CogdoGameAudioManager.py", line 53, in destroy
+    del base.cogdoGameAudioMgr
+AttributeError: ToonBase instance has no attribute 'cogdoGameAudioMgr'
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\EventManager.py", line 49, in eventLoopTask
+    self.doEvents()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\EventManager.py", line 42, in doEvents
+    while not isEmptyFunc():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1731, in handleMessageType
+    self.handleGoGetLost(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 494, in handleGoGetLost
+    self.lostConnection()
+  File "otp\distributed\OTPClientRepository.py", line 1643, in lostConnection
+    self.loginFSM.request('noConnection')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 228, in __transition
+    self.__exitCurrent(exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 186, in __exitCurrent
+    self.__currentState.exit(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 209, in exit
+    self.__exitChildren(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 188, in __exitChildren
+    fsm.request((fsm.getFinalState()).getName())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\distributed\ToontownClientRepository.py", line 516, in enterGameOff
+    OTPClientRepository.OTPClientRepository.enterGameOff(self)
+  File "otp\distributed\OTPClientRepository.py", line 1236, in enterGameOff
+    self._abandonShard()
+  File "toontown\distributed\ToontownClientRepository.py", line 1085, in _abandonShard
+    self.deleteObject(doId)
+  File "toontown\distributed\ToontownClientRepository.py", line 1074, in deleteObject
+    obj.deleteOrDelay()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 202, in deleteOrDelay
+    self.disableAnnounceAndDelete()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 205, in disableAnnounceAndDelete
+    self.disableAndAnnounce()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 231, in disableAndAnnounce
+    self.disable()
+  File "toontown\cogdominium\DistCogdoGame.py", line 118, in disable
+    self.loadFSM.requestFinalState()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 149, in requestFinalState
+    self.request(self.getFinalState().getName())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 228, in __transition
+    self.__exitCurrent(exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 186, in __exitCurrent
+    self.__currentState.exit(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 213, in exit
+    self.__exitFunc(*argList)
+  File "toontown\cogdominium\DistCogdoFlyingGame.py", line 119, in exitLoaded
+    self.game.unload()
+  File "toontown\cogdominium\CogdoFlyingGame.py", line 97, in unload
+    self.audioMgr.destroy()
+  File "toontown\cogdominium\CogdoGameAudioManager.py", line 53, in destroy
+    del base.cogdoGameAudioMgr
+AttributeError: ToonBase instance has no attribute 'cogdoGameAudioMgr'
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\EventManager.py", line 49, in eventLoopTask
+    self.doEvents()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\EventManager.py", line 42, in doEvents
+    while not isEmptyFunc():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1731, in handleMessageType
+    self.handleGoGetLost(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 494, in handleGoGetLost
+    self.lostConnection()
+  File "otp\distributed\OTPClientRepository.py", line 1643, in lostConnection
+    self.loginFSM.request('noConnection')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 228, in __transition
+    self.__exitCurrent(exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 186, in __exitCurrent
+    self.__currentState.exit(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 209, in exit
+    self.__exitChildren(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 188, in __exitChildren
+    fsm.request((fsm.getFinalState()).getName())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\distributed\ToontownClientRepository.py", line 516, in enterGameOff
+    OTPClientRepository.OTPClientRepository.enterGameOff(self)
+  File "otp\distributed\OTPClientRepository.py", line 1236, in enterGameOff
+    self._abandonShard()
+  File "toontown\distributed\ToontownClientRepository.py", line 1085, in _abandonShard
+    self.deleteObject(doId)
+  File "toontown\distributed\ToontownClientRepository.py", line 1074, in deleteObject
+    obj.deleteOrDelay()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 202, in deleteOrDelay
+    self.disableAnnounceAndDelete()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 205, in disableAnnounceAndDelete
+    self.disableAndAnnounce()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 231, in disableAndAnnounce
+    self.disable()
+  File "toontown\cogdominium\DistCogdoGame.py", line 118, in disable
+    self.loadFSM.requestFinalState()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 149, in requestFinalState
+    self.request(self.getFinalState().getName())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 228, in __transition
+    self.__exitCurrent(exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 186, in __exitCurrent
+    self.__currentState.exit(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 213, in exit
+    self.__exitFunc(*argList)
+  File "toontown\cogdominium\DistCogdoFlyingGame.py", line 119, in exitLoaded
+    self.game.unload()
+  File "toontown\cogdominium\CogdoFlyingGame.py", line 97, in unload
+    self.audioMgr.destroy()
+  File "toontown\cogdominium\CogdoGameAudioManager.py", line 53, in destroy
+    del base.cogdoGameAudioMgr
+AttributeError: ToonBase instance has no attribute 'cogdoGameAudioMgr'

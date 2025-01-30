@@ -1,0 +1,116 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+toontown\toon\Toon.py:439: SyntaxWarning: name 'BeaverDialogueArray' is used prior to global declaration
+  global BeaverDialogueArray
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x00000000284AE848>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1747, in handleMessageType
+    self.gotInterestDoneMessage(di)
+  File "otp\distributed\OTPClientRepository.py", line 1775, in gotInterestDoneMessage
+    self.handleInterestDoneMessage(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DoInterestManager.py", line 617, in handleInterestDoneMessage
+    messenger.send(event)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\distributed\ToontownClientRepository.py", line 1000, in _handleEmuSetZoneDone
+    messenger.send(event)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\hood\QuietZoneState.py", line 304, in _handleSetZoneComplete
+    self.fsm.request('waitForLocalAvatarOnShard')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\QuietZoneState.py", line 322, in enterWaitForLocalAvatarOnShard
+    self._announceDone()
+  File "toontown\hood\QuietZoneState.py", line 333, in _announceDone
+    self._setZoneCompleteCallbacks()
+  File "toontown\toonbase\ToonPythonUtil.py", line 4280, in __call__
+    callback()
+  File "toontown\toonbase\ToonPythonUtil.py", line 102, in _do__call__
+    return self._function(*(self._args + args), **_kargs)
+  File "toontown\hood\Place.py", line 734, in _placeTeleportInPostZoneComplete
+    base.localAvatar.orbitalCamera.setPresetPos(base.localAvatar.orbitalCamera.presetPos, transition=False)
+AttributeError: 'LocalToon' object has no attribute 'orbitalCamera'
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1747, in handleMessageType
+    self.gotInterestDoneMessage(di)
+  File "otp\distributed\OTPClientRepository.py", line 1775, in gotInterestDoneMessage
+    self.handleInterestDoneMessage(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DoInterestManager.py", line 617, in handleInterestDoneMessage
+    messenger.send(event)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\distributed\ToontownClientRepository.py", line 1000, in _handleEmuSetZoneDone
+    messenger.send(event)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\hood\QuietZoneState.py", line 304, in _handleSetZoneComplete
+    self.fsm.request('waitForLocalAvatarOnShard')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\QuietZoneState.py", line 322, in enterWaitForLocalAvatarOnShard
+    self._announceDone()
+  File "toontown\hood\QuietZoneState.py", line 333, in _announceDone
+    self._setZoneCompleteCallbacks()
+  File "toontown\toonbase\ToonPythonUtil.py", line 4280, in __call__
+    callback()
+  File "toontown\toonbase\ToonPythonUtil.py", line 102, in _do__call__
+    return self._function(*(self._args + args), **_kargs)
+  File "toontown\hood\Place.py", line 734, in _placeTeleportInPostZoneComplete
+    base.localAvatar.orbitalCamera.setPresetPos(base.localAvatar.orbitalCamera.presetPos, transition=False)
+AttributeError: 'LocalToon' object has no attribute 'orbitalCamera'

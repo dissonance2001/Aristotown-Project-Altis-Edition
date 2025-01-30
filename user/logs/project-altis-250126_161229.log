@@ -1,0 +1,14 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\python\lib\runpy.py", line 174, in _run_module_as_main
+    "__main__", fname, loader, pkg_name)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\python\lib\runpy.py", line 72, in _run_code
+    exec code in run_globals
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\toontown\toonbase\ClientStart.py", line 103, in <module>
+    ToonBase.ToonBase()
+  File "toontown\toonbase\ToonBase.py", line 42, in __init__
+    self.settings = Settings()
+NameError: global name 'Settings' is not defined

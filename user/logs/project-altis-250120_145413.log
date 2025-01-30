@@ -1,0 +1,33 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\python\lib\runpy.py", line 174, in _run_module_as_main
+    "__main__", fname, loader, pkg_name)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\python\lib\runpy.py", line 72, in _run_code
+    exec code in run_globals
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\toontown\toonbase\ClientStart.py", line 158, in <module>
+    from toontown.distributed import ToontownClientRepository
+  File "toontown\distributed\ToontownClientRepository.py", line 5, in <module>
+    from toontown.distributed import PlayGame
+  File "toontown\distributed\PlayGame.py", line 10, in <module>
+    from toontown.hood import TTHood
+  File "toontown\hood\TTHood.py", line 1, in <module>
+    from toontown.safezone.TTSafeZoneLoader import TTSafeZoneLoader
+  File "toontown\safezone\TTSafeZoneLoader.py", line 1, in <module>
+    from toontown.safezone import SafeZoneLoader
+  File "toontown\safezone\SafeZoneLoader.py", line 6, in <module>
+    from toontown.hood import Place
+  File "toontown\hood\Place.py", line 10, in <module>
+    from toontown.friends import FriendsListManager
+  File "toontown\friends\FriendsListManager.py", line 12, in <module>
+    from toontown.suit import SuitAvatarPanel
+  File "toontown\suit\SuitAvatarPanel.py", line 71
+    self.frame = DirectFrame(geom=gui.find('**/avatar_panel'), geom_scale=0.21, geom_color=Suit.Suit.medallionColors[avatar.dna.dept], geom_color=(0.655, 0.686, 0.698, 1), geom_pos=(0, 0, 0.02), relief=None, pos=(-0.2348, 0, -0.375), parent=base.a2dTopRight)
+SyntaxError: keyword argument repeated

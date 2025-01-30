@@ -1,0 +1,36 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x00000000260CDB88>}
+__handleAvatarChooserDone: 100000077, 'TORKEY', ('gss', 'sd', 's', 'f', (0.235, 0.573, 0.984, 1.0), (1.0, 1.0, 1.0, 1.0), (0.235, 0.573, 0.984, 1.0), (0.235, 0.573, 0.984, 1.0), 13, 0, 11, 0, 4, 9), 5
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+frame rate: 57.6 fps|0.024d|36 avs||334|334||0x0000|0x0000|810.1MB|1676.3MB|32717.5MB|1142|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 51.6 fps|0.006d|39 avs||634|635||0x0000|0x0000|876.8MB|1824.2MB|32717.5MB|1232|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_DG.pdna
+Reading DNA file... phase_8/dna/storage_DG_sz.pdna
+Reading DNA file... phase_8/dna/daisys_garden_sz.pdna
+DNALandmarkBuilding sb2:toon_landmark_hqDG_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb3:toon_landmark_DG_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+frame rate: 120.1 fps|0.001d|41 avs||934|935||0x0000|0x0000|907.9MB|2031.5MB|32717.5MB|1480|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL

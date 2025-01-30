@@ -1,0 +1,54 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000025FBBC08>}
+__handleAvatarChooserDone: 100000090, 'TRAP BUNNY', ('rsl', 'md', 'l', 'f', (0.726562, 0.472656, 0.859375, 1.0), (1.0, 1.0, 1.0, 1.0), (0.726562, 0.472656, 0.859375, 1.0), (0.726562, 0.472656, 0.859375, 1.0), 22, 7, 0, 7, 4, 1), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+frame rate: 84.4 fps|0.005d|49 avs||316|317||0x0000|0x0000|899.0MB|1749.2MB|32717.5MB|1213|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 71.6 fps|0.006d|87 avs||616|617||0x0000|0x0000|976.3MB|1920.1MB|32717.5MB|1307|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 62.6 fps|0.002d|136 avs||916|917||0x0000|0x0000|1070.0MB|2063.9MB|32717.5MB|1372|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Battle Event localtoon-battle-event-9
+frame rate: 60.9 fps|0.007d|184 avs||1216|1217||0x0000|0x0000|1153.3MB|2204.7MB|32717.5MB|1431|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 50.9 fps|0.005d|226 avs||1516|1517||0x0000|0x0000|1235.6MB|2295.7MB|32717.5MB|1456|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 47.3 fps|0.009d|261 avs||1816|1817||0x0000|0x0000|1306.7MB|2403.6MB|32717.5MB|1494|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 45.4 fps|0.005d|300 avs||2116|2117||0x0000|0x0000|1391.2MB|2498.8MB|32717.5MB|1522|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_DG.pdna
+Reading DNA file... phase_8/dna/storage_DG_sz.pdna
+Reading DNA file... phase_8/dna/daisys_garden_sz.pdna
+DNALandmarkBuilding sb2:toon_landmark_hqDG_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb3:toon_landmark_DG_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-15
+frame rate: 38.8 fps|0.005d|368 avs||2416|2417||0x0000|0x0000|1551.3MB|2829.8MB|32717.5MB|1908|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+frame rate: 39.0 fps|0.006d|399 avs||2716|2717||0x0000|0x0000|1646.2MB|2928.5MB|32717.5MB|1951|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL

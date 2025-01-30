@@ -1,0 +1,163 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000025F8BD88>}
+__handleAvatarChooserDone: 100000082, 'KOALALALALA', ('ess', 'sd', 's', 'f', (0.8039, 0.6862, 0.5843, 1.0), (1.0, 1.0, 1.0, 1.0), (0.8039, 0.6862, 0.5843, 1.0), (0.8039, 0.6862, 0.5843, 1.0), 13, 24, 11, 24, 2, 1), 5
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-9
+frame rate: 48.2 fps|0.018d|51 avs||338|339||0x0000|0x0000|896.7MB|1740.6MB|32717.5MB|1162|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+chooseFireOpenShot <function avatarCloseUpThreeQuarterRightShot at 0x0000000019EC8208>
+chooseFireOpenShot <function avatarCloseUpThreeQuarterLeftFireShot at 0x0000000019EC8DD8>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 41.7 fps|0.007d|68 avs||638|639||0x0000|0x0000|981.8MB|1912.0MB|32717.5MB|1260|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 46.7 fps|0.005d|74 avs||938|939||0x0000|0x0000|1068.5MB|2041.2MB|32717.5MB|1319|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+frame rate: 41.7 fps|0.014d|80 avs||1238|1239||0x0000|0x0000|1155.9MB|2160.3MB|32717.5MB|1381|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_DG.pdna
+Reading DNA file... phase_8/dna/storage_DG_sz.pdna
+Reading DNA file... phase_8/dna/daisys_garden_sz.pdna
+DNALandmarkBuilding sb2:toon_landmark_hqDG_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb3:toon_landmark_DG_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-15
+frame rate: 48.1 fps|0.032d|105 avs||1538|1539||0x0000|0x0000|1335.1MB|2422.0MB|32717.5MB|1773|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+frame rate: 37.7 fps|0.012d|124 avs||1838|1839||0x0000|0x0000|1353.6MB|2573.6MB|32717.5MB|1847|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_DG.pdna
+Reading DNA file... phase_8/dna/storage_DG_sz.pdna
+Reading DNA file... phase_8/dna/daisys_garden_sz.pdna
+DNALandmarkBuilding sb2:toon_landmark_hqDG_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb3:toon_landmark_DG_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+frame rate: 50.0 fps|0.002d|151 avs||2138|2139||0x0000|0x0000|1169.3MB|2554.8MB|32717.5MB|2095|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 50.3 fps|0.002d|151 avs||2438|2439||0x0000|0x0000|1169.9MB|2559.1MB|32717.5MB|2096|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 46.8 fps|0.004d|151 avs||2738|2739||0x0000|0x0000|1174.1MB|2563.3MB|32717.5MB|2098|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-33
+frame rate: 41.2 fps|0.004d|186 avs||3038|3039||0x0000|0x0000|1089.0MB|2731.0MB|32717.5MB|2307|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 30.0 fps|0.004d|200 avs||3338|3339||0x0000|0x0000|1139.4MB|2876.7MB|32717.5MB|2363|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_DG.pdna
+Reading DNA file... phase_8/dna/storage_DG_sz.pdna
+Reading DNA file... phase_8/dna/daisys_garden_sz.pdna
+DNALandmarkBuilding sb2:toon_landmark_hqDG_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb3:toon_landmark_DG_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+Exception occurred while processing Func-setProp-40220 of Parallel-31329:
+Parallel-31329:
+  0.000 Parallel-31329 {
+  0.000   *Func-setProp-40220
+  0.000   *Func-setProp-40221
+  0.000   *LerpFunctionInterval-__updateLabel-207
+  0.000 }
+
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 118, in __doPythonCallbacks
+    ival.privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\gui\DirectGuiBase.py", line 1098, in setProp
+    self[propString] = value
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\gui\DirectGuiBase.py", line 446, in __setitem__
+    self.configure(**{key: value})
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\gui\DirectGuiBase.py", line 339, in configure
+    optionInfo = self._optionInfo
+AttributeError: 'DirectWaitBar' object has no attribute '_optionInfo'
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 118, in __doPythonCallbacks
+    ival.privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\gui\DirectGuiBase.py", line 1098, in setProp
+    self[propString] = value
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\gui\DirectGuiBase.py", line 446, in __setitem__
+    self.configure(**{key: value})
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\gui\DirectGuiBase.py", line 339, in configure
+    optionInfo = self._optionInfo
+AttributeError: 'DirectWaitBar' object has no attribute '_optionInfo'

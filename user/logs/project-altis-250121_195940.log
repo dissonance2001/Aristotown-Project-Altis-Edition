@@ -1,0 +1,120 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000028F04A48>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_6/dna/storage_MM.pdna
+Reading DNA file... phase_6/dna/storage_MM_sz.pdna
+Reading DNA file... phase_6/dna/minnies_melody_land_sz.pdna
+DNALandmarkBuilding sb4:toon_landmark_hqMM_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb6:toon_landmark_MM_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+Reading DNA file... phase_5/dna/storage_town.pdna
+Reading DNA file... phase_6/dna/storage_MM_town.pdna
+Reading DNA file... phase_6/dna/minnies_melody_land_4100.pdna
+DNALandmarkBuilding sb59:toon_landmark_hqMM_DNARoot did not find **/*suit_building_origin
+Exception occurred while processing Sound-270 of Sequence-796:
+Sequence-796:
+  0.000 Sequence-796 {
+  0.000   Parallel-795 {
+  0.000     Sequence-791 {
+  0.000       *Func-stash-944
+  0.000       *Actor-lose-513 dur 2.54167
+  2.542       *remove-death-suit
+  2.542     }
+  0.000     gears2MTrack {
+  0.000       Sequence-793 {
+  0.000         Wait dur 1.5
+  1.500         Sequence-792 {
+  1.500           *Func-reparentTo-945
+  1.500           *Func-setPos-946
+  1.500           *Func-setScale-947
+  1.500           Wait dur 0.6
+  2.100           *Func-removeProp-948
+  2.100         }
+  2.100       }
+  0.700       *Particle-2 dur 5.7
+  5.200       *Particle-3 dur 1.2
+  5.400       *Particle-4 dur 1
+  6.400     }
+  0.000     gears1Track {
+  0.000       *Particle-1 dur 4.3
+  4.300     }
+  0.000     Sequence-549 {
+  0.000       *Sound-270 dur 1.6
+  1.600       *Sound-271 dur 1.854
+  3.454     }
+  6.400   }
+  6.400   Sequence-794 {
+  6.400     *Func-removeParticle-949
+  6.400     *Func-removeParticle-950
+  6.400     *Func-removeParticle-951
+  6.400     *Func-removeParticle-952
+  6.400   }
+  6.400 }
+
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 212, in privDoEvent
+    self.privInitialize(t)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\SoundInterval.py", line 81, in privInitialize
+    listenerNode = self.listenerNode, cutoff = self.cutOff)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\SfxPlayer.py", line 75, in playSfx
+    self.setFinalVolume(sfx, node, volume, listenerNode, cutoff)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\SfxPlayer.py", line 96, in setFinalVolume
+    finalVolume *= node.getNetAudioVolume()
+AssertionError: _error_type == ET_ok at line 437 of E:\NormalNed-Projects\panda3d-windows\panda\src\pgraph\nodePath.I
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 212, in privDoEvent
+    self.privInitialize(t)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\SoundInterval.py", line 81, in privInitialize
+    listenerNode = self.listenerNode, cutoff = self.cutOff)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\SfxPlayer.py", line 75, in playSfx
+    self.setFinalVolume(sfx, node, volume, listenerNode, cutoff)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\SfxPlayer.py", line 96, in setFinalVolume
+    finalVolume *= node.getNetAudioVolume()
+AssertionError: _error_type == ET_ok at line 437 of E:\NormalNed-Projects\panda3d-windows\panda\src\pgraph\nodePath.I

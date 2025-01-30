@@ -1,0 +1,223 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000027C03748>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+Exception occurred while processing Func-reparentTo-106 of movie-track-with-cam-402019852:
+movie-track-with-cam-402019852:
+  0.000 movie-track-with-cam-402019852 {
+  0.000   movie-track-402019852 {
+  0.000     Sequence-88 {
+  0.000       suit-attacks {
+  0.000         Sequence-134 {
+  0.000           *Func-makeUnLured-138
+  0.000           Parallel-133 {
+  0.000             *Func-unlureSuit-140
+  0.000             Parallel-131 {
+  0.000               *Func-setChatAbsolute-139
+  0.000             }
+  0.000             Sequence-132 {
+  0.000               *Func-setHpr-141
+  0.000               *Actor-walk-13 dur 0.5
+  0.500               *Func-loop-142
+  0.500             }
+  0.000             LerpPosInterval-293: pos from 0 7 0 to 0 7 0 dur 0.5
+  0.500           }
+  0.500           Sequence-130 {
+  0.500             *Func-makeUnLured-138
+  0.500             *Func-setNeutralAnimation-137
+  0.500             Parallel-120 {
+  0.500               Sequence-99 {
+  0.500                 *Actor-finger-wag-9 dur 1.04167
+  1.542                 Wait dur 1
+  2.542                 Sequence-98 {
+  2.542                   Wait dur 1e-06
+  2.542                   *Func-setChatAbsolute-98
+  2.542                   *Func-reparentTrap-99
+  2.542                   *Func-headsUp-100
+  2.542                   *Actor-throw-object-10 dur 3.02778
+  5.570                   *Func-setHpr-101
+  5.570                   *Func-setNeutralAnimation-102
+  5.570                   *Func-returnTrapToSuit-103
+  5.570                 }
+  5.570               }
+  0.500               Parallel-118 {
+  0.500                 Sequence-110 {
+  0.500                   *Func-headsUp-113
+  0.500                   *Func-removeInsured-114
+  0.500                   Sequence-113 {
+  0.500                     Wait dur 1.7
+  2.200                     Parallel-114 {
+  2.200                       Sequence-115 {
+  2.200                         *Actor-sidestep-left-12 dur 3.625
+  5.825                         *Func-loop-123
+  5.825                       }
+  2.200                       Sequence-116 {
+  2.200                         Wait dur 0.5
+  2.700                         *Sound-12 dur 0.574
+  3.274                       }
+  5.825                     }
+  5.825                     *Func-loop-124
+  5.825                   }
+  5.825                 }
+  0.500                 Sequence-117 {
+  0.500                   Wait dur 2.2
+  2.700                   *Func-indicateMissed-125
+  2.700                 }
+  5.825               }
+  0.500               Sequence-102 {
+  0.500                 Sequence-101 {
+  0.500                   Wait dur 0.25
+  0.750                   *Func-__showProp-104
+  0.750                   LerpScaleInterval-282: scale from 0.01 0.01 0.01 to 1.5 1.5 1.5 dur 0.25
+  1.000                 }
+  1.000                 Wait dur 1
+  2.000                 *Func-show-105
+  2.000                 Parallel-103 {
+  2.000                   *Func-reparentTo-106
+  2.000                   Parallel-100 {
+  2.000                     LerpPosInterval-281: pos to -0.25 0 0 dur 0.25
+  2.250                   }
+  2.250                 }
+  2.250                 Wait dur 1.55
+  3.800                 Sequence-104 {
+  3.800                   *Func-needRestoreRenderProp-107
+  3.800                   *Func-wrtReparentTo-108
+  3.800                   LerpPosInterval-283: pos to -1.1 -9 0.7 dur 0.25
+  4.050                   *Func-removeProp-109
+  4.050                   *Func-clearRenderProp-110
+  4.050                 }
+  4.050                 Parallel-109 {
+  4.050                   Sequence-105 {
+  4.050                     Sequence-106 {
+  4.050                       Wait
+  4.050                       *Func-__showProp-111
+  4.050                       LerpScaleInterval-284: scale from 0.01 0.01 0.01 to 2 2 2 dur 0
+  4.050                     }
+  4.050                     Sequence-107 {
+  4.050                       *Actor-dust-11 dur 1.66667
+  5.717                       *Func-detachNode-112
+  5.717                     }
+  5.717                   }
+  4.050                   Sequence-108 {
+  4.050                     Wait dur 0.01
+  4.060                     *Sound-11 dur 0.914
+  4.974                   }
+  5.717                 }
+  5.717               }
+  0.500               Sequence-119 {
+  0.500                 Wait dur 1.25
+  1.750                 *Sound-13 dur 3.056
+  4.806               }
+  5.825             }
+  5.825             *Func-setNeutralAnimation-136
+  5.825             Sequence-129 {
+  5.825               *Func-headsUp-134
+  5.825               *Func-loop-135
+  5.825             }
+  5.825           }
+  5.825         }
+  5.825       }
+  5.825       *Func-__handleMovieDone-144
+  5.825     }
+  5.825   }
+  0.000   Sequence-137 {
+  0.000     Sequence-89 {
+  0.000       suit-attacks-cam {
+  0.000         Sequence-136 {
+  0.000           Sequence-135 {
+  0.000             Wait dur 0.5
+  0.500             *Func-unlureSuit-143
+  0.500           }
+  0.500           Parallel-128 {
+  0.500             Sequence-121 {
+  0.500               Sequence-124 {
+  0.500                 Sequence-122 {
+  0.500                   *Func-setPos-126
+  0.500                   *Func-focusCameraBetweenPoints-127
+  0.500                   Wait dur 3.5
+  4.000                 }
+  4.000                 Sequence-123 {
+  4.000                   *Func-setPos-128
+  4.000                   *Func-focusCameraBetweenPoints-129
+  4.000                   Wait dur 1.825
+  5.825                 }
+  5.825               }
+  5.825             }
+  0.500             Sequence-127 {
+  0.500               LerpColorScaleInterval-285: color_scale to 1 0 0 1 dur 0
+  0.500               *Func-hide-130
+  0.500               *Func-setScale-131
+  0.500               LerpScaleInterval-286: scale from 1 1 1 to 0 0 0 dur 0
+  0.500               LerpPosInterval-287: pos from 0 0 0 to 0 0 0.42 dur 0
+  0.500               *Func-setText-132
+  0.500               *Func-show-133
+  0.500               Wait dur 0.5
+  1.000               Parallel-125 {
+  1.000                 LerpScaleInterval-288: scale from 0 0 0 to 1.2 1.2 1.2 dur 0.25
+  1.000                 LerpPosInterval-289: pos from 0 0 0.42 to 0 0 -0.075 dur 0.25
+  1.250               }
+  1.250               Parallel-126 {
+  1.250                 LerpScaleInterval-290: scale from 1.2 1.2 1.2 to 1.1 1.1 1.1 dur 0.25
+  1.250                 LerpPosInterval-291: pos from 0 0 -0.075 to 0 0 -0.04 dur 0.25
+  1.500               }
+  1.500               Wait dur 2
+  3.500               LerpColorScaleInterval-292: color_scale to 0 0 0 0 dur 0.25
+  3.750             }
+  5.825           }
+  5.825         }
+  5.825       }
+  5.825     }
+  5.825   }
+  5.825 }
+
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+TypeError: NodePath.reparent_to() argument 1 must be panda3d.core.NodePath, not instancemethod
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+TypeError: NodePath.reparent_to() argument 1 must be panda3d.core.NodePath, not instancemethod

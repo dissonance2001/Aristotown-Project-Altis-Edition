@@ -1,0 +1,324 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000025FDDCC8>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+Exception occurred while processing Func-__showProp-144 of movie-track-with-cam-402014354:
+movie-track-with-cam-402014354:
+  0.000 movie-track-with-cam-402014354 {
+  0.000   movie-track-402014354 {
+  0.000     Sequence-99 {
+  0.000       toon-attacks {
+  0.000         Sequence-129 {
+  0.000           Sequence-109 {
+  0.000             Parallel-111 {
+  0.000             }
+  0.000           }
+  0.000           Parallel-113 {
+  0.000             Sequence-128 {
+  0.000               Wait
+  0.000               Parallel-114 {
+  0.000                 Sequence-115 {
+  0.000                   Wait
+  0.000                   Parallel-116 {
+  0.000                     Sequence-117 {
+  0.000                       Wait dur 2.3
+  2.300                       *Sound-11 dur 3.701
+  6.001                     }
+  0.000                     Sequence-118 {
+  0.000                       *Func-showProps-134
+  0.000                       *Func-headsUp-135
+  0.000                       *Actor-pushbutton-24 dur 4
+  4.000                       *Func-removeProps-136
+  4.000                       *Func-loop-137
+  4.000                       *Func-setHpr-138
+  4.000                     }
+  0.000                     Sequence-119 {
+  0.000                       *Func-show-139
+  0.000                       *Func-setScale-140
+  0.000                       *Func-reparentTo-141
+  0.000                       LerpScaleInterval-168: scale from 0.1 0.1 0.1 to 1 1 1 dur 1.5
+  1.500                       Wait dur 4.5
+  6.000                       LerpScaleInterval-169: scale to 1 1 0.1 dur 0.4
+  6.400                       *Func-removeProp-142
+  6.400                     }
+  0.000                     Sequence-120 {
+  0.000                       Wait dur 2.5
+  2.500                       Sequence-123 {
+  2.500                         *Func-play-143
+  2.500                         Sequence-122 {
+  2.500                           Wait
+  2.500                           *Func-__showProp-144
+  2.500                           LerpScaleInterval-170: scale from 0.01 0.01 0.01 to 2 2 2 dur 0
+  2.500                         }
+  2.500                       }
+  2.500                     }
+  0.000                     Sequence-127 {
+  0.000                       Wait dur 1.8
+  1.800                       Parallel-124 {
+  1.800                         Sequence-125 {
+  1.800                           *Actor-sidestep-right-25 dur 5.08333
+  6.883                           *Func-setNeutralAnimation-145
+  6.883                         }
+  1.800                         *Func-indicateMissed-146
+  1.800                         Sequence-126 {
+  1.800                           *Sound-12 dur 3.996
+  5.796                         }
+  6.883                       }
+  6.883                     }
+  6.883                   }
+  6.883                 }
+  6.883               }
+  6.883             }
+  6.883           }
+  6.883           Parallel-112 {
+  6.883             Parallel-110 {
+  6.883             }
+  6.883           }
+  6.883         }
+  6.883       }
+  6.883       suit-attacks {
+  6.883         Sequence-182 {
+  6.883           *Func-makeUnLured-208
+  6.883           Parallel-181 {
+  6.883             *Func-unlureSuit-210
+  6.883             Parallel-179 {
+  6.883               *Func-setChatAbsolute-209
+  6.883             }
+  6.883             Sequence-180 {
+  6.883               *Func-setHpr-211
+  6.883               *Actor-walk-40 dur 0.5
+  7.383               *Func-loop-212
+  7.383             }
+  6.883             LerpPosInterval-208: pos to 0 7 0 dur 0.5
+  7.383           }
+  7.383           Sequence-178 {
+  7.383             *Func-makeUnLured-208
+  7.383             *Func-setNeutralAnimation-207
+  7.383             Parallel-152 {
+  7.383               Sequence-132 {
+  7.383                 Sequence-131 {
+  7.383                   Wait dur 1e-06
+  7.383                   *Func-setChatAbsolute-150
+  7.383                   *Func-reparentTrap-151
+  7.383                   *Func-headsUp-152
+  7.383                   *Actor-throw-object-26 dur 3.05556
+ 10.439                   *Func-setHpr-153
+ 10.439                   *Func-setNeutralAnimation-154
+ 10.439                   *Func-returnTrapToSuit-155
+ 10.439                 }
+ 10.439               }
+  7.383               Sequence-142 {
+  7.383                 *Func-headsUp-163
+  7.383                 *Func-removeInsured-164
+  7.383                 Parallel-150 {
+  7.383                   Sequence-145 {
+  7.383                     Wait dur 3
+ 10.383                     Sequence-147 {
+ 10.383                       Wait dur 0.01
+ 10.393                       *Actor-cringe-28 dur 0.08
+ 10.473                       Wait dur 0.01
+ 10.483                       *Actor-slip-forward-29 dur 0.85
+ 11.333                       Wait dur 0.102151
+ 11.435                       *Actor-slip-forward-30 dur 0.0333333
+ 11.468                       Wait dur 0.102151
+ 11.570                       *Actor-slip-forward-31 dur 0.0333333
+ 11.603                       Wait dur 0.102151
+ 11.705                       *Actor-slip-forward-32 dur 0.0333333
+ 11.738                       Wait dur 0.102151
+ 11.840                       *Actor-slip-forward-33 dur 0.0333333
+ 11.873                       Wait dur 0.102151
+ 11.975                       *Actor-slip-forward-34 dur 0.0333333
+ 12.008                       Wait dur 0.102151
+ 12.110                       *Actor-slip-forward-35 dur 0.0333333
+ 12.143                       Wait dur 0.102151
+ 12.245                       *Actor-slip-forward-36 dur 0.0333333
+ 12.278                       Wait dur 0.102151
+ 12.380                       *Actor-slip-forward-37 dur 0.0333333
+ 12.413                       Wait dur 0.102151
+ 12.515                       *Actor-slip-forward-38 dur 0.0333333
+ 12.548                       Wait dur 0.01
+ 12.558                       *Actor-slip-forward-39 dur 0.781667
+ 13.340                     }
+ 13.340                     *Func-loop-174
+ 13.340                   }
+  7.383                   Sequence-148 {
+  7.383                     Wait dur 3.4
+ 10.783                     *Func-__doDamage-173
+ 10.783                   }
+  7.383                   Sequence-146 {
+  7.383                   }
+  7.383                   Sequence-149 {
+  7.383                     Wait dur 3.4
+ 10.783                     *Sound-14 dur 0.572
+ 11.355                   }
+ 13.340                 }
+ 13.340               }
+  7.383               Sequence-151 {
+  7.383                 Wait dur 0.01
+  7.393                 *Sound-15 dur 5.142
+ 12.535               }
+  7.383               Sequence-141 {
+  7.383                 Parallel-140 {
+  7.383                   Sequence-136 {
+  7.383                     Sequence-135 {
+  7.383                       Wait dur 0.1
+  7.483                       *Func-__showProp-157
+  7.483                       LerpScaleInterval-171: scale from 0.01 0.01 0.01 to 3.5 3.5 3.5 dur 0.25
+  7.733                     }
+  7.733                     Wait dur 1.75
+  9.483                     *Func-needRestoreRenderProp-158
+  9.483                     *Func-wrtReparentTo-159
+  9.483                     Sequence-137 {
+  9.483                       *Func-calcOriginAndVelocity-160
+  9.483                       *LerpFunctionInterval-throwPos-2 dur 1
+ 10.483                     }
+ 10.483                     Wait dur 0.6
+ 11.083                     LerpPosInterval-172: pos to 1.2 -9.3 0.2 dur 0.4
+ 11.483                   }
+  7.383                   Sequence-138 {
+  7.383                     Wait dur 1.85
+  9.233                     LerpHprInterval-173: hpr to 0 0 0 dur 1
+ 10.233                   }
+  7.383                   Sequence-139 {
+  7.383                     Wait dur 1.85
+  9.233                     LerpScaleInterval-174: scale to 6 6 6 dur 1
+ 10.233                     Wait dur 0.95
+ 11.183                     LerpScaleInterval-175: scale to 0.01 0.01 0.01 dur 0.4
+ 11.583                   }
+ 11.583                 }
+ 11.583                 *Func-removeProp-161
+ 11.583                 *Func-clearRenderProp-162
+ 11.583               }
+ 13.340             }
+ 13.340             *Func-setNeutralAnimation-206
+ 13.340             Sequence-177 {
+ 13.340               *Func-headsUp-204
+ 13.340               *Func-loop-205
+ 13.340             }
+ 13.340           }
+ 13.340         }
+ 13.340       }
+ 13.340       *Func-__handleMovieDone-214
+ 13.340     }
+ 13.340   }
+  0.000   Sequence-185 {
+  0.000     Sequence-100 {
+  0.000       toon-attacks-cam {
+  0.000         Sequence-130 {
+  0.000           toonGroupShot {
+  0.000             *Func-setPosHpr-147
+  0.000             Wait
+  0.000           }
+  0.000           allGroupHighShot {
+  0.000             *Func-setPosHpr-149
+  0.000             Wait dur 6.883
+  6.883           }
+  6.883           toonGroupShot {
+  6.883             *Func-setPosHpr-148
+  6.883             Wait
+  6.883           }
+  6.883         }
+  6.883       }
+  6.883       suit-attacks-cam {
+  6.883         Sequence-184 {
+  6.883           Sequence-183 {
+  6.883             Wait dur 0.5
+  7.383             *Func-unlureSuit-213
+  7.383           }
+  7.383           Parallel-176 {
+  7.383             Sequence-153 {
+  7.383               Sequence-172 {
+  7.383                 Sequence-170 {
+  7.383                   *Func-setPos-196
+  7.383                   *Func-focusCameraBetweenPoints-197
+  7.383                   Wait dur 2
+  9.383                 }
+  9.383                 Sequence-171 {
+  9.383                   *Func-setPos-198
+  9.383                   *Func-focusCameraBetweenPoints-199
+  9.383                   Wait dur 3.957
+ 13.340                 }
+ 13.340               }
+ 13.340             }
+  7.383             Sequence-175 {
+  7.383               LerpColorScaleInterval-200: color_scale to 1 0 0 1 dur 0
+  7.383               *Func-hide-200
+  7.383               *Func-setScale-201
+  7.383               LerpScaleInterval-201: scale to 0 0 0 dur 0
+  7.383               LerpPosInterval-202: pos to 0 0 0.42 dur 0
+  7.383               *Func-setText-202
+  7.383               *Func-show-203
+  7.383               Wait dur 0.5
+  7.883               Parallel-173 {
+  7.883                 LerpScaleInterval-203: scale to 1.2 1.2 1.2 dur 0.25
+  7.883                 LerpPosInterval-204: pos to 0 0 -0.075 dur 0.25
+  8.133               }
+  8.133               Parallel-174 {
+  8.133                 LerpScaleInterval-205: scale to 1.1 1.1 1.1 dur 0.25
+  8.133                 LerpPosInterval-206: pos to 0 0 -0.04 dur 0.25
+  8.383               }
+  8.383               Wait dur 2
+ 10.383               LerpColorScaleInterval-207: color_scale to 0 0 0 0 dur 0.25
+ 10.633             }
+ 13.340           }
+ 13.340         }
+ 13.340       }
+ 13.340     }
+ 13.340   }
+ 13.340 }
+
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+  File "toontown\battle\MovieUtil.py", line 1750, in __showProp
+    prop.reparentTo(parent)
+TypeError: NodePath.reparent_to() argument 1 must be panda3d.core.NodePath, not function
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+  File "toontown\battle\MovieUtil.py", line 1750, in __showProp
+    prop.reparentTo(parent)
+TypeError: NodePath.reparent_to() argument 1 must be panda3d.core.NodePath, not function

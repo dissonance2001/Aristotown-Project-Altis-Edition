@@ -1,0 +1,119 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000025F2CE48>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+Exception occurred while processing Func-hide-2589 of Parallel-2012:
+Parallel-2012:
+  0.000 Parallel-2012 {
+  0.000   Parallel-2011 {
+  0.000     Sequence-2003 {
+  0.000       *Actor-lose-189 dur 6
+  6.000       *Func-hide-2589
+  6.000       *Func-setSkelecog2-2590
+  6.000       *Func-setVirtual-2591
+  6.000       *Func-setName-2592
+  6.000       *Func-show-2593
+  6.000       *Actor-landing-190 dur 2.04167
+  8.042       Sequence-2006 {
+  8.042         *Func-showHpText2-2594
+  8.042         *Func-showHpStringLureManager2-2595
+  8.042         *Func-showHpString-2596
+  8.042       }
+  8.042       *Func-loop-2597
+  8.042       *Func-setMaxHP-2598
+  8.042       *Func-updateHealthBar-2599
+  8.042       *Func-makeDamageUp-2600
+  8.042       *Func-makeLaserRevive-2601
+  8.042     }
+  0.000     Sequence-2007 {
+  0.000       Wait dur 0.8
+  0.800       *Sound-137 dur 1.2
+  2.000       *Sound-138 dur 3
+  5.000       *Sound-139 dur 1.545
+  6.545     }
+  0.000     gears1Track {
+  0.000       Wait dur 2.1
+  2.100       *Particle-59 dur 4.3
+  6.400     }
+  0.000     gears2MTrack {
+  0.000       Sequence-2008 {
+  0.000         Wait dur 5.4
+  5.400         Sequence-2009 {
+  5.400           *Func-reparentTo-2602
+  5.400           *Func-setPos-2603
+  5.400           *Func-setScale-2604
+  5.400           Wait dur 0.6
+  6.000           *Func-removeProp-2605
+  6.000         }
+  6.000       }
+  0.700       *Particle-60 dur 5.7
+  5.200       *Particle-61 dur 1.2
+  5.400       *Particle-62 dur 1
+  6.400     }
+  0.000     toonMTrack {
+  0.000       Sequence-2010 {
+  0.000         Wait dur 1
+  1.000         *Actor-duck-191 dur 3.75
+  4.750         *Actor-duck-192 dur 1.95
+  6.700         *Func-loop-2606
+  6.700       }
+  6.700     }
+  0.000     Sequence-2005 {
+  0.000       *Actor-death-188 dur 5.83333
+  5.833       *Func-loop-2587
+  5.833     }
+  8.042   }
+  0.000   *Func-unlureSuit-2607
+  8.042 }
+
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+AssertionError: !is_empty() at line 1844 of E:\NormalNed-Projects\panda3d-windows\built_x64\include\nodePath.I
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+AssertionError: !is_empty() at line 1844 of E:\NormalNed-Projects\panda3d-windows\built_x64\include\nodePath.I

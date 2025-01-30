@@ -1,0 +1,194 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000026E18D88>}
+__handleAvatarChooserDone: 100000076, 'BDOG', ('dss', 'sd', 's', 'f', (0.9333, 0.8235, 0.9333, 1.0), (1.0, 1.0, 1.0, 1.0), (0.9333, 0.8235, 0.9333, 1.0), (0.9333, 0.8235, 0.9333, 1.0), 6, 4, 6, 4, 1, 21), 5
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+frame rate: 47.3 fps|0.011d|51 avs||322|323||0x0000|0x0000|891.3MB|1787.4MB|32717.5MB|1168|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+chooseFireOpenShot <function avatarBehindShot at 0x000000001CAF8438>
+chooseFireOpenShot <function avatarCloseUpFireShot at 0x000000001CAF8D68>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 44.7 fps|0.007d|68 avs||622|623||0x0000|0x0000|987.2MB|1940.4MB|32717.5MB|1262|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_DG.pdna
+Reading DNA file... phase_8/dna/storage_DG_sz.pdna
+Reading DNA file... phase_8/dna/daisys_garden_sz.pdna
+DNALandmarkBuilding sb2:toon_landmark_hqDG_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb3:toon_landmark_DG_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-21
+frame rate: 67.0 fps|0.029d|94 avs||922|923||0x0000|0x0000|1156.5MB|2259.6MB|32717.5MB|1682|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+frame rate: 47.0 fps|0.004d|98 avs||1222|1223||0x0000|0x0000|1242.1MB|2417.5MB|32717.5MB|1772|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 43.6 fps|0.008d|107 avs||1522|1523||0x0000|0x0000|1303.0MB|2505.2MB|32717.5MB|1808|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+frame rate: 35.2 fps|0.010d|127 avs||1822|1823||0x0000|0x0000|1359.9MB|2620.8MB|32717.5MB|1840|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Battle Event localtoon-battle-event-15
+Exception occurred while processing Func-showHpText2-33306 of Parallel-24392:
+Parallel-24392:
+  0.000 Parallel-24392 {
+  0.000   Parallel-24391 {
+  0.000     Sequence-24379 {
+  0.000       *Func-debug-33290
+  0.000       *Func-insertDeathSuit-33291
+  0.000       *Func-debug-33292
+  0.000       *Actor-lose-4055 dur 8.25
+  8.250       *Func-debug-33293
+  8.250       *remove-death-suit
+  8.250       *Func-debug-33294
+  8.250       *Func-makeDead-33295
+  8.250       Sequence-24390 {
+  8.250         Sequence-24387 {
+  8.250           Wait dur 2
+ 10.250           *Func-showHpText2-33306
+ 10.250           *Func-showHpStringLureManager2-33307
+ 10.250           *Func-showHpString-33308
+ 10.250         }
+ 10.250         Sequence-24388 {
+ 10.250           LerpPosHprInterval-18291: pos to 0 -10 5 hpr to 0 0 0 dur 1.5
+ 11.750         }
+ 11.750         *Func-makeDamageUp-33305
+ 11.750         *Func-makeDesperation-33304
+ 11.750         Sequence-24389 {
+ 11.750           Wait dur 2
+ 13.750           *Func-setChatAbsolute-33309
+ 13.750           Wait dur 4
+ 17.750           *Func-setChatAbsolute-33310
+ 17.750           Wait dur 2
+ 19.750         }
+ 19.750       }
+ 19.750     }
+  0.000     Sequence-24380 {
+  0.000       Wait dur 0.8
+  0.800       *Sound-1826 dur 1.2
+  2.000       *Sound-1827 dur 3
+  5.000       *Sound-1828 dur 1.854
+  6.854     }
+  0.000     gears1Track {
+  0.000       Wait dur 2.1
+  2.100       *Particle-312 dur 4.3
+  6.400     }
+  0.000     gears2MTrack {
+  0.000       Sequence-24381 {
+  0.000         Wait dur 5.4
+  5.400         Sequence-24382 {
+  5.400           *Func-reparentTo-33296
+  5.400           *Func-setPos-33297
+  5.400           *Func-setScale-33298
+  5.400           Wait dur 0.6
+  6.000           *Func-removeProp-33299
+  6.000         }
+  6.000       }
+  0.700       *Particle-313 dur 5.7
+  5.200       *Particle-314 dur 1.2
+  5.400       *Particle-315 dur 1
+  6.400     }
+  0.000     toonMTrack {
+  0.000       Sequence-24383 {
+  0.000         Wait dur 1
+  1.000         *Actor-duck-4056 dur 3.75
+  4.750         *Actor-duck-4057 dur 1.95
+  6.700         *Func-loop-33300
+  6.700       }
+  0.000       Sequence-24384 {
+  0.000         Wait dur 1
+  1.000         *Actor-duck-4058 dur 3.75
+  4.750         *Actor-duck-4059 dur 1.95
+  6.700         *Func-loop-33301
+  6.700       }
+  0.000       Sequence-24385 {
+  0.000         Wait dur 1
+  1.000         *Actor-duck-4060 dur 3.75
+  4.750         *Actor-duck-4061 dur 1.95
+  6.700         *Func-loop-33302
+  6.700       }
+  0.000       Sequence-24386 {
+  0.000         Wait dur 1
+  1.000         *Actor-duck-4062 dur 3.75
+  4.750         *Actor-duck-4063 dur 1.95
+  6.700         *Func-loop-33303
+  6.700       }
+  6.700     }
+  0.000     *Actor-death-4054 dur 5.79167
+ 19.750   }
+  0.000   *Func-unlureSuit-33311
+ 19.750 }
+
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+  File "toontown\suit\DistributedSuitBase.py", line 811, in showHpText2
+    self.hpText = self.attachNewNode(self.hpTextNode)
+AssertionError: _error_type == ET_ok at line 565 of panda/src/pgraph/nodePath.cxx
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+  File "toontown\suit\DistributedSuitBase.py", line 811, in showHpText2
+    self.hpText = self.attachNewNode(self.hpTextNode)
+AssertionError: _error_type == ET_ok at line 565 of panda/src/pgraph/nodePath.cxx

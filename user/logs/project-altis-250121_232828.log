@@ -1,0 +1,269 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x000000002601F908>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_BR.pdna
+Reading DNA file... phase_8/dna/storage_BR_sz.pdna
+Reading DNA file... phase_8/dna/the_burrrgh_sz.pdna
+DNALandmarkBuilding sb8:toon_landmark_hqBR_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb9:toon_landmark_BR_clothes_shop_DNARoot did not find **/*suit_building_origin
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+Reading DNA file... phase_5/dna/storage_town.pdna
+Reading DNA file... phase_8/dna/storage_BR_town.pdna
+Reading DNA file... phase_8/dna/the_burrrgh_3400.pdna
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Reading DNA file... phase_8/dna/storage_DL.pdna
+Reading DNA file... phase_5/dna/storage_town.pdna
+Reading DNA file... phase_8/dna/storage_DL_town.pdna
+Reading DNA file... phase_8/dna/donalds_dreamland_9300.pdna
+Reading DNA file... phase_8/dna/storage_DL_sz.pdna
+Reading DNA file... phase_8/dna/donalds_dreamland_sz.pdna
+DNALandmarkBuilding sb6:toon_landmark_DL_clothes_shop_DNARoot did not find **/*suit_building_origin
+DNALandmarkBuilding sb5:toon_landmark_hqDL_DNARoot did not find **/*suit_building_origin
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "toontown\hood\QuietZoneState.py", line 152, in handleWaitForQuietZoneResponse
+    base.cr.handlePlayGame(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1747, in handleMessageType
+    self.gotInterestDoneMessage(di)
+  File "otp\distributed\OTPClientRepository.py", line 1775, in gotInterestDoneMessage
+    self.handleInterestDoneMessage(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DoInterestManager.py", line 617, in handleInterestDoneMessage
+    messenger.send(event)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\distributed\ToontownClientRepository.py", line 1000, in _handleEmuSetZoneDone
+    messenger.send(event)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\hood\QuietZoneState.py", line 195, in _handleQuietZoneComplete
+    self.fsm.request('waitForZoneRedirect')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\QuietZoneState.py", line 236, in enterWaitForZoneRedirect
+    self.fsm.request('waitForSetZoneResponse')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\QuietZoneState.py", line 262, in enterWaitForSetZoneResponse
+    self.fsm.request('waitForSetZoneComplete')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\QuietZoneState.py", line 300, in enterWaitForSetZoneComplete
+    messenger.send(self.getQuietZoneLeftEvent())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\hood\Hood.py", line 184, in handleLeftQuietZone
+    self.fsm.request(status['loader'], [status])
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\Hood.py", line 193, in enterSafeZoneLoader
+    self.loader.enter(requestStatus)
+  File "toontown\safezone\SafeZoneLoader.py", line 69, in enter
+    self.setState(requestStatus['where'], requestStatus)
+  File "toontown\safezone\SafeZoneLoader.py", line 75, in setState
+    self.fsm.request(stateName, [requestStatus])
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\safezone\SafeZoneLoader.py", line 132, in enterPlayground
+    self.place.enter(requestStatus)
+  File "toontown\safezone\DLPlayground.py", line 8, in enter
+    Playground.Playground.enter(self, requestStatus)
+  File "toontown\safezone\Playground.py", line 280, in enter
+    self.fsm.request(how, [requestStatus])
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\Place.py", line 565, in enterTunnelIn
+    base.localAvatar.tunnelIn(tunnelOrigin)
+  File "toontown\toon\LocalToon.py", line 690, in tunnelIn
+    self.b_setTunnelIn(self.tunnelX * 0.8, tunnelOrigin)
+  File "toontown\toon\DistributedToon.py", line 824, in b_setTunnelIn
+    pos = tunnelOrigin.getPos(render)
+AssertionError: !is_empty() at line 1442 of panda/src/pgraph/nodePath.cxx
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "toontown\hood\QuietZoneState.py", line 152, in handleWaitForQuietZoneResponse
+    base.cr.handlePlayGame(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1747, in handleMessageType
+    self.gotInterestDoneMessage(di)
+  File "otp\distributed\OTPClientRepository.py", line 1775, in gotInterestDoneMessage
+    self.handleInterestDoneMessage(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DoInterestManager.py", line 617, in handleInterestDoneMessage
+    messenger.send(event)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\distributed\ToontownClientRepository.py", line 1000, in _handleEmuSetZoneDone
+    messenger.send(event)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\hood\QuietZoneState.py", line 195, in _handleQuietZoneComplete
+    self.fsm.request('waitForZoneRedirect')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\QuietZoneState.py", line 236, in enterWaitForZoneRedirect
+    self.fsm.request('waitForSetZoneResponse')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\QuietZoneState.py", line 262, in enterWaitForSetZoneResponse
+    self.fsm.request('waitForSetZoneComplete')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\QuietZoneState.py", line 300, in enterWaitForSetZoneComplete
+    messenger.send(self.getQuietZoneLeftEvent())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 336, in send
+    self.__dispatch(acceptorDict, event, sentArgs, foundWatch)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\Messenger.py", line 421, in __dispatch
+    result = method (*(extraArgs + sentArgs))
+  File "toontown\hood\Hood.py", line 184, in handleLeftQuietZone
+    self.fsm.request(status['loader'], [status])
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\Hood.py", line 193, in enterSafeZoneLoader
+    self.loader.enter(requestStatus)
+  File "toontown\safezone\SafeZoneLoader.py", line 69, in enter
+    self.setState(requestStatus['where'], requestStatus)
+  File "toontown\safezone\SafeZoneLoader.py", line 75, in setState
+    self.fsm.request(stateName, [requestStatus])
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\safezone\SafeZoneLoader.py", line 132, in enterPlayground
+    self.place.enter(requestStatus)
+  File "toontown\safezone\DLPlayground.py", line 8, in enter
+    Playground.Playground.enter(self, requestStatus)
+  File "toontown\safezone\Playground.py", line 280, in enter
+    self.fsm.request(how, [requestStatus])
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\hood\Place.py", line 565, in enterTunnelIn
+    base.localAvatar.tunnelIn(tunnelOrigin)
+  File "toontown\toon\LocalToon.py", line 690, in tunnelIn
+    self.b_setTunnelIn(self.tunnelX * 0.8, tunnelOrigin)
+  File "toontown\toon\DistributedToon.py", line 824, in b_setTunnelIn
+    pos = tunnelOrigin.getPos(render)
+AssertionError: !is_empty() at line 1442 of panda/src/pgraph/nodePath.cxx

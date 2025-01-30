@@ -1,0 +1,219 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000029659CC8>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+Exception occurred while processing Func-wrtReparentTo-115 of movie-track-with-cam-402006666:
+movie-track-with-cam-402006666:
+  0.000 movie-track-with-cam-402006666 {
+  0.000   movie-track-402006666 {
+  0.000     Sequence-101 {
+  0.000       suit-attacks {
+  0.000         Sequence-145 {
+  0.000           *Func-makeUnLured-144
+  0.000           Parallel-144 {
+  0.000             *Func-unlureSuit-146
+  0.000             Parallel-142 {
+  0.000               *Func-setChatAbsolute-145
+  0.000             }
+  0.000             Sequence-143 {
+  0.000               *Func-setHpr-147
+  0.000               *Actor-walk-17 dur 0.5
+  0.500               *Func-loop-148
+  0.500             }
+  0.000             LerpPosInterval-193: pos from -7.62939e-06 7 0 to 0 7 0 dur 0.5
+  0.500           }
+  0.500           Sequence-141 {
+  0.500             *Func-makeUnLured-144
+  0.500             *Func-setNeutralAnimation-143
+  0.500             Parallel-131 {
+  0.500               Sequence-112 {
+  0.500                 Sequence-111 {
+  0.500                   Wait dur 1e-06
+  0.500                   *Func-setChatAbsolute-103
+  0.500                   *Func-reparentTrap-104
+  0.500                   *Func-headsUp-105
+  0.500                   *Actor-throw-object-12 dur 3.02778
+  3.528                   *Func-setHpr-106
+  3.528                   *Func-setNeutralAnimation-107
+  3.528                   *Func-returnTrapToSuit-108
+  3.528                 }
+  3.528               }
+  0.500               Sequence-121 {
+  0.500                 *Func-headsUp-120
+  0.500                 *Func-removeInsured-121
+  0.500                 Parallel-129 {
+  0.500                   Sequence-124 {
+  0.500                     Wait dur 3.05
+  3.550                     Sequence-126 {
+  3.550                       Wait dur 0.01
+  3.560                       *Actor-conked-15 dur 0.2
+  3.760                       Wait dur 0.01
+  3.770                       *Actor-struggle-16 dur 3.84167
+  7.612                     }
+  7.612                     *Func-loop-131
+  7.612                   }
+  0.500                   Sequence-127 {
+  0.500                     Wait dur 3.06
+  3.560                     *Func-__doDamage-130
+  3.560                   }
+  0.500                   Sequence-125 {
+  0.500                   }
+  0.500                   Sequence-128 {
+  0.500                     Wait dur 3.06
+  3.560                     *Sound-11 dur 0.572
+  4.132                   }
+  7.612                 }
+  7.612               }
+  0.500               Sequence-114 {
+  0.500                 Sequence-113 {
+  0.500                   Wait dur 0.25
+  0.750                   *Func-__showProp-109
+  0.750                   LerpScaleInterval-181: scale from 0.01 0.01 0.01 to 1.5 1.5 1.5 dur 0.25
+  1.000                 }
+  1.000                 Wait dur 1.55
+  2.550                 Sequence-116 {
+  2.550                   *Func-needRestoreRenderProp-110
+  2.550                   *Func-wrtReparentTo-111
+  2.550                   LerpPosInterval-182: pos from -0.233887 2.59155 5.63062 to -2.80001 -9 2.3475 dur 1
+  3.550                   *Func-removeProp-112
+  3.550                   *Func-clearRenderProp-113
+  3.550                 }
+  3.550                 Sequence-115 {
+  3.550                   *Actor-ttht_m_ene_fileFolder-13 dur 4.58333
+  8.133                 }
+  8.133                 Sequence-117 {
+  8.133                   *Func-needRestoreRenderProp-114
+  8.133                   *Func-wrtReparentTo-115
+  8.133                   LerpPosInterval-183: pos to -1.40001 -9 2.3475 dur 1
+  9.133                   *Func-removeProp-116
+  9.133                   *Func-clearRenderProp-117
+  9.133                 }
+  9.133                 Sequence-118 {
+  9.133                   Sequence-119 {
+  9.133                     Wait
+  9.133                     *Func-__showProp-118
+  9.133                     LerpScaleInterval-184: scale from 0.01 0.01 0.01 to 2 2 2 dur 0
+  9.133                   }
+  9.133                   Sequence-120 {
+  9.133                     *Actor-dust-14 dur 1.66667
+ 10.800                     *Func-detachNode-119
+ 10.800                   }
+ 10.800                 }
+ 10.800               }
+  0.500               Sequence-130 {
+  0.500                 Wait dur 2.55
+  3.050                 *Sound-12 dur 0.914
+  3.964               }
+ 10.800             }
+ 10.800             *Func-setNeutralAnimation-142
+ 10.800             Sequence-140 {
+ 10.800               *Func-headsUp-140
+ 10.800               *Func-loop-141
+ 10.800             }
+ 10.800           }
+ 10.800         }
+ 10.800       }
+ 10.800       *Func-__handleMovieDone-150
+ 10.800     }
+ 10.800   }
+  0.000   Sequence-148 {
+  0.000     Sequence-102 {
+  0.000       suit-attacks-cam {
+  0.000         Sequence-147 {
+  0.000           Sequence-146 {
+  0.000             Wait dur 0.5
+  0.500             *Func-unlureSuit-149
+  0.500           }
+  0.500           Parallel-139 {
+  0.500             Sequence-132 {
+  0.500               Sequence-135 {
+  0.500                 Sequence-133 {
+  0.500                   *Func-setPos-132
+  0.500                   *Func-focusCameraBetweenPoints-133
+  0.500                   Wait dur 3.5
+  4.000                 }
+  4.000                 Sequence-134 {
+  4.000                   *Func-setPos-134
+  4.000                   *Func-focusCameraBetweenPoints-135
+  4.000                   Wait dur 6.8
+ 10.800                 }
+ 10.800               }
+ 10.800             }
+  0.500             Sequence-138 {
+  0.500               LerpColorScaleInterval-185: color_scale to 1 0 0 1 dur 0
+  0.500               *Func-hide-136
+  0.500               *Func-setScale-137
+  0.500               LerpScaleInterval-186: scale from 1 1 1 to 0 0 0 dur 0
+  0.500               LerpPosInterval-187: pos from 0 0 0 to 0 0 0.42 dur 0
+  0.500               *Func-setText-138
+  0.500               *Func-show-139
+  0.500               Wait dur 0.5
+  1.000               Parallel-136 {
+  1.000                 LerpScaleInterval-188: scale from 0 0 0 to 1.2 1.2 1.2 dur 0.25
+  1.000                 LerpPosInterval-189: pos from 0 0 0.42 to 0 0 -0.075 dur 0.25
+  1.250               }
+  1.250               Parallel-137 {
+  1.250                 LerpScaleInterval-190: scale from 1.2 1.2 1.2 to 1.1 1.1 1.1 dur 0.25
+  1.250                 LerpPosInterval-191: pos from 0 0 -0.075 to 0 0 -0.04 dur 0.25
+  1.500               }
+  1.500               Wait dur 2
+  3.500               LerpColorScaleInterval-192: color_scale to 0 0 0 0 dur 0.25
+  3.750             }
+ 10.800           }
+ 10.800         }
+ 10.800       }
+ 10.800     }
+ 10.800   }
+ 10.800 }
+
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+AssertionError: !is_empty() at line 436 of panda/src/pgraph/nodePath.cxx
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\ShowBase.py", line 1963, in __ivalLoop
+    IntervalManager.ivalMgr.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 95, in step
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\IntervalManager.py", line 123, in __doPythonCallbacks
+    self.ivals[index].privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+AssertionError: !is_empty() at line 436 of panda/src/pgraph/nodePath.cxx

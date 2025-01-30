@@ -1,0 +1,35 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000026023F08>}
+__handleAvatarChooserDone: 100000090, 'TRAP BUNNY', ('rsl', 'md', 'l', 'f', (0.726562, 0.472656, 0.859375, 1.0), (1.0, 1.0, 1.0, 1.0), (0.726562, 0.472656, 0.859375, 1.0), (0.726562, 0.472656, 0.859375, 1.0), 22, 7, 0, 7, 4, 1), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+Traceback (most recent call last):
+  File "toontown\suit\Suit.py", line 6175, in __pulsePurpleColor
+    blendType='easeInOut')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\LerpInterval.py", line 656, in __init__
+    self.setEndColorScale(colorScale)
+TypeError: CLerpNodePathInterval.set_end_color_scale() argument 1 must be LVecBase4f, not tuple
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "toontown\suit\Suit.py", line 6175, in __pulsePurpleColor
+    blendType='easeInOut')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\LerpInterval.py", line 656, in __init__
+    self.setEndColorScale(colorScale)
+TypeError: CLerpNodePathInterval.set_end_color_scale() argument 1 must be LVecBase4f, not tuple

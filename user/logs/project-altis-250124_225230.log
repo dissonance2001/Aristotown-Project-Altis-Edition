@@ -1,0 +1,117 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000025DD0B88>}
+__handleAvatarChooserDone: 100000082, 'KOALALALALA', ('ess', 'sd', 's', 'f', (0.8039, 0.6862, 0.5843, 1.0), (1.0, 1.0, 1.0, 1.0), (0.8039, 0.6862, 0.5843, 1.0), (0.8039, 0.6862, 0.5843, 1.0), 13, 24, 11, 24, 2, 1), 5
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+frame rate: 54.9 fps|0.010d|43 avs||348|349||0x0000|0x0000|831.6MB|1776.2MB|32717.5MB|1198|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 47.3 fps|0.011d|49 avs||648|649||0x0000|0x0000|924.5MB|1943.1MB|32717.5MB|1287|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 46.5 fps|0.004d|57 avs||949|949||0x0000|0x0000|980.8MB|2049.6MB|32717.5MB|1350|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 40.1 fps|0.005d|73 avs||1249|1249||0x0000|0x0000|1043.0MB|2122.9MB|32717.5MB|1376|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019220A58>
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019220D68>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 42.3 fps|0.015d|80 avs||1549|1549||0x0000|0x0000|1121.6MB|2220.0MB|32717.5MB|1418|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 46.4 fps|0.007d|92 avs||1849|1849||0x0000|0x0000|1164.7MB|2273.8MB|32717.5MB|1438|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Battle Event localtoon-battle-event-21
+frame rate: 39.7 fps|0.018d|112 avs||2149|2149||0x0000|0x0000|950.5MB|2381.5MB|32717.5MB|1498|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+Found manager... using it...
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+frame rate: 35.6 fps|0.004d|121 avs||2449|2449||0x0000|0x0000|1006.3MB|2446.9MB|32717.5MB|1517|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 1.5)
+### newVec3 = LVector3f(0, 0, 0)
+### newVec3 = LVector3f(0, 0, 0.375)
+### newVec3 = LVector3f(0, 0, 0)
+Found manager... using it...
+frame rate: 38.9 fps|0.005d|126 avs||2749|2749||0x0000|0x0000|1061.4MB|2513.8MB|32717.5MB|1546|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Found manager... using it...
+frame rate: 36.5 fps|0.009d|141 avs||3049|3049||0x0000|0x0000|1004.4MB|2596.3MB|32717.5MB|1577|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 33.3 fps|0.003d|171 avs||3349|3349||0x0000|0x0000|1017.6MB|2670.5MB|32717.5MB|1596|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 37.6 fps|0.006d|212 avs||3649|3649||0x0000|0x0000|1058.2MB|2808.6MB|32717.5MB|1674|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Battle Event localtoon-battle-event-39
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019220D68>
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019220A58>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 33.9 fps|0.024d|228 avs||3949|3949||0x0000|0x0000|1085.1MB|2914.3MB|32717.5MB|1710|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 33.3 fps|0.012d|229 avs||4249|4249||0x0000|0x0000|1090.3MB|2989.4MB|32717.5MB|1736|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 30.6 fps|0.011d|231 avs||4549|4549||0x0000|0x0000|1081.1MB|3046.8MB|32717.5MB|1753|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function avatarCloseUpThreeQuarterRightShot at 0x0000000019220F98>
+chooseFireOpenShot <function avatarCloseUpFireShot at 0x0000000019221B38>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 29.4 fps|0.006d|245 avs||4849|4849||0x0000|0x0000|1116.7MB|3123.7MB|32717.5MB|1786|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 29.8 fps|0.009d|283 avs||5149|5150||0x0000|0x0000|1171.9MB|3238.3MB|32717.5MB|1824|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 26.8 fps|0.005d|328 avs||5449|5450||0x0000|0x0000|1150.2MB|3285.1MB|32717.5MB|1838|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019220A58>
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019220A58>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Battle Event localtoon-battle-event-51
+frame rate: 31.2 fps|0.009d|357 avs||5749|5750||0x0000|0x0000|1141.7MB|3379.2MB|32717.5MB|1862|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019220D68>
+chooseFireOpenShot <function avatarCloseUpThreeQuarterLeftFireShot at 0x0000000019221BA8>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 28.6 fps|0.006d|360 avs||6049|6050||0x0000|0x0000|1137.1MB|3434.6MB|32717.5MB|1877|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 25.9 fps|0.007d|382 avs||6349|6350||0x0000|0x0000|1166.9MB|3521.8MB|32717.5MB|1901|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019220D68>
+chooseFireOpenShot <function allGroupLowShot at 0x0000000019220A58>
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 24.8 fps|0.006d|403 avs||6649|6650||0x0000|0x0000|1194.9MB|3611.2MB|32717.5MB|1926|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 22.2 fps|0.007d|420 avs||6949|6950||0x0000|0x0000|1205.5MB|3711.7MB|32717.5MB|1955|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 23.0 fps|0.018d|438 avs||7249|7250||0x0000|0x0000|1225.8MB|3778.5MB|32717.5MB|1974|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019220D68>
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x0000000019220D68>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Battle Event localtoon-battle-event-45
+frame rate: 20.5 fps|0.008d|477 avs||7549|7550||0x0000|0x0000|1308.8MB|3879.7MB|32717.5MB|2007|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 23.3 fps|0.006d|520 avs||7849|7850||0x0000|0x0000|1321.8MB|3960.6MB|32717.5MB|2029|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL

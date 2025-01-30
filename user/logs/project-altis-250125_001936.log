@@ -1,0 +1,52 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000025E4DBC8>}
+__handleAvatarChooserDone: 100000076, 'BDOG', ('dss', 'sd', 's', 'f', (0.9333, 0.8235, 0.9333, 1.0), (1.0, 1.0, 1.0, 1.0), (0.9333, 0.8235, 0.9333, 1.0), (0.9333, 0.8235, 0.9333, 1.0), 6, 4, 6, 4, 1, 21), 5
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x00000000185F2D68>
+chooseFireOpenShot <function allGroupLowShot at 0x00000000185F2A58>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Battle Event localtoon-battle-event-9
+frame rate: 66.6 fps|0.015d|67 avs||367|371||0x0000|0x0000|934.3MB|1731.2MB|32717.5MB|1146|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function avatarCloseUpThreeQuarterRightShot at 0x00000000185F2F98>
+chooseFireOpenShot <function avatarCloseUpFireShot at 0x00000000185F3B38>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 68.6 fps|0.004d|78 avs||667|671||0x0000|0x0000|1006.2MB|1932.7MB|32717.5MB|1278|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 52.7 fps|0.008d|83 avs||967|971||0x0000|0x0000|1077.3MB|2072.6MB|32717.5MB|1337|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 42.9 fps|0.005d|111 avs||1267|1271||0x0000|0x0000|1158.1MB|2169.7MB|32717.5MB|1372|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function avatarBehindShot at 0x00000000185F3208>
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x00000000185F2D68>
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 39.3 fps|0.007d|132 avs||1567|1571||0x0000|0x0000|1256.0MB|2293.9MB|32717.5MB|1410|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+***********headParts pos= LPoint3f(0, 0, 0)
+***********headParts hpr= LVecBase3f(0, 0, 0)
+*************arms hpr= LVecBase3f(0, 0, 0)
+frame rate: 35.0 fps|0.008d|141 avs||1867|1871||0x0000|0x0000|1333.9MB|2396.7MB|32717.5MB|1456|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 38.3 fps|0.006d|171 avs||2167|2171||0x0000|0x0000|1325.9MB|2497.8MB|32717.5MB|1485|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+chooseFireOpenShot <function allGroupLowShot at 0x00000000185F2A58>
+chooseFireOpenShot <function allGroupLowShot at 0x00000000185F2A58>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 31.2 fps|0.004d|215 avs||2467|2471||0x0000|0x0000|1165.8MB|2590.1MB|32717.5MB|1512|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL

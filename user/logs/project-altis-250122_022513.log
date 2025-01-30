@@ -1,0 +1,23 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000025F77D88>}
+__handleAvatarChooserDone: 100000078, 'BUNNYNYNYNYN', ('rll', 'sd', 's', 'f', (0.411, 0.644, 0.282, 1.0), (1.0, 1.0, 1.0, 1.0), (0.411, 0.644, 0.282, 1.0), (0.411, 0.644, 0.282, 1.0), 1, 2, 1, 2, 8, 0), 5
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+frame rate: 43.9 fps|0.009d|86 avs||331|332||0x0000|0x0000|867.1MB|1703.6MB|32717.5MB|1155|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Battle Event localtoon-battle-event-3
+chooseFireOpenShot <function suitGroupThreeQuarterLeftBehindShot at 0x000000001A027F98>
+chooseFireOpenShot <function allGroupLowShot at 0x000000001A027C88>
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+Warning: NodePath.remove() is deprecated.  Use remove_node() instead.
+frame rate: 42.8 fps|0.019d|117 avs||631|632||0x0000|0x0000|997.6MB|1981.5MB|32717.5MB|1316|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL

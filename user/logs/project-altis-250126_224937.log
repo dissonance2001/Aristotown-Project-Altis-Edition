@@ -1,0 +1,787 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x00000000262C3808>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+OnscreenText.configure: mayChange == 0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+[49, 49, 49, 49, 49, 49]
+frame rate: 139.3 fps|0.002d|49 avs||314|314||0x0000|0x0000|970.9MB|1972.1MB|32717.5MB|1354|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 213.8 fps|0.001d|49 avs||614|614||0x0000|0x0000|995.1MB|1998.0MB|32717.5MB|1361|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Exception occurred while processing Func-initGagFrame-2623 of Sequence-4121:
+Sequence-4121:
+  0.000 Sequence-4121 {
+  0.000   Parallel-4120 {
+  0.000     Parallel-4119 {
+  0.000       Sequence-4113 {
+  0.000         *Func-show-2620
+  0.000         *Func-setForceOnscreenChat-2621
+  0.000         *Func-_setupSkipListen-2622
+  0.000         *Func-_teardownSkipListen-2885
+  0.000         *Func-_setupSkipListen-2886
+  0.000         Sequence-4116 {
+  0.000           *Func-initGagFrame-2623
+  0.000           Wait dur 1
+  1.000           *Func-showTrackIncLabel-2624
+  1.000           *Func-incrementExp-2625
+  1.000           Wait dur 0.0166667
+  1.017           *Func-incrementExp-2626
+  1.017           Wait dur 0.0166667
+  1.034           *Func-incrementExp-2627
+  1.034           Wait dur 0.0166667
+  1.051           *Func-incrementExp-2628
+  1.051           Wait dur 0.0166667
+  1.068           *Func-incrementExp-2629
+  1.068           Wait dur 0.0166667
+  1.085           *Func-incrementExp-2630
+  1.085           Wait dur 0.0166667
+  1.102           *Func-incrementExp-2631
+  1.102           Wait dur 0.0166667
+  1.119           *Func-incrementExp-2632
+  1.119           Wait dur 0.0166667
+  1.136           *Func-incrementExp-2633
+  1.136           Wait dur 0.0166667
+  1.153           *Func-incrementExp-2634
+  1.153           Wait dur 0.0166667
+  1.170           *Func-incrementExp-2635
+  1.170           Wait dur 0.0166667
+  1.187           *Func-incrementExp-2636
+  1.187           Wait dur 0.0166667
+  1.204           *Func-incrementExp-2637
+  1.204           Wait dur 0.0166667
+  1.221           *Func-incrementExp-2638
+  1.221           Wait dur 0.0166667
+  1.238           *Func-incrementExp-2639
+  1.238           Wait dur 0.0166667
+  1.255           *Func-incrementExp-2640
+  1.255           Wait dur 0.0166667
+  1.272           *Func-incrementExp-2641
+  1.272           Wait dur 0.0166667
+  1.289           *Func-incrementExp-2642
+  1.289           Wait dur 0.0166667
+  1.306           *Func-incrementExp-2643
+  1.306           Wait dur 0.0166667
+  1.323           *Func-incrementExp-2644
+  1.323           Wait dur 0.0166667
+  1.340           *Func-incrementExp-2645
+  1.340           Wait dur 0.0166667
+  1.357           *Func-incrementExp-2646
+  1.357           Wait dur 0.0166667
+  1.374           *Func-incrementExp-2647
+  1.374           Wait dur 0.0166667
+  1.391           *Func-incrementExp-2648
+  1.391           Wait dur 0.0166667
+  1.408           *Func-incrementExp-2649
+  1.408           Wait dur 0.0166667
+  1.425           *Func-incrementExp-2650
+  1.425           Wait dur 0.0166667
+  1.442           *Func-incrementExp-2651
+  1.442           Wait dur 0.0166667
+  1.459           *Func-incrementExp-2652
+  1.459           Wait dur 0.0166667
+  1.476           *Func-incrementExp-2653
+  1.476           Wait dur 0.0166667
+  1.493           *Func-incrementExp-2654
+  1.493           Wait dur 0.0166667
+  1.510           *Func-resetBarColor-2655
+  1.510           Wait dur 0.1
+  1.610           *Func-showTrackIncLabel-2656
+  1.610           *Func-incrementExp-2657
+  1.610           Wait dur 0.0166667
+  1.627           *Func-incrementExp-2658
+  1.627           Wait dur 0.0166667
+  1.644           *Func-incrementExp-2659
+  1.644           Wait dur 0.0166667
+  1.661           *Func-incrementExp-2660
+  1.661           Wait dur 0.0166667
+  1.678           *Func-incrementExp-2661
+  1.678           Wait dur 0.0166667
+  1.695           *Func-incrementExp-2662
+  1.695           Wait dur 0.0166667
+  1.712           *Func-incrementExp-2663
+  1.712           Wait dur 0.0166667
+  1.729           *Func-incrementExp-2664
+  1.729           Wait dur 0.0166667
+  1.746           *Func-incrementExp-2665
+  1.746           Wait dur 0.0166667
+  1.763           *Func-incrementExp-2666
+  1.763           Wait dur 0.0166667
+  1.780           *Func-incrementExp-2667
+  1.780           Wait dur 0.0166667
+  1.797           *Func-incrementExp-2668
+  1.797           Wait dur 0.0166667
+  1.814           *Func-incrementExp-2669
+  1.814           Wait dur 0.0166667
+  1.831           *Func-incrementExp-2670
+  1.831           Wait dur 0.0166667
+  1.848           *Func-incrementExp-2671
+  1.848           Wait dur 0.0166667
+  1.865           *Func-incrementExp-2672
+  1.865           Wait dur 0.0166667
+  1.882           *Func-incrementExp-2673
+  1.882           Wait dur 0.0166667
+  1.899           *Func-incrementExp-2674
+  1.899           Wait dur 0.0166667
+  1.916           *Func-incrementExp-2675
+  1.916           Wait dur 0.0166667
+  1.933           *Func-incrementExp-2676
+  1.933           Wait dur 0.0166667
+  1.950           *Func-incrementExp-2677
+  1.950           Wait dur 0.0166667
+  1.967           *Func-incrementExp-2678
+  1.967           Wait dur 0.0166667
+  1.984           *Func-incrementExp-2679
+  1.984           Wait dur 0.0166667
+  2.001           *Func-incrementExp-2680
+  2.001           Wait dur 0.0166667
+  2.018           *Func-incrementExp-2681
+  2.018           Wait dur 0.0166667
+  2.035           *Func-incrementExp-2682
+  2.035           Wait dur 0.0166667
+  2.052           *Func-incrementExp-2683
+  2.052           Wait dur 0.0166667
+  2.069           *Func-incrementExp-2684
+  2.069           Wait dur 0.0166667
+  2.086           *Func-incrementExp-2685
+  2.086           Wait dur 0.0166667
+  2.103           *Func-incrementExp-2686
+  2.103           Wait dur 0.0166667
+  2.120           *Func-resetBarColor-2687
+  2.120           Wait dur 0.1
+  2.220           *Func-uberGagInterval-2688
+  2.220           Wait dur 1
+  3.220           *Func-setProp-2689
+  3.220           Wait dur 1
+  4.220           *Func-setProp-2690
+  4.220           Wait dur 1.5
+  5.720           *Func-cleanupNewGag-2691
+  5.720           Wait dur 0.1
+  5.820           *Func-showTrackIncLabel-2692
+  5.820           Wait dur 0.1
+  5.920           *Func-showTrackIncLabel-2693
+  5.920           *Func-incrementExp-2694
+  5.920           Wait dur 0.0166667
+  5.937           *Func-incrementExp-2695
+  5.937           Wait dur 0.0166667
+  5.954           *Func-incrementExp-2696
+  5.954           Wait dur 0.0166667
+  5.971           *Func-incrementExp-2697
+  5.971           Wait dur 0.0166667
+  5.988           *Func-incrementExp-2698
+  5.988           Wait dur 0.0166667
+  6.005           *Func-incrementExp-2699
+  6.005           Wait dur 0.0166667
+  6.022           *Func-incrementExp-2700
+  6.022           Wait dur 0.0166667
+  6.039           *Func-incrementExp-2701
+  6.039           Wait dur 0.0166667
+  6.056           *Func-incrementExp-2702
+  6.056           Wait dur 0.0166667
+  6.073           *Func-incrementExp-2703
+  6.073           Wait dur 0.0166667
+  6.090           *Func-incrementExp-2704
+  6.090           Wait dur 0.0166667
+  6.107           *Func-incrementExp-2705
+  6.107           Wait dur 0.0166667
+  6.124           *Func-incrementExp-2706
+  6.124           Wait dur 0.0166667
+  6.141           *Func-incrementExp-2707
+  6.141           Wait dur 0.0166667
+  6.158           *Func-incrementExp-2708
+  6.158           Wait dur 0.0166667
+  6.175           *Func-incrementExp-2709
+  6.175           Wait dur 0.0166667
+  6.192           *Func-incrementExp-2710
+  6.192           Wait dur 0.0166667
+  6.209           *Func-incrementExp-2711
+  6.209           Wait dur 0.0166667
+  6.226           *Func-incrementExp-2712
+  6.226           Wait dur 0.0166667
+  6.243           *Func-incrementExp-2713
+  6.243           Wait dur 0.0166667
+  6.260           *Func-incrementExp-2714
+  6.260           Wait dur 0.0166667
+  6.277           *Func-incrementExp-2715
+  6.277           Wait dur 0.0166667
+  6.294           *Func-incrementExp-2716
+  6.294           Wait dur 0.0166667
+  6.311           *Func-incrementExp-2717
+  6.311           Wait dur 0.0166667
+  6.328           *Func-incrementExp-2718
+  6.328           Wait dur 0.0166667
+  6.345           *Func-incrementExp-2719
+  6.345           Wait dur 0.0166667
+  6.362           *Func-incrementExp-2720
+  6.362           Wait dur 0.0166667
+  6.379           *Func-incrementExp-2721
+  6.379           Wait dur 0.0166667
+  6.396           *Func-incrementExp-2722
+  6.396           Wait dur 0.0166667
+  6.413           *Func-incrementExp-2723
+  6.413           Wait dur 0.0166667
+  6.430           *Func-resetBarColor-2724
+  6.430           Wait dur 0.1
+  6.530           *Func-showTrackIncLabel-2725
+  6.530           *Func-incrementExp-2726
+  6.530           Wait dur 0.0166667
+  6.547           *Func-incrementExp-2727
+  6.547           Wait dur 0.0166667
+  6.564           *Func-incrementExp-2728
+  6.564           Wait dur 0.0166667
+  6.581           *Func-incrementExp-2729
+  6.581           Wait dur 0.0166667
+  6.598           *Func-incrementExp-2730
+  6.598           Wait dur 0.0166667
+  6.615           *Func-incrementExp-2731
+  6.615           Wait dur 0.0166667
+  6.632           *Func-incrementExp-2732
+  6.632           Wait dur 0.0166667
+  6.649           *Func-incrementExp-2733
+  6.649           Wait dur 0.0166667
+  6.666           *Func-incrementExp-2734
+  6.666           Wait dur 0.0166667
+  6.683           *Func-incrementExp-2735
+  6.683           Wait dur 0.0166667
+  6.700           *Func-incrementExp-2736
+  6.700           Wait dur 0.0166667
+  6.717           *Func-incrementExp-2737
+  6.717           Wait dur 0.0166667
+  6.734           *Func-incrementExp-2738
+  6.734           Wait dur 0.0166667
+  6.751           *Func-incrementExp-2739
+  6.751           Wait dur 0.0166667
+  6.768           *Func-incrementExp-2740
+  6.768           Wait dur 0.0166667
+  6.785           *Func-incrementExp-2741
+  6.785           Wait dur 0.0166667
+  6.802           *Func-incrementExp-2742
+  6.802           Wait dur 0.0166667
+  6.819           *Func-incrementExp-2743
+  6.819           Wait dur 0.0166667
+  6.836           *Func-incrementExp-2744
+  6.836           Wait dur 0.0166667
+  6.853           *Func-incrementExp-2745
+  6.853           Wait dur 0.0166667
+  6.870           *Func-incrementExp-2746
+  6.870           Wait dur 0.0166667
+  6.887           *Func-incrementExp-2747
+  6.887           Wait dur 0.0166667
+  6.904           *Func-incrementExp-2748
+  6.904           Wait dur 0.0166667
+  6.921           *Func-incrementExp-2749
+  6.921           Wait dur 0.0166667
+  6.938           *Func-incrementExp-2750
+  6.938           Wait dur 0.0166667
+  6.955           *Func-incrementExp-2751
+  6.955           Wait dur 0.0166667
+  6.972           *Func-incrementExp-2752
+  6.972           Wait dur 0.0166667
+  6.989           *Func-incrementExp-2753
+  6.989           Wait dur 0.0166667
+  7.006           *Func-incrementExp-2754
+  7.006           Wait dur 0.0166667
+  7.023           *Func-incrementExp-2755
+  7.023           Wait dur 0.0166667
+  7.040           *Func-resetBarColor-2756
+  7.040           Wait dur 0.1
+  7.140           *Func-showTrackIncLabel-2757
+  7.140           *Func-incrementExp-2758
+  7.140           Wait dur 0.0166667
+  7.157           *Func-incrementExp-2759
+  7.157           Wait dur 0.0166667
+  7.174           *Func-incrementExp-2760
+  7.174           Wait dur 0.0166667
+  7.191           *Func-incrementExp-2761
+  7.191           Wait dur 0.0166667
+  7.208           *Func-incrementExp-2762
+  7.208           Wait dur 0.0166667
+  7.225           *Func-incrementExp-2763
+  7.225           Wait dur 0.0166667
+  7.242           *Func-incrementExp-2764
+  7.242           Wait dur 0.0166667
+  7.259           *Func-incrementExp-2765
+  7.259           Wait dur 0.0166667
+  7.276           *Func-incrementExp-2766
+  7.276           Wait dur 0.0166667
+  7.293           *Func-incrementExp-2767
+  7.293           Wait dur 0.0166667
+  7.310           *Func-incrementExp-2768
+  7.310           Wait dur 0.0166667
+  7.327           *Func-incrementExp-2769
+  7.327           Wait dur 0.0166667
+  7.344           *Func-incrementExp-2770
+  7.344           Wait dur 0.0166667
+  7.361           *Func-incrementExp-2771
+  7.361           Wait dur 0.0166667
+  7.378           *Func-incrementExp-2772
+  7.378           Wait dur 0.0166667
+  7.395           *Func-incrementExp-2773
+  7.395           Wait dur 0.0166667
+  7.412           *Func-incrementExp-2774
+  7.412           Wait dur 0.0166667
+  7.429           *Func-incrementExp-2775
+  7.429           Wait dur 0.0166667
+  7.446           *Func-incrementExp-2776
+  7.446           Wait dur 0.0166667
+  7.463           *Func-incrementExp-2777
+  7.463           Wait dur 0.0166667
+  7.480           *Func-incrementExp-2778
+  7.480           Wait dur 0.0166667
+  7.497           *Func-incrementExp-2779
+  7.497           Wait dur 0.0166667
+  7.514           *Func-incrementExp-2780
+  7.514           Wait dur 0.0166667
+  7.531           *Func-incrementExp-2781
+  7.531           Wait dur 0.0166667
+  7.548           *Func-incrementExp-2782
+  7.548           Wait dur 0.0166667
+  7.565           *Func-incrementExp-2783
+  7.565           Wait dur 0.0166667
+  7.582           *Func-incrementExp-2784
+  7.582           Wait dur 0.0166667
+  7.599           *Func-incrementExp-2785
+  7.599           Wait dur 0.0166667
+  7.616           *Func-incrementExp-2786
+  7.616           Wait dur 0.0166667
+  7.633           *Func-incrementExp-2787
+  7.633           Wait dur 0.0166667
+  7.650           *Func-resetBarColor-2788
+  7.650           Wait dur 0.1
+  7.750           *Func-showTrackIncLabel-2789
+  7.750           *Func-incrementExp-2790
+  7.750           Wait dur 0.0166667
+  7.767           *Func-incrementExp-2791
+  7.767           Wait dur 0.0166667
+  7.784           *Func-incrementExp-2792
+  7.784           Wait dur 0.0166667
+  7.801           *Func-incrementExp-2793
+  7.801           Wait dur 0.0166667
+  7.818           *Func-incrementExp-2794
+  7.818           Wait dur 0.0166667
+  7.835           *Func-incrementExp-2795
+  7.835           Wait dur 0.0166667
+  7.852           *Func-incrementExp-2796
+  7.852           Wait dur 0.0166667
+  7.869           *Func-incrementExp-2797
+  7.869           Wait dur 0.0166667
+  7.886           *Func-incrementExp-2798
+  7.886           Wait dur 0.0166667
+  7.903           *Func-incrementExp-2799
+  7.903           Wait dur 0.0166667
+  7.920           *Func-incrementExp-2800
+  7.920           Wait dur 0.0166667
+  7.937           *Func-incrementExp-2801
+  7.937           Wait dur 0.0166667
+  7.954           *Func-incrementExp-2802
+  7.954           Wait dur 0.0166667
+  7.971           *Func-incrementExp-2803
+  7.971           Wait dur 0.0166667
+  7.988           *Func-incrementExp-2804
+  7.988           Wait dur 0.0166667
+  8.005           *Func-incrementExp-2805
+  8.005           Wait dur 0.0166667
+  8.022           *Func-incrementExp-2806
+  8.022           Wait dur 0.0166667
+  8.039           *Func-incrementExp-2807
+  8.039           Wait dur 0.0166667
+  8.056           *Func-incrementExp-2808
+  8.056           Wait dur 0.0166667
+  8.073           *Func-incrementExp-2809
+  8.073           Wait dur 0.0166667
+  8.090           *Func-incrementExp-2810
+  8.090           Wait dur 0.0166667
+  8.107           *Func-incrementExp-2811
+  8.107           Wait dur 0.0166667
+  8.124           *Func-incrementExp-2812
+  8.124           Wait dur 0.0166667
+  8.141           *Func-incrementExp-2813
+  8.141           Wait dur 0.0166667
+  8.158           *Func-incrementExp-2814
+  8.158           Wait dur 0.0166667
+  8.175           *Func-incrementExp-2815
+  8.175           Wait dur 0.0166667
+  8.192           *Func-incrementExp-2816
+  8.192           Wait dur 0.0166667
+  8.209           *Func-incrementExp-2817
+  8.209           Wait dur 0.0166667
+  8.226           *Func-incrementExp-2818
+  8.226           Wait dur 0.0166667
+  8.243           *Func-incrementExp-2819
+  8.243           Wait dur 0.0166667
+  8.260           *Func-resetBarColor-2820
+  8.260           Wait dur 0.1
+  8.360           *Func-showTrackIncLabel-2821
+  8.360           *Func-incrementExp-2822
+  8.360           Wait dur 0.0166667
+  8.377           *Func-incrementExp-2823
+  8.377           Wait dur 0.0166667
+  8.394           *Func-incrementExp-2824
+  8.394           Wait dur 0.0166667
+  8.411           *Func-incrementExp-2825
+  8.411           Wait dur 0.0166667
+  8.428           *Func-incrementExp-2826
+  8.428           Wait dur 0.0166667
+  8.445           *Func-incrementExp-2827
+  8.445           Wait dur 0.0166667
+  8.462           *Func-incrementExp-2828
+  8.462           Wait dur 0.0166667
+  8.479           *Func-incrementExp-2829
+  8.479           Wait dur 0.0166667
+  8.496           *Func-incrementExp-2830
+  8.496           Wait dur 0.0166667
+  8.513           *Func-incrementExp-2831
+  8.513           Wait dur 0.0166667
+  8.530           *Func-incrementExp-2832
+  8.530           Wait dur 0.0166667
+  8.547           *Func-incrementExp-2833
+  8.547           Wait dur 0.0166667
+  8.564           *Func-incrementExp-2834
+  8.564           Wait dur 0.0166667
+  8.581           *Func-incrementExp-2835
+  8.581           Wait dur 0.0166667
+  8.598           *Func-incrementExp-2836
+  8.598           Wait dur 0.0166667
+  8.615           *Func-incrementExp-2837
+  8.615           Wait dur 0.0166667
+  8.632           *Func-incrementExp-2838
+  8.632           Wait dur 0.0166667
+  8.649           *Func-incrementExp-2839
+  8.649           Wait dur 0.0166667
+  8.666           *Func-incrementExp-2840
+  8.666           Wait dur 0.0166667
+  8.683           *Func-incrementExp-2841
+  8.683           Wait dur 0.0166667
+  8.700           *Func-incrementExp-2842
+  8.700           Wait dur 0.0166667
+  8.717           *Func-incrementExp-2843
+  8.717           Wait dur 0.0166667
+  8.734           *Func-incrementExp-2844
+  8.734           Wait dur 0.0166667
+  8.751           *Func-incrementExp-2845
+  8.751           Wait dur 0.0166667
+  8.768           *Func-incrementExp-2846
+  8.768           Wait dur 0.0166667
+  8.785           *Func-incrementExp-2847
+  8.785           Wait dur 0.0166667
+  8.802           *Func-incrementExp-2848
+  8.802           Wait dur 0.0166667
+  8.819           *Func-incrementExp-2849
+  8.819           Wait dur 0.0166667
+  8.836           *Func-incrementExp-2850
+  8.836           Wait dur 0.0166667
+  8.853           *Func-incrementExp-2851
+  8.853           Wait dur 0.0166667
+  8.870           *Func-resetBarColor-2852
+  8.870           Wait dur 0.1
+  8.970           *Func-showTrackIncLabel-2853
+  8.970           *Func-incrementExp-2854
+  8.970           Wait dur 0.0166667
+  8.987           *Func-incrementExp-2855
+  8.987           Wait dur 0.0166667
+  9.004           *Func-incrementExp-2856
+  9.004           Wait dur 0.0166667
+  9.021           *Func-incrementExp-2857
+  9.021           Wait dur 0.0166667
+  9.038           *Func-incrementExp-2858
+  9.038           Wait dur 0.0166667
+  9.055           *Func-incrementExp-2859
+  9.055           Wait dur 0.0166667
+  9.072           *Func-incrementExp-2860
+  9.072           Wait dur 0.0166667
+  9.089           *Func-incrementExp-2861
+  9.089           Wait dur 0.0166667
+  9.106           *Func-incrementExp-2862
+  9.106           Wait dur 0.0166667
+  9.123           *Func-incrementExp-2863
+  9.123           Wait dur 0.0166667
+  9.140           *Func-incrementExp-2864
+  9.140           Wait dur 0.0166667
+  9.157           *Func-incrementExp-2865
+  9.157           Wait dur 0.0166667
+  9.174           *Func-incrementExp-2866
+  9.174           Wait dur 0.0166667
+  9.191           *Func-incrementExp-2867
+  9.191           Wait dur 0.0166667
+  9.208           *Func-incrementExp-2868
+  9.208           Wait dur 0.0166667
+  9.225           *Func-incrementExp-2869
+  9.225           Wait dur 0.0166667
+  9.242           *Func-incrementExp-2870
+  9.242           Wait dur 0.0166667
+  9.259           *Func-incrementExp-2871
+  9.259           Wait dur 0.0166667
+  9.276           *Func-incrementExp-2872
+  9.276           Wait dur 0.0166667
+  9.293           *Func-incrementExp-2873
+  9.293           Wait dur 0.0166667
+  9.310           *Func-incrementExp-2874
+  9.310           Wait dur 0.0166667
+  9.327           *Func-incrementExp-2875
+  9.327           Wait dur 0.0166667
+  9.344           *Func-incrementExp-2876
+  9.344           Wait dur 0.0166667
+  9.361           *Func-incrementExp-2877
+  9.361           Wait dur 0.0166667
+  9.378           *Func-incrementExp-2878
+  9.378           Wait dur 0.0166667
+  9.395           *Func-incrementExp-2879
+  9.395           Wait dur 0.0166667
+  9.412           *Func-incrementExp-2880
+  9.412           Wait dur 0.0166667
+  9.429           *Func-incrementExp-2881
+  9.429           Wait dur 0.0166667
+  9.446           *Func-incrementExp-2882
+  9.446           Wait dur 0.0166667
+  9.463           *Func-incrementExp-2883
+  9.463           Wait dur 0.0166667
+  9.480           *Func-resetBarColor-2884
+  9.480           Wait dur 0.1
+  9.580           Wait dur 0.75
+ 10.330           Wait dur 0.25
+ 10.580         }
+ 10.580         *Func-_teardownSkipListen-2889
+ 10.580         *Func-destroy-2890
+ 10.580         *Func-hide-2891
+ 10.580         *Func-setForceOnscreenChat-2892
+ 10.580         Sequence-4115 {
+ 10.580         }
+ 10.580       }
+  0.000       *Sound-771 dur 10.58
+ 10.580     }
+  0.000     Sequence-4114 {
+  0.000       Sequence-4118 {
+  0.000         *Func-chooseRewardShotNow-2888
+  0.000         Wait dur 10.58
+ 10.580       }
+ 10.580     }
+ 10.580   }
+ 10.580   *Func-__doneReward-2893
+ 10.580 }
+
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1731, in handleMessageType
+    self.handleGoGetLost(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 494, in handleGoGetLost
+    self.lostConnection()
+  File "otp\distributed\OTPClientRepository.py", line 1643, in lostConnection
+    self.loginFSM.request('noConnection')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 228, in __transition
+    self.__exitCurrent(exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 186, in __exitCurrent
+    self.__currentState.exit(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 209, in exit
+    self.__exitChildren(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 188, in __exitChildren
+    fsm.request((fsm.getFinalState()).getName())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\distributed\ToontownClientRepository.py", line 516, in enterGameOff
+    OTPClientRepository.OTPClientRepository.enterGameOff(self)
+  File "otp\distributed\OTPClientRepository.py", line 1236, in enterGameOff
+    self._abandonShard()
+  File "toontown\distributed\ToontownClientRepository.py", line 1085, in _abandonShard
+    self.deleteObject(doId)
+  File "toontown\distributed\ToontownClientRepository.py", line 1074, in deleteObject
+    obj.deleteOrDelay()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 202, in deleteOrDelay
+    self.disableAnnounceAndDelete()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 205, in disableAnnounceAndDelete
+    self.disableAndAnnounce()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 231, in disableAndAnnounce
+    self.disable()
+  File "toontown\suit\DistributedCashbotBoss.py", line 102, in disable
+    DistributedBossCog.DistributedBossCog.disable(self)
+  File "toontown\suit\DistributedBossCog.py", line 195, in disable
+    self.cleanupIntervals()
+  File "toontown\suit\DistributedBossCog.py", line 244, in cleanupIntervals
+    interval.finish()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 392, in finish
+    self.privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+  File "toontown\battle\RewardPanel.py", line 219, in initGagFrame
+    if base.cr.newsManager.getInvading():
+AttributeError: 'NoneType' object has no attribute 'getInvading'
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\EventManager.py", line 49, in eventLoopTask
+    self.doEvents()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\EventManager.py", line 42, in doEvents
+    while not isEmptyFunc():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1731, in handleMessageType
+    self.handleGoGetLost(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 494, in handleGoGetLost
+    self.lostConnection()
+  File "otp\distributed\OTPClientRepository.py", line 1643, in lostConnection
+    self.loginFSM.request('noConnection')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 228, in __transition
+    self.__exitCurrent(exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 186, in __exitCurrent
+    self.__currentState.exit(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 209, in exit
+    self.__exitChildren(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 188, in __exitChildren
+    fsm.request((fsm.getFinalState()).getName())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\distributed\ToontownClientRepository.py", line 516, in enterGameOff
+    OTPClientRepository.OTPClientRepository.enterGameOff(self)
+  File "otp\distributed\OTPClientRepository.py", line 1236, in enterGameOff
+    self._abandonShard()
+  File "toontown\distributed\ToontownClientRepository.py", line 1085, in _abandonShard
+    self.deleteObject(doId)
+  File "toontown\distributed\ToontownClientRepository.py", line 1074, in deleteObject
+    obj.deleteOrDelay()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 202, in deleteOrDelay
+    self.disableAnnounceAndDelete()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 205, in disableAnnounceAndDelete
+    self.disableAndAnnounce()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 231, in disableAndAnnounce
+    self.disable()
+  File "toontown\suit\DistributedCashbotBoss.py", line 102, in disable
+    DistributedBossCog.DistributedBossCog.disable(self)
+  File "toontown\suit\DistributedBossCog.py", line 195, in disable
+    self.cleanupIntervals()
+  File "toontown\suit\DistributedBossCog.py", line 244, in cleanupIntervals
+    interval.finish()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 392, in finish
+    self.privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+  File "toontown\battle\RewardPanel.py", line 219, in initGagFrame
+    if base.cr.newsManager.getInvading():
+AttributeError: 'NoneType' object has no attribute 'getInvading'
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\EventManager.py", line 49, in eventLoopTask
+    self.doEvents()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\showbase\EventManager.py", line 42, in doEvents
+    while not isEmptyFunc():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1471, in handlePlayGame
+    self.handleMessageType(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1731, in handleMessageType
+    self.handleGoGetLost(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 494, in handleGoGetLost
+    self.lostConnection()
+  File "otp\distributed\OTPClientRepository.py", line 1643, in lostConnection
+    self.loginFSM.request('noConnection')
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 228, in __transition
+    self.__exitCurrent(exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 186, in __exitCurrent
+    self.__currentState.exit(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 209, in exit
+    self.__exitChildren(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 188, in __exitChildren
+    fsm.request((fsm.getFinalState()).getName())
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 282, in request
+    exitArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 229, in __transition
+    self.__enter(aState, enterArgList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\ClassicFSM.py", line 215, in __enter
+    aState.enter(argList)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\fsm\State.py", line 202, in enter
+    self.__enterFunc(*argList)
+  File "toontown\distributed\ToontownClientRepository.py", line 516, in enterGameOff
+    OTPClientRepository.OTPClientRepository.enterGameOff(self)
+  File "otp\distributed\OTPClientRepository.py", line 1236, in enterGameOff
+    self._abandonShard()
+  File "toontown\distributed\ToontownClientRepository.py", line 1085, in _abandonShard
+    self.deleteObject(doId)
+  File "toontown\distributed\ToontownClientRepository.py", line 1074, in deleteObject
+    obj.deleteOrDelay()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 202, in deleteOrDelay
+    self.disableAnnounceAndDelete()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 205, in disableAnnounceAndDelete
+    self.disableAndAnnounce()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\DistributedObject.py", line 231, in disableAndAnnounce
+    self.disable()
+  File "toontown\suit\DistributedCashbotBoss.py", line 102, in disable
+    DistributedBossCog.DistributedBossCog.disable(self)
+  File "toontown\suit\DistributedBossCog.py", line 195, in disable
+    self.cleanupIntervals()
+  File "toontown\suit\DistributedBossCog.py", line 244, in cleanupIntervals
+    interval.finish()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 392, in finish
+    self.privPostEvent()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 520, in privPostEvent
+    self.__doPythonCallbacks()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\MetaInterval.py", line 496, in __doPythonCallbacks
+    ival.privDoEvent(t, eventType)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\Interval.py", line 210, in privDoEvent
+    self.privInstant()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\FunctionInterval.py", line 91, in privInstant
+    self.function(*self.extraArgs, **self.kw)
+  File "toontown\battle\RewardPanel.py", line 219, in initGagFrame
+    if base.cr.newsManager.getInvading():
+AttributeError: 'NoneType' object has no attribute 'getInvading'

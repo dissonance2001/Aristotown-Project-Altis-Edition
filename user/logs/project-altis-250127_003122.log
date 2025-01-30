@@ -1,0 +1,380 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x000000002626FDC8>}
+__handleAvatarChooserDone: 100000086, 'Mr. Rockenzap', ('lss', 'ms', 's', 'm', (0.984, 0.537, 0.396, 1.0), (1.0, 1.0, 1.0, 1.0), (0.984, 0.537, 0.396, 1.0), (0.984, 0.537, 0.396, 1.0), 11, 0, 0, 0, 1, 20), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+[49, 49, 49, 49, 49, 49]
+///////////
+Actor goon-402005499, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005497, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005499, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005500, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005497, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005497, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005500, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005497, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005500, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005500, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005500, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005582, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005500, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005582, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005582, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005582, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005621, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005582, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005621, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005621, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005621, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005621, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005652, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005498, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005652, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005652, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005652, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005652, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005653, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005587, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005653, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005653, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005653, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005653, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005691, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005691, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005722, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005691, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005722, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005779, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005722, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005776, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005779, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005776, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005722, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005776, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005776, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005722, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005722, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005722, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005722, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005545, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005687, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005747, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005826, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005799, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005826, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005853, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005826, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005853, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005857, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005853, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005826, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005857, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005857, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005826, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005857, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005822, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005826, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005826, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005826, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005905, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005907, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005751, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005905, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005907, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005905, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005905, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005907, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005934, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005905, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005907, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005934, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+frame rate: 214.6 fps|0.002d|28 avs||315|316||0x0000|0x0000|925.6MB|1829.0MB|32717.5MB|1205|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+///////////
+Actor goon-402005934, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005907, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005934, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005961, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005934, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005907, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005961, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005907, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005907, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005961, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005989, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005907, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005961, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005989, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005989, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005961, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005989, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005989, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005961, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402005961, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402005961, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006035, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006035, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006038, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006035, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006038, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006038, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006038, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006062, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006038, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006062, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006062, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006062, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006119, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006118, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006119, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006118, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006118, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006141, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006144, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006141, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006141, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006144, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006169, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006144, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006169, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006202, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006169, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006144, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006202, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006144, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006144, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006202, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006144, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006202, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006239, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006202, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006239, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006239, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006202, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006202, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006202, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006202, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006065, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006300, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006304, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006172, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006300, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006304, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006300, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006300, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006304, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006300, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006304, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006304, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006304, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006304, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006394, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006394, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006396, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006396, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006302, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006428, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006428, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006336, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006430, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006430, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006431, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006171, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006431, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006431, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006431, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+///////////
+Actor goon-402006397, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']
+[Actor goon--1, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--2, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon--3, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse'], Actor goon-402006146, parts = ['modelRoot'], LODs = ['lodRoot'], anims = ['walk', 'recovery', 'collapse']]
+///////////
+Traceback (most recent call last):
+  File "toontown\suit\BossCog.py", line 592, in __pulseRed
+    blendType='easeInOut'))
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\LerpInterval.py", line 655, in __init__
+    bakeInStart, 0, nodePath, other)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\LerpInterval.py", line 52, in __init__
+    bakeInStart, fluid, nodePath, other)
+TypeError: CLerpNodePathInterval.CLerpNodePathInterval() argument 5 must be panda3d.core.NodePath, not NoneType
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "toontown\suit\BossCog.py", line 592, in __pulseRed
+    blendType='easeInOut'))
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\LerpInterval.py", line 655, in __init__
+    bakeInStart, 0, nodePath, other)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\interval\LerpInterval.py", line 52, in __init__
+    bakeInStart, fluid, nodePath, other)
+TypeError: CLerpNodePathInterval.CLerpNodePathInterval() argument 5 must be panda3d.core.NodePath, not NoneType

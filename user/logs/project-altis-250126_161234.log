@@ -1,0 +1,41 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\python\lib\runpy.py", line 174, in _run_module_as_main
+    "__main__", fname, loader, pkg_name)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\python\lib\runpy.py", line 72, in _run_code
+    exec code in run_globals
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\toontown\toonbase\ClientStart.py", line 158, in <module>
+    from toontown.distributed import ToontownClientRepository
+  File "toontown\distributed\ToontownClientRepository.py", line 5, in <module>
+    from toontown.distributed import PlayGame
+  File "toontown\distributed\PlayGame.py", line 10, in <module>
+    from toontown.hood import TTHood
+  File "toontown\hood\TTHood.py", line 1, in <module>
+    from toontown.safezone.TTSafeZoneLoader import TTSafeZoneLoader
+  File "toontown\safezone\TTSafeZoneLoader.py", line 1, in <module>
+    from toontown.safezone import SafeZoneLoader
+  File "toontown\safezone\SafeZoneLoader.py", line 6, in <module>
+    from toontown.hood import Place
+  File "toontown\hood\Place.py", line 10, in <module>
+    from toontown.friends import FriendsListManager
+  File "toontown\friends\FriendsListManager.py", line 2, in <module>
+    from toontown.friends import FriendsListPanel
+  File "toontown\friends\FriendsListPanel.py", line 5, in <module>
+    from toontown.toon import ToonAvatarPanel
+  File "toontown\toon\ToonAvatarPanel.py", line 14, in <module>
+    from toontown.toon import ToonAvatarDetailPanel
+  File "toontown\toon\ToonAvatarDetailPanel.py", line 9, in <module>
+    from toontown.toon import DistributedToon
+  File "toontown\toon\DistributedToon.py", line 2, in <module>
+    from toontown.toon import Experience, InventoryNewOLD, InventoryNewNEW, TTEmote, Toon
+  File "toontown\toon\Toon.py", line 1465
+    def setGeomNodeH(self, h: int) -> None:
+                            ^
+SyntaxError: invalid syntax

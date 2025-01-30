@@ -1,0 +1,28 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\python\lib\runpy.py", line 174, in _run_module_as_main
+    "__main__", fname, loader, pkg_name)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\python\lib\runpy.py", line 72, in _run_code
+    exec code in run_globals
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\toontown\toonbase\ClientStart.py", line 158, in <module>
+    from toontown.distributed import ToontownClientRepository
+  File "toontown\distributed\ToontownClientRepository.py", line 44, in <module>
+    from toontown.makeatoon import MakeAToon
+  File "toontown\makeatoon\MakeAToon.py", line 23, in <module>
+    from toontown.toon import LocalToon
+  File "toontown\toon\LocalToon.py", line 21, in <module>
+    from otp.avatar import LocalAvatar
+  File "otp\avatar\LocalAvatar.py", line 24, in <module>
+    from toontown.toon.OrbitalCamera import OrbitalCamera
+  File "toontown\toon\OrbitalCamera.py", line 458
+    taskMgr.remove(f"{self.TopNodeName}-MouseRead")
+                                                 ^
+SyntaxError: invalid syntax

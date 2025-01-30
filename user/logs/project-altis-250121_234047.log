@@ -1,0 +1,76 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x0000000027EC9908>}
+__handleAvatarChooserDone: 100000090, 'TRAP BUNNY', ('rsl', 'md', 'l', 'f', (0.726562, 0.472656, 0.859375, 1.0), (1.0, 1.0, 1.0, 1.0), (0.726562, 0.472656, 0.859375, 1.0), (0.726562, 0.472656, 0.859375, 1.0), 22, 7, 0, 7, 4, 1), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+frame rate: 85.9 fps|0.004d|53 avs||318|319||0x0000|0x0000|871.9MB|1653.6MB|32717.5MB|1129|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+Traceback (most recent call last):
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1467, in handlePlayGame
+    self.handleUpdateField(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 437, in handleUpdateField
+    self.__doUpdate(doId, di, ovUpdated)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 445, in __doUpdate
+    do.dclass.receiveUpdate(do, di)
+  File "toontown\battle\DistributedBattle.py", line 63, in setMembers
+    oldtoons = DistributedBattleBase.DistributedBattleBase.setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, immuneSuits, enragedSuits, absorbingSuits, soakedSuits, timestamp)
+  File "toontown\battle\DistributedBattleBase.py", line 635, in setMembers
+    self.__requestAdjustTownBattle()
+  File "toontown\battle\DistributedBattleBase.py", line 1558, in __requestAdjustTownBattle
+    self.__adjustTownBattle()
+  File "toontown\battle\DistributedBattleBase.py", line 1598, in __adjustTownBattle
+    self.townBattle.updateChosenAttacks(self.townBattleAttacks[0], self.townBattleAttacks[1], self.townBattleAttacks[2], self.townBattleAttacks[3])
+  File "toontown\town\TownBattle.py", line 274, in updateChosenAttacks
+    self.toonPanels[battleIndices[i]].setValues(battleIndices[i], tracks[i], levels[i], numTargets, target, self.localNum)
+  File "toontown\town\TownBattleToonPanel.py", line 164, in setValues
+    damage = int(getAvPropDamage(track, level, self.avatar.experience.getExp(track)))
+AttributeError: 'DistributedToon' object has no attribute 'experience'
+Traceback (most recent call last):
+  File "otp\otpbase\OTPBase.py", line 235, in run
+    taskMgr.run()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 538, in run
+    self.step()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\task\Task.py", line 492, in step
+    self.mgr.poll()
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 609, in readerPollUntilEmpty
+    while self.readerPollOnce():
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ConnectionRepository.py", line 616, in readerPollOnce
+    self.handleDatagram(self.private__di)
+  File "otp\distributed\OTPClientRepository.py", line 1856, in handleDatagram
+    self.handler(msgType, di)
+  File "otp\distributed\OTPClientRepository.py", line 1467, in handlePlayGame
+    self.handleUpdateField(di)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 437, in handleUpdateField
+    self.__doUpdate(doId, di, ovUpdated)
+  File "D:\!-ARISTOTOWN ALTIS EDITION-!\Project-Altis-master\dependencies\panda\direct\distributed\ClientRepositoryBase.py", line 445, in __doUpdate
+    do.dclass.receiveUpdate(do, di)
+  File "toontown\battle\DistributedBattle.py", line 63, in setMembers
+    oldtoons = DistributedBattleBase.DistributedBattleBase.setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, immuneSuits, enragedSuits, absorbingSuits, soakedSuits, timestamp)
+  File "toontown\battle\DistributedBattleBase.py", line 635, in setMembers
+    self.__requestAdjustTownBattle()
+  File "toontown\battle\DistributedBattleBase.py", line 1558, in __requestAdjustTownBattle
+    self.__adjustTownBattle()
+  File "toontown\battle\DistributedBattleBase.py", line 1598, in __adjustTownBattle
+    self.townBattle.updateChosenAttacks(self.townBattleAttacks[0], self.townBattleAttacks[1], self.townBattleAttacks[2], self.townBattleAttacks[3])
+  File "toontown\town\TownBattle.py", line 274, in updateChosenAttacks
+    self.toonPanels[battleIndices[i]].setValues(battleIndices[i], tracks[i], levels[i], numTargets, target, self.localNum)
+  File "toontown\town\TownBattleToonPanel.py", line 164, in setValues
+    damage = int(getAvPropDamage(track, level, self.avatar.experience.getExp(track)))
+AttributeError: 'DistributedToon' object has no attribute 'experience'

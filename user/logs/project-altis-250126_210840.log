@@ -1,0 +1,20 @@
+TTLocalizer: Running in language: english
+from toontown.toonbase.TTLocalizerEnglish import *
+OTPLocalizer: Running in language: english
+from otp.otpbase.OTPLocalizerEnglish import *
+AppRunner has been removed and AppRunnerGlobal has been deprecated
+Preloading suits...
+Preloading Toon heads...
+Preloading Toon heads...
+Preloading avatars...
+{402000001: <toontown.distributed.ToontownDistrict.ToontownDistrict instance at 0x00000000281DA888>}
+__handleAvatarChooserDone: 100000090, 'TRAP BUNNY', ('rsl', 'md', 'l', 'f', (0.726562, 0.472656, 0.859375, 1.0), (1.0, 1.0, 1.0, 1.0), (0.726562, 0.472656, 0.859375, 1.0), (0.726562, 0.472656, 0.859375, 1.0), 22, 7, 0, 7, 4, 1), 4
+NodePath.iPosHpr() is deprecated.
+NodePath.iPosHpr() is deprecated.
+0
+Reading DNA file... phase_4/dna/storage.pdna
+Reading DNA file... phase_3.5/dna/storage_interior.pdna
+Battle Event localtoon-battle-event-3
+frame rate: 89.9 fps|0.006d|41 avs||318|319||0x0000|0x0000|923.3MB|1831.3MB|32717.5MB|1278|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 76.8 fps|0.004d|75 avs||618|619||0x0000|0x0000|1056.4MB|2052.0MB|32717.5MB|1420|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL
+frame rate: 62.1 fps|0.002d|94 avs||918|919||0x0000|0x0000|1118.9MB|2131.0MB|32717.5MB|1454|nt.2.6.2|3.593,3.593|8,16 cpus|OpenGL

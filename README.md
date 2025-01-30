@@ -1,7 +1,12 @@
 <img src="https://raw.githubusercontent.com/NormalNed/Project-Altis/53168140c5b29f018467bedec35b4e59a83d0609/resources/phase_3.5/etc/transicon.png" align="right" width="200"/>
 
+<<<<<<< Updated upstream
 # Project Altis
 Project Altis Beta Source, that just works.
+=======
+# Aristotown: Altis Edition (CURRENT VERSION NOT UPDATED DUE TO GITHUB ERROR)
+A customized version of Project Altis that's is heavily based on the predecessor Toontown: Corporate Clash. Although this version of the game may not reflect what comes directly from Clash, it does have very similar features to what Clash has to offer. This game is in no way, shape or form intended to be a Toontown: Corporate Clash mirror or duplicate (it is very far from being so), this version of the game uses various assets from Clash such as select gui panels, cog models, animated cog heads, cog abilities, cog animations, and prop models. 
+>>>>>>> Stashed changes
 
 # ❓ What is Project Altis
 Project Altis was a private server aimed around adding a crap ton of new features. We are going to keep up this tradition finishing and polishing up Altis for the community.
