@@ -135,8 +135,8 @@ AllSuitsBattle = (('drop-react', 'anvil-drop'),
 ('large-zap', 'large-zap'),
 ('small-zap', 'small-zap'),
  ('soak', 'soak'),
-                  ('lured', 'lured2'),
- ('lured2', 'lured2'))
+                  ('lured', 'lured'),
+ ('lured2', 'lured'))
 SuitsCEOBattle = (('sit', 'sit'),
  ('sit-eat-in', 'sit-eat-in'),
  ('sit-eat-loop', 'sit-eat-loop'),

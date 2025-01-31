@@ -5127,7 +5127,6 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
                 theSuit.setHP(1500)
-                theSuit.setMaxHP(4880)
                 theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.5)
                 for suit in self.battle.activeSuits:
                     if suit.currHP <= 0:
