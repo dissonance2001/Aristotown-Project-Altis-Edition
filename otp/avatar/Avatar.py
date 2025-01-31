@@ -332,7 +332,8 @@ class Avatar(Actor, ShadowCaster):
 
     def playDialogue(self, type, length):
         sound = self.getDialogueSfx(type, length)
-        base.playSfx(sound, node=self)
+        soundSequence = SoundInterval(sound, node=None, listenerNode=base.localAvatar, loop=0, volume=1.0)
+        soundSequence.start()
 
     def getDialogueSfx(self, type, length):
         retval = None
@@ -391,7 +392,9 @@ class Avatar(Actor, ShadowCaster):
             self.animHead = 'question'
         else:
             stringLength = len(chatString)
-            if stringLength <= OTPLocalizer.DialogLength1:
+            if stringLength <= 1:
+                self.animHead = None
+            elif stringLength <= OTPLocalizer.DialogLength1:
                 self.animHead = 'grunt'
             elif stringLength <= OTPLocalizer.DialogLength2:
                 self.animHead = 'murmur'
@@ -401,6 +404,15 @@ class Avatar(Actor, ShadowCaster):
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, timeout=(chatFlags & CFTimeout))
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
+        if self.animHead == None:
+            for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
+                ).start()
+        else:
+            for headPart in self.animatedHeadParts: Sequence(
+                ActorInterval(headPart, self.animHead),
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
+            ).start()
 
     def setChatMuted(self, chatString, chatFlags, dialogue = None, interrupt = 1, quiet = 0):
         pass
