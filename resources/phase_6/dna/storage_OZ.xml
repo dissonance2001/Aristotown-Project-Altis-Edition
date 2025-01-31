@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<storage scope="global">
+	<model path="phase_3.5/models/modules/walls_basement" scope="hood">
+		<store_node root="wall" code="wall_basement_brick_ur" />
+		<store_node root="wall" code="wall_basement_brick_ul" />
+		<store_node root="wall" code="wall_basement_brick_dr" />
+		<store_node root="wall" code="wall_basement_brick_dl" />
+
+		<store_node root="wall" code="wall_basement_rock_ur" />
+		<store_node root="wall" code="wall_basement_rock_ul" />
+		<store_node root="wall" code="wall_basement_rock_dr" />
+		<store_node root="wall" code="wall_basement_rock_dl" />
+	</model>
+
+	<model path="phase_8/models/props/daisy_park_table" scope="hood">
+		<store_node root="prop" code="prop_daisy_park_table" node="" />
+	</model>
+
+	<model path="phase_8/models/props/trees_DG" scope="hood">
+		<store_node root="holiday_prop" code="prop_tree_DG_ul" />
+		<store_node root="holiday_prop" code="prop_tree_DG_ur" />
+	</model>
+
+
+	<model path="phase_3.5/models/props/trees" scope="hood">
+		<store_node root="holiday_prop" code="prop_tree_large_brickbox_ur" />
+		<store_node root="holiday_prop" code="prop_tree_large_brickbox_ul" />
+		<store_node root="holiday_prop" code="prop_tree_small_brickbox_ur" />
+		<store_node root="holiday_prop" code="prop_tree_small_brickbox_ul" />
+		<store_node root="holiday_prop" code="prop_tree_fat_brickbox_ur" />
+		<store_node root="holiday_prop" code="prop_tree_fat_brickbox_ul" />
+
+		<store_node root="holiday_prop" code="prop_tree_large_woodbox_ur" />
+		<store_node root="holiday_prop" code="prop_tree_large_woodbox_ul" />
+		<store_node root="holiday_prop" code="prop_tree_small_woodbox_ur" />
+		<store_node root="holiday_prop" code="prop_tree_small_woodbox_ul" />
+		<store_node root="holiday_prop" code="prop_tree_large_ur" node="prop_tree_large_no_box_ur" />
+		<store_node root="holiday_prop" code="prop_tree_large_ul" node="prop_tree_large_no_box_ul" />
+		<store_node root="holiday_prop" code="prop_tree_small_ur" node="prop_tree_small_nobox_ur" />
+		<store_node root="holiday_prop" code="prop_tree_small_ul" node="prop_tree_small_no_box_ul" />
+		<store_node root="holiday_prop" code="prop_tree_fat_ur" node="prop_tree_fat_no_box_ur" />
+		<store_node root="holiday_prop" code="prop_tree_fat_ul" node="prop_tree_fat_no_box_ul" />
+	</model>
+
+	<model path="phase_8/models/props/window_flowerbox_wood" scope="hood">
+		<store_node root="prop" code="prop_window_flowerbox_wood" node="" />
+	</model>
+
+	<model path="phase_6/models/props/signs_DD" scope="hood">
+		<store_node root="sign" code="DD_sign1" />
+		<store_node root="sign" code="DD_sign2" />
+		<store_node root="sign" code="DD_sign3" />
+	</model>
+
+</storage>

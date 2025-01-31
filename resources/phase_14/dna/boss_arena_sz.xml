@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<scene zone="20000">
+	<group name="boss_20000">
+		<visgroup zone="20000:safe_zone" vis="20000:safe_zone">
+            <battle_cell width="20" height="20" x="0" y="0" z="0" />
+        </visgroup>
+
+<!--        <visgroup zone="10000" vis="10000 10001 10002 10003 10004 10005 10006 10007 10008 10009 10010 10011 10012">-->
+<!--            <suit_edge a="6" b="7" />-->
+<!--            <suit_edge a="7" b="8" />-->
+<!--            <suit_edge a="8" b="9" />-->
+<!--            <suit_edge a="9" b="10" />-->
+<!--            <battle_cell width="20" height="20" x="-57.086" y="-136.929" z="0" />-->
+<!--        </visgroup>-->
+    </group>
+</scene>
