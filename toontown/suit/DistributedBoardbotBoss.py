@@ -47,6 +47,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.doobers = []
         self.dooberRequest = None
         self.bossDamage = 0
+        self.currHP = self.bossDamage
         self.attackCode = None
         self.attackAvId = 0
         self.recoverRate = 0
@@ -68,6 +69,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.nerfed = ToontownGlobals.SELLBOT_NERF_HOLIDAY in base.cr.newsManager.getHolidayIdList()
         self.localToonPromoted = True
         self.resetMaxDamage()
+        self.maxHP = self.bossMaxDamage
 
     def announceGenerate(self):
         global OneBossCog

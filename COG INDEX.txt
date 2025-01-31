@@ -55,7 +55,7 @@ adc - Chainsaw Consultant Level 50.mgr
 drm - Chainsaw Consultant (OR) Level 50.mgr
 
 	Bossbot 'Litigation' Team:
-cp - Groundbreaker Level 38.mgr
+cp - Powerhouse Level 38.mgr
 fbd - Bookkeeper Level 44.mgr
 frs - Wiretapper Level 44.mgr
 gtk - Ambassador Level 48.mgr

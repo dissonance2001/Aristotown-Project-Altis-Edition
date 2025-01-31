@@ -7,7 +7,7 @@ from toontown.nametag.Nametag3d import Nametag3d
 
 class NametagGroup:
     CHAT_TIMEOUT_MIN = 4.0
-    CHAT_TIMEOUT_MAX = 12.0
+    CHAT_TIMEOUT_MAX = 8.0
     CHAT_STOMP_DELAY = 0
 
     def __init__(self):
@@ -272,7 +272,7 @@ class NametagGroup:
             self.clearChatText()
             self.stompChatText = chatText
             self.stompTask = taskMgr.doMethodLater(
-                self.CHAT_STOMP_DELAY, self.__chatStomp, self.stompTaskName,
+                0, self.__chatStomp, self.stompTaskName,
                 extraArgs=[timeout])
             return
 
@@ -308,10 +308,6 @@ class NametagGroup:
 
         self.chatPages = []
         self.chatPageIndex = 0
-
-        for nametag in self.nametags:
-            nametag.setChatText('')
-            nametag.update()
 
 
         if task is not None:

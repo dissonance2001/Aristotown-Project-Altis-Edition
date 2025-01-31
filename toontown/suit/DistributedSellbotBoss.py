@@ -52,6 +52,7 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.doobers = []
         self.dooberRequest = None
         self.bossDamage = 0
+        self.currHP = self.bossDamage
         self.attackCode = None
         self.attackAvId = 0
         self.recoverRate = 0
@@ -73,11 +74,12 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.nerfed = ToontownGlobals.SELLBOT_NERF_HOLIDAY in base.cr.newsManager.getHolidayIdList()
         self.localToonPromoted = True
         self.resetMaxDamage()
+        self.maxHP = self.bossMaxDamage
 
     def announceGenerate(self):
         global OneBossCog
         DistributedBossCog.DistributedBossCog.announceGenerate(self)
-        self.setName('C.S.O.')
+        self.setName('Senior V.P.')
         nameInfo = TTLocalizer.BossCogNameWithDept % {'name': self.name,
          'dept': SuitDNA.getDeptFullname(self.style.dept)}
         self.setDisplayName(nameInfo)
@@ -202,6 +204,7 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 self.bossDamageMovie.resumeUntil(self.bossDamage * self.bossDamageToMovie)
                 if self.recoverRate:
                     taskMgr.add(self.__recoverBossDamage, taskName)
+        self.updateHealthBar()
 
     def getBossDamage(self):
         now = globalClock.getFrameTime()
@@ -838,6 +841,8 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cagedToon.clearChat()
         self.reparentTo(render)
         self.setCageIndex(4)
+        self.generateHealthBar()
+        self.updateHealthBar()
         camera.reparentTo(render)
         camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
         (localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov),)
@@ -1211,7 +1216,6 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             spread = -spread
         dist = 50
         rate = time / numGears
-        self.ANIM_PLAYRATE = numGears / 4
         for i in xrange(numGears):
             node = gearRoot.attachNewNode(str(i))
             node.hide()

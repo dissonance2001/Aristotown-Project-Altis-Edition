@@ -175,9 +175,13 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         elif zoneId == ToontownGlobals.SellbotLobby:
             if base.config.GetBool('want-qa-regression', 0):
                 self.notify.info('QA-REGRESSION: COGHQ: Visit SellbotLobby')
-            self.geom = loader.loadModel(self.cogHQLobbyModelPath)
-            front = self.geom.find('**/frontWall')
+            self.geom2 = loader.loadModel(self.cogHQLobbyModelPath)
+            self.geom = loader.loadModel('phase_9/models/cogHQ/SellbotHQLobby2')
+            front = self.geom2.find('**/frontWall')
             front.node().setEffect(DecalEffect.make())
+            self.geom2.reparentTo(self.geom)
+            geom1 = self.geom.find('**/MainLobbyGeometry')
+            geom1.hide()
             door = self.geom.find('**/door_0')
             parent = door.getParent()
             door.wrtReparentTo(front)
@@ -188,6 +192,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             door.find('**/leftDoor').wrtReparentTo(parent)
             door.find('**/rightDoor').wrtReparentTo(parent)
             self.geom.flattenStrong()
+            self.geom2.flattenStrong()
         else:
             self.notify.warning('loadPlaceGeom: unclassified zone %s' % zoneId)
         CogHQLoader.CogHQLoader.loadPlaceGeom(self, zoneId)

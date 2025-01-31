@@ -13,8 +13,8 @@ from toontown.suit import DistributedGoon
 
 class DistributedCashbotBossGoon(DistributedGoon.DistributedGoon, DistributedCashbotBossObject.DistributedCashbotBossObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBossGoon')
-    walkGrabZ = -3.6
-    stunGrabZ = -2.2
+    walkGrabZ = -2.6
+    stunGrabZ = -1.2
     wiggleFreeTime = 2
     craneFrictionCoef = 0.15
     craneSlideSpeed = 10
@@ -31,6 +31,7 @@ class DistributedCashbotBossGoon(DistributedGoon.DistributedGoon, DistributedCas
         self.hitFloorSfx = loader.loadSfx('phase_5/audio/sfx/AA_drop_flowerpot.ogg')
         self.hitFloorSoundInterval = SoundInterval(self.hitFloorSfx, duration=1.0, node=self)
         self.wiggleSfx = loader.loadSfx('phase_5/audio/sfx/SA_finger_wag.ogg')
+        self.name = 'goon'
         return
 
     def generate(self):
@@ -54,8 +55,8 @@ class DistributedCashbotBossGoon(DistributedGoon.DistributedGoon, DistributedCas
         self.reparentTo(render)
 
     def disable(self):
-        i = self.boss.goons.index(self)
-        del self.boss.goons[i]
+       # i = self.boss.goons.index(self)
+        #del self.boss.goons[i]
         DistributedGoon.DistributedGoon.disable(self)
         DistributedCashbotBossObject.DistributedCashbotBossObject.disable(self)
 
@@ -148,7 +149,8 @@ class DistributedCashbotBossGoon(DistributedGoon.DistributedGoon, DistributedCas
 
     def setObjectState(self, state, avId, craneId):
         if state == 'W':
-            self.demand('Walk')
+            if not self.craneId:
+                self.demand('Walk')
         elif state == 'B':
             if self.state != 'Battle':
                 self.demand('Battle')
@@ -178,6 +180,7 @@ class DistributedCashbotBossGoon(DistributedGoon.DistributedGoon, DistributedCas
 
     def b_destroyGoon(self):
         if not self.isDead:
+            self.resetSpeedCaching()
             self.d_destroyGoon()
             self.destroyGoon()
 
@@ -185,7 +188,16 @@ class DistributedCashbotBossGoon(DistributedGoon.DistributedGoon, DistributedCas
         if not self.isDead:
             self.playCrushMovie(None, None)
         self.demand('Off')
+        print("///////////")
+        print(self)
+        print(self.boss.goons)
+        print("///////////")
+        if self in self.boss.goons:
+            self.boss.goons.remove(self)
         return
+
+    def d_requestWalk(self):
+        self.sendUpdate('requestWalk')
 
     def enterOff(self):
         DistributedGoon.DistributedGoon.enterOff(self)

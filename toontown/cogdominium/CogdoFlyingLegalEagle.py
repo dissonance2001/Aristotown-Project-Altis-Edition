@@ -29,7 +29,7 @@ class CogdoFlyingLegalEagle(DirectObject, FSM):
     CooldownEventName = 'LegalEagleCooldown'
     notify = DirectNotifyGlobal.directNotify.newCategory('CogdoFlyingLegalEagle')
 
-    def __init__(self, nest, index, suitDnaName = 'le'):
+    def __init__(self, nest, index, suitDnaName = 'arb'):
         FSM.__init__(self, 'CogdoFlyingLegalEagle')
         self.defaultTransitions = {'Off': ['Roost'],
          'Roost': ['TakeOff', 'Off'],

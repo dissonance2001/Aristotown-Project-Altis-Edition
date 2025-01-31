@@ -30,6 +30,7 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
         self.reserveSuits = []
         self.cagedToonNpcId = random.choice(NPCToons.HQnpcFriends.keys())
         self.bossMaxDamage = ToontownGlobals.SellbotBossMaxDamage
+        self.maxHP = self.bossMaxDamage
         self.battleOnePlanner = SuitBuildingGlobals.SUIT_PLANNER_VP
         self.battleTwoPlanner = SuitBuildingGlobals.SUIT_PLANNER_VP_SKELECOGS
         self.recoverRate = 0
@@ -129,8 +130,8 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
              ToontownGlobals.BossCogFrontAttack,
                                         ToontownGlobals.BossCogGolfAttack,
                 ToontownGlobals.BossCogGolfAttack,
-                ToontownGlobals.BossCogGolfAreaAttack,
-                                        ToontownGlobals.BossCogGolfAreaAttack,
+                ToontownGlobals.BossCogChaseAttack,
+                                        ToontownGlobals.BossCogChaseAttack,
              ToontownGlobals.BossCogDirectedAttack])
         if attackCode == ToontownGlobals.BossCogAreaAttack:
             self.__doAreaAttack()
@@ -479,9 +480,9 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
         self.__resetDoobers()
         for i in xrange(8):
             suit = DistributedSuitAI.DistributedSuitAI(self.air, None)
-            level = random.randrange(len(SuitDNA.suitsPerLevel))
+            level = 28
             suit.dna = SuitDNA.SuitDNA()
-            suit.dna.newSuitRandom(level=11, dept=self.dna.dept)
+            suit.dna.newSuitRandom(level=28, dept=self.dna.dept)
             suit.setLevel(level)
             suit.generateWithRequired(self.zoneId)
             self.doobers.append(suit)

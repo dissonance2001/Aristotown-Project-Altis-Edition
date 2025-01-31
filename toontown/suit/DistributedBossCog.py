@@ -7,6 +7,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.chat.ChatGlobals import *
 from direct.task import Task
 from toontown.suit import Suit
+from toontown.battle.BattleProps import *
 from toontown.nametag import NametagGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.battle import BattleExperience
@@ -97,7 +98,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.collNode.setName('BossZap')
         self.setTag('attackCode', str(ToontownGlobals.BossCogElectricFence))
         self.accept('enterBossZap', self.__touchedBoss)
-        bubbleL = CollisionSphere(10, -5, 0, 10)
+        bubbleL = CollisionSphere(10, -5, 0, 12)
         bubbleL.setTangible(0)
         bubbleLNode = CollisionNode('BossZap')
         bubbleLNode.setCollideMask(ToontownGlobals.WallBitmask)
@@ -105,7 +106,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.bubbleL = self.axle.attachNewNode(bubbleLNode)
         self.bubbleL.setTag('attackCode', str(ToontownGlobals.BossCogSwatLeft))
         self.bubbleL.stash()
-        bubbleR = CollisionSphere(-10, -5, 0, 10)
+        bubbleR = CollisionSphere(-10, -5, 0, 12)
         bubbleR.setTangible(0)
         bubbleRNode = CollisionNode('BossZap')
         bubbleRNode.setCollideMask(ToontownGlobals.WallBitmask)
@@ -145,6 +146,38 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.bubbleFR = self.rotateNode.attachNewNode(bubbleFRNode)
         self.bubbleFR.setTag('attackCode', str(ToontownGlobals.BossCogFrontAttack))
         self.bubbleFR.stash()
+        bubbleG = CollisionSphere(-10, 25, 0, 12)
+        bubbleG.setTangible(0)
+        bubbleGNode = CollisionNode('BossZap')
+        bubbleGNode.setCollideMask(ToontownGlobals.WallBitmask)
+        bubbleGNode.addSolid(bubbleG)
+        self.bubbleG = self.rotateNode.attachNewNode(bubbleGNode)
+        self.bubbleG.setTag('attackCode', str(ToontownGlobals.BossCogFrontAttack))
+        self.bubbleG.stash()
+        bubbleH = CollisionSphere(10, -25, 0, 12)
+        bubbleH.setTangible(0)
+        bubbleHNode = CollisionNode('BossZap')
+        bubbleHNode.setCollideMask(ToontownGlobals.WallBitmask)
+        bubbleHNode.addSolid(bubbleH)
+        self.bubbleH = self.rotateNode.attachNewNode(bubbleHNode)
+        self.bubbleH.setTag('attackCode', str(ToontownGlobals.BossCogFrontAttack))
+        self.bubbleH.stash()
+        bubbleI = CollisionSphere(-10, 0, 0, 12)
+        bubbleI.setTangible(0)
+        bubbleINode = CollisionNode('BossZap')
+        bubbleINode.setCollideMask(ToontownGlobals.WallBitmask)
+        bubbleINode.addSolid(bubbleI)
+        self.bubbleI = self.rotateNode.attachNewNode(bubbleINode)
+        self.bubbleI.setTag('attackCode', str(ToontownGlobals.BossCogFrontAttack))
+        self.bubbleI.stash()
+        bubbleJ = CollisionSphere(10, 25, 0, 12)
+        bubbleJ.setTangible(0)
+        bubbleJNode = CollisionNode('BossZap')
+        bubbleJNode.setCollideMask(ToontownGlobals.WallBitmask)
+        bubbleJNode.addSolid(bubbleJ)
+        self.bubbleJ = self.rotateNode.attachNewNode(bubbleJNode)
+        self.bubbleJ.setTag('attackCode', str(ToontownGlobals.BossCogFrontAttack))
+        self.bubbleJ.stash()
         self.warningSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
         self.swingClubSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_frisbee_gears.ogg')
 
@@ -198,6 +231,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
     def getDialogueArray(self, *args):
         return BossCog.BossCog.getDialogueArray(self, *args)
 
+
     def storeInterval(self, interval, name):
         if name in self.activeIntervals:
             ival = self.activeIntervals[name]
@@ -245,6 +279,17 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
     def hasLocalToon(self):
         doId = localAvatar.doId
         return doId in self.toonsA or doId in self.toonsB
+
+    def generateHeadAnims(self, path, cActor, additionalAnims=[]):
+        anims = ['fore', 'neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
+                 'stun', 'enraged', 'insurance', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revved-up', 'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive',
+                 'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'overclocked', 'come-on', 'zero']
+        for anim in additionalAnims:
+            anims.append(anim)
+        animList = {}
+        for anim in anims:
+            animList[anim] = path + anim + '.bam'
+        cActor.loadAnims(animList)
 
     def setBattleExperience(self, id0, origExp0, earnedExp0, origQuests0, items0, missedItems0, origMerits0, merits0, parts0, id1, origExp1, earnedExp1, origQuests1, items1, missedItems1, origMerits1, merits1, parts1, id2, origExp2, earnedExp2, origQuests2, items2, missedItems2, origMerits2, merits2, parts2, id3, origExp3, earnedExp3, origQuests3, items3, missedItems3, origMerits3, merits3, parts3, id4, origExp4, earnedExp4, origQuests4, items4, missedItems4, origMerits4, merits4, parts4, id5, origExp5, earnedExp5, origQuests5, items5, missedItems5, origMerits5, merits5, parts5, id6, origExp6, earnedExp6, origQuests6, items6, missedItems6, origMerits6, merits6, parts6, id7, origExp7, earnedExp7, origQuests7, items7, missedItems7, origMerits7, merits7, parts7, deathList, uberList, helpfulToons):
         self.deathList = deathList
@@ -810,29 +855,42 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
             self.doAnimate('hit', happy=1, now=1)
         elif attackCode == ToontownGlobals.BossCogSwatLeft:
             self.setDizzy(0)
-            self.doAnimate('ltSwing', now=1)
+            self.doAnimate('ltSwing')
             self.saySomethingSwat()
         elif attackCode == ToontownGlobals.BossCogSwatRight:
             self.setDizzy(0)
-            self.doAnimate('rtSwing', now=1)
+            self.doAnimate('rtSwing')
             self.saySomethingSwat()
         elif attackCode == ToontownGlobals.BossCogAreaAttack:
             self.setDizzy(0)
-            self.doAnimate('areaAttack', now=1)
+            self.doAnimate('areaAttack')
         elif attackCode == ToontownGlobals.BossCogFrontAttack:
             self.setDizzy(0)
-            self.doAnimate('frontAttack', now=1)
+            if self.style.dept == 'l':
+                self.saySomethingSpinLawbot()
+            self.doAnimate('frontAttack')
         elif attackCode == ToontownGlobals.BossCogGolfAreaAttack:
             self.setDizzy(0)
             self.doGolfAreaAttack()
         elif attackCode == ToontownGlobals.BossCogGolfAttack:
             self.setDizzy(0)
+            if self.style.dept == 'l':
+                self.saySomethingLawbot2()
             self.doGearAreaAttack()
+        elif attackCode == ToontownGlobals.BossCogChaseAttack:
+            self.setDizzy(0)
+            self.doGolfGearAreaAttack()
         elif attackCode == ToontownGlobals.BossCogRecoverDizzyAttack:
             self.setDizzy(0)
             self.doAnimate('frontAttack', now=1)
         elif attackCode == ToontownGlobals.BossCogDirectedAttack or attackCode == ToontownGlobals.BossCogSlowDirectedAttack or attackCode == ToontownGlobals.BossCogGearDirectedAttack:
             self.setDizzy(0)
+            if self.style.dept == 'l':
+                self.saySomethingLawbot()
+            elif self.style.dept == 'm':
+                self.saySomethingCFO()
+            elif self.style.dept == 's':
+                self.saySomethingVP()
             self.doDirectedAttack(avId, attackCode)
         elif attackCode == ToontownGlobals.BossCogNoAttack:
             self.setDizzy(0)
@@ -909,7 +967,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq.append(suitsOff)
         return seq
 
-    def doGolfAreaAttack(self):
+    def doGolfGearAreaAttack(self):
         toons = []
         for toonId in self.involvedToons:
             toon = base.cr.doId2do.get(toonId)
@@ -1189,18 +1247,46 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
 
     def saySomething(self):
         intervalName = 'CEOTaunt'
-        taunt = random.choice(("I wouldn't get too close. My patents protect these gears.", "You could say, this sale is 'geared' towards you."))
+        taunt = random.choice(("I wouldn't get too close. My patents protect these gears.", "I've got some new tricks up my sleeve.", "You could say, this sale is 'geared' towards you."))
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
 
-    def saySomething2(self):
+    def saySomethingCFO(self):
         intervalName = 'CEOTaunt'
         taunt = random.choice(("Cha-Ching!", "Budget this!", "This isn't legal tender!"))
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
+
+        seq.start()
+        self.activeIntervals[intervalName] = seq
+
+    def saySomethingVP(self):
+        intervalName = 'CEOTaunt'
+        taunt = random.choice(("Lemme toss this offer to you!", "Here's a sale 'geared' towards you!", "Buy one, get the rest free!"))
+        seq = Sequence(name=intervalName)
+        seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
+
+        seq.start()
+        self.activeIntervals[intervalName] = seq
+
+    def saySomethingLawbot2(self):
+        intervalName = 'CEOTaunt'
+        taunt = random.choice(("I wouldn't get too close. My patents protect these gears.",
+                               "You could say, this sale is 'geared' towards you."))
+
+        seq = Sequence(name=intervalName)
+        seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1210,6 +1296,8 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         taunt = random.choice(("Sorry for the delay, now where were we?", "Yikes! Back into the swing of things!", "Gonna take a lot more than a few pies to stop this sale!"))
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1219,6 +1307,8 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         taunt = random.choice(("Ouch!", "Right in the face!", "What a steal!"))
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1229,6 +1319,8 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
                                "Let's get these ideas going!", "I wouldn't get too close. My patents protect these gears."))
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1239,6 +1331,19 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
                                "Let's get these ideas going!", "I wouldn't get too close. My patents protect these gears."))
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
+
+        seq.start()
+        self.activeIntervals[intervalName] = seq
+
+    def saySomethingSpinLawbot(self):
+        intervalName = 'CEOTaunt'
+        taunt = random.choice(("Why worry about problems when you can shake them off?", "Let me put my spin on this.", "I may be old, but I'm still reliable."))
+        seq = Sequence(name=intervalName)
+        seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1248,6 +1353,21 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         taunt = random.choice(("It's a clearance sale! All Toons must go!", "This deal will knock your socks off!", "We're sweeping the floor with this limited time offer!"))
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
+
+        seq.start()
+        self.activeIntervals[intervalName] = seq
+
+    def saySomethingLawbot(self):
+        intervalName = 'CEOTaunt'
+        taunt = random.choice(("Justice isn't blind, but I am.", 'Your appeal has been rejected. I sentence you to sadness!',
+                               'Strike that from the record.', "You Toons don't understand the importance of law and order.",
+                               'Objection sustained!', "Order in the court!"))
+        seq = Sequence(name=intervalName)
+        seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1257,6 +1377,8 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         taunt = random.choice(("I've got some new tricks up my sleeve.", "This deal will make your head spin!"))
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1264,7 +1386,10 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
     def saySomethingSwat(self):
         intervalName = 'CEOTaunt'
         seq = Sequence(name=intervalName)
-        seq.append(Func(self.setChatAbsolute, "And away you go!", CFSpeech))
+        taunt = "And away you go!"
+        seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
+        seq.append(Wait(8.0))
+        seq.append(Func(self.clearChat))
 
         seq.start()
         self.activeIntervals[intervalName] = seq

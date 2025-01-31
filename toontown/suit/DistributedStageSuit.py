@@ -31,8 +31,9 @@ class DistributedStageSuit(DistributedFactorySuit.DistributedFactorySuit):
             self.reparentTo(hidden)
         else:
             self.doReparent()
-        if self.boss:
-            self.renameBoss()
+
+    def setNeutralAnimation(self):
+        pass
 
     def renameBoss(self):
         if self.getSkeleRevives() > 0:

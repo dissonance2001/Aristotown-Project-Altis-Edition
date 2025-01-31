@@ -24,7 +24,7 @@ ModelDict = {'s': 'phase_9/models/char/sellbotBoss',
  'm': 'phase_10/models/char/cashbotBoss',
  'l': 'phase_11/models/char/lawbotBoss',
  'c': 'phase_12/models/char/bossbotBoss',
- 'g': 'phase_12/models/char/bossbotBoss'}
+ 'g': 'phase_14/models/char/boardbotBoss'}
 AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'turn2Fb', 'Ff_neutral', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
 
 
@@ -47,6 +47,8 @@ class BossCog(Avatar.Avatar):
         self.bubbleF = None
         self.bubbleFL = None
         self.bubbleFR = None
+        self.headParts = []
+        self.animatedHeadParts = []
         self.raised = 1
         self.forward = 1
         self.happy = 1
@@ -93,24 +95,35 @@ class BossCog(Avatar.Avatar):
                 self.initializeNametag3d()
 
     def generateBossCog(self):
-        self.throwSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_frisbee_gears.ogg')
-        self.swingSfx = loader.loadSfx ('phase_9/audio/sfx/CHQ_VP_swipe.ogg')
-        self.spinSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_spin.ogg')
-        self.rainGearsSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_raining_gears.ogg')
-        self.swishSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_swish.ogg')
-        self.boomSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_boom.ogg')
-        self.deathSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_big_death.ogg')
-        self.treadsSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_tractor_treads.ogg')
-        self.headshakeSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_headshake.ogg')
-        self.upSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_raise_up.ogg')
-        self.downSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_collapse.ogg')
-        self.reelSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_reeling_backwards.ogg')
-        self.birdsSfx = loader.loadSfx('phase_4/audio/sfx/SZ_TC_bird1.ogg')
-        self.dizzyAlert = loader.loadSfx('phase_5/audio/sfx/AA_sound_aoogah.ogg')
-        self.grunt = loader.loadSfx('phase_9/audio/sfx/Boss_COG_VO_grunt.ogg')
-        self.murmur = loader.loadSfx('phase_9/audio/sfx/Boss_COG_VO_murmur.ogg')
-        self.statement = loader.loadSfx('phase_9/audio/sfx/Boss_COG_VO_statement.ogg')
-        self.question = loader.loadSfx('phase_9/audio/sfx/Boss_COG_VO_question.ogg')
+        self.throwSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_frisbee_gears.ogg')
+        self.swingSfx = base.loadSfx ('phase_9/audio/sfx/CHQ_VP_swipe.ogg')
+        self.spinSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_spin.ogg')
+        self.rainGearsSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_raining_gears.ogg')
+        self.swishSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_swish.ogg')
+        self.boomSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_boom.ogg')
+        self.deathSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_big_death.ogg')
+        self.treadsSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_tractor_treads.ogg')
+        self.headshakeSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_headshake.ogg')
+        self.upSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_raise_up.ogg')
+        self.downSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_collapse.ogg')
+        self.reelSfx = base.loadSfx('phase_9/audio/sfx/CHQ_VP_reeling_backwards.ogg')
+        self.birdsSfx = base.loadSfx('phase_4/audio/sfx/SZ_TC_bird1.ogg')
+        self.dizzyAlert = base.loadSfx('phase_5/audio/sfx/AA_sound_aoogah.ogg')
+        if self.style.dept == 'c':
+            self.grunt = base.loadSfx('phase_9/audio/sfx/Boss_c_COG_VO_grunt.ogg')
+            self.murmur = base.loadSfx('phase_9/audio/sfx/Boss_c_COG_VO_murmur.ogg')
+            self.statement = base.loadSfx('phase_9/audio/sfx/Boss_c_COG_VO_statement.ogg')
+            self.question = base.loadSfx('phase_9/audio/sfx/Boss_c_COG_VO_question.ogg')
+        elif self.style.dept == 'l':
+            self.grunt = base.loadSfx('phase_9/audio/sfx/Boss_l_COG_VO_grunt.ogg')
+            self.murmur = base.loadSfx('phase_9/audio/sfx/Boss_l_COG_VO_murmur.ogg')
+            self.statement = base.loadSfx('phase_9/audio/sfx/Boss_l_COG_VO_statement.ogg')
+            self.question = base.loadSfx('phase_9/audio/sfx/Boss_l_COG_VO_question.ogg')
+        else:
+            self.grunt = base.loadSfx('phase_9/audio/sfx/Boss_COG_VO_grunt.ogg')
+            self.murmur = base.loadSfx('phase_9/audio/sfx/Boss_COG_VO_murmur.ogg')
+            self.statement = base.loadSfx('phase_9/audio/sfx/Boss_COG_VO_statement.ogg')
+            self.question = base.loadSfx('phase_9/audio/sfx/Boss_COG_VO_question.ogg')
         self.dialogArray = [self.grunt,
          self.murmur,
          self.statement,
@@ -120,7 +133,10 @@ class BossCog(Avatar.Avatar):
         dna = self.style
         filePrefix = ModelDict[dna.dept]
         self.loadModel(GenericModel + '-legs-zero', 'legs')
-        self.loadModel(filePrefix + '-torso-zero', 'torso')
+        if self.style.dept == 'l':
+            self.loadModel(filePrefix + '-torso-zero', 'torso')
+        else:
+            self.loadModel(GenericModel + '-torso-zero', 'torso')
         self.loadModel(filePrefix + '-head-zero', 'head')
         self.twoFaced = dna.dept == 's'
         self.attach('head', 'torso', 'joint34')
@@ -140,9 +156,24 @@ class BossCog(Avatar.Avatar):
         self.backAttack = self.rotateNode.attachNewNode('frontAttack')
         self.backAttack.setPos(0, 10, 10)
         self.backAttack.setScale(2)
-        self.setHeight(30)
-        self.nametag3d.setScale(2)
-        for partName in ('legs', 'torso', 'head'):
+        self.corner1Attack = self.rotateNode.attachNewNode('frontAttack')
+        self.corner1Attack.setPos(-10, -8, 10)
+        self.corner1Attack.setScale(2)
+        self.corner2Attack = self.rotateNode.attachNewNode('frontAttack')
+        self.corner2Attack.setPos(10, -8, 10)
+        self.corner2Attack.setScale(2)
+        self.corner3Attack = self.rotateNode.attachNewNode('frontAttack')
+        self.corner3Attack.setPos(-10, 8, 10)
+        self.corner3Attack.setScale(2)
+        self.corner4Attack = self.rotateNode.attachNewNode('frontAttack')
+        self.corner4Attack.setPos(10, 8, 10)
+        self.corner4Attack.setScale(2)
+        if self.style.dept == 'c':
+            self.setHeight(30)
+        else:
+            self.setHeight(25)
+        self.nametag3d.setScale(2.5)
+        for partName in ('legs', 'torso'):
             animDict = {}
             for anim in AnimList:
                 animDict[anim] = '%s-%s-%s' % (GenericModel, partName, anim)
@@ -150,15 +181,48 @@ class BossCog(Avatar.Avatar):
             self.loadAnims(animDict, partName)
 
         self.stars = BattleProps.globalPropPool.getProp('stun')
-        self.stars.setPosHprScale(7, 0, 0, 0, 0, -90, 3, 3, 3)
+        self.stars.setPosHprScale(0, 0, 10, 0, 0, 0, 3, 3, 3)
         self.stars.loop('stun')
+        texture = loader.loadTexture('phase_9/maps/cc_t_ene_boss_m.png')
+        texture2 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_c.png')
         self.pelvis = self.getPart('torso')
+        if self.style.dept == 'm':
+            pelvis = self.pelvis.find('**/Object')
+            pelvis.setTexture(texture, 1)
+        elif self.style.dept == 'c':
+            pelvis = self.pelvis.find('**/Object')
+            pelvis.setTexture(texture2, 1)
         self.pelvisForwardHpr = VBase3(0, 0, 0)
         self.pelvisReversedHpr = VBase3(-180, 0, 0)
-        self.neck = self.getPart('head')
-        self.neck.setTwoSided(True)
-        self.neckForwardHpr = VBase3(0, 0, 0)
-        self.neckReversedHpr = VBase3(0, -540, 0)
+        if self.style.dept == 's':
+            self.neck = self.getPart('head')
+            self.neck.setTwoSided(True)
+            self.neck.hide()
+            self.neckForwardHpr = VBase3(0, 0, 0)
+            self.neckReversedHpr = VBase3(0, -540, 0)
+        elif self.style.dept == 'l':
+            self.neck = self.getPart('head')
+            self.neck.setTwoSided(True)
+            self.neck.hide()
+            self.neckForwardHpr = VBase3(0, 0, 0)
+            self.neckReversedHpr = VBase3(0, -540, 0)
+        elif self.style.dept == 'g':
+            self.neck = self.getPart('head')
+            self.neck.setTwoSided(True)
+            self.neckForwardHpr = VBase3(0, 0, 0)
+            self.neckReversedHpr = VBase3(0, -540, 0)
+        elif self.style.dept == 'm':
+            self.neck = self.getPart('head')
+            self.neck.setTwoSided(True)
+            self.neck.hide()
+            self.neckForwardHpr = VBase3(0, 0, 0)
+            self.neckReversedHpr = VBase3(0, -540, 0)
+        elif self.style.dept == 'c':
+            self.neck = self.getPart('head')
+            self.neck.setTwoSided(True)
+            self.neck.hide()
+            self.neckForwardHpr = VBase3(0, 0, 0)
+            self.neckReversedHpr = VBase3(0, -540, 0)
         self.axle = self.find('**/joint_axle')
         self.doorA = self.__setupDoor('**/joint_doorFront', 'doorA', self.doorACallback, VBase3(0, 0, 0), VBase3(0, 0, -80), CollisionPolygon(Point3(5, -4, 0.32), Point3(0, -4, 0), Point3(0, 4, 0), Point3(5, 4, 0.32)))
         self.doorB = self.__setupDoor('**/joint_doorRear', 'doorB', self.doorBCallback, VBase3(0, 0, 0), VBase3(0, 0, 80), CollisionPolygon(Point3(-5, 4, 0.84), Point3(0, 4, 0), Point3(0, -4, 0), Point3(-5, -4, 0.84)))
@@ -169,30 +233,89 @@ class BossCog(Avatar.Avatar):
         self.doorA.request('Closed')
         self.doorB.request('Closed')
         self.setBlend(frameBlend=base.wantSmoothAnims)
+        if self.style.dept == 'c':
+            self.generateHead3('ceo-a', animated=True)
+        elif self.style.dept == 'm':
+            self.generateHead3('cfo', animated=True)
+        elif self.style.dept == 's':
+            self.generateHead3('vp', animated=True)
+        elif self.style.dept == 'l':
+            self.generateHead3('clo', animated=True)
+        self.generateHealthBarBase()
+        self.generateCorporateMedallion()
 
     def initializeBodyCollisions(self, collIdStr):
         Avatar.Avatar.initializeBodyCollisions(self, collIdStr)
         if not self.ghostMode:
             self.collNode.setCollideMask(self.collNode.getIntoCollideMask() | ToontownGlobals.PieBitmask)
 
+    def generateCorporateMedallion(self):
+        icons = loader.loadModel('phase_3.5/models/char/ttcc_ene_insignias')
+        icons2 = loader.loadModel('phase_3.5/models/gui/cog_icons')
+        dept = self.style.dept
+        if base.config.GetBool('want-new-cogs', 0):
+            chestNull = self.find('**/def_joint_lifeMeter')
+            if chestNull.isEmpty():
+                chestNull = self.find('**/joint_lifeMeter')
+        else:
+            chestNull = self.find('**/joint_lifeMeter')
+        if dept == 'c':
+            self.corpMedallion = icons.find('**/emblem_corp').copyTo(chestNull)
+        elif dept == 's':
+            self.corpMedallion = icons.find('**/emblem_sales').copyTo(chestNull)
+        elif dept == 'l':
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
+        elif dept == 'm':
+            self.corpMedallion = icons.find('**/emblem_money').copyTo(chestNull)
+        elif dept == 'g':
+            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+        elif dept == 't':
+            self.corpMedallion = icons2.find('**/TechIcon').copyTo(chestNull)
+        self.corpMedallion.setScale(3)
+        self.corpMedallion.setP(-20)
+        if self.style.dept == 'l':
+            self.corpMedallion.setY(1.1)
+        else:
+            self.corpMedallion.setY(.25)
+
+    def generateHealthBarBase(self):
+        self.removeHealthBar()
+        chestNull = self.find('**/joint_lifeMeter')
+        if chestNull.isEmpty():
+            return
+        model = loader.loadModel('phase_3.5/models/char/ttcc_ene_insignias')
+        button = model.find('**/emblem_hp')
+        base = model.find('**/emblem_base')
+        base.setScale(3.0)
+        base.setP(-20)
+        base.reparentTo(chestNull)
+        self.healthBar = button
+        if self.style.dept == 'l':
+            base.setY(1.1)
+        else:
+            base.setY(.25)
+
     def generateHealthBar(self):
         self.removeHealthBar()
         chestNull = self.find('**/joint_lifeMeter')
         if chestNull.isEmpty():
             return
-        model = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
-        button = model.find('**/minnieCircle')
-        button.setScale(6.0)
+        model = loader.loadModel('phase_3.5/models/char/ttcc_ene_insignias')
+        button = model.find('**/emblem_hp')
+        button.setScale(3.0)
         button.setP(-20)
         button.setColor(self.healthColors[0])
         button.reparentTo(chestNull)
         self.healthBar = button
-        glow = BattleProps.globalPropPool.getProp('glow')
+        glow = button.find('**/glow')
         glow.reparentTo(self.healthBar)
-        glow.setScale(0.28)
-        glow.setPos(-0.005, 0.01, 0.015)
+        glow.setScale(1)
+        glow.setPos(0, 0, 0)
         glow.setColor(self.healthGlowColors[0])
-        button.flattenLight()
+        if self.style.dept == 'l':
+            button.setY(1.1)
+        else:
+            button.setY(.25)
         self.healthBarGlow = glow
         self.healthCondition = 0
 
@@ -200,67 +323,297 @@ class BossCog(Avatar.Avatar):
         if self.healthBar == None:
             return
         health = 1.0 - float(self.bossDamage) / float(self.bossMaxDamage)
-        if health > 0.95:
+        if health > 1.5:
+            condition = 13
+            self.ANIM_PLAYRATE = 1
+        elif health > 1.0:
+            condition = 12
+            self.ANIM_PLAYRATE = 1
+        elif health > 0.95:
             condition = 0
+            self.ANIM_PLAYRATE = 1.05
         elif health > 0.9:
             condition = 1
+            self.ANIM_PLAYRATE = 1.1
         elif health > 0.8:
             condition = 2
+            self.ANIM_PLAYRATE = 1.15
         elif health > 0.7:
             condition = 3
+            self.ANIM_PLAYRATE = 1.2
         elif health > 0.6:
             condition = 4
+            self.ANIM_PLAYRATE = 1.25
         elif health > 0.5:
             condition = 5
-        elif health > 0.3:
+            self.ANIM_PLAYRATE = 1.3
+        elif health > 0.4:
             condition = 6
-        elif health > 0.15:
+            self.ANIM_PLAYRATE = 1.35
+        elif health > 0.3:
             condition = 7
-        elif health > 0.05:
+            self.ANIM_PLAYRATE = 1.4
+        elif health > 0.2:
             condition = 8
-        elif health > 0.0:
+            self.ANIM_PLAYRATE = 1.45
+        elif health > 0.1:
             condition = 9
-        else:
+            self.ANIM_PLAYRATE = 1.5
+        elif health > 0.0:
             condition = 10
+            self.ANIM_PLAYRATE = 2
+        else:
+            condition = 11
+            self.ANIM_PLAYRATE = 1
         
         if self.healthCondition != condition:
-            if condition == 9:
-                blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.75), Task(self.__blinkGray), Task.pause(0.1))
+            if condition == 10:
+                self.healthBar.setColor(1, 1, 1, 1)
+                self.healthBarGlow.setColor(1, 1, 1, 1)
+                blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray), Task.pause(0.1))
                 taskMgr.add(blinkTask, self.uniqueName('blink-task'))
-            elif condition == 10:
-                if self.healthCondition == 9:
+            elif condition == 11:
+                self.healthBar.setColor(1, 1, 1, 1)
+                self.healthBarGlow.setColor(1, 1, 1, 1)
+                if self.healthCondition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
-                blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.25), Task(self.__blinkGray), Task.pause(0.1))
-                taskMgr.add(blinkTask, self.uniqueName('blink-task'))
             else:
-                self.healthBar.setColor(self.healthColors[condition], 1)
-                self.healthBarGlow.setColor(self.healthGlowColors[condition], 1)
+                if self.style.dept == 'c':
+                    self.healthBar.setColor(1, 1, 1, 1)
+                    self.healthBarGlow.setColor(1, 1, 1, 1)
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    self.__changeColor()
+                    self.eyes.setColor(self.healthColors[condition], 1)
+                else:
+                    self.healthBar.setColor(1, 1, 1, 1)
+                    self.healthBarGlow.setColor(1, 1, 1, 1)
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    self.__changeColor()
             self.healthCondition = condition
+
+    def generateHead3(self, headType, headColor=None, headTexture=None, modelOverride=None, pathOverride=None,
+                     extraArgs={}, animated=False, additionalAnims=[]):
+        if animated:
+            if headType == 'skelecog' or headType == 'overwhelmingauthorizer' or headType == 'executioner':
+                if headType == 'overwhelmingauthorizer':
+                    headModel = Actor.Actor('phase_14/models/char/ttcc_ene_%s%s-zero' % (
+                    headType, '_exe' if self.isExecutive or self.isManager else ''))
+                elif headType == 'executioner':
+                    headModel = Actor.Actor('phase_14/models/char/ttcc_ene_executioner-zero')
+                else:
+                    headModel = Actor.Actor(
+                        'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-zero')
+                self.generateHeadAnims(
+                    'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-',
+                    headModel, additionalAnims)
+                self.animatedHeadParts.append(headModel)
+                if headType != 'autocaddie' and headType != 'overwhelmingauthorizer':
+                    if headTexture:
+                        try:
+                            texture = loader.loadTexture('phase_5/maps/' + headTexture)
+                        except:
+                            texture = loader.loadTexture('phase_14/maps/' + headTexture)
+                    else:
+                        if self.style.dept == None:
+                            texture = loader.loadTexture('phase_14/maps/ttcc_ene_skelecog_unemployed.png')
+                        else:
+                            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s%s.png' % (
+                            self.style.dept, '_exe' if self.isExecutive or self.isManager else '',))
+                    for headPart in self.animatedHeadParts:
+                        headPart.setTexture(texture, 1)
+            else:
+                headModel = Actor.Actor('phase_14/models/char/ttcc_ene_' + headType + '-zero')
+                self.generateHeadAnims('phase_14/models/char/ttcc_ene_' + headType + '-', headModel, additionalAnims)
+                self.animatedHeadParts.append(headModel)
+            headModel.reparentTo(self.find('**/joint34'))
+            headModel.setBlend(frameBlend=base.wantSmoothAnims)
+            headModel.loop('neutral')
+            if headType == 'cfo':
+                headModel.setTwoSided(True)
+            if headType == 'ceo-a':
+                ceoeyes = headModel.find('**/ceo_eyes')
+                self.eyes = ceoeyes
+            if 'x' in extraArgs:
+                if extraArgs['x'] != None:
+                    headModel.setX(extraArgs['x'])
+            if 'y' in extraArgs:
+                if extraArgs['y'] != None:
+                    headModel.setY(extraArgs['y'])
+            if 'z' in extraArgs:
+                if extraArgs['z'] != None:
+                    headModel.setZ(extraArgs['z'])
+            if 'h' in extraArgs:
+                if extraArgs['h'] != None:
+                    headModel.setH(extraArgs['h'])
+            if 'p' in extraArgs:
+                if extraArgs['p'] != None:
+                    headModel.setP(extraArgs['p'])
+            if 'r' in extraArgs:
+                if extraArgs['r'] != None:
+                    headModel.setR(extraArgs['r'])
+            if 'scale' in extraArgs:
+                if extraArgs['scale'] != None:
+                    headModel.setScale(*extraArgs['scale'])
+            self.headParts.append(headModel)
+        else:
+            if headType == 'skelecog':
+                if base.config.GetBool('want-clash-assets', False):
+                    headModel = loader.loadModel(
+                        'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-zero')
+                    headReferences = headModel.findAllMatches('**/skeleskull_' + string.upper(self.style.body))
+                else:
+                    headModel = loader.loadModel(
+                        'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-head')
+                    headReferences = headModel.findAllMatches('**/suit' + string.upper(self.style.body))
+            else:
+                if pathOverride:
+                    headModel = loader.loadModel(pathOverride + headType)
+                else:
+                    if modelOverride:
+                        headModel = loader.loadModel(modelOverride)
+                        headReferences = headModel.findAllMatches('**/' + headType)
+                    else:
+                        try:
+                            headModel = loader.loadModel('phase_' + str(phase) + '/models/char/' + headType)
+                            headReferences = headModel.findAllMatches('**/' + headType + '.egg')
+                        except:
+                            headModel = loader.loadModel('phase_' + str(phase) + filePrefix + 'heads')
+                            headReferences = headModel.findAllMatches('**/' + headType)
+            if pathOverride:
+                if headTexture:
+                    pass
+                if headColor:
+                    headModel.setColor(headColor)
+                if 'x' in extraArgs:
+                    if extraArgs['x'] != None:
+                        headModel.setX(extraArgs['x'])
+                if 'y' in extraArgs:
+                    if extraArgs['y'] != None:
+                        headModel.setY(extraArgs['y'])
+                if 'z' in extraArgs:
+                    if extraArgs['z'] != None:
+                        headModel.setZ(extraArgs['z'])
+                if 'h' in extraArgs:
+                    if extraArgs['h'] != None:
+                        headModel.setH(extraArgs['h'])
+                if 'p' in extraArgs:
+                    if extraArgs['p'] != None:
+                        headModel.setP(extraArgs['p'])
+                if 'r' in extraArgs:
+                    if extraArgs['r'] != None:
+                        headModel.setR(extraArgs['r'])
+                if 'scale' in extraArgs:
+                    if extraArgs['scale'] != None:
+                        headModel.setScale(*extraArgs['scale'])
+                self.headParts.append(headModel)
+            else:
+                for i in range(0, headReferences.getNumPaths()):
+                    if self.style.body == 'a' or self.style.body == 'b':
+                        headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'to_head')
+                    else:
+                        headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'joint34')
+                    if headTexture:
+                        try:
+                            headTex = loader.loadTexture('phase_' + str(phase) + '/maps/' + headTexture)
+                        except:
+                            try:  # Will work on a more viable replacement for specific phases later.
+                                headTex = loader.loadTexture('phase_5/maps/' + headTexture)
+                            except:
+                                try:
+                                    headTex = loader.loadTexture('phase_11/maps/' + headTexture)
+                                except:
+                                    headTex = loader.loadTexture('phase_14/maps/' + headTexture)
+                        headPart.setTexture(headTex, 1)
+                    if headColor:
+                        headPart.setColor(headColor)
+                    if 'x' in extraArgs:
+                        if extraArgs['x'] != None:
+                            headPart.setX(extraArgs['x'])
+                    if 'y' in extraArgs:
+                        if extraArgs['y'] != None:
+                            headPart.setY(extraArgs['y'])
+                    if 'z' in extraArgs:
+                        if extraArgs['z'] != None:
+                            headPart.setZ(extraArgs['z'])
+                    if 'h' in extraArgs:
+                        if extraArgs['h'] != None:
+                            headPart.setH(extraArgs['h'])
+                    if 'p' in extraArgs:
+                        if extraArgs['p'] != None:
+                            headPart.setP(extraArgs['p'])
+                    if 'r' in extraArgs:
+                        if extraArgs['r'] != None:
+                            headPart.setR(extraArgs['r'])
+                    if 'scale' in extraArgs:
+                        if extraArgs['scale'] != None:
+                            headPart.setScale(*extraArgs['scale'])
+                    if headType == 'suitA' or headType == 'suitB' or headType == 'suitC':
+                        headPart.setZ(headPart.getZ() + {
+                            'suitA': -6.05,
+                            'suitB': -5.09477996826172,
+                            'suitC': -4.15
+                        }[headType])
+                        if self.isExecutive or self.isManager:
+                            if self.style.name == 'mbr':
+                                headPart.setColor(VBase4(0.825, 0.6, 0.425, 1.0))
+                            else:
+                                if headColor == None:
+                                    headPart.setColor({
+                                                          'c': SuitDNA.corpPolyColor,
+                                                          'l': SuitDNA.legalPolyColor,
+                                                          'm': SuitDNA.moneyPolyColor,
+                                                          's': SuitDNA.salesPolyColor,
+                                                          'g': SuitDNA.boardPolyColor,
+                                                          None: VBase4(0.5, 0.5, 0.5, 1.0)
+                                                      }[SuitDNA.getSuitDept(self.style.name)])
+                        else:
+                            if self.style.name == 'mbr':
+                                headPart.setColor(VBase4(1.0, 0.25, 0.0, 1.0))
+                    self.headParts.append(headPart)
+                headModel.removeNode()
 
     def __blinkRed(self, task):
         if self.healthBar:
-            self.healthBar.setColor(self.healthColors[3], 1)
-            self.healthBarGlow.setColor(self.healthGlowColors[3], 1)
-            if self.healthCondition == 5:
-                self.healthBar.setScale(1.17)
+            self.healthBar.setColor(self.healthColors[9], 1)
         
         return Task.done
 
     def __blinkGray(self, task):
         if self.healthBar:
-            self.healthBar.setColor(self.healthColors[4], 1)
-            self.healthBarGlow.setColor(self.healthGlowColors[4], 1)
-            if self.healthCondition == 5:
-                self.healthBar.setScale(1.0)
+            self.healthBar.setColor(self.healthColors[10], 1)
         
         return Task.done
+
+    def __pulseRed(self, task):
+        self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=.25, colorScale=(1, 0, 0, 1),
+                                   blendType='easeInOut'))
+        self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=.25, colorScale=(1, 0, 0, 1),
+                                   blendType='easeInOut'))
+        self.interval.start()
+        self.glowInterval.start()
+
+    def __pulseGray(self, task):
+        self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=.25, colorScale=(0.431, 0.431, 0.431, 1),
+                                   blendType='easeInOut'))
+        self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=.25, colorScale=(0, 0, 0, 0),
+                                   blendType='easeInOut'))
+        self.interval.start()
+        self.glowInterval.start()
+
+    def __changeColor(self):
+        self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(self.healthColors[self.healthCondition]),
+                                   blendType='easeInOut'))
+        self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(self.healthColors[self.healthCondition]),
+                                   blendType='easeInOut'))
+        self.interval.start()
+        self.glowInterval.start()
 
     def removeHealthBar(self):
         if self.healthBar:
             self.healthBar.removeNode()
             self.healthBar = None
         
-        if self.healthCondition == 4 or self.healthCondition == 5:
+        if self.healthCondition == 9 or self.healthCondition == 10:
             taskMgr.remove(self.uniqueName('blink-task'))
         
         self.healthCondition = 0
@@ -482,7 +835,7 @@ class BossCog(Avatar.Avatar):
             ival = Sequence(ival, ActorInterval(self, animName))
             startsHappy = 1
             endsHappy = 1
-        
+
         startNeckHpr = self.neckForwardHpr
         endNeckHpr = self.neckForwardHpr
         if self.happy != startsHappy:
@@ -515,7 +868,7 @@ class BossCog(Avatar.Avatar):
         
         self.dizzy = dizzy
         if dizzy:
-            self.stars.reparentTo(self.neck)
+            self.stars.reparentTo(self.pelvis)
             base.playSfx(self.birdsSfx, looping=1)
         else:
             self.stars.detachNode()
@@ -544,28 +897,34 @@ class BossCog(Avatar.Avatar):
             if not self.forward:
                 ival = Sequence(Func(self.reverseBody), ival, Func(self.forwardBody))
         elif anim == 'down2Up':
+            for headPart in self.animatedHeadParts:
+                headAnim = Parallel(Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
+                headAnim.start()
             ival = Parallel(SoundInterval(self.upSfx), self.getAngryActorInterval('Fb_down2Up'))
             self.raised = 1
         elif anim == 'up2Down':
+            for headPart in self.animatedHeadParts:
+                headAnim = Parallel(Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
+                headAnim.start()
             ival = Parallel(SoundInterval(self.downSfx), self.getAngryActorInterval('Fb_down2Up', playRate=-1))
             self.raised = 0
         elif anim == 'throw':
             self.doAnimate(None, raised=1, happy=0, queueNeutral=0)
             ival = Parallel()
-            if self.dna.dept == 'm' :
-                ival.append(Func(self.setChatAbsolute, random.choice(("Cha-Ching!", "Budget this!", "This isn't legal tender!")), CFSpeech | CFTimeout))
-            elif self.dna.dept == 's':
-                ival.append(Func(self.setChatAbsolute,
-                                 random.choice(("Lemme toss this offer to you!", 'Have a free sample!', 'My products beat out all of Toontown!', "Here's a sale 'geared' towards you!", "Buy one, get the rest free!")),
-                                 CFSpeech | CFTimeout))
             ival.append(Parallel(Sequence(SoundInterval(self.throwSfx), duration=0),
                             self.getAngryActorInterval('Fb_UpThrow')))
         elif anim == 'hit':
             if self.raised:
                 self.raised = 0
                 ival = self.getAngryActorInterval('Fb_firstHit')
+                for headPart in self.animatedHeadParts:
+                    headAnim = Sequence(ActorInterval(headPart, 'neutral-lured'), Func(headPart.loop, 'neutral-lured'))
+                    headAnim.start()
             else:
                 ival = self.getAngryActorInterval('Fb_downHit')
+                for headPart in self.animatedHeadParts:
+                    headAnim = Sequence(ActorInterval(headPart, 'neutral-lured'), Func(headPart.loop, 'neutral-lured'))
+                    headAnim.start()
             ival = Parallel(SoundInterval(self.reelSfx, node=self), ival)
         elif anim == 'ltSwing' or anim == 'rtSwing':
             self.doAnimate(None, raised=0, happy=0, queueNeutral=0)
@@ -574,14 +933,23 @@ class BossCog(Avatar.Avatar):
             else:
                 ival = Sequence(Track((0, self.getAngryActorInterval('Fb_downRtSwing')), (0.9, SoundInterval(self.swingSfx, node=self)), (1, Func(self.bubbleR.unstash))), Func(self.bubbleR.stash))
         elif anim == 'frontAttack':
-            self.doAnimate(None, raised=1, happy=0, queueNeutral=0)
+            self.doAnimate(None, raised=1, happy=0, queueNeutral=1)
             pe = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
             pe2 = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
             pe3 = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
             pe4 = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
+            pe5 = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
+            pe6 = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
+            pe7 = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
+            pe8 = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
+            pe.setH(0)
             pe2.setH(180)
             pe3.setH(90)
             pe4.setH(270)
+            pe5.setH(45)
+            pe6.setH(-45)
+            pe7.setH(135)
+            pe8.setH(-135)
             ival = Sequence()
             if self.dna.dept == 'm' :
                 ival.append(Func(self.setChatAbsolute, random.choice(("Why worry about problems when you can shake them off?", "Let me put my spin on this.", "I'm showering you with praise!")), CFSpeech | CFTimeout))
@@ -595,13 +963,29 @@ class BossCog(Avatar.Avatar):
             ival.append(Sequence(Func(self.reverseHead), Parallel(ActorInterval(self, 'Bb2Ff_spin'), Func(self.forwardHead))))
             if self.forward:
                 ival = Sequence(Func(self.reverseBody), ParallelEndTogether(ival, self.pelvis.hprInterval(0.5, self.pelvisForwardHpr, blendType='easeInOut')))
-            ival = Sequence(Track((0, ival), (0, Sequence(SoundInterval(self.spinSfx, node=self))), (1.3, Parallel(SoundInterval(self.rainGearsSfx, node=self), ParticleInterval(pe4, self.leftAttack, worldRelative=0, duration=1.5, cleanup=True), ParticleInterval(pe3, self.rightAttack, worldRelative=0, duration=1.5, cleanup=True), ParticleInterval(pe2, self.backAttack, worldRelative=0, duration=1.5, cleanup=True), ParticleInterval(pe, self.frontAttack, worldRelative=0, duration=1.5, cleanup=True), duration=0)), (1.9, Func(self.bubbleF.unstash)), (1.9, Func(self.bubbleFL.unstash)), (1.9, Func(self.bubbleFR.unstash)), (1.9, Func(self.bubbleB.unstash))), Func(self.bubbleF.stash), Func(self.bubbleFL.stash), Func(self.bubbleFR.stash), Func(self.bubbleB.stash))
+            ival = Sequence(Track((0, ival), (0, Sequence(SoundInterval(self.spinSfx, node=self))), (1.3, Parallel(
+                SoundInterval(self.rainGearsSfx, node=self),
+                ParticleInterval(pe8, self.corner4Attack, worldRelative=0, duration=1.5, cleanup=True),
+                ParticleInterval(pe7, self.corner3Attack, worldRelative=0, duration=1.5, cleanup=True),
+                ParticleInterval(pe6, self.corner2Attack, worldRelative=0, duration=1.5, cleanup=True),
+                ParticleInterval(pe5, self.corner1Attack, worldRelative=0, duration=1.5, cleanup=True),
+                ParticleInterval(pe4, self.leftAttack, worldRelative=0, duration=1.5, cleanup=True),
+                ParticleInterval(pe3, self.rightAttack, worldRelative=0, duration=1.5, cleanup=True),
+                ParticleInterval(pe2, self.backAttack, worldRelative=0, duration=1.5, cleanup=True),
+                ParticleInterval(pe, self.frontAttack, worldRelative=0, duration=1.5, cleanup=True), duration=0)),
+                                  (1.9, Func(self.bubbleJ.unstash)), (1.9, Func(self.bubbleI.unstash)),
+                                  (1.9, Func(self.bubbleH.unstash)), (1.9, Func(self.bubbleG.unstash)),
+                                  (1.9, Func(self.bubbleF.unstash)), (1.9, Func(self.bubbleFL.unstash)),
+                                  (1.9, Func(self.bubbleFR.unstash)), (1.9, Func(self.bubbleB.unstash))),
+                            Func(self.bubbleJ.stash), Func(self.bubbleI.stash), Func(self.bubbleH.stash),
+                            Func(self.bubbleG.stash), Func(self.bubbleF.stash), Func(self.bubbleFL.stash),
+                            Func(self.bubbleFR.stash), Func(self.bubbleB.stash))
             self.forward = 1
             self.happy = 1
             self.raised = 1
         elif anim == 'areaAttack':
             if self.twoFaced:
-                self.doAnimate(None, raised=1, happy=0, queueNeutral=0)
+                self.doAnimate(None, raised=1, happy=0, queueNeutral=1)
             else:
                 self.doAnimate(None, raised=1, happy=1, queueNeutral=1)
             ival = Parallel(ActorInterval(self, 'Fb_jump'),
@@ -611,9 +995,7 @@ class BossCog(Avatar.Avatar):
                                      Wait(.1), Func(self.announceAreaAttack), Wait(.1), Func(self.announceAreaAttack),
                                      Wait(.1), Func(self.announceAreaAttack), Wait(.1)))
 
-            if self.dna.dept == 'm' :
-                ival.append(Func(self.setChatAbsolute, "I told you toons to get away from those cranes!", CFSpeech | CFTimeout))
-            elif self.dna.dept == 's' :
+            if self.dna.dept == 's' :
                 ival.append(Func(self.setChatAbsolute, random.choice(("It's a clearance sale! All Toons must go!", 'Pay attention to my pitch!', "This deal will knock your socks off!", "We're sweeping the floor with this limited time offer!")), CFSpeech | CFTimeout))
             if self.twoFaced:
                 self.happy = 0

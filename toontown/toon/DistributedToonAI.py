@@ -5657,10 +5657,8 @@ def givePies(pieType, numPies=0):
     if pieType == -1:
         target.b_setNumPies(0)
         return "Removed %s's pies." % target.getName()
-    if pieType == 6:
-        return 'Invalid pie type!'
-    if not 0 <= pieType <= 7:
-        return 'Pie type must be in range (0-7).'
+    if not 0 <= pieType <= 8:
+        return 'Pie type must be in range (0-8).'
     if not -1 <= numPies <= 99:
         return 'Pie count out of range (-1-99).'
     target.b_setPieType(pieType)
@@ -5669,24 +5667,53 @@ def givePies(pieType, numPies=0):
     else:
         target.b_setNumPies(ToontownGlobals.FullPies)
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
-def trackBonus(trackIndex):
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int, int, int, int, int, int, int, int])
+def trackBonus(trackIndex=-1, trackIndex2=-1, trackIndex3=-1, trackIndex4=-1, trackIndex5=-1, trackIndex6=-1, trackIndex7=-1, trackIndex8=-1):
     """
     Modify the invoker's track bonus level.
     """
     invoker = spellbook.getInvoker()
-    if not 0 <= trackIndex < 8:
-        return 'Invalid track index!'
-    trackBonusLevel = [0] * 9
-    trackBonusLevel[trackIndex] = 6
-    invoker.b_setTrackBonusLevel(trackBonusLevel)
-    return 'Your track bonus level has been set!'
+    bonus = [-1, -1, -1, -1, -1, -1, -1, -1]
+    if trackIndex > -1:
+        bonus[trackIndex] = 7
+    else:
+        pass
+    if trackIndex2 > -1:
+        bonus[trackIndex2] = 7
+    else:
+        pass
+    if trackIndex3 > -1:
+        bonus[trackIndex3] = 7
+    else:
+        pass
+    if trackIndex4 > -1:
+        bonus[trackIndex4] = 7
+    else:
+        pass
+    if trackIndex5 > -1:
+        bonus[trackIndex5] = 7
+    else:
+        pass
+    if trackIndex6 > -1:
+        bonus[trackIndex6] = 7
+    else:
+        pass
+    if trackIndex7 > -1:
+        bonus[trackIndex7] = 7
+    else:
+        pass
+    if trackIndex8 > -1:
+        bonus[trackIndex8] = 7
+    else:
+        pass
+    invoker.b_setTrackBonusLevel(bonus)
+    return 'Your prestiges have been set!'
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, str, int])
 def track(command, track, value=None):
     try:
-        index = ('toonup', 'trap', 'lure', 'sound', 'throw',
-                 'squirt', 'zap', 'drop').index(track.lower())
+        index = ('toonup', 'trap', 'lure', 'throw',
+                 'squirt', 'zap', 'sound', 'drop').index(track.lower())
     except:
         return 'Invalid Gag track!'
     invoker = spellbook.getTarget()
@@ -5863,9 +5890,9 @@ def printDNA():
 @magicWord(category=CATEGORY_MODERATOR, types=[str, int])
 def summonCogdo(track, difficulty=0):
     """ Spawns a Field Office with the given type and difficulty """
-    tracks = ['s', 'l']
+    tracks = ['s', 'm', 'l', 'c']
     if track not in tracks:
-        return 'Invalid Field Office type! Supported types are "s" and "l"'
+        return 'Invalid Field Office type! Supported types are "s" "m" "c" and "l"'
 
     av = spellbook.getInvoker()
     try:

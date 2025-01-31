@@ -6,6 +6,7 @@ from toontown.battle.BattleProps import *
 from toontown.battle.BattleSounds import *
 from toontown.toon.ToonDNA import *
 from toontown.suit.SuitDNA import *
+from toontown.chat.ChatGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import MovieCamera
 from toontown.battle import MovieNPCSOS
@@ -13,7 +14,7 @@ from toontown.battle import MovieUtil
 from toontown.battle.MovieUtil import calcAvgSuitPos
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieThrow')
-hitSoundFiles = ('AA_tart_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_wholepie_only.ogg', 'AA_wholepie_only.ogg', 'AA_wholepie_only.ogg')
+hitSoundFiles = ('AA_tart_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_throw_cream_pie_cog.ogg', 'AA_throw_wedding_cake_cog.ogg', 'AA_throw_wedding_cake_cog.ogg')
 splatDict = {0: 'splat_cake', 1: 'splat_fruit', 2: 'splat_cream',
              3: 'splat_cake', 4: 'splat_fruit', 5: 'splat_cream', 6: 'splat_cake', 7: 'splat_wedding'}
 tPieLeavesHand = 2.7
@@ -82,14 +83,14 @@ def doThrows(throws):
     notify.debug('singleHitDict = %s' % singleHitDict)
     notify.debug('groupHitDict = %s' % groupHitDict)
     notify.debug('totalHitDict = %s' % totalHitDict)
-    delay = 0.0
+    delay = random.choice((0.1, 0.2, 0.3, 0.4, 0.5))
     mtrack = Parallel()
     for st in suitThrows:
         if len(st) > 0:
             ival = __doSuitThrows(st, npcs)
             if ival:
                 mtrack.append(Sequence(Wait(delay), ival))
-            delay = delay + 0
+            delay = delay + random.choice((0.1, 0.2, 0.3, 0.4, 0.5))
 
     retTrack = Sequence()
     retTrack.append(npcArrivals)
@@ -290,18 +291,20 @@ def __getCreamPieSoundTrack(level, hitSuit, node = None):
 
 
 def __getSoundTrack(level, hitSuit, node = None):
+    soundEffect = globalBattleSoundCache.getSound(hitSoundFiles[level])
+    soundTrack = Sequence()
     if level == 7:
-        return __getWeddingCakeSoundTrack(level, hitSuit, node)
-    if level == 6:
-        return __getBirthdayCakeSoundTrack(level, hitSuit, node)
-    if level == 5:
-        return __getCreamPieSoundTrack(level, hitSuit, node)
-    throwSound = globalBattleSoundCache.getSound('AA_pie_throw_only.ogg')
-    throwTrack = Sequence(Wait(2.6), SoundInterval(throwSound, node=node))
+        throwSound = globalBattleSoundCache.getSound('AA_throw_wedding_cake.ogg')
+    else:
+        throwSound = globalBattleSoundCache.getSound('AA_pie_throw_only.ogg')
+    if level == 7:
+        throwTrack = Sequence(Wait(1), SoundInterval(throwSound, node=node))
+    else:
+        throwTrack = Sequence(Wait(2.6), SoundInterval(throwSound, node=node))
+    soundTrack.append(Wait(tPieHitsSuit))
+    soundTrack.append(SoundInterval(soundEffect, node=node))
     if hitSuit:
-        hitSound = globalBattleSoundCache.getSound(hitSoundFiles[level])
-        hitTrack = Sequence(Wait(tPieLeavesHand), SoundInterval(hitSound, node=node))
-        return Parallel(throwTrack, hitTrack)
+        return Parallel(throwTrack, soundTrack)
     else:
         return throwTrack
 
@@ -338,13 +341,16 @@ def __throwPie(throw, delay, hitCount, npcs):
     splatName = 'splat-' + pieName
     if pieName == 'wedding-cake':
         splatName = 'splat-birthday-cake'
+    elif pieName == 'birthday-cake-slice':
+        splatName = 'splat-birthday-cake'
     splat = globalPropPool.getProp(splatName)
+    soundTrack = __getSoundTrack(level, hitSuit, suit)
     splatType = globalPropPool.getPropType(splatName)
     toonTrack = Sequence()
     toonFace = Func(toon.headsUp, battle, suitPos)
     toonTrack.append(Wait(delay))
     toonTrack.append(toonFace)
-    toonTrack.append(ActorInterval(toon, 'throw'))
+    toonTrack.append(Parallel(soundTrack, ActorInterval(toon, 'throw')))
     toonTrack.append(Func(toon.loop, 'neutral'))
     if not 'npc' in throw:
         toonTrack.append(Func(toon.setHpr, battle, origHpr))
@@ -355,7 +361,7 @@ def __throwPie(throw, delay, hitCount, npcs):
     pieScale = Parallel(pieScale1, pieScale2)
     piePreflight = Func(__propPreflight, pies, suit, toon, battle)
     pieTrack = Sequence(Wait(delay), pieShow, pieAnim, pieScale, Func(battle.movie.needRestoreRenderProp, pies[0]), Wait(tPieLeavesHand - 1.0), piePreflight)
-    soundTrack = __getSoundTrack(level, hitSuit, toon)
+    soundTrack = __getSoundTrack(level, hitSuit, suit)
     if hitSuit:
         pieFly = LerpPosInterval(pie, tPieHitsSuit - tPieLeavesHand, pos=MovieUtil.avatarFacePoint(suit, other=battle), name=pieFlyTaskName, other=battle)
         pieHide = Func(MovieUtil.removeProps, pies)
@@ -385,7 +391,7 @@ def __throwPie(throw, delay, hitCount, npcs):
         pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
     if hitSuit:
         suitResponseTrack = Sequence()
-        showDamage = Func(suit.showHpTextThrow, -hp, openEnded=0, attackTrack=THROW_TRACK)
+        showDamage = Sequence(Func(suit.showHpTextThrow, -hp, openEnded=0, attackTrack=THROW_TRACK), Func(suit.showHpString, "MARKED!", openEnded=0))
         #markDamage = Func(showMarkRounds, suit, level)
         value = hp
         #if kbbonus > 0:
@@ -398,6 +404,10 @@ def __throwPie(throw, delay, hitCount, npcs):
             suitPos, suitHpr = battle.getActorPosHpr(suit)
             suitType = getSuitBodyType(suit.getStyleName())
             animTrack = Sequence()
+            if level <= 5:
+                animTrack.append(ActorInterval(suit, 'pie-small-react', duration=0.2))
+            elif level <= 5:
+                pass
             if suitType == 'a' and level <= 5:
                 animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.43))
             elif suitType == 'a':
@@ -412,6 +422,10 @@ def __throwPie(throw, delay, hitCount, npcs):
                 animTrack.append(ActorInterval(suit, 'pie-large-lured', startTime=0))
             animTrack.append(Func(battle.unlureSuit, suit))
             moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
+            updateTrack = Parallel(Func(suit.setChatAbsolute,
+                                        '',
+                                        CFSpeech | CFTimeout))
+            animTrack.append(updateTrack)
             sival = Parallel(animTrack, moveTrack)
         elif hitCount == 1 and level <= 5:
             sival = Parallel(ActorInterval(suit, 'pie-small-react'), MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
@@ -440,47 +454,24 @@ def __throwPie(throw, delay, hitCount, npcs):
         if revived != 0 and not suit.isSkeleton:
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         if died != 0 and suit.isVirtual:
-            suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
+            suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        if suit.maxHP > 0:
-            if float(suit.currHP - (value + kbbonus + hpbonus)) / float(suit.maxHP) <= 0.25:
-                suitResponseTrack.append(Func(suit.loop, 'neutral-hurt'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitResponseTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitResponseTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitResponseTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt')
-                        )
-            else:
-                suitResponseTrack.append(
-                    Func(suit.loop, 'neutral'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitResponseTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitResponseTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitResponseTrack.append(
-                            Func(headPart.loop,
-                                 'neutral')
-                        )
+        suitResponseTrack.append(Func(suit.setNeutralAnimation))
+        suitResponseTrack.append(Func(suit.setChatAbsolute,
+             '',
+             CFSpeech | CFTimeout))
+        suitIndex = battle.activeSuits.index(suit)
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
     else:
         suitResponseTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
@@ -488,9 +479,63 @@ def __throwPie(throw, delay, hitCount, npcs):
         return [toonTrack, soundTrack, pieTrack]
     else:
         return [toonTrack,
-         soundTrack,
          pieTrack,
          suitResponseTrack]
+
+def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'dsf':
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.425))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding:
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.115))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
+                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    else:
+        return Sequence()
 
 
 def __createWeddingCakeFlight(throw, groupHitDict, pie, pies):
@@ -683,7 +728,7 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
             elif died != 0:
                 singleSuitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
             else:
-                singleSuitResponseTrack.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                singleSuitResponseTrack.append(Func(suit.setNeutralAnimation))
             singleSuitResponseTrack = Parallel(singleSuitResponseTrack, bonusTrack)
         else:
             groupHitValues = groupHitDict.values()
@@ -699,14 +744,43 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
      groupSuitResponseTrack]
 
 def __splatSuit(suit, level):
-    splatTex = loader.loadTexture('phase_5/maps/' + splatDict[level] + '_%s.png' % random.randint(1, 6))
+    splatTex = loader.loadTexture('phase_5/maps/' + splatDict[level] + '_%s.png' % random.choice((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)))
+    splatTex2 = loader.loadTexture('phase_5/maps/tiny_' + splatDict[level] + '.png')
     splat = TextureStage(splatDict[level])
     splat.setMode(TextureStage.MDecal)
-    #splat.setSavedResult()
-    suit.find('**/body').setTexture(splat, splatTex)
-    suit.find('**/necktie-s').setTexture(splat, splatTex)
-    suit.find('**/necktie-w').setTexture(splat, splatTex)
-    suit.find('**/bowtie').setTexture(splat, splatTex)
+    splat.setSavedResult(True)
+    for headPart in suit.headParts:
+        if not suit.dna.name == 'lit':
+            headPart.setTexture(splat, splatTex)
+    if suit.dna.name == 'dsf':
+        suit.find('**/highroller_body').setTexture(splat, splatTex)
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+    elif suit.dna.name == 'mad':
+        suit.find('**/highroller_body').setTexture(splat, splatTex)
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+    elif suit.dna.name == 'crf':
+        suit.find('**/highroller_body').setTexture(splat, splatTex)
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+    elif suit.isSkeleton:
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+    else:
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+
 
 
 def reparentCakePart(pie, cakeParts):

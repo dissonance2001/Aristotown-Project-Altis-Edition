@@ -1,4 +1,4 @@
-from direct.distributed.AstronInternalRepository import AstronInternalRepository
+from direct.distributed.AstronInternalRepository import *
 from otp.distributed.OtpDoGlobals import *
 from toontown.distributed.ToontownNetMessengerAI import ToontownNetMessengerAI
 from direct.distributed.PyDatagram import PyDatagram

@@ -38,7 +38,7 @@ class CogdoFlyingGame(DirectObject):
     def _initLegalEagles(self):
         nestIndex = 1
         nests = self.level.root.findAllMatches('**/%s;+s' % Globals.Level.LegalEagleNestName)
-        self.invSuit = 'le'
+        self.invSuit = 'arb'
         for nest in nests:
             legalEagle = CogdoFlyingLegalEagle(nest, nestIndex, self.invSuit)
             self.legalEagles.append(legalEagle)

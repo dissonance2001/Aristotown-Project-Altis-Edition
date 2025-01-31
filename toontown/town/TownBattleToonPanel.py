@@ -26,27 +26,33 @@ class TownBattleToonPanel(DirectFrame):
         self.setScale(0.5)
         self.initialiseoptions(TownBattleToonPanel)
         self.avatar = None
+        status = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.snapped = status.find('**/vulnerable_icon')
+        self.snapped.setPosHprScale(-0.25, 0, 0.03, -180, 0, 0, .15, .15, .15)
+        self.snapped.reparentTo(self)
+        self.snapped.hide()
+        self.vulnerable = status.find('**/broken_shield_icon')
+        self.vulnerable.setPosHprScale(0.22, 0, 0.03, -180, 0, 0, .15, .15, .15)
+        self.vulnerable.reparentTo(self)
+        self.vulnerable.hide()
         self.sosText = DirectLabel(parent=self, relief=None, pos=(0.22, 0, 0.03), text=TTLocalizer.TownBattleToonSOS, text_fg=(0.176, 1, 0, 1), text_scale=0.1, text_font=getSignFont())
         self.sosText.hide()
         self.fireText = DirectLabel(parent=self, relief=None, pos=(0.22, 0, 0.03), text=TTLocalizer.TownBattleToonFire, text_fg=(1, 0, 0, 1), text_scale=0.1, text_font=getSignFont())
         self.fireText.hide()
-        self.roundsText = DirectLabel(parent=self, relief=None, pos=(-0.2, -0.2, 0.1), text='', text_scale=0.08, text_fg=(0.176, 1, 0, 1), text_font=getSignFont())
+        self.roundsText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(0.176, 1, 0, 1), text_font=getSignFont())
         self.roundsText.hide()
-        self.damageText = DirectLabel(parent=self, relief=None, pos=(-0.2, -0.2, 0.1), text='', text_scale=0.08, text_fg=(1, 0, 0, 1), text_font=getSignFont())
+        self.damageText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(1, 0, 0, 1), text_font=getSignFont())
         self.damageText.hide()
-        self.selfHealText = DirectLabel(parent=self, relief=None, pos=(-0.2, -0.2, 0.05), text='', text_scale=0.06, text_fg=(0.176, 1, 0, 1), text_font=getSignFont())
+        self.selfHealText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(0.176, 1, 0, 1), text_font=getSignFont())
         self.selfHealText.hide()
-        self.exeDamageText = DirectLabel(parent=self, relief=None, pos=(-0.2, -0.2, 0.05), text='', text_scale=0.06, text_fg=(1, 0, 0, 1), text_font=getSignFont())
+        self.exeDamageText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(1, 0, 0, 1), text_font=getSignFont())
         self.exeDamageText.hide()
-        self.soakedRoundsText = DirectLabel(parent=self, relief=None, pos=(-0.2, -0.2, 0.05), text='', text_scale=0.06, text_fg=(0.176, 1, 0, 1), text_font=getSignFont())
+        self.soakedRoundsText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(0.176, 1, 0, 1), text_font=getSignFont())
         self.soakedRoundsText.hide()
-        self.soakedDamageText = DirectLabel(parent=self, relief=None, pos=(-0.2, -0.2, 0.05), text='', text_scale=0.06, text_fg=(1, 0, 0, 1), text_font=getSignFont())
+        self.soakedDamageText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(1, 0, 0, 1), text_font=getSignFont())
         self.soakedDamageText.hide()
-        self.knockbackText = DirectLabel(parent=self, relief=None, pos=(-0.2, -0.2, 0.05), text='', text_scale=0.06, text_fg=(1, 0, 0, 1), text_font=getSignFont())
+        self.knockbackText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(1, 0, 0, 1), text_font=getSignFont())
         self.knockbackText.hide()
-        self.undecidedText2 = DirectLabel(parent=self, relief=None, pos=(-0.2, -0.2, 0.075),
-                                         text='CHOOSING...', text_scale=0.08, text_fg=(1, 1, 1, 1),
-                                         text_font=getSignFont())
         self.undecidedText = DirectLabel(parent=self, relief=None, pos=(0.22, 0.05, -0.03), text=TTLocalizer.TownBattleUndecided, text_scale=0.3, text_fg=(1, 1, 1, 1), text_font=getSignFont())
         self.passText = DirectLabel(parent=self, relief=None, pos=(0.2, 0, 0.03),
                                     text='', text_scale=0.1, text_fg=(1, 0, 0, 1), text_font=getSignFont())
@@ -78,8 +84,8 @@ class TownBattleToonPanel(DirectFrame):
             self.laffMeter = LaffMeter.LaffMeter(avatar.style, avatar.hp, avatar.maxHp)
             self.laffMeter.setAvatar(self.avatar)
             self.laffMeter.reparentTo(self)
-            self.laffMeter.setPos(-0.2, 0.14, -0.1)
-            self.laffMeter.setScale(0.1)
+            self.laffMeter.setPos(-0.15, 0.14, 0.05)
+            self.laffMeter.setScale(0.11)
             self.laffMeter.start()
 
     def setHealthText(self, hp, maxHp, quietly = 0):
@@ -109,7 +115,6 @@ class TownBattleToonPanel(DirectFrame):
          targetIndex,
          localNum))
         self.undecidedText.hide()
-        self.undecidedText2.hide()
         self.sosText.hide()
         self.fireText.hide()
         self.roundsText.hide()
@@ -120,6 +125,8 @@ class TownBattleToonPanel(DirectFrame):
         self.knockbackText.hide()
         self.selfHealText.hide()
         self.gagNode.hide()
+        self.snapped.hide()
+        self.vulnerable.hide()
         self.whichText.hide()
         self.passNode.hide()
         self.passText.hide()
@@ -128,7 +135,7 @@ class TownBattleToonPanel(DirectFrame):
             self.hasGag = 0
         if track == BattleBase.NO_ATTACK or track == BattleBase.UN_ATTACK:
             self.undecidedText.show()
-            self.undecidedText2.show()
+            #self.undecidedText2.show()
         elif track == BattleBase.PASS_ATTACK:
             self.passText.show()
             self.passText['text'] = 'PASS'
@@ -152,77 +159,130 @@ class TownBattleToonPanel(DirectFrame):
                 self.gag.setColor(1, 1, 1, 1)
             self.hasGag = 1
             allGagBoost = False
-            if 'allGagBoost' in base.localAvatar.battleConditions:
+            if 'allGagBoost' in self.avatar.battleConditions:
                 allGagBoost = True
             damage = int(getAvPropDamage(track, level, self.avatar.experience.getExp(track)))
             lureValue = int(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
-            if track == HEAL_TRACK and 'healBoost' in base.localAvatar.battleConditions:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['healBoost'][0] * 0.01) + 1.0)))
-            elif track == TRAP_TRACK and 'trapBoost' in base.localAvatar.battleConditions:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['trapBoost'][0] * 0.01) + 1.0)))
-            elif track == LURE_TRACK and 'lureBoost' in base.localAvatar.battleConditions:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['lureBoost'][0] * 0.01) + 1.0)))
+            if track == HEAL_TRACK and 'healBoost' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['healBoost'][0] * 0.01) + 1.0)))
+            elif track == HEAL_TRACK and 'encore' in base.localAvatar.battleConditions:
+                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
+            elif track == TRAP_TRACK and 'trapBoost' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['trapBoost'][0] * 0.01) + 1.0)))
+            elif track == LURE_TRACK and 'lureBoost' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['lureBoost'][0] * 0.01) + 1.0)))
                 lureValue = int(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) +
-                     base.localAvatar.battleConditions['lureBoost'][
+                     self.avatar.battleConditions['lureBoost'][
                          0]) / 2)
-            elif track == SOUND_TRACK and 'soundBoost' in base.localAvatar.battleConditions:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['soundBoost'][0] * 0.01) + 1.0)))
-            elif track == THROW_TRACK and 'throwBoost' in base.localAvatar.battleConditions:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['throwBoost'][0] * 0.01) + 1.0)))
-            elif track == SQUIRT_TRACK and 'squirtBoost' in base.localAvatar.battleConditions:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['squirtBoost'][0] * 0.01) + 1.0)))
-            elif track == ZAP_TRACK and 'zapBoost' in base.localAvatar.battleConditions:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['zapBoost'][0] * 0.01) + 1.0)))
-            elif track == DROP_TRACK and 'dropBoost' in base.localAvatar.battleConditions:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['dropBoost'][0] * 0.01) + 1.0)))
-            if allGagBoost:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
+            elif track == SOUND_TRACK and 'soundBoost' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['soundBoost'][0] * 0.01) + 1.0)))
+            elif track == THROW_TRACK and 'throwBoost' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['throwBoost'][0] * 0.01) + 1.0)))
+            elif track == SQUIRT_TRACK and 'squirtBoost' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['squirtBoost'][0] * 0.01) + 1.0)))
+            elif track == ZAP_TRACK and 'zapBoost' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['zapBoost'][0] * 0.01) + 1.0)))
+            elif track == DROP_TRACK and 'dropBoost' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['dropBoost'][0] * 0.01) + 1.0)))
+            elif track == SOUND_TRACK and 'encore' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
+            elif track == TRAP_TRACK and 'encore' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
+            elif track == THROW_TRACK and 'encore' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
+            elif track == SQUIRT_TRACK and 'encore' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
+            elif track == ZAP_TRACK and 'encore' in  self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
+            elif track == DROP_TRACK and 'encore' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
+            elif track == LURE_TRACK and 'encore' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
+                lureValue = int(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + self.avatar.battleConditions['encore'][
+                        0]) / 2)
+            elif track == SOUND_TRACK and 'encore2' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
+            elif track == TRAP_TRACK and 'encore2' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
+            elif track == THROW_TRACK and 'encore2' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
+            elif track == SQUIRT_TRACK and 'encore2' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
+            elif track == ZAP_TRACK and 'encore2' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
+            elif track == DROP_TRACK and 'encore2' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
+            elif track == LURE_TRACK and 'encore2' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
                 lureValue = int(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) +
-                     base.localAvatar.battleConditions['allGagBoost'][
+                     base.localAvatar.battleConditions['encore2'][
                          0]) / 2)
+            elif track == SOUND_TRACK and 'winded' in self.avatar.battleConditions:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['winded'][0] * 0.01) + 1.0)))
+            elif allGagBoost and not track == LURE_TRACK:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
+                lureValue = int(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+            else:
+                lureValue = int(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
             if numTargets is not None and targetIndex is not None and localNum is not None:
                 self.whichText.show()
                 self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
             if track == LURE_TRACK:
                 self.roundsText.show()
-                self.roundsText['text'] = 'Rounds: ' + str(NumRoundsLured[level] + 1)
-                self.knockbackText.show()
-                self.knockbackText['text'] = 'Knockback: ' + str(lureValue)+'%'
+                if self.avatar.trackBonusLevel[track] >= 1:
+                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(int(lureValue * 1.2))+'%'
+                else:
+                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(lureValue) + '%'
+                #self.knockbackText.show()
+                #self.knockbackText['text'] = 'Knockback: ' + str(lureValue)+'%'
             if track == HEAL_TRACK:
-                self.damageText.show()
-                self.damageText['text'] = 'Heals: ' + str(damage)
-                self.selfHealText.show()
-                self.selfHealText['text'] = 'Self Heal: ' + str(damage / 2.5)
-                self.selfHealText.setColor(0.176, 1, 0, 1)
+                self.roundsText.show()
+                if self.avatar.trackBonusLevel[track] >= 1:
+                    self.roundsText['text'] = '+' + str(damage) + '/' + str(int(damage / 2.5))
+                else:
+                    self.roundsText['text'] = '+' + str(damage) + '/' + str(int(damage / 4))
+                self.roundsText.setColor(0.176, 1, 0, 1)
+                #self.selfHealText.show()
+                #self.selfHealText['text'] = 'Self Heal: ' + str(damage / 2.5)
+                #self.selfHealText.setColor(0.176, 1, 0, 1)
             if track == TRAP_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = 'Damage: ' + str(damage)
-                self.exeDamageText.show()
-                self.exeDamageText['text'] = 'Exe./Gov.: ' + str(damage * 1.3)
+                if self.avatar.trackBonusLevel[track] >= 1:
+                    self.damageText['text'] = '-' + str(int(damage * 1.2)) + '/' + str(int(((damage * 1.2) * 1.3) + 1))
+                else:
+                    self.damageText['text'] = '-' + str(damage) + '/' + str(int(damage * 1.3))
+                #self.exeDamageText.show()
+                #self.exeDamageText['text'] = 'Exe./Gov.: ' + str(damage * 1.3)
             if track == SOUND_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = 'Damage: ' + str(damage)
+                self.damageText['text'] = '-' + str(damage)
             if track == THROW_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = 'Damage: ' + str(damage)
-                self.selfHealText.show()
-                self.selfHealText['text'] = 'Self Heal: ' + str(damage/5)
+                self.damageText['text'] = '-' + str(damage)
+                #self.selfHealText.show()
+                #self.selfHealText['text'] = 'Self Heal: ' + str(damage/5)
             if track == DROP_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = 'Damage: ' + str(damage)
+                self.damageText['text'] = '-' + str(damage)
             if track == SQUIRT_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = 'Damage: ' + str(damage)
-                self.soakedRoundsText.show()
-                self.soakedRoundsText['text'] = 'Rounds: ' + str(ToontownBattleGlobals.AvSoakRounds[level])
+                if self.avatar.trackBonusLevel[track] >= 1:
+                    self.damageText['text'] = '-' + str(int(damage * .5)) + '/ -' + str(damage) + '/ -' + str(int(damage * .5))
+                else:
+                    self.damageText['text'] = '-' + str(int(damage * .25)) + '/ -' + str(damage) + '/ -' + str(int(damage * .25))
+                #self.soakedRoundsText.show()
+                #self.soakedRoundsText['text'] = 'Rounds: ' + str(ToontownBattleGlobals.AvSoakRounds[level])
             if track == ZAP_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = 'Damage: ' + str(damage)
-                self.soakedDamageText.show()
-                self.soakedDamageText['text'] = 'If Soaked: ' + str(damage * 3)
+                self.damageText['text'] = '-' + str(damage)
+                #self.soakedDamageText.show()
+                #self.soakedDamageText['text'] = 'If Soaked: ' + str(damage * 3)
         else:
             self.notify.error('Bad track value: %s' % track)
 

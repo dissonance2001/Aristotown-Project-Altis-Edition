@@ -5,6 +5,8 @@ from direct.distributed import DistributedSmoothNode
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 from direct.fsm import FSM
+import math
+import copy
 from direct.task import Task
 smileyDoId = 1
 
@@ -19,6 +21,7 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
         self.avId = 0
         self.craneId = 0
         self.cleanedUp = 0
+        self.speeds = []
         self.collisionNode = CollisionNode('object')
         self.collisionNode.setIntoCollideMask(ToontownGlobals.PieBitmask | OTPGlobals.WallBitmask | ToontownGlobals.CashbotBossObjectBitmask | OTPGlobals.CameraBitmask)
         self.collisionNode.setFromCollideMask(ToontownGlobals.PieBitmask | OTPGlobals.FloorBitmask)
@@ -70,9 +73,35 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
         self.handler.addInPattern(self.collideName + '-%in')
         self.handler.addAgainPattern(self.collideName + '-%in')
         self.watchDriftName = self.uniqueName('watchDrift')
+        self.startCacheName = self.uniqueName('startSpeedCaching')
+
+    def startSpeedCaching(self, task):
+        # print(self.physicsObject.getVelocity())
+        # print(self.collisionNodePath.getHpr())
+        speed = self.physicsObject.getVelocity().length()
+        # orientation = self.physicsObject.getOrientation()
+        # rotation = self.physicsObject.getRotation()
+        # lcs = self.physicsObject.getLcs()
+        # print(lcs)
+
+        if len(self.speeds) > 5:
+            self.speeds.pop(0)
+
+        self.speeds.append(speed)
+        # print(self.speeds)
+
+        return Task.again
+
+    def resetSpeedCaching(self):
+
+        self.speeds = []
+        taskMgr.remove(self.startCacheName)
 
     def activatePhysics(self):
         if not self.physicsActivated:
+            self.speeds = []
+            self.speeds.append(self.physicsObject.getVelocity().length())
+            taskMgr.doMethodLater(0.1, self.startSpeedCaching, self.startCacheName)
             self.boss.physicsMgr.attachPhysicalNode(self.node())
             base.cTrav.addCollider(self.collisionNodePath, self.handler)
             self.physicsActivated = 1
@@ -120,17 +149,14 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
 
     def __hitBoss(self, entry):
         if (self.state == 'Dropped' or self.state == 'LocalDropped') and self.craneId != self.boss.doId:
-            vel = self.physicsObject.getVelocity()
-            vel = self.crane.root.getRelativeVector(render, vel)
-            vel.normalize()
-            impact = vel[1]
+            speed = max(self.speeds)
+
+            impact = min(1.0, max(pow(speed, 1.75) / 466.475, 0.0))
             if impact >= self.getMinImpact():
-                print 'hit! %s' % impact
                 self.hitBossSoundInterval.start()
                 self.doHitBoss(impact)
             else:
                 self.touchedBossSoundInterval.start()
-                print '--not hard enough: %s' % impact
 
     def doHitBoss(self, impact):
         self.d_hitBoss(impact)
@@ -166,8 +192,7 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
         if state == 'G':
             self.demand('Grabbed', avId, craneId)
         elif state == 'D':
-            if self.state != 'Dropped':
-                self.demand('Dropped', avId, craneId)
+            self.demand('Dropped', avId, craneId)
         elif state == 's':
             if self.state != 'SlidingFloor':
                 self.demand('SlidingFloor', avId)
@@ -218,14 +243,16 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
         self.crane = self.cr.doId2do.get(craneId)
         self.hideShadows()
         self.prepareGrab()
-        self.crane.grabObject(self)
+        if self.crane:
+            self.crane.grabObject(self)
 
     def exitLocalGrabbed(self):
         if self.newState != 'Grabbed':
-            self.crane.dropObject(self)
-            self.prepareRelease()
-            del self.crane
-            self.showShadows()
+            if self.crane:
+                self.crane.dropObject(self)
+                self.prepareRelease()
+                del self.crane
+                self.showShadows()
 
     def enterGrabbed(self, avId, craneId):
         if self.oldState == 'LocalGrabbed':
@@ -252,7 +279,7 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
         self.craneId = craneId
         self.crane = self.cr.doId2do.get(craneId)
         self.activatePhysics()
-        self.startPosHprBroadcast()
+        self.startPosHprBroadcast(period=.05)
         self.hideShadows()
         self.handler.setStaticFrictionCoef(0)
         self.handler.setDynamicFrictionCoef(0)
@@ -270,7 +297,7 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
         self.crane = self.cr.doId2do.get(craneId)
         if self.avId == base.localAvatar.doId:
             self.activatePhysics()
-            self.startPosHprBroadcast()
+            self.startPosHprBroadcast(period=.05)
             self.handler.setStaticFrictionCoef(0)
             self.handler.setDynamicFrictionCoef(0)
         else:
@@ -294,7 +321,7 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
             self.lerpInterval = None
         if self.avId == base.localAvatar.doId:
             self.activatePhysics()
-            self.startPosHprBroadcast()
+            self.startPosHprBroadcast(period=.05)
             self.handler.setStaticFrictionCoef(0.9)
             self.handler.setDynamicFrictionCoef(0.5)
             if self.wantsWatchDrift:
@@ -302,6 +329,7 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
         else:
             self.startSmooth()
         self.hitFloorSoundInterval.start()
+        self.resetSpeedCaching()
         return
 
     def exitSlidingFloor(self):

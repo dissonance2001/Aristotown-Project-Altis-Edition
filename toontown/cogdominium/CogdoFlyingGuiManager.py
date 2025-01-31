@@ -54,16 +54,20 @@ class CogdoFlyingGuiManager:
         self._progressGui.hide()
 
     def presentProgressGui(self):
-        ToontownIntervals.start(ToontownIntervals.getPresentGuiIval(self._progressGui, 'present_progress_gui'))
+        return
+        #ToontownIntervals.start(ToontownIntervals.getPresentGuiIval(self._progressGui, 'present_progress_gui'))
 
     def presentRefuelGui(self):
-        ToontownIntervals.start(ToontownIntervals.getPresentGuiIval(self._refuelGui, 'present_fuel_gui'))
+        return
+       # ToontownIntervals.start(ToontownIntervals.getPresentGuiIval(self._refuelGui, 'present_fuel_gui'))
 
     def presentTimerGui(self):
-        ToontownIntervals.start(ToontownIntervals.getPresentGuiIval(self._timer, 'present_timer_gui'))
+        return
+        #ToontownIntervals.start(ToontownIntervals.getPresentGuiIval(self._timer, 'present_timer_gui'))
 
     def presentMemoGui(self):
-        ToontownIntervals.start(ToontownIntervals.getPresentGuiIval(self._memoGui, 'present_memo_gui'))
+        return
+        #ToontownIntervals.start(ToontownIntervals.getPresentGuiIval(self._memoGui, 'present_memo_gui'))
 
     def offstage(self):
         self.root.stash()

@@ -347,7 +347,7 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
     suitResponseTrack = Sequence()
     reactIval = Sequence()
     if showCannon and hitSuit:
-        showDamage = Func(suit.showHpText, -hp, openEnded=0)
+        showDamage = Sequence(Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "FIRED!", openEnded=0))
         updateHealthBar = Func(suit.updateHealthBar, hp)
         cannon = loader.loadModel('phase_4/models/minigames/toon_cannon')
         barrel = cannon.find('**/cannon')
@@ -416,9 +416,10 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
 
     else:
-        suitResponseTrack = Parallel(suitResponseTrack, Sequence(Wait(4.25), Func(suit.setChatAbsolute, random.choice(
+        suitResponseTrack = Parallel(suitResponseTrack, Sequence(Wait(4.25),Func(suit.showHpTextWhite,
+                                           'FIRE IMMUNE!'), Func(suit.setChatAbsolute, random.choice(
         OTPLocalizerEnglish.SuitFireManager), CFSpeech | CFTimeout), Func(MovieUtil.indicateMissed, suit, 0.6),
-                                                                 ActorInterval(suit, 'gag-miss'), ActorInterval(suit, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))))
+                                                                 ActorInterval(suit, 'gag-miss'), Func(suit.setNeutralAnimation)))
     return [toonTrack,
      soundTrack,
      buttonTrack,

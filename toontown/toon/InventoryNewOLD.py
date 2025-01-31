@@ -19,9 +19,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
     PressableTextColor = Vec4(1, 1, 1, 1)
     PressableGeomColor = Vec4(1, 1, 1, 1)
     PressableImageColor = Vec4(0, 0.6, 1, 1)
-    PropBonusPressableImageColor = Vec4(1.0, 0.6, 0.0, 1)
+    PressableOrganicColor = Vec4(0, .2, .9, 1)
+    PropBonusPressableImageColor = Vec4(0, 0.9, 1, 1)
     NoncreditPressableImageColor = Vec4(0.3, 0.6, 0.6, 1)
-    PropBonusNoncreditPressableImageColor = Vec4(0.6, 0.6, 0.3, 1)
+    PropBonusNoncreditPressableImageColor = Vec4(0, 0.196, 1, 1)
     DeletePressableImageColor = Vec4(0.7, 0.1, 0.1, 1)
     UnpressableTextColor = Vec4(1, 1, 1, 0.3)
     UnpressableGeomColor = Vec4(1, 1, 1, 0.3)
@@ -257,9 +258,16 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.buttons.append([])
             for item in range(0, len(Levels[track])):
                 button = DirectButton(parent=self.trackRows[track], image=(self.upButton,
-                 self.downButton,
-                 self.rolloverButton,
-                 self.flatButton), geom=self.invModels[track][item], text='50', text_scale=0.06, text_align=TextNode.ARight, geom_scale=0.7, geom_pos=(-0.01, -0.1, 0), text_fg=Vec4(1, 1, 1, 1), text_font=getSignFont(), text_pos=(0.08, -0.045), textMayChange=1, relief=None, image_color=(0.071, 0, 1, 1), image_scale=1.02, pos=(self.ButtonXOffset + item * self.ButtonXSpacing + adjustLeft, -0.1, 0), command=self.__handleSelection, extraArgs=[track, item])
+                                                                           self.downButton,
+                                                                           self.rolloverButton,
+                                                                           self.flatButton),
+                                      geom=self.invModels[track][item], text='50', text_scale=0.06,
+                                      text_align=TextNode.ARight, geom_scale=0.7, geom_pos=(-0.01, -0.1, 0),
+                                      text_fg=Vec4(1, 1, 1, 1), text_font=getSignFont(), text_pos=(0.08, -0.045),
+                                      textMayChange=1, relief=None, image_color=self.PressableImageColor, image_scale=1.02,
+                                      pos=(self.ButtonXOffset + item * self.ButtonXSpacing + adjustLeft, -0.1, 0),
+                                      command=self.__handleSelection, extraArgs=[track, item])
+
                 button.bind(DGG.ENTER, self.showDetail, extraArgs=[track, item])
                 button.bind(DGG.EXIT, self.hideDetail)
                 self.buttons[track].append(button)
@@ -336,44 +344,19 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         damageBonus = 0
 
         damageAppendStr = ''
-        if self.propAndOrganicBonusStack:
-            if propBonus:
-                damageBonus += getDamageBonus(damage, track)
-                if track == SOUND_TRACK:
-                    damageBonusStr = TTLocalizer.SoundExtraText
-                elif track == HEAL_TRACK:
-                    bonus = int(damage * 0.5)
-                    damageBonusStr = TTLocalizer.InventoryDamageBonus % TTLocalizer.HealExtraText % {'heal': bonus}
-                elif track == LURE_TRACK:
-                    damageBonus = 1
-            if organicBonus:
-                damageBonus += getDamageBonus(damage, track)
-                if track == SOUND_TRACK:
-                    damageBonusStr = TTLocalizer.SoundExtraText
-                elif track == HEAL_TRACK:
-                    bonus = int(damage * 0.25)
-                    damageBonusStr = TTLocalizer.InventoryDamageBonusString % TTLocalizer.HealExtraText % {'heal': bonus}
-                elif track == LURE_TRACK:
-                    damageBonus = 1
-            if damageBonus:
-                damageBonusStr = TTLocalizer.InventoryDamageBonus % damageBonus
-        else:
-            if propBonus or organicBonus:
-                damageBonus += getDamageBonus(damage, track)
-                if track == SOUND_TRACK:
-                    damageBonusStr = TTLocalizer.SoundExtraText
-                elif track == HEAL_TRACK:
-                    bonus = int(damage * 0.2)
-                    damageBonusStr = TTLocalizer.InventoryDamageBonusString % TTLocalizer.HealExtraText % {'heal': bonus}
-                elif track == LURE_TRACK:
-                    damageBonus = 1
-            if damageBonus:
-                damageBonusStr = TTLocalizer.InventoryDamageBonus % damageBonus
         accString = AvTrackAccStrings[track]
 
         allGagBoost = False
         if 'allGagBoost' in base.localAvatar.battleConditions:
             allGagBoost = True
+
+        encore= False
+        if 'encore' in base.localAvatar.battleConditions:
+            encore = True
+
+        winded = False
+        if 'winded' in base.localAvatar.battleConditions:
+            winded = True
 
         def labelColorize(damage, param):
             if allGagBoost:
@@ -404,6 +387,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if track == HEAL_TRACK and 'healBoost' in base.localAvatar.battleConditions:
             damage = math.ceil(damage * ((base.localAvatar.battleConditions['healBoost'][0] * 0.01) + 1.0))
             damageAppendStr = labelColorize(damage, 'healBoost')
+        elif track == HEAL_TRACK and 'encore' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore')
         elif track == TRAP_TRACK and 'trapBoost' in base.localAvatar.battleConditions:
             damage = math.ceil(damage * ((base.localAvatar.battleConditions['trapBoost'][0] * 0.01) + 1.0))
             damageAppendStr = labelColorize(damage, 'trapBoost')
@@ -416,6 +402,57 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         elif track == SOUND_TRACK and 'soundBoost' in base.localAvatar.battleConditions:
             damage = math.ceil(damage * ((base.localAvatar.battleConditions['soundBoost'][0] * 0.01) + 1.0))
             damageAppendStr = labelColorize(damage, 'soundBoost')
+        elif track == SOUND_TRACK and 'encore' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore')
+        elif track == TRAP_TRACK and 'encore' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore')
+        elif track == THROW_TRACK and 'encore' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore')
+        elif track == SQUIRT_TRACK and 'encore' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore')
+        elif track == ZAP_TRACK and 'encore' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore')
+        elif track == DROP_TRACK and 'encore' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore')
+        elif track == LURE_TRACK and 'encore' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore')
+            lureValue = int(
+                ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['encore'][
+                    0]) / 2)
+        elif track == SOUND_TRACK and 'encore2' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore2')
+        elif track == TRAP_TRACK and 'encore2' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore2')
+        elif track == THROW_TRACK and 'encore2' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore2')
+        elif track == SQUIRT_TRACK and 'encore2' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore2')
+        elif track == ZAP_TRACK and 'encore2' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore2')
+        elif track == DROP_TRACK and 'encore2' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore2')
+        elif track == LURE_TRACK and 'encore2' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'encore2')
+            lureValue = int(
+                ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['encore2'][
+                    0]) / 2)
+        elif track == SOUND_TRACK and 'winded' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['winded'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'winded')
         elif track == THROW_TRACK and 'throwBoost' in base.localAvatar.battleConditions:
             damage = math.ceil(damage * ((base.localAvatar.battleConditions['throwBoost'][0] * 0.01) + 1.0))
             damageAppendStr = labelColorize(damage, 'throwBoost')
@@ -440,31 +477,42 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
 
         damage = int(damage)
-        if track == DROP_TRACK and organicBonus:
-            accString += '(+10%)'
-        #if track == ZAP_TRACK:
-            #self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailDataExtra % {'accuracy': accString,
-                                                                                        #'damageString': self.getToonupDmgStr(
-                                                                                            #track, level),
-                                                                                        #'damage': str(
-                                                                                       #damage) + damageAppendStr,
-                                                                                        #'bonus': damageBonusStr,
-                                                                                        #'singleOrGroup': self.getSingleGroupStr(
-                                                                                           # track, level)})
-                                                                                         ##'extra': self.getExtraText(track, level, organicBonus)})
-            #self.detailCreditLabel.setPos(-0.22, 0, -0.39625)
-        if track == TRAP_TRACK:
+        organicBonus = self.toon.checkGagBonus(track, level)
+        if track == TRAP_TRACK and organicBonus:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': self.getToonupDmgStr(
+                                                                                       track, level),
+                                                                                   'damage': str(
+                                                                                       int(damage * 1.2)) + damageAppendStr,
+                                                                                   'bonus': '\nExe./Gov. Mult.: %i%s\nDaze Rounds: %i' % (
+                                                                                   math.ceil((damage * 1.2) * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS)),
+                                                                                   damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.37625)
+        elif track == TRAP_TRACK:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
                                                                                    'bonus': '\nExe./Gov. Mult.: %i%s\nDaze Rounds: %i' % (
-                                                                                   int(damage * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS)) + 1,
+                                                                                   math.ceil(damage * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS)),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.37625)
+        elif track == LURE_TRACK and organicBonus:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': "Rounds",
+                                                                                   'damage':
+                                                                                       ToontownBattleGlobals.AvLureRounds[
+                                                                                           level] + 1,
+                                                                                   'bonus': '\nKnockback: %s' %
+                                                                                       str(int(lureValue * 1.2))+'%' + damageAppendStr,
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
         elif track == LURE_TRACK:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': "Rounds",
@@ -476,7 +524,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
-        elif track == THROW_TRACK:
+        elif track == THROW_TRACK and organicBonus:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
@@ -488,26 +536,57 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.42625)
+        elif track == THROW_TRACK:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': self.getToonupDmgStr(
+                                                                                       track, level),
+                                                                                   'damage': str(
+                                                                                       damage) + damageAppendStr,
+                                                                                   'bonus': '\nMark Rounds: %i\nMarked Damage: %i%%' % (
+                                                                                       ToontownBattleGlobals.AvMarkRounds[
+                                                                                           level], +ToontownBattleGlobals.AvMarkBoost),
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.39625)
+        elif track == SOUND_TRACK and organicBonus:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': self.getToonupDmgStr(
+                                                                                       track, level),
+                                                                                   'damage': str(damage) + damageAppendStr,
+                                                                                   'bonus': '\nEncore Gag Bonus: 16%',
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
         elif track == SOUND_TRACK:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(damage) + damageAppendStr,
-                                                                                   'bonus': '\nEncore Gag Bonus: 10%',
+                                                                                   'bonus': '\nEncore Gag Bonus: 8%',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
-            self.detailCreditLabel.setPos(-0.22, 0, -0.33625)
+            self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
+        elif track == ZAP_TRACK and organicBonus:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': self.getToonupDmgStr(
+                                                                                       track, level),
+                                                                                   'damage': str(
+                                                                                       damage) + damageAppendStr,
+                                                                                   'bonus': "\nZap Jump Dmg.: 84% & 67%",
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.37625)
         elif track == ZAP_TRACK:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
-                                                                                   'bonus': '\nSoak Damage Mult.: %i%%' % ToontownBattleGlobals.AvZapBoost + damageBonusStr,
+                                                                                   'bonus': "\nZap Jump Dmg.: 67% & 35%",
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
-            self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
-        elif track == HEAL_TRACK:
+            self.detailCreditLabel.setPos(-0.22, 0, -0.37625)
+        elif track == HEAL_TRACK and organicBonus:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
@@ -519,6 +598,30 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
+        elif track == HEAL_TRACK:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': self.getToonupDmgStr(
+                                                                                       track, level),
+                                                                                   'damage': str(
+                                                                                       damage) + damageAppendStr,
+                                                                                   'bonus': '\nSelf Heal: %i%s' % (
+                                                                                   math.ceil(damage / 4),
+                                                                                   damageAppendStr) + damageBonusStr,
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
+        elif track == SQUIRT_TRACK and organicBonus:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': self.getToonupDmgStr(
+                                                                                       track, level),
+                                                                                   'damage': str(
+                                                                                       damage) + damageAppendStr,
+                                                                                   'bonus': '\nSoak Rounds: %i\nSoaked Dodge Rate: %i%%' % (
+                                                                                       ToontownBattleGlobals.AvSoakRounds[
+                                                                                           level], -ToontownBattleGlobals.AvSoakDefReduction) + damageBonusStr + '\nSplash Damage: 50%',
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.4125)
         elif track == SQUIRT_TRACK:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
@@ -527,20 +630,30 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        damage) + damageAppendStr,
                                                                                    'bonus': '\nSoak Rounds: %i\nSoaked Dodge Rate: %i%%' % (
                                                                                        ToontownBattleGlobals.AvSoakRounds[
-                                                                                           level], -ToontownBattleGlobals.AvSoakDefReduction) + damageBonusStr,
+                                                                                           level], -ToontownBattleGlobals.AvSoakDefReduction) + damageBonusStr + '\nSplash Damage: 25%',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
-            self.detailCreditLabel.setPos(-0.22, 0, -0.37625)
+            self.detailCreditLabel.setPos(-0.22, 0, -0.4125)
+        elif track == DROP_TRACK and organicBonus:
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
+                                                                                   'damageString': self.getToonupDmgStr(
+                                                                                       track, level),
+                                                                                   'damage': str(
+                                                                                       damage) + damageAppendStr,
+                                                                                   'bonus': '\nBonus Damage: Up to\n25% w/Debuffs',
+                                                                                   'singleOrGroup': self.getSingleGroupStr(
+                                                                                       track, level)})
+            self.detailCreditLabel.setPos(-0.22, 0, -0.39625)
         elif track == DROP_TRACK:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
-                                                                                   'bonus': '\nBonus Combo %: 10%' + damageBonusStr,
+                                                                                   'bonus': '',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
-            self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
+            self.detailCreditLabel.setPos(-0.22, 0, -0.31625)
         else:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
              'damageString': self.getToonupDmgStr(track, level),
@@ -681,9 +794,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         return None
 
     def bookActivateButtons(self):
-        self.setPos(0, 0, 0.52)
-        self.setScale(1.0)
-        self.detailFrame.setPos(0.1, 0, -0.855)
+        self.setPos(0.1, 0, 0.52)
+        self.setScale(0.8)
+        self.detailFrame.setPos(0.1, 0, -0.355)
         self.detailFrame.setScale(0.75)
         self.deleteEnterButton.hide()
         self.deleteAllButton.hide()
@@ -1103,8 +1216,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
     def battleActivateButtons(self):
         self.stopAndClearPropBonusIval()
         self.reparentTo(aspect2d)
-        self.setPos(0, 0, 0.1)
-        self.setScale(1)
+        self.setPos(0.1, 0, 0)
+        self.setScale(0.9)
         if self.battleFrame == None:
             self.loadBattleFrame()
         self.battleFrame.show()
@@ -1298,6 +1411,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if self.interactivePropTrackBonus == track:
             button.configure(image_color=self.PropBonusPressableImageColor)
             self.addToPropBonusIval(button)
+        elif organicBonus:
+            button.configure(image_color=self.PressableOrganicColor)
         else:
             button.configure(image_color=self.PressableImageColor)
 
@@ -1358,7 +1473,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             shadowColor = self.ShadowColor
         button.configure(text_shadow=shadowColor, geom_color=self.BookUnpressableGeomColor, image_image=self.flatButton, commandButtons=())
-        button.configure(image0_color=self.BookUnpressableImage0Color, image2_color=self.BookUnpressableImage2Color)
+        color = self.BookUnpressableImage0Color
+        if organicBonus:
+            color = self.PressableOrganicColor
+        button.configure(image0_color=color, image2_color=self.BookUnpressableImage2Color)
 
     def hideTrack(self, trackIndex):
         self.trackNameLabels[trackIndex].show()
@@ -1395,6 +1513,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
         bonus = organicBonus or propBonus
+        if bonus:
+            imageColor = self.PressableOrganicColor
+        else:
+            imageColor = self.PressableImageColor
+        button.configure(image_color=imageColor)
 
     def buttonBoing(self, track, level):
         button = self.buttons[track][level]
@@ -1433,6 +1556,18 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                 return TTLocalizer.InventoryAffectsAllToons
             else:
                 return TTLocalizer.InventoryAffectsOneToon
+        elif track == TRAP_TRACK:
+            return TTLocalizer.InventoryAffectsOneCog
+        elif track == THROW_TRACK:
+            return TTLocalizer.InventoryAffectsOneCog
+        elif track == SQUIRT_TRACK:
+            return TTLocalizer.InventoryAffectsThreeCogs
+        elif track == ZAP_TRACK:
+            return TTLocalizer.InventoryAffectsThreeCogs
+        elif track == SOUND_TRACK:
+            return TTLocalizer.InventoryAffectsOneCog
+        elif track == DROP_TRACK:
+            return TTLocalizer.InventoryAffectsOneCog
         elif isGroup(track, level):
             return TTLocalizer.InventoryAffectsAllCogs
         else:

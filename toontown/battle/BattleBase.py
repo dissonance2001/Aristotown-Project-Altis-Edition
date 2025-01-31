@@ -37,10 +37,10 @@ FIRE = 100
 HEAL = HEAL_TRACK
 TRAP = TRAP_TRACK
 LURE = LURE_TRACK
-SOUND = SOUND_TRACK
 THROW = THROW_TRACK
 SQUIRT = SQUIRT_TRACK
 ZAP = ZAP_TRACK
+SOUND = SOUND_TRACK
 DROP = DROP_TRACK
 TOON_ATTACK_TIME = 12.0
 SUIT_ATTACK_TIME = 12.0
@@ -73,8 +73,10 @@ def levelAffectsGroup(track, level):
 def attackAffectsGroup(track, level, type = None):
     if track == NPCSOS or type == NPCSOS or track == PETSOS or type == PETSOS:
         return 1
-    elif track >= 0 and track <= DROP_TRACK:
+    elif track == HEAL_TRACK or track == LURE_TRACK:
         return AvPropTargetCat[AvPropTarget[track]][level]
+    elif track == SOUND_TRACK:
+        return 1
     else:
         return 0
 

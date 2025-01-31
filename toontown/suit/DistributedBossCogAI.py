@@ -46,6 +46,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
          'BattleThree',
          'Victory']
         self.bossDamage = 0
+        self.currHP = self.bossDamage
         self.battleThreeStart = 0
         self.battleThreeDuration = 1800
         self.attackCode = None
@@ -265,7 +266,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def enterBattleOne(self):
         if self.battle:
-            self.battle.startBattle(self.toons, self.suits)
+            self.battle.startBattle(self.toonsA, self.suitsB)
 
     def exitBattleOne(self):
         self.resetBattles()

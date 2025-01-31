@@ -496,7 +496,6 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         return fieldList
 
     def addSuit(self, suit):
-        self.notify.debug('addSuit(%d)' % suit.doId)
         self.newSuits.append(suit)
         self.suits.append(suit)
         suit.battleTrap = NO_TRAP
@@ -545,7 +544,6 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.__requestAdjust()
 
     def suitRequestJoin(self, suit):
-        self.notify.debug('suitRequestJoin(%d)' % suit.getDoId())
         if self.suitCanJoin():
             self.addSuit(suit)
             self.__joinSuit(suit)

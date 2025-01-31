@@ -38,7 +38,7 @@ class CogdoFlyingProgressGui(DirectFrame):
     def addToon(self, toon):
         marker = NodePath('toon_marker-%i' % toon.doId)
         marker.reparentTo(self)
-        self._getToonMarker(toon).copyTo(marker)
+        #self._getToonMarker(toon).copyTo(marker)
         marker.setColor(toon.style.getHeadColor())
         if toon.isLocal():
             marker.setScale(Globals.Gui.LocalMarkerScale)

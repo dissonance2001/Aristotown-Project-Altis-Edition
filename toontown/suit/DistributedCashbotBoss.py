@@ -13,6 +13,7 @@ from toontown.suit import DistributedCashbotBossGoon
 from toontown.suit import SuitDNA
 from otp.otpbase import OTPGlobals
 from toontown.battle import MovieToonVictory
+from toontown.friends import FriendsListManager
 from toontown.battle import RewardPanel
 from toontown.battle import SuitBattleGlobals
 from toontown.building import ElevatorConstants
@@ -45,11 +46,15 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cranes = {}
         self.safes = {}
         self.goons = []
+        self.latency = 0.5
         self.battleDifficulty = 0
+        self.geomFlashInterval = None
         self.bonusUnites = 0
         self.bossMaxDamage = ToontownGlobals.CashbotBossMaxDamage
         self.elevatorType = ElevatorConstants.ELEVATOR_CFO
         base.boss = self
+        self.currHP = 0
+        self.maxHP = self.bossMaxDamage
         return
 
     def announceGenerate(self):
@@ -63,7 +68,8 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         targetNode = CollisionNode('headTarget')
         targetNode.addSolid(target)
         targetNode.setCollideMask(ToontownGlobals.PieBitmask)
-        self.headTarget = self.neck.attachNewNode(targetNode)
+        for headPart in self.animatedHeadParts:
+            self.headTarget = headPart.attachNewNode(targetNode)
         shield = CollisionSphere(0, 0, 0.8, 7)
         shieldNode = CollisionNode('shield')
         shieldNode.addSolid(shield)
@@ -71,6 +77,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         shieldNodePath = self.pelvis.attachNewNode(shieldNode)
         self.heldObject = None
         self.bossDamage = 0
+        self.currHP = self.bossDamage
         self.loadEnvironment()
         self.__makeResistanceToon()
         self.physicsMgr = PhysicsManager()
@@ -187,15 +194,22 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.endVault = loader.loadModel('phase_10/models/cogHQ/EndVault.bam')
         self.lightning = loader.loadModel('phase_10/models/cogHQ/CBLightning.bam')
         self.magnet = loader.loadModel('phase_10/models/cogHQ/CBMagnet.bam')
+        self.magnet = loader.loadModel('phase_10/models/cogHQ/CBMagnetBlue.bam')
+        self.sideMagnet = loader.loadModel('phase_10/models/cogHQ/CBMagnetRed.bam')
         self.craneArm = loader.loadModel('phase_10/models/cogHQ/CBCraneArm.bam')
         self.controls = loader.loadModel('phase_10/models/cogHQ/CBCraneControls.bam')
         self.stick = loader.loadModel('phase_10/models/cogHQ/CBCraneStick.bam')
         self.safe = loader.loadModel('phase_10/models/cogHQ/CBSafe.bam')
+        self.safe2 = loader.loadModel('phase_10/models/cogHQ/CBSafe.bam')
         self.eyes = loader.loadModel('phase_10/models/cogHQ/CashBotBossEyes.bam')
         self.cableTex = self.craneArm.findTexture('MagnetControl')
         self.eyes.setPosHprScale(4.5, 0, -2.5, 90, 90, 0, 0.4, 0.4, 0.4)
-        self.eyes.reparentTo(self.neck)
+        self.safe2.setPosHprScale(0, 0, 0, -90, -90, 0, 1, 1, 1)
+        for headPart in self.animatedHeadParts:
+            self.eyes.reparentTo(headPart)
+            self.safe2.reparentTo(headPart)
         self.eyes.hide()
+        self.safe2.hide()
         self.midVault.setPos(0, -222, -70.7)
         self.endVault.setPos(84, -201, -6)
         self.geom = NodePath('geom')
@@ -373,7 +387,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                             LerpColorScaleInterval(render, 1, Vec4(0.75, 1.0, 0.75, 1.0)),
                             Func(self.setChatAbsolute, TTL.CashbotBossDiscoverToons2, CFSpeech),
                             Wait(4),
-                            Func(self.clearChat),
+                            Func(self.setChatAbsolute, '', CFSpeech),
                             self.loseCogSuits(self.toonsA + self.toonsB, render, (113, -228, 10, 90, 0, 0)),
                             Wait(1),
                             Func(rToon.setHpr, 0, 0, 0),
@@ -398,7 +412,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                                     base.camera.posHprInterval(2, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
                                     Func(self.setChatAbsolute, attackToons, CFSpeech),
                                     Wait(2),
-                                    Func(self.clearChat))
+                                    Func(self.setChatAbsolute, '', CFSpeech))
         return Sequence(Func(base.camera.reparentTo, render), track)
 
     def makePrepareBattleTwoMovie(self, delayDeletes):
@@ -456,7 +470,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             Wait(2),
             Func(self.setChatAbsolute, TTL.CashbotBossCogAgain, CFSpeech),
             Wait(2),
-            Func(self.clearChat),
+            Func(self.setChatAbsolute, '', CFSpeech),
             Func(self.getGeomNode().setH, 0),
             Func(self.midCutsceneMusic.stop))))
         return Sequence(Func(base.camera.reparentTo, self), base.camera.posHprInterval(1, Point3(0, -27, 25), VBase3(0, -18, 0), blendType='easeInOut'), track, Func(base.camera.reparentTo, render))
@@ -618,7 +632,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 Func(base.camera.setPosHpr, 105, -280, 20, -158, -3, 0),
                 Func(self.reparentTo, render),
                 Func(self.show),
-                Func(self.clearChat),
+                Func(self.setChatAbsolute, '', CFSpeech),
                 Func(self.setPosHpr, *ToontownGlobals.CashbotBossBattleThreePosHpr),
                 ActorInterval(self, 'Fb_firstHit'),
                 ActorInterval(self, 'Fb_down2Up'))),
@@ -648,13 +662,47 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 Func(self.pose, 'Ff_neutral', 0))))
         return bossTrack
 
+    def enterRollToBattleTwo(self):
+        self.notify.debug('----- enterRollToBattleTwo')
+        self.releaseToons(finalBattle=1)
+        self.stashBoss()
+        self.toonsToBattlePosition(self.involvedToons, self.battleANode)
+        self.stickBossToFloor()
+        intervalName = 'RollToBattleTwo'
+        seq = Sequence(self.__makeRollToBattleTwoMovie(), Func(self.__onToPrepareBattleTwo), name=intervalName)
+        seq.start()
+        self.storeInterval(seq, intervalName)
+        base.playMusic(self.betweenBattleMusic, looping=1, volume=0.9)
+        taskMgr.doMethodLater(0.01, self.unstashBoss, 'unstashBoss')
+
+    def __clickedNameTag(self, avatar):
+        self.notify.debug('__clickedNameTag')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
+
+    def __handleFriendAvatar(self, avId, avName, avDisableName):
+        self.notify.debug('__handleFriendAvatar')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleFriendAvatar(place, avId, avName, avDisableName)
+
+    def __handleAvatarDetails(self, avId, avName, playerId = None):
+        self.notify.debug('__handleAvatarDetails')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleAvatarDetails(place, avId, avName, playerId)
+
     def grabObject(self, obj):
         obj.wrtReparentTo(self.neck)
         obj.hideShadows()
         obj.stashCollisions()
         if obj.lerpInterval:
             obj.lerpInterval.finish()
-        obj.lerpInterval = Parallel(obj.posInterval(ToontownGlobals.CashbotBossToMagnetTime, Point3(-1, 0, 0.2)), obj.quatInterval(ToontownGlobals.CashbotBossToMagnetTime, VBase3(0, -90, 90)), Sequence(Wait(ToontownGlobals.CashbotBossToMagnetTime), ShowInterval(self.eyes)), obj.toMagnetSoundInterval)
+        obj.lerpInterval = Parallel(obj.posInterval(ToontownGlobals.CashbotBossToMagnetTime, Point3(-1, 0, 0.2)), obj.quatInterval(ToontownGlobals.CashbotBossToMagnetTime, VBase3(0, -90, 90)), Sequence(Wait(ToontownGlobals.CashbotBossToMagnetTime), ShowInterval(self.eyes), ShowInterval(self.safe2)), obj.toMagnetSoundInterval)
         obj.lerpInterval.start()
         self.heldObject = obj
 
@@ -666,6 +714,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         obj.wrtReparentTo(render)
         obj.setHpr(obj.getH(), 0, 0)
         self.eyes.hide()
+        self.safe2.hide()
         obj.showShadows()
         obj.unstashCollisions()
         self.heldObject = None
@@ -819,6 +868,12 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.evWalls.stash()
         self.midVault.unstash()
         self.__hideResistanceToon()
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
         base.playMusic(self.battleOneMusic, looping=1, volume=0.9)
 
     def exitBattleOne(self):
@@ -857,11 +912,9 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleTwo(self):
         self.reparentTo(render)
         self.evWalls.unstash()
-        self.setPosHpr(*ToontownGlobals.CashbotBossBattleTwoPosHpr)
+        self.setPosHpr(*ToontownGlobals.CashbotBossBattleOnePosHpr)
         self.show()
         self.pelvis.setHpr(self.pelvisReversedHpr)
-        self.toonsToBattlePosition(self.toonsA, self.battleANode)
-        self.toonsToBattlePosition(self.toonsB, self.battleBNode)
         self.doAnimate()
         self.__hideResistanceToon()
         base.playMusic(self.battleTwoMusic, looping=1, volume=0.9)
@@ -887,7 +940,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         seq.start()
         self.storeInterval(seq, intervalName)
         self.__showResistanceToon(False)
-        taskMgr.add(self.__doPhysics, self.uniqueName('physics'), priority=25)
+        taskMgr.add(self.__doPhysics, self.uniqueName('physics'), priority=50)
 
     def __beginBattleThree(self):
         intervalName = 'PrepareBattleThreeMovie'
@@ -1018,6 +1071,46 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.rewardPanel.destroy()
         del self.rewardPanel
         self.battleThreeMusic.stop()
+
+    def setAttackCode(self, attackCode, avId=0):
+        DistributedBossCog.DistributedBossCog.setAttackCode(self, attackCode, avId)
+        if attackCode == ToontownGlobals.BossCogDizzy:
+            self.setDizzy(1)
+            self.cleanupAttacks()
+            self.doAnimate(None, raised=0, happy=1)
+        elif attackCode == ToontownGlobals.BossCogAreaAttack:
+            self.doAnimate('areaAttack', now=1)
+            siren = base.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
+            seq = Sequence(Func(self.setChatAbsolute, 'I told you Toons to get away from those cranes!', CFSpeech),
+                           Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)), Wait(1),
+                           Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)), Wait(1),
+                           Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)))
+            seq.start()
+        elif attackCode == ToontownGlobals.BossCogFrontAttack:
+            self.setDizzy(0)
+            self.doAnimate('frontAttack', now=1)
+        elif attackCode == ToontownGlobals.BossCogRecoverDizzyAttack:
+            self.setDizzy(0)
+            self.doAnimate('frontAttack', now=1)
+
+    def saySomething(self, chatString):
+        intervalName = 'ChiefJusticeTaunt'
+        seq = Sequence(name=intervalName)
+        seq.append(Func(self.setChatAbsolute, chatString, CFSpeech))
+
+    def geomFlashRed(self, geom):
+        self.cleanupGeomFlash()
+        geom.setColorScale(1, 1, 1, 1)
+        i = Sequence(geom.colorScaleInterval(0.1, colorScale=VBase4(1, 0, 0, 1)),
+                     geom.colorScaleInterval(0.3, colorScale=VBase4(1, 1, 1, 1)))
+        self.geomFlashInterval = i
+        i.start()
+
+    def cleanupGeomFlash(self):
+        if self.geomFlashInterval:
+            self.geomFlashInterval.finish()
+            self.geomFlashInterval = None
+        return
 
     def enterEpilogue(self):
         self.cleanupIntervals()

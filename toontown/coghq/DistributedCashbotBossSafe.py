@@ -1,9 +1,11 @@
 from pandac.PandaModules import *
+from panda3d.physics import *
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 from toontown.coghq import DistributedCashbotBossObject
+import copy
 
 class DistributedCashbotBossSafe(DistributedCashbotBossObject.DistributedCashbotBossObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBossSafe')
@@ -22,6 +24,7 @@ class DistributedCashbotBossSafe(DistributedCashbotBossObject.DistributedCashbot
         self.toMagnetSoundInterval = Parallel(SoundInterval(self.flyToMagnetSfx, duration=ToontownGlobals.CashbotBossToMagnetTime, node=self), Sequence(Wait(ToontownGlobals.CashbotBossToMagnetTime - 0.02), SoundInterval(self.hitMagnetSfx, duration=1.0, node=self)))
         self.hitFloorSfx = loader.loadSfx('phase_5/audio/sfx/AA_drop_bigweight_miss.ogg')
         self.hitFloorSoundInterval = SoundInterval(self.hitFloorSfx, node=self)
+        self.name = 'safe'
 
     def announceGenerate(self):
         DistributedCashbotBossObject.DistributedCashbotBossObject.announceGenerate(self)
@@ -88,3 +91,35 @@ class DistributedCashbotBossSafe(DistributedCashbotBossObject.DistributedCashbot
     def exitInitial(self):
         if self.index == 0:
             self.unstash()
+
+    def setupPhysics(self, name):
+        an = ActorNode('%s-%s' % (name, self.doId))
+        an.getPhysicsObject().setOrientation(LOrientationf(0, 0, 0, 1))
+        anp = NodePath(an)
+        if not self.isEmpty():
+            self.reparentTo(anp)
+        # It is important that there be no messenger hooks added on
+        # this object at the time we reassign the NodePath.
+        NodePath.assign(self, anp)
+
+        self.physicsObject = an.getPhysicsObject()
+        # self.copy.physicsObject = an.getPhysicsObject()
+        # print(self.copy.physicsObject.getOrientation())
+        # print(self.copy.physicsObject.getOrientation().getAngle())
+        # self.physicsObject.setOriented(False)
+        self.setTag('object', str(self.doId))
+
+        self.collisionNodePath.reparentTo(self)
+        # self.collisionNodePath.setH(180)
+        self.handler = PhysicsCollisionHandler()
+        # self.copy = copy.copy(self)
+        # print(self.copy)
+        self.handler.addCollider(self.collisionNodePath, self)
+        # Set up a collision event so we know when the object hits the
+        # floor, or the boss's target.
+        self.collideName = self.uniqueName('collide')
+        self.handler.addInPattern(self.collideName + '-%in')
+        self.handler.addAgainPattern(self.collideName + '-%in')
+
+        self.watchDriftName = self.uniqueName('watchDrift')
+        self.startCacheName = self.uniqueName('startSpeedCaching')

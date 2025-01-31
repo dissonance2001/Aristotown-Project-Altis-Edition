@@ -429,15 +429,15 @@ class Movie(DirectObject.DirectObject):
             if ival:
                 track.append(ival)
                 camTrack.append(camIval)
-            ival, camIval = MovieSound.doSounds(self.__findToonAttack(SOUND))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
             ival, camIval = MovieThrow.doThrows(self.__findToonAttack(THROW))
             if ival:
                 track.append(ival)
                 camTrack.append(camIval)
             ival, camIval = MovieSquirt.doSquirts(self.__findToonAttack(SQUIRT))
+            if ival:
+                track.append(ival)
+                camTrack.append(camIval)
+            ival, camIval = MovieSound.doSounds(self.__findToonAttack(SOUND))
             if ival:
                 track.append(ival)
                 camTrack.append(camIval)

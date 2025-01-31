@@ -27,6 +27,8 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         self.waiter = 0
         self.isElite = 0
         self.executive = 0
+        self.cog = 0
+        self.isSkeleton = 0
         self.manager = 0
         self.governaught = 0
         self.dmgMult = 1.0
@@ -242,8 +244,34 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
                                                            , 1.41, 1.42, 1.43, 1.44, 1.45, 1.46, 1.47, 1.48, 1.49,
                                                            1.5)))))
             self.currHP = self.maxHP
-        if self.executive and not self.dna.name == 'jb':
+        if self.dna.name == 'cg' or self.dna.name == 'csh' or self.dna.name == 'fas' or self.dna.name == 'gkp' \
+                or self.dna.name == 'ant':
+            self.maxHP = int((((self.maxHP * random.choice((.90, .91, .92, .93,
+                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1))) * ToontownBattleGlobals.EXECUTIVE_HP_MULT)))
+            self.currHP = self.maxHP
+        if self.executive and not self.dna.name == 'jb' and not self.dna.name == 'cg' and not self.dna.name == 'csh' and not self.dna.name == 'fas' and not self.dna.name == 'gkp' \
+                and not self.dna.name == 'ant':
             self.maxHP = int(self.maxHP * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
+            self.currHP = self.maxHP
+
+    def b_setCog(self, cog):
+        if cog == None:
+            cog = 0
+        self.setCog(cog)
+        self.d_setCog(self.getCog())
+
+    def d_setCog(self, cog):
+        self.sendUpdate('setExecutive', [cog])
+
+    def getCog(self):
+        return self.cog
+
+    def setCog(self, cog):
+        if cog == None:
+            cog = 0
+        self.cog = cog
+        if self.cog:
+            self.maxHP = self.maxHP
             self.currHP = self.maxHP
 
     def b_setGovernaught(self, governaught):
@@ -288,7 +316,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
                                                         .7, .71, .72, .73, .74, .75, .76, .77, .78, .79, .8, .81, .82, .83, .84, .85, .86, .87, .88, .89, .90, .91, .92, .93,
                                            .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16,
                                            1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25, 1.26, 1.27, 1.28, 1.29, 1.3, 1.31, 1.32, 1.33, 1.34, 1.35, 1.36, 1.37, 1.38, 1.39, 1.4
-                                                           , 1.41, 1.42, 1.43, 1.44, 1.45, 1.46, 1.47, 1.48, 1.49, 1.5)))))
+                                                           , 1.41, 1.42, 1.43, 1.44, 1.45, 1.46, 1.47, 1.48, 1.49, 1.5, 1.75)))))
             self.currHP = self.maxHP
 
     def b_setSkeleRevives(self, num):
@@ -318,9 +346,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         self.currHP = self.maxHP
         self.reviveFlag = 1
         self.setDamageMultiplier(self.getDamageMultiplier() * 1.5)
-        self.b_setMaxHP(int(self.maxHP * random.choice((.3, .31, .32, .33, .34, .35, .36, .37, .38, .39, .4, .41, .42, .43, .44, .45, .46, .47, .48, .49, .5, .51,
-                                                        .52, .53, .54, .55, .56, .57, .58, .59, .6, .61, .62, .63, .64, .65, .66, .67, .68, .69,
-                                                        .7))))
+        self.setMaxHP(int(self.maxHP * .5))
 
     def reviveCheckAndClear(self):
         returnValue = 0
@@ -333,7 +359,11 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         return self.currHP
 
     def setHP(self, hp):
-        self.currHP = hp
+        if hp > self.maxHP * self.hardMaxHP:
+            self.currHP = self.maxHP * self.hardMaxHP
+        else:
+            self.currHP = hp
+        return None
 
     def b_setHP(self, hp):
         self.setHP(hp)
@@ -378,14 +408,44 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         pass
 
     def b_setSkelecog(self, flag):
+        if flag == None:
+            flag = 0
+        self.isSkeleton(flag)
         self.setSkelecog(flag)
         self.d_setSkelecog(flag)
 
     def setSkelecog(self, flag):
+        if flag == None:
+            flag = 0
+        self.isSkeleton = flag
         SuitBase.SuitBase.setSkelecog(self, flag)
-        self.maxHP = int(self.maxHP * random.choice((.7, .71, .72, .73, .74, .75, .76, .77, .78, .79, .8, .81, .82, .83, .84, .85, .86, .87, .88, .89, .90, .91, .92, .93,
-                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16,
-                                           1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25, 1.26, 1.27, 1.28, 1.29, 1.3)))
+        if self.isSkeleton:
+            self.maxHP = int(((self.maxHP * random.choice((.90, .91, .92, .93,
+                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1)))))
+            self.currHP = self.maxHP
+
+    def b_setSkeleton(self, isSkeleton):
+        if isSkeleton == None:
+            isSkeleton = 0
+        self.isSkeleton(isSkeleton)
+        self.d_setSkeleton(self.getSkeleton())
+
+    def d_setSkeleton(self, isSkeleton):
+        self.sendUpdate('setisSkeleton', [isSkeleton])
+
+    def getSkeleton(self):
+        return self.isSkeleton
+
+    def setSkeleton(self, isSkeleton):
+        if isSkeleton == None:
+            isSkeleton = 0
+        self.isSkeleton = isSkeleton
+        if self.isSkeleton:
+            self.maxHP = int(((self.maxHP * random.choice((.90, .91, .92,
+                                                           .93,
+                                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04,
+                                                           1.05, 1.06, 1.07, 1.08, 1.09, 1.1)))))
+            self.currHP = self.maxHP
 
     def d_setSkelecog(self, flag):
         self.sendUpdate('setSkelecog', [flag])

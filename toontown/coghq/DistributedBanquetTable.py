@@ -28,7 +28,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
      180]
     pitcherMinH = -360
     pitcherMaxH = 360
-    rotateSpeed = 30
+    rotateSpeed = 50
     waterPowerSpeed = base.config.GetDouble('water-power-speed', 15)
     waterPowerExponent = base.config.GetDouble('water-power-exponent', 3)
     useNewAnimations = True
@@ -895,20 +895,20 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
             if self.TugOfWarControls:
                 damage = 1
                 if self.lastPowerFired < self.YELLOW_POWER_THRESHOLD:
-                    damage = 1
-                elif self.lastPowerFired < self.RED_POWER_THRESHOLD:
-                    damage = 2
-                else:
                     damage = 3
+                elif self.lastPowerFired < self.RED_POWER_THRESHOLD:
+                    damage = 6
+                else:
+                    damage = 9
                 self.boss.d_hitBoss(damage)
             else:
                 damage = 1
                 if self.lastPowerFired < self.YELLOW_POWER_THRESHOLD:
-                    damage = 1
-                elif self.lastPowerFired < self.RED_POWER_THRESHOLD:
-                    damage = 2
-                else:
                     damage = 3
+                elif self.lastPowerFired < self.RED_POWER_THRESHOLD:
+                    damage = 6
+                else:
+                    damage = 9
                 self.boss.d_hitBoss(damage)
 
     def waterHitBoss(self, tableIndex):

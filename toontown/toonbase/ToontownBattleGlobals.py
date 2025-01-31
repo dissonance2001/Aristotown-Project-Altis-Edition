@@ -5,12 +5,13 @@ MAX_TOON_CAPACITY = 4
 MAX_SUIT_CAPACITY = 6
 BattleCamFaceOffFov = 40.0
 BattleCamFaceOffPos = Point3(0, -10, 4)
-BattleCamDefaultPos1 = Point3(0, -6.6, 16.5)
+BattleCamDefaultPos1 = Point3(0, -8.6, 18.5)
 BattleCamDefaultHpr1 = Vec3(0, 0, 0)
-BattleCamDefaultPos2 = Point3(0, -7.1, 20.5)
+BattleCamDefaultPos2 = Point3(0, -9.1, 22)
 BattleCamDefaultHpr2 = Vec3(0, -61, 0)
-BattleCamDefaultFov = 100.0
-BattleCamMenuFov = 70.0
+BattleCamDefaultFov = 100
+BattleCamMenuFov = 65.0
+BattleCamMenuFov2 = 85.0
 BattleCamJoinPos = Point3(0, -12, 13)
 BattleCamJoinHpr = Vec3(0, -45, 0)
 SkipMovie = 0
@@ -20,18 +21,18 @@ NPCTracks = TTLocalizer.BattleGlobalNPCTracks
 TrackColors = ((211 / 255.0, 148 / 255.0, 255 / 255.0),
  (255 / 255.0, 0 / 255.0, 0 / 255.0),
  (79 / 255.0, 190 / 255.0, 76 / 255.0),
- (93 / 255.0, 108 / 255.0, 239 / 255.0),
  (255 / 255.0, 145 / 255.0, 66 / 255.0),
  (255 / 255.0, 65 / 255.0, 199 / 255.0),
  (254 / 255.0, 255 / 255.0, 0 / 255.0),
+  (93 / 255.0, 108 / 255.0, 239 / 255.0),
  (67 / 255.0, 243 / 255.0, 255 / 255.0))
 HEAL_TRACK = 0
 TRAP_TRACK = 1
 LURE_TRACK = 2
-SOUND_TRACK = 3
-THROW_TRACK = 4
-SQUIRT_TRACK = 5
-ZAP_TRACK = 6
+THROW_TRACK = 3
+SQUIRT_TRACK = 4
+ZAP_TRACK = 5
+SOUND_TRACK = 6
 DROP_TRACK = 7
 NPC_RESTOCK_GAGS = 8
 NPC_TOONS_HIT = 9
@@ -99,16 +100,6 @@ CarryLimits = (
   ( # Trap
       (10, 0, 0, 0, 0, 0, 0, 0),
       (10, 5, 0, 0, 0, 0, 0, 0),
-      (15, 10, 0, 0, 0, 0, 0, 0),
-      (20, 15, 0, 5, 0, 0, 0, 0),
-      (25, 20, 0, 10, 3, 0, 0, 0),
-      (30, 25, 0, 15, 7, 3, 0, 0),
-(30, 25, 0, 15, 7, 3, 2, 1),
-      (30, 25, 0, 15, 7, 3, 2, 1)
-  ),
-  ( # Lure
-      (10, 0, 0, 0, 0, 0, 0, 0),
-      (10, 5, 0, 0, 0, 0, 0, 0),
       (15, 10, 5, 0, 0, 0, 0, 0),
       (20, 15, 10, 5, 0, 0, 0, 0),
       (25, 20, 15, 10, 3, 0, 0, 0),
@@ -116,7 +107,7 @@ CarryLimits = (
 (30, 25, 20, 15, 7, 3, 2, 1),
       (30, 25, 20, 15, 7, 3, 2, 1)
   ),
-  ( # Sound
+  ( # Lure
       (10, 0, 0, 0, 0, 0, 0, 0),
       (10, 5, 0, 0, 0, 0, 0, 0),
       (15, 10, 5, 0, 0, 0, 0, 0),
@@ -156,6 +147,16 @@ CarryLimits = (
 (30, 25, 20, 15, 7, 3, 2, 1),
       (30, 25, 20, 15, 7, 3, 2, 1)
   ),
+( # Sound
+      (10, 0, 0, 0, 0, 0, 0, 0),
+      (10, 5, 0, 0, 0, 0, 0, 0),
+      (15, 10, 5, 0, 0, 0, 0, 0),
+      (20, 15, 10, 5, 0, 0, 0, 0),
+      (25, 20, 15, 10, 3, 0, 0, 0),
+      (30, 25, 20, 15, 7, 3, 0, 0),
+(30, 25, 20, 15, 7, 3, 2, 1),
+      (30, 25, 20, 15, 7, 3, 2, 1)
+  ),
   ( # Drop
       (10, 0, 0, 0, 0, 0, 0, 0),
       (10, 5, 0, 0, 0, 0, 0, 0),
@@ -177,15 +178,15 @@ DLF_REVIVES = 32
 DLF_ELITE = 64
 EXECUTIVE_HP_MULT = 1.5
 EXECUTIVE_DMG_MULT = 1.2
-EXECUTIVE_BASE_CHANCE = 40
+EXECUTIVE_BASE_CHANCE = 30
 GOVERNAUGHT_HP_MULT = 1.2
 GOVERNAUGHT_DMG_MULT = 1.5
 GOVERNAUGHT_BASE_CHANCE = 20
-V2_BASE_CHANCE = 50
+V2_BASE_CHANCE = 25
 pieNames = ['cupcake',
  'fruitpie-slice',
  'creampie-slice',
-            'creampie-slice',
+            'birthday-cake-slice',
  'fruitpie',
  'creampie',
  'birthday-cake',
@@ -201,7 +202,7 @@ AvProps = (('feather',
   'baton'),
  ('banana',
   'rake',
-  'quicksand',
+  'spring',
   'marbles',
   'quicksand',
   'trapdoor',
@@ -215,14 +216,6 @@ AvProps = (('feather',
   'hypnogogs',
   '50dollar',
   'hypnogogs'),
- (  'kazoo',
-    'bikehorn',
-  'whistle',
-  'bugle',
-  'aoogah',
-  'elephant',
-  'foghorn',
-  'singing'),
  ('cupcake',
   'fruitpieslice',
   'creampieslice',
@@ -247,6 +240,14 @@ AvProps = (('feather',
   'stormcloud',
   'stormcloud',
   'stormcloud'),
+(  'kazoo',
+    'bikehorn',
+  'whistle',
+  'bugle',
+  'aoogah',
+  'elephant',
+  'foghorn',
+  'singing'),
  ('flowerpot',
   'sandbag',
   'bowlingball',
@@ -279,14 +280,6 @@ AvPropsNew = (('inventory_feather',
   'inventory_hypno_goggles',
 'inventory_50dollarbill',
   'inventory_screen'),
- ('inventory_kazoo',
-  'inventory_bikehorn',
-  'inventory_whistle',
-  'inventory_bugle',
-  'inventory_aoogah',
-  'inventory_elephant',
-  'inventory_fog_horn',
-  'inventory_opera_singer'),
  ('inventory_cup_cake',
   'inventory_fruit_pie_slice',
   'inventory_cream_pie_slice',
@@ -307,10 +300,18 @@ AvPropsNew = (('inventory_feather',
   'inventory_rug',
   'inventory_balloon',
   'inventory_cart_battery',
-  'inventory_tazer',
   'inventory_television',
+  'inventory_tazer',
   'inventory_tesla_coil',
   'inventory_lightning'),
+('inventory_kazoo',
+  'inventory_bikehorn',
+  'inventory_whistle',
+  'inventory_bugle',
+  'inventory_aoogah',
+  'inventory_elephant',
+  'inventory_fog_horn',
+  'inventory_opera_singer'),
  ('inventory_flower_pot',
   'inventory_sandbag',
 'inventory_bowlingball',
@@ -346,14 +347,6 @@ AvPropAccuracy = ((70,
   70,
   90,
   90),
- (95,
-  95,
-  95,
-  95,
-  95,
-  95,
-  95,
-  95),
  (75,
   75,
   75,
@@ -378,6 +371,14 @@ AvPropAccuracy = ((70,
   100,
   100,
   100),
+                  (95,
+                   95,
+                   95,
+                   95,
+                   95,
+                   95,
+                   95,
+                   95),
  (80,
   80,
   80,
@@ -403,14 +404,14 @@ AvPropDamage = ((((8, 10), (Levels[0][0], Levels[0][1])),
   ((90, 90), (Levels[0][5], Levels[0][6])),
   ((90, 90), (Levels[0][6], Levels[0][7])),
 ((135, 135), (Levels[0][7], MaxSkill))),
- (((23, 23), (Levels[1][0], Levels[1][1])),
-  ((34, 34), (Levels[1][1], Levels[1][2])),
-  ((54, 54), (Levels[1][2], Levels[1][3])),
-  ((90, 90), (Levels[1][3], Levels[1][4])),
-  ((138, 138), (Levels[1][4], Levels[1][5])),
-  ((192, 192), (Levels[1][5], Levels[1][6])),
-  ((264, 264), (Levels[1][6], Levels[1][7])),
-  ((336, 336), (Levels[1][7], MaxSkill))),
+ (((14, 14), (Levels[1][0], Levels[1][1])),
+  ((28, 28), (Levels[1][1], Levels[1][2])),
+  ((45, 45), (Levels[1][2], Levels[1][3])),
+  ((75, 75), (Levels[1][3], Levels[1][4])),
+  ((115, 115), (Levels[1][4], Levels[1][5])),
+  ((160, 160), (Levels[1][5], Levels[1][6])),
+  ((220, 220), (Levels[1][6], Levels[1][7])),
+  ((280, 280), (Levels[1][7], MaxSkill))),
  (((0, 0), (0, 0)),
   ((0, 0), (0, 0)),
   ((0, 0), (0, 0)),
@@ -419,40 +420,42 @@ AvPropDamage = ((((8, 10), (Levels[0][0], Levels[0][1])),
 ((0, 0), (0, 0)),
   ((0, 0), (0, 0)),
   ((0, 0), (0, 0))),
-                (((5, 5), (Levels[3][0], Levels[3][1])),
-                 ((10, 10), (Levels[3][1], Levels[3][2])),
-                 ((16, 16), (Levels[3][2], Levels[3][3])),
-                 ((21, 21), (Levels[3][3], Levels[3][4])),
-                 ((30, 30), (Levels[3][4], Levels[3][5])),
-                 ((50, 50), (Levels[3][5], Levels[3][6])),
-                 ((70, 70), (Levels[3][6], Levels[3][7])),
-                 ((90, 90), (Levels[3][7], MaxSkill))),
- (((8, 8), (Levels[4][0], Levels[4][1])),
-  ((13, 13), (Levels[4][1], Levels[4][2])),
-  ((21, 21), (Levels[4][2], Levels[4][3])),
-  ((35, 35), (Levels[4][3], Levels[4][4])),
-  ((56, 56), (Levels[4][4], Levels[4][5])),
-  ((90, 90), (Levels[4][5], Levels[4][6])),
-  ((130, 130), (Levels[4][6], Levels[4][7])),
-  ((170, 170), (Levels[4][7], MaxSkill))),
-                (((4, 4), (Levels[5][0], Levels[5][1])),
-                 ((8, 8), (Levels[5][1], Levels[5][2])),
-                 ((16, 16), (Levels[5][2], Levels[5][3])),
-                 ((21, 21), (Levels[5][3], Levels[5][4])),
-                 ((30, 30), (Levels[5][4], Levels[5][5])),
-                 ((60, 60), (Levels[5][5], Levels[5][6])),
-                 ((90, 90), (Levels[5][6], Levels[5][7])),
-                 ((120, 120), (Levels[5][7], MaxSkill))),
+ (((8, 8), (Levels[3][0], Levels[3][1])),
+  ((13, 13), (Levels[3][1], Levels[3][2])),
+  ((21, 21), (Levels[3][2], Levels[3][3])),
+  ((35, 35), (Levels[3][3], Levels[3][4])),
+  ((56, 56), (Levels[3][4], Levels[3][5])),
+  ((90, 90), (Levels[3][5], Levels[3][6])),
+  ((130, 130), (Levels[3][6], Levels[3][7])),
+  ((170, 170), (Levels[3][7], MaxSkill))),
+                (((4, 4), (Levels[4][0], Levels[4][1])),
+                 ((8, 8), (Levels[4][1], Levels[4][2])),
+                 ((16, 16), (Levels[4][2], Levels[4][3])),
+                 ((21, 21), (Levels[4][3], Levels[4][4])),
+                 ((30, 30), (Levels[4][4], Levels[4][5])),
+                 ((60, 60), (Levels[4][5], Levels[4][6])),
+                 ((90, 90), (Levels[4][6], Levels[4][7])),
+                 ((120, 120), (Levels[4][7], MaxSkill))),
  ( # Zap
-  ((4, 4), (Levels[6][0], Levels[6][1])),
-  ((6, 6), (Levels[6][1], Levels[6][2])),
-  ((10, 10), (Levels[6][2], Levels[6][3])),
-  ((12, 12), (Levels[6][3], Levels[6][4])),
-  ((34, 34), (Levels[6][4], Levels[6][5])),
-  ((40, 40), (Levels[6][5], Levels[6][6])),
-  ((66, 66), (Levels[6][6], Levels[6][7])),
-  ((80, 80), (Levels[6][7], MaxSkill))),
-                (((12, 12), (Levels[6][0], Levels[6][1])),
+  ((12, 12), (Levels[5][0], Levels[5][1])),
+  ((20, 20), (Levels[5][1], Levels[5][2])),
+  ((36, 36), (Levels[5][2], Levels[5][3])),
+  ((60, 60), (Levels[5][3], Levels[5][4])),
+  ((90, 90), (Levels[5][4], Levels[5][5])),
+  ((140, 140), (Levels[5][5], Levels[5][6])),
+  ((190, 190), (Levels[5][6], Levels[5][7])),
+  ((240, 240), (Levels[5][7], MaxSkill))),
+(((5, 5), (Levels[3][0], Levels[3][1])),
+                 ((10, 10), (Levels[6][1], Levels[6][2])),
+                 ((16, 16), (Levels[6][2], Levels[6][3])),
+                 ((21, 21), (Levels[6][3], Levels[6][4])),
+                 ((30, 30), (Levels[6][4], Levels[6][5])),
+                 ((50, 50), (Levels[6][5], Levels[6][6])),
+                 ((70, 70), (Levels[6][6], Levels[6][7])),
+                 ((90, 90), (Levels[6][7], MaxSkill))),
+                # Drop
+                (
+                    ((12, 12), (Levels[6][0], Levels[6][1])),
                  ((20, 20), (Levels[6][1], Levels[6][2])),
                  ((35, 35), (Levels[6][2], Levels[6][3])),
                  ((56, 56), (Levels[6][3], Levels[6][4])),
@@ -478,14 +481,6 @@ AvPropTargetCat = ((ATK_SINGLE_TARGET,
 ATK_SINGLE_TARGET,
   ATK_SINGLE_TARGET,
   ATK_SINGLE_TARGET),
- (ATK_GROUP_TARGET,
-  ATK_GROUP_TARGET,
-  ATK_GROUP_TARGET,
-  ATK_GROUP_TARGET,
-  ATK_GROUP_TARGET,
-  ATK_GROUP_TARGET,
-  ATK_GROUP_TARGET,
-  ATK_GROUP_TARGET),
  (ATK_SINGLE_TARGET,
   ATK_SINGLE_TARGET,
   ATK_SINGLE_TARGET,
@@ -493,7 +488,16 @@ ATK_SINGLE_TARGET,
   ATK_SINGLE_TARGET,
 ATK_SINGLE_TARGET,
   ATK_SINGLE_TARGET,
-  ATK_SINGLE_TARGET))
+  ATK_SINGLE_TARGET),
+                   (ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET),
+                   )
 LURE_KNOCKBACK_VALUE = 1
 AvLureKnockback = (1.3,
  1,
@@ -525,6 +529,7 @@ AvZapJumps = ((3, 2.25, 1.5),
               (3, 2.75, 2.5))
 InstaKillChance = [2, 3, 5, 8, 10, 15, 20, 20]
 DropMissChance = [40, 40, 40, 40, 40, 40, 40, 40]
+LureMissChance = [15, 10, 15, 10, 15, 10, 15, 20]
 AvSoakRounds = (2, 2, 3, 3, 4, 4, 5, 5)
 AvMarkRounds = (1, 1, 1, 1, 1, 1, 1, 1)
 AvDazeRounds = (2, 2, 2, 2, 2, 2, 2, 2)
@@ -541,7 +546,10 @@ def getTrapDamage(trapLevel, toon, suit = None, executive = None):
     if suit:
         executive = suit.getExecutive() or suit.getGovernaught()
     damage = getAvPropDamage(TRAP_TRACK, trapLevel, toon.experience.getExp(TRAP_TRACK))
-    if executive:
+    organicBonus = toon.checkGagBonus(TRAP_TRACK, trapLevel)
+    if executive and organicBonus:
+        damage += math.ceil((damage * TRAP_EXECUTIVE_BONUS) + 1)
+    elif executive:
         damage += math.ceil(damage * TRAP_EXECUTIVE_BONUS)
     return int(damage)
 
@@ -555,24 +563,11 @@ def getAvPropDamage(attackTrack, attackLevel, exp, organicBonus = False, propBon
     damage = math.floor((expVal - minE) / expPerHp) + minD
     if damage <= 0:
         damage = minD
-    if propAndOrganicBonusStack:
-        originalDamage = damage
-        if organicBonus:
-            damage += getDamageBonus(originalDamage, attackTrack)
-        if propBonus:
-            damage += getDamageBonus(originalDamage, attackTrack)
-    elif organicBonus or propBonus:
-        damage += getDamageBonus(damage, attackTrack)
     return damage
 
 
 def getDamageBonus(normal, track = 4):
-    if track == THROW_TRACK:
-        bonus = int(normal * 0.1)
-        if bonus < 1 and normal > 0:
-            bonus = 1
-    else:
-        bonus = 0
+    bonus = 0
     return bonus
 
 
@@ -695,7 +690,48 @@ ValidStatusConditions = (
     'dodgy',
     'noUnites',
     'enraged',
+    'encore2',
+    'shielding',
+    'lureImmune',
+    'soakImmune',
+    'damageReduction', #takes 50% less damage
+    'costscalculator', #for when a manager is lured that has fees
+    'insurancecalculator', #for when a manager is supposed to heal but is lured
+    'snappedcalculator', #for when a manager is lured and queues up a damage vulnerability
+    'sanctioncalculator',
+    'bindingscalculator',
+    'soakedcalculator',
+    'soakedcalculator2',
+    'markedcalculator',
+    'markedcalculator2',
+    'bashcalculator',
+    'collectcallfeescalculator',
+'collectcallcalculator',
+    'rotationcalculator',
+    'papercutcalculator',
+    'explodingbillcalculator',
+    'refinementcalculator',
+    'gavelcalculator',
+'bellowcalculator',
+    'bound',
+    'vulnerablecalculator',
+    'HRdamagereduction',
+    'sanctioncalculator2',
+    'absorbingHR',
+    'aceInTheHole',
+    'zapImmune',
+    'dropcalculator',
+    'zapcalculator',
+    'toonupcalculator',
+    'trapcalculator',
+    'kbImmune',
+    'phase3',
+    'syphon',
+    'snapped',
+    'dazed2',
+    'phase2',
     'absorbing',
+    'vulnerable',
 'desperation',
 'absorbing2',
     # modify dodge rate by %
@@ -703,6 +739,7 @@ ValidStatusConditions = (
     'allGagBoost',
     'noGags',
     'healBoost',
+    'insured',
     'noToonUpGags',
     'trapBoost',
     'noTrapGags',
@@ -714,6 +751,7 @@ ValidStatusConditions = (
     'noThrowGags',
     'squirtBoost',
     'nolevel7s',
+    'frozen',
     'nolevel6s',
     'nolevel5s',
     'nolevel8s',

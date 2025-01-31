@@ -28,7 +28,7 @@ class CogdoMazeSuit(MazeSuit, FSM, CogdoMazeSplattable):
         self.hp = data['hp']
         self.type = cogdoSuitType
         self.memos = data['memos']
-        self.deathSuit = self.suit.getLoseActor()
+        self.deathSuit = self.suit
         self.deathSuit.pose('lose', 0)
         BattleParticles.loadParticles()
         self._initSfx()
@@ -172,7 +172,7 @@ class CogdoMazeSlowMinionSuit(CogdoMazeSuit):
 class CogdoMazeFastMinionSuit(CogdoMazeSuit):
 
     def __init__(self, serialNum, maze, randomNumGen, difficulty, startTile = None):
-        CogdoMazeSuit.__init__(self, serialNum, maze, randomNumGen, difficulty, startTile, 'tf', Globals.SuitTypes.FastMinion)
+        CogdoMazeSuit.__init__(self, serialNum, maze, randomNumGen, difficulty, startTile, 'ssm', Globals.SuitTypes.FastMinion)
 
 
 class CogdoMazeBossSuit(CogdoMazeSuit):
@@ -182,7 +182,7 @@ class CogdoMazeBossSuit(CogdoMazeSuit):
     ShakeEventName = 'CogdoMazeSuitShake'
 
     def __init__(self, serialNum, maze, randomNumGen, difficulty, startTile = None):
-        self.bossSuit = 'ms'
+        self.bossSuit = 'mh'
         
         CogdoMazeSuit.__init__(self, serialNum, maze, randomNumGen, difficulty, startTile, self.bossSuit, Globals.SuitTypes.Boss, walkAnimName='stomp')
         self.dropTimer = 0
@@ -223,7 +223,7 @@ class CogdoMazeBossSuit(CogdoMazeSuit):
         CogdoMazeSuit.gameStart(self, gameStartTime)
 
     def startWalkAnim(self):
-        if self.bossSuit != 'ms':
+        if self.bossSuit != 'mh':
             self._walkAnimName = 'walk'
             self.suit.loop(self._walkAnimName)
         else:

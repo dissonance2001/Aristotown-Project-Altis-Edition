@@ -41,10 +41,12 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         self.chairs = None
         self.gavels = None
         self.suits = []
+        self.chasingToon = False
         self.activeSuits = []
         self.reserveSuits = []
         self.cagedToonNpcId = random.choice(NPCToons.npcFriends.keys())
         self.bossMaxDamage = ToontownGlobals.LawbotBossMaxDamage
+        self.maxHP = self.bossMaxDamage
         self.recoverRate = 0
         self.recoverStartTime = 0
         self.bossDamage = ToontownGlobals.LawbotBossInitialDamage
@@ -174,6 +176,8 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         self.sendUpdate('setTaunt', [tauntIndex, extraInfo])
 
     def doNextAttack(self, task):
+        for lawyer in self.lawyers:
+            lawyer.doNextAttack(self)
         if self.attackCode == ToontownGlobals.BossCogDizzyNow:
             attackCode = ToontownGlobals.BossCogRecoverDizzyAttack
         else:
@@ -184,10 +188,13 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
                 ToontownGlobals.BossCogDirectedAttack])
         if attackCode == ToontownGlobals.BossCogAreaAttack:
             self.__doAreaAttack()
+            self.waitForNextAttack(5)
         elif attackCode == ToontownGlobals.BossCogDirectedAttack:
             self.__doDirectedAttack()
+            self.waitForNextAttack(5)
         elif attackCode == ToontownGlobals.BossCogGolfAreaAttack:
             self.__doGolfAreaAttack()
+            self.waitForNextAttack(5)
         else:
             self.b_setAttackCode(attackCode)
 
@@ -200,6 +207,15 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
     def __doDirectedAttack(self):
         toonId = random.choice(self.involvedToons)
         self.b_setAttackCode(ToontownGlobals.BossCogDirectedAttack, toonId)
+
+    def __doChaseAttack(self):
+        toonId = random.choice(self.involvedToons)
+        self.doChaseAttack(toonId)
+        self.b_setAttackCode(ToontownGlobals.BossCogChaseAttack, toonId)
+
+    def doChaseAttack(self, avId):
+        self.chasingToon = True
+        self.b_setAttackCode(ToontownGlobals.BossCogChaseAttack, avId)
 
     def b_setBossDamage(self, bossDamage, recoverRate, recoverStartTime):
         self.d_setBossDamage(bossDamage, recoverRate, recoverStartTime)
@@ -230,7 +246,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         taskName = self.uniqueName('NextStrafe')
         taskMgr.remove(taskName)
 
-    def doNextStrafe(self, task):
+    def doNextStrafe(self):
         if self.attackCode != ToontownGlobals.BossCogDizzyNow:
             side = random.choice([0, 1])
             direction = random.choice([0, 1])
@@ -289,9 +305,14 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
 
     def generateNewReserves(self, battleNumber):
         if battleNumber == 1:
-            cogs = self.invokeReservesPlanner(11, 'lit2')
-            reserveSuits = cogs['reserveSuits']
-            return {'reserveSuits': reserveSuits}
+            if self.battleA:
+                cogs = self.invokeReservesPlanner(11, 'lit2')
+                reserveSuits = cogs['reserveSuits']
+                return {'reserveSuits': reserveSuits}
+            elif self.battleB:
+                cogs = self.invokeReservesPlanner(11, 'lit')
+                reserveSuits = cogs['reserveSuits']
+                return {'reserveSuits': reserveSuits}
         elif battleNumber == 2:
             cogs = self.invokeReservesPlanner(11, 'lit')
             reserveSuits = cogs['reserveSuits']
@@ -475,10 +496,10 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         self.calculateWeightPerToon()
         diffSettings = 4
         self.ammoCount = 99
-        self.numGavels = 6
+        self.numGavels = 13
         if self.numGavels >= len(ToontownGlobals.LawbotBossGavelPosHprs):
             self.numGavels = len(ToontownGlobals.LawbotBossGavelPosHprs)
-        self.numLawyers = 10
+        self.numLawyers = 18
         if self.numLawyers >= len(ToontownGlobals.LawbotBossLawyerPosHprs):
             self.numLawyers = len(ToontownGlobals.LawbotBossLawyerPosHprs)
         self.toonupValue = 10
@@ -779,13 +800,22 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
 
     def __makeLawyers(self):
         self.__resetLawyers()
-        lawCogChoices = ['b',
-         'dt',
-         'ac',
-         'bs',
-         'sd',
-         'le',
-         'bw']
+        lawCogChoices = ['bf',
+                         'b',
+                        'dt',
+                        'ac',
+                        'bs',
+                        'sd',
+                        'le',
+                        'bw',
+                         'brv',
+                         'jur',
+                         'jdg',
+                         'cfp',
+                         'sjg',
+                         'arb',
+                         'sb',
+                         'lsc']
         for i in xrange(self.numLawyers):
             suit = DistributedLawbotBossSuitAI.DistributedLawbotBossSuitAI(self.air, None)
             suit.dna = SuitDNA.SuitDNA()
@@ -906,8 +936,26 @@ def skipCJ():
     if boss.state in ('PrepareBattleThree', 'BattleThree'):
         return "You can't skip this round."
     boss.exitIntroduction()
-    boss.b_setState('PrepareBattleThree')
+    boss.b_setState('RollToBattleTwo')
 
+
+@magicWord(category=CATEGORY_ADMINISTRATOR)
+def skipCJFinal():
+    """
+    Kills the CJ.
+    """
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedLawbotBossAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+    if not boss:
+        return "You aren't in a CJ"
+    boss.exitIntroduction()
+    boss.b_setState('PrepareBattleThree')
+    return 'Skipped to CJ Final.'
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
 def killCJ():

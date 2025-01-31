@@ -351,7 +351,7 @@ class LaffMeter(DirectFrame):
             if not quietly:
                 self.animatedEffect(delta)
 
-            if (float(self.hp) / float(self.maxHp)) <= 0.25:
+            if (float(self.hp) / float(self.maxHp)) <= 0.166666:
                 self.startFlash()
 
     def start(self):

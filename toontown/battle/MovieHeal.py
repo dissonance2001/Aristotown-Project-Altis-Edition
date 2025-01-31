@@ -51,7 +51,7 @@ def __doHealLevel(heal, hasInteractivePropHealBonus):
     elif level == 5:
         return __healJuggle(heal, hasInteractivePropHealBonus)
     elif level == 6:
-        return __healSprinkle(heal, hasInteractivePropHealBonus)
+        return __healCannon(heal, hasInteractivePropHealBonus)
     elif level == 7:
         return __healDive(heal, hasInteractivePropHealBonus)
     return None
@@ -126,6 +126,9 @@ def __getSoundTrack(level, delay, duration = None, node = None):
         soundIntervals.append(playSound)
     return soundIntervals
 
+def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
+    return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
+
 
 def __healTickle(heal, hasInteractivePropHealBonus):
     toon = heal['toon']
@@ -164,8 +167,67 @@ def __healTickle(heal, hasInteractivePropHealBonus):
     track.append(mtrack)
     track.append(Func(MovieUtil.removeProps, feathers))
     track.append(__returnToBase(heal))
-    track.append(Func(target.clearChat))
+    target.setChatAbsolute('', CFSpeech | CFTimeout)
     return track
+
+def __healCannon(heal, hasInteractivePropHealBonus):
+    npcId = 0
+    if 'npcId' in heal:
+        npcId = heal['npcId']
+        toon = NPCToons.createLocalNPC(npcId)
+        if toon == None:
+            return
+    else:
+        toon = heal['toon']
+    toon = heal['toon']
+    target = heal['target']['toon']
+    ineffective = heal['sidestep']
+    level = heal['level']
+    track = Sequence(Wait(0.5))
+    delay = 4.25
+    first = 1
+    targetTrack = Sequence()
+    hp = heal['target']['hp']
+    reactIval = Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus)
+    if first == 1:
+        targetTrack.append(Wait(delay))
+        first = 0
+    targetTrack.append(Parallel(reactIval, ActorInterval(target, 'conked')))
+    button = globalPropPool.getProp('heal-button')
+    button2 = MovieUtil.copyProp(button)
+    buttons = [button, button2]
+    hands = toon.getLeftHands()
+    track.append(Func(MovieUtil.showProps, buttons, hands))
+    track.append(ActorInterval(toon, 'pushbutton'))
+    track.append(Func(MovieUtil.removeProps, buttons))
+    track.append(Func(toon.loop, 'neutral'))
+    cubes = globalPropPool.getProp('cannon')
+    cubes.setPos(Point3(0, MovieUtil.SUIT_TRAP_RAKE_DISTANCE, 0))
+    cubes2 = globalPropPool.getProp('cannon2')
+    cubes2.setPos(Point3(0, MovieUtil.SUIT_TRAP_RAKE_DISTANCE, 0))
+    cubes3 = globalPropPool.getProp('cannon3')
+    cubes3.setPos(Point3(0, MovieUtil.SUIT_TRAP_RAKE_DISTANCE, 0))
+    ladderOffset = Point3(0, 4, 0)
+    ladderPos = render.getRelativePoint(target, ladderOffset)
+    #hips = [toon.getLOD(toon.getLODNames()[0]).find('**/joint_hips'), toon.getLOD(toon.getLODNames()[1]).find('**/joint_hips')]
+    cubeTrack = Sequence(Func(MovieUtil.showProp, cubes, target), ActorInterval(cubes, 'cannon'), Func(MovieUtil.removeProp, cubes),
+                         Func(MovieUtil.showProp, cubes2, target), ActorInterval(cubes2, 'cannon2'), Func(MovieUtil.removeProp, cubes2))
+    cubeTrack2 = Sequence(Func(MovieUtil.showProp, cubes, target), ActorInterval(cubes, 'cannon'), Func(MovieUtil.removeProp, cubes),
+                         Func(MovieUtil.showProp, cubes3, target), ActorInterval(cubes3, 'cannon3'), Func(MovieUtil.removeProp, cubes3))
+    mtrack = Parallel(cubeTrack, Sequence(getSoundTrack('MG_cannon_growth.ogg', node=toon),
+                                          getSoundTrack('MG_cannon_adjust.ogg', node=toon),
+                                          getSoundTrack('MG_cannon_confetti.ogg', node=toon)), targetTrack)
+    mtrack2 = Parallel(cubeTrack2, Sequence(getSoundTrack('MG_cannon_growth.ogg', node=toon),
+                                            getSoundTrack('MG_cannon_adjust.ogg', node=toon),
+                                            getSoundTrack('MG_cannon_fail.ogg', node=toon)), targetTrack)
+
+    target.setChatAbsolute('', CFSpeech | CFTimeout)
+    track.append(Wait(2.0))
+    maxDam = AvPropDamage[0][1][0][1]
+    if hp >= maxDam - 1:
+        return Parallel(track, mtrack)
+    else:
+        return Parallel(track, mtrack2)
 
 
 def __healJoke(heal, hasInteractivePropHealBonus):
@@ -215,7 +277,7 @@ def __healJoke(heal, hasInteractivePropHealBonus):
     reactTrack.append(Wait(dTargetLaugh))
     for target in targets:
         targetToon = target['toon']
-        reactTrack.append(Func(targetToon.clearChat))
+        targetToon.setChatAbsolute('', CFSpeech | CFTimeout)
 
     tracks.append(reactTrack)
     if npcId != 0:
@@ -255,7 +317,7 @@ def __healSmooch(heal, hasInteractivePropHealBonus):
     delay = tThrow + dThrow
     mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(level, 2, node=toon), Sequence(ActorInterval(toon, 'smooch'), *__returnToBase(heal)), Sequence(Wait(delay), ActorInterval(target, 'conked')), Sequence(Wait(delay), Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus)))
     track.append(mtrack)
-    track.append(Func(target.clearChat))
+    target.setChatAbsolute('', CFSpeech | CFTimeout)
     return track
 
 
@@ -307,7 +369,7 @@ def __healDance(heal, hasInteractivePropHealBonus):
         track.append(__returnToBase(heal))
     for target in targets:
         targetToon = target['toon']
-        track.append(Func(targetToon.clearChat))
+        targetToon.setChatAbsolute('', CFSpeech | CFTimeout)
 
     return track
 
@@ -338,7 +400,7 @@ def __healSprinkle(heal, hasInteractivePropHealBonus):
     mtrack = Parallel(__getPartTrack(sprayEffect, 1.5, 0.5, [sprayEffect, toon, 0]), __getPartTrack(dropEffect, 1.9, 2.0, [dropEffect, target, 0]), __getPartTrack(explodeEffect, 2.7, 1.0, [explodeEffect, toon, 0]), __getPartTrack(poofEffect, 3.4, 1.0, [poofEffect, target, 0]), __getPartTrack(wallEffect, 4.05, 1.2, [wallEffect, toon, 0]), __getSoundTrack(level, 2, duration=4.1, node=toon), Sequence(Func(face90), ActorInterval(toon, 'sprinkle-dust')), Sequence(Wait(delay), Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus)))
     track.append(mtrack)
     track.append(__returnToBase(heal))
-    track.append(Func(target.clearChat))
+    target.setChatAbsolute('', CFSpeech | CFTimeout)
     return track
 
 
@@ -383,7 +445,7 @@ def __healJuggle(heal, hasInteractivePropHealBonus):
         track.append(__returnToBase(heal))
     for target in targets:
         targetToon = target['toon']
-        track.append(Func(targetToon.clearChat))
+        targetToon.setChatAbsolute('', CFSpeech | CFTimeout)
 
     return track
 
@@ -468,7 +530,7 @@ def __healDive(heal, hasInteractivePropHealBonus):
         track.append(__returnToBase(heal))
     for target in targets:
         targetToon = target['toon']
-        track.append(Func(targetToon.clearChat))
+        targetToon.setChatAbsolute('', CFSpeech | CFTimeout)
 
     return track
 

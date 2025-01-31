@@ -19,9 +19,8 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
         self.dinerInfo = {}
         for i in xrange(self.numDiners):
             self.dinerStatus[i] = self.INACTIVE
-            diffSettings = ToontownGlobals.BossbotBossDifficultySettings[self.boss.battleDifficulty]
-            hungryDuration = diffSettings[4]
-            eatingDuration = diffSettings[5]
+            hungryDuration = 25
+            eatingDuration = 30
             hungryDuration += random.uniform(-5, 5)
             eatingDuration += random.uniform(-5, 5)
             level = 12

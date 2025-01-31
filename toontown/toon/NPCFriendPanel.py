@@ -189,6 +189,22 @@ class NPCFriendCard(DirectFrame):
             if track == ToontownBattleGlobals.NPC_DAMAGE_BOOST:
                 if level == 8:
                     sosText += ' All'
+                elif level == 7:
+                    sosText += ' Drop'
+                elif level == 6:
+                    sosText += ' Sound'
+                elif level == 5:
+                    sosText += ' Zap'
+                elif level == 4:
+                    sosText += ' Squirt'
+                elif level == 3:
+                    sosText += ' Throw'
+                elif level == 2:
+                    sosText += ' Lure'
+                elif level == 1:
+                    sosText += ' Trap'
+                elif level == 0:
+                    sosText += ' Toon-Up'
                 else:
                     sosText += ' ' + self.sosTracks[level]
             sosText = TextEncoder.upper(sosText)

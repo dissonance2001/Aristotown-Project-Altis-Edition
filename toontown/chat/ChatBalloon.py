@@ -1,23 +1,23 @@
 from pandac.PandaModules import *
 
 class ChatBalloon(NodePath):
-    TEXT_X_OFFSET = -0.05
+    TEXT_X_OFFSET = -0.025
     TEXT_Y_OFFSET = -0.05
 
     # Proportion of the Z offset based on the default line height, and the new
     # line height:
-    TEXT_Z_OFFSET = -(2.0/16.5)
+    TEXT_Z_OFFSET = 0.05
 
     TEXT_MIN_WIDTH = 1
     TEXT_MIN_HEIGHT = 1
-    TEXT_GLYPH_SCALE = 1
-    TEXT_GLYPH_SHIFT = -0.05
+    TEXT_GLYPH_SCALE = 0.875
+    TEXT_GLYPH_SHIFT = 0
 
-    BALLOON_X_PADDING = 0.5
-    BALLOON_Z_PADDING = 0.6
+    BALLOON_X_PADDING = 0.475
+    BALLOON_Z_PADDING = 0.675
 
-    BUTTON_SCALE = 5
-    BUTTON_SHIFT = (0, 0.6, 0)
+    BUTTON_SCALE = 4.5
+    BUTTON_SHIFT = (0, 0, 0)
 
     def __init__(self, model, modelWidth, modelHeight, textNode,
                  foreground=VBase4(0, 0, 0, 1), background=VBase4(1, 1, 1, 1),

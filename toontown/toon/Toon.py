@@ -534,6 +534,8 @@ class Toon(Avatar.Avatar, ToonHead):
         self.wake = None
         self.lastWakeTime = 0
         self.forceJumpIdle = False
+        self.headParts = []
+        self.animatedHeadParts = []
         self.numPies = 0
         self.pieType = 0
         self.pieThrowType = ToontownGlobals.PieThrowArc
@@ -2190,7 +2192,7 @@ class Toon(Avatar.Avatar, ToonHead):
         else:
             doClear = self.nametag.getChatText() == SLEEP_STRING
         if doClear:
-            self.clearChat()
+            self.setChatAbsolute('', CFThought)
         self.lerpLookAt(Point3(0, 1, 0), time=0.25)
         self.stop()
 

@@ -198,7 +198,7 @@ class DistributedCashbotBossGoonAI(DistributedGoonAI.DistributedGoonAI, Distribu
             return
         if self.state == 'Dropped' or self.state == 'Grabbed':
             if not self.boss.heldObject:
-                damage = int(impact * 25 * self.scale)
+                damage = int(impact * 25 * self.scale * 0.8)
                 self.boss.recordHit(max(damage, 2))
         self.b_destroyGoon()
 
@@ -217,6 +217,19 @@ class DistributedCashbotBossGoonAI(DistributedGoonAI.DistributedGoonAI, Distribu
 
     def destroyGoon(self):
         self.demand('Off')
+        print("///////////")
+        print(self)
+        print(self.boss.goons)
+        print("///////////")
+        if self in self.boss.goons:
+            self.boss.goons.remove(self)
+
+    def requestWalk(self):
+        avId = self.air.getAvatarIdFromSender()
+        if avId == self.avId and self.state == 'Stunned':
+            craneId, objectId = self.__getCraneAndObject(avId)
+            if craneId != 0 and objectId == self.doId:
+                self.demand('Walk', avId, craneId)
 
     def enterOff(self):
         self.tubeNodePath.stash()

@@ -311,6 +311,7 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         if self.mode == 'suit':
             self.cab = self.elevatorModel.find('**/elevator')
             cogIcons = loader.loadModel('phase_3/models/gui/cog_icons')
+            cogIcons2 = loader.loadModel('phase_3.5/models/gui/cog_icons')
             dept = chr(self.track)
             if dept == 'c':
                 corpIcon = cogIcons.find('**/CorpIcon').copyTo(self.cab)
@@ -323,16 +324,16 @@ class DistributedBuilding(DistributedObject.DistributedObject):
             elif dept == 'g':
                 corpIcon = cogIcons.find('**/BoardIcon').copyTo(self.cab)
             elif dept == 't':
-                corpIcon = cogIcons.find('**/cog').copyTo(self.cab)
+                corpIcon = cogIcons2.find('**/emblem_board').copyTo(self.cab)
             corpIcon.setPos(0, 6.79, 6.8)
             corpIcon.setScale(3)
             from toontown.suit import Suit
             corpIcon.setColor(Suit.Suit.medallionColors[dept])
             cogIcons.removeNode()
-        self.leftDoor = self.elevatorModel.find('**/left-door')
+        self.leftDoor = self.elevatorModel.find('**/left_door')
         if self.leftDoor.isEmpty():
             self.leftDoor = self.elevatorModel.find('**/left_door')
-        self.rightDoor = self.elevatorModel.find('**/right-door')
+        self.rightDoor = self.elevatorModel.find('**/right_door')
         if self.rightDoor.isEmpty():
             self.rightDoor = self.elevatorModel.find('**/right_door')
         self.suitDoorOrigin = newNP.find('**/*_door_origin')

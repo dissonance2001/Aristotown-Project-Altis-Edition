@@ -216,12 +216,8 @@ class RewardPanel(DirectFrame):
         except:
             zoneId = 0
         if hasattr(base.cr, 'newsManager'):
-            if base.cr.newsManager.getInvading():
-                self.hqBonusLabel['text'] = TTLocalizer.CogInvasionBonus
             if ZoneUtil.isCogHQZone(zoneId):
                 self.hqBonusLabel['text'] = TTLocalizer.CogHQBonus
-            if base.cr.newsManager.getInvading() and ZoneUtil.isCogHQZone(zoneId):
-                self.hqBonusLabel['text'] = TTLocalizer.MegaBonus
         if ZoneUtil.isCogHQZone(zoneId) or self.hqBonusLabel['text'] != '':
             self.hqBonusLabel.show()
             self.growShrink = Sequence(LerpScaleInterval(self.hqBonusLabel, 1, 1.1, 0.9, blendType='easeInOut'), LerpScaleInterval(self.hqBonusLabel, 1, 0.9, 1.1, blendType='easeInOut'))

@@ -93,18 +93,18 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         [ToontownGlobals.PajamaPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 5, 5, 75, 5),
          (7, 8, 9, 10, 11, 12, 13, 14), [], 0],
         [ToontownGlobals.BossbotHQ, 8, 30, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (100, 0, 0, 0, 0, 0),
-         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
         [ToontownGlobals.SellbotHQ, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 15, 20, 15, 15, 15),
-         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
         [ToontownGlobals.SellbotFactoryExt, 8, 70, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 15, 20, 15, 15, 15),
-         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
         [ToontownGlobals.CashbotHQ, 8, 100, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 100, 0, 0, 10),
-         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
         [ToontownGlobals.LawbotHQ, 8, 50, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 100, 0, 0, 0, 10),
-         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0],
+         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
         [19000, 8, 20, 0, 0, 0, 4, (1, 5, 10, 40, 60, 80), (0, 0, 0, 0, 100, 0),
-         (13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25), [], 0]]
-    
+         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0]]
+
     SUIT_HOOD_INFO_ZONE = 0
     SUIT_HOOD_INFO_MIN = 1
     SUIT_HOOD_INFO_MAX = 2
@@ -117,9 +117,10 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     SUIT_HOOD_INFO_LVL = 9
     SUIT_HOOD_INFO_HEIGHTS = 10
     SUIT_HOOD_INFO_ECHANCE = 11
-    MAX_SUIT_TYPES = 10
+    MAX_SUIT_TYPES = 11
     MAX_SUIT_TYPES_HQ = 14
-    HQ_SKELE_CHANCE = 0
+    HQ_SKELE_CHANCE = .25
+    HQ_VIRTUAL_CHANCE = 0
     POP_UPKEEP_DELAY = 10
     POP_ADJUST_DELAY = 300
     PATH_COLLISION_BUFFER = 5
@@ -157,7 +158,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
                     hoodInfo[self.SUIT_HOOD_INFO_BMAX] = int(0.5 + self.CogdoPopFactor * hoodInfo[
                         self.SUIT_HOOD_INFO_BMAX])
-        
+
         self.hoodInfoIdx = -1
         for index in xrange(len(self.SuitHoodInfo)):
             currHoodInfo = self.SuitHoodInfo[index]
@@ -350,6 +351,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             buildingHeight=None, suitLevel=None, suitType=None, suitTrack=None,
             suitName=None, skelecog=None, revives=None, waiter=None, executive=None):
         self.skeleChance = 0
+        self.virtualChance = 0
         self.isElite = False
         startPoint = None
         blockNumber = None
@@ -432,14 +434,17 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             return None
         newSuit.initializePath()
         self.zoneChange(newSuit, None, newSuit.zoneId)
+        newSuit.setCog(1)
         if skelecog:
             newSuit.setSkelecog(skelecog)
-        if self.skeleChance == 1 and not newSuit.getManager() and not newSuit.dna.dept == 'g' and not newSuit.dna.dept == 'l':
+        if self.skeleChance == 1 and not newSuit.getManager():
             newSuit.setSkelecog(1)
         if newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
             newSuit.setManager(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg':
+        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.isSkeleton:
             newSuit.setSkeleRevives(random.choice((1, 2)))
+        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and newSuit.isSkeleton:
+            newSuit.setSkeleRevives(1)
         if newSuit.dna.name == 'cg':
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'jdg':
@@ -751,7 +756,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 if suitName is not None:
                     suitType = SuitDNA.getSuitType(suitName)
                     suitTrack = SuitDNA.getSuitDept(suitName)
-                
+
                 (suitLevel, suitType, suitTrack) = self.pickLevelTypeAndTrack(None, suitType, suitTrack)
 
                 if random.random() < self.CogdoRatio:
@@ -1007,7 +1012,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 toon.b_setBattleId(toonId)
         pos = self.battlePosDict[canonicalZoneId]
         interactivePropTrackBonus = -1
-        
+
         if simbase.config.GetBool('props-buff-battles', True) and self.cellToGagBonusDict.has_key(canonicalZoneId):
             tentativeBonusTrack = self.cellToGagBonusDict[canonicalZoneId]
             trackToHolidayDict = {
@@ -1018,7 +1023,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 holidayId = trackToHolidayDict[tentativeBonusTrack]
                 if simbase.air.holidayManager.isHolidayRunning(holidayId) and simbase.air.holidayManager.getCurPhase(holidayId) >= 1:
                     interactivePropTrackBonus = tentativeBonusTrack
-        
+
         self.battleMgr.newBattle(
             zoneId, zoneId, pos, suit, toonId, self.__battleFinished,
             self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_SMAX],
@@ -1135,12 +1140,14 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             self.isElite = True
         if type is None:
             if ZoneUtil.isCogHQZone(self.zoneId):
-                typeChoices = range(max(level - 15, 7), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
+                typeChoices = range(max(level - 16, 7), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
                 type = random.choice(typeChoices)
                 if random.random() < self.HQ_SKELE_CHANCE:
                     self.skeleChance = 1
+                if random.random() < self.HQ_VIRTUAL_CHANCE:
+                    self.virtualChance = 1
             else:
-                typeChoices = range(max(level - 15, 1), min(level, self.MAX_SUIT_TYPES) + 1)
+                typeChoices = range(max(level - 16, 1), min(level, self.MAX_SUIT_TYPES) + 1)
                 type = random.choice(typeChoices)
 
         if level < type:
@@ -1149,17 +1156,54 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if level > 25:
             pass
         else:
-            level = min(max(level, type), type + 15)
+            if type == 3:
+                level = min(max(level, type), type + 6)
+            elif type == 5:
+                level = min(max(level, type), type + 6)
+            elif type == 7:
+                level = min(max(level, type), type + 8)
+            elif type == 8:
+                level = min(max(level, type), type + 7)
+            elif type == 9:
+                level = min(max(level, type), type + 10)
+            elif type == 10:
+                level = min(max(level, type), type + 9)
+            elif type == 11:
+                level = min(max(level, type), type + 9)
+            elif type == 12:
+                level = min(max(level, type), type + 11)
+            elif type == 13:
+                level = min(max(level, type), type + 11)
+            elif type == 14:
+                level = min(max(level, type), type + 12)
+            else:
+                level = min(max(level, type), type + 4)
         if track is None:
             track = SuitDNA.suitDepts[SuitBattleGlobals.pickFromFreqList(self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_TRACK])]
         self.notify.debug('pickLevelTypeAndTrack: %s %s %s' % (level, type, track))
         return (level, type, track)
-        
+
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
-def spawnCog(name, level, revives = 0, skelecog = 0, waiter = 0):
+def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
+    suitFullName = SuitBattleGlobals.SuitAttributes[name]['name']
     av = spellbook.getInvoker()
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
     pointmap = sp.streetPointList
+    if revives > 2:
+        return "Unable to spawn %s with more than 2 revives."  % suitFullName
+    elif revives > 1 and skelecog >= 1:
+        return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
+    elif name == 'mad' and revives > 0:
+        return "Unable to spawn %s with revives."  % suitFullName
+    elif (name == 'cg' or name == 'jur' or name == 'laa' or name == 'csh' or name == 'bgr' or name == 'tcc' or name == 'fb' or name == 'jl' or name == 'gb' or name == 'lbs' \
+        or name == 'fas' or name == 'mdr' or name == 'gkp' or name == 'ddv' or name == 'ant' or name == 'sya') and revives > 1:
+        return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
+    elif name == 'blr':
+        revives = 1
+    elif name == 'dsk':
+        revives = 1
+    elif name == 'kb':
+        revives = 1
     sp.createNewSuit([], pointmap, suitName=name, suitLevel=level, skelecog=skelecog, revives=revives, waiter=waiter)
-    return "Spawned %s in current zone." % name
+    return "Spawned %s in current zone." % suitFullName

@@ -37,6 +37,11 @@ from toontown.toonbase import ToontownTimer
 
 OneBossCog = None
 
+MIN_CHASE_X = -360
+MAX_CHASE_X = 360
+MIN_CHASE_Y = 360
+MAX_CHASE_Y = 360
+
 
 class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotBoss')
@@ -49,6 +54,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.lawyers = []
         self.lawyerRequest = None
         self.bossDamage = 0
+        self.currHP = self.bossDamage
         self.attackCode = None
         self.attackAvId = 0
         self.recoverRate = 0
@@ -60,6 +66,11 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.insidesBNodePath = None
         self.strafeInterval = None
         self.onscreenMessage = None
+        self.chaseTrack = None
+        self.chaseTime = 0
+
+        # Hacky fix for crashing when we run over a table.
+        self.tableIndex = 15
         self.bossMaxDamage = ToontownGlobals.LawbotBossMaxDamage
         self.elevatorType = ElevatorConstants.ELEVATOR_CJ
         self.gavels = {}
@@ -93,7 +104,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         global OneBossCog
         self.notify.debug('----- announceGenerate')
         DistributedBossCog.DistributedBossCog.announceGenerate(self)
-        self.setName(TTLocalizer.LawbotBossName)
+        self.setName('C. L. O.')
         nameInfo = TTLocalizer.BossCogNameWithDept % {'name': self.name,
          'dept': SuitDNA.getDeptFullname(self.style.dept)}
         self.setDisplayName(nameInfo)
@@ -159,6 +170,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.__cleanupStrafe()
         self.__cleanupJuryBox()
         render.clearTag('pieCode')
+        taskMgr.remove('chaseTask')
         self.targetNodePath.detachNode()
         self.cr.relatedObjectMgr.abortRequest(self.lawyerRequest)
         self.lawyerRequest = None
@@ -244,6 +256,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 if self.recoverRate:
                     taskMgr.add(self.__recoverBossDamage, taskName)
         self.makeScaleReflectDamage()
+        self.updateHealthBar()
 
     def getBossDamage(self):
         self.notify.debug('----- getBossDamage')
@@ -316,6 +329,67 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         track, hpr = self.rollBossToPoint(battlePos, hpr, battlePos, battleHpr, 0)
         self.makeToonsWait()
         return Sequence(chatTrack, bossTrack, Func(self.getGeomNode().setH, 0), name=self.uniqueName('BattleTwoMovie'))
+
+    def doChaseToonAttack(self, avId):
+        def doChase(toon):
+
+            if toon is None:
+                # Toon died or rage quit.
+                self.sendUpdate('finishedChasing', [0, 0])
+                return Task.done
+            if self.chaseTime > 35:
+                # Exceeded time for chasing.
+                self.sendUpdate('finishedChasing', [0, 0])
+                return Task.done
+            if self.dizzy:
+                self.sendUpdate('finishedChasing', [0, 0])
+                return Task.done
+
+            fromPos, fromHpr = self.getPos(), self.getHpr()
+            toPos = toon.getPos()
+
+            # Check if they are out of our bounds.
+            if MIN_CHASE_X > toPos.getX():
+                toPos.setX(MIN_CHASE_X)
+            if toPos.getX() > MAX_CHASE_X:
+                toPos.setX(MAX_CHASE_X)
+            if MIN_CHASE_Y > toPos.getY():
+                toPos.setY(MIN_CHASE_Y)
+            if toPos.getY() > MAX_CHASE_Y:
+                toPos.setY(MAX_CHASE_Y)
+
+            # If we've reached our boundaries, we should stop the task.
+            if MIN_CHASE_X >= fromPos.getX() or MAX_CHASE_X <= fromPos.getX():
+                return Task.done
+            if MIN_CHASE_Y >= fromPos.getY() or MAX_CHASE_Y <= fromPos.getY():
+                return Task.done
+
+            # We don't need flying CEOs.
+            toPos.setZ(fromPos.getZ())
+
+            # Make a temperary node to avoid autistic turning.
+            temp = render.attachNewNode('temp')
+            temp.setPos(self.getPos())
+            temp.setHpr(self.getHpr())
+            temp.lookAt(toon)
+            toHpr = temp.getHpr()
+            toHpr.setX(toHpr.getX() - 180)
+            temp.removeNode()
+
+            chaseTrack, hpr = self.moveBossToPoint(fromPos, fromHpr, toPos, toHpr, False)
+            self.chaseTrack = chaseTrack
+            self.chaseTrack.start()
+            self.storeInterval(self.moveTrack, 'chaseTrack')
+            self.chaseTime += 1
+            return Task.again
+
+        if avId in self.involvedToons:
+            av = self.cr.doId2do.get(avId)
+            if av is not None:
+                self.chaseTime = 0
+                # Hacky fix for crashing when we run over a table.
+                self.tableIndex = 15
+                taskMgr.doMethodLater(0.2, doChase, 'chaseTask', extraArgs=[av])
 
     def toNeutralMode(self):
         if self.cr:
@@ -390,9 +464,12 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('----- loadEnvironment')
         DistributedBossCog.DistributedBossCog.loadEnvironment(self)
         self.geom = loader.loadModel('phase_11/models/lawbotHQ/LawbotCourtroom3')
+        self.geom2 = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoom')
         self.geom.setPos(0, 0, -71.601)
         self.geom.setScale(1)
-        self.elevatorEntrance = self.geom.find('**/elevator_origin')
+        self.geom2.setPos(-2, -90, 0)
+        self.geom2.setScale(1)
+        self.elevatorEntrance = self.geom2.find('**/elevator_origin')
         self.elevatorEntrance.getChildren().detach()
         self.elevatorEntrance.setScale(1)
         elevatorModel = loader.loadModel('phase_11/models/lawbotHQ/LB_Elevator')
@@ -401,11 +478,11 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.promotionMusic = base.loader.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
         self.betweenBattleMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleTwoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_juryBG.ogg')
-        floor = self.geom.find('**/MidVaultFloor1')
+        floor = self.geom2.find('**/floor')
         if floor.isEmpty():
-            floor = self.geom.find('**/CR3_Floor')
+            floor = self.geom2.find('**/floor')
         self.evFloor = self.replaceCollisionPolysWithPlanes(floor)
-        self.evFloor.reparentTo(self.geom)
+        self.evFloor.reparentTo(self.geom2)
         self.evFloor.setName('floor')
         plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, -50)))
         planeNode = CollisionNode('dropPlane')
@@ -413,13 +490,22 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         planeNode.setCollideMask(ToontownGlobals.PieBitmask)
         self.geom.attachNewNode(planeNode)
         self.door3 = self.geom.find('**/SlidingDoor1/')
+        self.door4 = self.geom2.find('**/door_back')
+        self.table = self.geom2.find('**/table')
+        self.paper = self.geom2.find('**/paper')
+        self.gavel1 = self.geom2.find('**/gavel_0')
+        self.gavel2 = self.geom2.find('**/gavel_1')
+        self.collisions = self.geom2.find('**/table_col')
+        self.frontdoors = self.geom2.find('**/g_doors')
+        self.collisionsdoor1 = self.geom2.find('**/entry_R_col')
+        self.collisionsdoor2 = self.geom2.find('**/entry_L_col')
         if self.door3.isEmpty():
             self.door3 = self.geom.find('**/interior/CR3_Door')
         self.mainDoor = self.geom.find('**/Door_1')
         if not self.mainDoor.isEmpty():
-            itemsToHide = ['interior/Door_1']
+            itemsToHide = ['entry_R', 'entry_L']
             for str in itemsToHide:
-                stuffToHide = self.geom.find('**/%s' % str)
+                stuffToHide = self.geom2.find('**/%s' % str)
                 if not stuffToHide.isEmpty():
                     self.notify.debug('found %s' % stuffToHide)
                     stuffToHide.wrtReparentTo(self.mainDoor)
@@ -437,7 +523,8 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 else:
                     self.notify.debug('not found %s' % stuffToHide)
 
-        self.geom.reparentTo(render)
+        #self.geom.reparentTo(render)
+        self.geom2.reparentTo(render)
         self.loadWitnessStand()
         self.loadScale()
         self.scaleNodePath.stash()
@@ -464,6 +551,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def loadPodium(self):
         self.podium = self.geom.find('**/Podium')
+        self.podium.reparentTo(self.geom)
         newZ = self.podium.getZ() - ToontownGlobals.LawbotBossBattleTwoPosHpr[2]
         if not self.debugPositions:
             self.podium.setZ(newZ)
@@ -480,6 +568,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def loadWitnessStand(self):
         self.realWitnessStand = self.geom.find('**/WitnessStand')
+        self.realWitnessStand.reparentTo(self.geom)
         if not self.realWitnessStand.isEmpty():
             pass
         self.reflectedWitnessStand = self.geom.find('**/Witnessstand_Geo_Reflect')
@@ -553,7 +642,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('negBeamLocatorPos = %s' % negBeamLocatorPos)
         self.beamNodePath.setPos(beamLocatorPos)
         self.scaleNodePath.setScale(*ToontownGlobals.LawbotBossInjusticeScale)
-        self.scaleNodePath.wrtReparentTo(self.geom)
+        self.scaleNodePath.wrtReparentTo(self.geom2)
         self.baseHighCol = self.scaleNodePath.find('**/BaseHighCol')
         oldBitMask = self.baseHighCol.getCollideMask()
         newBitMask = oldBitMask & ~ToontownGlobals.PieBitmask
@@ -604,7 +693,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.standNodePath.reparentTo(self.scaleNodePath)
         self.scaleNodePath.setPosHpr(*ToontownGlobals.LawbotBossInjusticePosHpr)
         self.scaleNodePath.setScale(5.0)
-        self.scaleNodePath.wrtReparentTo(self.geom)
+        self.scaleNodePath.wrtReparentTo(self.geom2)
         self.setScaleTilt(startingTilt)
 
     def setScaleTilt(self, tilt):
@@ -649,7 +738,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('----- unloadEnvironment')
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
         self.geom.removeNode()
+        self.geom2.removeNode()
         del self.geom
+        del self.geom2
 
     def __loadMopaths(self):
         self.notify.debug('----- __loadMopaths')
@@ -714,6 +805,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleOnePosHpr)
         self.stopAnimate()
+        self.frontdoors.removeNode()
+        self.collisionsdoor1.removeNode()
+        self.collisionsdoor2.removeNode()
         self.__hideWitnessToon()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
@@ -876,7 +970,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleTwo(self):
         self.notify.debug('----- enterBattleTwo')
         self.cleanupIntervals()
-        self.scaleNodePath.unstash()
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
@@ -892,7 +985,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             self.toonsToBattlePosition(self.toonsA, self.battleANode)
             self.toonsToBattlePosition(self.toonsB, self.battleBNode)
         base.playMusic(self.battleTwoMusic, looping=1, volume=0.9)
-        self.startJuryBoxMoving()
+        #self.startJuryBoxMoving()
 
     def getChairParent(self):
         return self.juryBox
@@ -952,6 +1045,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.setToonsToNeutral(self.involvedToons)
         self.clearChat()
         self.reparentTo(render)
+        self.scaleNodePath.unstash()
         base.playMusic(self.betweenBattleMusic, looping=1, volume=0.9)
         self.__showWitnessToon()
         prepareBattleThreeMovie = self.__makePrepareBattleThreeMovie()
@@ -985,6 +1079,13 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         base.camera.setHpr(0, 0, 0)
         self.clearChat()
         self.witnessToon.clearChat()
+        self.table.removeNode()
+        self.paper.removeNode()
+        self.gavel1.removeNode()
+        self.gavel2.removeNode()
+        self.collisions.removeNode()
+        self.generateHealthBar()
+        self.updateHealthBar()
         self.reparentTo(render)
         self.happy = 1
         self.raised = 1
@@ -1075,6 +1176,8 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('----- enterVictory')
         self.cleanupIntervals()
         self.reparentTo(render)
+        self.door4.removeNode()
+        base.camera.setPosHpr(0, 200, 8, 0, 0, 0)
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleThreePosHpr)
         self.loop('neutral')
         localAvatar.setCameraFov(ToontownGlobals.BossBattleCameraFov)
@@ -1427,7 +1530,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             (12, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro2, CFSpeech)),
             (18, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro3, CFSpeech)),
             (22, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro4, CFSpeech)),
-            (5.5, Func(self.setChatAbsolute, '', CFSpeech)),
             (24, Sequence(
                 Func(self.clearChat),
                 self.loseCogSuits(self.toonsA + self.toonsB, render, (-2.798, -70, 10, 180, 0, 0)))),
@@ -1601,7 +1703,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         dropSfx = base.loadSfx('phase_5/audio/sfx/AA_drop_safe_miss.ogg')
         myFromPos = Point3(ToontownGlobals.LawbotBossBattleThreePosHpr[0], ToontownGlobals.LawbotBossBattleThreePosHpr[1], ToontownGlobals.LawbotBossBattleThreePosHpr[2])
         paperwork.setPos(myFromPos)
-        myToPos = Point3(myFromPos[0], myFromPos[1] + 30, myFromPos[2])
+        myToPos = Point3(myFromPos[0], myFromPos[1] + 60, myFromPos[2])
         paperPosStart = Point3(myFromPos[0], myFromPos[1] + 30, myFromPos[2]+30)
         paperToPos = Point3(myFromPos[0], myFromPos[1] + 36, myFromPos[2])
         rollThroughDoor = self.rollBossToPoint(fromPos=myFromPos, fromHpr=None, toPos=myToPos, toHpr=None, reverse=0)
@@ -1617,7 +1719,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             (0.5, Sequence(
                 Func(self.clearChat),
                 Func(base.camera.reparentTo, render),
-                Func(base.camera.setPos, -3, 45, 25),
+                Func(base.camera.setPos, -3, 175, 15),
                 Func(base.camera.setHpr, 0, 10, 0))),
             (1.0, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins1, CFSpeech)),
             (5.5, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins2, CFSpeech)),
@@ -1635,7 +1737,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                        SoundInterval(dropSfx),
                        Func(self.stash)),
                        Func(paperwork.detachNode))))),
-            (5.5, Func(self.setChatAbsolute, '', CFSpeech)),
             (17, Sequence(self.door3.posInterval(1, doorStartPos))))
         retTrack = Parallel(bossTrack, ActorInterval(self, 'Ff_speech', loop=1))
         return bossTrack
@@ -1755,7 +1856,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('done with positionToons')
 
     def __makePrepareBattleTwoMovie(self):
-        chatString = TTLocalizer.WitnessToonPrepareBattleTwo % ToontownGlobals.LawbotBossJurorsForBalancedScale
+        chatString = TTLocalizer.WitnessToonPrepareBattleTwo
         movie = Sequence(Func(base.camera.reparentTo, self.witnessToon), Func(base.camera.setPos, 0, 8, 2), Func(base.camera.setHpr, 180, 10, 0), Func(self.witnessToon.setLocalPageChat, chatString, 0))
         return movie
 

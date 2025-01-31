@@ -304,7 +304,7 @@ class QuestMap(DirectFrame):
                 self.hqPosInfo = QuestMapGlobals.HQPosTable.get('%s_%s_english' % (ToontownGlobals.dnaMap[hoodId], zoneId))
                 self.fishingSpotInfo = QuestMapGlobals.FishingSpotPosTable.get('%s_%s_english' % (ToontownGlobals.dnaMap[hoodId], zoneId))
                 self.cogInfoPos = QuestMapGlobals.CogInfoPosTable.get('%s_%s_english' % (ToontownGlobals.dnaMap[hoodId], zoneId))
-                self.cogInfoFrame.setPos(self.cogInfoPos)
+                #self.cogInfoFrame.setPos(self.cogInfoPos)
                 self.hide()
                 self.hoodId = hoodId
                 self.zoneId = zoneId

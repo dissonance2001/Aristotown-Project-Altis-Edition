@@ -9,7 +9,7 @@ from toontown.nametag.Nametag import Nametag
 from toontown.toontowngui.Clickable2d import Clickable2d
 
 class Nametag2d(Nametag, Clickable2d, MarginVisible):
-    CONTENTS_SCALE = 0.25
+    CONTENTS_SCALE = 0.27
 
     CHAT_TEXT_MAX_ROWS = 8
     CHAT_TEXT_WORD_WRAP = 10
@@ -124,7 +124,7 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
             # We aren't in the margin display. Disable the click region if one
             # is present:
             if self.region is not None:
-                self.region.setActive(True)
+                self.region.setActive(False)
 
     def tick(self, task):
         if (self.avatar is None) or self.avatar.isEmpty():
@@ -229,7 +229,7 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
 
         # Reposition the panel:
         x = (self.textNode.getLeft()+self.textNode.getRight()) / 2.0
-        z = (self.textNode.getBottom()+self.textNode.getTop()) / 2.0
+        z = (self.textNode.getBottom()+self.textNode.getTop()) / 1.9
         self.panel.setPos(x, 0, z)
 
         # Resize the panel:
@@ -270,9 +270,9 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
             self.contents.node().removeAllChildren()
 
             if (self.cell in base.leftCells) or (self.cell in base.rightCells):
-                self.chatTextNode.setWordwrap(8)
+                self.chatTextNode.setWordwrap(7.25)
             else:
-                self.chatTextNode.setWordwrap(8)
+                self.chatTextNode.setWordwrap(7.25)
 
             model = self.getChatBalloonModel()
             modelWidth = self.getChatBalloonWidth()

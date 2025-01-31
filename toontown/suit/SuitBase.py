@@ -21,6 +21,7 @@ class SuitBase:
         self.level = 0
         self.maxHP = 10
         self.currHP = 10
+        self.hardMaxHP = 2.0
         self.isSkelecog = 0
         self.isElite = 0
         self.isWaiter = 0
@@ -68,6 +69,9 @@ class SuitBase:
         return self.isSkelecog
 
     def setSkelecog(self, flag):
+        self.isSkelecog = flag
+
+    def setSkelecog2(self, flag):
         self.isSkelecog = flag
 
     def setVirtual(self, flag):

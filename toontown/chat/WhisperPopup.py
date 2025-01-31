@@ -210,7 +210,7 @@ class WhisperPopup(Clickable2d, MarginVisible):
         left, right, bottom, top = self.textNode.getFrameActual()
         center = self.contents.getRelativePoint(
             self.chatBalloon.textNodePath,
-            ((left+right) / 1.0, 0, (bottom+top) / 2.0))
+            ((left+right) / 1.5, 0, (bottom+top) / 2.0))
 
         # Translate the chat balloon along the inverse:
         self.chatBalloon.setPos(self.chatBalloon, -center)

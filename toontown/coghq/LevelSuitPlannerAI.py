@@ -79,17 +79,18 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
     def __genSuitObject(self, suitDict, reserve):
         suit = self.cogCtor(simbase.air, self)
         dna = SuitDNA.SuitDNA()
-        dna.newSuitRandom(level=SuitDNA.getRandomSuitType(suitDict['level']), dept=suitDict['track'])
+        if 'type' in suitDict:
+            dna.newSuit(suitDict['type'])
+        else:
+            dna.newSuitRandom(level=suitDict['level'], dept=suitDict['track'])
         suit.dna = dna
         suit.setLevel(suitDict['level'])
         if suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             suit.setManager(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg':
-            suit.setSkeleRevives(1)
+            suit.setSkeleRevives(random.choice((1, 2)))
         if suit.dna.name == 'cg':
             suit.setExecutive(1)
-        if suit.dna.name == 'dsf':
-            suit.setSkeleRevives(1)
         if suit.dna.name == 'jdg':
             suit.setExecutive(1)
         if suit.dna.name == 'gkp':
@@ -98,15 +99,13 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
             suit.setExecutive(1)
         if suit.dna.name == 'csh':
             suit.setExecutive(1)
-        if suit.dna.name == 'msp':
-            suit.setExecutive(1)
         if suit.dna.name == 'ant':
             suit.setExecutive(1)
         if suit.dna.name == 'jb':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.dna.name == 'ant' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'msp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.dna.name == 'ant' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'yuh' and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'msp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
+        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'yuh' and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
             suit.setGovernaught(1)
         suit.setSkeleRevives(suitDict.get('revives'))
         suit.setLevelDoId(self.level.doId)

@@ -10,6 +10,7 @@ from toontown.coghq import LawbotOfficeLobby_Trap00_Cogs
 from toontown.coghq import LawbotOfficeDiamondRoom_Trap00_Cogs
 from toontown.coghq import LawbotOfficeDiamondRoom_Battle00_Cogs
 from toontown.coghq import LawbotOfficeGearRoom_Battle00_Cogs
+from toontown.coghq import LawbotOfficeLobby_Special01_Cogs
 
 # Explicit room imports...
 from toontown.coghq import LawbotOfficeEntrance_Action00
@@ -32,6 +33,7 @@ from toontown.coghq import LawbotOfficeDiamondRoom_Action01
 from toontown.coghq import LawbotOfficeLobby_Action01
 from toontown.coghq import LawbotOfficeDiamondRoom_Battle00
 from toontown.coghq import LawbotOfficeGearRoom_Battle00
+from toontown.coghq import LawbotOfficeLobby_Special01
 
 def getStageRoomSpecModule(roomId):
     return CashbotStageSpecModules[roomId]
@@ -65,11 +67,12 @@ CashbotStageRoomId2RoomName = {0: 'LawbotOfficeEntrance_Action00',
  102: 'LawbotOfficeDiamondRoom_Action01',
  103: 'LawbotOfficeLobby_Action01',
  104: 'LawbotOfficeDiamondRoom_Battle00',
- 105: 'LawbotOfficeGearRoom_Battle00'}
+ 105: 'LawbotOfficeGearRoom_Battle00',
+                               200: 'LawbotOfficeLobby_Special01'}
 CashbotStageRoomName2RoomId = invertDict(CashbotStageRoomId2RoomName)
 CashbotStageEntranceIDs = (0,)
 CashbotStageMiddleRoomIDs = (1,)
-CashbotStageFinalRoomIDs = (2,)
+CashbotStageFinalRoomIDs = (2, 200)
 CashbotStageConnectorRooms = ('phase_11/models/lawbotHQ/LB_connector_7cubeL2', 'phase_11/models/lawbotHQ/LB_connector_7cubeLR')
 CashbotStageSpecModules = {}
 for roomName, roomId in CashbotStageRoomName2RoomId.items():
@@ -83,7 +86,8 @@ CogSpecModules = {'LawbotOfficeOilRoom_Battle00': LawbotOfficeOilRoom_Battle00_C
  'LawbotOfficeLobby_Trap00': LawbotOfficeLobby_Trap00_Cogs,
  'LawbotOfficeDiamondRoom_Trap00': LawbotOfficeDiamondRoom_Trap00_Cogs,
  'LawbotOfficeDiamondRoom_Battle00': LawbotOfficeDiamondRoom_Battle00_Cogs,
- 'LawbotOfficeGearRoom_Battle00': LawbotOfficeGearRoom_Battle00_Cogs}
+ 'LawbotOfficeGearRoom_Battle00': LawbotOfficeGearRoom_Battle00_Cogs,
+                  'LawbotOfficeLobby_Special01': LawbotOfficeLobby_Special01_Cogs}
 roomId2numBattles = {}
 for roomName, roomId in CashbotStageRoomName2RoomId.items():
     if roomName not in CogSpecModules:

@@ -42,138 +42,39 @@ def doLures(lures):
 def showLureRounds(suit, battle, level):
     trapProp = suit.battleTrapProp
     currentBossHealth = -1
-    if suit.style.name == 'csm' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'scg' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'csm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'lit' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'ste' or s.dna.name == 'csm' or s.dna.name == 'scg':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'ste' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'gtk' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'frs' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'fbd' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'cp' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'crf' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsf' or s.dna.name == 'prr' or s.dna.name == 'tb':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'dsf' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'crf' or s.dna.name == 'prr' or s.dna.name == 'tb':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'prr' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsf' or s.dna.name == 'crf' or s.dna.name == 'tb':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'tb' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsf' or s.dna.name == 'prr' or s.dna.name == 'crf':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'ffm' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'dsk' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'blr' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'dvp' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'ffm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name == 'blr' and not trapProp:
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'ffm' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            suit.showHpText("LURED 1 ROUND")
-        else:
-            suit.showHpText("LURED 2 ROUNDS")
-    elif suit.style.name in SuitBattleGlobals.SpecialCogDict and not trapProp:
-        suit.showHpText("LURED 2 ROUNDS")
+    if suit.isAngry and suit.isDesperation:
+        suit.showHpText("IMMUNE")
+    elif suit.isImmune:
+        suit.showHpText("IMMUNE")
+    elif suit.dna.name == 'crf' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'dsf' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.isDesperation and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureDesperation("DESPERATION!")
+    elif suit.isAngry and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.isSkeleton and suit.isManager and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpString("SKELETAL MANAGER!")
+    elif suit.isManager and not trapProp:
+        suit.showHpTextLureInfo("LURED 2 ROUNDS")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.isInsured and not trapProp:
+        suit.showHpTextLureInfo("LURED 2 ROUNDS")
+        suit.showHpStringLureManager("INSURED BENEFIT!")
+    elif suit.isSkeleton and suit.currHP > (suit.maxHP * 1.5) and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureOvercharged("OVERCHARGED!")
     elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
-        suit.showHpText("LURED 2 ROUNDS")
+        suit.showHpTextLureInfo("LURED 2 ROUNDS")
+        suit.showHpStringLureOvercharged("OVERCHARGED!")
+    #elif suit.isSkeleton and level >= 3 and not trapProp:
+        #suit.showHpTextLureInfo("SKELETAL STRUCTURE!\nLURED 2 ROUNDS", 2)
     elif trapProp:
         suit.showHpTextRed("TRAPPED")
     else:
@@ -239,48 +140,78 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
     if sidestep == 0:
         if kbbonus == 1 or hp > 0:
             suitTrack = Sequence()
+            makeLured = Func(suit.makeLured)
+            makeUnLured = Func(suit.makeUnLured)
             opos, ohpr = battle.getActorPosHpr(suit)
             reachDist = MovieUtil.SUIT_LURE_DISTANCE
             reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-            suitTrack.append(Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-            suitTrack.append(Wait(3.5))
-            suitName = suit.getStyleName()
-            retardPos, retardHpr = battle.getActorPosHpr(suit)
-            retardPos.setY(retardPos.getY() + MovieUtil.SUIT_EXTRA_REACH_DISTANCE)
-            suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-            if suitName in MovieUtil.largeSuits:
-                moveTrack = lerpSuit(suit, 0.0, reachAnimDuration / 2.5, retardPos, battle, trapProp)
-                reachTrack = ActorInterval(suit, 'reach', duration=reachAnimDuration)
-                suitTrack.append(Parallel(moveTrack, reachTrack))
+            if suit.dna.name == 'scg' and suit.isAngry and suit.isDesperation:
+                suitTrack.append(Func(suit.loop, 'neutral-enraged'))
+                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+            elif suit.dna.name == 'mad' and suit.currHP > 7200 and not suit.currHP > 8000:
+                suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                    '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+            elif suit.isLureImmune:
+                suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                    '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+            elif suit.isImmortal and suit.dna.name == 'dsf':
+                suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                    '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+            elif suit.isImmortal:
+                suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
+                suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
             else:
-                suitTrack.append(ActorInterval(suit, 'reach', duration=reachAnimDuration))
-            if trapProp:
-                suitTrack.append(Func(trapProp.wrtReparentTo, battle))
-            suitTrack.append(Func(suit.setPos, battle, reachPos))
-            if trapProp:
-                suitTrack.append(Func(trapProp.wrtReparentTo, suit))
-                suit.battleTrapProp = trapProp
-            if trapProp:
-                suitTrack.append(Func(suit.loop, 'lured2'))
-            else:
-                suitTrack.append(Func(suit.loop, 'lured2'))
-            if suit.style.name == 'crf':
-                for headPart in suit.animatedHeadParts:
-                    suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-            elif suit.style.name == 'mad':
-                for headPart in suit.animatedHeadParts:
-                    suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-            else:
-                for headPart in suit.animatedHeadParts:
-                    #suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 1))
-                    #suitTrack.append(Wait(1.5))
-                    suitTrack.append(Func(headPart.loop, 'neutral-lured'))
-            suitTrack.append(Func(battle.lureSuit, suit))
-            if hp > 0:
-                suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
-            tracks.append(suitTrack)
+                suitTrack.append(Func(suit.setNeutralAnimation))
+                suitTrack.append(Wait(3.5))
+                suitName = suit.getStyleName()
+                retardPos, retardHpr = battle.getActorPosHpr(suit)
+                retardPos.setY(retardPos.getY() + MovieUtil.SUIT_EXTRA_REACH_DISTANCE)
+                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                if suitName in MovieUtil.largeSuits:
+                    moveTrack = lerpSuit(suit, 0.0, reachAnimDuration / 2.5, retardPos, battle, trapProp)
+                    reachTrack = ActorInterval(suit, 'reach', duration=reachAnimDuration)
+                    suitTrack.append(Parallel(moveTrack, reachTrack))
+                else:
+                    suitTrack.append(ActorInterval(suit, 'reach', duration=reachAnimDuration))
+                if trapProp:
+                    suitTrack.append(Func(trapProp.wrtReparentTo, battle))
+                suitTrack.append(Func(suit.setPos, battle, reachPos))
+                if trapProp:
+                    suitTrack.append(Func(trapProp.wrtReparentTo, suit))
+                    suit.battleTrapProp = trapProp
+                if trapProp:
+                    suitTrack.append(Func(suit.loop, 'lured2'))
+                else:
+                    suitTrack.append(Func(suit.loop, 'lured2'))
+                if suit.style.name == 'crf':
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                elif suit.style.name == 'mad':
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                elif suit.style.name == 'dsf':
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                else:
+                    for headPart in suit.animatedHeadParts:
+                        suitTrack.append(Func(headPart.loop, 'neutral-lured'))
+                suitTrack.append(Func(battle.lureSuit, suit))
+                suitTrack.append(makeLured)
+                if hp > 0:
+                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
+                    suitTrack.append(makeUnLured)
+                tracks.append(suitTrack)
     else:
-        tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+        if not suit.isLured:
+            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
     tracks.append(getSoundTrack('TL_fishing_pole.ogg', delay=0.5, node=toon))
     return tracks
 
@@ -301,6 +232,8 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
     tracks.append(magnetTrack)
     for target in targets:
         suit = target['suit']
+        makeLured = Func(suit.makeLured)
+        makeUnLured = Func(suit.makeUnLured)
         trapProp = suit.battleTrapProp
         if sidestep == 0:
             hp = target['hp']
@@ -317,35 +250,66 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 numShakes = 3
                 shakeTotalDuration = 0.8
                 shakeDuration = shakeTotalDuration / float(numShakes)
-                suitTrack.append(Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                suitTrack.append(Wait(suitDelay))
-                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                suitTrack.append(ActorInterval(suit, 'landing', startTime=2.37, endTime=1.82))
-                for i in xrange(0, numShakes):
-                    suitTrack.append(ActorInterval(suit, 'landing', startTime=1.82, endTime=1.16, duration=shakeDuration))
+                if suit.dna.name == 'scg' and suit.isAngry and suit.isDesperation:
+                    suitTrack.append(Func(suit.loop, 'neutral-enraged'))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                elif suit.dna.name == 'mad' and suit.currHP > 7200 and not suit.currHP > 8000:
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                elif suit.isLureImmune:
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
+                elif suit.isImmortal and suit.dna.name == 'dsf':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                elif suit.isImmortal:
+                    suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
+                    suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                else:
+                    suitTrack.append(Func(suit.setNeutralAnimation))
+                    suitTrack.append(Wait(suitDelay))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    suitTrack.append(ActorInterval(suit, 'landing', startTime=2.37, endTime=1.82))
+                    for i in xrange(0, numShakes):
+                        suitTrack.append(
+                            ActorInterval(suit, 'landing', startTime=1.82, endTime=1.16, duration=shakeDuration))
 
-                suitTrack.append(ActorInterval(suit, 'landing', startTime=1.16, endTime=0.7))
-                suitTrack.append(ActorInterval(suit, 'landing', startTime=0.7, duration=1.3))
-                if trapProp:
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                else:
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured'))
-                suitTrack.append(Func(battle.lureSuit, suit))
-                if hp > 0:
-                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
-                tracks.append(suitTrack)
-                tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
+                    suitTrack.append(ActorInterval(suit, 'landing', startTime=1.16, endTime=0.7))
+                    suitTrack.append(ActorInterval(suit, 'landing', startTime=0.7, duration=1.3))
+                    if trapProp:
+                        suitTrack.append(Func(suit.loop, 'lured2'))
+                    else:
+                        suitTrack.append(Func(suit.loop, 'lured2'))
+                    if suit.style.name == 'crf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'mad':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'dsf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    else:
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured'))
+                    suitTrack.append(Func(battle.lureSuit, suit))
+                    suitTrack.append(makeLured)
+                    if hp > 0:
+                        suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
+                        suitTrack.append(makeUnLured)
+                    tracks.append(suitTrack)
+                    tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
         else:
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+            if not suit.isLured:
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
 
     if isSmallMagnet == 1:
         tracks.append(getSoundTrack('TL_small_magnet.ogg', delay=0.7, node=toon))
@@ -373,6 +337,8 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
     tracks = Parallel(gogglesTrack, toonTrack)
     for target in targets:
         suit = target['suit']
+        makeLured = Func(suit.makeLured)
+        makeUnLured = Func(suit.makeUnLured)
         trapProp = suit.battleTrapProp
         if sidestep == 0:
             hp = target['hp']
@@ -386,33 +352,61 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-                suitTrack.append(Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                suitTrack.append(Wait(suitDelay))
-                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
-                suitTrack.append(Func(suit.setPos, battle, reachPos))
-                if trapProp:
-                    suitTrack.append(Func(suit.loop, 'lured2'))
+                if suit.dna.name == 'scg' and suit.isAngry and suit.isDesperation:
+                    suitTrack.append(Func(suit.loop, 'neutral-enraged'))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
+                elif suit.dna.name == 'mad' and suit.currHP > 7200 and not suit.currHP > 8000:
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
+                elif suit.isLureImmune:
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
+                elif suit.isImmortal and suit.dna.name == 'dsf':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
+                elif suit.isImmortal:
+                    suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
+                    suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
                 else:
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        # suitTrack.append(MovieUtil.createSuitStunInterval(suit, 0, 1))
-                        # suitTrack.append(Wait(1.5))
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured'))
-                suitTrack.append(Func(battle.lureSuit, suit))
-                if hp > 0:
-                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
-                tracks.append(suitTrack)
-                tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
+                    suitTrack.append(Func(suit.setNeutralAnimation))
+                    suitTrack.append(Wait(suitDelay))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
+                    suitTrack.append(Func(suit.setPos, battle, reachPos))
+                    if trapProp:
+                        suitTrack.append(Func(suit.loop, 'lured2'))
+                    else:
+                        suitTrack.append(Func(suit.loop, 'lured2'))
+                    if suit.style.name == 'crf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'mad':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'dsf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    else:
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured'))
+                    suitTrack.append(Func(battle.lureSuit, suit))
+                    suitTrack.append(makeLured)
+                    if hp > 0:
+                        suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
+                        suitTrack.append(makeUnLured)
+                    tracks.append(suitTrack)
+                    tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
         else:
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
+            if not suit.isLured:
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
 
     tracks.append(getSoundTrack('TL_hypnotize.ogg', delay=0.5, node=toon))
     return tracks
@@ -490,7 +484,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
     result.append(Func(reparentTrap))
     parent = battle
     if suit.battleTrapIsFresh:
-        if trapName == 'quicksand' or trapName == 'trapdoor':
+        if trapName == 'quicksand' or trapName == 'trapdoor'or trapName == 'wreckingball':
             trapProp.hide()
             trapProp.reparentTo(suit)
             trapProp.setPos(Point3(0, MovieUtil.SUIT_TRAP_DISTANCE, 0))
@@ -504,6 +498,14 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             trapProp.setScale(Point3(0.7, 0.7, 0.7))
             rakeOffset = MovieUtil.getSuitRakeOffset(suit)
             trapProp.setY(trapProp.getY() + rakeOffset)
+        elif trapName == 'spring':
+            trapProp.hide()
+            trapProp.reparentTo(suit)
+            trapProp.setPos(0, MovieUtil.SUIT_TRAP_RAKE_DISTANCE, -.5)
+            trapProp.setHpr(Point3(0, 0, 0))
+            trapProp.setScale(Point3(1, 1, 1))
+            rakeOffset = MovieUtil.getSuitRakeOffset(suit)
+            trapProp.setY(trapProp.getY() + rakeOffset)
         else:
             parent = render
     if trapName == 'banana':
@@ -513,49 +515,26 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(trapProp, 'banana', startTime=3.1), Wait(1.1), LerpScaleInterval(trapProp, 1, Point3(0.01, 0.01, 0.01)))
         suitTrack = Sequence()
         suitTrack.append(ActorInterval(suit, 'slip-backward'))
-        damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
+        damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
         if random.random() <= 0.01:
             soundTrack = Sequence(Parallel(SoundInterval(globalBattleSoundCache.getSound('AA_pie_throw_only.ogg'), node=suit), Func(base.playSfx, globalBattleSoundCache.getSound('AA_WHATAREYOUDOING.ogg'))), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
         else:
             soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_pie_throw_only.ogg'), node=suit), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
-        if suit.maxHP > 0:
-            if float(suit.currHP - hp) / float(suit.maxHP) <= 0.25:
-                suitTrack.append(Func(suit.loop, 'neutral-hurt'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt')
-                        )
-            else:
-                suitTrack.append(
-                    Func(suit.loop, 'neutral'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral')
-                        )
+        suitTrack.append(Func(suit.setNeutralAnimationTrap))
+        suitTrack.append(Func(suit.setChatAbsoluteTrap,
+                              '',
+                              CFSpeech | CFTimeout))
+        suitIndex = battle.activeSuits.index(suit)
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(moveTrack, animTrack, suitTrack, damageTrack, soundTrack))
     elif trapName == 'rake' or trapName == 'rake-react':
         hpr = trapProp.getHpr(parent)
@@ -566,46 +545,23 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         rakeAnimDuration = 3.125
         suitTrack = Sequence()
         suitTrack.append(ActorInterval(suit, 'rake-react', duration=rakeAnimDuration))
-        damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
+        damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
         soundTrack = getSoundTrack('TL_step_on_rake.ogg', delay=0.6, node=suit)
-        if suit.maxHP > 0:
-            if float(suit.currHP - hp) / float(suit.maxHP) <= 0.25:
-                suitTrack.append(Func(suit.loop, 'neutral-hurt'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt')
-                        )
-            else:
-                suitTrack.append(
-                    Func(suit.loop, 'neutral'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral')
-                        )
+        suitTrack.append(Func(suit.setNeutralAnimationTrap))
+        suitTrack.append(Func(suit.setChatAbsoluteTrap,
+                              '',
+                              CFSpeech | CFTimeout))
+        suitIndex = battle.activeSuits.index(suit)
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(rakeTrack, suitTrack, damageTrack, soundTrack))
     elif trapName == 'marbles':
         slidePos = trapProp.getPos(parent)
@@ -614,46 +570,23 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = ActorInterval(trapProp, 'marbles', startTime=3.1)
         suitTrack = Sequence()
         suitTrack.append(ActorInterval(suit, 'slip-backward'))
-        damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
+        damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
         soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_pie_throw_only.ogg'), duration=0.55, node=suit), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
-        if suit.maxHP > 0:
-            if float(suit.currHP - hp) / float(suit.maxHP) <= 0.25:
-                suitTrack.append(Func(suit.loop, 'neutral-hurt'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral-hurt')
-                        )
-            else:
-                suitTrack.append(
-                    Func(suit.loop, 'neutral'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral')
-                        )
+        suitTrack.append(Func(suit.setNeutralAnimationTrap))
+        suitTrack.append(Func(suit.setChatAbsoluteTrap,
+                              '',
+                              CFSpeech | CFTimeout))
+        suitIndex = battle.activeSuits.index(suit)
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(moveTrack, animTrack, suitTrack, damageTrack, soundTrack))
     elif trapName == 'quicksand':
         sinkPos1 = trapProp.getPos(battle)
@@ -663,13 +596,14 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         sinkPos1.setZ(sinkPos1.getZ() - 3.1)
         sinkPos2.setZ(sinkPos2.getZ() - 9.1)
         dropPos.setZ(dropPos.getZ() + 15)
+        landPos.setY(dropPos.getY() + 4)
         if base.config.GetBool('want-new-cogs', 0):
             nameTag = suit.find('**/def_nameTag')
         else:
             nameTag = suit.find('**/joint_nameTag')
         trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
         moveTrack = Sequence(Wait(0.9), LerpPosInterval(suit, 0.9, sinkPos1, other=battle), LerpPosInterval(suit, 0.4, sinkPos2, other=battle), Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.1))
-        animTrack = Sequence(ActorInterval(suit, 'flail'), ActorInterval(suit, 'flail', startTime=1.1), Wait(0.7))
+        animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.25), Wait(0.7))
         soundTrack = Sequence(Wait(0.7),
                               SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit))
         if died and not suit.isVirtual:
@@ -693,49 +627,90 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                         animTrack.append(MovieUtil.createDesperationTrack(s))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
+            suitPos, suitHpr = battle.getActorPosHpr(suit)
             moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
-            damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
-            animTrack.append(ActorInterval(suit, 'slip-forward', duration=2.1))
+            damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
+            animTrack.append(ActorInterval(suit, 'slip-forward', playRate=1.25))
             soundTrack.append(Wait(0.1))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
-            if suit.maxHP > 0:
-                if float(suit.currHP - hp) / float(suit.maxHP) <= 0.25:
-                    animTrack.append(Func(suit.loop, 'neutral-hurt'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt')
-                            )
-                else:
-                    animTrack.append(
-                        Func(suit.loop, 'neutral'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral')
-                            )
+            animTrack.append(Func(suit.setNeutralAnimationTrap))
+            animTrack.append(Func(suit.setChatAbsoluteTrap,
+                                  '',
+                                  CFSpeech | CFTimeout))
+        suitIndex = battle.activeSuits.index(suit)
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
+        result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
+    elif trapName == 'spring':
+        sinkPos1 = trapProp.getPos(battle)
+        sinkPos2 = trapProp.getPos(battle)
+        sinkPos3 = trapProp.getPos(battle)
+        dropPos = trapProp.getPos(battle)
+        landPos = trapProp.getPos(battle)
+        sinkPos1.setZ(sinkPos1.getZ() + 20)
+        sinkPos2.setZ(sinkPos2.getZ() + 3)
+        sinkPos3.setZ(sinkPos3.getZ() - 10)
+        dropPos.setZ(dropPos.getZ() + 15)
+        landPos.setY(dropPos.getY() + 4)
+        if base.config.GetBool('want-new-cogs', 0):
+            nameTag = suit.find('**/def_nameTag')
+        else:
+            nameTag = suit.find('**/joint_nameTag')
+        trapTrack = Sequence(Wait(0.9), LerpPosInterval(trapProp, 0.25, sinkPos2), Wait(1.0), LerpPosInterval(trapProp, 0.25, sinkPos3), Func(MovieUtil.removeProp, trapProp))
+        moveTrack = Sequence(Wait(0.9), LerpPosInterval(suit, 0.25, sinkPos1, other=battle), Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.1))
+        animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.375), Wait(0.7))
+        soundTrack = Sequence(Wait(0.7),
+                              SoundInterval(globalBattleSoundCache.getSound('AA_spring_activate.ogg'), node=suit))
+        if died and not suit.isVirtual:
+            suitGone = 1
+            damageTrack = Sequence()
+            if suit.style.name == 'csm':
+                for s in battle.activeSuits:
+                    if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
+                        animTrack.append(MovieUtil.createDesperationTrack(s))
+            elif suit.style.name == 'scg':
+                for s in battle.activeSuits:
+                    if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
+                        animTrack.append(MovieUtil.createDesperationTrack(s))
+            elif suit.style.name == 'lit':
+                for s in battle.activeSuits:
+                    if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
+                        animTrack.append(MovieUtil.createDesperationTrack(s))
+            elif suit.style.name == 'ste':
+                for s in battle.activeSuits:
+                    if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
+                        animTrack.append(MovieUtil.createDesperationTrack(s))
+        else:
+            moveTrack.append(Func(suit.wrtReparentTo, battle))
+            suitPos, suitHpr = battle.getActorPosHpr(suit)
+            moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
+            damageTrack = Sequence(Wait(2.75), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
+            animTrack.append(ActorInterval(suit, 'slip-forward', playRate=1.25))
+            soundTrack.append(Wait(0.5))
+            soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
+            animTrack.append(Func(suit.setNeutralAnimationTrap))
+            animTrack.append(Func(suit.setChatAbsoluteTrap,
+                                  '',
+                                  CFSpeech | CFTimeout))
+        suitIndex = battle.activeSuits.index(suit)
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'trapdoor':
         sinkPos = trapProp.getPos(battle)
@@ -743,12 +718,13 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         landPos = trapProp.getPos(battle)
         sinkPos.setZ(sinkPos.getZ() - 9.1)
         dropPos.setZ(dropPos.getZ() + 15)
+        landPos.setY(dropPos.getY() + 4)
         trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
         moveTrack = Sequence(Wait(2.2), LerpPosInterval(suit, 0.4, sinkPos, other=battle), Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.1))
-        animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail', 0.7, 0.25),
+        animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail-qs', 0.7, 0.25),
                              Func(trapProp.setColor, Vec4(0, 0, 0, 1)),
-                             ActorInterval(suit, 'flail', startTime=0.7, endTime=0),
-                             ActorInterval(suit, 'neutral', duration=0.5), ActorInterval(suit, 'flail', startTime=1.1))
+                             ActorInterval(suit, 'flail-qs', startTime=0.7, endTime=0),
+                             ActorInterval(suit, 'neutral', duration=0.5), ActorInterval(suit, 'flail-qs', startTime=1.1, endTime=1.375))
         soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('TL_trap_door.ogg'), node=suit))
         if died and not suit.isVirtual:
             suitGone = 1
@@ -773,65 +749,56 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
             animTrack.append(Wait(1.1))
-            animTrack.append(ActorInterval(suit, 'slip-forward', duration=2.1))
-            if suit.maxHP > 0:
-                if float(suit.currHP - hp) / float(suit.maxHP) <= 0.25:
-                    animTrack.append(Func(suit.loop, 'neutral-hurt'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt')
-                            )
-                else:
-                    animTrack.append(
-                        Func(suit.loop, 'neutral'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral')
-                            )
-            damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
+            suitPos, suitHpr = battle.getActorPosHpr(suit)
+            animTrack.append(ActorInterval(suit, 'slip-forward', playRate=1.25))
+            animTrack.append(Func(suit.setNeutralAnimationTrap))
+            animTrack.append(Func(suit.setChatAbsoluteTrap,
+                                  '',
+                                  CFSpeech | CFTimeout))
+            damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
             soundTrack.append(Wait(0.8))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
+        suitIndex = battle.activeSuits.index(suit)
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        animTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'wreckingball':
+        ballPropTrack = Sequence()
+        ballPosPoints = [Point3(0, 0, 20), VBase3(-90, 0, 90)]
+        ball = loader.loadModel('phase_5/models/char/wreckingball-ball')
+        ballPropTrack.append(getPropAppearTrack(ball, trapProp, ballPosPoints, 0, Point3(1, 1, 1), scaleUpTime=0))
+        ballPropTrack.append(Func(battle.movie.needRestoreRenderProp, ball))
+        ballPropTrack.append(Func(ball.wrtReparentTo, render))
+        targetPoint = battle.getActorPosHpr(suit)
+        ballPropTrack.append(Wait(1.5))
+        ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(90, 0, 0)))
+        ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(90, 90, 0)))
+        ballPropTrack.append(Func(battle.movie.clearRenderProp, trapProp))
+        ballPropTrack.append(Func(MovieUtil.removeProp, ball))
         sinkPos = trapProp.getPos(battle)
         dropPos = trapProp.getPos(battle)
         landPos = trapProp.getPos(battle)
         sinkPos.setZ(sinkPos.getZ() + 9.1)
         sinkPos.setY(sinkPos.getZ() + 9.1)
-        dropPos.setZ(dropPos.getZ() + 15)
+        dropPos.setZ(dropPos.getZ() + 25)
+        landPos.setY(dropPos.getY() + 4)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
-            animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail', 0.7, 0.25),
+            animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail-wb', 0.35, 0.25),
                                  Func(trapProp.setColor, Vec4(0, 0, 0, 1)),
-                                 ActorInterval(suit, 'flail', startTime=0.7, endTime=0),
-                                 ActorInterval(suit, 'flail', startTime=0.7, duration=0.5))
+                                 ActorInterval(suit, 'flail-wb', startTime=0.35, endTime=0),
+                                 ActorInterval(suit, 'flail-wb', endTime=1.25))
             animTrack.append(MovieUtil.createSuitWreckingDeathTrack(suit, battle))
-            result.append(Parallel(animTrack, damageTrack))
+            result.append(Parallel(animTrack, damageTrack, ballPropTrack))
 
         else:
             trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
@@ -842,59 +809,37 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                                                 node=suit))
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
-            animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail', 0.7, 0.25),
+            animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail-wb', 0.35, 0.25),
                                  Func(trapProp.setColor, Vec4(0, 0, 0, 1)),
-                                 ActorInterval(suit, 'flail', startTime=0.7, endTime=0),
-                                 ActorInterval(suit, 'flail', startTime=0.7, duration=1.5))
-            animTrack.append(Wait(1.1))
-            animTrack.append(ActorInterval(suit, 'slip-forward'))
-            if suit.maxHP > 0:
-                if float(suit.currHP - hp) / float(suit.maxHP) <= 0.25:
-                    animTrack.append(Func(suit.loop, 'neutral-hurt'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt')
-                            )
-                else:
-                    animTrack.append(
-                        Func(suit.loop, 'neutral'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            animTrack.append(
-                                Func(headPart.loop,
-                                     'neutral')
-                            )
-            damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
-            soundTrack.append(Wait(0.8))
+                                 ActorInterval(suit, 'flail-wb', startTime=0.35, endTime=0),
+                                 ActorInterval(suit, 'flail-wb'))
+            animTrack.append(Wait(0.6))
+            animTrack.append(ActorInterval(suit, 'slip-forward', playRate=1.25))
+            animTrack.append(Func(suit.setNeutralAnimationTrap))
+            animTrack.append(Func(suit.setChatAbsoluteTrap,
+                                  '',
+                                  CFSpeech | CFTimeout))
+            damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
+            soundTrack.append(Wait(0.3))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
-            result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
+            suitIndex = battle.activeSuits.index(suit)
+            animTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+            animTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+            animTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+            animTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+            animTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+            animTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+            animTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+            animTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+            animTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+            animTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
+            result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack, ballPropTrack))
     elif trapName == 'tnt':
         tntTrack = ActorInterval(trapProp, 'tnt')
         explosionTrack = Sequence(Wait(2.3), createTNTExplosionTrack(battle, trapProp=trapProp, relativeTo=parent))
         flyPos = suit.getPos()
         flyPos.setZ(suit.getZ() + 17)
+        flyPos.setY(suit.getY() + 4)
         dropPos = suit.getPos()
         oldCamera = base.camera.getPos()
         oldHPR = base.camera.getHpr()
@@ -903,10 +848,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         suitTrack = Sequence(Func(suit.setChatAbsolute,
                                    'Uh Oh...',
                                    CFSpeech | CFTimeout))
-        suitTrack.append(ActorInterval(suit, 'flail', duration=0.7))
-        suitTrack.append(ActorInterval(suit, 'flail', startTime=0.7, endTime=0.0))
-        suitTrack.append(ActorInterval(suit, 'neutral', duration=0.4))
-        suitTrack.append(ActorInterval(suit, 'flail', startTime=0.6, endTime=0.7))
+        suitTrack.append(ActorInterval(suit, 'tnt-react', endTime=2))
         
         if base.localAvatar in battle.activeToons:
             suitTrack.append(Parallel(base.camera.posHprInterval(
@@ -928,7 +870,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             suitTrack.append(MovieUtil.midairSuitExplodeTrack(suit, battle))
-            damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
+            damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
             soundTrack = Sequence(
                 SoundInterval(globalBattleSoundCache.getSound('TL_dynamite.ogg'), duration=2.0, node=suit),
@@ -952,16 +894,30 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                           LerpPosInterval(suit, 0.7, dropPos),
                           )
                 )
+                suitTrack.append(Func(suit.setChatAbsoluteTrap,
+                                      '',
+                                      CFSpeech | CFTimeout))
             suitTrack.append(Func(suit.clearColorScale))
             suitTrack.append(Func(trapProp.sparksEffect.cleanup))
             suitTrack.append(Func(battle.movie.clearRestoreColor))
 
-            damageTrack = Sequence(Wait(2.3), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
+            damageTrack = Sequence(Wait(2.3), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
             soundTrack = Sequence(
                 SoundInterval(globalBattleSoundCache.getSound('TL_dynamite.ogg'), duration=2.0, node=suit),
                 SoundInterval(explosionSound, duration=0.6, node=suit)
             )
+        suitIndex = battle.activeSuits.index(suit)
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(tntTrack, suitTrack, damageTrack, explosionTrack, soundTrack))
     elif trapName == 'traintrack':
         result.append(createIncomingTrainInterval(battle, suit, hp, lure, trapProp))
@@ -980,25 +936,100 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
     else:
         result.append(Func(battle.unlureSuit, suit))
         #result.append(MovieUtil.createSuitResetPosTrack(suit, battle))
-        result.append(Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+        result.append(Func(suit.setNeutralAnimationTrap))
+        result.append(Func(suit.setChatAbsolute,
+                              '',
+                              CFSpeech | CFTimeout))
         if revived != 0 and suit.isSkeleton:
             result.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         elif revived != 0 and not suit.isSkeleton:
             result.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died != 0 and suit.isVirtual:
-            result.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
+            result.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         elif died != 0 and not suit.isVirtual and not suitGone:
             result.append(MovieUtil.createSuitDeathTrack(suit, battle))
     return result
+
+def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'dsf':
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.425))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+            suitTrack.append(Wait(6.0))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+            suitTrack.append(Wait(6.0))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+            suitTrack.append(Wait(6.0))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+            suitTrack.append(Wait(6.0))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+            suitTrack.append(Wait(6.0))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+            suitTrack.append(Wait(6.0))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+            suitTrack.append(Wait(6.0))
+        return suitTrack
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding:
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.115))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
+                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+            suitTrack.append(Wait(6.0))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+            suitTrack.append(Wait(6.0))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+            suitTrack.append(Wait(6.0))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+            suitTrack.append(Wait(6.0))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+            suitTrack.append(Wait(6.0))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+            suitTrack.append(Wait(6.0))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+            suitTrack.append(Wait(6.0))
+        return suitTrack
+    else:
+        return Sequence()
 
 
 def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
+    updateTrack = Parallel(Func(suit.setChatAbsolute,
+                                '',
+                                CFSpeech | CFTimeout))
     walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.loop, 'neutral'))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(walkTrack, moveTrack)
+    return Parallel(walkTrack, updateTrack, moveTrack)
 	
 def midairSuitExplodeTrack(suit, battle):
     suitTrack = Sequence()
@@ -1179,7 +1210,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
     hands = toon.getLeftHands()
     endPos = toon.getPos(battle)
     endPos.setY(endPos.getY() + 4)
-    button = globalPropPool.getProp('button')
+    button = globalPropPool.getProp('lure-button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
     toonTrack = Sequence()
@@ -1209,6 +1240,8 @@ def __createSlideshowMultiTrack(lure, npcs = []):
     targets = lure['target']
     for target in targets:
         suit = target['suit']
+        makeLured = Func(suit.makeLured)
+        makeUnLured = Func(suit.makeUnLured)
         trapProp = suit.battleTrapProp
         if sidestep == 0:
             hp = target['hp']
@@ -1222,35 +1255,80 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-                suitTrack.append(Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                suitTrack.append(Wait(suitDelay))
-                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
-                suitTrack.append(Func(suit.setPos, battle, reachPos))
-                if trapProp:
-                    suitTrack.append(Func(suit.loop, 'lured2'))
+                if suit.dna.name == 'scg' and suit.isAngry and suit.isDesperation:
+                    suitTrack.append(Func(suit.loop, 'neutral-enraged'))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
+                elif suit.dna.name == 'mad' and suit.currHP > 7200 and not suit.currHP > 8000:
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
+                elif suit.isLureImmune:
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
+                elif suit.isImmortal and suit.dna.name == 'dsf':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
+                elif suit.isImmortal:
+                    suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
+                    suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
                 else:
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured'))
-                suitTrack.append(Func(battle.lureSuit, suit))
-                if hp > 0:
-                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
-                tracks.append(suitTrack)
-                tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
+                    suitTrack.append(Func(suit.setNeutralAnimation))
+                    suitTrack.append(Wait(suitDelay))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
+                    suitTrack.append(Func(suit.setPos, battle, reachPos))
+                    if trapProp:
+                        suitTrack.append(Func(suit.loop, 'lured2'))
+                    else:
+                        suitTrack.append(Func(suit.loop, 'lured2'))
+                    if suit.style.name == 'crf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'mad':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'dsf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    else:
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured'))
+                    suitTrack.append(Func(battle.lureSuit, suit))
+                    suitTrack.append(makeLured)
+                    if hp > 0:
+                        suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
+                        suitTrack.append(makeUnLured)
+                    tracks.append(suitTrack)
+                    tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
         else:
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
+            if not suit.isLured:
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
 
     tracks.append(getSoundTrack('TL_presentation.ogg', delay=2.3, node=toon))
     tracks.append(getSoundTrack('AA_drop_trigger_box.ogg', delay=slideshowDelay, node=toon))
     return tracks
+
+def __showProp(prop, parent, pos, hpr = None, scale = None):
+    prop.reparentTo(parent)
+    prop.setPos(pos)
+    if hpr:
+        prop.setHpr(hpr)
+    if scale:
+        prop.setScale(scale)
+
+def getPropTrack(prop, parent, posPoints, appearDelay, remainDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, scaleDownTime = 0.5, startScale = Point3(0.01), anim = 0, propName = 'none', animDuration = 0.0, animStartTime = 0.0):
+    if anim == 1:
+        track = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints), LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale), ActorInterval(prop, propName, duration=animDuration, startTime=animStartTime), Wait(remainDelay), Func(MovieUtil.removeProp, prop))
+    else:
+        track = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints), LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale), Wait(remainDelay), LerpScaleInterval(prop, scaleDownTime, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProp, prop))
+    return track
 
 def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None):
     propTrack = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints))

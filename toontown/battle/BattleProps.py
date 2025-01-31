@@ -72,6 +72,9 @@ Props = ((5, 'partyBall', 'partyBall'),
          (5, 'kazoo', 'kazoo'),
 (5, 'wreckingball', 'wreckingball'),
  (3.5, 'creampie', 'tart'),
+         (3.5, 'tv', 'tv'),
+         (5, 'ttcc_gag_radio', 'ttcc_gag_radio'),
+         (5, 'ttcc_gag_stagelight', 'ttcc_gag_stagelight'),
  (3.5, 'cupcake', 'cupcake'),
  (5, 'fruitpie-slice', 'fruit-pie-slice'),
          (5, 'fruitpie', 'fruit-pie'),
@@ -80,6 +83,10 @@ Props = ((5, 'partyBall', 'partyBall'),
   'birthday-cake',
   'birthday-cake-mod',
   'birthday-cake-chan'),
+         (5,
+          'birthday-cake-slice',
+          'birthday-cake-slice-mod',
+          'birthday-cake-slice-chan'),
  (5, 'wedding-cake', 'wedding_cake'),
  (3.5, 'squirting-flower', 'squirting-flower'),
  (5,
@@ -102,7 +109,10 @@ Props = ((5, 'partyBall', 'partyBall'),
   'stormcloud-mod',
   'stormcloud-chan'),
  (5, 'geyser', 'geyser'),
- (3.5, 'button', 'button'),
+ (3.5,
+  'button',
+  'button-mod',
+  'button-chan'),
  (5,
   'flowerpot',
   'flowerpot-mod',
@@ -135,6 +145,10 @@ Props = ((5, 'partyBall', 'partyBall'),
   'piano',
   'piano-mod',
   'piano-chan'),
+         (5,
+          'ttht_m_ene_fileFolder',
+          'ttht_m_ene_fileFolder-mod',
+          'ttht_m_ene_fileFolder-chan'),
  (5,
   'rake-react',
   'rake-step-mod',
@@ -173,6 +187,23 @@ Props = ((5, 'partyBall', 'partyBall'),
           'court-costs-calculator',
           'court-costs-calculator-mod',
           'court-costs-calculator-chan'),
+(5,
+          'cc_a_prp_bat_playcard',
+ 'cc_a_prp_bat_playcard-mod',
+          'cc_a_prp_bat_playcard-chan',),
+         (5,
+          'cc_a_prp_bat_watercooler',
+          'cc_a_prp_bat_watercooler-mod',
+          'cc_a_prp_bat_watercooler-chan'),
+(5,
+          'cc_m_chr_ene_highroller',
+          'cc_m_chr_ene_highroller-mod',
+          'cc_m_chr_ene_highroller-chan'),
+
+(5,
+          'ttht_m_ene_techbotLaptop',
+          'ttht_m_ene_techbotLaptop-mod',
+          'ttht_m_ene_techbotLaptop-chan'),
  (3.5,
   'clip-on-tie',
   'clip-on-tie-mod',
@@ -190,6 +221,7 @@ Props = ((5, 'partyBall', 'partyBall'),
  (5, 'watercooler', 'watercooler'),
          (5, 'modeltv', 'modeltv'),
  (5, 'dagger', 'dagger'),
+(5, 'ttrpg_m_ene_prp_bouncedRate', 'ttrpg_m_ene_prp_bouncedRate'),
  (5, 'card', 'card'),
  (5, 'baseball', 'baseball'),
  (5, 'bird', 'bird'),
@@ -203,6 +235,8 @@ Props = ((5, 'partyBall', 'partyBall'),
  (5, 'newspaper', 'newspaper'),
  (5, 'pink-slip', 'pink-slip'),
          (5, 'lightning_battle', 'lightning_battle'),
+         (5, 'spring', 'spring'),
+         (5, 'waterBalloon', 'waterBalloon'),
  (5,
   'teeth',
   'teeth-mod',
@@ -211,17 +245,62 @@ Props = ((5, 'partyBall', 'partyBall'),
           'litigator-teeth',
           'litigator-teeth-mod',
           'litigator-teeth-chan'),
+(5,
+ 'cannon',
+          'cannon-mod',
+          'cannon-chan'),
+(3.5,
+ 'zap-button',
+          'zap-button-mod',
+          'zap-button-chan'),
+(3.5,
+ 'trap-button',
+          'trap-button-mod',
+          'trap-button-chan'),
+(3.5,
+ 'drop-button',
+          'drop-button-mod',
+          'drop-button-chan'),
+(3.5,
+ 'heal-button',
+          'heal-button-mod',
+          'heal-button-chan'),
+(3.5,
+ 'lure-button',
+          'lure-button-mod',
+          'lure-button-chan'),
+(3.5,
+ 'squirt-button',
+          'squirt-button-mod',
+          'squirt-button-chan'),
+(5,
+ 'cannon2',
+          'cannon2-mod',
+          'cannon2-chan'),
+(5,
+ 'cannon3',
+          'cannon3-mod',
+          'cannon3-chan'),
  (5, 'power-tie', 'power-tie'),
+         (5, 'bonus-check', 'bonus-check'),
  (3.5, 'spray', 'spray'),
  (3.5, 'splash', 'splash'),
  (3.5,
   'splat',
   'splat-mod',
   'splat-chan'),
+         (3.5,
+          'zap_beam',
+          'zap_beam-mod',
+          'zap_beam-chan'),
  (3.5,
   'stun',
   'stun-mod',
   'stun-chan'),
+         (3.5,
+          'stun2',
+          'stun2-mod',
+          'stun2-chan'),
  (3.5, 'glow', 'glow'),
  (3.5,
   'suit_explosion',
@@ -330,6 +409,9 @@ class PropPool:
         propName = 'dust'
         self.propStrings[propName] = (self.getPath(5, 'dust-mod'), self.getPath(5, 'dust-chan'))
         self.propTypes[propName] = 'actor'
+        propName = 'dust2'
+        self.propStrings[propName] = (self.getPath(5, 'dust2-mod'), self.getPath(5, 'dust2-chan'))
+        self.propTypes[propName] = 'actor'
         propName = 'kapow'
         self.propStrings[propName] = (self.getPath(5, 'kapow-mod'), self.getPath(5, 'kapow-chan'))
         self.propTypes[propName] = 'actor'
@@ -357,6 +439,12 @@ class PropPool:
             self.props[name].setScale(0.5)
         elif name == 'fruitpie':
             self.props[name].setScale(0.75)
+        elif name == 'cc_a_prp_bat_playcard':
+            self.props[name].setTwoSided(True)
+        elif name == 'calculator':
+            self.props[name].setTwoSided(True)
+        elif name == 'court-costs-calculator':
+            self.props[name].setTwoSided(True)
         elif name == 'double-windsor':
             self.props[name].setScale(1.5)
         elif name[:6] == 'splat-':
@@ -364,8 +452,10 @@ class PropPool:
             scale = prop.getScale() * Splats[name[6:]][0]
             prop.setScale(scale)
             prop.setColor(Splats[name[6:]][1])
+            self.props[name].setTwoSided(True)
         elif name == 'splash-from-splat':
             self.props[name].setColor(0.75, 0.75, 1.0, 1.0)
+            self.props[name].setTwoSided(True)
         elif name == 'clip-on-tie':
             tie = self.props[name]
             tie.getChild(0).setHpr(23.86, -16.03, 9.18)
@@ -381,6 +471,11 @@ class PropPool:
             lips.flattenMedium()
         elif name == '5dollar':
             tex = loader.loadTexture('phase_5/maps/dollar_5.jpg')
+            tex.setMinfilter(Texture.FTLinearMipmapLinear)
+            tex.setMagfilter(Texture.FTLinear)
+            self.props[name].setTexture(tex, 1)
+        elif name == 'stun2':
+            tex = loader.loadTexture('phase_5/maps/ttcc_fx_battleParticles_palette_2.png')
             tex.setMinfilter(Texture.FTLinearMipmapLinear)
             tex.setMagfilter(Texture.FTLinear)
             self.props[name].setTexture(tex, 1)
@@ -406,7 +501,13 @@ class PropPool:
                 cloud = self.props[name].find(cloudName)
                 cloud.setBin('fixed', bin)
                 bin -= 10
-
+        elif name == 'dust2':
+            bin = 110
+            for cloudNum in xrange(1, 50):
+                cloudName = '**/cloud' + str(cloudNum)
+                cloud = self.props[name].find(cloudName)
+                cloud.setBin('fixed', bin)
+                bin -= 10
         elif name == 'kapow':
             l = self.props[name].find('**/letters')
             l.setBin('fixed', 20)

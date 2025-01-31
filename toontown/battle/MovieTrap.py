@@ -47,7 +47,9 @@ def doTraps(traps):
                 rake2.pose('rake', 0)
                 trapPropList.append([rake, rake2])
             elif level == 2:
-                trapPropList.append([globalPropPool.getProp('quicksand')])
+                spring = globalPropPool.getProp('spring')
+                spring2 = MovieUtil.copyProp(spring)
+                trapPropList.append([spring, spring2])
             elif level == 3:
                 marbles = globalPropPool.getProp('marbles')
                 marbles2 = MovieUtil.copyProp(marbles)
@@ -95,7 +97,7 @@ def __doTrapLevel(trap, trapProps, explode = 0):
     elif level == 1:
         return __trapRake(trap, trapProps, explode)
     elif level == 2:
-        return __trapMarbles(trap, trapProps, explode)
+        return __trapSpringboard(trap, trapProps, explode)
     elif level == 3:
         return __trapMarbles(trap, trapProps, explode)
     elif level == 4:
@@ -302,7 +304,7 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     trapTrack.append(Func(trapProp.setScale, Point3(0.1, 0.1, 0.1)))
     trapTrack.append(Func(trapProp.reparentTo, suit))
     trapTrack.append(Func(trapProp.setPos, trapPoint))
-    trapTrack.append(LerpScaleInterval(trapProp, 1.2, Point3(1.7, 1.7, 1.7)))
+    trapTrack.append(LerpScaleInterval(trapProp, 0.25, Point3(1.7, 1.7, 1.7)))
     if explode == 1:
         dustNode = hidden.attachNewNode('DustNode')
         trapTrack.append(Func(trapProp.wrtReparentTo, hidden))
@@ -319,7 +321,7 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
         suit.battleTrapIsFresh = 1
     trapTracks.append(trapTrack)
 
-    button = globalPropPool.getProp('button')
+    button = globalPropPool.getProp('trap-button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
     toonTrack = Sequence()
@@ -331,10 +333,12 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     toonTrack.append(Func(toon.setHpr, battle, origHpr))
     if propName == 'quicksand':
         propSound = globalBattleSoundCache.getSound('TL_quicksand.ogg')
+    elif propName == 'spring':
+        propSound = globalBattleSoundCache.getSound('AA_spring_place.ogg')
     else:
         propSound = globalBattleSoundCache.getSound('TL_trap_door.ogg')
     buttonSound = globalBattleSoundCache.getSound('AA_drop_trigger_box.ogg')
-    soundTrack = Sequence(Wait(2.3), SoundInterval(buttonSound, duration=0.67, node=toon), Wait(0.3), SoundInterval(propSound, duration=0.5, node=toon))
+    soundTrack = Sequence(Wait(2.3), SoundInterval(buttonSound, duration=0.5, node=toon), SoundInterval(propSound, duration=0.5, node=toon))
     return Parallel(trapTracks, toonTrack, soundTrack)
 
 
@@ -381,6 +385,12 @@ def __trapQuicksand(trap, trapProps, explode):
     quicksand = trapProps[0]
     return __createPlacedTrapMultiTrack(trap, quicksand, 'quicksand', explode=explode)
 
+def __trapSpringboard(trap, trapProps, explode):
+    toon = trap['toon']
+    suit = trap['target'][0]['suit']
+    notify.debug('toon: %s lays quicksand in front of suit: %d' % (toon.getName(), suit.doId))
+    spring = trapProps[0]
+    return __createPlacedTrapMultiTrack(trap, spring, 'spring', explode=explode)
 
 def __trapTrapdoor(trap, trapProps, explode):
     toon = trap['toon']

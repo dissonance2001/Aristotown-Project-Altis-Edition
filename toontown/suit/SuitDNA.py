@@ -175,7 +175,7 @@ suitHeadTypes = ['f',
                  'nhy',
                  'wrt',
                  'auh']
-suitATypes = ['ym',
+suitATypes = [
 'mm',
 'ds',
               'dot',
@@ -184,7 +184,6 @@ suitATypes = ['ym',
               'kpn',
               'vpr',
               'kyl',
-              'gry',
               'sfs',
               'pyc',
               'sys',
@@ -254,7 +253,6 @@ suitATypes = ['ym',
               'ssr',
               'txm',
               'mg',
-              'bdb',
               'rng',
               'cps',
               'csh',
@@ -275,9 +273,9 @@ suitATypes = ['ym',
               'jdg',
               'jb',
               'gkp',
-              'bw',
-              'phs',
+    'ls',
               'bby',
+    'm',
               'dvk',
               'ghd',
               'cry',
@@ -289,10 +287,10 @@ suitBTypes = ['p',
               'cfp',
               'sd',
               'tm',
-              'm',
               'nd',
+              'bw',
+              'bdb',
               'dvp',
-              'ls',
               'mb',
               'ptr',
               'kbc',
@@ -300,6 +298,7 @@ suitBTypes = ['p',
               'inw',
               'ant',
               'sb',
+              'gry',
               'dar',
               'dfr',
               'ms',
@@ -316,6 +315,7 @@ suitBTypes = ['p',
               'mp',
               'scg',
               'otm',
+              'sdb',
               'isw',
               'fb',
               'sft',
@@ -326,6 +326,7 @@ suitCTypes = ['f',
               'le',
               'brv',
               'dty',
+'ym',
               'nar',
               'cm',
               'bfh',
@@ -334,6 +335,7 @@ suitCTypes = ['f',
               'bf',
               'jr',
               'sw',
+              'phs',
               'dvg',
               'trb',
               'hho',
@@ -342,7 +344,6 @@ suitCTypes = ['f',
               'tf',
               'skd',
               'cmk',
-              'sdb',
               'tg',
               'trm',
               'mb',
@@ -434,7 +435,7 @@ def getSuitBodyType(name):
         return 'c'
     else:
         print 'Unknown body type for suit name: ', name
-    
+
     return
 
 
@@ -454,8 +455,8 @@ def getSuitDept(name):
         return suitDepts[5]
     else:
         print 'Unknown dept for suit name: ', name
-    
-    return 
+
+    return
 
 
 def getDeptFullname(dept):
@@ -480,10 +481,14 @@ def getSuitName(deptIndex, typeIndex):
 
 
 def getRandomSuitType(level, rng = random):
-    try:
-        returnval = random.randint(max(level - 12, 1), min(level, 11))
-    except:
-        returnval = 8
+    if level <= 18:
+        returnval = random.randint(7, 14)
+    elif level > 18:
+        returnval = random.randint(12, 14)
+    elif level > 20:
+        returnval = 14
+    else:
+        returnval = 14
 
     return returnval
 

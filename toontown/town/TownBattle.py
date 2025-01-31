@@ -3,7 +3,11 @@ import types
 from direct.fsm import StateData
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
+from direct.interval.IntervalGlobal import *
+from toontown.battle.BattleSounds import *
 from toontown.town import TownBattleAttackPanel
+from toontown.toonbase import ToontownGlobals
+from toontown.toonbase import ToontownLoader
 from toontown.town import TownBattleWaitPanel
 from toontown.town import TownBattleChooseAvatarPanel
 from toontown.town import TownBattleSOSPanel
@@ -190,10 +194,12 @@ class TownBattle(StateData.StateData):
         self.time = time
         self.timer.setTime(time)
 
+
+
     def __cogPanels(self, num):
         for panel in self.cogPanels:
             panel.hide()
-            panel.setPos(0, 0, 0.8)
+            panel.setPos(0, 0, 0.7)
 
         for i in range(num):
             self.cogPanels[i].setX(((num - 1) * 0.25) - (i * 0.5))
@@ -203,10 +209,7 @@ class TownBattle(StateData.StateData):
         self.notify.debug('enterPanels() num: %d localNum: %d' % (num, localNum))
         for toonPanel in self.toonPanels:
             toonPanel.hide()
-            if settings['newGui'] == True:
-                z = -0.3
-            else:
-                z = -0.7
+            z = -0.84
             toonPanel.setPos(0, 0, z)
 
         if num == 1:

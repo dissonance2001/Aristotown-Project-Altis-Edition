@@ -4,6 +4,7 @@ from toontown.battle.BattleProps import *
 from toontown.battle.BattleSounds import *
 from toontown.battle import BattleParticles
 from toontown.battle.RewardPanel import *
+from toontown.chat.ChatGlobals import *
 from toontown.battle import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import MovieUtil
@@ -33,39 +34,46 @@ def doSounds(sounds):
         return (None, None)
     npcArrivals, npcDepartures, npcs = MovieNPCSOS.doNPCTeleports(sounds)
     mtrack = Parallel()
+    mainTrack = Parallel()
     hitCount = 0
     prevLevel = 0
-    prevSounds = [[],
-     [],
-     [],
-     [],
-     [],
-     [],
-                  [],
-     []]
+    soundHitsCount = 0
+    prevSounds = {}
+    for i in xrange(MAX_LEVEL_INDEX + 1):
+        prevSounds[i] = []
     for sound in sounds:
         level = sound['level']
         prevSounds[level].append(sound)
         for target in sound['target']:
             if target['hp'] > 0:
-                hitCount += 1
+                soundHitsCount += 1
                 break
 
-    delay = 0.0
-    for soundList in prevSounds:
+    totalDamage = [0] * len(sounds[0]['target'])
+    lastSound = None
+    for soundList in prevSounds.values():
         if len(soundList) > 0:
-            mtrack.append(__doSoundsLevel(soundList, delay, hitCount, npcs))
-            delay += 0
+            mainTrack.append(__doSoundsLevel(soundList))
 
-    soundTrack = Sequence(npcArrivals, mtrack, npcDepartures)
+        for sound in soundList:
+            for target in sound['target']:
+                lastSound = sound
+                totalDamage[sound['target'].index(target)] += target['hp']
+
+    if lastSound:
+        mainTrack.append(__getSuitTrack(lastSound, soundHitsCount, totalDamage))
+
+    deathTracks = __getSuitDeathTracks(lastSound)
+    soundTrack = Sequence(npcArrivals, mainTrack, npcDepartures, deathTracks)
     targets = sounds[0]['target']
-    camDuration = mtrack.getDuration()
+    camDuration = mainTrack.getDuration() + deathTracks.getDuration()
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
     camTrack = MovieCamera.chooseSoundShot(sounds, targets, camDuration, enterDuration, exitDuration)
     return (soundTrack, camTrack)
 
-def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamage, hpbonus, toon, npcs):
+def __getSuitTrack(sound, hitCount, totalDamage):
+    targets = sound['target']
     tracks = Parallel()
     attacks = 0
     uberDelay = 0.0
@@ -75,35 +83,34 @@ def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamag
         isUber = 1
     for target in targets:
         suit = target['suit']
-        if totalDamage > 0 and sound == lastSoundThatHit:
-            hp = target['hp']
-            died = target['died']
+        targetIndex = targets.index(target)
+        if totalDamage[targetIndex] > 0:
             battle = sound['battle']
+            hpBonus = 0
             kbbonus = target['kbbonus']
-            suitTrack = Sequence()
-            toonTrack = Sequence(Func(toon.showHpTextWhite, "ENCORE!"))
-            showDamage = Func(suit.showHpText, -totalDamage, openEnded=0)
-            updateHealthBar = Func(suit.updateHealthBar, totalDamage)
+            suit = target['suit']
+            died = target['died']
+            revived = target['revived']
+            suitTrack = Sequence(Wait(tSuitReact))
+            showDamage = Func(suit.showHpText, -totalDamage[targetIndex], openEnded=0)
+            updateHealthBar = Func(suit.updateHealthBar, totalDamage[targetIndex])
             if isUber:
                 breakEffect = BattleParticles.createParticleEffect(file='soundBreak')
                 breakEffect.setDepthWrite(0)
                 breakEffect.setDepthTest(0)
                 breakEffect.setTwoSided(1)
                 soundEffect = globalBattleSoundCache.getSound(hitSoundFiles[0])
-            suitTrack.append(Wait(delay + tSuitReact))
             if isUber:
                 delayTime = random.random()
                 suitTrack.append(Wait(delayTime + 2.0))
                 suitTrack.append(Func(setPosFromOther, breakEffect, suit, Point3(0, 0.0, suit.getHeight() - 1.0)))
                 #suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5))) THIS CRASHES PANDA WITH A BOUNDING SPHERE ERROR
                 suitTrack.append(Sequence(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit)))
-                suitTrack.append(toonTrack)
                 if died:
                     suitTrack.append(headExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
                 suitTrack.append(updateHealthBar)
-                suitTrack.append(toonTrack)
             if hitCount == 1:
                 if suit.style.dept == 'l':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
@@ -195,79 +202,122 @@ def __getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamag
                 suitTrack.append(__createSuitResetPosTrack(suit, battle))
                 suitTrack.append(Func(battle.unlureSuit, suit))
             bonusTrack = None
-            if hpbonus > 0:
-                bonusTrack = Sequence(Wait(delay + tSuitReact + delay + 0.75 + uberDelay), Func(suit.showHpText, -hpbonus, 1, openEnded=0), Func(suit.updateHealthBar, hpbonus))
-            if suit.maxHP > 0:
-                if float(suit.currHP - (totalDamage + kbbonus + hpbonus)) / float(suit.maxHP) <= 0.25:
-                    suitTrack.append(Func(suit.loop, 'neutral-hurt'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                                Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                                Func(headPart.loop,
-                                 'neutral-hurt', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                                Func(headPart.loop,
-                                 'neutral-hurt')
-                        )
-                else:
-                    suitTrack.append(
-                        Func(suit.loop, 'neutral'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                            Func(headPart.loop,
-                                 'neutral')
-                        )
+            if hpBonus > 0:
+                bonusTrack = Sequence(Wait(tSuitReact + 0.75 + uberDelay),
+                                      Func(suit.showHpText, -hpBonus, 1, openEnded=0))
+                bonusTrack.append(updateHealthBar)
+            suitTrack.append(Func(suit.setNeutralAnimation))
+            suitTrack.append(Func(suit.setChatAbsolute,
+                               '',
+                               CFSpeech | CFTimeout))
+            suitIndex = battle.activeSuits.index(suit)
+            suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, totalDamage[targetIndex], battle))
+            suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, totalDamage[targetIndex], battle))
+            suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, totalDamage[targetIndex], battle))
+            suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, totalDamage[targetIndex], battle))
+            suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, totalDamage[targetIndex], battle))
+            suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, totalDamage[targetIndex], battle))
+            suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, totalDamage[targetIndex], battle))
+            suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, totalDamage[targetIndex], battle))
+            suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, totalDamage[targetIndex], battle))
+            suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, totalDamage[targetIndex], battle))
             if bonusTrack == None:
                 tracks.append(suitTrack)
             else:
                 tracks.append(Parallel(suitTrack, bonusTrack))
-        elif totalDamage <= 0:
+        elif totalDamage[targetIndex] <= 0:
             battle = sound['battle']
-            if battle.isSuitLured(suit) == 1:
+            if suit.isLured:
                 tracks.append(__createSuitResetPosTrack(suit, battle))
                 tracks.append(Func(battle.unlureSuit, suit))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        headLoop = Func(headPart.loop,
-                                        'neutral%s' % (
-                                            '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
-                                        fromFrame=0, toFrame=22)
-                        tracks.append(headLoop)
-                if suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        headLoop = Func(headPart.loop,
-                                        'neutral%s' % (
-                                            '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
-                                        fromFrame=0, toFrame=22)
-                        tracks.append(headLoop)
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        headLoop = Func(headPart.loop,
-                                        'neutral%s' % (
-                                            '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-                        tracks.append(headLoop)
-            tracks.append(Sequence(Wait(2.9), Func(MovieUtil.indicateMissed, suit, 1.0)))
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, delay + tSuitReact))
+            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, tSuitReact))
+            tracks.append(Func(suit.setNeutralAnimation))
+            tracks.append(Func(suit.setChatAbsolute,
+                                  '',
+                                  CFSpeech | CFTimeout))
 
     return tracks
+
+def __getSuitDeathTracks(sound):
+    targets = sound['target']
+    toon = sound['toon']
+    deathTracks = Parallel()
+    for target in targets:
+        battle = sound['battle']
+        suit = target['suit']
+        died = target['died']
+        revived = target['revived']
+        if revived != 0 and suit.isSkeleton:
+            deathTracks.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+        if revived != 0 and not suit.isSkeleton:
+            deathTracks.append(MovieUtil.createSuitReviveTrack(suit, battle))
+        if died != 0 and suit.isVirtual:
+            deathTracks.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
+        elif died and not suit.isVirtual:
+            if sound['level'] >= 7:
+                deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
+            else:
+                deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
+
+    return deathTracks
+
+
+def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'dsf':
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.425))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding:
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(
+            Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK),
+            Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.115))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
+                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    else:
+        return Sequence()
 	
 def headExplodeTrack(suit, battle):
     headParts = suit.getHeadParts()
@@ -306,58 +356,32 @@ def headExplodeTrack(suit, battle):
     return Parallel(suitTrack, explosionTrack, deathSoundTrack, gears1Track, gears2MTrack)
 
 
-def __doSoundsLevel(sounds, delay, hitCount, npcs):
-    lastSoundThatHit = None
-    totalDamage = 0
-    for sound in sounds:
-        for target in sound['target']:
-            if target['hp'] > 0:
-                lastSoundThatHit = sound
-                totalDamage += target['hp']
-                break
-
+def __doSoundsLevel(sounds):
     mainTrack = Sequence()
     tracks = Parallel()
-    deathTracks = Parallel()
     for sound in sounds:
         toon = sound['toon']
         if 'npc' in sound:
             toon = sound['npc']
         level = sound['level']
-        targets = sound['target']
-        hpbonus = sound['hpbonus']
-        attackMTrack = soundfn_array[sound['level']](sound, delay, toon, targets, level)
-        tracks.append(Sequence(Wait(delay), attackMTrack))
-        tracks.append(__getSuitTrack(sound, lastSoundThatHit, delay, hitCount, targets, totalDamage, hpbonus, toon, npcs))
-        for target in targets:
-            battle = sound['battle']
-            suit = target['suit']
-            died = target['died']
-            revived = target['revived']
-            if revived != 0 and suit.isSkeleton:
-                deathTracks.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-            if revived != 0 and not suit.isSkeleton:
-                deathTracks.append(MovieUtil.createSuitReviveTrack(suit, battle))
-            if died != 0 and suit.isVirtual:
-                deathTracks.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
-            elif died and not suit.isVirtual:
-                if (sound['level'] >= 7) and (totalDamage >= target['hp']):
-                    deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
-                else:
-                    deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
+        attackMTrack = soundFunctions[sound['level']](sound, 0, toon, level)
+        tracks.append(Sequence(attackMTrack))
 
     mainTrack.append(tracks)
-    mainTrack.append(deathTracks)
     return mainTrack
+
 
 
 def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
+    updateTrack = Parallel(Func(suit.setChatAbsolute,
+                                '',
+                                CFSpeech | CFTimeout))
     walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.loop, 'neutral'))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(walkTrack, moveTrack)
+    return Parallel(walkTrack, updateTrack, moveTrack)
 
 
 def createSuitResetPosTrack(suit, battle):
@@ -406,7 +430,7 @@ def __hasLuredSuits(sound):
 
     return retval
 
-def __doKazoo(sound, delay, toon, targets, level):
+def __doKazoo(sound, delay, toon, level):
     tracks = Parallel()
     instrMin = Vec3(0.001, 0.001, 0.001)
     instrMax = Vec3(0.65, 0.65, 0.65)
@@ -464,7 +488,7 @@ def __doKazoo(sound, delay, toon, targets, level):
     return tracks
 
 
-def __doBikehorn(sound, delay, toon, targets, level):
+def __doBikehorn(sound, delay, toon, level):
     tracks = Parallel()
     instrMin = Vec3(0.001, 0.001, 0.001)
     instrMax = Vec3(0.65, 0.65, 0.65)
@@ -516,7 +540,7 @@ def __doBikehorn(sound, delay, toon, targets, level):
     return tracks
 
 
-def __doWhistle(sound, delay, toon, targets, level):
+def __doWhistle(sound, delay, toon, level):
     tracks = Parallel()
     instrMin = Vec3(0.001, 0.001, 0.001)
     instrMax = Vec3(0.2, 0.2, 0.2)
@@ -566,7 +590,7 @@ def __doWhistle(sound, delay, toon, targets, level):
     return tracks
 
 
-def __doBugle(sound, delay, toon, targets, level):
+def __doBugle(sound, delay, toon, level):
     tracks = Parallel()
     instrMin = Vec3(0.001, 0.001, 0.001)
     instrMax = Vec3(0.4, 0.4, 0.4)
@@ -627,7 +651,7 @@ def __doBugle(sound, delay, toon, targets, level):
     return tracks
 
 
-def __doAoogah(sound, delay, toon, targets, level):
+def __doAoogah(sound, delay, toon, level):
     tracks = Parallel()
     instrMin = Vec3(0.001, 0.001, 0.001)
     instrMax = Vec3(0.5, 0.5, 0.5)
@@ -677,7 +701,7 @@ def __doAoogah(sound, delay, toon, targets, level):
     return tracks
 
 
-def __doElephant(sound, delay, toon, targets, level):
+def __doElephant(sound, delay, toon, level):
     tracks = Parallel()
     instrMin = Vec3(0.001, 0.001, 0.001)
     instrMax1 = Vec3(0.3, 0.4, 0.2)
@@ -734,7 +758,7 @@ def __doElephant(sound, delay, toon, targets, level):
     return tracks
 
 
-def __doFoghorn(sound, delay, toon, targets, level):
+def __doFoghorn(sound, delay, toon, level):
     tracks = Parallel()
     instrMin = Vec3(0.001, 0.001, 0.001)
     instrMax1 = Vec3(0.1, 0.1, 0.1)
@@ -789,7 +813,7 @@ def __doFoghorn(sound, delay, toon, targets, level):
     return tracks
 
 
-def __doOpera(sound, delay, toon, targets, level):
+def __doOpera(sound, delay, toon, level):
     tracks = Parallel()
     delay = delay
     instrMin = Vec3(0.001, 0.001, 0.001)
@@ -869,6 +893,15 @@ def getScaleBlendIntervals(props, duration, startScale, endScale, blendType):
 
 
 soundfn_array = (__doKazoo,
+                  __doBikehorn,
+                  __doWhistle,
+                  __doBugle,
+                  __doAoogah,
+                  __doElephant,
+                  __doFoghorn,
+                  __doOpera)
+
+soundFunctions = (__doKazoo,
                   __doBikehorn,
                   __doWhistle,
                   __doBugle,

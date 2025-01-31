@@ -31,6 +31,7 @@ class DistributedBoardbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.F
         else:
             self.cagedToonNpcId = random.choice(NPCToons.HQnpcFriends.keys())
         self.bossMaxDamage = ToontownGlobals.SellbotBossMaxDamage
+        self.maxHP = self.bossMaxDamage
         self.recoverRate = 0
         self.recoverStartTime = 0
         self.nerfed = ToontownGlobals.SELLBOT_NERF_HOLIDAY in simbase.air.holidayManager.currentHolidays

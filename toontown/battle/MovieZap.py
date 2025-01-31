@@ -7,6 +7,7 @@ from toontown.toon.ToonDNA import *
 from toontown.battle import MovieUtil
 from toontown.suit.SuitDNA import *
 from toontown.battle import MovieUtil
+from toontown.chat.ChatGlobals import *
 from toontown.battle import MovieNPCSOS
 from toontown.battle import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
@@ -15,10 +16,10 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieZap')
-hitSoundFiles = ('AA_tesla.ogg', 'AA_carpet.ogg', 'AA_balloon.ogg', 'AA_tesla.ogg',
-                 'AA_tesla.ogg', 'AA_tesla.ogg', 'AA_tesla.ogg', 'AA_lightning.ogg')
-missSoundFiles = ('AA_tesla_miss.ogg', 'AA_carpet.ogg', 'AA_balloon_miss.ogg', 'AA_tesla_miss.ogg',
-                  'AA_tesla_miss.ogg', 'AA_tesla_miss.ogg', 'AA_tesla_miss.ogg', 'AA_lightning_miss.ogg')
+hitSoundFiles = ('AA_tesla.ogg', 'AA_carpet.ogg', 'AA_balloon.ogg', 'AA_zap_radio.ogg',
+                 'AA_zap_tv.ogg', 'AA_zap_stagelight_hit.ogg', 'AA_tesla.ogg', 'AA_lightning.ogg')
+missSoundFiles = ('AA_tesla.ogg', 'AA_carpet.ogg', 'AA_balloon.ogg', 'AA_zap_radio.ogg',
+                 'AA_zap_tv.ogg', 'AA_zap_stagelight_miss.ogg', 'AA_tesla.ogg', 'AA_lightning.ogg')
 sprayScales = [0.2,
                0.3,
                0.1,
@@ -67,7 +68,7 @@ def doZaps(zaps):
         return 0
     suitZaps.sort(compFunc)
 
-    delay = 0.0
+    delay = 0
 
     mtrack = Parallel()
     for st in suitZaps:
@@ -75,7 +76,7 @@ def doZaps(zaps):
             ival = __doSuitZaps(st, npcs)
             if ival:
                 mtrack.append(Sequence(Wait(delay), ival))
-            delay = delay + 0
+            delay = delay + TOON_ZAP_SUIT_DELAY
     zapTrack = Sequence(npcArrivals, mtrack, npcDepartures)
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
@@ -146,9 +147,12 @@ def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.loop, 'neutral'))
+    updateTrack = Parallel(Func(suit.setChatAbsolute,
+                                '',
+                                CFSpeech | CFTimeout))
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimation))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(walkTrack, moveTrack)
+    return Parallel(walkTrack, updateTrack, moveTrack)
 	
 def createSuitResetPosTrack(suit, battle):
     return __createSuitResetPosTrack(suit, battle)
@@ -174,13 +178,8 @@ def __soakRemoval(suit, remove=0):
     else:
         suitBody = [suit.find('**/body'), suit.find('**/hands')]
     suitInterval = Sequence()
-    if suit.style.name == 'lit':
-        for headPart in suit.headParts:
-            suitInterval.append(Func(headPart.hide))
-        suit.generateHead3('litigator', animated=True)
-        texture = loader.loadTexture('phase_11/maps/ttcc_ene_litigator.png')
-        for headPart in suit.headParts:
-            headPart.setTexture(texture, 1)
+    if suit.style.name == 'lit' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeDryLitigator))
     for bodyPart in suitBody:
         if bodyPart:
             suitInterval.append(Func(bodyPart.setColor, color))
@@ -190,21 +189,27 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
     if hp > 0:
         suitTrack = Sequence()
         zapTracks = Parallel()
+        scapeGoatTrack = Sequence()
         sival = ActorInterval(suit, anim)
         sival = []
-        if fShowStun == 1:
-            sival = Parallel(Func(suit.loop, anim), MovieUtil.zapCog(suit, beforeStun, afterStun, battle), MovieUtil.createSuitStunInterval(suit, beforeStun, afterStun))
+        suitIndex = battle.activeSuits.index(suit)
+        if toon.getTrackBonusLevel(ZAP_TRACK) > 1:
+            zapTracks.append(__zapNearby(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
+            zapTracks.append(__zapNearby2(suit, anim, suitIndex + 2, battle.activeSuits, tContact, hp, battle))
+            zapTracks.append(__zapNearby(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+            zapTracks.append(__zapNearby2(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
         else:
-            sival = Parallel(Func(suit.loop, anim), MovieUtil.zapCog(suit, beforeStun, afterStun, battle), MovieUtil.createSuitStunInterval(suit, beforeStun, afterStun))
-        #suitIndex = battle.activeSuits.index(suit)
-        #zapTracks.append(__zapNearby(suitIndex + 1, battle.activeSuits))
-        #zapTracks.append(__zapNearby(suitIndex - 1, battle.activeSuits))
+            zapTracks.append(__zapNearby2(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
+            zapTracks.append(__zapNearby3(suit, anim, suitIndex + 2, battle.activeSuits, tContact, hp, battle))
+            zapTracks.append(__zapNearby2(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+            zapTracks.append(__zapNearby3(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=ZAP_TRACK)
         updateHealthBar = Func(suit.updateHealthBar, hp)
+        soakRemoval = Func(suit.makeUnSoaked)
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
-        suitTrack.append(sival)
+        suitTrack.append(Parallel(MovieUtil.zapCog(suit, anim, .5, 2.0, battle), MovieUtil.createSuitStunInterval(suit, .5, 2.0)))
         bonusTrack = Sequence(Wait(tContact))
         if kbbonus > 0:
             suitTrack.append(__createSuitResetPosTrack(suit, battle))
@@ -214,55 +219,33 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=ZAP_TRACK))
             bonusTrack.append(updateHealthBar)
         if died != 0 and suit.isVirtual:
-            suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
+            suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.shortCircuitTrack(suit, battle))
         else:
-            suitTrack.append(Wait(1.0))
-            if suit.maxHP > 0:
-                if float(suit.currHP - hp) / float(suit.maxHP) <= 0.25:
-                    suitTrack.append(Func(suit.loop, 'neutral-hurt'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                                Func(headPart.loop,
-                                     'neutral-hurt')
-                            )
-                else:
-                    suitTrack.append(
-                        Func(suit.loop, 'neutral'))
-                    if suit.style.name == 'crf':
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                                Func(headPart.loop,
-                                     'neutral', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'mad':
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                                Func(headPart.loop,
-                                     'neutral', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            suitTrack.append(
-                                Func(headPart.loop,
-                                     'neutral')
-                            )
-            suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
+            suitTrack.append(__createSuitResetPosTrack(suit, battle))
+            suitTrack.append(Func(battle.unlureSuit, suit))
             #suitTrack.append(__soakRemoval(suit))
         if revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         if revived != 0 and not suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
+        suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
+        suitTrack.append(soakRemoval)
+        suitTrack.append(Func(suit.setNeutralAnimation))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              '',
+                              CFSpeech | CFTimeout))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         return Parallel(suitTrack, bonusTrack, zapTracks)
     elif dodge:
         return MovieUtil.createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits)
@@ -308,9 +291,309 @@ def shortCircuitTrack(suit, battle):
 def say(statement):
     print statement
 
-def __zapNearby(suitIndex, suits):
-    if len(suits) > suitIndex >= 0:
-        return Parallel(Sequence(ActorInterval(suits[suitIndex], 'shock')))
+
+def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'dsf':
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.425))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding:
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.115))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
+                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    else:
+        return Sequence()
+
+def __ScapegoatAbsorb1(suitIndex, suits, hp, battle):
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'dsf':
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(hp * 0.425))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding:
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(hp * 0.115))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
+                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    else:
+        return Sequence()
+
+def __ScapegoatAbsorb2(suitIndex, suits, hp, battle):
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'dsf':
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(
+            Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK),
+            Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(hp * 0.425))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding:
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(hp * 0.115))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
+                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
+        return suitTrack
+    else:
+        return Sequence()
+
+def __zapNearby(suit, anim, suitIndex, suits, tContact, hp, battle):
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and suits[suitIndex].isSoaked and not (suits[suitIndex].dna.name == 'mad' and suits[suitIndex].currHP > 7200 and not suits[suitIndex].currHP > 8000):
+        revives = suits[suitIndex].getSkeleRevives()
+        soakRemoval = Func(suits[suitIndex].makeUnSoaked)
+        suitTrack = Sequence()
+        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 0.84))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.84))
+        suitTrack.append(Wait(tContact))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(MovieUtil.zapCog(suits[suitIndex], anim,.5, 2.0, battle), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPZap, battle))
+        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'soak', startTime=3.5), __soakRemoval(suits[suitIndex], 1)))
+        suitTrack.append(__createSuitResetPosTrack(suits[suitIndex], battle))
+        suitTrack.append(Func(battle.unlureSuit, suits[suitIndex]))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(soakRemoval)
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb1(suitIndex + 5, battle.activeSuits, hp, battle))
+        return suitTrack
+    else:
+        return Sequence()
+
+def __zapNearby2(suit, anim, suitIndex, suits, tContact, hp, battle):
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and suits[suitIndex].isSoaked and not (suits[suitIndex].dna.name == 'mad' and suits[suitIndex].currHP > 7200 and not suits[suitIndex].currHP > 8000):
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        soakRemoval = Func(suits[suitIndex].makeUnSoaked)
+        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 0.67))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.67))
+        suitTrack.append(Wait(tContact))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(MovieUtil.zapCog(suits[suitIndex], anim,.5, 2.0, battle), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPZap, battle))
+        suitTrack.append(
+            Parallel(ActorInterval(suits[suitIndex], 'soak', startTime=3.5), __soakRemoval(suits[suitIndex], 1)))
+        suitTrack.append(__createSuitResetPosTrack(suits[suitIndex], battle))
+        suitTrack.append(Func(battle.unlureSuit, suits[suitIndex]))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(soakRemoval)
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 5, battle.activeSuits, hp, battle))
+        return suitTrack
+    else:
+        return Sequence()
+
+def __zapNearby3(suit, anim, suitIndex, suits, tContact, hp, battle):
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and suits[suitIndex].isSoaked and not (suits[suitIndex].dna.name == 'mad' and suits[suitIndex].currHP > 7200 and not suits[suitIndex].currHP > 8000):
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        soakRemoval = Func(suits[suitIndex].makeUnSoaked)
+        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 0.35))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.35))
+        suitTrack.append(Wait(tContact))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(MovieUtil.zapCog(suits[suitIndex], anim, .5, 2.0, battle),
+                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        if suits[suitIndex].isVirtual and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPZap, battle))
+        suitTrack.append(
+            Parallel(ActorInterval(suits[suitIndex], 'soak', startTime=3.5), __soakRemoval(suits[suitIndex], 1)))
+        suitTrack.append(__createSuitResetPosTrack(suits[suitIndex], battle))
+        suitTrack.append(Func(battle.unlureSuit, suits[suitIndex]))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(soakRemoval)
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 5, battle.activeSuits, hp, battle))
+        return suitTrack
     else:
         return Sequence()
 
@@ -372,7 +655,7 @@ def __doJoybuzzer(zap, delay, fShowStun, npcs=[]):
 
     sprayTrack = MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold, dSprayScale, horizScale=scale, vertScale=scale)
     if hp > 0 or delay <= 0:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived))
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived))
     return tracks
 
 
@@ -429,7 +712,7 @@ def __doRug(zap, delay, fShowStun, npcs=[]):
         sprayTrack = MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold, dSprayScale, horizScale=scale, vertScale=scale)
         tracks.append(Sequence(Wait(tSpray), sprayTrack))
     if hp > 0 or delay <= 0:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, dodge=False))
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, dodge=False))
     return tracks
 
 
@@ -487,7 +770,7 @@ def __doBalloon(zap, delay, fShowStun, npcs=[]):
     pistolTrack.append(Func(MovieUtil.removeProp, pistol))
     tracks.append(pistolTrack)
     if hp > 0 or delay <= 0:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived))
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived))
     return tracks
 
 
@@ -550,7 +833,7 @@ def __doBattery(zap, delay, fShowStun, npcs=[]):
     
     tracks.append(sprayTrack)
     if hp > 0 or delay <= 0:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits, battle, toon, 
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits, battle, toon,
             fShowStun, revived=revived))
     
     return tracks
@@ -623,6 +906,163 @@ def __doTazer(zap, delay, fShowStun, npcs=[]):
     return tracks
 
 
+def __doBrokenTV(zap, delay, fShowStun, npcs=[]):
+    toon = zap['toon']
+    level = zap['level']
+    hpbonus = zap['hpbonus']
+    target = zap['target']
+    suit = target['suit']
+    hp = target['hp']
+    kbbonus = target['kbbonus']
+    died = target['died']
+    revived = target['revived']
+    leftSuits = target['leftSuits']
+    rightSuits = target['rightSuits']
+    battle = zap['battle']
+    suitPos = suit.getPos(battle)
+    origHpr = toon.getHpr(battle)
+    endPos = toon.getPos(battle)
+    endPos.setY(endPos.getY() + 3)
+    hitSuit = hp > 0
+    scale = sprayScales[level]
+    tButton = 0.0
+    dButtonScale = 0.5
+    dButtonHold = 3.0
+    dSprayScale = 0.1
+    dSprayHold = 1.8
+    tContact = 2.9
+    tSpray = 2.5
+    tSprayDelay = 2.5
+    tSuitDodges = 1.8
+    shrinkDuration = 0.4
+    tracks = Parallel()
+    soundTrack = __getSoundTrack(level, hitSuit, 2.3, toon)
+    tracks.append(soundTrack)
+    button = globalPropPool.getProp('zap-button')
+    button2 = MovieUtil.copyProp(button)
+    buttons = [button, button2]
+    hands = toon.getLeftHands()
+    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, endPos),
+                         ActorInterval(toon, 'pushbutton'),
+                         Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'),
+                         Func(toon.setHpr, battle, origHpr))
+
+    tracks.append(toonTrack)
+    coil = globalPropPool.getProp('tv')
+    coil.setPos(endPos)
+    coil.setH(180)
+    propTrack = Sequence()
+    propTrack.append(Func(coil.show))
+    propTrack.append(Func(coil.setScale, Point3(0.1, 0.1, 0.1)))
+    propTrack.append(Func(coil.reparentTo, battle))
+    propTrack.append(LerpScaleInterval(coil, 1.5, Point3(1.0, 1.0, 1.0)))
+    propTrack.append(Wait(tSpray + 2))
+    propTrack.append(LerpScaleInterval(nodePath=coil, scale=Point3(1.0, 1.0, 0.1), duration=shrinkDuration))
+    propTrack.append(Func(MovieUtil.removeProp, coil))
+    tracks.append(propTrack)
+    targetPoint = lambda suit=suit: __suitTargetPoint(suit)
+
+    def getSprayStartPos(coil=coil, toon=toon):
+        toon.update(0)
+        p = coil.getPos(render)
+        p.setZ(1)
+        return p
+
+    sprayTrack = Sequence()
+    sprayTrack.append(Wait(tSprayDelay))
+    sprayTrack.append(
+        MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold,
+                              dSprayScale,
+                              horizScale=scale, vertScale=scale))
+
+    tracks.append(sprayTrack)
+    if hp > 0 or delay <= 0:
+        tracks.append(
+            __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits,
+                           battle,
+                           toon, fShowStun, revived=revived))
+
+    return tracks
+
+def __doBrokenRadio(zap, delay, fShowStun, npcs=[]):
+    toon = zap['toon']
+    level = zap['level']
+    hpbonus = zap['hpbonus']
+    target = zap['target']
+    suit = target['suit']
+    hp = target['hp']
+    kbbonus = target['kbbonus']
+    died = target['died']
+    revived = target['revived']
+    leftSuits = target['leftSuits']
+    rightSuits = target['rightSuits']
+    battle = zap['battle']
+    suitPos = suit.getPos(battle)
+    origHpr = toon.getHpr(battle)
+    endPos = toon.getPos(battle)
+    endPos.setY(endPos.getY() + 3)
+    hitSuit = hp > 0
+    scale = sprayScales[level]
+    tButton = 0.0
+    dButtonScale = 0.5
+    dButtonHold = 3.0
+    dSprayScale = 0.1
+    dSprayHold = 1.8
+    tContact = 2.9
+    tSpray = 2.5
+    tSprayDelay = 2.5
+    tSuitDodges = 1.8
+    shrinkDuration = 0.4
+    tracks = Parallel()
+    soundTrack = __getSoundTrack(level, hitSuit, 2.3, toon)
+    tracks.append(soundTrack)
+    button = globalPropPool.getProp('zap-button')
+    button2 = MovieUtil.copyProp(button)
+    buttons = [button, button2]
+    hands = toon.getLeftHands()
+    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, endPos),
+                         ActorInterval(toon, 'pushbutton'),
+                         Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'),
+                         Func(toon.setHpr, battle, origHpr))
+
+    tracks.append(toonTrack)
+    coil = globalPropPool.getProp('ttcc_gag_radio')
+    coil.setPos(endPos)
+    coil.setH(180)
+    propTrack = Sequence()
+    propTrack.append(Func(coil.show))
+    propTrack.append(Func(coil.setScale, Point3(0.1, 0.1, 0.1)))
+    propTrack.append(Func(coil.reparentTo, battle))
+    propTrack.append(LerpScaleInterval(coil, 1.5, Point3(1.0, 1.0, 1.0)))
+    propTrack.append(Wait(tSpray + 2))
+    propTrack.append(LerpScaleInterval(nodePath=coil, scale=Point3(1.0, 1.0, 0.1), duration=shrinkDuration))
+    propTrack.append(Func(MovieUtil.removeProp, coil))
+    tracks.append(propTrack)
+    targetPoint = lambda suit=suit: __suitTargetPoint(suit)
+
+    def getSprayStartPos(coil=coil, toon=toon):
+        toon.update(0)
+        p = coil.getPos(render)
+        p.setZ(1)
+        return p
+
+    sprayTrack = Sequence()
+    sprayTrack.append(Wait(tSprayDelay))
+    sprayTrack.append(
+        MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold,
+                              dSprayScale,
+                              horizScale=scale, vertScale=scale))
+
+    tracks.append(sprayTrack)
+    if hp > 0 or delay <= 0:
+        tracks.append(
+            __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits,
+                           battle,
+                           toon, fShowStun, revived=revived))
+
+    return tracks
+
+
 def __doTesla(zap, delay, fShowStun, npcs=[]):
     toon = zap['toon']
     level = zap['level']
@@ -655,11 +1095,11 @@ def __doTesla(zap, delay, fShowStun, npcs=[]):
     tracks = Parallel()
     soundTrack = __getSoundTrack(level, hitSuit, 2.3, toon)
     tracks.append(soundTrack)
-    button = globalPropPool.getProp('button')
+    button = globalPropPool.getProp('zap-button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
     hands = toon.getLeftHands()
-    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, endPos), ActorInterval(toon, 'pushbutton'), 
+    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, endPos), ActorInterval(toon, 'pushbutton'),
         Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'), Func(toon.setHpr, battle, origHpr))
     
     tracks.append(toonTrack)
@@ -679,7 +1119,7 @@ def __doTesla(zap, delay, fShowStun, npcs=[]):
     def getSprayStartPos(coil = coil, toon = toon):
         toon.update(0)
         p = coil.getPos(render)
-        #p.setZ(5) Temp "fix," this doesn't like to cooperate
+        p.setZ(5) #Temp "fix," this doesn't like to cooperate
         return p
 
     sprayTrack = Sequence()
@@ -689,13 +1129,12 @@ def __doTesla(zap, delay, fShowStun, npcs=[]):
     
     tracks.append(sprayTrack)
     if hp > 0 or delay <= 0:
-        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits, battle, 
+        tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits, battle,
             toon, fShowStun, revived=revived))
     
     return tracks
 
-
-def __doLightning(zap, delay, fShowStun, uberClone = 0, npcs=[]):
+def __doStagelight(zap, delay, fShowStun, uberClone = 0, npcs=[]):
     if npcs is None:
         npcs = []
     toon = zap['toon']
@@ -707,7 +1146,7 @@ def __doLightning(zap, delay, fShowStun, uberClone = 0, npcs=[]):
     kbbonus = target['kbbonus']
     rightSuits = target['rightSuits']
     suit = target['suit']
-    button = globalPropPool.getProp('button')
+    button = globalPropPool.getProp('zap-button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
     hands = toon.getLeftHands()
@@ -724,54 +1163,138 @@ def __doLightning(zap, delay, fShowStun, uberClone = 0, npcs=[]):
     if not 'npc' in zap:
         toonTrack.append(Func(toon.setHpr, battle, origHpr))
     tracks = Parallel()
-    tContact = 1.5
+    tContact = 5.0
     tSpray = 1.5
-    tSuitDodges = 1.8
-    toonTrack, buttonTrack = MovieUtil.createButtonInterval(battle, delay, origHpr, suitPos, toon)
+    tSuitDodges = 4
+    toonTrack, buttonTrack = MovieUtil.createButtonIntervalZap(battle, delay, origHpr, suitPos, toon)
     tracks.append(toonTrack)
     tracks.append(buttonTrack)
-    soundTrack = __getSoundTrack(level, hitSuit, 2.3, toon)
+    soundTrack = __getSoundTrack(level, hitSuit, 3, toon)
     tracks.append(soundTrack)
-    cloud = globalPropPool.getProp('stormcloud')
-    cloudHeight = suit.height + 3
-    cloudPosPoint = Point3(0, 0, cloudHeight)
-    scaleUpPoint = Point3(10, 10, 10)
-    rainDelay = 1
+    cage = globalPropPool.getProp('ttcc_gag_stagelight')
+    texture = loader.loadTexture('phase_5/maps/battle/ttcc_gag_stagelight.png')
+    texture2 = loader.loadTexture('phase_3/maps/ttcc_lights_palette.png')
+    cage.find('**/stagelight').setTexture(texture, 1)
+    cage.find('**/spotlight').setTexture(texture2, 1)
+    cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
+    y = suitPos.getY()
+    cagePos = [Point3(0, 0, suit.height + 15), suit.getHpr(battle)]
+    for headPart in suit.headParts:
+        head = headPart
+        headPartShow = Parallel(Func(headPart.show))
+        headPartHide = Parallel(Func(headPart.hide))
     if hitSuit:
-        cloudHold = 4.7
+        cagePropTrack = Sequence(getPropAppearTrack(cage, suit, cagePos, 3, scaleUpPoint=Point3(1.5, 1.5, 1.5), scaleUpTime=0),
+                                 Parallel(ActorInterval(suit, 'soak', endTime=1.5), Func(suit.setNeutralAnimation)),
+                                 Wait(0.25),
+        Func(cage.find('**/spotlight').hide),
+            Parallel(cagePosition, Func(cage.reparentTo, head)),
+            Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn')), Wait(2),
+        LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
+        Func(MovieUtil.removeProp, cage)
+        )
     else:
-        cloudHold = 1.7
-
-    def getCloudTrack(cloud, suit, cloudPosPoint, scaleUpPoint, rainDelay, cloudHold, battle=battle):
-        tracks = Parallel()
-        track = Sequence(Func(MovieUtil.showProp, cloud, suit, cloudPosPoint), Func(cloud.pose, 'stormcloud', 0),
-                         LerpScaleInterval(cloud, 1.5, scaleUpPoint, startScale=MovieUtil.PNT3_NEARZERO),
-                         Wait(rainDelay), ActorInterval(cloud, 'stormcloud'))
-        track.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
-        track.append(Func(MovieUtil.removeProp, cloud))
-        oldcolor = render.getColorScale()
-        lightTrack = Sequence(Wait(rainDelay + 1), LerpColorScaleInterval(render, 1, (0.3, 0.3, 0.3, 1)), Wait(2),
-                              LerpColorScaleInterval(render, 1, (oldcolor)))
-        tracks.append(track)
-        tracks.append(lightTrack)
-        return tracks
-
-    tracks.append(getCloudTrack(cloud, suit, cloudPosPoint, scaleUpPoint, rainDelay, cloudHold))
+        cagePropTrack = Sequence(
+            getPropAppearTrack(cage, suit, cagePos, 3, scaleUpPoint=Point3(1.5, 1.5, 1.5), scaleUpTime=0),
+            Parallel(ActorInterval(suit, 'soak', endTime=1.5), Func(suit.setNeutralAnimation)),
+            Wait(0.25),
+            Func(cage.find('**/spotlight').hide),
+        Parallel(cagePosition),
+        Parallel(cage.posInterval(0.1, Point3(suitPos.getX(), 0, 0), blendType='easeIn')),
+        LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
+        Func(MovieUtil.removeProp, cage)
+    )
+    tracks.append(cagePropTrack)
     if hp > 0 or delay <= 0:
         tracks.append(
-            __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits,
+            __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits,
                            battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, revived=revived, npcs=npcs))
 
 
     return tracks
 
 
+def __doLightning(zap, delay, fShowStun, uberClone = 0, npcs=[]):
+    if npcs is None:
+        npcs = []
+    toon = zap['toon']
+    battle = zap['battle']
+    target = zap['target']
+    hp = target['hp']
+    level = zap['level']
+    leftSuits = target['leftSuits']
+    kbbonus = target['kbbonus']
+    rightSuits = target['rightSuits']
+    suit = target['suit']
+    button = globalPropPool.getProp('zap-button')
+    button2 = MovieUtil.copyProp(button)
+    buttons = [button, button2]
+    hands = toon.getLeftHands()
+    targets = zap['target']
+    died = target['died']
+    revived = target['revived']
+    hpbonus = zap['hpbonus']
+    hitSuit = hp > 0
+    suitPos = suit.getPos(battle)
+    origHpr = toon.getHpr(battle)
+    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, suitPos),
+                         ActorInterval(toon, 'pushbutton'),
+                         Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'))
+    if not 'npc' in zap:
+        toonTrack.append(Func(toon.setHpr, battle, origHpr))
+    tracks = Parallel()
+    tContact = 3.5
+    tSpray = 1.5
+    tSuitDodges = 1.5
+    toonTrack, buttonTrack = MovieUtil.createButtonIntervalZap(battle, delay, origHpr, suitPos, toon)
+    tracks.append(toonTrack)
+    tracks.append(buttonTrack)
+    soundTrack = __getSoundTrack(level, hitSuit, 2.5, toon)
+    tracks.append(soundTrack)
+    cage = loader.loadModel('phase_5/models/props/lightning')
+    cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
+    y = suitPos.getY()
+    cagePos = [Point3(suitPos.getX(), y, 100.0), suit.getHpr(battle)]
+    cagePropTrack = Sequence(
+        getPropAppearTrack(cage, battle, cagePos, 3.5, scaleUpPoint=Point3(2.0, 2.0, 10.0), scaleUpTime=0),
+        Parallel(cagePosition),
+        Parallel(cage.posInterval(0, Point3(suitPos.getX(), y, 0.1), blendType='easeIn')), Wait(0.5),
+        LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
+        Func(MovieUtil.removeProp, cage)
+        )
+
+    tracks.append(cagePropTrack)
+    if hp > 0 or delay <= 0:
+        tracks.append(
+            __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits,
+                           battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, revived=revived, npcs=npcs))
+
+
+    return tracks
+
+
+def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None):
+    propTrack = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints))
+    if poseExtraArgs:
+        propTrack.append(Func(prop.pose, *poseExtraArgs))
+    propTrack.append(LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale))
+    return propTrack
+
+def __showProp(prop, parent, pos, hpr = None, scale = None):
+    prop.reparentTo(parent)
+    prop.setPos(pos)
+    if hpr:
+        prop.setHpr(hpr)
+    if scale:
+        prop.setScale(scale)
+
+
 
 zapfn_array = (__doJoybuzzer,
  __doRug,
  __doBalloon,
- __doBattery,
- __doTazer,
-               __doBattery,
+ __doBrokenRadio,
+ __doBrokenTV,
+               __doStagelight,
                __doTesla,
  __doLightning)

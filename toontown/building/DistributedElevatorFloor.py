@@ -53,8 +53,8 @@ class DistributedElevatorFloor(DistributedElevatorFSM.DistributedElevatorFSM):
         self.elevatorModel = loader.loadModel('phase_4/models/modules/elevator')
         self.elevatorModel.reparentTo(hidden)
         self.elevatorModel.setScale(1.05)
-        self.leftDoor = self.elevatorModel.find('**/left-door')
-        self.rightDoor = self.elevatorModel.find('**/right-door')
+        self.leftDoor = self.elevatorModel.find('**/left_door')
+        self.rightDoor = self.elevatorModel.find('**/right_door')
         self.elevatorModel.find('**/light_panel').removeNode()
         self.elevatorModel.find('**/light_panel_frame').removeNode()
         if self.isSetup:
@@ -65,10 +65,10 @@ class DistributedElevatorFloor(DistributedElevatorFSM.DistributedElevatorFSM):
         self.elevatorModel = loader.loadModel('phase_11/models/lawbotHQ/LB_ElevatorScaled')
         if not self.elevatorModel:
             self.notify.error('No Elevator Model in DistributedElevatorFloor.setupElevator. Please inform JML. Fool!')
-        self.leftDoor = self.elevatorModel.find('**/left-door')
+        self.leftDoor = self.elevatorModel.find('**/left_door')
         if self.leftDoor.isEmpty():
             self.leftDoor = self.elevatorModel.find('**/left_door')
-        self.rightDoor = self.elevatorModel.find('**/right-door')
+        self.rightDoor = self.elevatorModel.find('**/right_door')
         if self.rightDoor.isEmpty():
             self.rightDoor = self.elevatorModel.find('**/right_door')
         DistributedElevatorFSM.DistributedElevatorFSM.setupElevator(self)

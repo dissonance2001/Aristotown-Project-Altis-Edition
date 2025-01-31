@@ -62,8 +62,20 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('confetti.ptf')
     elif name == 'DemotionFreeze':
         return loadParticleFile('demotionFreeze.ptf')
+    elif name == 'demotionUnFreeze2':
+        return loadParticleFile('demotionUnFreeze2.ptf')
     elif name == 'DemotionSpray':
         return loadParticleFile('demotionSpray.ptf')
+    elif name == 'DemotionSpray3':
+        return loadParticleFile('reOrgSpray2.ptf')
+    elif name == 'downsizeCloud2':
+        return loadParticleFile('downsizeCloud2.ptf')
+    elif name == 'downsizeSpray2':
+        return loadParticleFile('downsizeSpray2.ptf')
+    elif name == 'DemotionFreeze2':
+        return loadParticleFile('demotionFreeze2.ptf')
+    elif name == 'DemotionSpray2':
+        return loadParticleFile('demotionSpray2.ptf')
     elif name == 'DoubleTalkLeft':
         return loadParticleFile('doubleTalkLeft.ptf')
     elif name == 'DoubleTalkRight':
@@ -116,6 +128,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('synergy.ptf')
     elif name == 'Waterfall':
         return loadParticleFile('waterfall.ptf')
+    elif name == 'dataSpray':
+        return loadParticleFile('dataSpray.ptf')
     elif name == 'FreezingRain':
         return loadParticleFile('snow.ptf')
     elif name == 'SnowWaterfall':

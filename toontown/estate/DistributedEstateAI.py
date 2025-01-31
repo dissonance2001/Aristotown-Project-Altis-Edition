@@ -332,7 +332,7 @@ class Garden:
         spentPoints = av.getSpentTrainingPoints()
         for i in xrange(8):
             if spentPoints[i] >= 3:
-                bonus[i] = 6
+                bonus[i] = 7
         av.b_setTrackBonusLevel(bonus)
 
     def update(self):

@@ -4,7 +4,10 @@ from toontown.toonbase import ToontownGlobals
 from toontown.coghq import DistributedCashbotBossCraneAI
 from toontown.coghq import DistributedCashbotBossSafeAI
 from toontown.suit import DistributedCashbotBossGoonAI
+from toontown.battle import DistributedBattleMinibossAI
 from toontown.coghq import DistributedCashbotBossTreasureAI
+from toontown.suit import DistributedMinibossAI
+from toontown.building import SuitPlannerInteriorAI
 from toontown.battle import BattleExperienceAI
 from toontown.chat import ResistanceChat
 from direct.fsm import FSM
@@ -16,12 +19,12 @@ from otp.ai.MagicWordGlobal import *
 from toontown.building import SuitBuildingGlobals
 import math
 
-class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM):
+class DistributedCashbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBossAI')
     maxGoons = 8
 
     def __init__(self, air):
-        DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, 'm')
+        DistributedMinibossAI.DistributedMinibossAI.__init__(self, air, 'm')
         FSM.FSM.__init__(self, 'DistributedCashbotBossAI')
         self.cranes = None
         self.safes = None
@@ -47,10 +50,11 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.waitingForHelmet = 0
         self.avatarHelmets = {}
         self.bossMaxDamage = ToontownGlobals.CashbotBossMaxDamage
+        self.maxHP = self.bossMaxDamage
         self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage
 
     def generate(self):
-        DistributedBossCogAI.DistributedBossCogAI.generate(self)
+        DistributedMinibossAI.DistributedMinibossAI.generate(self)
         if __dev__:
             self.scene.reparentTo(self.getRender())
 
@@ -66,9 +70,55 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            return self.invokeSuitPlanner(SuitBuildingGlobals.SUIT_PLANNER_CFO, 0)
-        else:
-            return self.invokeSuitPlanner(SuitBuildingGlobals.SUIT_PLANNER_CFO_SKELECOGS, 1)
+            cogs = self.invokeEmptyPlanner(11, 'crf1')
+            activeSuits = cogs['activeSuits']
+            reserveSuits = cogs['reserveSuits']
+            while len(activeSuits) >= 6:
+                suit = activeSuits.pop()
+                reserveSuits.append((suit, 100))
+
+            def compareJoinChance(a, b):
+                return cmp(a[1], b[1])
+
+            reserveSuits.sort(compareJoinChance)
+            return {'activeSuits': activeSuits,
+                    'reserveSuits': reserveSuits}
+        if battleNumber == 2:
+            cogs = self.invokeEmptyPlanner(11, 'crf2')
+            activeSuits = cogs['activeSuits']
+            reserveSuits = cogs['reserveSuits']
+            while len(activeSuits) >= 6:
+                suit = activeSuits.pop()
+                reserveSuits.append((suit, 100))
+
+            def compareJoinChance(a, b):
+                return cmp(a[1], b[1])
+
+            reserveSuits.sort(compareJoinChance)
+            return {'activeSuits': activeSuits,
+                    'reserveSuits': reserveSuits}
+
+    def generateNewReserves(self, battleNumber):
+        if battleNumber == 1:
+            cogs = self.invokeReservesPlanner(11, 'crf1')
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
+        elif battleNumber == 2:
+            cogs = self.invokeReservesPlanner(11, 'crf2')
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
+
+    def invokeSuitPlanner(self, buildingCode, skelecog):
+        suits = DistributedMinibossAI.DistributedMinibossAI.invokeSuitPlanner(self, buildingCode, skelecog)
+        activeSuits = suits['activeSuits'][:]
+        reserveSuits = suits['reserveSuits'][:]
+        if len(activeSuits) + len(reserveSuits) >= 6:
+            while len(activeSuits) < 6:
+                activeSuits.append(reserveSuits.pop()[0])
+
+        retval = {'activeSuits': activeSuits,
+                  'reserveSuits': reserveSuits}
+        return retval
 
     def removeToon(self, avId):
         if self.cranes != None:
@@ -83,7 +133,7 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             for goon in self.goons:
                 goon.removeToon(avId)
 
-        DistributedBossCogAI.DistributedBossCogAI.removeToon(self, avId)
+        DistributedMinibossAI.DistributedMinibossAI.removeToon(self, avId)
 
     def __makeBattleThreeObjects(self):
         if self.cranes == None:
@@ -138,16 +188,22 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         else:
             attackCode = random.choice([ToontownGlobals.BossCogAreaAttack,
                                         ToontownGlobals.BossCogFrontAttack,
-                                        ToontownGlobals.BossCogSlowDirectedAttack,
-                                        ToontownGlobals.BossCogAreaAttack,
-                                        ToontownGlobals.BossCogSlowDirectedAttack,
                                         ToontownGlobals.BossCogSlowDirectedAttack])
         if attackCode == ToontownGlobals.BossCogAreaAttack:
             self.__doAreaAttack()
+            self.waitForNextAttack(10)
         elif attackCode == ToontownGlobals.BossCogSlowDirectedAttack:
             self.__doDirectedAttack()
+            self.waitForNextAttack(10)
+        elif attackCode == ToontownGlobals.BossCogRecoverDizzyAttack:
+            self.b_setAttackCode(ToontownGlobals.BossCogRecoverDizzyAttack)
+            self.waitForNextAttack(10)
+        elif attackCode == ToontownGlobals.BossCogFrontAttack:
+            self.b_setAttackCode(ToontownGlobals.BossCogFrontAttack)
+            self.waitForNextAttack(10)
         elif attackCode == ToontownGlobals.BossCogGolfAreaAttack:
             self.__doGolfAreaAttack()
+            self.waitForNextAttack(10)
         else:
             self.b_setAttackCode(attackCode)
 
@@ -259,11 +315,10 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def makeGoon(self, side = None):
         if side == None:
             side = random.choice(['EmergeA', 'EmergeB'])
-        goon = self.__chooseOldGoon()
-        if goon == None:
+        goon = DistributedCashbotBossGoonAI.DistributedCashbotBossGoonAI(self.air, self)
+        if goon != None:
             if len(self.goons) >= self.getMaxGoons():
                 return
-            goon = DistributedCashbotBossGoonAI.DistributedCashbotBossGoonAI(self.air, self)
             goon.generateWithRequired(self.zoneId)
             self.goons.append(goon)
         if self.getBattleThreeTime() > 1.0:
@@ -358,7 +413,7 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         healthDisp = int(self.bossMaxDamage - self.bossDamage)
         if healthDisp < 0:
            healthDisp = 0
-        self.setHealthTag(str(healthDisp) + '/' + str(int(self.bossMaxDamage)))
+        #self.setHealthTag(str(healthDisp) + '/' + str(int(self.bossMaxDamage)))
         if self.bossDamage >= self.bossMaxDamage:
             self.b_setState('Victory')
         elif self.attackCode != ToontownGlobals.BossCogDizzy:
@@ -408,25 +463,25 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                     simbase.backups.save('cfo-staff-event', ('participants',), participants)
 
     def enterOff(self):
-        DistributedBossCogAI.DistributedBossCogAI.enterOff(self)
+        DistributedMinibossAI.DistributedMinibossAI.enterOff(self)
         self.rewardedToons = []
 
     def exitOff(self):
-        DistributedBossCogAI.DistributedBossCogAI.exitOff(self)
+        DistributedMinibossAI.DistributedMinibossAI.exitOff(self)
 
     def enterIntroduction(self):
-        DistributedBossCogAI.DistributedBossCogAI.enterIntroduction(self)
+        DistributedMinibossAI.DistributedMinibossAI.enterIntroduction(self)
         self.__makeBattleThreeObjects()
         self.__resetBattleThreeObjects()
         self.calcAndSetBattleDifficulty()
 
     def exitIntroduction(self):
-        DistributedBossCogAI.DistributedBossCogAI.exitIntroduction(self)
+        DistributedMinibossAI.DistributedMinibossAI.exitIntroduction(self)
         self.__deleteBattleThreeObjects()
         
     def makeBattleTwoBattles(self):
         self.postBattleState = 'PrepareBattleThree'
-        self.initializeBattles(2, ToontownGlobals.CashbotBossBattleThreePosHpr)
+        self.initializeBattles(2, ToontownGlobals.CashbotBossBattleOnePosHpr)
         
     def enterPrepareBattleTwo(self):
         self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)
@@ -524,62 +579,13 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.recalcDifficulty()
 		
     def recalcDifficulty(self):
-        if self.battleDifficulty >= 7:
-            self.b_setMaxHp(ToontownGlobals.CashbotBossMaxDamage*3.2)
-            self.goonMinStrength = 10
-            self.goonMaxStrength = 43
-            self.goonMinScale = 0.8
-            self.goonMaxScale = 2.6
-            self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage * 2
-            self.b_setBonusUnites(2)
-        elif self.battleDifficulty >= 6:
-            self.b_setMaxHp(ToontownGlobals.CashbotBossMaxDamage*2.9)
-            self.goonMinStrength = 10
-            self.goonMaxStrength = 41
-            self.goonMinScale = 0.8
-            self.goonMaxScale = 2.5
-            self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage * 1.8
-            self.b_setBonusUnites(2)
-        elif self.battleDifficulty >= 5:
-            self.b_setMaxHp(ToontownGlobals.CashbotBossMaxDamage*2.5)
-            self.goonMinStrength = 10
-            self.goonMaxStrength = 39
-            self.goonMinScale = 0.8
-            self.goonMaxScale = 2.4
-            self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage * 1.6
-            self.b_setBonusUnites(1)
-        elif self.battleDifficulty >= 4:
-            self.b_setMaxHp(ToontownGlobals.CashbotBossMaxDamage*2)
-            self.goonMinStrength = 8
-            self.goonMaxStrength = 38
-            self.goonMinScale = 0.6
-            self.goonMaxScale = 2.4
-            self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage * 1.4
-            self.b_setBonusUnites(1)
-        elif self.battleDifficulty >= 3:
-            self.b_setMaxHp(ToontownGlobals.CashbotBossMaxDamage*1.5)
-            self.goonMinStrength = 8
-            self.goonMaxStrength = 36
-            self.goonMinScale = 0.6
-            self.goonMaxScale = 2.2
-            self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage * 1.3
-            self.b_setBonusUnites(1)
-        elif self.battleDifficulty >= 2:
-            self.b_setMaxHp(ToontownGlobals.CashbotBossMaxDamage*1.2)
-            self.goonMinStrength = 5
-            self.goonMaxStrength = 35
-            self.goonMinScale = 0.5
-            self.goonMaxScale = 2.1
-            self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage * 1.2
-            self.b_setBonusUnites(0)
-        else:
-            self.b_setMaxHp(ToontownGlobals.CashbotBossMaxDamage)
-            self.goonMinStrength = 3
-            self.goonMaxStrength = 32
-            self.goonMinScale = 0.3
-            self.goonMaxScale = 1.7
-            self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage
-            self.b_setBonusUnites(0)
+        self.b_setMaxHp(ToontownGlobals.CashbotBossMaxDamage)
+        self.goonMinStrength = 12
+        self.goonMaxStrength = 43
+        self.goonMinScale = 1.0
+        self.goonMaxScale = 2.6
+        self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage
+        self.b_setBonusUnites(0)
 
     def b_setBattleDifficulty(self, batDiff):
         self.setBattleDifficulty(batDiff)
@@ -655,7 +661,7 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.__deleteBattleThreeObjects()
 
     def enterEpilogue(self):
-        DistributedBossCogAI.DistributedBossCogAI.enterEpilogue(self)
+        DistributedMinibossAI.DistributedMinibossAI.enterEpilogue(self)
         self.d_setRewardId(self.rewardId)
 
 
@@ -702,7 +708,7 @@ def skipCFO():
 @magicWord(category=CATEGORY_PROGRAMMER)
 def cfo2():
     """
-    Skips to the final round of the CFO.
+    Skips to the next round of the CFO.
     """
     invoker = spellbook.getInvoker()
     boss = None

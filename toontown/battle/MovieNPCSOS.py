@@ -220,7 +220,7 @@ def __doToonsHit(attack, level, hp):
 
 
 def __doCogsMiss(attack, level, hp):
-    track = __doSprinkle(attack, 'suits', hp)
+    track = __doSprinkleCogs(attack, 'suits', hp)
     pbpText = attack['playByPlayText']
     if hp == 1:
         text = TTLocalizer.MovieNPCSOSCogsMissS

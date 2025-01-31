@@ -7,6 +7,7 @@ from toontown.suit import Suit
 from toontown.suit import SuitBase
 from toontown.suit import SuitDialog
 from toontown.suit import SuitTimings
+from toontown.battle import MovieUtil
 from direct.directnotify import DirectNotifyGlobal
 from direct.directtools.DirectGeometry import CLAMP
 from direct.distributed.ClockDelta import *
@@ -60,6 +61,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.initState = None
         self.finalState = None
         self.buildingSuit = 0
+        self.battleConditions = {}
         self.fsm = ClassicFSM.ClassicFSM('DistributedSuit', [
             State.State('Off',
                         self.enterOff,
@@ -628,7 +630,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
         anims = ['bellow', 'neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
-                 'stun', 'enraged', 'insurance', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revved-up', 'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive',
+                 'stun', 'enraged', 'insurance', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup', 'scabbard', 'sparkplug', 'throttle', 'gsnap', 'throttle2', 'mouthdrop', 'dive',
                  'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'overclocked', 'come-on', 'zero']
         for anim in additionalAnims:
             anims.append(anim)
@@ -705,7 +707,91 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             soundSequence.start()
             self.cleanUpSoundList()
 
-    def setChatAbsolute(self, chatString, chatFlags, dialogue=None, interrupt=True):
+    def checkCogHP(self, battle):
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.createSuitDeathTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPBomb(self, battle):
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPZap(self, battle):
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPLaserRevive(self, battle):
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.createSuitReviveTrackVirtual(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPLaser(self, battle):
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.createVirtualSuitDeathTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPRevive(self, battle):
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.createSuitReviveTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogOvercharge(self):
+        if float(self.currHP) > float(self.maxHP * 1.5):
+            self.isOvercharged = 1
+        else:
+            self.isOvercharged = 0
+
+    def setNeutralAnimation(self):
+        if self.getDizzy():
+            Sequence(Func(self.loop, 'lured')
+                     ).start()
+        elif self.isChainsawPhase2:
+            Sequence(
+                Func(self.loop, 'neutral-override%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                ).start()
+        elif self.isOttomanPhase2:
+            Sequence(Func(self.loop, 'pace')
+                     ).start()
+        elif self.isAngry:
+            Sequence(Func(self.loop, 'neutral-enraged')
+                     ).start()
+        elif self.isImmortal and not self.dna.name == 'dsf':
+            Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
+                     ).start()
+        elif self.isVulnerable and self.dna.name == 'crf':
+            Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                     ).start()
+        else:
+            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+
+    def setNeutralAnimationTrap(self):
+        if self.isAngry:
+            Sequence(Func(self.loop, 'neutral-enraged')
+                     ).start()
+        elif self.isChainsawPhase2:
+            Sequence(
+                Func(self.loop, 'neutral-ovveride%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                ).start()
+        elif self.isImmortal and not self.dna.name == 'dsf':
+            Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
+                     ).start()
+        elif self.isVulnerable and self.dna.name == 'crf':
+            Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                     ).start()
+        else:
+            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+
+    def setChatAbsoluteTrap(self, chatString, chatFlags, dialogue=None, interrupt=True):
         searchString = chatString.lower()
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             self.animHead = 'murmur'
@@ -715,7 +801,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.animHead = 'question'
         else:
             stringLength = len(chatString)
-            if stringLength <= OTPLocalizer.DialogLength1:
+            if stringLength <= 1:
+                self.animHead = None
+            elif stringLength <= OTPLocalizer.DialogLength1:
                 self.animHead = 'grunt'
             elif stringLength <= OTPLocalizer.DialogLength2:
                 self.animHead = 'murmur'
@@ -726,20 +814,120 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.nametag.setChatText(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if self.style.name == 'crf':
-            for headPart in self.animatedHeadParts: Sequence(
-                ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
-            ).start()
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+                ).start()
         if self.style.name == 'mad':
-            for headPart in self.animatedHeadParts: Sequence(
-                ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
-            ).start()
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+                ).start()
+        if self.style.name == 'dsf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+                ).start()
         else:
-            for headPart in self.animatedHeadParts: Sequence(
-                ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-            ).start()
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                ).start()
+
+    def setChatAbsolute(self, chatString, chatFlags, dialogue=None, interrupt=True):
+        searchString = chatString.lower()
+        if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
+            self.animHead = 'murmur'
+        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
+            self.animHead = 'grunt'
+        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
+            self.animHead = 'question'
+        else:
+            stringLength = len(chatString)
+            if stringLength <= 1:
+                self.animHead = None
+            elif stringLength <= OTPLocalizer.DialogLength1:
+                self.animHead = 'grunt'
+            elif stringLength <= OTPLocalizer.DialogLength2:
+                self.animHead = 'murmur'
+            elif stringLength <= OTPLocalizer.DialogLength3:
+                self.animHead = 'statement'
+            else:
+                self.animHead = 'statement'
+        self.nametag.setChatText(chatString, chatFlags)
+        self.playCurrentDialogue(dialogue, chatFlags, interrupt)
+        if self.animHead == None and self.getDizzy():
+            if self.style.name == 'crf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
+                ).start()
+            if self.style.name == 'mad':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
+                ).start()
+            if self.style.name == 'dsf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
+                ).start()
+            else:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-lured')
+                ).start()
+        elif self.animHead == None:
+            if self.style.name == 'crf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+                ).start()
+            if self.style.name == 'mad':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+                ).start()
+            if self.style.name == 'dsf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+                ).start()
+            else:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                ).start()
+        elif self.getDizzy():
+            if self.style.name == 'crf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
+                ).start()
+            if self.style.name == 'mad':
+                for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'neutral-lured',  fromFrame=0, toFrame=22)
+                ).start()
+            if self.style.name == 'dsf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'neutral-lured',  fromFrame=0, toFrame=22)
+                ).start()
+            else:
+                for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'neutral-lured')
+                ).start()
+        else:
+            if self.style.name == 'crf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+                ).start()
+            if self.style.name == 'mad':
+                for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+                ).start()
+            if self.style.name == 'dsf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), fromFrame=0, toFrame=22)
+                ).start()
+            else:
+                for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                ).start()
 
     def cleanUpSoundList(self):
         removeList = []

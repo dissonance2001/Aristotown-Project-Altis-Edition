@@ -757,22 +757,23 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.__considerUpdateMeter()
 
     def __considerUpdateMeter(self):
-        wantMeter = self.__shouldDisplayMeter()
-        try:
-            if wantMeter and not self.overheadMeter:
-                self.overheadMeter = LaffMeter(self.style, self.hp, self.maxHp)
-                self.overheadMeter.setAvatar(self)
-                self.overheadMeter.setZ(5)
-                self.overheadMeter.setScale(1.5)
-                self.overheadMeter.reparentTo(NodePath(self.nametag.getNameIcon()))
+        pass
+        #wantMeter = self.__shouldDisplayMeter()
+        #try:
+            #if wantMeter and not self.overheadMeter:
+                #self.overheadMeter = LaffMeter(self.style, self.hp, self.maxHp)
+                #self.overheadMeter.setAvatar(self)
+                #self.overheadMeter.setZ(5)
+                #self.overheadMeter.setScale(1.5)
+                #self.overheadMeter.reparentTo(NodePath(self.nametag.getNameIcon()))
                 #self.overheadMeter.hide(BitMask32.bit(1)) # Hide from 2D camera.
-                self.overheadMeter.start()
-            elif not wantMeter and self.overheadMeter:
-                self.overheadMeter.stop()
-                self.overheadMeter.destroy()
-                self.overheadMeter = None
-        except:
-            pass
+                #self.overheadMeter.start()
+            #elif not wantMeter and self.overheadMeter:
+                #self.overheadMeter.stop()
+                #self.overheadMeter.destroy()
+                #self.overheadMeter = None
+        #except:
+            #pass
 
     def __shouldDisplayMeter(self):
         if base.meterMode == 0:
@@ -1399,7 +1400,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def doSmoothTask(self, task):
         self.smoother.computeAndApplySmoothPosHpr(self, self)
-        self.setSpeed(self.smoother.getSmoothForwardVelocity(), self.smoother.getSmoothRotationalVelocity())
+        self.setSpeed(self.smoother.getSmoothForwardVelocity(),
+                      self.smoother.getSmoothLateralVelocity())
         return Task.cont
 
     def d_setParent(self, parentToken):
@@ -2795,7 +2797,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0)), Func(self.hideHpText))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
                 seq.start()
 
     def setName(self, name = 'unknownDistributedAvatar'):
