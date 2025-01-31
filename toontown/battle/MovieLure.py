@@ -961,27 +961,18 @@ def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
         suitTrack.append(updateHealthBar)
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].isVirtual and revives >= 2:
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
-            suitTrack.append(Wait(6.0))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-            suitTrack.append(Wait(6.0))
         elif suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-            suitTrack.append(Wait(6.0))
-        elif suits[suitIndex].isSkeleton and revives >= 1:
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-            suitTrack.append(Wait(6.0))
         elif not suits[suitIndex].isSkeleton and revives >= 1:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-            suitTrack.append(Wait(6.0))
-        elif suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
-            suitTrack.append(Wait(6.0))
         elif not suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
-            suitTrack.append(Wait(6.0))
         return suitTrack
     elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding:
         revives = suits[suitIndex].getSkeleRevives()
@@ -994,27 +985,18 @@ def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
                                   MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].isVirtual and revives >= 2:
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
-            suitTrack.append(Wait(6.0))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-            suitTrack.append(Wait(6.0))
         elif suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-            suitTrack.append(Wait(6.0))
-        elif suits[suitIndex].isSkeleton and revives >= 1:
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-            suitTrack.append(Wait(6.0))
         elif not suits[suitIndex].isSkeleton and revives >= 1:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-            suitTrack.append(Wait(6.0))
-        elif suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
-            suitTrack.append(Wait(6.0))
         elif not suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
-            suitTrack.append(Wait(6.0))
         return suitTrack
     else:
         return Sequence()

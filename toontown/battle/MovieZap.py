@@ -193,16 +193,68 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         sival = ActorInterval(suit, anim)
         sival = []
         suitIndex = battle.activeSuits.index(suit)
+        if suitIndex + 1 < len(battle.activeSuits):
+            target1 = battle.activeSuits[suitIndex + 1]
+        if suitIndex + 2 < len(battle.activeSuits):
+            target2 = battle.activeSuits[suitIndex + 2]
+        if suitIndex - 1 >= 0:
+            target3 = battle.activeSuits[suitIndex - 1]
+        if suitIndex - 2 >= 0:
+            target4 = battle.activeSuits[suitIndex - 2]
         if toon.getTrackBonusLevel(ZAP_TRACK) > 1:
-            zapTracks.append(__zapNearby(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
-            zapTracks.append(__zapNearby2(suit, anim, suitIndex + 2, battle.activeSuits, tContact, hp, battle))
-            zapTracks.append(__zapNearby(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
-            zapTracks.append(__zapNearby2(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
+            if suitIndex + 1 < len(battle.activeSuits) and not suitIndex + 2 < len(battle.activeSuits) and target1.isSoaked:
+                zapTracks.append(__zapNearby(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex + 1 < len(battle.activeSuits) and suitIndex + 2 < len(battle.activeSuits) and not target2.isSoaked:
+                zapTracks.append(__zapNearby(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex + 1 < len(battle.activeSuits) and suitIndex + 2 < len(battle.activeSuits) and target2.isSoaked:
+                zapTracks.append(__zapNearby2(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
+                zapTracks.append(__zapNearby2(suit, anim, suitIndex + 2, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0 and target3.isSoaked and target4.isSoaked and suitIndex + 1 < len(battle.activeSuits) and suitIndex + 2 < len(battle.activeSuits) and target2.isSoaked and target1.isSoaked:
+                pass
+            elif suitIndex - 1 >= 0 and suitIndex + 1 < len(battle.activeSuits) and suitIndex + 2 < len(battle.activeSuits) and target2.isSoaked and target1.isSoaked and target3.isSoaked:
+                pass
+            elif suitIndex - 1 >= 0 and suitIndex + 1 < len(battle.activeSuits) and target1.isSoaked and target3.isSoaked:
+                pass
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0 and target3.isSoaked and not target4.isSoaked and not suitIndex + 1 < len(battle.activeSuits) and not suitIndex + 2 < len(battle.activeSuits):
+                zapTracks.append(__zapNearby(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0 and target3.isSoaked and target4.isSoaked and not suitIndex + 1 < len(
+                    battle.activeSuits) and not suitIndex + 2 < len(battle.activeSuits):
+                zapTracks.append(__zapNearby2(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+                zapTracks.append(__zapNearby2(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0  and target3.isSoaked and not target4.isSoaked:
+                zapTracks.append(__zapNearby(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0 and target3.isSoaked and target4.isSoaked:
+                zapTracks.append(__zapNearby2(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+                zapTracks.append(__zapNearby2(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and not suitIndex - 2 >= 0 and target3.isSoaked:
+                zapTracks.append(__zapNearby(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
         else:
-            zapTracks.append(__zapNearby2(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
-            zapTracks.append(__zapNearby3(suit, anim, suitIndex + 2, battle.activeSuits, tContact, hp, battle))
-            zapTracks.append(__zapNearby2(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
-            zapTracks.append(__zapNearby3(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
+            if suitIndex + 1 < len(battle.activeSuits) and not suitIndex + 2 < len(battle.activeSuits) and target1.isSoaked:
+                zapTracks.append(__zapNearby3(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex + 1 < len(battle.activeSuits) and suitIndex + 2 < len(battle.activeSuits) and not target2.isSoaked:
+                zapTracks.append(__zapNearby3(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex + 1 < len(battle.activeSuits) and suitIndex + 2 < len(battle.activeSuits) and target2.isSoaked:
+                zapTracks.append(__zapNearby4(suit, anim, suitIndex + 1, battle.activeSuits, tContact, hp, battle))
+                zapTracks.append(__zapNearby4(suit, anim, suitIndex + 2, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0 and target3.isSoaked and target4.isSoaked and suitIndex + 1 < len(battle.activeSuits) and suitIndex + 2 < len(battle.activeSuits) and target2.isSoaked and target1.isSoaked:
+                pass
+            elif suitIndex - 1 >= 0 and suitIndex + 1 < len(battle.activeSuits) and suitIndex + 2 < len(battle.activeSuits) and target2.isSoaked and target1.isSoaked and target3.isSoaked:
+                pass
+            elif suitIndex - 1 >= 0 and suitIndex + 1 < len(battle.activeSuits) and target1.isSoaked and target3.isSoaked:
+                pass
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0 and target3.isSoaked and not target4.isSoaked and not suitIndex + 1 < len(battle.activeSuits) and not suitIndex + 2 < len(battle.activeSuits):
+                zapTracks.append(__zapNearby3(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0 and target3.isSoaked and target4.isSoaked and not suitIndex + 1 < len(
+                    battle.activeSuits) and not suitIndex + 2 < len(battle.activeSuits):
+                zapTracks.append(__zapNearby4(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+                zapTracks.append(__zapNearby4(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0  and target3.isSoaked and not target4.isSoaked:
+                zapTracks.append(__zapNearby3(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and suitIndex - 2 >= 0 and target3.isSoaked and target4.isSoaked:
+                zapTracks.append(__zapNearby4(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
+                zapTracks.append(__zapNearby4(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
+            elif suitIndex - 1 >= 0 and not suitIndex - 2 >= 0 and target3.isSoaked:
+                zapTracks.append(__zapNearby(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=ZAP_TRACK)
         updateHealthBar = Func(suit.updateHealthBar, hp)
         soakRemoval = Func(suit.makeUnSoaked)
@@ -358,18 +410,16 @@ def __ScapegoatAbsorb1(suitIndex, suits, hp, battle):
         suitTrack.append(updateHealthBar)
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].isVirtual and revives >= 2:
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
         elif suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1:
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 1:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
         return suitTrack
@@ -384,18 +434,16 @@ def __ScapegoatAbsorb1(suitIndex, suits, hp, battle):
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
                                   MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].isVirtual and revives >= 2:
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
         elif suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1:
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 1:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
         return suitTrack
@@ -415,18 +463,16 @@ def __ScapegoatAbsorb2(suitIndex, suits, hp, battle):
         suitTrack.append(updateHealthBar)
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].isVirtual and revives >= 2:
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
         elif suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1:
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 1:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
         return suitTrack
@@ -441,18 +487,16 @@ def __ScapegoatAbsorb2(suitIndex, suits, hp, battle):
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
                                   MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].isVirtual and revives >= 2:
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
         elif suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1:
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 1:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
         return suitTrack
@@ -464,25 +508,23 @@ def __zapNearby(suit, anim, suitIndex, suits, tContact, hp, battle):
         revives = suits[suitIndex].getSkeleRevives()
         soakRemoval = Func(suits[suitIndex].makeUnSoaked)
         suitTrack = Sequence()
-        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 0.84))
+        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 1.1))
         value = hp
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.84))
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 1.1))
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
         suitTrack.append(Parallel(MovieUtil.zapCog(suits[suitIndex], anim,.5, 2.0, battle), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
-        if suits[suitIndex].isVirtual and revives >= 2:
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
         elif suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1:
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 1:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPZap, battle))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'soak', startTime=3.5), __soakRemoval(suits[suitIndex], 1)))
@@ -509,25 +551,23 @@ def __zapNearby2(suit, anim, suitIndex, suits, tContact, hp, battle):
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         soakRemoval = Func(suits[suitIndex].makeUnSoaked)
-        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 0.67))
+        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 0.55))
         value = hp
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.67))
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.55))
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
         suitTrack.append(Parallel(MovieUtil.zapCog(suits[suitIndex], anim,.5, 2.0, battle), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
-        if suits[suitIndex].isVirtual and revives >= 2:
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
         elif suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1:
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 1:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPZap, battle))
         suitTrack.append(
@@ -555,26 +595,69 @@ def __zapNearby3(suit, anim, suitIndex, suits, tContact, hp, battle):
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         soakRemoval = Func(suits[suitIndex].makeUnSoaked)
-        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 0.35))
+        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 0.9))
         value = hp
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.35))
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.9))
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
         suitTrack.append(Parallel(MovieUtil.zapCog(suits[suitIndex], anim, .5, 2.0, battle),
                                   MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
-        if suits[suitIndex].isVirtual and revives >= 2:
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
         elif suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1:
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 1:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isVirtual:
+        elif not suits[suitIndex].isVirtual:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPZap, battle))
+        suitTrack.append(
+            Parallel(ActorInterval(suits[suitIndex], 'soak', startTime=3.5), __soakRemoval(suits[suitIndex], 1)))
+        suitTrack.append(__createSuitResetPosTrack(suits[suitIndex], battle))
+        suitTrack.append(Func(battle.unlureSuit, suits[suitIndex]))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(soakRemoval)
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb2(suitIndex + 5, battle.activeSuits, hp, battle))
+        return suitTrack
+    else:
+        return Sequence()
+
+def __zapNearby4(suit, anim, suitIndex, suits, tContact, hp, battle):
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and suits[suitIndex].isSoaked and not (suits[suitIndex].dna.name == 'mad' and suits[suitIndex].currHP > 7200 and not suits[suitIndex].currHP > 8000):
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        soakRemoval = Func(suits[suitIndex].makeUnSoaked)
+        showDamage = Func(suits[suitIndex].showHpText, - int(hp * 0.45))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.45))
+        suitTrack.append(Wait(tContact))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(MovieUtil.zapCog(suits[suitIndex], anim, .5, 2.0, battle),
+                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 2:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
+        elif not suits[suitIndex].isSkeleton and revives >= 1:
+            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
         elif not suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPZap, battle))
         suitTrack.append(

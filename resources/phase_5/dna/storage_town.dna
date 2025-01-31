@@ -62,6 +62,13 @@ hood_model "phase_4/models/modules/suit_landmark_board" [
 	store_node [ "suit_landmark" "suit_landmark_g4" "" ]
 	store_node [ "suit_landmark" "suit_landmark_g5" "" ]
 	]
+hood_model "phase_4/models/modules/suit_landmark_tech" [
+	store_node [ "suit_landmark" "suit_landmark_t1" "" ]
+	store_node [ "suit_landmark" "suit_landmark_t2" "" ]
+	store_node [ "suit_landmark" "suit_landmark_t3" "" ]
+	store_node [ "suit_landmark" "suit_landmark_t4" "" ]
+	store_node [ "suit_landmark" "suit_landmark_t5" "" ]
+	]
 
 hood_model "phase_4/models/modules/elevator" [
 	store_node [ "elevator" "elevator" "" ]

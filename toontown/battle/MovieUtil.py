@@ -546,7 +546,7 @@ def createAmbassadorReviveTrack(suit, battle):
     suitTrack.append(Func(suit.setSkelecog2, True))
     suitTrack.append(Func(suit.show))
     suitTrack.append(Func(suit.setMaxHP, 4880))
-    suitTrack.append(Func(suit.setHP, 1345))
+    suitTrack.append(Func(suit.setHP, 1500))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
     suitTrack.append(Func(suit.makeRevive))

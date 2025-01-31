@@ -2497,6 +2497,7 @@ class Suit(Avatar.Avatar):
         self.isLitigationManager = 0
         self.isDead = 0
         self.isSoakImmune = 0
+        self.isRevive = 0
         self.isDamageReduction = 0
         self.isChainsawPhase2 = 0
         self.isChainsawPhase3 = 0
@@ -6735,6 +6736,7 @@ class Suit(Avatar.Avatar):
         self.setDisplayName(nameInfo)
 
         self.isSkeleton = 1
+        self.isRevive = 1
 
     def makeFired(self, elite=False):
         anims = self.generateAnimDict()

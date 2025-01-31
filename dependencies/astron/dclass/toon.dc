@@ -1292,6 +1292,7 @@ dclass DistributedSuitBase : DistributedObject {
   setBrushOff(int16) broadcast;
   setWaiter(uint8) broadcast ram;
   setSkelecog(uint8) required broadcast ram;
+  setSkeleton(uint8) required broadcast ram;
   setSkeleRevives(uint8) required broadcast ram;
   setHP(int32) required broadcast ram;
   setElite(uint8) required broadcast ram;
@@ -1301,6 +1302,7 @@ dclass DistributedSuitBase : DistributedObject {
   setSoakedStatus(uint8) required broadcast ram;
   setExecutive(uint8) required broadcast ram;
   setManager(uint8) required broadcast ram;
+  setCog(uint8) required broadcast ram;
   setGovernaught(uint8) required broadcast ram;
   setMaxHP(uint16) broadcast ram;
 };
@@ -1449,6 +1451,7 @@ dclass DistributedCashbotBossSafe : DistributedCashbotBossObject {
 dclass DistributedCashbotBossGoon : DistributedCashbotBossObject {
   requestBattle(int16/10) airecv clsend;
   requestStunned(int16/10) airecv clsend;
+  requestWalk() airecv clsend;
   setVelocity(uint8/10) broadcast ram;
   setHFov(uint8) broadcast ram;
   setAttackRadius(uint8) broadcast ram;

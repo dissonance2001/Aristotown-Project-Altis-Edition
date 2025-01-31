@@ -1630,65 +1630,190 @@ class BattleCalculatorAI:
                                         target9.useSkeleRevive()
                     if suitIndex + 1 < len(activeSuits):
                         target3 = activeSuits[suitIndex + 1]
-                        if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked'):
-                            organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
-                            if organicBonus:
-                                attackDamageAbsorb = (int(attackDamage * .84) * .425)
-                                attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
-                                target3.setHP(target3.currHP - int(attackDamage * 0.84))
-                            else:
-                                attackDamageAbsorb = (int(attackDamage * .67) * .425)
-                                attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
-                                target3.setHP(target3.currHP - int(attackDamage * 0.84))
-                            self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
-                            self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
-                            self.__removeLured(target3.doId)
-                            for s in self.battle.activeSuits:
-                                if s.dna.name == 'scg':
-                                    target9 = s
-                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cp':
-                                    target9 = s
-                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'dsf':
-                                    target9 = s
-                                    if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cry':
-                                    target9 = s
-                                    if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target3.dna.name == 'cry':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'blr':
-                                    target9 = s
-                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                            if target3.getHP() <= 0:
+                        if suitIndex + 2 < len(activeSuits):
+                            target4 = activeSuits[suitIndex + 2]
+                            if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked')\
+                                    and not self.suitHasCondition(target4.doId, 'soaked'):
+                                organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                                if organicBonus:
+                                    attackDamageAbsorb = (int(attackDamage * .84) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 1.1))
+                                else:
+                                    attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.9))
+                                self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
                                 self.__removeLured(target3.doId)
-                                if target3.getSkeleRevives() >= 1:
-                                    target3.useSkeleRevive()
+                                for s in self.battle.activeSuits:
+                                    if s.dna.name == 'scg':
+                                        target9 = s
+                                        if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cp':
+                                        target9 = s
+                                        if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'dsf':
+                                        target9 = s
+                                        if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cry':
+                                        target9 = s
+                                        if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target3.dna.name == 'cry':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'blr':
+                                        target9 = s
+                                        if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                if target3.getHP() <= 0:
+                                    self.__removeLured(target3.doId)
+                                    if target3.getSkeleRevives() >= 1:
+                                        target3.useSkeleRevive()
+                        if not suitIndex + 2 < len(activeSuits):
+                            if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked'):
+                                organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                                if organicBonus:
+                                    attackDamageAbsorb = (int(attackDamage * .84) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 1.1))
+                                else:
+                                    attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.9))
+                                self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
+                                self.__removeLured(target3.doId)
+                                for s in self.battle.activeSuits:
+                                    if s.dna.name == 'scg':
+                                        target9 = s
+                                        if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cp':
+                                        target9 = s
+                                        if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'dsf':
+                                        target9 = s
+                                        if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cry':
+                                        target9 = s
+                                        if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target3.dna.name == 'cry':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'blr':
+                                        target9 = s
+                                        if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                if target3.getHP() <= 0:
+                                    self.__removeLured(target3.doId)
+                                    if target3.getSkeleRevives() >= 1:
+                                        target3.useSkeleRevive()
+                        if suitIndex + 2 < len(activeSuits):
+                            target4 = activeSuits[suitIndex + 2]
+                            if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked')\
+                                    and self.suitHasCondition(target4.doId, 'soaked') and not self.suitHasCondition(target4.doId, 'immune') and not self.suitHasCondition(target4.doId, 'zapImmune'):
+                                organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                                if organicBonus:
+                                    attackDamageAbsorb = (int(attackDamage * .84) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.55))
+                                else:
+                                    attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.45))
+                                self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
+                                self.__removeLured(target3.doId)
+                                for s in self.battle.activeSuits:
+                                    if s.dna.name == 'scg':
+                                        target9 = s
+                                        if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cp':
+                                        target9 = s
+                                        if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'dsf':
+                                        target9 = s
+                                        if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cry':
+                                        target9 = s
+                                        if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target3.dna.name == 'cry':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'blr':
+                                        target9 = s
+                                        if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                if target3.getHP() <= 0:
+                                    self.__removeLured(target3.doId)
+                                    if target3.getSkeleRevives() >= 1:
+                                        target3.useSkeleRevive()
                     if suitIndex + 2 < len(activeSuits):
                         target4 = activeSuits[suitIndex + 2]
                         if not self.suitHasCondition(target4.doId, 'immune') and not self.suitHasCondition(target4.doId, 'zapImmune') and self.suitHasCondition(target4.doId, 'soaked'):
@@ -1696,11 +1821,11 @@ class BattleCalculatorAI:
                             if organicBonus:
                                 attackDamageAbsorb = (int(attackDamage * .67) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
-                                target4.setHP(target4.currHP - int(attackDamage * 0.84))
+                                target4.setHP(target4.currHP - int(attackDamage * 0.55))
                             else:
                                 attackDamageAbsorb = (int(attackDamage * .35) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .35) * .115)
-                                target4.setHP(target4.currHP - int(attackDamage * 0.84))
+                                target4.setHP(target4.currHP - int(attackDamage * 0.45))
                             self.__removeLured(target4.doId)
                             self.setSuitCondition(target4.doId, 'lured', 0, 0, 'setBoth')
                             self.setSuitCondition(target4.doId, 'soaked', 1, 1, 'setBoth')
@@ -1751,85 +1876,407 @@ class BattleCalculatorAI:
                                 if target4.getSkeleRevives() >= 1:
                                     target4.useSkeleRevive()
                     if suitIndex - 1 >= 0:
-                        target2 = activeSuits[suitIndex - 1]
-                        if not self.suitHasCondition(target2.doId, 'immune') and not self.suitHasCondition(target2.doId, 'zapImmune') and self.suitHasCondition(target2.doId, 'soaked'):
+                        target3 = activeSuits[suitIndex - 1]
+                        if suitIndex - 2 >= 0 and suitIndex + 1 < len(activeSuits):
+                            target4 = activeSuits[suitIndex - 2]
+                            target2 = activeSuits[suitIndex + 1]
+                            if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked')\
+                                    and not self.suitHasCondition(target4.doId, 'soaked') and not self.suitHasCondition(target2.doId, 'soaked'):
+                                organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                                if organicBonus:
+                                    attackDamageAbsorb = (int(attackDamage * .84) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 1.1))
+                                else:
+                                    attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.9))
+                                self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
+                                self.__removeLured(target3.doId)
+                                for s in self.battle.activeSuits:
+                                    if s.dna.name == 'scg':
+                                        target9 = s
+                                        if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cp':
+                                        target9 = s
+                                        if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'dsf':
+                                        target9 = s
+                                        if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cry':
+                                        target9 = s
+                                        if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target3.dna.name == 'cry':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'blr':
+                                        target9 = s
+                                        if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                if target3.getHP() <= 0:
+                                    self.__removeLured(target3.doId)
+                                    if target3.getSkeleRevives() >= 1:
+                                        target3.useSkeleRevive()
+                        if suitIndex - 2 >= 0 and suitIndex + 1 < len(activeSuits):
+                            target4 = activeSuits[suitIndex - 2]
+                            target2 = activeSuits[suitIndex + 1]
+                            target3 = activeSuits[suitIndex - 1]
+                            if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked')\
+                                    and self.suitHasCondition(target4.doId, 'soaked') and not self.suitHasCondition(target4.doId, 'immune') and not self.suitHasCondition(target4.doId, 'zapImmune')\
+                                    and not self.suitHasCondition(target2.doId, 'soaked'):
+                                organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                                if organicBonus:
+                                    attackDamageAbsorb = (int(attackDamage * .84) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.55))
+                                else:
+                                    attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.45))
+                                self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
+                                self.__removeLured(target3.doId)
+                                for s in self.battle.activeSuits:
+                                    if s.dna.name == 'scg':
+                                        target9 = s
+                                        if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cp':
+                                        target9 = s
+                                        if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'dsf':
+                                        target9 = s
+                                        if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cry':
+                                        target9 = s
+                                        if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target3.dna.name == 'cry':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'blr':
+                                        target9 = s
+                                        if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                if target3.getHP() <= 0:
+                                    self.__removeLured(target3.doId)
+                                    if target3.getSkeleRevives() >= 1:
+                                        target3.useSkeleRevive()
+                        if suitIndex - 2 >= 0 and not suitIndex + 1 < len(activeSuits):
+                            target4 = activeSuits[suitIndex - 2]
+                            if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked')\
+                                    and not self.suitHasCondition(target4.doId, 'soaked'):
+                                organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                                if organicBonus:
+                                    attackDamageAbsorb = (int(attackDamage * .84) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 1.1))
+                                else:
+                                    attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.9))
+                                self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
+                                self.__removeLured(target3.doId)
+                                for s in self.battle.activeSuits:
+                                    if s.dna.name == 'scg':
+                                        target9 = s
+                                        if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cp':
+                                        target9 = s
+                                        if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'dsf':
+                                        target9 = s
+                                        if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cry':
+                                        target9 = s
+                                        if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target3.dna.name == 'cry':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'blr':
+                                        target9 = s
+                                        if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                if target3.getHP() <= 0:
+                                    self.__removeLured(target3.doId)
+                                    if target3.getSkeleRevives() >= 1:
+                                        target3.useSkeleRevive()
+                        if not suitIndex - 2 >= 0 and suitIndex + 1 < len(activeSuits):
+                            target4 = activeSuits[suitIndex - 2]
+                            target2 = activeSuits[suitIndex + 1]
+                            target3 = activeSuits[suitIndex - 1]
+                            if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked')\
+                                    and not self.suitHasCondition(target2.doId, 'soaked'):
+                                organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                                if organicBonus:
+                                    attackDamageAbsorb = (int(attackDamage * .84) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.55))
+                                else:
+                                    attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.45))
+                                self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
+                                self.__removeLured(target3.doId)
+                                for s in self.battle.activeSuits:
+                                    if s.dna.name == 'scg':
+                                        target9 = s
+                                        if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cp':
+                                        target9 = s
+                                        if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'dsf':
+                                        target9 = s
+                                        if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cry':
+                                        target9 = s
+                                        if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target3.dna.name == 'cry':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'blr':
+                                        target9 = s
+                                        if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                if target3.getHP() <= 0:
+                                    self.__removeLured(target3.doId)
+                                    if target3.getSkeleRevives() >= 1:
+                                        target3.useSkeleRevive()
+                        if not suitIndex - 2 >= 0 and not suitIndex + 1 < len(activeSuits):
+                            target4 = activeSuits[suitIndex - 2]
+                            if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked'):
+                                organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                                if organicBonus:
+                                    attackDamageAbsorb = (int(attackDamage * .84) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 1.1))
+                                else:
+                                    attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.9))
+                                self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
+                                self.__removeLured(target3.doId)
+                                for s in self.battle.activeSuits:
+                                    if s.dna.name == 'scg':
+                                        target9 = s
+                                        if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cp':
+                                        target9 = s
+                                        if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'dsf':
+                                        target9 = s
+                                        if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cry':
+                                        target9 = s
+                                        if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target3.dna.name == 'cry':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'blr':
+                                        target9 = s
+                                        if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                if target3.getHP() <= 0:
+                                    self.__removeLured(target3.doId)
+                                    if target3.getSkeleRevives() >= 1:
+                                        target3.useSkeleRevive()
+                        if suitIndex - 2 >= 0 and not suitIndex + 1 < len(activeSuits):
+                            target4 = activeSuits[suitIndex - 2]
+                            target3 = activeSuits[suitIndex - 1]
+                            if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked')\
+                                    and self.suitHasCondition(target4.doId, 'soaked') and not self.suitHasCondition(target4.doId, 'immune') and not self.suitHasCondition(target4.doId, 'zapImmune'):
+                                organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                                if organicBonus:
+                                    attackDamageAbsorb = (int(attackDamage * .84) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.55))
+                                else:
+                                    attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                    attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                    target3.setHP(target3.currHP - int(attackDamage * 0.45))
+                                self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
+                                self.__removeLured(target3.doId)
+                                for s in self.battle.activeSuits:
+                                    if s.dna.name == 'scg':
+                                        target9 = s
+                                        if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cp':
+                                        target9 = s
+                                        if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'dsf':
+                                        target9 = s
+                                        if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target3.dna.name == 'dsf':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'cry':
+                                        target9 = s
+                                        if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target3.dna.name == 'cry':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                    elif s.dna.name == 'blr':
+                                        target9 = s
+                                        if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
+                                            target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                            if target9.getHP() <= 0:
+                                                self.__removeLured(target9.doId)
+                                                if target9.getSkeleRevives() >= 1:
+                                                    target9.useSkeleRevive()
+                                if target3.getHP() <= 0:
+                                    self.__removeLured(target3.doId)
+                                    if target3.getSkeleRevives() >= 1:
+                                        target3.useSkeleRevive()
+                    if suitIndex - 2 >= 0 and suitIndex + 1 < len(activeSuits):
+                        target4 = activeSuits[suitIndex - 2]
+                        target1 = activeSuits[suitIndex - 1]
+                        target2 = activeSuits[suitIndex + 1]
+                        if not self.suitHasCondition(target4.doId, 'immune') and not self.suitHasCondition(target4.doId, 'zapImmune') and self.suitHasCondition(target4.doId, 'soaked')\
+                                and self.suitHasCondition(target1.doId, 'soaked') and not self.suitHasCondition(target2.doId, 'soaked'):
                             organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                             if organicBonus:
-                                attackDamageAbsorb = (int(attackDamage * .84) * .425)
-                                attackDamageAbsorbHR = (int(attackDamage * .84) * .115)
-                                target2.setHP(target2.currHP - int(attackDamage * 0.84))
-                            else:
                                 attackDamageAbsorb = (int(attackDamage * .67) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
-                                target2.setHP(target2.currHP - int(attackDamage * 0.84))
-                            self.__removeLured(target2.doId)
-                            self.setSuitCondition(target2.doId, 'lured', 0, 0, 'setBoth')
-                            self.setSuitCondition(target2.doId, 'soaked', 1, 1, 'setBoth')
-                            for s in self.battle.activeSuits:
-                                if s.dna.name == 'scg':
-                                    target9 = s
-                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target2.dna.name == 'scg':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cp':
-                                    target9 = s
-                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target2.dna.name == 'cp':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'blr':
-                                    target9 = s
-                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target2.dna.name == 'blr':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cry':
-                                    target9 = s
-                                    if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target2.dna.name == 'cry':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'dsf':
-                                    target9 = s
-                                    if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target2.dna.name == 'dsf':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                            if target2.getHP() <= 0:
-                                self.__removeLured(target2.doId)
-                                if target2.getSkeleRevives() >= 1:
-                                    target2.useSkeleRevive()
-                    if suitIndex - 2 >= 0:
-                        target1 = activeSuits[suitIndex - 2]
-                        if not self.suitHasCondition(target1.doId, 'immune') and not self.suitHasCondition(target1.doId, 'zapImmune') and self.suitHasCondition(target1.doId, 'soaked'):
-                            organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
-                            if organicBonus:
-                                attackDamageAbsorb = (int(attackDamage * .67) * .425)
-                                attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
-                                target1.setHP(target1.currHP - int(attackDamage * 0.84))
+                                target4.setHP(target4.currHP - int(attackDamage * 0.55))
                             else:
                                 attackDamageAbsorb = (int(attackDamage * .35) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .35) * .115)
-                                target1.setHP(target1.currHP - int(attackDamage * 0.84))
-                            self.__removeLured(target1.doId)
-                            self.setSuitCondition(target1.doId, 'lured', 0, 0, 'setBoth')
-                            self.setSuitCondition(target1.doId, 'soaked', 1, 1, 'setBoth')
+                                target4.setHP(target4.currHP - int(attackDamage * 0.45))
+                            self.__removeLured(target4.doId)
+                            self.setSuitCondition(target4.doId, 'lured', 0, 0, 'setBoth')
+                            self.setSuitCondition(target4.doId, 'soaked', 1, 1, 'setBoth')
                             for s in self.battle.activeSuits:
                                 if s.dna.name == 'scg':
                                     target9 = s
-                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target1.dna.name == 'scg':
+                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target4.dna.name == 'scg':
                                         target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
                                         if target9.getHP() <= 0:
                                             self.__removeLured(target9.doId)
@@ -1837,7 +2284,7 @@ class BattleCalculatorAI:
                                                 target9.useSkeleRevive()
                                 elif s.dna.name == 'cp':
                                     target9 = s
-                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target1.dna.name == 'cp':
+                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target4.dna.name == 'cp':
                                         target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
                                         if target9.getHP() <= 0:
                                             self.__removeLured(target9.doId)
@@ -1845,16 +2292,8 @@ class BattleCalculatorAI:
                                                 target9.useSkeleRevive()
                                 elif s.dna.name == 'blr':
                                     target9 = s
-                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target1.dna.name == 'blr':
+                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target4.dna.name == 'blr':
                                         target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'dsf':
-                                    target9 = s
-                                    if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target1.dna.name == 'dsf':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
                                         if target9.getHP() <= 0:
                                             self.__removeLured(target9.doId)
                                             if target9.getSkeleRevives() >= 1:
@@ -1862,16 +2301,87 @@ class BattleCalculatorAI:
                                 elif s.dna.name == 'cry':
                                     target9 = s
                                     if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target1.dna.name == 'cry':
+                                                                                           'shielding') and not target4.dna.name == 'cry':
                                         target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
                                         if target9.getHP() <= 0:
                                             self.__removeLured(target9.doId)
                                             if target9.getSkeleRevives() >= 1:
                                                 target9.useSkeleRevive()
-                            if target1.getHP() <= 0:
-                                self.__removeLured(target1.doId)
-                                if target1.getSkeleRevives() >= 1:
-                                    target1.useSkeleRevive()
+                                elif s.dna.name == 'dsf':
+                                    target9 = s
+                                    if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target4.dna.name == 'dsf':
+                                        target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                        if target9.getHP() <= 0:
+                                            self.__removeLured(target9.doId)
+                                            if target9.getSkeleRevives() >= 1:
+                                                target9.useSkeleRevive()
+                            if target4.getHP() <= 0:
+                                self.__removeLured(target4.doId)
+                                if target4.getSkeleRevives() >= 1:
+                                    target4.useSkeleRevive()
+                    if suitIndex - 2 >= 0 and not suitIndex + 1 < len(activeSuits):
+                        target4 = activeSuits[suitIndex - 2]
+                        target1 = activeSuits[suitIndex - 1]
+                        if not self.suitHasCondition(target4.doId, 'immune') and not self.suitHasCondition(target4.doId, 'zapImmune') and self.suitHasCondition(target4.doId, 'soaked')\
+                                and self.suitHasCondition(target1.doId, 'soaked'):
+                            organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                            if organicBonus:
+                                attackDamageAbsorb = (int(attackDamage * .67) * .425)
+                                attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
+                                target4.setHP(target4.currHP - int(attackDamage * 0.55))
+                            else:
+                                attackDamageAbsorb = (int(attackDamage * .35) * .425)
+                                attackDamageAbsorbHR = (int(attackDamage * .35) * .115)
+                                target4.setHP(target4.currHP - int(attackDamage * 0.45))
+                            self.__removeLured(target4.doId)
+                            self.setSuitCondition(target4.doId, 'lured', 0, 0, 'setBoth')
+                            self.setSuitCondition(target4.doId, 'soaked', 1, 1, 'setBoth')
+                            for s in self.battle.activeSuits:
+                                if s.dna.name == 'scg':
+                                    target9 = s
+                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target4.dna.name == 'scg':
+                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                        if target9.getHP() <= 0:
+                                            self.__removeLured(target9.doId)
+                                            if target9.getSkeleRevives() >= 1:
+                                                target9.useSkeleRevive()
+                                elif s.dna.name == 'cp':
+                                    target9 = s
+                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target4.dna.name == 'cp':
+                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                        if target9.getHP() <= 0:
+                                            self.__removeLured(target9.doId)
+                                            if target9.getSkeleRevives() >= 1:
+                                                target9.useSkeleRevive()
+                                elif s.dna.name == 'blr':
+                                    target9 = s
+                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target4.dna.name == 'blr':
+                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                        if target9.getHP() <= 0:
+                                            self.__removeLured(target9.doId)
+                                            if target9.getSkeleRevives() >= 1:
+                                                target9.useSkeleRevive()
+                                elif s.dna.name == 'cry':
+                                    target9 = s
+                                    if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
+                                                                                           'shielding') and not target4.dna.name == 'cry':
+                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
+                                        if target9.getHP() <= 0:
+                                            self.__removeLured(target9.doId)
+                                            if target9.getSkeleRevives() >= 1:
+                                                target9.useSkeleRevive()
+                                elif s.dna.name == 'dsf':
+                                    target9 = s
+                                    if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId, 'absorbingHR') and not target4.dna.name == 'dsf':
+                                        target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
+                                        if target9.getHP() <= 0:
+                                            self.__removeLured(target9.doId)
+                                            if target9.getSkeleRevives() >= 1:
+                                                target9.useSkeleRevive()
+                            if target4.getHP() <= 0:
+                                self.__removeLured(target4.doId)
+                                if target4.getSkeleRevives() >= 1:
+                                    target4.useSkeleRevive()
                     if self.__isWet(targetId) or self.__isRaining(self.battle.getToon(toonId)):
                         chance = InstaKillChance[atkLevel]
                         if random.randint(0, 99) <= chance:
@@ -2825,7 +3335,7 @@ class BattleCalculatorAI:
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-            if theSuit.currHP <= 1220 and not self.suitHasCondition(theSuit.doId, 'phase3'):
+            if theSuit.currHP <= 1500 and not self.suitHasCondition(theSuit.doId, 'phase3'):
                 return 9
             if self.suitHasCondition(theSuit.doId, 'immune'):
                 return 10
@@ -4568,7 +5078,7 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'Snow':
                 result = 42
                 attack[SUIT_HP_COL][targetIndex] = result
-                theSuit.setHP(int(theSuit.currHP + result * 4))
+                theSuit.setHP(int(theSuit.currHP + result))
                 self.setSuitCondition(theSuit.doId, 'shielding', 1, 4, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'enraged', 0, 0, 'none')
                 self.setSuitCondition(theSuit.doId, 'gavelcalculator', 1, 10, 'setBoth')
@@ -4616,6 +5126,8 @@ class BattleCalculatorAI:
                 result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
+                theSuit.setHP(1500)
+                theSuit.setMaxHP(4880)
                 theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.5)
                 for suit in self.battle.activeSuits:
                     if suit.currHP <= 0:
