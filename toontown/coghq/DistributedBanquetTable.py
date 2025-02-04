@@ -15,6 +15,8 @@ from toontown.toonbase import TTLocalizer
 from toontown.coghq import BanquetTableBase
 from toontown.coghq import DinerStatusIndicator
 from toontown.battle import MovieUtil
+from toontown.suit.SuitInvasionGlobals import IFSkelecog, IFWaiter, IFV2
+from toontown.toonbase import ToontownBattleGlobals
 
 class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, BanquetTableBase.BanquetTableBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBanquetTable')
@@ -192,17 +194,20 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
         elif 12 <= level <= 20:
             level = random.choice([7, 8, 9, 10, 11])
         else:
-            level = random.choice([7, 8, 9, 10, 11])
-        diner.dna.newSuitRandom(level=level, dept='c')
-        dept = self.dinerInfo[i][3][i]
+            level = random.choice([7, 8, 9, 10, 11, 12, 13, 14])
+        dept = random.choice(['s', 'm', 'l', 'c', 'g', 't'])
         diner.dna.newSuitRandom(level=level, dept=dept)
         diner.setDNA(diner.dna)
         diner.nametag.setNametag2d(None)
         diner.nametag.setNametag3d(None)
-        if self.useNewAnimations:
-            diner.loop('sit', fromFrame=i)
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE:
+            diner.makeExecutive()
+            diner.loop('sit-exec', fromFrame=i)
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE:
+            diner.makeGovernaught()
+            diner.loop('sit-exec', fromFrame=i)
         else:
-            diner.pose('landing', 0)
+            diner.loop('sit', fromFrame=i)
         locator = self.tableGroup.find('**/chair_%d' % (i + 1))
         locatorScale = locator.getNetTransform().getScale()[0]
         correctHeadingNp = locator.attachNewNode('correctHeading')
@@ -374,13 +379,12 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
         if indicator:
             indicator.request('Dead')
         diner = self.diners[chairIndex]
-        deathSuit = diner
         locator = self.tableGroup.find('**/chair_%d' % (chairIndex + 1))
-        deathSuit = diner.getLoseActor()
-        ival = Sequence(Func(self.notify.debug, 'before actorinterval sit-lose'), ActorInterval(diner, 'sit-lose'), Func(self.notify.debug, 'before deathSuit.setHpr'), Func(deathSuit.setHpr, diner.getHpr()), Func(self.notify.debug, 'before diner.hide'), Func(diner.hide), Func(self.notify.debug, 'before deathSuit.reparentTo'), Func(deathSuit.reparentTo, self.chairLocators[chairIndex]), Func(self.notify.debug, 'befor ActorInterval lose'), ActorInterval(deathSuit, 'lose', duration=MovieUtil.SUIT_LOSE_DURATION), Func(self.notify.debug, 'before remove deathsuit'), Func(removeDeathSuit, diner, deathSuit, name='remove-death-suit-%d-%d' % (chairIndex, self.index)), Func(self.notify.debug, 'diner.stash'), Func(diner.stash))
+        deathSuit = diner
+        ival = Sequence(Func(self.notify.debug, 'before actorinterval sit-lose'), ActorInterval(diner, 'sit-lose'), Func(diner.reparentTo, self.chairLocators[chairIndex]), ActorInterval(diner, 'lose', duration=MovieUtil.SUIT_LOSE_DURATION), Func(diner.stash))
         spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
         deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
-        deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=deathSuit), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=deathSuit), SoundInterval(deathSound, volume=0.32, node=deathSuit))
+        deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=diner), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=diner), SoundInterval(deathSound, volume=0.32, node=diner))
         intervalName = 'dinerDie-%d-%d' % (self.index, chairIndex)
         deathIval = Parallel(ival, deathSoundTrack)
         deathIval.start()

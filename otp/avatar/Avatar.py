@@ -308,6 +308,8 @@ class Avatar(Actor, ShadowCaster):
                 base.playSfx(self.soundChatBubble, node=self)
 
     def playDialogueForString(self, chatString):
+        if len(chatString) == 0:
+            return
         searchString = chatString.lower()
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             type = 'special'

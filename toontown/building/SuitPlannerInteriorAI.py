@@ -277,7 +277,7 @@ class SuitPlannerInteriorAI:
 
         def suitKindFromLevel(level):
             if level <= 18:
-                return random.randint(7, 14)
+                return random.randint(7, 12)
             elif level > 18:
                 return random.randint(12, 14)
             elif level > 20:

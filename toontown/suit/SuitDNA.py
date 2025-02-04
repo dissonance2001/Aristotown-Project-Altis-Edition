@@ -482,7 +482,7 @@ def getSuitName(deptIndex, typeIndex):
 
 def getRandomSuitType(level, rng = random):
     if level <= 18:
-        returnval = random.randint(7, 14)
+        returnval = random.randint(7, 13)
     elif level > 18:
         returnval = random.randint(12, 14)
     elif level > 20:

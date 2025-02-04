@@ -25,7 +25,7 @@ ModelDict = {'s': 'phase_9/models/char/sellbotBoss',
  'l': 'phase_11/models/char/lawbotBoss',
  'c': 'phase_12/models/char/bossbotBoss',
  'g': 'phase_14/models/char/boardbotBoss'}
-AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'turn2Fb', 'Ff_neutral', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
+AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'Ff_neutral_f', 'turn2Fb', 'Ff_neutral', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
 
 
 class BossCog(Avatar.Avatar):
@@ -933,7 +933,10 @@ class BossCog(Avatar.Avatar):
             else:
                 ival = Sequence(Track((0, self.getAngryActorInterval('Fb_downRtSwing')), (0.9, SoundInterval(self.swingSfx, node=self)), (1, Func(self.bubbleR.unstash))), Func(self.bubbleR.stash))
         elif anim == 'frontAttack':
-            self.doAnimate(None, raised=1, happy=0, queueNeutral=1)
+            if self.dna.dept == 'm':
+                self.doAnimate(None, raised=1, happy=0, queueNeutral=1)
+            else:
+                self.doAnimate(None, raised=1, happy=0, queueNeutral=0)
             pe = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
             pe2 = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
             pe3 = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
@@ -987,7 +990,7 @@ class BossCog(Avatar.Avatar):
             if self.twoFaced:
                 self.doAnimate(None, raised=1, happy=0, queueNeutral=1)
             else:
-                self.doAnimate(None, raised=1, happy=1, queueNeutral=1)
+                self.doAnimate(None, raised=1, happy=0, queueNeutral=1)
             ival = Parallel(ActorInterval(self, 'Fb_jump'),
                             Sequence(SoundInterval(self.swishSfx, duration=1.1),
                                      SoundInterval(self.boomSfx, duration=1.9)),

@@ -143,6 +143,7 @@ SuitsCEOBattle = (('sit', 'sit'),
  ('sit-eat-out', 'sit-eat-out'),
  ('lose3', 'wrecked'),
  ('sit-angry', 'sit-angry'),
+('sit-exec', 'sit-exec'),
  ('sit-hungry-left', 'leftsit-hungry'),
  ('sit-hungry-right', 'rightsit-hungry'),
  ('sit-lose', 'sit-lose'),
@@ -622,8 +623,9 @@ mb = (('phone', 'phone', 4),
       ('pickpocket', 'pickpocket', 4))
 ls = (('phone', 'phone', 4),
       ('speak', 'speak', 4),
-('finger-wag', 'finger-wga', 4),
+('finger-wag', 'finger-wag', 4),
       ('smile', 'smile', 4),
+('magic1', 'magic1', 4),
       ('lose3', 'wrecked', 4),
       ('glower', 'glower', 4))
 rb = (('phone', 'phone', 4),
@@ -4699,7 +4701,7 @@ class Suit(Avatar.Avatar):
         if self.isExecutive:
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_waiter_e.png')
         elif self.isGovernaught:
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_count.png')
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_waiter_gov.png')
         elif self.isManager:
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_e.png' % self.style.dept)
         modelRoot.find('**/body').setTexture(texture, 1)

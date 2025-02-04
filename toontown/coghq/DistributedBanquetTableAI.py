@@ -28,7 +28,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
                 level = dinerLevel
             else:
                 level = random.choice(dinerLevel)
-            dept = random.choice(['s', 'm', 'l', 'c', 'g'])
+            dept = random.choice(['s', 'm', 'l', 'c', 'g', 't'])
 			
             if level == 11:
                 # TODO: Add sit animation for suit B cogs.

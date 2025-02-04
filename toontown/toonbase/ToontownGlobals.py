@@ -1788,7 +1788,7 @@ BossbotElevCamPosHpr = (0,
  0)
 BossbotFoodModelScale = 0.75
 BossbotOilDamage = 5
-BossbotNumFoodToExplode = 1
+BossbotNumFoodToExplode = 2
 BossbotBossServingDuration = 300
 BossbotPrepareBattleThreeDuration = 20
 WaiterBattleAPosHpr = (20,
@@ -1821,20 +1821,20 @@ DinerBattleBPosHpr = (-20,
  0,
  0,
  0)
-BossbotBossMaxDamage = 500
+BossbotBossMaxDamage = 2400
 BossbotMaxSpeedDamage = 90
 BossbotSpeedRecoverRate = 20
 BossbotBossDifficultySettings = [
   # number of tables, number of diners per table, diner level, unflatten time, hungry duration, eat duration
-  (13, 8,10,3,30,25),
-  (13, 8,11,6,28,26),
-  (13,8,12,7,26,27),
-  (13, 8,13,8,24,28),
-  (13,8,14,9,22,29)
+  (14,8,10,3,30,25),
+  (14,8,11,6,28,26),
+  (14,8,12,7,26,27),
+  (14,8,13,8,24,28),
+  (14,8,14,9,22,29)
  ]
 BossbotBossDamageMultipliers = [1, 1.1, 1.25, 1.4, 1.6]
 BossbotRollSpeedMax = 50
-BossbotRollSpeedMin = 25
+BossbotRollSpeedMin = 20
 BossbotTurnSpeedMax = 80
 BossbotTurnSpeedMin = 40
 BossbotTreadSpeedMax = 20.5
