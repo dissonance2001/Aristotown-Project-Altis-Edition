@@ -142,7 +142,7 @@ class DistributedLevelBattle(DistributedBattle.DistributedBattle):
             destPos, destHpr = self.getActorPosHpr(suit, self.suits)
             oneSuitTrack.append(Wait(delay))
             if suitIsLeader == 1:
-                oneSuitTrack.append(Func(suit.clearChat))
+                oneSuitTrack.append(Func(suit.setChatAbsolute, '', CFSpeech | CFTimeout))
             oneSuitTrack.append(self.createAdjustInterval(suit, destPos, destHpr))
             suitTrack.append(oneSuitTrack)
 

@@ -5131,7 +5131,7 @@ class Toon(Avatar.Avatar, ToonHead):
     def makeWaiter(self):
         if not self.isDisguised:
             return
-        self.suit.makeWaiter(self.suitGeom)
+        self.suit.makeWaiter2(self.suitGeom)
 
     def getPieModel(self):
         from toontown.toonbase import ToontownBattleGlobals

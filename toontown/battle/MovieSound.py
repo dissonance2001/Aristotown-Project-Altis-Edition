@@ -112,7 +112,10 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 suitTrack.append(showDamage)
                 suitTrack.append(updateHealthBar)
             if hitCount == 1:
-                if suit.style.dept == 'l':
+                if suit.isWaiter:
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.dept == 'l':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
                 elif suit.style.name == 'th':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
@@ -147,7 +150,10 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 else:
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
             else:
-                if suit.style.dept == 'l':
+                if suit.isWaiter:
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.dept == 'l':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'),
                                               MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
                 elif suit.style.name == 'th':

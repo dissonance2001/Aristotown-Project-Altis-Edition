@@ -353,10 +353,10 @@ class BossCog(Avatar.Avatar):
         elif health > 0.3:
             condition = 7
             self.ANIM_PLAYRATE = 1.4
-        elif health > 0.2:
+        elif health > 0.25:
             condition = 8
             self.ANIM_PLAYRATE = 1.45
-        elif health > 0.1:
+        elif health > 0.15:
             condition = 9
             self.ANIM_PLAYRATE = 1.5
         elif health > 0.0:

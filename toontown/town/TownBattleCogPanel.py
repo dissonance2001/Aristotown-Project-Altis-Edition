@@ -18,43 +18,44 @@ from toontown.toonbase import TTLocalizer
 
 class TownBattleCogPanel(DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('TownBattleCogPanel')
-    healthColors = (Vec4(0.169, 1, 0, 1),
-                    Vec4(0.5, 1, 0, 1),
-                    Vec4(0.75, 1, 0, 1),
-                    Vec4(1, 1, 0, 1),
-                    Vec4(1, 0.866, 0, 1),
-                    Vec4(1, 0.7, 0, 1),
-                    Vec4(1, 0.6, 0, 1),
-                    Vec4(1, 0.5, 0, 1.0),
-                    Vec4(1, 0.25, 0, 1),
+    healthColors = (Vec4(0, 1, 0.078, 1),
+                    Vec4(0.388, 1, 0, 1),
+                    Vec4(0.686, 1, 0, 1),
+                    Vec4(0.882, 1, 0, 1),
+                    Vec4(0.988, 1, 0, 1),
+                    Vec4(1, 0.831, 0, 1),
+                    Vec4(1, 0.714, 0, 1),
+                    Vec4(1, 0.533, 0, 1.0),
                     Vec4(1, 0, 0, 1),
-                    Vec4(0, 0, 0, 0),
+                    Vec4(1, 0, 0, 1),
+                    Vec4(0.431, 0.431, 0.431, 1),  # out
                     Vec4(1, 0, 0, 1),
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
                     Vec4(1, 0.416, 0.937, 1),  # 14 pink silhouette
                     Vec4(0, 0.361, 1, 1),
                     Vec4(1, 1, 1, 1),  # 15 blue silhouette
-                    Vec4(186 / 255, 82 / 255, 1, 1))
-    healthGlowColors = (Vec4(0.25, 1, 0.25, 0.5),
-                        Vec4(0.5, 1, 0.25, .5),
-                        Vec4(0.75, 1, 0.25, .5),
-                        Vec4(1, 1, 0.25, 0.5),
-                        Vec4(1, 0.866, 0.25, .5),
-                        Vec4(1, 0.7, 0.25, .5),
-                        Vec4(1, 0.6, 0.25, 0.5),
-                        Vec4(1, 0.5, 0.25, 0.5),
-                        Vec4(1, 0.25, 0, 0.5),
-                        Vec4(1, 0, 0, 0.5),
-                        Vec4(1, 0, 0, 0.5),
-                        Vec4(0, 0, 0, 0),
-                        Vec4(0.0, 1.0, 1.0, 0.5),  # overheal
-                        Vec4(0.553, 0, 1, 1),
+                    Vec4(186 / 255, 82 / 255, 1, 1),
+                    Vec4(0.702, 0, 1, 1))  # 17 purple puls
+    healthGlowColors = (Vec4(0, 1, 0.078, 1),
+                        Vec4(0.388, 1, 0, 1),
+                        Vec4(0.686, 1, 0, 1),
+                        Vec4(0.882, 1, 0, 1),
+                        Vec4(0.988, 1, 0, 1),
+                        Vec4(1, 0.831, 0, 1),
+                        Vec4(1, 0.714, 0, 1),
+                        Vec4(1, 0.533, 0, 1.0),
+                        Vec4(1, 0, 0, 1),
+                        Vec4(1, 0, 0, 1),
+                        Vec4(0.431, 0.431, 0.431, 1),  # out
+                        Vec4(1, 0, 0, 1),
+                        Vec4(0.0, 1.0, 1.0, 1),  # overheal
+                        Vec4(0.553, 0, 1, 1),  # overcharge
                         Vec4(1, 0.416, 0.937, 1),  # 14 pink silhouette
-                        Vec4(0, 0.361, 1, 1),  # 15 blue silhouette
-                        Vec4(1, 1, 1, 1),
-                        # overcharge
-                        Vec4(186 / 255, 82 / 255, 1, 1))
+                        Vec4(0, 0.361, 1, 1),
+                        Vec4(1, 1, 1, 1),  # 15 blue silhouette
+                        Vec4(186 / 255, 82 / 255, 1, 1),
+                        Vec4(0.702, 0, 1, 1))  # 17 purple pulse
     bossBarColors = (Vec4(0.169, 1, 0, 1),
                     Vec4(0.5, 1, 0, 1),
                     Vec4(0.75, 1, 0, 1),
@@ -1649,8 +1650,6 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
         elif name == 'tb' or name == 'ts':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'tg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .12, .12, .12)
         elif name == 'adc' or name == 'drm' or name == 'cry':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0875, .0875, .0875)
         elif name == 'mes':
@@ -1719,6 +1718,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .105, .105, .105)
         elif name == 'mdm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
+        elif name == 'tg':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .14, .14, .14)
         else:
             self.suitHead.setPos(-0.27, 0.5, 0.13)
 

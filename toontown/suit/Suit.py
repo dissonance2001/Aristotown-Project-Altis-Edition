@@ -135,8 +135,8 @@ AllSuitsBattle = (('drop-react', 'anvil-drop'),
 ('large-zap', 'large-zap'),
 ('small-zap', 'small-zap'),
  ('soak', 'soak'),
-                  ('lured', 'lured'),
- ('lured2', 'lured'))
+                  ('lured', 'lured2'),
+ ('lured2', 'lured2'))
 SuitsCEOBattle = (('sit', 'sit'),
  ('sit-eat-in', 'sit-eat-in'),
  ('sit-eat-loop', 'sit-eat-loop'),
@@ -1274,14 +1274,17 @@ vpr = (('magic3', 'magic3', 4),
        ('magic1', 'magic1', 4))
 kyl = (('magic2', 'magic2', 4),
        ('effort', 'effort', 4),
+('finger-wag', 'finger-wag', 4),
        ('speak', 'speak', 4))
 sdb = (('watercooler', 'watercooler', 4),
       ('effort', 'effort', 4),
       ('lose3', 'wrecked', 4),
+('finger-wag', 'finger-wag', 4),
       ('glower', 'glower', 5),
       ('magic1', 'magic1', 4))
 gry =  (('pen-squirt', 'fountain-pen', 4),
         ('glower', 'glower', 4),
+('finger-wag', 'finger-wag', 4),
 ('sanction', 'sanction', 4),
         ('calculator', 'calculator', 4),
         ('lose3', 'wrecked', 4),
@@ -1303,6 +1306,7 @@ sfs = (('lose3', 'wrecked', 4),
 pyc = (('magic1', 'magic1', 4),
 ('magic2', 'magic2', 4),
        ('lose3', 'wrecked', 4),
+('finger-wag', 'finger-wag', 4),
 ('magic3', 'magic3', 5),
        ('glower', 'glower', 4),
        ('smile', 'smile', 4))
@@ -1331,6 +1335,7 @@ ant = (('pen-squirt', 'fountain-pen', 4),
 sya = (('frustrated', 'frustrated-f', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4),
+('finger-wag', 'finger-wag', 4),
        ('magic1', 'magic1', 4),
 ('speak', 'speak', 4),
        ('pickpocket', 'pickpocket', 4),
@@ -2334,15 +2339,15 @@ def attachSuitHead(node, suitName):
 class Suit(Avatar.Avatar):
     notify = DirectNotifyGlobal.directNotify.newCategory('Suit')
     __module__ = __name__
-    healthColors = (Vec4(0.169, 1, 0, 1),
-                    Vec4(0.5, 1, 0, 1),
-                    Vec4(0.75, 1, 0, 1),
-                    Vec4(1, 1, 0, 1),
-                    Vec4(1, 0.866, 0, 1),
-                    Vec4(1, 0.7, 0, 1),
-                    Vec4(1, 0.6, 0, 1),
-                    Vec4(1, 0.5, 0, 1.0),
-                    Vec4(1, 0.25, 0, 1),
+    healthColors = (Vec4(0, 1, 0.078, 1),
+                    Vec4(0.388, 1, 0, 1),
+                    Vec4(0.686, 1, 0, 1),
+                    Vec4(0.882, 1, 0, 1),
+                    Vec4(0.988, 1, 0, 1),
+                    Vec4(1, 0.831, 0, 1),
+                    Vec4(1, 0.714, 0, 1),
+                    Vec4(1, 0.533, 0, 1.0),
+                    Vec4(1, 0, 0, 1),
                     Vec4(1, 0, 0, 1),
                     Vec4(0.431, 0.431, 0.431, 1), #out
                     Vec4(1, 0, 0, 1),
@@ -2353,17 +2358,17 @@ class Suit(Avatar.Avatar):
                     Vec4(1, 1, 1, 1),  # 15 blue silhouette
                     Vec4(186 / 255, 82 / 255, 1, 1),
                     Vec4(0.702, 0, 1, 1)) # 17 purple puls
-    healthGlowColors = (Vec4(0.169, 1, 0, 1),
-                    Vec4(0.5, 1, 0, 1),
-                    Vec4(0.75, 1, 0, 1),
-                    Vec4(1, 1, 0, 1),
-                    Vec4(1, 0.866, 0, 1),
-                    Vec4(1, 0.7, 0, 1),
-                    Vec4(1, 0.6, 0, 1),
-                    Vec4(1, 0.5, 0, 1.0),
-                    Vec4(1, 0.25, 0, 1),
+    healthGlowColors = (Vec4(0, 1, 0.078, 1),
+                    Vec4(0.388, 1, 0, 1),
+                    Vec4(0.686, 1, 0, 1),
+                    Vec4(0.882, 1, 0, 1),
+                    Vec4(0.988, 1, 0, 1),
+                    Vec4(1, 0.831, 0, 1),
+                    Vec4(1, 0.714, 0, 1),
+                    Vec4(1, 0.533, 0, 1.0),
                     Vec4(1, 0, 0, 1),
-                    Vec4(0, 0, 0, 0),
+                    Vec4(1, 0, 0, 1),
+                    Vec4(0.431, 0.431, 0.431, 1), #out
                     Vec4(1, 0, 0, 1),
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
@@ -4586,14 +4591,16 @@ class Suit(Avatar.Avatar):
         dept = self.style.dept
         phase = 3.5
         texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
-        if self.style.dept == 'c' and not self.isExecutive and not self.isManager and not self.isGovernaught:
+        if self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
+        elif self.style.dept == 'c' and not self.isExecutive and not self.isManager and not self.isGovernaught and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
-        elif self.isExecutive:
+        elif self.isExecutive and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.isManager and not self.style.name == 'lbs' and not self.style.name == 'jl'\
-                and not self.style.name == 'blr' and not self.style.name == 'dsk' and not self.style.name == 'gb' and not self.style.name == 'fb' and not self.style.name == 'tcc':
+                and not self.style.name == 'blr' and not self.style.name == 'dsk' and not self.style.name == 'gb' and not self.style.name == 'fb' and not self.style.name == 'tcc' and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.isGovernaught:
+        elif self.isGovernaught and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
         modelRoot.find('**/necktie-s').hide()
         modelRoot.find('**/necktie-w').hide()
@@ -4601,7 +4608,9 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/necktie-s').setTexture(texture, 1)
         modelRoot.find('**/necktie-w').setTexture(texture, 1)
         modelRoot.find('**/bowtie').setTexture(texture, 1)
-        if self.style.dept == 'l':
+        if self.isWaiter:
+            modelRoot.find('**/bowtie').show()
+        elif self.style.dept == 'l':
             modelRoot.find('**/bowtie').show()
         elif self.style.dept == 's':
             modelRoot.find('**/necktie-s').show()
@@ -4698,13 +4707,71 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         self.isWaiter = 1
         texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_waiter.png')
-        if self.isExecutive:
+        if self.isSkeleton:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+        elif self.isExecutive:
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_waiter_e.png')
         elif self.isGovernaught:
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_waiter_gov.png')
         elif self.isManager:
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_e.png' % self.style.dept)
+        if self.style.name == 'tld' and not self.isSkeleton and not self.isExecutive:
+            texture2 = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho_waiter.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture2, 1)
         modelRoot.find('**/body').setTexture(texture, 1)
+        modelRoot.find('**/necktie-s').hide()
+        modelRoot.find('**/necktie-w').hide()
+        modelRoot.find('**/bowtie').show()
+        modelRoot.find('**/bowtie').setTexture(texture, 1)
+        modelRoot.find('**/hands').setColor(0.835, 0.843, 0.847, 1)
+        name = self.name
+        if self.style.name == 'cr' or self.style.name == 'hh' or self.style.name == 'le' or self.style.name == 'cfp' or self.style.name == 'cvy' or self.style.name == 'gh' \
+                or self.style.name == 'ssm' or self.style.name == 'bdb' or self.style.name == 'gry' or self.style.name == 'rb' or self.style.name == 'phs':
+            dept = 'Waitress'
+        else:
+            dept = 'Waiter'
+        level = str(self.getActualLevel())
+        if self.getExecutive():
+            level += TTLocalizer.ExecutivePostFix
+        if self.getManager():
+            level += TTLocalizer.ManagerPostFix
+        if self.getGovernaught():
+            level += TTLocalizer.GovernaughtPostFix
+        if self.getSkeleRevives() > 0:
+            level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        self.setDisplayName(nameInfo)
+
+    def makeWaiter2(self, modelRoot = None):
+        if not modelRoot:
+            modelRoot = self
+        self.isWaiter = 1
+        texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_waiter.png')
+        if self.isSkeleton:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+        elif self.isExecutive:
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_waiter_e.png')
+        elif self.isGovernaught:
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_waiter_gov.png')
+        elif self.isManager:
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_waiter_e.png')
+        if self.style.name == 'tld' and not self.isSkeleton and not self.isExecutive:
+            texture2 = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho_waiter.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture2, 1)
+        modelRoot.find('**/body').setTexture(texture, 1)
+        modelRoot.find('**/necktie-s').hide()
+        modelRoot.find('**/necktie-w').hide()
+        modelRoot.find('**/bowtie').show()
+        modelRoot.find('**/bowtie').setTexture(texture, 1)
+        modelRoot.find('**/hands').setColor(0.835, 0.843, 0.847, 1)
 
     def makeManagerSuit(self, modelRoot=None):
         if not modelRoot:
@@ -6143,15 +6210,16 @@ class Suit(Avatar.Avatar):
             condition = 6
         elif health > 0.3:
             condition = 7
-        elif health > 0.2:
+        elif health >= 0.25:
             condition = 8
-        elif health > 0.1:
+        elif health > 0.15:
             condition = 9
         elif health > 0.0:
             condition = 10
         else:
             condition = 11
         self.condition = condition
+        #self.healthCondition = condition
         #print('UpdateHealthBar - condition is %i' % condition)
 
         if self.healthCondition != condition or forceUpdate:
@@ -6556,13 +6624,15 @@ class Suit(Avatar.Avatar):
         dropShadow.reparentTo(self.shadowJoint)
         self.nametagNull = self.find('**/joint_nameTag')
         texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
-        if self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught():
+        if self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
+        elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
-        elif self.getExecutive():
+        elif self.getExecutive() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.getManager():
+        elif self.getManager() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.getGovernaught():
+        elif self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
         self.find('**/body').setTexture(texture, 1)
         self.find('**/emblem_healthmeter').show()
@@ -6596,7 +6666,13 @@ class Suit(Avatar.Avatar):
         else:
             self.setName('Skelecog')
             name = 'Skelecog'
-        dept = self.getStyleDept()
+        if self.style.name == 'cr' or self.style.name == 'hh' or self.style.name == 'le' or self.style.name == 'cfp' or self.style.name == 'cvy' or self.style.name == 'gh' \
+                or self.style.name == 'ssm' or self.style.name == 'bdb' or self.style.name == 'gry' or self.style.name == 'rb' or self.style.name == 'phs' and self.isWaiter:
+            dept = 'Waitress'
+        elif self.isWaiter:
+            dept = 'Waiter'
+        else:
+            dept = self.getStyleDept()
         level = str(self.getActualLevel())
         if self.getExecutive():
             level += TTLocalizer.ExecutivePostFix
@@ -6681,13 +6757,15 @@ class Suit(Avatar.Avatar):
         dropShadow.setColor(0.0, 0.0, 0.0, 0.5)
         dropShadow.reparentTo(self.shadowJoint)
         texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
-        if self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught():
+        if self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
+        elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
-        elif self.getExecutive():
+        elif self.getExecutive() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.getManager():
+        elif self.getManager() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.getGovernaught():
+        elif self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
         self.find('**/body').setTexture(texture, 1)
         self.find('**/emblem_healthmeter').show()
@@ -6721,7 +6799,13 @@ class Suit(Avatar.Avatar):
         else:
             self.setName('Skelecog')
             name = 'Skelecog'
-        dept = self.getStyleDept()
+        if self.style.name == 'cr' or self.style.name == 'hh' or self.style.name == 'le' or self.style.name == 'cfp' or self.style.name == 'cvy' or self.style.name == 'gh' \
+                or self.style.name == 'ssm' or self.style.name == 'bdb' or self.style.name == 'gry' or self.style.name == 'rb' or self.style.name == 'phs' and self.isWaiter:
+            dept = 'Waitress'
+        elif self.isWaiter:
+            dept = 'Waiter'
+        else:
+            dept = self.getStyleDept()
         level = str(self.getActualLevel())
         revives = self.getSkeleRevives()
         if self.getExecutive():
@@ -7361,19 +7445,19 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'mdm':
             self.setSuitClothes()
             texture = loader.loadTexture('phase_14/maps/cc_t_ene_insider%s.png' % (
-                '_exe' if self.isExecutive or self.isGovernaught else '',))
+                '_gov' if self.isExecutive or self.isGovernaught else '',))
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
         elif self.style.name == 'tld':
             self.setSuitClothes()
             texture = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho%s.png' % (
-                '_exe' if self.isExecutive or self.isGovernaught else '',))
+                '_gov' if self.isExecutive or self.isGovernaught else '',))
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
         elif self.style.name == 'ca':
             self.setSuitClothes()
             texture = loader.loadTexture('phase_14/maps/cc_t_ene_bagholder%s.png' % (
-                '_exe' if self.isExecutive or self.isGovernaught else '',))
+                '_gov' if self.isExecutive or self.isGovernaught else '',))
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
         else:

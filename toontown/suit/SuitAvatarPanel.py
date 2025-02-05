@@ -23,42 +23,44 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
     POPUP_ANIMATION_DURATION = 0
     POPOUT_ANIMATION_DURATION = 0
 
-    healthColors = (Vec4(0.169, 1, 0, 1),
-                    Vec4(0.5, 1, 0, 1),
-                    Vec4(0.75, 1, 0, 1),
-                    Vec4(1, 1, 0, 1),
-                    Vec4(1, 0.866, 0, 1),
-                    Vec4(1, 0.7, 0, 1),
-                    Vec4(1, 0.6, 0, 1),
-                    Vec4(1, 0.5, 0, 1.0),
-                    Vec4(1, 0.25, 0, 1),
+    healthColors = (Vec4(0, 1, 0.078, 1),
+                    Vec4(0.388, 1, 0, 1),
+                    Vec4(0.686, 1, 0, 1),
+                    Vec4(0.882, 1, 0, 1),
+                    Vec4(0.988, 1, 0, 1),
+                    Vec4(1, 0.831, 0, 1),
+                    Vec4(1, 0.714, 0, 1),
+                    Vec4(1, 0.533, 0, 1.0),
                     Vec4(1, 0, 0, 1),
-                    Vec4(0, 0, 0, 0),
+                    Vec4(1, 0, 0, 1),
+                    Vec4(0.431, 0.431, 0.431, 1),  # out
                     Vec4(1, 0, 0, 1),
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
                     Vec4(1, 0.416, 0.937, 1),  # 14 pink silhouette
                     Vec4(0, 0.361, 1, 1),
                     Vec4(1, 1, 1, 1),  # 15 blue silhouette
-                    Vec4(186 / 255, 82 / 255, 1, 1))
-    healthGlowColors = (Vec4(0.169, 1, 0, .5),
-                        Vec4(0.5, 1, 0, .5),
-                        Vec4(0.75, 1, 0, .5),
-                        Vec4(1, 1, 0, .5),
-                        Vec4(1, 0.866, 0, .5),
-                        Vec4(1, 0.7, 0, .5),
-                        Vec4(1, 0.6, 0, .5),
-                        Vec4(1, 0.5, 0, .5),
-                        Vec4(1, 0.25, 0, .5),
-                        Vec4(1, 0, 0, .5),
-                        Vec4(0, 0, 0, 0),
+                    Vec4(186 / 255, 82 / 255, 1, 1),
+                    Vec4(0.702, 0, 1, 1))  # 17 purple puls
+    healthGlowColors = (Vec4(0, 1, 0.078, 1),
+                        Vec4(0.388, 1, 0, 1),
+                        Vec4(0.686, 1, 0, 1),
+                        Vec4(0.882, 1, 0, 1),
+                        Vec4(0.988, 1, 0, 1),
+                        Vec4(1, 0.831, 0, 1),
+                        Vec4(1, 0.714, 0, 1),
+                        Vec4(1, 0.533, 0, 1.0),
                         Vec4(1, 0, 0, 1),
-                        Vec4(0.0, 1.0, 1.0, .5),  # overheal
-                        Vec4(0.553, 0, 1, .5),  # overcharge
-                        Vec4(1, 0.416, 0.937, .5),  # 14 pink silhouette
-                        Vec4(0, 0.361, 1, .5),
-                        Vec4(1, 1, 1, .5),  # 15 blue silhouette
-                        Vec4(186 / 255, 82 / 255, 1, .5))
+                        Vec4(1, 0, 0, 1),
+                        Vec4(0.431, 0.431, 0.431, 1),  # out
+                        Vec4(1, 0, 0, 1),
+                        Vec4(0.0, 1.0, 1.0, 1),  # overheal
+                        Vec4(0.553, 0, 1, 1),  # overcharge
+                        Vec4(1, 0.416, 0.937, 1),  # 14 pink silhouette
+                        Vec4(0, 0.361, 1, 1),
+                        Vec4(1, 1, 1, 1),  # 15 blue silhouette
+                        Vec4(186 / 255, 82 / 255, 1, 1),
+                        Vec4(0.702, 0, 1, 1))  # 17 purple pulse
 
     def __init__(self, avatar):
         AvatarPanel.AvatarPanel.__init__(self, avatar, FriendsListPanel=FriendsListPanel)
@@ -92,9 +94,9 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             self.condition = 6
         elif health > 0.3:
             self.condition = 7
-        elif health > 0.2:
+        elif health > 0.25:
             self.condition = 8
-        elif health > 0.1:
+        elif health > 0.15:
             self.condition = 9
         elif health > 0.0:
             self.condition = 10
@@ -381,9 +383,9 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             condition = 6
         elif health > 0.3:
             condition = 7
-        elif health > 0.2:
+        elif health > 0.25:
             condition = 8
-        elif health > 0.1:
+        elif health > 0.15:
             condition = 9
         elif health > 0.0:
             condition = 10

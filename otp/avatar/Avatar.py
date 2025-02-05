@@ -408,13 +408,137 @@ class Avatar(Actor, ShadowCaster):
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if self.animHead == None:
             for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
                 ).start()
         else:
             for headPart in self.animatedHeadParts: Sequence(
                 ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
             ).start()
+
+    def checkCogHP(self, battle):
+        from toontown.battle import MovieUtil
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.createSuitDeathTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPBomb(self, battle):
+        from toontown.battle import MovieUtil
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPZap(self, battle):
+        from toontown.battle import MovieUtil
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPLaserRevive(self, battle):
+        from toontown.battle import MovieUtil
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.createSuitReviveTrackVirtual(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPLaser(self, battle):
+        from toontown.battle import MovieUtil
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.createVirtualSuitDeathTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+    def checkCogHPRevive(self, battle):
+        from toontown.battle import MovieUtil
+        if self.getHP() <= 0:
+            Parallel(MovieUtil.createSuitReviveTrack(self, battle), Func(battle.unlureSuit, self)).start()
+        else:
+            pass
+
+
+    def setNeutralAnimation(self):
+        if self.getDizzy():
+            Sequence(Func(self.loop, 'lured')
+                     ).start()
+        elif self.isChainsawPhase2:
+            Sequence(
+                Func(self.loop, 'neutral-override%s' % ('-glitched' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+                ).start()
+        elif self.isOttomanPhase2:
+            Sequence(Func(self.loop, 'pace')
+                     ).start()
+        elif self.isAngry:
+            Sequence(Func(self.loop, 'neutral-enraged')
+                     ).start()
+        elif self.isImmortal and not self.dna.name == 'dsf':
+            Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
+                     ).start()
+        elif self.isVulnerable and self.dna.name == 'crf':
+            Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+                     ).start()
+        else:
+            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+            ).start()
+
+    def setNeutralAnimationTrap(self):
+        if self.isAngry:
+            Sequence(Func(self.loop, 'neutral-enraged')
+                     ).start()
+        elif self.isChainsawPhase2:
+            Sequence(
+                Func(self.loop, 'neutral-ovveride%s' % ('-glitched' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+                ).start()
+        elif self.isImmortal and not self.dna.name == 'dsf':
+            Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
+                     ).start()
+        elif self.isVulnerable and self.dna.name == 'crf':
+            Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+                     ).start()
+        else:
+            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+            ).start()
+
+    def setChatAbsoluteTrap(self, chatString, chatFlags, dialogue=None, interrupt=True):
+        searchString = chatString.lower()
+        if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
+            self.animHead = 'murmur'
+        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
+            self.animHead = 'grunt'
+        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
+            self.animHead = 'question'
+        else:
+            stringLength = len(chatString)
+            if stringLength <= 1:
+                self.animHead = None
+            elif stringLength <= OTPLocalizer.DialogLength1:
+                self.animHead = 'grunt'
+            elif stringLength <= OTPLocalizer.DialogLength2:
+                self.animHead = 'murmur'
+            elif stringLength <= OTPLocalizer.DialogLength3:
+                self.animHead = 'statement'
+            else:
+                self.animHead = 'statement'
+        self.nametag.setChatText(chatString, chatFlags)
+        self.playCurrentDialogue(dialogue, chatFlags, interrupt)
+        if self.dna.name == 'crf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13else '',), fromFrame=0, toFrame=22)
+                ).start()
+        if self.dna.name == 'mad':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',), fromFrame=0, toFrame=22)
+                ).start()
+        if self.dna.name == 'dsf':
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',), fromFrame=0, toFrame=22)
+                ).start()
+        else:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+                ).start()
 
     def setChatMuted(self, chatString, chatFlags, dialogue = None, interrupt = 1, quiet = 0):
         pass

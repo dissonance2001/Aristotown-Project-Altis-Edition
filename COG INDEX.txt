@@ -25,10 +25,10 @@ kpn - The Big Cheese Level 8-25
 	Operations Analysts:
 ym - Gumshoe Level 2-8
 ds - Enforcer Level 3-9
-trb - Fore-Caddie Level 5-15
+trb - The Molder Level 5-15
 
 	Field Specialists:
-cr - The Molder Level 4-12
+cr - Fore-Caddie Level 4-12
 dvg - Blowhard Level 6-15
 bkp - Toxic Leader Level 7-18
 
@@ -47,12 +47,12 @@ tc - Firestarter Level 20.mgr
 tg - Featherbedder Level 30.mgr
 
 	High Roller Manager:
-tb - Major Player (HR) Level 88.mgr
+tb - Major Player (HR) Level 88.mgr (broken)
 
 	Kudos Managers:
 ts - Major Player Level 28.mgr
 adc - Chainsaw Consultant Level 50.mgr
-drm - Chainsaw Consultant (OR) Level 50.mgr
+drm - Chainsaw Consultant (Override) Level 50.mgr
 
 	Bossbot 'Litigation' Team:
 cp - Powerhouse Level 38.mgr
@@ -87,12 +87,12 @@ jdg - Magistrate Level 15-20.exe
 	Facility Manager:
 jur - Head Attorney Level 16.mgr
 
-	Overclocked CJ Phase 1 Managers:
+	Extra Managers:
 tlr - Arbitrator Level 50.mgr
 cm - Judy Level 20.mgr
 tr - Count Erclaim Level 20.mgr
 mp - Redd "Heir" Wing Level 20.mgr
-laa - The Witness Stand-In Level 50.mgr
+laa - The Witness Stand-In Level 50.mgr (broken)
 
 	Street Manager:
 ggm - Mouthpiece Level 16.mgr
@@ -152,9 +152,9 @@ trk - Plutocrat Level 38.mgr
 msp - Count Erfit Level 20.mgr
 
 	High Roller Managers:
-dsf - High Roller (999 HP) Level 100.mgr
-mad - High Roller Silhouette Level 25.mgr
-crf - High Roller (44444 HP) Level 100.mgr
+dsf - High Roller (999 HP) Level 100.mgr (does not work outside of the O.C.F.O.)
+mad - High Roller Silhouette Level 25.mgr (broken)
+crf - High Roller (44444 HP) Level 100.mgr (does not work outside of the O.C.F.O.)
 
 =============SELLBOTS:===============
 	Regular Cogs:
@@ -199,7 +199,7 @@ jr - Multislacker Level 24.mgr
 sft - Pacesetter Level 66.mgr
 
 	High Roller Manager:
-prr - Videographer Level 90.mgr
+prr - Videographer Level 90.mgr (broken)
 
 	Sellbot 'Litigation' Team:
 blr - Radiographer Level 28.mgr v2.0
@@ -285,17 +285,17 @@ sya - Senior Developer Level 20.mgr
 yuh - Desk Jockey Level 3-10 (No .gov Variant)
 
 	Nothing:
-yhi - PLACEHOLDER Level 25.mgr 
-jas - PLACEHOLDER Level 25.mgr
-tas - PLACEHOLDER Level 20.mgr 
-fhu - PLACEHOLDER Level 30.mgr 
-fsh - PLACEHOLDER Level 88.mgr
-fhj - PLACEHOLDER Level 50.mgr
-kdh - PLACEHOLDER Level 50.mgr
+yhi - PLACEHOLDER Level N/A.mgr
+jas - PLACEHOLDER Level N/A.mgr
+tas - PLACEHOLDER Level N/A.mgr
+fhu - PLACEHOLDER Level N/A.mgr
+fsh - PLACEHOLDER Level N/A.mgr
+fhj - PLACEHOLDER Level N/A.mgr
+kdh - PLACEHOLDER Level N/A.mgr
 
 	Techbot 'Litigation' Team:
-dar - Black Hat Level 40.mgr
-nhy - Security Supervisor Level 45.mgr
-wrt - Keylogger Level 45.mgr
-auh - Technocrat Level 50.mgr
+dar - Black Hat Level 40.mgr (broken)
+nhy - Security Supervisor Level 45.mgr (broken)
+wrt - Keylogger Level 45.mgr (broken)
+auh - Technocrat Level 50.mgr (broken)
 

@@ -1754,8 +1754,9 @@ class BattleCalculatorAI:
                                         target3.useSkeleRevive()
                         if suitIndex + 2 < len(activeSuits):
                             target4 = activeSuits[suitIndex + 2]
+                            target3 = activeSuits[suitIndex + 1]
                             if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'zapImmune') and self.suitHasCondition(target3.doId, 'soaked')\
-                                    and self.suitHasCondition(target4.doId, 'soaked') and not self.suitHasCondition(target4.doId, 'immune') and not self.suitHasCondition(target4.doId, 'zapImmune'):
+                                    and self.suitHasCondition(target4.doId, 'soaked')  and not self.suitHasCondition(target4.doId, 'immune') and not self.suitHasCondition(target4.doId, 'zapImmune'):
                                 organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                                 if organicBonus:
                                     attackDamageAbsorb = (int(attackDamage * .84) * .425)
@@ -3202,58 +3203,6 @@ class BattleCalculatorAI:
                 return 4
             if self.suitHasCondition(theSuit.doId, 'gavelcalculator'):
                 return 8
-        if theSuit.dna.name == 'kb':
-            x = self.TurnsElapsed
-            if x % 99 == 0:
-                return atk
-            if x % 11 == 0 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                return 8
-            if x % 5 == 0:
-                return 11
-            if x % 4 == 0:
-                return 9
-            if x % 3 == 0:
-                return 10
-        if theSuit.dna.name == 'ts':
-            x = self.TurnsElapsed
-            if x % 99 == 0:
-                return atk
-            if x % 11 == 0 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                return 11
-            if x % 5 == 0:
-                return 9
-            if x % 4 == 0:
-                return 10
-            if x % 3 == 0:
-                return 0
-            if self.suitHasCondition(theSuit.doId, 'soaked') and x % 2 == 0:
-                return 8
-        if theSuit.dna.name == 'tb':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-            if x % 99 == 0:
-                return 9
-            if x % 5 == 0:
-                return 7
-            if x % 4 == 0:
-                return 8
-        if theSuit.dna.name == 'fd':
-            x = self.TurnsElapsed
-            if x % 99 == 0:
-                return atk
-            if x % 11 == 0 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                return 5
-            if x % 5 == 0:
-                return 4
-            if x % 4 == 0:
-                return 1
-            if x % 3 == 0:
-                return 0
         if theSuit.dna.name == 'cp':
             x = self.TurnsElapsed
             if x % 99 == 0:
@@ -3355,24 +3304,6 @@ class BattleCalculatorAI:
                 return random.choice((0, 1))
             if len(self.battle.activeSuits) >= 4 and self.suitHasCondition(theSuit.doId, 'phase3') and x % 2 == 0:
                 return 0
-        if theSuit.dna.name == 'prr':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'tb' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-            if x % 99 == 0:
-                return 12
-            if x % 6 == 0:
-                return 0
-            if x % 5 == 0:
-                return 1
-            if x % 4 == 0:
-                return 3
-            if x % 3 == 0:
-                return 4
         if theSuit.dna.name == 'dsf':
             x = self.TurnsElapsed
             if x % 99 == 0:
@@ -3474,18 +3405,6 @@ class BattleCalculatorAI:
                     return random.choice((1, 2))
             elif theSuit.currHP > 0:
                 return 0
-        if theSuit.dna.name == 'bsh':
-            x = self.TurnsElapsed
-            if x % 99 == 0:
-                return atk
-            if x % 11 == 0 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                return 8
-            if x % 5 == 0:
-                return 5
-            if x % 4 == 0:
-                return 7
-            if x % 3 == 0:
-                return 6
         if theSuit.dna.name == 'dvk':
             x = self.TurnsElapsed
             if x % 99 == 0:
@@ -3601,16 +3520,6 @@ class BattleCalculatorAI:
             for t in self.battle.activeToons:
                 if self.toonHasCondition(t, 'cheer'):
                     return 2
-        if theSuit.dna.name == 'fd':
-            x = self.TurnsElapsed
-            if x % 99 == 0:
-                return atk
-            if x % 11 == 0 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                return 5
-            if x % 4 == 0:
-                return 3
-            if x % 3 == 0:
-                return 0
         if theSuit.dna.name == 'blr':
             x = self.TurnsElapsed
             if x % 99 == 0:
@@ -3693,22 +3602,6 @@ class BattleCalculatorAI:
                 return 0
             if x % 3 == 0:
                 return random.choice((1, 2))
-        if theSuit.dna.name == 'cm':
-            x = self.TurnsElapsed
-            if x % 3 == 0:
-                return 1
-        if theSuit.dna.name == 'mp':
-            x = self.TurnsElapsed
-            if x % 99 == 0:
-                return atk
-            if x % 4 == 0:
-                return 5
-        if theSuit.dna.name == 'cm':
-            x = self.TurnsElapsed
-            if x % 99 == 0:
-                return atk
-            if x % 4 == 0:
-                return 1
         currentBossHealth = -1
         for s in self.battle.suits:
             if s.dna.name == 'csm':

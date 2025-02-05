@@ -2708,7 +2708,7 @@ def zapCog(suit, anim, before, after, battle):
     headNormal = head.hprInterval(0, Vec3(0, 0, 0))
     zapTrack = Sequence(Wait(before), SoundInterval(zapSfx, volume=0.6))
     flashTrack = Sequence(Wait(before), Func(suit.setColorScale, (0,0,0,1)), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(suit.setColorScale, (1,1,1,1)))
-    spazzTrack = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Func(zapSuit.play, anim))
+    spazzTrack = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Func(zapSuit.play, anim), Wait(4), Func(zapSuit.setNeutralAnimation))
     return Parallel(zapTrack, flashTrack, spazzTrack)
 
 def spawnHeadExplosion(suit, battle):
