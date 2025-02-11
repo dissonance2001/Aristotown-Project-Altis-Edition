@@ -179,7 +179,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                        frameSize=(0, 0, 0, 0),
                                        barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
                                        frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
-                                       text='Level: FIRED!' + '\n' + TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
                                        text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
         elif revives > 2 and avatar.isVirtual and avatar.maxHP > 9999:
             healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
@@ -381,11 +381,11 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             condition = 5
         elif health > 0.4:
             condition = 6
-        elif health > 0.3:
-            condition = 7
         elif health > 0.25:
+            condition = 7
+        elif health > 0.2:
             condition = 8
-        elif health > 0.15:
+        elif health > 0.1:
             condition = 9
         elif health > 0.0:
             condition = 10

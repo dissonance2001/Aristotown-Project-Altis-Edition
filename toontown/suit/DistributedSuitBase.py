@@ -72,7 +72,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.executive = 0
         self.manager = 0
         self.dizzy = 0
-        self.playRate = 0
+        self.playRate = 1
         self.governaught = 0
         self.maxHP = 10
         self.currHP = 10
@@ -166,6 +166,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def getManager(self):
         return self.manager
+
+    def setPlayRate2(self, num):
+        self.playRate = num
+
+    def getPlayRate2(self):
+        return self.playRate
 
     def processManager(self):
         self.maxHP = self.getHP()

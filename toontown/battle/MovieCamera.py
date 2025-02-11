@@ -610,7 +610,7 @@ def chooseNPCExitShot(exits, exitsDuration):
     return track
 
 
-def chooseSuitShot(attack, attackDuration):
+def chooseSuitShot(attack, attackDuration, cheat=0):
     duration = attackDuration
     if duration < 0:
         duration = 1e-06
@@ -2414,10 +2414,10 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera())
     pbpText = attack['playByPlayText']
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
-    if attack['name'] in TTLocalizer.SuitCheatNames:
+    if cheat:
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat(displayName, 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatNames[attack['name']][0], 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat(TTLocalizer.SuitCheatNames[attack['name']], 3.5)
         return Parallel(camTrack, pbpTrack, pbpDesc)
     if float(suit.currHP) > float(suit.maxHP * 1.5):
         pbpTrack = pbpText.getShowIntervalOvercharged(displayName, 3.5)

@@ -351,7 +351,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
                 else:
                     cogdoNumFloors = 2
                 
-                if self.track not in ['l', 's', 'm', 'g', 'c']:
+                if self.track not in ['l', 's', 'm', 'g', 'c', 't']:
                     self.notify.warning('Invalid track %s for cog building/cog dominium!' % (str(self.track)))
                     continue
                 

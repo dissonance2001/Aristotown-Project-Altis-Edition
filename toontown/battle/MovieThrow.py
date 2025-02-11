@@ -744,7 +744,7 @@ def __splatSuit(suit, level):
     splatTex2 = loader.loadTexture('phase_5/maps/tiny_' + splatDict[level] + '.png')
     splat = TextureStage(splatDict[level])
     splat.setMode(TextureStage.MDecal)
-    splat.setSavedResult(True)
+    #splat.setSavedResult(True)
     for headPart in suit.headParts:
         if not suit.dna.name == 'lit':
             headPart.setTexture(splat, splatTex)

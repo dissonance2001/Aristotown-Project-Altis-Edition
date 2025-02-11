@@ -188,8 +188,10 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
                     suitTrack.append(Func(trapProp.wrtReparentTo, suit))
                     suit.battleTrapProp = trapProp
                 if trapProp:
+                    suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
                     suitTrack.append(Func(suit.loop, 'lured2'))
                 else:
+                    suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
                     suitTrack.append(Func(suit.loop, 'lured2'))
                 if suit.style.name == 'crf':
                     for headPart in suit.animatedHeadParts:
@@ -285,8 +287,10 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.16, endTime=0.7))
                     suitTrack.append(ActorInterval(suit, 'landing', startTime=0.7, duration=1.3))
                     if trapProp:
+                        suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
                         suitTrack.append(Func(suit.loop, 'lured2'))
                     else:
+                        suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
                         suitTrack.append(Func(suit.loop, 'lured2'))
                     if suit.style.name == 'crf':
                         for headPart in suit.animatedHeadParts:
@@ -382,8 +386,10 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                     suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
                     suitTrack.append(Func(suit.setPos, battle, reachPos))
                     if trapProp:
+                        suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
                         suitTrack.append(Func(suit.loop, 'lured2'))
                     else:
+                        suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
                         suitTrack.append(Func(suit.loop, 'lured2'))
                     if suit.style.name == 'crf':
                         for headPart in suit.animatedHeadParts:
@@ -1267,8 +1273,10 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
                     suitTrack.append(Func(suit.setPos, battle, reachPos))
                     if trapProp:
+                        suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
                         suitTrack.append(Func(suit.loop, 'lured2'))
                     else:
+                        suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
                         suitTrack.append(Func(suit.loop, 'lured2'))
                     if suit.style.name == 'crf':
                         for headPart in suit.animatedHeadParts:

@@ -354,7 +354,9 @@ def getSuitVitals(name, level = -1):
     dict['hp'] = data['hp'][level]
     dict['def'] = data['def'][level]
     attacks = data['attacks']
+    cheats = data['cheats']
     alist = []
+    clist = []
     for a in attacks:
         adict = {}
         name = a[0]
@@ -365,8 +367,19 @@ def getSuitVitals(name, level = -1):
         adict['freq'] = a[3][level]
         adict['group'] = SuitAttacks[name][1]
         alist.append(adict)
+    for c in cheats:
+        cdict = {}
+        name = c[0]
+        cdict['name'] = name
+        cdict['animName'] = SuitCheats[name][0]
+        cdict['hp'] = c[1][level]
+        cdict['acc'] = c[2][level]
+        cdict['freq'] = c[3][level]
+        cdict['group'] = SuitCheats[name][1]
+        clist.append(cdict)
 
     dict['attacks'] = alist
+    dict['cheats'] = clist
     return dict
 
 
@@ -414,6 +427,60 @@ def pickSuitAttack(attacks, suitLevel):
 
         return attackNum
     return
+
+def pickSuitCheat(cheats, suitLevel):
+    cheatNum = None
+    randNum = random.randint(0, 99)
+    notify.debug('pickSuitAttack: rolled %d' % randNum)
+    count = 0
+    index = 0
+    total = 0
+    for c in cheats:
+        total = total + c[3][suitLevel]
+
+    for c in cheats:
+        count = count + c[3][suitLevel]
+        if randNum < count:
+            attackNum = index
+            notify.debug('picking attack %d' % attackNum)
+            break
+        index = index + 1
+
+    configAttackName = simbase.config.GetString('attack-type', 'random')
+    if configAttackName == 'random':
+        return attackNum
+    elif configAttackName == 'sequence':
+        for i in xrange(len(attacks)):
+            if cheats[i] not in debugAttackSequence:
+                debugAttackSequence[cheats[i]] = 1
+                return i
+
+        return cheatNum
+    else:
+        for i in xrange(len(cheats)):
+            if cheats[i][0] == configAttackName:
+                return i
+
+        return cheatNum
+    return
+
+def getSuitCheat(suitName, suitLevel, cheatNum = -1):
+    cheatChoices = SuitAttributes[suitName]['cheats']
+    if cheatNum == -1:
+        notify.debug('getSuitAttack: picking attacking for %s' % suitName)
+        cheatNum = pickSuitCheat(cheatChoices, suitLevel)
+    cheat = cheatChoices[cheatNum]
+    cdict = {}
+    cdict['suitName'] = suitName
+    name = attack[0]
+    cdict['name'] = name
+    cdict['id'] = SuitAttacks.keys().index(name)
+    cdict['animName'] = SuitAttacks[name][0]
+    cdict['hp'] = cheat[1][suitLevel]
+    cdict['acc'] = cheat[2][suitLevel]
+    cdict['freq'] = cheat[3][suitLevel]
+    cdict['group'] = SuitAttacks[name][1]
+    return cdict
 
 
 def getSuitAttack(suitName, suitLevel, attackNum = -1):
@@ -3704,15 +3771,15 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('EvilEyeWSI',
+             (('RestrainingOrder',
                (1,),
                (50,),
                (25,)),
-('EvilEyeWSI',
+('RestrainingOrder',
                (1,),
                (50,),
                (25,)),
-              ('EvilEyeWSI',
+              ('RestrainingOrder',
                (1,),
                (50,),
                (50,)))},
@@ -6212,6 +6279,9 @@ QUALITY_CONTROL_LEVEL_1 = SuitAttacks.keys().index('QualityLvlControl1')
 QUALITY_CONTROL_LEVEL_2 = SuitAttacks.keys().index('QualityLvlControl2')
 QUALITY_CONTROL_LEVEL_3 = SuitAttacks.keys().index('QualityLvlControl3')
 
+SuitCheats = {'TestCheat': ('finger-wag', ATK_TGT_SINGLE),}
+TEST_CHEAT = SuitCheats.keys().index('TestCheat')
+
 def getFaceoffTaunt(suitName, doId):
     if suitName in SuitFaceoffTaunts:
         taunts = SuitFaceoffTaunts[suitName]
@@ -6221,6 +6291,26 @@ def getFaceoffTaunt(suitName, doId):
 
 
 SuitFaceoffTaunts = TTLocalizer.SuitFaceoffTaunts
+
+def getCheatTauntIndex(cheatName):
+    if cheatName in SuitCheatTaunts:
+        taunts = SuitCheatTaunts[cheatName]
+        return random.randint(0, len(taunts) - 1)
+    else:
+        return 1
+
+def getCheatTaunt(cheatname, index=None):
+    if cheatname in SuitCheatTaunts:
+        taunts = SuitCheatTaunts[cheatname]
+    else:
+        taunts = TTLocalizer.SuitAttackDefaultTaunts
+    if index:
+        if index >= len(taunts):
+            notify.warning('index exceeds length of taunts list in getCheatTaunt')
+            return TTLocalizer.SuitAttackDefaultTaunts[0]
+        return taunts[index]
+    else:
+        return random.choice(taunts)
 
 def getAttackTauntIndexFromIndex(suit, attackIndex):
     adict = getSuitAttack(suit.getStyleName(), suit.getLevel(), attackIndex)
@@ -6251,6 +6341,7 @@ def getAttackTaunt(attackName, index = None):
 
 
 SuitAttackTaunts = TTLocalizer.SuitAttackTaunts
+SuitCheatTaunts = TTLocalizer.SuitCheatTaunts
 DisabledAttacks = ('Gavel', 'SandTrap', 'FloodTheMarket', 'FiveOClockShadow')
 
 def getAttacksByType(attributes):
@@ -6266,3 +6357,18 @@ def getAttacksByType(attributes):
             singleAttacks.append(attack)
     
     return groupAttacks, singleAttacks
+
+
+def getCheatsByType(attributes):
+    groupCheats = []
+    singleCheats = []
+
+    for cheat in sorted(attributes['cheats'], key=lambda x: x[0]):
+        if cheat[0] in DisabledCheats:
+            continue
+        if SuitAttacks[attack[0]][1] == ATK_TGT_GROUP:
+            groupAttacks.append(cheat)
+        else:
+            singleAttacks.append(cheat)
+
+    return groupCheats, singleCheats

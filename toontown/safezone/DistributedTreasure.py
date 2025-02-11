@@ -151,4 +151,8 @@ class DistributedTreasure(DistributedObject.DistributedObject):
         return (self.nodePath, Point3())
 
     def startAnimation(self):
-        pass
+        throbInIval = Sequence(LerpHprInterval(self.treasure, 4, (360, 0, 0)))
+        throbOutIval = Sequence(LerpPosInterval(self.treasure, 1.5, (0, 0, .5), blendType='easeIn'), LerpPosInterval(self.treasure, 1.5, (0, 0, 0), blendType='easeIn'))
+        self.heartThrobIval = Parallel(throbInIval, throbOutIval)
+        throbInIval.loop()
+        throbOutIval.loop()

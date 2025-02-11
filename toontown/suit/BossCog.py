@@ -350,13 +350,13 @@ class BossCog(Avatar.Avatar):
         elif health > 0.4:
             condition = 6
             self.ANIM_PLAYRATE = 1.35
-        elif health > 0.3:
+        elif health > 0.25:
             condition = 7
             self.ANIM_PLAYRATE = 1.4
-        elif health > 0.25:
+        elif health > 0.2:
             condition = 8
             self.ANIM_PLAYRATE = 1.45
-        elif health > 0.15:
+        elif health > 0.1:
             condition = 9
             self.ANIM_PLAYRATE = 1.5
         elif health > 0.0:
@@ -887,54 +887,83 @@ class BossCog(Avatar.Avatar):
         if anim == None:
             partName = None
             if self.happy:
+                for headPart in self.animatedHeadParts:
+                    headPart.setP(0)
                 animName = 'Ff_neutral'
             else:
+                for headPart in self.animatedHeadParts:
+                    headPart.setP(0)
                 animName = 'Fb_neutral'
             if self.raised:
+                for headPart in self.animatedHeadParts:
+                    headPart.setP(0)
                 ival = ActorInterval(self, animName)
             else:
+                for headPart in self.animatedHeadParts:
+                    headPart.setP(0)
                 ival = Parallel(ActorInterval(self, animName, partName=['torso', 'head']), ActorInterval(self, 'Fb_downNeutral', partName='legs'))
             if not self.forward:
                 ival = Sequence(Func(self.reverseBody), ival, Func(self.forwardBody))
         elif anim == 'down2Up':
             for headPart in self.animatedHeadParts:
-                headAnim = Parallel(Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
+                headPart.setP(180)
+                headAnim = Parallel(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
                 headAnim.start()
             ival = Parallel(SoundInterval(self.upSfx), self.getAngryActorInterval('Fb_down2Up'))
             self.raised = 1
         elif anim == 'up2Down':
             for headPart in self.animatedHeadParts:
-                headAnim = Parallel(Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
+                headPart.setP(180)
+                headAnim = Parallel(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
                 headAnim.start()
             ival = Parallel(SoundInterval(self.downSfx), self.getAngryActorInterval('Fb_down2Up', playRate=-1))
             self.raised = 0
         elif anim == 'throw':
+            for headPart in self.animatedHeadParts:
+                headPart.setP(180)
             self.doAnimate(None, raised=1, happy=0, queueNeutral=0)
             ival = Parallel()
             ival.append(Parallel(Sequence(SoundInterval(self.throwSfx), duration=0),
                             self.getAngryActorInterval('Fb_UpThrow')))
         elif anim == 'hit':
+            if self.raised and self.dizzy:
+                self.raised = 0
+                ival = self.getAngryActorInterval('Fb_firstHit')
+                for headPart in self.animatedHeadParts:
+                    headPart.setP(180)
+                    headAnim = Sequence(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral-lured'))
+                    headAnim.start()
             if self.raised:
                 self.raised = 0
                 ival = self.getAngryActorInterval('Fb_firstHit')
                 for headPart in self.animatedHeadParts:
-                    headAnim = Sequence(ActorInterval(headPart, 'neutral-lured'), Func(headPart.loop, 'neutral-lured'))
+                    headPart.setP(180)
+                    headAnim = Sequence(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
                     headAnim.start()
             else:
                 ival = self.getAngryActorInterval('Fb_downHit')
                 for headPart in self.animatedHeadParts:
+                    headPart.setP(180)
                     headAnim = Sequence(ActorInterval(headPart, 'neutral-lured'), Func(headPart.loop, 'neutral-lured'))
                     headAnim.start()
             ival = Parallel(SoundInterval(self.reelSfx, node=self), ival)
         elif anim == 'ltSwing' or anim == 'rtSwing':
+            for headPart in self.animatedHeadParts:
+                headPart.setP(0)
             self.doAnimate(None, raised=0, happy=0, queueNeutral=0)
             if anim == 'ltSwing':
+                for headPart in self.animatedHeadParts:
+                    headPart.setP(0)
                 ival = Sequence(Track((0, self.getAngryActorInterval('Fb_downLtSwing')), (0.9, SoundInterval(self.swingSfx, node=self)), (1, Func(self.bubbleL.unstash))), Func(self.bubbleL.stash))
             else:
+                for headPart in self.animatedHeadParts:
+                    headPart.setP(0)
                 ival = Sequence(Track((0, self.getAngryActorInterval('Fb_downRtSwing')), (0.9, SoundInterval(self.swingSfx, node=self)), (1, Func(self.bubbleR.unstash))), Func(self.bubbleR.stash))
         elif anim == 'frontAttack':
-            if self.dna.dept == 'm':
-                self.doAnimate(None, raised=1, happy=0, queueNeutral=1)
+            for headPart in self.animatedHeadParts:
+                headPart.setP(0)
+            if not self.raised:
+                self.doAnimate('down2Up', happy=0, queueNeutral=0)
             else:
                 self.doAnimate(None, raised=1, happy=0, queueNeutral=0)
             pe = BattleParticles.loadParticleFile('bossCogFrontAttack.ptf')
@@ -987,6 +1016,8 @@ class BossCog(Avatar.Avatar):
             self.happy = 1
             self.raised = 1
         elif anim == 'areaAttack':
+            for headPart in self.animatedHeadParts:
+                headPart.setP(0)
             if self.twoFaced:
                 self.doAnimate(None, raised=1, happy=0, queueNeutral=1)
             else:

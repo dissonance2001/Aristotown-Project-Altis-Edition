@@ -322,7 +322,7 @@ SnowballColor = VBase4(1.0, 1.0, 1.0, 1.0)
 Splats = {'cupcake': (0.3, TartColor),
  'fruitpie-slice': (0.5, FruitpieColor),
  'creampie-slice': (0.5, CreampieColor),
-'cake-slice': (0.6, BirthdayCakeColor),
+'birthday-cake-slice': (0.6, BirthdayCakeColor),
  'fruitpie': (0.7, FruitpieColor),
  'creampie': (0.7, CreampieColor),
  'birthday-cake': (0.9, BirthdayCakeColor)}

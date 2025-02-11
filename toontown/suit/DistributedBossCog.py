@@ -1139,7 +1139,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
                     return
                 self.doMethodLater(0.01, detachGearRoot, 'detach-%s' % gearRoot.getName())
 
-            seq = Sequence(ParallelEndTogether(self.pelvis.hprInterval(1, VBase3(toToonH, 0, 0)), neutral1Anim),
+            seq = Sequence(ParallelEndTogether(self.pelvis.hprInterval(.25, VBase3(toToonH, 0, 0)), neutral1Anim),
                            extraAnim, Parallel(Sequence(Wait(0.19), gearTrack, Func(detachGearRootLater),
                                                         self.pelvis.hprInterval(0.2, VBase3(0, 0, 0))),
                                                Sequence(throwAnim, neutral2Anim)))
@@ -1251,7 +1251,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1262,7 +1262,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1273,7 +1273,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1286,7 +1286,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1297,7 +1297,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1308,7 +1308,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1320,7 +1320,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1332,7 +1332,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1343,7 +1343,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1354,7 +1354,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1367,7 +1367,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1378,7 +1378,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         seq = Sequence(name=intervalName)
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq
@@ -1389,7 +1389,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         taunt = "And away you go!"
         seq.append(Func(self.setChatAbsolute, taunt, CFSpeech))
         seq.append(Wait(8.0))
-        seq.append(Func(self.clearChat))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
 
         seq.start()
         self.activeIntervals[intervalName] = seq

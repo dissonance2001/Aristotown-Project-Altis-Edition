@@ -10,6 +10,7 @@ from direct.distributed import DistributedObject
 from direct.fsm import State
 from toontown.battle import BattleBase
 from toontown.hood import ZoneUtil
+import random
 
 SKY_COLORS = [Vec4(1,1,1,1), Vec4(1,1,1,1), Vec4(0.8,0.8,0.8,1), Vec4(0.6,0.6,0.6,1), Vec4(0.4,0.4,0.4,1), Vec4(0.2,0.2,0.2,1)]
 
