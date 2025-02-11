@@ -3551,6 +3551,9 @@ SuitFaceoffTaunts = {'b': ['Do you have a donation for me?',
         "You're going to need some urgent care soon.",
         'This is no laughing matter.',
         "I'm going to give you the business."]}
+SuitAttackCheats = {'TestCheat': ("wouldnt it be great if this worked!",
+                                            'titties!'),}
+SuitCheatTaunts = {'TestCheat': ['Do you have any idea how much paperwork I will have to file after this?']}
 SuitCheatNames = ('CourtCosts', 'Cage', 'PaperCut', 'WireCut', 'Wiretapped',
                   'Voicemail', 'CollectCall', 'CollectCallFees', 'ExplodingBill',
                   'FireCog', 'GoodMorningToontown', 'Caress', 'RadioInfrequency',

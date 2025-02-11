@@ -194,6 +194,7 @@ class DNALoader(object):
 
     def loadDNAFileBase(self, store, _file):
         if type(_file) == str and _file.endswith(".dna"):
+            pass
             _file = _file.replace(".dna", ".pdna")
             #_file = _file.replace("../resources/", "")
         if __debug__:

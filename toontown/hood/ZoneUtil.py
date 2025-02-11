@@ -252,4 +252,4 @@ def genDNAFileName(zoneId):
         phase = 4
     if hoodId == zoneId:
         zoneId = 'sz'
-    return 'phase_%s/dna/%s_%s.pdna' % (phase, hood, zoneId)
+    return 'phase_%s/dna/%s_%s.dna' % (phase, hood, zoneId)

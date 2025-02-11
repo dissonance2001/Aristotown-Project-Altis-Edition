@@ -946,7 +946,7 @@ laa = (('glower', 'glower', 4),
        ('effort', 'effort', 4),
        ('speak', 'speak', 4),
        ('quick-jump', 'jump', 4),
-       ('defense', 'defense', 4),
+       ('golf-club-swing', 'golf-club-swing', 4),
        ('falling-knife', 'falling-knife', 4),
        ('throw-object', 'throw-object', 4),
        ('finger-wag', 'finger-wag', 4),
@@ -3593,7 +3593,7 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'dfh':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(0.635, 0.62, 0.651, 1)
-            self.generateBody()
+            self.generateFemaleBody()
             self.generateHead2('bigfish')
             self.setHeight(10.0)
         elif dna.name == 'rng':
@@ -4728,11 +4728,7 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/bowtie').setTexture(texture, 1)
         modelRoot.find('**/hands').setColor(0.835, 0.843, 0.847, 1)
         name = self.name
-        if self.style.name == 'cr' or self.style.name == 'hh' or self.style.name == 'le' or self.style.name == 'cfp' or self.style.name == 'cvy' or self.style.name == 'gh' \
-                or self.style.name == 'ssm' or self.style.name == 'bdb' or self.style.name == 'gry' or self.style.name == 'rb' or self.style.name == 'phs':
-            dept = 'Waitress'
-        else:
-            dept = 'Waiter'
+        dept = self.getStyleDept()
         level = str(self.getActualLevel())
         if self.getExecutive():
             level += TTLocalizer.ExecutivePostFix
@@ -5860,6 +5856,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'hh':
             self.corpMedallion.setZ(.2)
+        elif self.style.name == 'dfh':
+            self.corpMedallion.setZ(.2)
         elif self.style.name == 'cm':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'bdb':
@@ -5922,6 +5920,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'bdb':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'cfp':
+            self.corpMedallion.setZ(.2)
+        elif self.style.name == 'dfh':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'ggm':
             self.corpMedallion.setZ(.2)
@@ -6007,6 +6007,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'cfp':
             self.corpMedallion.setZ(.2)
+        elif self.style.name == 'dfh':
+            self.corpMedallion.setZ(.2)
         elif self.style.name == 'ggm':
             self.corpMedallion.setZ(.2)
         icons.removeNode()
@@ -6062,6 +6064,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'bdb':
             self.corpMedallion.setZ(.2)
+        elif self.style.name == 'dfh':
+            self.corpMedallion.setZ(.2)
         if self.style.body == 'c':
             self.corpMedallion.setY(.05)
         if self.style.body == 'a':
@@ -6111,6 +6115,8 @@ class Suit(Avatar.Avatar):
         if self.style.body == 'a':
             self.healthBar.setY(-.1)
         if self.style.name == 'le':
+            self.healthBar.setZ(.2)
+        elif self.style.name == 'dfh':
             self.healthBar.setZ(.2)
         elif self.style.name == 'hh':
             self.healthBar.setZ(.2)
@@ -6208,11 +6214,11 @@ class Suit(Avatar.Avatar):
             condition = 5
         elif health > 0.4:
             condition = 6
-        elif health > 0.3:
+        elif health > 0.25:
             condition = 7
-        elif health >= 0.25:
+        elif health > 0.2:
             condition = 8
-        elif health > 0.15:
+        elif health > 0.1:
             condition = 9
         elif health > 0.0:
             condition = 10
@@ -6666,13 +6672,7 @@ class Suit(Avatar.Avatar):
         else:
             self.setName('Skelecog')
             name = 'Skelecog'
-        if self.style.name == 'cr' or self.style.name == 'hh' or self.style.name == 'le' or self.style.name == 'cfp' or self.style.name == 'cvy' or self.style.name == 'gh' \
-                or self.style.name == 'ssm' or self.style.name == 'bdb' or self.style.name == 'gry' or self.style.name == 'rb' or self.style.name == 'phs' and self.isWaiter:
-            dept = 'Waitress'
-        elif self.isWaiter:
-            dept = 'Waiter'
-        else:
-            dept = self.getStyleDept()
+        dept = self.getStyleDept()
         level = str(self.getActualLevel())
         if self.getExecutive():
             level += TTLocalizer.ExecutivePostFix
@@ -6799,13 +6799,7 @@ class Suit(Avatar.Avatar):
         else:
             self.setName('Skelecog')
             name = 'Skelecog'
-        if self.style.name == 'cr' or self.style.name == 'hh' or self.style.name == 'le' or self.style.name == 'cfp' or self.style.name == 'cvy' or self.style.name == 'gh' \
-                or self.style.name == 'ssm' or self.style.name == 'bdb' or self.style.name == 'gry' or self.style.name == 'rb' or self.style.name == 'phs' and self.isWaiter:
-            dept = 'Waitress'
-        elif self.isWaiter:
-            dept = 'Waiter'
-        else:
-            dept = self.getStyleDept()
+        dept = self.getStyleDept()
         level = str(self.getActualLevel())
         revives = self.getSkeleRevives()
         if self.getExecutive():
@@ -7777,6 +7771,12 @@ class Suit(Avatar.Avatar):
             loadDialog(1)
             return FemaleDialogArray
         if self.style.name == 'gry' and self.isSkeleton:
+            loadDialog(1)
+            return SkelecogDialogFemaleArray
+        if self.style.name == 'dfh' and not self.isSkeleton:
+            loadDialog(1)
+            return FemaleDialogArray
+        if self.style.name == 'dfh' and self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogFemaleArray
         if self.style.name == 'hh' and self.isSkeleton:

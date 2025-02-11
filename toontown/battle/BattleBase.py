@@ -368,7 +368,7 @@ class BattleBase:
         else:
             self.notify.debug('buildJoinPointList() - counter-clockwise')
             index = BattleBase.suitCCwise.index(nearestP)
-            plist = BattleBase.suitCCwise[index + 1:]
+            plist = BattleBase.suitCCwise[index - 1:]
         self.notify.debug('buildJoinPointList() - plist: %s' % plist)
         return plist
 

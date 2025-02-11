@@ -2031,10 +2031,9 @@ def doManagerHeal(attack):
             suitTracks.append(tauntInterval)
             suitTracks.append(ActorInterval(theSuit, 'throw-paper'))
             suitTracks.append(Wait(6.5))
-            posPoints = [Point3(-0.25, 0.75, 0), VBase3(90, 0, 0)]
+            posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
             hitPoint = suit.getPos(battle)
             hitPoint.setZ(suit.height + 2)
-            hitPoint.setY(hitPoint.getY() + 0.5)
             knife = globalPropPool.getProp('bonus-check')
             knifeTrack = Sequence(
                 getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
@@ -2042,9 +2041,9 @@ def doManagerHeal(attack):
                 Wait(2.3),
                 Parallel(
                     getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
-                    LerpHprInterval(knife, 0.8, VBase3(0, 90, 0))),
+                    LerpHprInterval(knife, 0.8, VBase3(-180, 90, 0))),
                 Parallel(
-                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ() - 10)),
                     Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
                 Func(MovieUtil.removeProp, knife)
             )
@@ -2065,10 +2064,9 @@ def doManagerHeal(attack):
             suitTracks.append(tauntInterval)
             suitTracks.append(ActorInterval(theSuit, 'throw-paper'))
             suitTracks.append(Wait(6.5))
-            posPoints = [Point3(-0.25, 0.75, 0), VBase3(90, 0, 0)]
+            posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
             hitPoint = suit.getPos(battle)
             hitPoint.setZ(suit.height + 2)
-            hitPoint.setY(hitPoint.getY() + 0.5)
             knife = globalPropPool.getProp('bonus-check')
             knifeTrack = Sequence(
                 getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
@@ -2076,9 +2074,9 @@ def doManagerHeal(attack):
                 Wait(2.3),
                 Parallel(
                     getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
-                    LerpHprInterval(knife, 0.8, VBase3(0, 90, 0))),
+                    LerpHprInterval(knife, 0.8, VBase3(-180, 90, 0))),
                 Parallel(
-                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ() - 10)),
                     Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
                 Func(MovieUtil.removeProp, knife)
             )
@@ -2099,10 +2097,9 @@ def doManagerHeal(attack):
             suitTracks.append(tauntInterval)
             suitTracks.append(ActorInterval(theSuit, 'throw-paper'))
             suitTracks.append(Wait(6.5))
-            posPoints = [Point3(-0.25, 0.75, 0), VBase3(90, 0, 0)]
+            posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
             hitPoint = suit.getPos(battle)
             hitPoint.setZ(suit.height + 2)
-            hitPoint.setY(hitPoint.getY() + 0.5)
             knife = globalPropPool.getProp('bonus-check')
             knifeTrack = Sequence(
             getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
@@ -2110,8 +2107,8 @@ def doManagerHeal(attack):
             Wait(2.3),
             Parallel(
                 getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
-                LerpHprInterval(knife, 0.8, VBase3(0, 90, 0))),
-            Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                LerpHprInterval(knife, 0.8, VBase3(-180, 90, 0))),
+            Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
             Func(MovieUtil.removeProp, knife)
             )
@@ -4128,7 +4125,7 @@ def doBiteGavel(attack):
     suitDelay = 1.45
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
     teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4),
                                                    scaleUpTime=propScaleUpTime))
     teethAppearTrack.append(Wait(suitDelay))
@@ -8558,7 +8555,7 @@ def doTeeOffGroup(attack):
                                  Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),
                                  Wait(1.125))
         missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
-        ballPropTrack.append(getThrowTrack(ball, toon.getPos(battle), 0.25, battle, .1))
+        ballPropTrack.append(getThrowTrack(ball, toon.getPos(battle), 0.1, battle, .1))
         ballPropTrack.append(Func(MovieUtil.removeProp, ball))
         ballPropTracks.append(ballPropTrack)
     dodgeDelay = suitTrack.getDuration()
@@ -8767,10 +8764,9 @@ def doManagerHealTeeOff(attack):
             suitTracks.append(tauntInterval)
             suitTracks.append(ActorInterval(theSuit, 'throw-paper'))
             suitTracks.append(Wait(6.5))
-            posPoints = [Point3(-0.25, 0.75, 0), VBase3(90, 0, 0)]
+            posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
             hitPoint = suit.getPos(battle)
             hitPoint.setZ(suit.height + 2)
-            hitPoint.setY(hitPoint.getY() + 0.5)
             knife = globalPropPool.getProp('bonus-check')
             knifeTrack = Sequence(
                 getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
@@ -8778,9 +8774,9 @@ def doManagerHealTeeOff(attack):
                 Wait(2.3),
                 Parallel(
                     getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
-                    LerpHprInterval(knife, 0.8, VBase3(0, 90, 0))),
+                    LerpHprInterval(knife, 0.8, VBase3(-180, 90, 0))),
                 Parallel(
-                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ() - 10)),
                     Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
                 Func(MovieUtil.removeProp, knife)
             )
@@ -8801,10 +8797,9 @@ def doManagerHealTeeOff(attack):
             suitTracks.append(tauntInterval)
             suitTracks.append(ActorInterval(theSuit, 'throw-paper'))
             suitTracks.append(Wait(6.5))
-            posPoints = [Point3(-0.25, 0.75, 0), VBase3(90, 0, 0)]
+            posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
             hitPoint = suit.getPos(battle)
             hitPoint.setZ(suit.height + 2)
-            hitPoint.setY(hitPoint.getY() + 0.5)
             knife = globalPropPool.getProp('bonus-check')
             knifeTrack = Sequence(
                 getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
@@ -8812,9 +8807,9 @@ def doManagerHealTeeOff(attack):
                 Wait(2.3),
                 Parallel(
                     getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
-                    LerpHprInterval(knife, 0.8, VBase3(0, 90, 0))),
+                    LerpHprInterval(knife, 0.8, VBase3(-180, 90, 0))),
                 Parallel(
-                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ() - 10)),
                     Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
                 Func(MovieUtil.removeProp, knife)
             )
@@ -8835,10 +8830,9 @@ def doManagerHealTeeOff(attack):
             suitTracks.append(tauntInterval)
             suitTracks.append(ActorInterval(theSuit, 'throw-paper'))
             suitTracks.append(Wait(6.5))
-            posPoints = [Point3(-0.25, 0.75, 0), VBase3(90, 0, 0)]
+            posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
             hitPoint = suit.getPos(battle)
             hitPoint.setZ(suit.height + 2)
-            hitPoint.setY(hitPoint.getY() + 0.5)
             knife = globalPropPool.getProp('bonus-check')
             knifeTrack = Sequence(
                 getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
@@ -8846,9 +8840,9 @@ def doManagerHealTeeOff(attack):
                 Wait(2.3),
                 Parallel(
                     getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
-                    LerpHprInterval(knife, 0.8, VBase3(0, 90, 0))),
+                    LerpHprInterval(knife, 0.8, VBase3(-180, 90, 0))),
                 Parallel(
-                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ() - 10)),
                     Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
                 Func(MovieUtil.removeProp, knife)
             )
@@ -8884,7 +8878,7 @@ def doMulliganGroup(attack):
                                  Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),
                                  Wait(0.75))
         missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
-        ballPropTrack.append(getThrowTrack(ball, toon.getPos(battle), 0.25, battle, 0.25))
+        ballPropTrack.append(getThrowTrack(ball, toon.getPos(battle), 0.1, battle, 0.1))
         ballPropTrack.append(Func(MovieUtil.removeProp, ball))
         ballPropTracks.append(ballPropTrack)
     dodgeDelay = suitTrack.getDuration()
@@ -8922,7 +8916,7 @@ def doMulligan(attack):
                              Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),
                              Wait(0.75))
     missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
-    ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], .25))
+    ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], .1))
     ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
     dodgeDelay = suitTrack.getDuration()
     toonTrack = getToonTrack(attack, 2.5, ['slip-backward'], 1, ['duck'],
@@ -10095,7 +10089,7 @@ def doPinkSlip(attack):
     throwDelay = 2.43
     throwDuration = 0.5
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(0, 0.75, -0.1), VBase3(90, 0, 0)]
+    posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
     paperAppearTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.8, Point3(8, 8, 8), scaleUpTime=0.25))
     paperAppearTrack.append(Wait(0.93))
     hitPoint = __toonGroundPoint(attack, toon, 0.2, parent=battle)
@@ -10159,7 +10153,7 @@ def doPinkSlipAftershock(attack):
     suitTrack = Sequence(headsUp, tauntInterval, ActorInterval(suit, 'throw-paper', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
     suitTrack.append(Wait(3.0))
     suitTrack.append(doAfterShockChairman(attack))
-    posPoints = [Point3(0, 0.75, -0.1), VBase3(90, 0, 0)]
+    posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
     paperAppearTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.8, Point3(8, 8, 8), scaleUpTime=0.25))
     paperAppearTrack.append(Wait(0.93))
     hitPoint = __toonGroundPoint(attack, toon, 0.2, parent=battle)
@@ -10223,7 +10217,7 @@ def doPinkSlipCage(attack):
     suitTrack = Sequence(headsUp, tauntInterval, ActorInterval(suit, 'throw-paper', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
     suitTrack.append(Wait(3.0))
     suitTrack.append(doCage(attack))
-    posPoints = [Point3(0, 0.75, -0.1), VBase3(90, 0, 0)]
+    posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
     paperAppearTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.8, Point3(8, 8, 8), scaleUpTime=0.25))
     paperAppearTrack.append(Wait(0.93))
     hitPoint = __toonGroundPoint(attack, toon, 0.2, parent=battle)
@@ -10287,7 +10281,7 @@ def doPinkSlipSnipe(attack):
     suitTrack = Sequence(headsUp, tauntInterval, ActorInterval(suit, 'throw-paper', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
     suitTrack.append(Wait(3.0))
     suitTrack.append(doSnipeChairman(attack))
-    posPoints = [Point3(0, 0.75, -0.1), VBase3(90, 0, 0)]
+    posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
     paperAppearTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.8, Point3(8, 8, 8), scaleUpTime=0.25))
     paperAppearTrack.append(Wait(0.93))
     hitPoint = __toonGroundPoint(attack, toon, 0.2, parent=battle)
@@ -13982,14 +13976,14 @@ def doBounceCheck(attack):
     dmg = target['hp']
     hitSuit = dmg > 0
     check = globalPropPool.getProp('bounced-check')
-    checkPosPoints = [Point3(-0.25, 0.75, -0.1), VBase3(90, 0, 0)]
+    checkPosPoints = [Point3(-0.25, -0.425, 0), VBase3(-180, 0, 0)]
     bounce1Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'one')
     bounce2Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'two')
     hit3Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'threeHit')
     miss3Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'threeMiss')
     bounce4Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'four')
     suitType = getSuitBodyType(attack['suitName'])
-    throwDelay = 1.5
+    throwDelay = 1
     dodgeDelay = 3.1
     damageDelay = 3.5
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
@@ -14001,7 +13995,7 @@ def doBounceCheck(attack):
     if attack['suit'].dna.name == 'dvk':
         suitTrack.append(Wait(1.0))
         suitTrack.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
-    checkPropTrack = Sequence(getPropAppearTrack(check, suit.getRightHand(), checkPosPoints, 1e-05, Point3(8.5, 8.5, 8.5), startScale=MovieUtil.PNT3_ONE))
+    checkPropTrack = Sequence(getPropAppearTrack(check, suit.getRightHand(), checkPosPoints, .5, Point3(8.5, 8.5, 8.5), startScale=MovieUtil.PNT3_ONE))
     checkPropTrack.append(Wait(throwDelay))
     checkPropTrack.append(Func(check.wrtReparentTo, toon))
     checkPropTrack.append(Func(check.setHpr, Point3(0, -90, 0)))
@@ -14028,7 +14022,7 @@ def doBounceCheck(attack):
         checkPropTrack.append(LerpScaleInterval(check, 0.3, MovieUtil.PNT3_NEARZERO))
         checkPropTrack.append(Func(MovieUtil.removeProp, check))
     toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
-    soundTracks = Sequence(getSoundTrack('SA_pink_slip.ogg', delay=throwDelay + 0.5, duration=0.5, node=suit), getSoundTrack('SA_pink_slip.ogg', duration=0.6, node=suit))
+    soundTracks = Sequence(getSoundTrack('SA_pink_slip.ogg', delay=throwDelay + 1, duration=0.5, node=suit), getSoundTrack('SA_pink_slip.ogg', duration=0.6, node=suit))
     return Parallel(suitTrack, checkPropTrack, toonTrack, soundTracks)
 
 def doBounceRate(attack):
@@ -14040,19 +14034,19 @@ def doBounceRate(attack):
     dmg = target['hp']
     hitSuit = dmg > 0
     check = globalPropPool.getProp('ttrpg_m_ene_prp_bouncedRate')
-    checkPosPoints = [Point3(-0.25, 0.75, -0.1), VBase3(-90, 0, 0)]
+    checkPosPoints = [Point3(1.5, 0.65, 0), VBase3(-180, 0, 0)]
     bounce1Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'one')
     bounce2Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'two')
     hit3Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'threeHit')
     miss3Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'threeMiss')
     bounce4Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'four')
     suitType = getSuitBodyType(attack['suitName'])
-    throwDelay = 1.5
+    throwDelay = 1
     dodgeDelay = 3.1
     damageDelay = 3.5
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     checkPropTrack = Sequence(
-        getPropAppearTrack(check, suit.getRightHand(), checkPosPoints, 1e-05, Point3(2, 2, 2),
+        getPropAppearTrack(check, suit.getRightHand(), checkPosPoints, .5, Point3(2, 2, 2),
                            startScale=MovieUtil.PNT3_ONE))
     checkPropTrack.append(Wait(throwDelay))
     checkPropTrack.append(Func(check.wrtReparentTo, toon))
@@ -14080,7 +14074,7 @@ def doBounceRate(attack):
         checkPropTrack.append(LerpScaleInterval(check, 0.3, MovieUtil.PNT3_NEARZERO))
         checkPropTrack.append(Func(MovieUtil.removeProp, check))
     toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
-    soundTracks = Sequence(getSoundTrack('SA_pink_slip.ogg', delay=throwDelay + 0.5, duration=0.5, node=suit), getSoundTrack('SA_pink_slip.ogg', duration=0.6, node=suit))
+    soundTracks = Sequence(getSoundTrack('SA_pink_slip.ogg', delay=throwDelay + 1, duration=0.5, node=suit), getSoundTrack('SA_pink_slip.ogg', duration=0.6, node=suit))
     return Parallel(suitTrack, checkPropTrack, toonTrack, soundTracks)
 
 def doBounceCheckPecking(attack):
@@ -14092,14 +14086,14 @@ def doBounceCheckPecking(attack):
     dmg = target['hp']
     hitSuit = dmg > 0
     check = globalPropPool.getProp('bounced-check')
-    checkPosPoints = [Point3(-0.25, 0.75, -0.1), VBase3(90, 0, 0)]
-    bounce1Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'one')
-    bounce2Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'two')
-    hit3Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'threeHit')
-    miss3Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'threeMiss')
-    bounce4Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'four')
+    checkPosPoints = [Point3(-0.25, -0.425, 0), VBase3(-180, 0, 0)]
+    bounce1Point = lambda suit=suit, toon=toon, battle=battle: getThrowEndPoint(suit, toon, battle, 'one')
+    bounce2Point = lambda suit=suit, toon=toon, battle=battle: getThrowEndPoint(suit, toon, battle, 'two')
+    hit3Point = lambda suit=suit, toon=toon, battle=battle: getThrowEndPoint(suit, toon, battle, 'threeHit')
+    miss3Point = lambda suit=suit, toon=toon, battle=battle: getThrowEndPoint(suit, toon, battle, 'threeMiss')
+    bounce4Point = lambda suit=suit, toon=toon, battle=battle: getThrowEndPoint(suit, toon, battle, 'four')
     suitType = getSuitBodyType(attack['suitName'])
-    throwDelay = 1.5
+    throwDelay = 1
     dodgeDelay = 3.1
     damageDelay = 3.5
     taunt = random.choice(
@@ -14110,12 +14104,12 @@ def doBounceCheckPecking(attack):
          "Ah, too bad, you're funless."])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
-
     suitTrack = Sequence(tauntInterval, ActorInterval(suit, 'throw-paper', playRate=1.5))
     if attack['suit'].dna.name == 'dvk':
         suitTrack.append(Wait(3.0))
         suitTrack.append(doPeckingOrderVulnerability(attack))
-    checkPropTrack = Sequence(getPropAppearTrack(check, suit.getRightHand(), checkPosPoints, 1e-05, Point3(8.5, 8.5, 8.5), startScale=MovieUtil.PNT3_ONE))
+    checkPropTrack = Sequence(getPropAppearTrack(check, suit.getRightHand(), checkPosPoints, .5, Point3(8.5, 8.5, 8.5),
+                                                 startScale=MovieUtil.PNT3_ONE))
     checkPropTrack.append(Wait(throwDelay))
     checkPropTrack.append(Func(check.wrtReparentTo, toon))
     checkPropTrack.append(Func(check.setHpr, Point3(0, -90, 0)))
@@ -14141,7 +14135,7 @@ def doBounceCheckPecking(attack):
         checkPropTrack.append(LerpScaleInterval(check, 0.3, MovieUtil.PNT3_NEARZERO))
     checkPropTrack.append(Func(MovieUtil.removeProp, check))
     toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
-    soundTracks = Sequence(getSoundTrack('SA_pink_slip.ogg', delay=throwDelay + 0.5, duration=0.5, node=suit),
+    soundTracks = Sequence(getSoundTrack('SA_pink_slip.ogg', delay=throwDelay + 1, duration=0.5, node=suit),
                            getSoundTrack('SA_pink_slip.ogg', duration=0.6, node=suit))
     return Parallel(suitTrack, checkPropTrack, toonTrack, soundTracks)
 
@@ -15095,8 +15089,8 @@ def doMarketCrash(attack):
     target = attack['target']
     toon = target['toon']
     dmg = target['hp']
-    suitDelay = 1.75
-    propDelay = 0.1
+    suitDelay = 1.5
+    propDelay = .5
     throwDuration = 1.0
     paper = globalPropPool.getProp('newspaper')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
@@ -15108,8 +15102,8 @@ def doMarketCrash(attack):
     if attack['suit'].dna.name == 'dvk':
         suitTrack.append(Wait(1.0))
         suitTrack.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
-    posPoints = [Point3(0.1, 1, -0.05), VBase3(90, 170, 0)]
-    paperTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, propDelay, Point3(3.5, 3.5, 3.5), scaleUpTime=0.25))
+    posPoints = [Point3(-1.6, -0.75, 0.2), VBase3(-90, 170, 0)]
+    paperTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, propDelay, Point3(3.5, 3.5, 3.5), scaleUpTime=0))
     paperTrack.append(Wait(suitDelay))
     hitPoint = toon.getPos(battle)
     hitPoint.setX(hitPoint.getX() + 1.2)
@@ -15161,7 +15155,7 @@ def doMarketCrashPecking(attack):
     if attack['suit'].dna.name == 'dvk':
         suitTrack.append(Wait(3.0))
         suitTrack.append(doPeckingOrderVulnerability(attack))
-    posPoints = [Point3(0.1, 1, -0.05), VBase3(90, 170, 0)]
+    posPoints = [Point3(-1.6, -0.75, 0.2), VBase3(-90, 170, 0)]
     paperTrack = Sequence(
         getPropAppearTrack(paper, suit.getRightHand(), posPoints, propDelay, Point3(3.5, 3.5, 3.5), scaleUpTime=0.25))
     paperTrack.append(Wait(suitDelay))
@@ -15208,7 +15202,7 @@ def doBite(attack):
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
     suitTrack = getSuitTrack(attack)
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
     teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4), scaleUpTime=propScaleUpTime))
     teethAppearTrack.append(Wait(suitDelay))
     teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
@@ -15269,7 +15263,7 @@ def doSnap(attack):
     suitDelay = 1.55
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
     teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4),
                                                    scaleUpTime=propScaleUpTime))
     teethAppearTrack.append(Wait(suitDelay))
@@ -15378,7 +15372,7 @@ def doSnapSoaked(attack):
     suitDelay = 1.55
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
     teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4),
                                                    scaleUpTime=propScaleUpTime))
     teethAppearTrack.append(Wait(suitDelay))
@@ -15488,7 +15482,7 @@ def doSnapBellow(attack):
     suitDelay = 1.55
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
     teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4),
                                                    scaleUpTime=propScaleUpTime))
     teethAppearTrack.append(Wait(suitDelay))
@@ -15613,7 +15607,7 @@ def doChomp(attack):
     suitDelay = 1.55
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
     teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4),
                                                    scaleUpTime=propScaleUpTime))
     teethAppearTrack.append(Wait(suitDelay))
@@ -15755,7 +15749,7 @@ def doEvictionNotice(attack):
     dmg = target['hp']
     paper = globalPropPool.getProp('shredder-paper')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(0.25, -1.5, .85), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
     propTrack.append(Wait(1.55))
     hitPoint = __toonFacePoint(toon, parent=battle)
@@ -15816,7 +15810,7 @@ def doEvictionNoticeInsurance(attack):
     headsUp = Func(suit.headsUp, battle, targetPos)
     tauntInterval = Sequence(headsUp, Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(tauntInterval, ActorInterval(suit, 'throw-paper', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
-    posPoints = [Point3(0.25, -1.5, .85), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     propTrack = Sequence(
         getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
     propTrack.append(Wait(1.55))
@@ -15868,7 +15862,7 @@ def doEvictionNoticeExplodingBill(attack):
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
     suitTrack = Sequence(headsUp, tauntInterval, ActorInterval(suit, 'throw-paper', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
-    posPoints = [Point3(0.25, -1.5, .85), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     propTrack = Sequence(
         getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
     propTrack.append(Wait(1.55))
@@ -16324,7 +16318,7 @@ def doCaseInsurancePlan(attack):
                                          'Any Sound and Zap Gags Toons use can and will be held against them in a court of law.',
                                          CFSpeech | CFTimeout))
     ceaseTracks.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
-    posPoints = [Point3(0.25, -1.5, .85), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
         theSuit = attack['suit']
@@ -16417,7 +16411,7 @@ def doCaseInsurancePlanSkelecog(attack):
                                          'Any Sound and Zap Gags Toons use can and will be held against them in a court of law.',
                                          CFSpeech | CFTimeout))
     ceaseTracks.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
-    posPoints = [Point3(0.25, -1.5, .85), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
         theSuit = attack['suit']
@@ -16489,7 +16483,7 @@ def doCaseInsurancePlanInsurance(attack):
                                          'Any Toon-Up and Squirt Gags Toons use can and will be held against them in a court of law.',
                                          CFSpeech | CFTimeout))
     ceaseTracks.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
-    posPoints = [Point3(0.25, -1.5, .85), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
         theSuit = attack['suit']
@@ -16563,7 +16557,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
                                          'Any Sound and Zap Gags Toons use can and will be held against them in a court of law.',
                                          CFSpeech | CFTimeout))
     ceaseTracks.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
-    posPoints = [Point3(0.25, -1.5, .85), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
         theSuit = attack['suit']
@@ -16653,7 +16647,7 @@ def doContractEnforcement(attack):
                                           'Quality Control dictates that all Squirt and Zap gags are now classified as defective.',
                                          CFSpeech | CFTimeout))
     ceaseTracks.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
-    posPoints = [Point3(0.25, -1.5, .85), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
         theSuit = attack['suit']
@@ -17195,9 +17189,9 @@ def doExplodingBill(attack):
     dmg = target['hp']
     tnt = globalPropPool.getProp('shredder-paper')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(0, -1.5, .5), VBase3(0, 230, 0)]
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     propTrack = Sequence(
-        getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+        getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0))
     propTrack.append(Wait(1.5))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)
@@ -18681,9 +18675,13 @@ def doRestrainingOrder(attack):
     dmg = target['hp']
     paper = globalPropPool.getProp('shredder-paper')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(0.25, -1.5, .85), VBase3(0, 220, -10)]
+    for s in battle.activeSuits:
+        if s.dna.name == 'laa':
+            theSuit = s
+        suitTrack.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
+    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
     propTrack = Sequence(
-        getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+        getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0))
     propTrack.append(Wait(1.55))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)

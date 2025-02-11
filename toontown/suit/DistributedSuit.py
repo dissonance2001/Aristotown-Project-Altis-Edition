@@ -709,37 +709,47 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def checkCogHP(self, battle):
         if self.getHP() <= 0:
-            Parallel(MovieUtil.createSuitDeathTrack(self, battle), Func(battle.unlureSuit, self)).start()
+            ival = Sequence(MovieUtil.createSuitDeathTrack(self, battle), Func(battle.unlureSuit, self))
+            ival.start()
+            ival.setPlayRate(2)
         else:
             pass
 
     def checkCogHPBomb(self, battle):
         if self.getHP() <= 0:
-            Parallel(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self)).start()
+            ival = Sequence(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self))
+            ival.start()
         else:
             pass
 
     def checkCogHPZap(self, battle):
         if self.getHP() <= 0:
-            Parallel(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self)).start()
+            ival = Sequence(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self))
+            ival.start()
         else:
             pass
 
     def checkCogHPLaserRevive(self, battle):
         if self.getHP() <= 0:
-            Parallel(MovieUtil.createSuitReviveTrackVirtual(self, battle), Func(battle.unlureSuit, self)).start()
+            ival = Sequence(MovieUtil.createSuitReviveTrackVirtual(self, battle), Func(battle.unlureSuit, self))
+            ival.start()
+            ival.setPlayRate(2)
         else:
             pass
 
     def checkCogHPLaser(self, battle):
         if self.getHP() <= 0:
-            Parallel(MovieUtil.createVirtualSuitDeathTrack(self, battle), Func(battle.unlureSuit, self)).start()
+            ival = Sequence(MovieUtil.createVirtualSuitDeathTrack(self, battle), Func(battle.unlureSuit, self))
+            ival.start()
+            ival.setPlayRate(2)
         else:
             pass
 
     def checkCogHPRevive(self, battle):
         if self.getHP() <= 0:
-            Parallel(MovieUtil.createSuitReviveTrack(self, battle), Func(battle.unlureSuit, self)).start()
+            ival = Sequence(MovieUtil.createSuitReviveTrack(self, battle), Func(battle.unlureSuit, self))
+            ival.start()
+            ival.setPlayRate(2)
         else:
             pass
 
@@ -751,17 +761,17 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def setNeutralAnimation(self):
         if self.getDizzy():
-            Sequence(Func(self.loop, 'lured')
+            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'lured'), Func(self.setPlayRate, self.getPlayRate2(), 'lured2'), Func(self.loop, 'lured')
                      ).start()
         elif self.isChainsawPhase2:
             Sequence(
-                Func(self.loop, 'neutral-override%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                Func(self.setPlayRate, self.getPlayRate2(), 'neutral-override%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)), Func(self.loop, 'neutral-override%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                 ).start()
         elif self.isOttomanPhase2:
-            Sequence(Func(self.loop, 'pace')
+            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()
         elif self.isAngry:
-            Sequence(Func(self.loop, 'neutral-enraged')
+            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
         elif self.isImmortal and not self.dna.name == 'dsf':
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
@@ -770,7 +780,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
         else:
-            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)), Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
 
     def setNeutralAnimationTrap(self):

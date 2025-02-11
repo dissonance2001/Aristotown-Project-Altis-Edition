@@ -11,6 +11,7 @@ from toontown.battle import MovieFire
 from toontown.battle import MovieHeal
 from toontown.battle import MovieLure
 from toontown.battle import MovieNPCSOS
+from toontown.battle import MovieSuitCheats
 from toontown.battle import MoviePetSOS
 from toontown.battle import MovieSOS
 from toontown.battle import MovieSound
@@ -198,6 +199,7 @@ class Movie(DirectObject.DirectObject):
             self.restore()
         self.toonAttackDicts = []
         self.suitAttackDicts = []
+        self.suitCheatDicts = []
         self.restoreColor = 0
         self.restoreHips = 0
         self.restoreHeadScale = 0
@@ -257,6 +259,13 @@ class Movie(DirectObject.DirectObject):
             self.track.delayDeletes.append(DelayDelete.DelayDelete(toon, 'Movie.play'))
 
         self.track.start(ts)
+        for s in self.battle.suits:
+            if s.dna.name == 'laa':
+                theSuit = s
+                self.track.setPlayRate(theSuit.getPlayRate())
+            else:
+                pass
+        return None
 
     def finish(self):
         self.track.finish()
@@ -593,6 +602,105 @@ class Movie(DirectObject.DirectObject):
                         sb5,
                         st5))
         self.__genSuitAttackDicts(toons, suits, suitAttacks)
+
+    def __genSuitCheatDicts(self, toons, suits, suitCheats):
+        for suitCheat in suitCheats:
+            targetGone = 0
+            attack = suitCheat[SUIT_ATK_COL]
+            suitIndex = suitCheat[SUIT_ID_COL]
+            suitId = suits[suitIndex]
+            suit = self.battle.findSuit(suitId)
+            if not suit:
+                self.notify.error('suit: %d not in battle!' % suitId)
+            cheatDict = {}
+            cheatDict['suit'] = suit
+            cheatDict['battle'] = self.battle
+            cheatDict['playByPlayText'] = self.playByPlayText
+            cheatDict['taunt'] = suitCheat[SUIT_TAUNT_COL]
+            hps = suitCheat[SUIT_HP_COL]
+            if ATK_TGT_GROUP:
+                targets = []
+                for t in toons:
+                    if t != -1:
+                        target = self.battle.findToon(t)
+                        if not target:
+                            continue
+                        targetIndex = toons.index(t)
+                        tdict = {}
+                        tdict['toon'] = target
+                        tdict['hp'] = hps[targetIndex]
+                        self.notify.debug('DAMAGE: toon: %d hit for hp: %d' % (target.doId, hps[targetIndex]))
+                        tdict['died'] = suitCheat[TOON_DIED_COL] & 1 << targetIndex
+                        targets.append(tdict)
+                if len(targets) > 0:
+                    cheatDict['target'] = targets
+                else:
+                    targetGone = 1
+            elif ATK_TGT_SINGLE:
+                targetIndex = suitCheat[SUIT_TGT_COL]
+                targetId = toons[targetIndex]
+                target = self.battle.findToon(targetId)
+                if not target:
+                    targetGone = 1
+                else:
+                    self.notify.debug('DAMAGE: toon: %d hit for hp: %d' % (target.doId, hps[targetIndex]))
+                    tdict = {'toon': target,
+                             'hp': hps[targetIndex],
+                             'died': suitCheat[TOON_DIED_COL] & 1 << targetIndex}
+                    toonIndex = self.battle.activeToons.index(target)
+                    rightToons = []
+                    for ti in xrange(0, toonIndex):
+                        rightToons.append(self.battle.activeToons[ti])
+                    lenToons = len(self.battle.activeToons)
+                    leftToons = []
+                    if lenToons > toonIndex + 1:
+                        for ti in xrange(toonIndex + 1, lenToons):
+                            leftToons.append(self.battle.activeToons[ti])
+                    tdict['leftToons'] = leftToons
+                    tdict['rightToons'] = rightToons
+                    cheatDict['target'] = tdict
+            else:
+                self.notify.warning('got suit attack not group or single!')
+            if targetGone == 0:
+                self.suitCheatDicts.append(cheatDict)
+            else:
+                self.notify.warning('genSuitCheatDicts() - target gone!')
+        return
+
+    def __doSuitCheats(self):
+        if base.config.GetBool('want-suit-anims', 1):
+            track = Sequence(name='suit-attacks')
+            camTrack = Sequence(name='suit-attacks-cam')
+            isLocalToonSad = False
+            for cheat in self.suitCheatDicts:
+                battle = cheat['battle']
+                suit = cheat['suit']
+                if battle.isSuitLured(suit):
+                    resetTrack = MovieSuitAttacks.getResetTrack(suit, battle)
+                    track.append(resetTrack)
+                    waitTrack = Sequence(Wait(resetTrack.getDuration()), Func(battle.unlureSuit, suit))
+                    camTrack.append(waitTrack)
+                interval, cameraInterval = MovieSuitCheats.doSuitCheat(cheat)
+                if interval:
+                    track.append(interval)
+                    camTrack.append(cameraInterval)
+                targetField = cheat.get('target')
+                if targetField is None:
+                    continue
+                if cheat['group'] == ATK_TGT_GROUP:
+                    for target in targetField:
+                        if target['died'] and target['toon'].doId == base.localAvatar.doId:
+                            isLocalToonSad = True
+                elif cheat['group'] == ATK_TGT_SINGLE:
+                    if targetField['died'] and targetField['toon'].doId == base.localAvatar.doId:
+                        isLocalToonSad = True
+                if isLocalToonSad:
+                    break
+            if len(track) == 0:
+                return None, None
+            return track, camTrack
+        else:
+            return None, None
 
     def __genToonAttackDicts(self, toons, suits, toonAttacks):
         for ta in toonAttacks:
