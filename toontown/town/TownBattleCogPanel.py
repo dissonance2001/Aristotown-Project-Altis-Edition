@@ -492,123 +492,96 @@ class TownBattleCogPanel(DirectFrame):
             self.luredManager2.show()
             self.lureImmune4.show()
             self.overcharged2.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 12 and self.cog.currHP > 10000 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.blue.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 12 and self.cog.currHP > 10000:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.blue.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 12 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lightblue.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 12:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lightblue.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 0 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.green.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 0:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.green.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 1 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.green.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 1:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.green.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 2 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.pink.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 2:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.pink.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 3 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.red.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 3:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.red.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 4 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 13000 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 4:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 13000:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 5 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 12000 and self.cog.isLured:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.orange.show()
+            self.luredCog4.show()
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 12000:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.orange.show()
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 11000 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune3.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 5:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 11000:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune3.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 6 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 10000 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
-            self.yellow.show()
+            self.lightblue.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 6:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 10000:
             self.virtual.show()
             self.luredManager2.show()
-            self.yellow.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 7 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.red.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 7:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.red.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 8 and self.cog.isLured:
+            self.lightblue.show()
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 9000 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.pink.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 8:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 9000:
             self.virtual.show()
             self.luredManager2.show()
             self.pink.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 9 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.yellow.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 9:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.yellow.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 0 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 8000 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.red.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 0:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 8000:
             self.virtual.show()
             self.luredManager2.show()
             self.red.show()
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 7000 and self.cog.isLured:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.blue.show()
+            self.luredCog4.show()
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 7000:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.blue.show()
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 6000 and self.cog.isLured:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.yellow.show()
+            self.luredCog4.show()
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 6000:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.yellow.show()
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 5000 and self.cog.isLured:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.orange.show()
+            self.luredCog4.show()
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 5000:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.orange.show()
+        elif self.cog.dna.name == 'mad' and self.cog.isLured:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.green.show()
+            self.luredCog4.show()
+        elif self.cog.dna.name == 'mad':
+            self.virtual.show()
+            self.luredManager2.show()
+            self.green.show()
         elif self.cog.isVirtual and self.cog.isImmortal:
             self.virtual.show()
             self.immortal.show()
@@ -1522,8 +1495,18 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.26, 0.5, 0.125, -90, 0, 0, .105, .105, .105)
         elif name == 'ptr':
             self.suitHead.setPosHprScale(-0.26, 0.5, 0.12, -90, 0, 0, .085, .085, .085)
-        elif name == 'rng' or name == 'jdg':
+        elif name == 'rng':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .115, .115, .115)
+        elif name == 'jdg':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
+        elif name == 'isw':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
+        elif name == 'ls':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .09, .09, .09)
+        elif name == 'dvg':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .1, .1, .1)
+        elif name == 'trm':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
         elif name == 'bgh':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .001, .001, .001)
         elif name == 'ste' or name == 'wrt':
@@ -1533,7 +1516,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'gry':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .10, .10, .10)
         elif name == 'scg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .1, .1, .1)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .1, .1, .1)
         elif name == 'kpn':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
         elif name == 'crf' or name == 'mad':
@@ -1602,14 +1585,10 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .09, .09, .09)
         elif name == 'brv':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
-        elif name == 'gm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .115, .115, .115)
         elif name == 'rus' or name == 'tm' or name == 'sdb':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .085, .085, .085)
         elif name == 'tbc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'cr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .065, .065, .065)
         elif name == 'nd':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
         elif name == 'bw':
@@ -1620,7 +1599,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.09, -180, 0, 0, .08, .08, .08)
         elif name == 'cc' or name == 'sc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
-        elif name == 'dvg':
+        elif name == 'cr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .17, .177, .177)
         elif name == 'bdb':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .12, .12, .12)
@@ -1646,7 +1625,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .175, .175, .175)
         elif name == 'tc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .07, .07, .07)
-        elif name == 'isw':
+        elif name == 'gm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
         elif name == 'tb' or name == 'ts':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)

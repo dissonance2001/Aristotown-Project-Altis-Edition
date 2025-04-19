@@ -149,7 +149,7 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
                 suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                 suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                 tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
-            elif suit.dna.name == 'mad' and suit.currHP > 7200 and not suit.currHP > 8000:
+            elif suit.dna.name == 'mad' and suit.maxHP > 0 and not suit.maxHP > 5000:
                 suitTrack.append(Func(suit.loop, 'neutral%s' % (
                     '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                 suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
@@ -256,7 +256,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
-                elif suit.dna.name == 'mad' and suit.currHP > 7200 and not suit.currHP > 8000:
+                elif suit.dna.name == 'mad' and suit.maxHP > 0 and not suit.maxHP > 5000:
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
@@ -360,7 +360,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
-                elif suit.dna.name == 'mad' and suit.currHP > 7200 and not suit.currHP > 8000:
+                elif suit.dna.name == 'mad' and suit.maxHP > 0 and not suit.maxHP > 5000:
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
@@ -1247,7 +1247,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.3))
-                elif suit.dna.name == 'mad' and suit.currHP > 7200 and not suit.currHP > 8000:
+                elif suit.dna.name == 'mad' and suit.maxHP > 0 and not suit.maxHP > 5000:
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))

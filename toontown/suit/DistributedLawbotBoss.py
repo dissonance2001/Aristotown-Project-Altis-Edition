@@ -256,7 +256,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 if self.recoverRate:
                     taskMgr.add(self.__recoverBossDamage, taskName)
         self.makeScaleReflectDamage()
-        self.updateHealthBar()
+        #self.updateHealthBar()
 
     def getBossDamage(self):
         self.notify.debug('----- getBossDamage')

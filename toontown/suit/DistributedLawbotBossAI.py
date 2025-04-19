@@ -459,10 +459,8 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
             self.notify.warning('decrementCannonBallsLeft invalid avId: %d' % avId)
 
     def enterBattleTwo(self):
-        if self.battleA:
-            self.battleA.startBattle(self.toonsA, self.suitsA)
-        if self.battleB:
-            self.battleB.startBattle(self.toonsB, self.suitsB)
+        if self.battle:
+            self.battle.startBattle(self.toons, self.suits)
 
     def __doneBattleTwo(self, avIds):
         self.b_setState('RollToBattleThree')

@@ -181,12 +181,14 @@ hh = (('speak', 'speak', 4),
       ('lose3', 'wrecked', 4),
       ('magic1', 'magic1', 4),
       ('pen-squirt', 'fountain-pen', 4))
-cr = (('magic1', 'magic1', 4),
-       ('speak', 'speak', 4),
-('golf-club-swing', 'golf-club-swing', 4),
+cr = (('glower', 'glower', 4),
        ('lose3', 'wrecked', 4),
-       ('glower', 'glower', 4),
-       ('magic3', 'magic3', 4))
+('effort', 'effort', 4),
+       ('speak', 'speak', 4),
+       ('cigar-smoke', 'cigar-smoke', 4),
+       ('magic2', 'magic2', 4),
+       ('golf-club-swing', 'golf-club-swing', 4),
+       ('quick-jump', 'jump', 4))
 tbc = (('magic2', 'magic2', 4),
 ('magic3', 'magic3', 4),
        ('throw-paper', 'throw-paper', 4),
@@ -207,6 +209,7 @@ dot = (('glower', 'glower', 4),
 dvg = (('glower', 'glower', 4),
        ('lose3', 'wrecked', 4),
 ('effort', 'effort', 4),
+       ('speak', 'speak', 4),
        ('cigar-smoke', 'cigar-smoke', 4),
        ('magic2', 'magic2', 4),
        ('golf-club-swing', 'golf-club-swing', 4),
@@ -326,6 +329,7 @@ drm = (('throw-object', 'throw-object', 4),
        ('revvedup', 'revvedup', 4),
        ('neutral', 'neutral-override', 4))
 cp = (('magic3', 'magic3', 4),
+('magic2', 'magic2', 4),
       ('throw-object', 'throw-object', 4),
       ('throw-paper', 'throw-paper', 4),
       ('lose3', 'wrecked', 4),
@@ -431,17 +435,19 @@ mka = (('phone', 'phone', 4),
        ('magic3', 'magic3', 4),
        ('lose3', 'wrecked', 4),
        ('glower', 'glower', 4))
-trm = (('magic2', 'magic2', 4),
-       ('cigar-smoke', 'cigar-smoke', 4),
+trm = (('speak', 'speak', 4),
+       ('magic2', 'magic2', 4),
+('smile', 'smile', 4),
+('magic3', 'magic3', 4),
        ('lose3', 'wrecked', 4),
-       ('effort', 'effort', 4),
-       ('pickpocket', 'pickpocket', 4),
-       ('glower', 'glower', 4))
+       ('golf-club-swing', 'golf-club-swing', 4))
 ssm = (('speak', 'speak', 4),
        ('magic2', 'magic2', 4),
        ('lose3', 'wrecked', 4),
        ('golf-club-swing', 'golf-club-swing', 4))
-isw = (('phone', 'phone', 4),
+isw = (('speak', 'speak', 4),
+       ('smile', 'smile', 4),
+       ('phone', 'phone', 4),
        ('pickpocket', 'pickpocket', 4),
        ('glower', 'glower', 4),
        ('effort', 'effort', 4),
@@ -461,6 +467,7 @@ mdr = (('throw-paper', 'throw-paper', 4),
        ('magic2', 'magic2', 4),
        ('magic1', 'magic1', 4),
        ('lose3', 'wrecked', 4),
+('rolled', 'rolled', 4),
        ('frustrated', 'frustrated', 4),
        ('magic3', 'magic3', 4),
        ('speak', 'speak', 4))
@@ -631,13 +638,15 @@ ls = (('phone', 'phone', 4),
 rb = (('phone', 'phone', 4),
       ('lose3', 'wrecked', 4),
       ('throw-object', 'throw-object', 4))
-gm = (('phone', 'phone', 4),
-      ('throw-paper', 'throw-paper', 4),
-      ('glower', 'glower', 4),
-      ('effort', 'effort', 4),
-      ('lose3', 'wrecked', 4),
+gm = (('speak', 'speak', 4),
+       ('smile', 'smile', 4),
+       ('phone', 'phone', 4),
+       ('pickpocket', 'pickpocket', 4),
+       ('glower', 'glower', 4),
+       ('effort', 'effort', 4),
       ('magic2', 'magic2', 4),
-      ('pickpocket', 'pickpocket', 4))
+       ('lose3', 'wrecked', 4),
+       ('magic1', 'magic1', 4))
 ad = (('magic1', 'magic1', 4),
       ('glower', 'glower', 4),
       ('lose3', 'wrecked', 4),
@@ -749,6 +758,7 @@ dsf = (('magic3', 'magic3', 4),
 ('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
 ('highroller-neutral-levitate-in-out', 'highroller-neutral-levitate-in-out', 4),
 ('wheelspin', 'wheelspin', 4),
+('bust', 'bust', 4),
        ('speak', 'speak', 4),
        ('lose3', 'wrecked', 4),
        ('calculating-costs', 'calculating-costs', 4),
@@ -786,6 +796,7 @@ mad = (('magic1', 'magic1', 4),
 crf = (('effort', 'wheelspin', 4),
        ('wheelspin', 'wheelspin', 4),
        ('cease', 'cease', 4),
+('bust', 'bust', 4),
        ('magic3', 'magic3', 4),
        ('frustrated', 'frustrated', 4),
        ('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
@@ -879,6 +890,7 @@ jur = (('magic2', 'magic2', 4),
        ('lose3', 'wrecked', 4),
        ('objection-out', 'objection-out', 4),
        ('quick-jump', 'jump', 4),
+('pace', 'pace', 4),
        ('magic3', 'magic3', 4),
        ('throw-object', 'throw-object', 5),
        ('throw-paper', 'throw-paper', 5),
@@ -1010,6 +1022,7 @@ lit = (('magic2', 'magic2', 4),
        ('magic1', 'magic1', 4),
        ('lose3', 'wrecked', 4),
        ('snap2', 'snap2', 4),
+       ('snap', 'snap', 4),
        ('throw-object', 'throw-object', 4),
        ('throw-paper', 'throw-paper', 4))
 ca = (('pickpocket', 'pickpocket', 4),
@@ -2353,11 +2366,13 @@ class Suit(Avatar.Avatar):
                     Vec4(1, 0, 0, 1),
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
-                    Vec4(1, 0.416, 0.937, 1),  # 14 pink silhouette
+                    Vec4(1, 0.6, 0.89, 1),  # 14 pink silhouette
                     Vec4(0, 0.361, 1, 1),
                     Vec4(1, 1, 1, 1),  # 15 blue silhouette
                     Vec4(186 / 255, 82 / 255, 1, 1),
-                    Vec4(0.702, 0, 1, 1)) # 17 purple puls
+                    Vec4(0.702, 0, 1, 1),
+                    Vec4(1, 1, 1, 1),
+                    Vec4(1, 0, 0.906, 1)) # 18 white
     healthGlowColors = (Vec4(0, 1, 0.078, 1),
                     Vec4(0.388, 1, 0, 1),
                     Vec4(0.686, 1, 0, 1),
@@ -2372,11 +2387,14 @@ class Suit(Avatar.Avatar):
                     Vec4(1, 0, 0, 1),
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
-                    Vec4(1, 0.416, 0.937, 1),  # 14 pink silhouette
+                    Vec4(1, 0.6, 0.89, 1),  # 14 pink silhouette
                     Vec4(0, 0.361, 1, 1),
                     Vec4(1, 1, 1, 1),  # 15 blue silhouette
                     Vec4(186 / 255, 82 / 255, 1, 1),
-                        Vec4(0.702, 0, 1, 1)) #17 purple pulse
+                        Vec4(0.702, 0, 1, 1),
+                        Vec4(1, 1, 1, 1),
+                        Vec4(1, 0, 0.906, 1)
+                        ) #18 white
     medallionColors = {'c': Vec4(0.863, 0.776, 0.769, 1.0),
      's': Vec4(0.843, 0.745, 0.745, 1.0),
      'l': Vec4(0.749, 0.776, 0.824, 1.0),
@@ -2574,13 +2592,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(3.25)
         elif dna.name == 'cr':
-            self.scale = 4.5 / aSize
-            self.handColor = VBase4(0.922, 0.757, 0.663, 1)
-            self.generateFemaleBody()
-            self.generateHead2('bossbotClubPresidentHair')
-            self.generateHead2('bossbotClubPresidentEarrings')
-            self.generateHead2('bossbotClubPresidentHead')
-            self.setHeight(6.25)
+            self.scale = 6.0 / cSize
+            self.handColor = VBase4(0.878, 0.733, 0.71, 1)
+            self.generateBody()
+            self.generateHead2('Blowhard')
+            texture = loader.loadTexture('phase_3.5/maps/ttrm_t_ene_head_blowhard.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.5)
         elif dna.name == 'tbc':
             self.scale = 4.5 / bSize
             self.handColor = VBase4(0.643, 0.608, 0.596, 1)
@@ -2616,14 +2635,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(7.45)
         elif dna.name == 'dvg':
-            self.scale = 6.5 / cSize
-            self.handColor = VBase4(0.878, 0.733, 0.71, 1)
+            self.scale = 6.25 / aSize
+            self.handColor = VBase4(0.831, 0.831, 0.831, 1)
             self.generateBody()
-            self.generateHead2('Blowhard')
-            texture = loader.loadTexture('phase_3.5/maps/ttrm_t_ene_head_blowhard.png')
+            self.generateHead2('root')
+            texture = loader.loadTexture('phase_14/maps/bigshot.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.0)
+            self.setHeight(7.45)
         elif dna.name == 'cpl':
             self.scale = 6.75 / cSize
             self.handColor = SuitDNA.corpPolyColor
@@ -2634,14 +2653,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.23)
         elif dna.name == 'bkp':
-            self.scale = 6.5 / aSize
+            self.scale = 6.75 / aSize
             self.handColor = VBase4(0.882, 0.894, 0.004, 1)
             self.generateBody()
             self.generateHead('toxicleader')
             texture = loader.loadTexture('phase_3.5/maps/skull.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.2)
+            self.setHeight(8.5)
         elif dna.name == 'kpn':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.749, 0.859, 0.525, 1.0)
@@ -2919,15 +2938,15 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.69)
         elif dna.name == 'jdg':
-            self.scale = 7.2 / aSize
-            self.handColor = VBase4(0.184, 0.137, 0.11, 1)
-            self.generateBody()
-            self.generateHead3('magnate', animated=True)
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_magnate.png')
+            self.scale = 4.5 / aSize
+            self.handColor = VBase4(0.722, 0.757, 0.784, 1)
+            self.generateFemaleBody()
+            self.generateHead2('root')
+            texture = loader.loadTexture('phase_14/maps/whistleblower.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.makeExecutive()
-            self.setHeight(8.7)
+            self.setHeight(6.0)
         elif dna.name == 'jur':
             self.scale = 7.2 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -3096,11 +3115,11 @@ class Suit(Avatar.Avatar):
             self.generateHead('beancounter')
             self.setHeight(5.95)
         elif dna.name == 'ls':
-            self.scale = 5.25 / aSize
-            self.handColor = VBase4(0.337, 0.29, 0.278, 1)
-            self.generateBody()
-            self.generateHead2('newshound')
-            texture = loader.loadTexture('phase_4/maps/newshound.png')
+            self.scale = 5.25 / cSize
+            self.handColor = VBase4(0.545, 0.655, 0.553, 1)
+            self.generateFemaleBody()
+            self.generateHead2('root')
+            texture = loader.loadTexture('phase_14/maps/bookkeeper_BookkeeperFinal.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(7.2)
@@ -3114,14 +3133,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(7.22)
         elif dna.name == 'gm':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.604, 0.71, 0.675, 1)
+            self.scale = 6.5 / aSize
+            self.handColor = VBase4(0.125, 0.125, 0.125, 1)
             self.generateBody()
-            self.generateHead2('bigwig')
-            texture = loader.loadTexture('phase_4/maps/affiliate.jpg')
+            self.generateHead2('overtime')
+            texture = loader.loadTexture('phase_3.5/maps/ttoff_t_ene_overtime_palette_4amlc_1.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.6)
+            self.setHeight(8.2)
         elif dna.name == 'ad':
             self.scale = 5.3 / cSize
             self.handColor = SuitDNA.moneyPolyColor
@@ -3344,14 +3363,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(7.45)
         elif dna.name == 'trm':
-            self.scale = 6.5 / cSize
-            self.handColor = VBase4(0.718, 0.451, 0.451, 1)
+            self.scale = 6.0 / aSize
+            self.handColor = VBase4(0.584, 0.686, 0.745, 1)
             self.generateBody()
-            self.generateHead('flunky')
-            texture = loader.loadTexture('phase_4/maps/mademan.png')
+            self.generateHead2('root')
+            texture = loader.loadTexture('phase_14/maps/peoplepleaser.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.5)
+            self.setHeight(7.8)
         elif dna.name == 'ssm':
             self.scale = 6.25 / aSize
             self.handColor = VBase4(0.918, 0.808, 0.871, 1)
@@ -3362,14 +3381,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.11)
         elif dna.name == 'isw':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.38, 0.369, 0.376, 1)
-            self.generateBody()
-            self.generateHead2('overtime')
-            texture = loader.loadTexture('phase_3.5/maps/ttoff_t_ene_overtime_palette_4amlc_1.png')
+            self.scale = 6.5 / aSize
+            self.handColor = VBase4(0.733, 0.541, 0.525, 1)
+            self.generateFemaleBody()
+            self.generateHead2('root')
+            texture = loader.loadTexture('phase_14/maps/kissup_tex.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.7)
+            self.setHeight(8.5)
         elif dna.name == 'ssr':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.918, 0.886, 0.875, 1)
@@ -3926,7 +3945,8 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'kdh':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.generateSkeletonBody()
+            self.generateBody()
+            self.generateHead3('highroller', animated=True)
             self.makeExecutive()
             self.setTransparency(1)
             self.setHeight(8.5)
@@ -3972,10 +3992,10 @@ class Suit(Avatar.Avatar):
         self.setName(SuitBattleGlobals.SuitAttributes[dna.name]['name'])
         self.getGeomNode().setScale(self.scale)
         if not self.isSkeleton:
-            self.generateHPBase()
+            self.generateHealthBar()
             self.generateCorporateMedallion()
             self.generateCorporateMedallion2()
-            self.generateHealthBar()
+            self.generateHPBase()
         else:
             #self.generateSkeletonHealthBar()
             self.generateCorporateMedallion3()
@@ -4867,14 +4887,7 @@ class Suit(Avatar.Avatar):
                 self.animatedHeadParts.append(headModel)
             headModel.reparentTo(self.find('**/joint_head'))
             headModel.setBlend(frameBlend=base.wantSmoothAnims)
-            if self.style.name == 'crf':
-                headModel.loop('neutral', fromFrame=0, toFrame=22)
-            elif self.style.name == 'mad':
-                headModel.loop('neutral', fromFrame=0, toFrame=22)
-            elif self.style.name == 'dsf':
-                headModel.loop('neutral', fromFrame=0, toFrame=22)
-            else:
-                headModel.loop('neutral')
+            headModel.loop('neutral')
             if 'x' in extraArgs:
                 if extraArgs['x'] != None:
                     headModel.setX(extraArgs['x'])
@@ -5605,11 +5618,25 @@ class Suit(Avatar.Avatar):
                 headModel = loader.loadModel('phase_14/models/char/ttcc_ene_connoisseur')
         if headType == 'greyhat' and self.style.name == 'gry':
             headModel = loader.loadModel('phase_14.5/models/char/grey-hat')
+        if headType == 'root' and self.style.name == 'dvg':
+            headModel = loader.loadModel('phase_14/models/char/yesman')
+        if headType == 'root' and self.style.name == 'trb':
+            headModel = loader.loadModel('phase_14/models/char/yesman')
+        if headType == 'root' and self.style.name == 'jdg':
+            headModel = loader.loadModel('phase_14/models/char/whistleblower')
+        if headType == 'root' and self.style.name == 'ls':
+            headModel = loader.loadModel('phase_14/models/char/bookkeeper')
+        if headType == 'root' and self.style.name == 'cvy':
+            headModel = loader.loadModel('phase_14/models/char/yesman')
         if headType == 'magnate' and self.style.name == 'bdb':
                 headModel = loader.loadModel('phase_14/models/char/ttcc_ene_magnate-zero2')
         if headType == 'camera' and self.style.name == 'cps':
                 headModel = loader.loadModel('phase_4/models/accessories/newstoon_camera')
-        if headType == 'Blowhard' and self.style.name == 'dvg':
+        if headType == 'root' and self.style.name == 'isw':
+            headModel = loader.loadModel('phase_14/models/char/mingler')
+        if headType == 'root' and self.style.name == 'trm':
+            headModel = loader.loadModel('phase_14/models/char/tf_new')
+        if headType == 'Blowhard' and self.style.name == 'cr':
                 headModel = loader.loadModel('phase_3.5/models/char/ttrm_m_ene_head_blowhard')
         if headType == 'industryTitan':
                 headModel = loader.loadModel('phase_3.5/models/char/ttrpg_tech-heads')
@@ -5750,8 +5777,6 @@ class Suit(Avatar.Avatar):
         for i in xrange(0, headReferences.getNumPaths()):
             headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'joint_head')
             headPart.setTwoSided(True)
-            if self.style.name == 'dvg':
-                headPart.setY(.1)
             if self.style.name == 'bdb' and headType == 'angel_wings':
                 headPart.setZ(1.25)
                 headPart.setScale(1.25)
@@ -5761,28 +5786,45 @@ class Suit(Avatar.Avatar):
             if headType == 'skeleskull_A':
                 headPart.setY(-.2)
                 headPart.setZ(-.1)
-            if self.style.name == 'trb':
-                headPart.setZ(-.4)
-                headPart.setScale(.7)
-                headPart.setH(180)
-            if self.style.name == 'dvg':
-                headPart.setH(180)
             if self.style.name == 'gry':
                 headPart.setH(180)
                 headPart.setZ(-.1)
                 headPart.setScale(.85)
+            if self.style.name == 'trb':
+                headPart.setZ(-.4)
+                headPart.setScale(.7)
+                headPart.setH(180)
+            if self.style.name == 'trm':
+                headPart.setZ(0.9)
+                headPart.setY(1)
+                headPart.setX(-0.05)
+                headPart.setScale(4)
             if self.style.name == 'ls':
                 headPart.setH(180)
+                headPart.setY(.1)
                 headPart.setZ(-.1)
             if self.style.name == 'm':
                 headPart.setH(180)
                 headPart.setZ(-.1)
+            if self.style.name == 'gm':
+                headPart.setY(-.2)
+                headPart.setScale(1.05)
+            if headType == 'root' and self.style.name == 'jdg': #whistleblower
+                headPart.setH(90)
+                headPart.setP(90)
+                headPart.setR(-90)
+                headPart.setScale(1.1)
+                headPart.setZ(-.1)
+            if headType == 'root': #whistleblower
+                headPart.setH(90)
+                headPart.setP(90)
+                headPart.setR(-90)
+                #headPart.setZ(-.1)
             if self.style.name == 'ym':
                 headPart.setH(180)
                 headPart.setZ(-.1)
-            if self.style.name == 'isw':
-                headPart.setY(-.2)
-                headPart.setScale(1.05)
+            if self.style.name == 'cr':
+                headPart.setH(180)
             if self.style.name == 'rus':
                 headPart.setZ(-.1)
                 headPart.setY(-.1)
@@ -5802,7 +5844,7 @@ class Suit(Avatar.Avatar):
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
         anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
                  'stun', 'enraged', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup',
-                 'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive',
+                 'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive', 'bust',
                  'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'gsnap', 'overclocked',
                  'come-on', 'zero' ]
         for anim in additionalAnims:
@@ -5855,6 +5897,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'phs':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'hh':
+            self.corpMedallion.setZ(.2)
+        elif self.style.name == 'ls':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'dfh':
             self.corpMedallion.setZ(.2)
@@ -5912,6 +5956,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'hh':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'cm':
+            self.corpMedallion.setZ(.2)
+        elif self.style.name == 'ls':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'dty':
             self.corpMedallion.setZ(.2)
@@ -5983,6 +6029,7 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setY(.05)
         if self.style.body == 'a':
             self.corpMedallion.setY(-.1)
+            self.corpMedallion.setZ(-.1)
         if self.style.name == 'fhj':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'mad':
@@ -5991,13 +6038,17 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'crf':
             self.corpMedallion.setScale(0)
-        elif self.style.name == 'le':
+        else:
+            self.corpMedallion.setScale(1.175)
+        if self.style.name == 'le':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'gry':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'hh':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'phs':
+            self.corpMedallion.setZ(.2)
+        elif self.style.name == 'ls':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'cm':
             self.corpMedallion.setZ(.2)
@@ -6025,51 +6076,56 @@ class Suit(Avatar.Avatar):
         else:
             chestNull = self.find('**/joint_attachMeter')
         if dept == 'c':
-            self.corpMedallion = model.find('**/emblem_base').copyTo(chestNull)
+            self.hpBase = model.find('**/emblem_base').copyTo(chestNull)
         elif dept == 's':
-            self.corpMedallion = model.find('**/emblem_base').copyTo(chestNull)
+            self.hpBase = model.find('**/emblem_base').copyTo(chestNull)
         elif dept == 'l':
-            self.corpMedallion = model.find('**/emblem_base').copyTo(chestNull)
+            self.hpBase = model.find('**/emblem_base').copyTo(chestNull)
         elif dept == 'm':
-            self.corpMedallion = model.find('**/emblem_base').copyTo(chestNull)
+            self.hpBase = model.find('**/emblem_base').copyTo(chestNull)
         elif dept == 'g':
-            self.corpMedallion = model.find('**/emblem_base').copyTo(chestNull)
+            self.hpBase = model.find('**/emblem_base').copyTo(chestNull)
         elif dept == 't':
-            self.corpMedallion = model.find('**/emblem_base').copyTo(chestNull)
-        self.corpMedallion.setH(180.0)
-        self.corpMedallion.setColor(self.medallionColors[dept])
+            self.hpBase = model.find('**/emblem_base').copyTo(chestNull)
+        self.hpBase.setH(180.0)
+        self.hpBase.setColor(self.medallionColors[dept])
         if self.style.name == 'fhj':
-            self.corpMedallion.setScale(0)
+            self.hpBase.setScale(0)
         elif self.style.name == 'mad':
-            self.corpMedallion.setScale(0)
+            self.hpBase.setScale(0)
         elif self.style.name == 'dsf':
-            self.corpMedallion.setScale(0)
+            self.hpBase.setScale(0)
         elif self.style.name == 'crf':
-            self.corpMedallion.setScale(0)
-        elif self.style.name == 'le':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setScale(0)
+        else:
+            self.hpBase.setScale(1.175)
+        if self.style.name == 'le':
+            self.hpBase.setZ(.2)
         elif self.style.name == 'hh':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setZ(.2)
         elif self.style.name == 'gry':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setZ(.2)
+        elif self.style.name == 'ls':
+            self.hpBase.setZ(.2)
         elif self.style.name == 'cm':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setZ(.2)
         elif self.style.name == 'dty':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setZ(.2)
         elif self.style.name == 'cfp':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setZ(.2)
         elif self.style.name == 'phs':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setZ(.2)
         elif self.style.name == 'ggm':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setZ(.2)
         elif self.style.name == 'bdb':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setZ(.2)
         elif self.style.name == 'dfh':
-            self.corpMedallion.setZ(.2)
+            self.hpBase.setZ(.2)
         if self.style.body == 'c':
-            self.corpMedallion.setY(.05)
+            self.hpBase.setY(.05)
         if self.style.body == 'a':
-            self.corpMedallion.setY(-.1)
+            self.hpBase.setY(-.1)
+            self.hpBase.setZ(-.1)
         model.removeNode()
         icons.removeNode()
 
@@ -6086,7 +6142,7 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'crf':
             button.setScale(0)
         else:
-            button.setScale(1)
+            button.setScale(1.175)
         button.setH(180.0)
         button.setColor(self.healthColors[0])
         chestNull = self.find('**/joint_attachMeter')
@@ -6114,6 +6170,7 @@ class Suit(Avatar.Avatar):
             self.healthBar.setY(.05)
         if self.style.body == 'a':
             self.healthBar.setY(-.1)
+            self.healthBar.setZ(-.1)
         if self.style.name == 'le':
             self.healthBar.setZ(.2)
         elif self.style.name == 'dfh':
@@ -6121,6 +6178,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'hh':
             self.healthBar.setZ(.2)
         elif self.style.name == 'cm':
+            self.healthBar.setZ(.2)
+        elif self.style.name == 'ls':
             self.healthBar.setZ(.2)
         elif self.style.name == 'phs':
             self.healthBar.setZ(.2)
@@ -6194,6 +6253,97 @@ class Suit(Avatar.Avatar):
         self.currHP -= hp
         messenger.send(self.uniqueName('suitHpUpdate'), [self.currHP, self.maxHP, hp])
         health = float(self.currHP) / float(self.maxHP)
+        if self.style.name == 'mad':
+            if self.maxHP > 13000:
+                self.setDisplayName(self.createNameInfoMagenta())
+                self.virtualize(20)
+            elif self.maxHP > 12000:
+                self.setDisplayName(self.createNameInfoWhite())
+                self.virtualize(19)
+            elif self.maxHP > 11000:
+                self.setDisplayName(self.createNameInfoPurple())
+                self.virtualize(13)
+            elif self.maxHP > 10000:
+                self.setDisplayName(self.createNameInfoLightBlue())
+                self.virtualize(12)
+            elif self.maxHP > 9000:
+                self.setDisplayName(self.createNameInfoPink())
+                self.virtualize(14)
+            elif self.maxHP > 8000:
+                self.setDisplayName(self.createNameInfoRed())
+                self.virtualize(8)
+            elif self.maxHP > 7000:
+                self.setDisplayName(self.createNameInfoBlue())
+                self.virtualize(15)
+            elif self.maxHP > 6000:
+                self.setDisplayName(self.createNameInfoYellow())
+                self.virtualize(3)
+            elif self.maxHP > 5000:
+                self.setDisplayName(self.createNameInfoOrange())
+                self.virtualize(6)
+            else:
+                self.setDisplayName(self.createNameInfoGreen())
+                self.virtualize(0)
+        if self.style.name == 'bg':
+            if self.getActualLevel() == 20:
+                self.setDisplayName(self.createNameInfoHighStakes())
+            elif self.getActualLevel() == 21:
+                self.setDisplayName(self.createNameInfoMulligan())
+            elif self.getActualLevel() == 22:
+                self.setDisplayName(self.createNameInfoAncient())
+            elif self.getActualLevel() == 23:
+                self.setDisplayName(self.createNameInfoChipFan())
+            elif self.getActualLevel() == 24:
+                self.setDisplayName(self.createNameInfoPuzzling())
+            elif self.getActualLevel() == 25:
+                self.setDisplayName(self.createNameInfoShivering())
+            else:
+                pass
+        if self.style.name == 'bgr':
+            if self.getActualLevel() == 20:
+                self.setDisplayName(self.createNameInfoAbacus())
+            elif self.getActualLevel() == 21:
+                self.setDisplayName(self.createNameInfoControlling())
+            elif self.getActualLevel() == 22:
+                self.setDisplayName(self.createNameInfoConfused())
+            elif self.getActualLevel() == 23:
+                self.setDisplayName(self.createNameInfoAccountant())
+            elif self.getActualLevel() == 24:
+                self.setDisplayName(self.createNameInfoSpongy())
+            elif self.getActualLevel() == 25:
+                self.setDisplayName(self.createNameInfoFraudulent())
+            else:
+                pass
+        if self.style.name == 'jur':
+            if self.getActualLevel() == 20:
+                self.setDisplayName(self.createNameInfoSneaky())
+            elif self.getActualLevel() == 21:
+                self.setDisplayName(self.createNameInfoOmnipotent())
+            elif self.getActualLevel() == 22:
+                self.setDisplayName(self.createNameInfoOverseer())
+            elif self.getActualLevel() == 23:
+                self.setDisplayName(self.createNameInfoMonolithic())
+            elif self.getActualLevel() == 24:
+                self.setDisplayName(self.createNameInfoChrono())
+            elif self.getActualLevel() == 25:
+                self.setDisplayName(self.createNameInfoLaborious())
+            else:
+                pass
+        if self.style.name == 'mdr':
+            if self.getActualLevel() == 20:
+                self.setDisplayName(self.createNameInfoSleepy())
+            elif self.getActualLevel() == 21:
+                self.setDisplayName(self.createNameInfoBurning())
+            elif self.getActualLevel() == 22:
+                self.setDisplayName(self.createNameInfoExplosive())
+            elif self.getActualLevel() == 23:
+                self.setDisplayName(self.createNameInfoContractor())
+            elif self.getActualLevel() == 24:
+                self.setDisplayName(self.createNameInfoRedTape())
+            elif self.getActualLevel() == 25:
+                self.setDisplayName(self.createNameInfoSniper())
+            else:
+                pass
         if health > 1.5:
             condition = 13
         elif health > 1.25:
@@ -6238,7 +6388,8 @@ class Suit(Avatar.Avatar):
                 else:
                     self.healthBarGlow.setColor(0, 0, 0, 0)
                     taskMgr.remove(self.uniqueName('blink-task'))
-                    self.virtualize(condition)
+                    if not self.style.name == 'mad':
+                        self.virtualize(condition)
                 self.__changeColor()
             elif condition == 10:
                 taskMgr.remove(self.uniqueName('blink-task'))
@@ -6275,7 +6426,8 @@ class Suit(Avatar.Avatar):
                 else:
                     self.healthBarGlow.setColor(0, 0, 0, 0)
                     taskMgr.remove(self.uniqueName('blink-task'))
-                    self.virtualize(condition)
+                    if not self.style.name == 'mad':
+                        self.virtualize(condition)
                 self.__changeColor()
             self.healthCondition = condition
 
@@ -6309,7 +6461,8 @@ class Suit(Avatar.Avatar):
             self.glowInterval.start()
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
-            self.virtualizeRed(9)
+            if not self.style.name == 'mad':
+                self.virtualizeRed(9)
 
     def __pulseWhite(self):
         if not self.virtual:
@@ -6321,7 +6474,8 @@ class Suit(Avatar.Avatar):
             self.glowInterval.start()
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
-            self.virtualizeRed(9)
+            if not self.style.name == 'mad':
+                self.virtualizeRed(9)
 
     def __pulseGray(self, task):
         if not self.virtual:
@@ -6333,7 +6487,8 @@ class Suit(Avatar.Avatar):
             self.glowInterval.start()
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
-            self.virtualizeGray(10)
+            if not self.style.name == 'mad':
+                self.virtualizeGray(10)
 
     def __pulsePurple(self, task):
         if not self.virtual:
@@ -6345,7 +6500,8 @@ class Suit(Avatar.Avatar):
             self.glowInterval.start()
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
-            self.virtualizePurple(17)
+            if not self.style.name == 'mad':
+                self.virtualizePurple(17)
 
     def __changeColor(self):
         if not self.virtual:
@@ -6357,7 +6513,8 @@ class Suit(Avatar.Avatar):
             self.glowInterval.start()
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
-            self.virtualize(self.condition)
+            if not self.style.name == 'mad':
+                self.virtualize(self.condition)
 
     def __pulsePurpleColor(self, task):
         if not self.virtual:
@@ -6369,7 +6526,8 @@ class Suit(Avatar.Avatar):
             self.glowInterval.start()
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
-            self.virtualize(13)
+            if not self.style.name == 'mad':
+                self.virtualize(13)
 
     def removeHealthBar(self):
         if self.healthBar:
@@ -6488,20 +6646,6 @@ class Suit(Avatar.Avatar):
 
     def makeVirtual(self, isVirtual = 1):
         self.removeHealthBar()
-        name = 'Virtual Cog'
-        dept = self.getStyleDept()
-        level = str(self.getActualLevel())
-        if self.getExecutive():
-            level += TTLocalizer.ExecutivePostFix
-        if self.getManager():
-            level += TTLocalizer.ManagerPostFix
-        if self.getGovernaught():
-            level += TTLocalizer.GovernaughtPostFix
-        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
-                                                        'dept': dept,
-                                                        'level': level}
-        if not self.style.name == 'mad':
-            self.setDisplayName(nameInfo)
         self.isVirtual = 1
         self.virtual = isVirtual
         if self.virtual:
@@ -6511,20 +6655,6 @@ class Suit(Avatar.Avatar):
         self.removeHealthBar()
         self.isVirtual = 1
         self.virtual = isVirtual
-        name = 'Virtual Cog'
-        dept = self.getStyleDept()
-        level = str(self.getActualLevel())
-        if self.getExecutive():
-            level += TTLocalizer.ExecutivePostFix
-        if self.getManager():
-            level += TTLocalizer.ManagerPostFix
-        if self.getGovernaught():
-            level += TTLocalizer.GovernaughtPostFix
-        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
-                                                        'dept': dept,
-                                                        'level': level}
-        if not self.style.name == 'mad':
-            self.setDisplayName(nameInfo)
         if self.virtual:
             self.virtualize2(0)
 
@@ -7594,9 +7724,6 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'cfp' and not self.isSkeleton:
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'jdg' and not self.isSkeleton:
-            loadDialog(1)
-            return FeatherbedderDialogArray
         if self.style.name == 'ggm' and not self.isSkeleton:
             loadDialog(1)
             return MouthpieceDialogArray
@@ -7642,10 +7769,22 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'bdb' and not self.isSkeleton:
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'cr' and self.isSkeleton:
+        if self.style.name == 'jdg' and self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogFemaleArray
-        if self.style.name == 'cr' and not self.isSkeleton:
+        if self.style.name == 'jdg' and not self.isSkeleton:
+            loadDialog(1)
+            return FemaleDialogArray
+        if self.style.name == 'isw' and self.isSkeleton:
+            loadDialog(1)
+            return SkelecogDialogFemaleArray
+        if self.style.name == 'isw' and not self.isSkeleton:
+            loadDialog(1)
+            return FemaleDialogArray
+        if self.style.name == 'ls' and self.isSkeleton:
+            loadDialog(1)
+            return SkelecogDialogFemaleArray
+        if self.style.name == 'ls' and not self.isSkeleton:
             loadDialog(1)
             return FemaleDialogArray
         if self.style.name == 'mes' and not self.isSkeleton:

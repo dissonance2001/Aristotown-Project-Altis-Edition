@@ -103,18 +103,17 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         else:
             self.condition = 11
         self.avatar = avatar
-        if avatar.isVirtual:
-            self.head.setColor(1, 1, 1, 1)
-            self.head.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
-            for part in avatar.headParts:
-                copyPart = part.copyTo(self.head)
-                copyPart.setDepthTest(1)
-                copyPart.setDepthWrite(1)
-        else:
-            for part in avatar.headParts:
-                copyPart = part.copyTo(self.head)
-                copyPart.setDepthTest(1)
-                copyPart.setDepthWrite(1)
+        #if avatar.isVirtual:
+            #self.head.setColor(1, 1, 1, 1)
+            #self.head.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+            #for part in avatar.headParts:
+              #  copyPart = part.copyTo(self.head)
+               # copyPart.setDepthTest(1)
+               # copyPart.setDepthWrite(1)
+        for part in avatar.headParts:
+            copyPart = part.copyTo(self.head)
+            copyPart.setDepthTest(1)
+            copyPart.setDepthWrite(1)
 
         p1 = Point3()
         p2 = Point3()
@@ -286,9 +285,9 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.healthNode = self.frame.attachNewNode('health')
         self.healthNode.setPos(0, 0, -0.24)
         self.healthBar2 = healthBar2
-        self.healthBar2.setProp('barColor', self.healthColors[self.condition])
-        self.healthBar2.setProp('value', self.avatar.currHP)
-        self.healthBar2.setProp('range', self.avatar.getMaxHP())
+        #self.healthBar2.setProp('barColor', self.healthColors[self.condition])
+        #self.healthBar2.setProp('value', self.avatar.currHP)
+        #self.healthBar2.setProp('range', self.avatar.getMaxHP())
         button.reparentTo(self.healthBar2)
         base2.reparentTo(self.healthBar2)
         corpIcon = avatar.corpMedallion.copyTo(hidden)
@@ -405,7 +404,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         revives = avatar.getSkeleRevives() + 1
         def __updateLabel(tempHp):
             if avatar.isFired:
-                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % 'FIRED!' + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
                 self.healthBar2['value'] = 0
                 self.corpIcon.hide()
                 self.deptLabel['text'] = ''
@@ -495,17 +494,17 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                 LerpFunctionInterval(__updateLabel, duration=0, fromData=currHp+delta, toData=currHp, blendType='easeInOut')
             )
 
-        if condition == 10 and self.avatar.isVirtual:
+        if condition == 10 and self.avatar.isVirtual and not self.avatar.dna.name == 'mad':
             taskMgr.remove(self.frame.uniqueName('blink-task'))
             self.button.setColor(1, 1, 1, 1)
             self.head.setColor(1, 1, 1, 1)
-            blinkTask = Task.loop(Task(self.__pulseRed), Task(self.__pulseRedHead), Task.pause(0.75), Task(self.__pulseGray), Task(self.__pulseGrayHead), Task.pause(0.1))
+            blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray), Task.pause(0.1))
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
-        elif condition == 11 and self.avatar.isVirtual:
+        elif condition == 11 and self.avatar.isVirtual and not self.avatar.dna.name == 'mad':
             taskMgr.remove(self.frame.uniqueName('blink-task'))
             self.button.setColor(1, 1, 1, 1)
             self.head.setColor(1, 1, 1, 1)
-            blinkTask = Task.loop(Task(self.__pulseRed), Task(self.__pulseRedHead), Task.pause(0.25), Task(self.__pulseGray), Task(self.__pulseGrayHead), Task.pause(0.1))
+            blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray), Task.pause(0.1))
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
         elif condition == 10:
             taskMgr.remove(self.frame.uniqueName('blink-task'))
@@ -520,10 +519,10 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                        blendType='easeInOut'))
             blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray), Task.pause(0.1))
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
-        elif condition == 13 and avatar.isVirtual:
+        elif condition == 13 and avatar.isVirtual and not self.avatar.dna.name == 'mad':
             self.head.setColor(1, 1, 1, 1)
             self.button.setColor(1, 1, 1, 1)
-            blinkTask = Task.loop(Task(self.__pulsePurple), Task(self.__pulsePurpleHead), Task.pause(1.5), Task(self.__pulsePurpleColor), Task(self.__pulsePurpleColorHead),
+            blinkTask = Task.loop(Task(self.__pulsePurple), Task.pause(1.5), Task(self.__pulsePurpleColor),
                                   Task.pause(1.5))
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
         elif condition == 13:
@@ -531,17 +530,13 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             blinkTask = Task.loop(Task(self.__pulsePurple), Task.pause(1.5), Task(self.__pulsePurpleColor),
                                   Task.pause(1.5))
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
-        elif self.avatar.isVirtual:
+        elif self.avatar.isVirtual and not self.avatar.dna.name == 'mad':
             self.button.setColor(1, 1, 1, 1)
-            self.head.setColor(1, 1, 1, 1)
             self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
                                    blendType='easeInOut'))
             self.changeInterval.start()
             taskMgr.remove(self.frame.uniqueName('blink-task'))
             self.blinkTask = None
-            self.colorInterval = Parallel(LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[condition]),
-                                       blendType='easeInOut'))
-            self.colorInterval.start()
         else:
             self.button.setColor(1, 1, 1, 1)
             self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),

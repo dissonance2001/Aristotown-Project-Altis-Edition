@@ -7,7 +7,11 @@ from toontown.battle.BattleBase import *
 from toontown.battle import BattleExperience
 from toontown.battle import BattleParticles
 from toontown.battle import MovieDrop
+from toontown.battle import BattleProps
 from toontown.battle import MovieFire
+import PlayByPlayText
+from otp.otpbase import OTPLocalizerEnglish
+from toontown.battle.BattleSounds import *
 from toontown.battle import MovieHeal
 from toontown.battle import MovieLure
 from toontown.battle import MovieNPCSOS
@@ -20,6 +24,7 @@ from toontown.battle import MovieSuitAttacks
 from toontown.battle import MovieThrow
 from toontown.battle import MovieToonVictory
 from toontown.battle import MovieTrap
+from toontown.battle import MovieCamera
 from toontown.battle import MovieZap
 from toontown.battle import MovieUtil
 from toontown.battle import PlayByPlayText
@@ -105,6 +110,76 @@ class Movie(DirectObject.DirectObject):
         if self.renderProps.count(prop) > 0:
             self.renderProps.remove(prop)
 
+    def getPropTrack(self, prop, parent, posPoints, appearDelay, remainDelay, scaleUpPoint=Point3(1), scaleUpTime=0.5,
+                     scaleDownTime=0.5, startScale=Point3(0.01), anim=0, propName='none', animDuration=0.0,
+                     animStartTime=0.0):
+        if anim == 1:
+            track = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints),
+                             LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale),
+                             ActorInterval(prop, propName, duration=animDuration, startTime=animStartTime),
+                             Wait(remainDelay), Func(MovieUtil.removeProp, prop))
+        else:
+            track = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints),
+                             LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale),
+                             Wait(remainDelay), LerpScaleInterval(prop, scaleDownTime, MovieUtil.PNT3_NEARZERO),
+                             Func(MovieUtil.removeProp, prop))
+        return track
+
+    def getPropAppearTrack(self, prop, parent, posPoints, appearDelay, scaleUpPoint=Point3(1), scaleUpTime=0.5,
+                           startScale=Point3(0.01), poseExtraArgs=None):
+        propTrack = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints))
+        if poseExtraArgs:
+            propTrack.append(Func(prop.pose, *poseExtraArgs))
+        propTrack.append(LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale))
+        return propTrack
+
+    def getPropThrowTrack(self, attack, prop, hitPoints=[], missPoints=[], hitDuration=0.25, missDuration=0.25,
+                          hitPointNames='none', missPointNames='none', lookAt='none', groundPointOffSet=0,
+                          missScaleDown=None, parent=render):
+        target = attack['target']
+        toon = target['toon']
+        dmg = target['hp']
+        battle = attack['battle']
+
+        def getLambdas(list, prop, toon):
+            for i in xrange(len(list)):
+                if list[i] == 'face':
+                    list[i] = lambda toon=toon: __toonFacePoint(toon)
+                elif list[i] == 'miss':
+                    list[i] = lambda prop=prop, toon=toon: __toonMissPoint(prop, toon)
+                elif list[i] == 'bounceHit':
+                    list[i] = lambda prop=prop, toon=toon: __throwBounceHitPoint(prop, toon)
+                elif list[i] == 'bounceMiss':
+                    list[i] = lambda prop=prop, toon=toon: __throwBounceMissPoint(prop, toon)
+
+            return list
+
+        if hitPointNames != 'none':
+            hitPoints = getLambdas(hitPointNames, prop, toon)
+        if missPointNames != 'none':
+            missPoints = getLambdas(missPointNames, prop, toon)
+        propTrack = Sequence()
+        propTrack.append(Func(battle.movie.needRestoreRenderProp, prop))
+        propTrack.append(Func(prop.wrtReparentTo, parent))
+        if lookAt != 'none':
+            propTrack.append(Func(prop.lookAt, lookAt))
+        if dmg > 0:
+            for i in xrange(len(hitPoints)):
+                pos = hitPoints[i]
+                propTrack.append(LerpPosInterval(prop, hitDuration, pos=pos))
+
+        else:
+            for i in xrange(len(missPoints)):
+                pos = missPoints[i]
+                propTrack.append(LerpPosInterval(prop, missDuration, pos=pos))
+
+            if missScaleDown:
+                propTrack.append(LerpScaleInterval(prop, missScaleDown, MovieUtil.PNT3_NEARZERO))
+        name = attack['id']
+        propTrack.append(Func(MovieUtil.removeProp, prop))
+        propTrack.append(Func(battle.movie.clearRenderProp, prop))
+        return propTrack
+
     def restore(self):
         for toon in self.battle.activeToons:
             toon.loop('neutral')
@@ -164,7 +239,7 @@ class Movie(DirectObject.DirectObject):
 
         for suit in self.battle.activeSuits:
             if suit._Actor__animControlDict != None:
-                suit.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+                suit.setNeutralAnimation()
                 suit.battleTrapIsFresh = 0
                 origPos, origHpr = self.battle.getActorPosHpr(suit)
                 suit.setPosHpr(self.battle, origPos, origHpr)
@@ -242,6 +317,372 @@ class Movie(DirectObject.DirectObject):
         if sattacks:
             ptrack.append(sattacks)
             camtrack.append(scam)
+            for a in self.suitAttackDicts:
+                battle = a['battle']
+                ival, camIval = MovieSuitAttacks.doSuitAttack(a)
+                for s in battle.activeSuits:
+                    pbpText = PlayByPlayText.PlayByPlayText()
+                    pbpDc = PlayByPlayText.PlayByPlayText()
+                    if s.dna.name == 'ste':
+                        theSuit = s
+                        tauntTrack = Func(theSuit.setChatAbsolute, 'Any of the following Gag Levels Toons use can and will be held against them in a court of law.', CFSpeech | CFTimeout)
+                        suitTrack = Sequence(ActorInterval(theSuit, 'cease'), Func(theSuit.setNeutralAnimation))
+                        camTrack = MovieCamera.chooseSuitShotCheatStenographer(self.battle)
+                        if a['id'] == COURT_COSTS and not s.isDesperation:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatStenographerCalculations(self.battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(self.doCourtCalculations(a, theSuit), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == COURT_COSTS and s.isDesperation:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatStenographerCalculations(self.battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(self.doCourtCalculations2(a, theSuit), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == COURT_SANCTION or a['id'] == COURT_RECORD_4:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatStenographerSanctionUnbound(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doCourtSanction(a, theSuit), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == LEGAL_BINDINGS or a['id'] == CLOSE_THE_LOOP:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatStenographerSanction(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doCourtSanctionBindingsReal(a, s), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        soundTrack = Sequence(
+                        SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=theSuit))
+                        if a['suit'].dna.name == 'ste':
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                    elif s.dna.name == 'csm':
+                        theSuit = s
+                        tauntTrack = Func(theSuit.setChatAbsolute, 'Any of the following Gag Tracks Toons use can and will be held against them in a court of law.', CFSpeech | CFTimeout)
+                        suitTrack = Sequence(ActorInterval(theSuit, 'cease'), Func(theSuit.setNeutralAnimation))
+                        camTrack = MovieCamera.chooseSuitShotCheatCaseManager(self.battle)
+                        camTrack2 = MovieCamera.chooseSuitShotCheatCaseManagerGags(self.battle)
+                        soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=theSuit))
+                        if not a['id'] == INSURANCE_PLAN:
+                            if not theSuit.isSkeleton and a['suit'].dna.name == 'csm':
+                                ptrack.append(
+                                Sequence(Wait(1.0), Parallel(self.doCaseInsurancePlanInsurance(theSuit), camTrack),
+                                         Func(theSuit.setNeutralAnimation)))
+                            if theSuit.isSkeleton and a['suit'].dna.name == 'csm':
+                                ptrack.append(Sequence(Wait(1.0),
+                                                   Parallel(self.doCaseInsurancePlanSkelecogInsurance(theSuit),
+                                                            camTrack), Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == INSURANCE_PLAN:
+                            if not theSuit.isSkeleton and a['suit'].dna.name == 'csm':
+                                ptrack.append(
+                                Sequence(Wait(1.0), Parallel(self.doCaseInsurancePlan(theSuit), camTrack),
+                                         Func(theSuit.setNeutralAnimation)))
+                            if theSuit.isSkeleton and a['suit'].dna.name == 'csm':
+                                ptrack.append(Sequence(Wait(2.0),
+                                                   Parallel(self.doCaseInsurancePlanSkelecog(theSuit),
+                                                            camTrack), Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == POISON_SPRAY or a['id'] == ENRAGED:
+                            if not theSuit.isSkeleton and a['suit'].dna.name == 'csm':
+                                ptrack.append(
+                                Sequence(Wait(1.0), Parallel(self.doCaseInsurancePlanInsurance(theSuit), camTrack),
+                                         Func(theSuit.setNeutralAnimation)))
+                                camTrack2 = MovieCamera.chooseSuitShotCheatCaseManagerBindings(a, 4)
+                                ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doLegalBindings(a), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                            if theSuit.isSkeleton and a['suit'].dna.name == 'csm':
+                                ptrack.append(Sequence(Wait(1.0),
+                                                   Parallel(self.doCaseInsurancePlanSkelecogInsurance(theSuit),
+                                                            camTrack), Func(theSuit.setNeutralAnimation)))
+                                camTrack2 = MovieCamera.chooseSuitShotCheatCaseManagerBindings(a, 4)
+                                ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doLegalBindings(a), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == LEGAL_BINDINGS or a['id'] == CLOSE_THE_LOOP:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatCaseManagerBindings(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doLegalBindings(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['suit'].dna.name == 'csm':
+                            camTrack2 = MovieCamera.chooseSuitShotCheatCaseManagerGags(self.battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack2)))
+                    elif s.dna.name == 'scg':
+                        theSuit = s
+                        if a['id'] == POISON_SPRAY:
+                            suitTrack2 = Sequence(self.doPoisonSpray(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack2 = MovieCamera.chooseSuitShotCheatScapegoatShielding(self.battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack2, camTrack2)))
+                        if a['id'] == SNOW:
+                            suitTrack3 = Sequence(self.doPoisonSpray(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatScapegoatShielding(self.battle)
+                            suitTrack2 = Sequence(MovieSuitAttacks.doScapegoatSyphon(a), Func(theSuit.setNeutralAnimation))
+                            camTrack2 = MovieCamera.chooseSuitShotCheatScapegoatSyphon(self.battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack2, camTrack2)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                        if a['id'] == GAVEL:
+                            suitTrack3 = Sequence(self.doGavel(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatScapegoatGavel(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                            #ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, camTrack)))
+                        if a['id'] == ENRAGED:
+                            suitTrack = Sequence(self.doEnraged(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack = MovieCamera.chooseSuitShotCheatScapegoatEnraged(self.battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, camTrack)))
+                    elif s.dna.name == 'lit':
+                        theSuit = s
+                        tauntTrack = Func(theSuit.setChatAbsolute, random.choice(("In just a snap.",
+                                                                              "It seems we may need a little assistance.",
+                                                                              "You seem to be in alligator territory.",
+                                                                              "The party's over here, fellas!",
+                                                                              "Good luck treading these waters now.")), CFSpeech | CFTimeout)
+                        suitTrack = Sequence(MovieUtil.createSuitSnapInterval(theSuit), Func(theSuit.setNeutralAnimation))
+                        camTrack = MovieCamera.chooseSuitShotCheatLitigator(self.battle)
+                        soundTrack = Sequence(
+                        SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=theSuit))
+                        if a['id'] == POISON_SPRAY:
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        if a['id'] == SNAP_WET:
+                            suitTrack3 = Sequence(MovieSuitAttacks.doSnap(a, s), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatLitigatorSnapDangerous(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                        if a['id'] == GAVEL:
+                            suitTrack3 = Sequence(MovieSuitAttacks.doSnap(a, s), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatLitigatorSnapDangerous(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        if a['id'] == WHITE_POWDER:
+                            suitTrack3 = Sequence(MovieSuitAttacks.doSnap(a, s), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatLitigatorSnapDangerous(a, 4)
+                            suitTrack4 = Sequence(MovieSuitAttacks.doWhitePowder(a), Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatLitigatorBellow(self.battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                    elif s.dna.name == 'frs':
+                        theSuit = s
+                        tauntTrack = Func(theSuit.setChatAbsolute, 'Quality Control dictates that the following Gag Levels are now classified as defective.', CFSpeech | CFTimeout)
+                        suitTrack = Sequence(ActorInterval(theSuit, 'cease'), Func(theSuit.setNeutralAnimation))
+                        camTrack = MovieCamera.chooseSuitShotCheatWiretapper(self.battle)
+                        soundTrack = Sequence(
+                        SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=theSuit))
+                        #ptrack.append(Sequence(Parallel(suitTrack, tauntTrack)))
+                        if a['id'] == COLLECT_CALL_FEES and not s.isDesperation:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatWiretapperCalculations(self.battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(self.doCourtCalculationsWiretapper(a, theSuit), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == COLLECT_CALL_FEES and s.isDesperation:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatWiretapperCalculations(self.battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(self.doCourtCalculations2Wiretapper(a, theSuit), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == COLLECT_CALL:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatWiretapperCollectCall(a, 6)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doCollectCall(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == WIRETAPPED:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatWiretapperWiretapped(a, 6)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doWiretapped(a), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                            camTrack2 = MovieCamera.chooseSuitShotCheatWiretapperPayback(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doPayback(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == VOICEMAIL:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatWiretapperVoicemail(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doVoicemail(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['suit'].dna.name == 'frs':
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                    elif s.dna.name == 'cp':
+                        theSuit = s
+                        if a['id'] == BLAST:
+                            suitTrack3 = Sequence(MovieSuitAttacks.doBlast(a), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatPowerhouseBlast(a, 4)
+                            suitTrack4 = Sequence(MovieSuitAttacks.doBlastShield(a), Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseShielding(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                        if a['id'] == COURT_MANDATE:
+                            suitTrack3 = Sequence(MovieSuitAttacks.doGroupSyphonCheat(a), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatPowerhouseDesperationSyphon(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                        if a['id'] == COURT_MANDATE_1:
+                            suitTrack4 = Sequence(MovieSuitAttacks.doSnipeRetaliation(a, theSuit),
+                                                  Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseSnipe(a, 4)
+                            suitTrack3 = Sequence(MovieSuitAttacks.doSoakResist(a), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatPowerhouseSoakResist(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                        if a['id'] == COURT_MANDATE_2:
+                            suitTrack4 = Sequence(MovieSuitAttacks.doSnipeRetaliation(a, theSuit),
+                                                  Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseSnipe(a, 4)
+                            suitTrack3 = Sequence(MovieSuitAttacks.doSyphon(a), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatPowerhouseSyphon(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                        if a['id'] == COURT_MANDATE_3:
+                            suitTrack4 = Sequence(MovieSuitAttacks.doSnipeRetaliation(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseSnipe(a, 4)
+                            suitTrack3 = Sequence(MovieSuitAttacks.doLureResist(a), Func(theSuit.setNeutralAnimation))
+                            camTrack3 = MovieCamera.chooseSuitShotCheatPowerhouseLureImmune(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                        if a['id'] == EXPLODING_BILL:
+                            suitTrack4 = Sequence(MovieSuitAttacks.doSnipeRetaliation(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseSnipeRetaliation(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                        if a['id'] == COLLECT_CALL:
+                            suitTrack4 = Sequence(MovieSuitAttacks.doSnipeRetaliation(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseSnipeRetaliation(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                        if a['id'] == BOOKKEEPING:
+                            suitTrack4 = Sequence(MovieSuitAttacks.doSnipeRetaliation(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseSnipeRetaliation(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                        if a['id'] == WIRE_CUT:
+                            suitTrack4 = Sequence(MovieSuitAttacks.doSnipeRetaliation(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseSnipeRetaliation(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                        if a['id'] == PAPER_CUT:
+                            suitTrack4 = Sequence(MovieSuitAttacks.doSnipeRetaliation(a, theSuit), Func(theSuit.setNeutralAnimation))
+                            camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseSnipeRetaliation(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
+                    elif s.dna.name == 'fbd':
+                        theSuit = s
+                        tauntTrack = Func(theSuit.setChatAbsolute, 'Quality Control dictates that the following Gag Tracks are now classified as defective.', CFSpeech | CFTimeout)
+                        suitTrack = Sequence(ActorInterval(theSuit, 'cease'), Func(theSuit.setNeutralAnimation))
+                        camTrack = MovieCamera.chooseSuitShotCheatBookkeeper(self.battle)
+                        soundTrack = Sequence(
+                        SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=theSuit))
+                        #ptrack.append(Sequence(Parallel(suitTrack, tauntTrack)))
+                        if a['id'] == EXPLODING_BILL:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatBookkeeperExplodingBill(a, 6)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doExplodingBill(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == WIRE_CUT:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatBookkeeperPaperCutMarked(a, 6)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doPaperCut(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == PAPER_CUT:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatBookkeeperPaperCut(a, 6)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doPaperCut2(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == VOICEMAIL:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatBookkeeperBookkeepingRetaliation(a, 6)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doBookKeepingRetaliation(a, theSuit), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == BOOKKEEPING:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatBookkeeperBookkeeping(a, 6)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doBookKeeping(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == COLLECT_CALL:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatBookkeeperPaperCutRetaliation(a, 6)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doPaperCutRetaliation(a, theSuit), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                        if a['suit'].dna.name == 'fbd':
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                    elif s.dna.name == 'gtk':
+                        theSuit = s
+                        tauntTrack = Func(theSuit.setChatAbsolute, 'In just a snap.', CFSpeech | CFTimeout)
+                        suitTrack = Sequence(ActorInterval(theSuit, 'snap'), Func(theSuit.setNeutralAnimation))
+                        camTrack = MovieCamera.chooseSuitShotCheatAmbassador(self.battle)
+                        soundTrack = Sequence(
+                        SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=theSuit))
+                        #ptrack.append(Sequence(Parallel(suitTrack, tauntTrack)))
+                        if a['id'] == BEGUILE:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorMulligan(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doMulliganGroup(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        if a['id'] == MULLIGAN:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorMulligan(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doMulligan(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == REFINEMENT:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorRefinement(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doRefinement(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        if a['id'] == EVIL_EYE_WSI:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorManagerBonus(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doManagerHealTeeOff(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        if a['id'] == MANAGERIAL_PROTECTION:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorMulligan(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doMulligan(a), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorImmune(a, 4)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doManagerialProtection(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        if a['id'] == DETONATE_3:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorRefinement(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doRefinement(a), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorOverwhelmingAuthority(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doAmbassadorPhase3(a), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        if a['id'] == HEAD_ROLLER_3:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorSteamRoller(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doHeadRollerGroup(a, 1, 2, 3, 4, 5), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorWorkersCompensation(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doWorkersCompensationGroup(a, 1, 2, 3, 4, 5), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorPayback(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doPayback(a), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        if a['id'] == HEAD_ROLLER_2:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorHeadRoller(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doHeadRoller(a, 3), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorWorkersCompensation(battle)
+                            ptrack.append(
+                                Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doWorkersCompensation2(a, 3), camTrack2),
+                                         Func(theSuit.setNeutralAnimation)))
+                        if a['id'] == HEAD_ROLLER:
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorHeadRoller(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doHeadRoller(a, 2), camTrack2),
+                                       Func(theSuit.setNeutralAnimation)))
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorWorkersCompensation(battle)
+                            ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doWorkersCompensation2(a, 2), camTrack2),
+                                                   Func(theSuit.setNeutralAnimation)))
+                    elif s.dna.name == 'blr':
+                        theSuit = s
+                        tauntTrack = Func(theSuit.setChatAbsolute, 'Quality Control dictates that the following Gag Levels are now classified as defective.', CFSpeech | CFTimeout)
+                        suitTrack = Sequence(ActorInterval(theSuit, 'cease'), Func(theSuit.setNeutralAnimation))
+                        camTrack = MovieCamera.chooseSuitShotCheatRadiographer(self.battle)
+                        soundTrack = Sequence(
+                        SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=theSuit))
+                        #ptrack.append(Sequence(Parallel(suitTrack, tauntTrack)))
+                        ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                    elif s.dna.name == 'dsk':
+                        theSuit = s
+                        tauntTrack = Func(theSuit.setChatAbsolute, 'Quality Control dictates that the following Gag Tracks are now classified as defective.', CFSpeech | CFTimeout)
+                        suitTrack = Sequence(ActorInterval(theSuit, 'cease'), Func(theSuit.setNeutralAnimation))
+                        camTrack = MovieCamera.chooseSuitShotCheatUnionBuster(self.battle)
+                        soundTrack = Sequence(
+                        SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=theSuit))
+                    #   ptrack.append(Sequence(Parallel(suitTrack, tauntTrack)))
+                        ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                #elif s.isInsured and a['suit'].isInsured:
+                    #camTrack = MovieCamera.chooseSuitShotCheatInsured(self.battle)
+                    #soundTrack = Sequence(
+                      #  SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=s))
+                    #suitTrack = Parallel()
+                    #x = int((s.maxHP * s.hardMaxHP) - s.currHP)
+                    #if s.currHP >= (s.maxHP * s.hardMaxHP):
+                    #    suitTrack.append(Func(s.showHpText, 0))
+                    #    suitTrack.append(Func(s.showHpString, "INSURED!"))
+                   # elif s.currHP + 50 > (s.maxHP * s.hardMaxHP):
+                   #     suitTrack.append(Func(s.showHpTextCheat, x))
+                   #     suitTrack.append(Func(s.showHpString, "INSURED!"))
+                    #    suitTrack.append(Func(s.setHealthForMe, x))
+                   # else:
+                     #   suitTrack.append(Func(s.showHpTextCheat, 50))
+                     #   suitTrack.append(Func(s.showHpString, "INSURED!"))
+                     #   suitTrack.append(Func(s.setHealthForMe, 50))
+                    #suitTrack.append(Func(s.updateHealthBar, 0))
+                    #ptrack.append(Parallel(suitTrack, soundTrack, camTrack))
+                   # ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
+                                                                           #  '',
+                                                                           #  CFSpeech | CFTimeout)))
+                    ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
+                              '',
+                              CFSpeech | CFTimeout)))
         ptrack.append(Func(callback))
         self._deleteTrack()
         self.track = Sequence(ptrack, name='movie-track-%d' % self.battle.doId)
@@ -266,6 +707,598 @@ class Movie(DirectObject.DirectObject):
             else:
                 pass
         return None
+
+    def __makeSanctionedNodePath(self):
+        tn = TextNode('CANCELLED')
+        tn.setFont(getSuitFont())
+        tn.setText('SANCTIONED\nSANCTIONED\nSANCTIONED')
+        tn.setAlign(TextNode.ACenter)
+        tntop = hidden.attachNewNode('CancelledTop')
+        tnpath = tntop.attachNewNode(tn)
+        tnpath.setPosHpr(0, 0, 0, 0, 0, 0)
+        tnpath.setScale(1)
+        tnpath.setColor(0.7, 0, 0, 1)
+        tnpathback = tnpath.instanceUnderNode(tntop, 'backside')
+        tnpathback.setPosHpr(0, 0, 0, 180, 0, 0)
+        tnpath.setScale(1)
+        return tntop
+
+    def doSnapSoaked(self, attack):
+        suit = attack['suit']
+        battle = attack['battle']
+        target = attack['target']
+        toon = target['toon']
+        dmg = target['hp']
+        teeth = BattleProps.globalPropPool.getProp('litigator-teeth')
+        propDelay = 0.25
+        propScaleUpTime = 0.25
+        suitDelay = 1.55
+        throwDelay = propDelay + propScaleUpTime + suitDelay
+        throwDuration = 0.25
+        posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
+        teethAppearTrack = Sequence(
+            getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4),
+                               scaleUpTime=propScaleUpTime))
+        teethAppearTrack.append(Wait(suitDelay))
+        teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
+        teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
+        if dmg > 0:
+            x = toon.getX(battle)
+            y = toon.getY(battle)
+            z = toon.getZ(battle)
+            toonHeight = z + toon.getHeight()
+            flyPoint = Point3(x, y + 2.7, toonHeight * 0.7)
+            teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.4, pos=Point3(x, y + 3.2, toonHeight * 0.7)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.3, pos=Point3(x, y + 4.7, toonHeight * 0.5)))
+            teethAppearTrack.append(Wait(0.2))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y, toonHeight + 3)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 1.2, toonHeight * 0.7)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 0.7, toonHeight * 0.4)))
+            teethAppearTrack.append(Wait(0.4))
+            scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(teeth, throwDuration, Point3(6, 6, 6)), Wait(0.9),
+                                  LerpScaleInterval(teeth, 0.2, Point3(10, 10, 10)), Wait(1.2),
+                                  LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO))
+            hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.2),
+                                LerpHprInterval(teeth, 0.4, Point3(180, -35, 0), startHpr=Point3(180, 0, 0)), Wait(0.6),
+                                LerpHprInterval(teeth, 0.1, Point3(0, -35, 0), startHpr=Point3(180, -35, 0)))
+            animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'litigator-teeth', duration=throwDuration),
+                                 ActorInterval(teeth, 'litigator-teeth', duration=0.3),
+                                 Func(teeth.pose, 'litigator-teeth', 1), Wait(0.7),
+                                 ActorInterval(teeth, 'litigator-teeth', duration=0.9))
+            propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack),
+                                 Func(MovieUtil.removeProp, teeth), Func(battle.movie.clearRenderProp, teeth))
+        else:
+            x = toon.getX(battle)
+            y = toon.getY(battle)
+            z = toon.getZ(battle)
+            z = z + 0.2
+            flyPoint = Point3(x, y - 2.1, z)
+            teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
+            teethAppearTrack.append(Wait(0.2))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 0.5, y - 2.5, z)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 1.0, y - 3.0, z + 0.4)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 1.3, y - 3.6, z)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 0.9, y - 3.1, z + 0.4)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 0.3, y - 2.6, z)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.1, y - 2.2, z + 0.4)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.4, y - 1.9, z)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.7, y - 2.1, z + 0.4)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.8, y - 2.3, z)))
+            teethAppearTrack.append(LerpScaleInterval(teeth, 0.6, MovieUtil.PNT3_NEARZERO))
+            hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.5),
+                                LerpHprInterval(teeth, 0.4, Point3(80, 0, 0), startHpr=Point3(180, 0, 0)),
+                                LerpHprInterval(teeth, 0.8, Point3(-10, 0, 0), startHpr=Point3(80, 0, 0)))
+            animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'teeth', duration=3.6))
+            propTrack = Sequence(Parallel(teethAppearTrack, hprTrack, animTrack), Func(MovieUtil.removeProp, teeth),
+                                 Func(battle.movie.clearRenderProp, teeth))
+        damageAnims = [['cringe',
+                        0.01,
+                        0.7,
+                        1.2],
+                       ['spit',
+                        0.01,
+                        2.95,
+                        1.47],
+                       ['spit',
+                        0.01,
+                        4.42,
+                        0.07],
+                       ['spit',
+                        0.08,
+                        4.49,
+                        -0.07],
+                       ['spit',
+                        0.08,
+                        4.42,
+                        0.07],
+                       ['spit',
+                        0.08,
+                        4.49,
+                        -0.07],
+                       ['spit',
+                        0.08,
+                        4.42,
+                        0.07],
+                       ['spit',
+                        0.08,
+                        4.49,
+                        -0.07],
+                       ['spit', 0.01, 4.42]]
+        dodgeAnims = [['jump', 0.01, 0.01]]
+        toonTrack = getToonTakeDamageTrackCheat(attack, toon, target['died'], int(dmg / 1.93), 2.1,
+                                                splicedDamageAnims=damageAnims, showDamageExtraTime=1)
+        notifyTrack = Sequence(Wait(3.1), Func(toon.showHpTextCheat, - int(dmg / 1.93)),
+                               Func(toon.showHpString, "VULNERABLE!"))
+        soundTrack = getSoundTrack('SA_chomp.ogg', delay=2, node=suit)
+        suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+        return Parallel(suitTrack, toonTrack, soundTrack, propTrack, notifyTrack)
+
+    def doGavel(self, attack, suit):
+        battle = attack['battle']
+        target = attack['target']
+        toon = target['toon']
+        targetPos = toon.getPos(battle)
+        headsUp = Func(suit.headsUp, battle, targetPos)
+        dmg = target['hp']
+        gavel = BattleProps.globalPropPool.getProp('LB_gavel')
+        toonPos = toon.getPos(battle)
+        initialScale = toon.getScale()
+        gavelPos = Point3(toonPos.getX(), 2, 0)
+        propTrack = Sequence(
+            MovieSuitAttacks.getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
+                               scaleUpPoint=Point3(1), scaleUpTime=1.5),
+            LerpHprInterval(gavel, 0.5, VBase3(0, 90, 0)),
+            Parallel(SoundInterval(globalBattleSoundCache.getSound('LB_gavel.ogg'), node=toon), Sequence(
+                Wait(0.1),
+                LerpHprInterval(gavel, 0.5, VBase3(0, 0, 0)),
+                LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO)
+            ))
+        )
+        taunt = "Any gags Toons use can and will be held against them in a court of law."
+        origPos, origHpr = battle.getActorPosHpr(suit)
+        suitReset = Func(suit.setHpr, battle, origHpr)
+        suitTrack = Sequence(headsUp, Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
+                             ActorInterval(suit, 'effort', playRate=1.25), suitReset, Func(suit.setNeutralAnimation))
+        toonTrack = Sequence(
+            Wait(2.0),
+            Parallel(
+                Func(toon.enterFlattened),
+            ),
+            Wait(1.0),
+            Parallel(
+                Sequence(
+                    Wait(0.5),
+                    Func(toon.exitFlattened)
+                ),
+                SoundInterval(globalBattleSoundCache.getSound('toon_decompress.ogg'), node=toon)),
+                Sequence(
+                    ActorInterval(toon, 'jump'),
+                    Func(toon.loop, 'neutral')
+                )
+            )
+        return Parallel(suitTrack, toonTrack, propTrack)
+
+    def doEnraged(self, attack, suit):
+        taunt = random.choice(
+            ["I've had enough of all of this!",
+"You got the goat, Toons!",
+"You made me maaa-d!"])
+        soundTrack = Sequence(
+                        SoundInterval(globalBattleSoundCache.getSound('SA_rage.ogg'), node=suit))
+        suitTrack = Sequence(ActorInterval(suit, 'rage'), Func(suit.makeAngry), Func(suit.setNeutralAnimation))
+        headInterval = Sequence(MovieUtil.createSuitEnragedInterval(suit, 0))
+        tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+        return Parallel(suitTrack, soundTrack, headInterval, tauntInterval)
+
+    def doPoisonSpray(self, attack, suit):
+        taunt = random.choice(
+            ["I can take it!",
+"My guard is up!",
+"It's just a scratch!",
+"Is that the best these Toons have?"])
+        suitTrack = Sequence(ActorInterval(suit, 'defense'), Func(suit.makeShielding), Func(suit.setNeutralAnimation))
+        tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+        soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_defense.ogg'), node=suit))
+        return Parallel(suitTrack, soundTrack, tauntInterval)
+
+    def doCourtSanction(self, attack, suit):
+        battle = attack['battle']
+        target = attack['target']
+        dmg = target['hp']
+        toon = target['toon']
+        sanctioned = self.__makeSanctionedNodePath()
+        missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
+        propTrack = Sequence(
+            Wait(0.5),
+            Func(battle.movie.needRestoreRenderProp, sanctioned),
+            Func(sanctioned.reparentTo, render),
+            Func(sanctioned.setScale, 0.6),
+            Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
+            Func(sanctioned.setP, 0),
+            Func(sanctioned.setR, 0),
+            MovieSuitAttacks.getPropThrowTrack(attack, sanctioned, [toon.getPos(toon)], [missPoint], .25),
+            Func(MovieUtil.removeProp, sanctioned),
+            Func(battle.movie.clearRenderProp, sanctioned)
+        )
+        toonTrack = ActorInterval(toon, 'conked')
+        tauntTrack = Func(suit.setChatAbsolute,
+                          random.choice(("Someone isn't doing their part around here.", "What happened to your little strategy called, 'teamwork'?", "I spy with my little eye, a Toon who isn't pulling their weight.")),
+                          CFSpeech | CFTimeout)
+        # toonTrack = getToonTrack(attack, 0.8, ['conked'], 0.2, ['sidestep'])
+        suitTrack = Sequence(ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimation))
+        soundTrack = Sequence(Wait(0.5),
+                    SoundInterval(globalBattleSoundCache.getSound('SA_sanction.ogg'), node=suit))
+        notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextCheat, - int(dmg / 2.2)),
+                               Func(toon.showHpString, "SANCTIONED!"))
+        return Parallel(suitTrack, toonTrack, propTrack, tauntTrack, soundTrack, notifyTrack)
+
+    def doCourtRecord3(self, suit):
+        tauntTrack = Func(suit.setChatAbsolute, 'Test Phrase.', CFSpeech | CFTimeout)
+        suitTrack = Sequence(ActorInterval(suit, 'cease'), Func(suit.setNeutralAnimation))
+        return Parallel(suitTrack, tauntTrack)
+
+    def doCourtCalculations(self, attack, suit):
+        calculator = BattleProps.globalPropPool.getProp('court-costs-calculator')
+        suitTrack = Sequence(ActorInterval(suit, 'calculating-costs'), Func(suit.setNeutralAnimation),
+                             Wait(2.0))
+        suitSpeechTrack = Func(suit.setChatAbsolute,
+                               "Calculating costs of litigation fees... Price index raised to %s." % (attack['target'][0]['hp'] + 4), CFSpeech | CFTimeout)
+        calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 0.25
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+        calcPropTrack = MovieSuitAttacks.getPropTrack(calculator, suit.getRightHand(), calcPosPoints, 0, calcDuration,
+                                     scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1,
+                                     propName='court-costs-calculator', animStartTime=0,
+                                     animDuration=2.9)
+        soundTrack = Sequence(
+                    SoundInterval(globalBattleSoundCache.getSound('SA_calculating_costs.ogg'), node=suit))
+        return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
+
+    def doCourtCalculations2(self, attack, suit):
+        calculator = BattleProps.globalPropPool.getProp('court-costs-calculator')
+        suitTrack = Sequence(ActorInterval(suit, 'calculating-costs'), Func(suit.setNeutralAnimation),
+                             Wait(2.0))
+        suitSpeechTrack = Func(suit.setChatAbsolute,
+                               "Calculating costs of litigation fees... Price index raised to %s." % (attack['target'][0]['hp'] + 6), CFSpeech | CFTimeout)
+        calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 0.25
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+        calcPropTrack = MovieSuitAttacks.getPropTrack(calculator, suit.getRightHand(), calcPosPoints, 0, calcDuration,
+                                     scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1,
+                                     propName='court-costs-calculator', animStartTime=0,
+                                     animDuration=2.9)
+        soundTrack = Sequence(
+                    SoundInterval(globalBattleSoundCache.getSound('SA_calculating_costs.ogg'), node=suit))
+        return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
+
+    def doCourtCalculationsWiretapper(self, attack, suit):
+        calculator = BattleProps.globalPropPool.getProp('court-costs-calculator')
+        suitTrack = Sequence(ActorInterval(suit, 'calculating-costs'), Func(suit.setNeutralAnimation),
+                             Wait(2.0))
+        suitSpeechTrack = Func(suit.setChatAbsolute,
+                               "Calculating costs of collect call fees... Price index raised to %s." % (attack['target'][0]['hp'] + 4), CFSpeech | CFTimeout)
+        calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 0.25
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+        calcPropTrack = MovieSuitAttacks.getPropTrack(calculator, suit.getRightHand(), calcPosPoints, 0, calcDuration,
+                                     scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1,
+                                     propName='court-costs-calculator', animStartTime=0,
+                                     animDuration=2.9)
+        soundTrack = Sequence(
+                    SoundInterval(globalBattleSoundCache.getSound('SA_calculating_costs.ogg'), node=suit))
+        return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
+
+    def doCourtCalculations2Wiretapper(self, attack, suit):
+        calculator = BattleProps.globalPropPool.getProp('court-costs-calculator')
+        suitTrack = Sequence(ActorInterval(suit, 'calculating-costs'), Func(suit.setNeutralAnimation),
+                             Wait(2.0))
+        suitSpeechTrack = Func(suit.setChatAbsolute,
+                               "Calculating costs of collect call fees... Price index raised to %s." % (attack['target'][0]['hp'] + 6), CFSpeech | CFTimeout)
+        calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 0.25
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+        calcPropTrack = MovieSuitAttacks.getPropTrack(calculator, suit.getRightHand(), calcPosPoints, 0, calcDuration,
+                                     scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1,
+                                     propName='court-costs-calculator', animStartTime=0,
+                                     animDuration=2.9)
+        soundTrack = Sequence(
+                    SoundInterval(globalBattleSoundCache.getSound('SA_calculating_costs.ogg'), node=suit))
+        return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
+
+    def doCaseInsurancePlan(self, suit):
+        theSuit = suit
+        if theSuit.dna.name == 'csm':
+            taunt = 'Hrm...'
+        else:
+            taunt = 'AHH!'
+
+        suitTracks = Parallel()
+        tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+        for suit in self.battle.activeSuits:
+            suitTrack = Sequence()
+            suitTrack.append(Wait(4.5))
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'scg':
+                    currentBossHealth = s.currHP
+            if currentBossHealth >= 1:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                elif suit.currHP + 85 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 85))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 85))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 85))
+            else:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                elif suit.currHP + 50 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                    suitTrack.append(Func(suit.setHealthForMe, x))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 50))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 50))
+            suitTrack.append(Func(suit.updateHealthBar, 0))
+            if not suit.dna.name == 'csm':
+                suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(
+                    OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
+            suitTrack.append(Func(suit.setNeutralAnimation))
+            suitTrack.append(Func(suit.makeInsured))
+            suitTracks.append(suitTrack)
+            suitTracks.append(tauntInterval)
+            suitTracks.append(MovieUtil.createSuitInsuranceInterval(theSuit))
+            suitTracks.append(Wait(6.5))
+        posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
+        knifeTracks = Parallel()
+        for suit in self.battle.activeSuits:
+            if suit.dna.name == 'csm':
+                theSuit = suit
+            hitPoint = suit.getPos(self.battle)
+            hitPoint.setZ(suit.height + 2)
+            hitPoint.setY(hitPoint.getY() + 0.5)
+            knife = BattleProps.globalPropPool.getProp('shredder-paper')
+            knifeTrack = Sequence(
+                MovieSuitAttacks.getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(1, 1, 1),
+                                   scaleUpTime=0.1),
+                Wait(2.3),
+                Parallel(
+                    MovieSuitAttacks.getThrowTrack(knife, hitPoint, 1.5, self.battle, -30.288),
+                    LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
+                Parallel(
+                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                    Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
+                Func(MovieUtil.removeProp, knife)
+            )
+            knifeTracks.append(knifeTrack)
+        # cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
+        suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimation))
+        # insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
+        soundTrack1 = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_insurance.ogg'), node=suit))
+        soundTrack2 = Sequence(Wait(2.8), SoundInterval(globalBattleSoundCache.getSound('SA_extra_tip.ogg'), node=suit))
+        multiTrack = Parallel(soundTrack1, soundTrack2)
+        healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit))
+        return Parallel(suitTrack, suitTracks, healSound, multiTrack, knifeTracks)
+
+    def doCaseInsurancePlanSkelecog(self, suit):
+        theSuit = suit
+        if theSuit.dna.name == 'csm':
+            taunt = random.choice(
+                ["Hmph...", "Hrnhmpf...",
+                 "Hrm...",
+                 "Hm, hm..."])
+        else:
+            taunt = 'AHH'
+
+        suitTracks = Parallel()
+        tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+        for suit in self.battle.activeSuits:
+            suitTrack = Sequence()
+            suitTrack.append(Wait(4.5))
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'scg':
+                    currentBossHealth = s.currHP
+            if currentBossHealth >= 1:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                elif suit.currHP + 85 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 85))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 85))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 85))
+            else:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                elif suit.currHP + 50 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                    suitTrack.append(Func(suit.setHealthForMe, x))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 50))
+                    suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 50))
+            suitTrack.append(Func(suit.updateHealthBar, 0))
+            if not suit.dna.name == 'csm':
+                suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(
+                    OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
+            suitTrack.append(Func(suit.setNeutralAnimation))
+            suitTrack.append(Func(suit.makeInsured))
+            suitTracks.append(suitTrack)
+            suitTracks.append(tauntInterval)
+            suitTracks.append(ActorInterval(theSuit, 'throw-paper'))
+            suitTracks.append(Wait(6.5))
+        posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
+        knifeTracks = Parallel()
+        for suit in self.battle.activeSuits:
+            if suit.dna.name == 'csm':
+                theSuit = suit
+            hitPoint = suit.getPos(self.battle)
+            hitPoint.setZ(suit.height + 2)
+            hitPoint.setY(hitPoint.getY() + 0.5)
+            knife = BattleProps.globalPropPool.getProp('shredder-paper')
+            knifeTrack = Sequence(
+                MovieSuitAttacks.getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(1, 1, 1),
+                                   scaleUpTime=0.1),
+                Wait(2.3),
+                Parallel(
+                    MovieSuitAttacks.getThrowTrack(knife, hitPoint, 1.5, self.battle, -30.288),
+                    LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
+                Parallel(
+                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                    Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
+                Func(MovieUtil.removeProp, knife)
+            )
+            knifeTracks.append(knifeTrack)
+        # cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
+        suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimation))
+        # insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
+        # soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
+        soundTrack2 = Sequence(Wait(2.8), SoundInterval(globalBattleSoundCache.getSound('SA_extra_tip.ogg'), node=suit))
+        multiTrack = soundTrack2
+        healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit))
+        return Parallel(suitTrack, suitTracks, healSound, multiTrack, knifeTracks)
+
+    def doCaseInsurancePlanInsurance(self, suit):
+        theSuit = suit
+        if theSuit.dna.name == 'csm':
+            taunt = 'Hrm...'
+        else:
+            taunt = 'AHH!'
+
+        suitTracks = Parallel()
+        tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+        for suit in self.battle.activeSuits:
+            suitTrack = Sequence()
+            suitTrack.append(Wait(4.5))
+            x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+            if suit.currHP >= (suit.maxHP * suit.hardMaxHP) and not suit.isLured:
+                suitTrack.append(Func(suit.showHpText, 0))
+            elif suit.currHP + 50 > (suit.maxHP * suit.hardMaxHP) and not suit.isLured:
+                suitTrack.append(Func(suit.setHealthForMe, 0))
+            elif not suit.isLured:
+                suitTrack.append(Func(suit.setHealthForMe, 0))
+            suitTrack.append(Func(suit.showHpTextWhite, "INSURANCE!", 0))
+            suitTrack.append(Func(suit.updateHealthBar, 0))
+            if not suit.dna.name == 'csm':
+                suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(
+                    OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
+            suitTrack.append(Func(suit.setNeutralAnimation))
+            suitTrack.append(Func(suit.makeInsured))
+            suitTracks.append(suitTrack)
+            suitTracks.append(tauntInterval)
+            suitTracks.append(MovieUtil.createSuitInsuranceInterval(theSuit))
+            suitTracks.append(Wait(6.5))
+        posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
+        knifeTracks = Parallel()
+        for suit in self.battle.activeSuits:
+            if suit.dna.name == 'csm':
+                theSuit = suit
+            hitPoint = suit.getPos(self.battle)
+            hitPoint.setZ(suit.height + 2)
+            hitPoint.setY(hitPoint.getY() + 0.5)
+            knife = BattleProps.globalPropPool.getProp('shredder-paper')
+            knifeTrack = Sequence(
+                MovieSuitAttacks.getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(1, 1, 1),
+                                   scaleUpTime=0.1),
+                Wait(2.3),
+                Parallel(
+                    MovieSuitAttacks.getThrowTrack(knife, hitPoint, 1.5, self.battle, -30.288),
+                    LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
+                Parallel(
+                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                    Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
+                Func(MovieUtil.removeProp, knife)
+            )
+            knifeTracks.append(knifeTrack)
+        # cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
+        suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimation))
+        # insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
+        soundTrack1 = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_insurance.ogg'), node=suit))
+        soundTrack2 = Sequence(Wait(2.8), SoundInterval(globalBattleSoundCache.getSound('SA_extra_tip.ogg'), node=suit))
+        multiTrack = Parallel(soundTrack1, soundTrack2)
+        healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit))
+        return Parallel(suitTrack, suitTracks, healSound, multiTrack, knifeTracks)
+
+    def doCaseInsurancePlanSkelecogInsurance(self, suit):
+        theSuit = suit
+        if theSuit.dna.name == 'csm':
+            taunt = random.choice(
+                ["Hmph...", "Hrnhmpf...",
+                 "Hrm...",
+                 "Hm, hm..."])
+        else:
+            taunt = 'AHH'
+
+        suitTracks = Parallel()
+        tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+        for suit in self.battle.activeSuits:
+            suitTrack = Sequence()
+            suitTrack.append(Wait(4.5))
+            x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+            if suit.currHP >= (suit.maxHP * suit.hardMaxHP) and not suit.isLured and not suit.isInsured:
+                suitTrack.append(Func(suit.showHpText, 0))
+            elif suit.currHP + 50 > (suit.maxHP * suit.hardMaxHP) and not suit.isLured and not suit.isInsured:
+                suitTrack.append(Func(suit.setHealthForMe, 0))
+            elif not suit.isLured:
+                suitTrack.append(Func(suit.setHealthForMe, 0))
+            suitTrack.append(Func(suit.showHpTextWhite, "INSURANCE!", 0))
+            suitTrack.append(Func(suit.updateHealthBar, 0))
+            if not suit.dna.name == 'csm':
+                suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(
+                    OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
+            suitTrack.append(Func(suit.setNeutralAnimation))
+            suitTrack.append(Func(suit.makeInsured))
+            suitTracks.append(suitTrack)
+            suitTracks.append(tauntInterval)
+            suitTracks.append(ActorInterval(theSuit, 'throw-paper'))
+            suitTracks.append(Wait(6.5))
+        posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
+        knifeTracks = Parallel()
+        for suit in self.battle.activeSuits:
+            if suit.dna.name == 'csm':
+                theSuit = suit
+            hitPoint = suit.getPos(self.battle)
+            hitPoint.setZ(suit.height + 2)
+            hitPoint.setY(hitPoint.getY() + 0.5)
+            knife = BattleProps.globalPropPool.getProp('shredder-paper')
+            knifeTrack = Sequence(
+                MovieSuitAttacks.getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(1, 1, 1),
+                                   scaleUpTime=0.1),
+                Wait(2.3),
+                Parallel(
+                    MovieSuitAttacks.getThrowTrack(knife, hitPoint, 1.5, self.battle, -30.288),
+                    LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
+                Parallel(
+                    LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
+                    Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
+                Func(MovieUtil.removeProp, knife)
+            )
+            knifeTracks.append(knifeTrack)
+        # cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
+        suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimation))
+        # insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
+        # soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
+        soundTrack2 = Sequence(Wait(2.8), SoundInterval(globalBattleSoundCache.getSound('SA_extra_tip.ogg'), node=suit))
+        multiTrack = soundTrack2
+        healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit))
+        return Parallel(suitTrack, suitTracks, healSound, multiTrack, knifeTracks)
 
     def finish(self):
         self.track.finish()

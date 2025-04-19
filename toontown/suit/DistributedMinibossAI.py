@@ -28,13 +28,7 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
         self.nearToons = []
         self.suits = []
         self.activeSuits = []
-        self.toonsA = []
-        self.toonsB = []
         self.reserveSuits = []
-        self.suitsA = []
-        self.activeSuitsA = []
-        self.suitsB = []
-        self.activeSuitsB = []
         self.barrier = None
         self.keyStates = [
          'BattleOne', 'BattleTwo', 'BattleThree', 'Victory']
@@ -181,10 +175,10 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
          rentals, normals)
 
     def sendBattleIds(self):
-        self.sendUpdate('setBattleIds', [self.battleNumber, self.battleAId, self.battleBId])
+        self.sendUpdate('setBattleIds', [self.battleNumber, self.battleId, self.battleId])
 
     def sendToonIds(self):
-        self.sendUpdate('setToonIds', [self.involvedToons, self.toonsA, self.toonsB])
+        self.sendUpdate('setToonIds', [self.involvedToons, self.toons, self.toons])
 
     def damageToon(self, toon, deduction):
         toon.takeDamage(deduction)
@@ -306,10 +300,8 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
                 toon.b_setCogIndex(-1)
 
     def enterBattleOne(self):
-        if self.battleA:
-            self.battleA.startBattle(self.toonsA, self.suitsA)
-        if self.battleB:
-            self.battleB.startBattle(self.toonsB, self.suitsB)
+        if self.battle:
+            self.battle.startBattle(self.toons, self.suits)
 
     def exitBattleOne(self):
         self.resetBattles()
@@ -340,10 +332,6 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
         self.battleNumber = 0
         self.battle = None
         self.battleId = 0
-        self.battleA = None
-        self.battleAId = 0
-        self.battleB = None
-        self.battleBId = 0
         self.arenaSide = None
         self.toonSkillPtsGained = {}
         self.toonExp = {}
@@ -358,26 +346,19 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def resetBattles(self):
         sendReset = 0
-        if self.battleA:
-            self.battleA.requestDelete()
-            self.battleA = None
-            self.battleAId = 0
+        if self.battle:
+            self.battle.requestDelete()
+            self.battle = None
+            self.battleId = 0
             sendReset = 1
-        if self.battleB:
-            self.battleB.requestDelete()
-            self.battleB = None
-            self.battleBId = 0
-            sendReset = 1
-        for suit in self.suitsA + self.suitsB:
+        for suit in self.suits:
             suit.requestDelete()
 
         for suit, joinChance in self.reserveSuits:
             suit.requestDelete()
 
-        self.suitsA = []
-        self.activeSuitsA = []
-        self.suitsB = []
-        self.activeSuitsB = []
+        self.suits = []
+        self.activeSuits = []
         self.reserveSuits = []
         self.battleNumber = 0
         if sendReset:
@@ -385,23 +366,17 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
         return
 
     def resetToons(self):
-        if self.toonsA or self.toonsB:
+        if self.toons:
             self.looseToons = self.looseToons + self.involvedToons
             self.involvedToons = []
-            self.toonsA = []
-            self.toonsB = []
+            self.toons = []
             self.sendToonIds()
 
     def divideToons(self):
         toons = self.involvedToons[:]
         random.shuffle(toons)
         numToons = min(len(toons), 8)
-        if numToons < 4:
-            numToonsB = numToons / 2
-        else:
-            numToonsB = (numToons + random.choice([0, 1])) / 2
-        self.toonsA = toons[numToonsB:numToons]
-        self.toonsB = toons[:numToonsB]
+        self.toons = toons[:numToons]
         self.looseToons += toons[numToons:]
         self.sendToonIds()
 
@@ -434,33 +409,20 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
             return
         self.battleNumber = battleNumber
         suitHandles = self.generateSuits(battleNumber)
-        self.suitsA = suitHandles['activeSuits']
-        self.activeSuitsA = self.suitsA[:]
+        self.suits = suitHandles['activeSuits']
+        self.activeSuits = self.suits[:]
         self.reserveSuits = suitHandles['reserveSuits']
         suitHandles = self.generateSuits(battleNumber)
-        self.suitsB = suitHandles['activeSuits']
-        self.activeSuitsB = self.suitsB[:]
-        self.reserveSuits += suitHandles['reserveSuits']
-        if self.toonsA:
-            self.battleA = self.makeBattle(bossCogPosHpr, ToontownGlobals.BossCogBattleAPosHpr, self.handleRoundADone,
-                                           self.handleBattleADone, battleNumber, 0)
-            self.battleAId = self.battleA.doId
+        if self.toons:
+            self.battle = self.makeBattle(bossCogPosHpr, ToontownGlobals.BossCogBattleAPosHpr, self.handleRoundADone,
+                                          self.handleBattleADone, battleNumber, 0)
+            self.battleId = self.battle.doId
         else:
-            self.moveSuits(self.activeSuitsA)
-            self.suitsA = []
-            self.activeSuitsA = []
+            self.moveSuits(self.activeSuits)
+            self.suits = []
+            self.activeSuits = []
             if self.arenaSide == None:
                 self.b_setArenaSide(0)
-        if self.toonsB:
-            self.battleB = self.makeBattle(bossCogPosHpr, ToontownGlobals.BossCogBattleBPosHpr, self.handleRoundBDone,
-                                           self.handleBattleBDone, battleNumber, 1)
-            self.battleBId = self.battleB.doId
-        else:
-            self.moveSuits(self.activeSuitsB)
-            self.suitsB = []
-            self.activeSuitsB = []
-            if self.arenaSide == None:
-                self.b_setArenaSide(1)
         self.sendBattleIds()
         return
 
@@ -502,22 +464,22 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
             self.reserveSuits.append((suit, 0))
 
     def handleRoundADone(self, toonIds, totalHp, deadSuits):
-        if self.battleA:
-            self.handleRoundDone(self.battleA, self.suitsA, self.activeSuitsA, toonIds, totalHp, deadSuits)
+        if self.battle:
+            self.handleRoundDone(self.battle, self.suits, self.activeSuits, toonIds, totalHp, deadSuits)
 
     def handleRoundBDone(self, toonIds, totalHp, deadSuits):
         if self.battleB:
             self.handleRoundDone(self.battleB, self.suitsB, self.activeSuitsB, toonIds, totalHp, deadSuits)
 
     def handleBattleADone(self, zoneId, toonIds):
-        if self.battleA:
-            self.battleA.requestDelete()
-            self.battleA = None
-            self.battleAId = 0
+        if self.battle:
+            self.battle.requestDelete()
+            self.battle = None
+            self.battleId = 0
             self.sendBattleIds()
         if self.arenaSide == None:
             self.b_setArenaSide(0)
-        if not self.battleB and self.hasToons() and self.hasToonsAlive():
+        if not self.battle and self.hasToons() and self.hasToonsAlive():
             self.b_setState(self.postBattleState)
         return
 

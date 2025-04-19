@@ -408,12 +408,12 @@ class Avatar(Actor, ShadowCaster):
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if self.animHead == None:
             for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
                 ).start()
         else:
             for headPart in self.animatedHeadParts: Sequence(
                 ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
             ).start()
 
     def checkCogHP(self, battle):
@@ -525,19 +525,19 @@ class Avatar(Actor, ShadowCaster):
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if self.dna.name == 'crf':
                 for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13else '',), fromFrame=0, toFrame=22)
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',), fromFrame=0, toFrame=22)
                 ).start()
         if self.dna.name == 'mad':
                 for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',), fromFrame=0, toFrame=22)
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',), fromFrame=0, toFrame=22)
                 ).start()
         if self.dna.name == 'dsf':
                 for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',), fromFrame=0, toFrame=22)
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',), fromFrame=0, toFrame=22)
                 ).start()
         else:
                 for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
                 ).start()
 
     def setChatMuted(self, chatString, chatFlags, dialogue = None, interrupt = 1, quiet = 0):

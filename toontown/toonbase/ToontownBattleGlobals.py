@@ -8,7 +8,7 @@ BattleCamFaceOffPos = Point3(0, -10, 4)
 BattleCamDefaultPos1 = Point3(0, -8.6, 18.5)
 BattleCamDefaultHpr1 = Vec3(0, 0, 0)
 BattleCamDefaultPos2 = Point3(0, -9.1, 22)
-BattleCamDefaultHpr2 = Vec3(0, -61, 0)
+BattleCamDefaultHpr2 = Vec3(0, -56, 0)
 BattleCamDefaultFov = 100
 BattleCamMenuFov = 65.0
 BattleCamMenuFov2 = 85.0
@@ -744,6 +744,7 @@ ValidStatusConditions = (
     'trapBoost',
     'noTrapGags',
     'lureBoost',
+    'nolevel4s',
     'noLureGags',
     'soundBoost',
     'noSoundGags',

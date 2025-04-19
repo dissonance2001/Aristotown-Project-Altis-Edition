@@ -228,10 +228,8 @@ class SuitPlannerInteriorAI:
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 1)
             miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 1)
             miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 1)
-            activeSuits.append(miniboss4)
-            activeSuits.append(miniboss2)
-            activeSuits.append(miniboss)
-            activeSuits.append(miniboss3)
+            activeSuits.append(random.choice((miniboss, miniboss3)))
+            activeSuits.append(random.choice((miniboss2, miniboss4)))
         elif specialCode == 'lit2':
             miniboss = self.__genSuitObject(self.zoneId, 22, 'l', 22, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 23, 'l', 23, 0)

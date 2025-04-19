@@ -237,10 +237,226 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                                                         'level': level}
         return nameInfo
 
+    def createNameInfoShivering(self):
+        name = 'Shivering Club President'
+        dept = 'Bossbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoHighStakes(self):
+        name = 'High Stakes Club President'
+        dept = 'Bossbot'
+        level = '20.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoMulligan(self):
+        name = 'Mulligan Club President'
+        dept = 'Bossbot'
+        level = '21.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoChipFan(self):
+        name = 'Chip Fan Club President'
+        dept = 'Bossbot'
+        level = '23.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
     def createNameInfoLightBlue(self):
         name = 'Light Blue Silhouette'
         dept = 'Cashbot'
         level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoPuzzling(self):
+        name = 'Puzzling Club President'
+        dept = 'Bossbot'
+        level = '24.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoAncient(self):
+        name = 'Ancient Club President'
+        dept = 'Bossbot'
+        level = '22.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoSpongy(self):
+        name = 'Spongy Mint Supervisor'
+        dept = 'Cashbot'
+        level = '24.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoFraudulent(self):
+        name = 'Fraudulent Mint Supervisor'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoAccountant(self):
+        name = 'Accountant Mint Supervisor'
+        dept = 'Cashbot'
+        level = '23.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoConfused(self):
+        name = 'Confused Mint Supervisor'
+        dept = 'Cashbot'
+        level = '22.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoControlling(self):
+        name = 'Controlling Mint Supervisor'
+        dept = 'Cashbot'
+        level = '21.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoAbacus(self):
+        name = 'Abacus Mint Supervisor'
+        dept = 'Cashbot'
+        level = '20.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoLaborious(self):
+        name = 'Laborious Head Attorney'
+        dept = 'Lawbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoChrono(self):
+        name = 'Chrono Head Attorney'
+        dept = 'Lawbot'
+        level = '24.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoMonolithic(self):
+        name = 'Monolithic Head Attorney'
+        dept = 'Lawbot'
+        level = '23.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoOmnipotent(self):
+        name = 'Omnipotent Head Attorney'
+        dept = 'Lawbot'
+        level = '21.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoOverseer(self):
+        name = 'Overseer Head Attorney'
+        dept = 'Lawbot'
+        level = '22.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoSneaky(self):
+        name = 'Sneaky Head Attorney'
+        dept = 'Lawbot'
+        level = '20.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoSniper(self):
+        name = 'Sniper Factory Foreman'
+        dept = 'Sellbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoRedTape(self):
+        name = 'Red Tape\nFactory Foreman'
+        dept = 'Sellbot'
+        level = '24.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoContractor(self):
+        name = 'Contractor Factory Foreman'
+        dept = 'Sellbot'
+        level = '23.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoExplosive(self):
+        name = 'Explosive Factory Foreman'
+        dept = 'Sellbot'
+        level = '22.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoBurning(self):
+        name = 'Burning Factory Foreman'
+        dept = 'Sellbot'
+        level = '21.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoSleepy(self):
+        name = 'Sleepy Factory Foreman'
+        dept = 'Sellbot'
+        level = '20.mgr'
         nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
                                                         'dept': dept,
                                                         'level': level}
@@ -266,6 +482,24 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def createNameInfoOrange(self):
         name = 'Orange Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoWhite(self):
+        name = 'White Silhouette'
+        dept = 'Cashbot'
+        level = '25.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoMagenta(self):
+        name = 'Magenta Silhouette'
         dept = 'Cashbot'
         level = '25.mgr'
         nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,

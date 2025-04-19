@@ -745,9 +745,9 @@ def __splatSuit(suit, level):
     splat = TextureStage(splatDict[level])
     splat.setMode(TextureStage.MDecal)
     #splat.setSavedResult(True)
-    for headPart in suit.headParts:
-        if not suit.dna.name == 'lit':
-            headPart.setTexture(splat, splatTex)
+    #for headPart in suit.headParts:
+        #if not suit.dna.name == 'lit':
+            #headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
         suit.find('**/body').setTexture(splat, splatTex)

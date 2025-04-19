@@ -1293,6 +1293,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                             self.makeUnpressable(button, track, level)
                         if level == 7 and 'nolevel8s' in base.localAvatar.battleConditions:
                             self.makeUnpressable(button, track, level)
+                        if level == 3 and 'nolevel4s' in base.localAvatar.battleConditions:
+                            self.makeUnpressable(button, track, level)
                         if level == 4 and 'nolevel5s' in base.localAvatar.battleConditions:
                             self.makeUnpressable(button, track, level)
                         if level == 5 and 'nolevel6s' in base.localAvatar.battleConditions:
