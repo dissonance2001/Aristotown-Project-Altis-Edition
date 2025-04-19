@@ -1,5 +1,5 @@
 # Window settings:
-window-title Aristotown: Altis Edition [tew tow] Version 1.6.9.
+window-title Project Altis [BETA 1.2.0]
 win-origin -2 -2
 icon-filename phase_3/etc/icon.ico
 cursor-filename phase_3/etc/toonmono.cur
@@ -173,7 +173,3 @@ want-live-updates #t
 
 # SSL
 server-force-ssl #f
-
-# Harfbuzz is good for handling non-latin text.
-# However, this causes odd spacing on Cog nametags, so let's disable it.
-text-use-harfbuzz #f
