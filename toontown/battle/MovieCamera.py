@@ -618,6 +618,8 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == WHEEL_SPIN:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == RAISING_THE_ANTE:
+        camTrack.append(defaultCamera(openShotDuration=1.2))
     elif name == SWIRL_BATH:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == SNAP_WET:

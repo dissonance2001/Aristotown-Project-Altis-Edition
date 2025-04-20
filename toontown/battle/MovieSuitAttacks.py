@@ -424,6 +424,8 @@ def doSuitAttack(attack):
         suitTrack = doJargon(attack)
     elif name == RESTRAINING_ORDER_WSI:
         suitTrack = doRestrainingOrder(attack)
+    elif name == RAISING_THE_ANTE:
+        suitTrack = doRaisingTheAnte(attack)
     elif name == SWIRL_BATH:
         suitTrack = doRolled(attack)
     elif name == LEGALESE:
@@ -3824,6 +3826,57 @@ def doOilRain(attack):
             puddleTracks.append(puddleTrack)
     soundTrack1 = getSoundTrack('SA_liquidate.ogg', delay=2.0, node=suit)
     return Parallel(suitTrack, toonTracks, cloudPropTracks, soundTrack1, puddleTracks)
+
+def doRaisingTheAnte(attack):
+    '''
+    A battle animation to give Toons the damage boost based on the Raising the Ante status effect in Corporate Clash.
+    author: Professor Control
+    '''
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTrack = getSuitAnimTrack(attack)
+    #suitTrack.append(doWheelSpin2(attack))
+    partTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+
+        # I never got to make an actual particle effect work, so I settled for making a faux particle effect.
+        numArrows = 15 # I don't know how long we want the particle effect to go on for, but we can change that depending on how many arrows we want.
+        radius = 2.0
+        partTrack = Parallel()
+        for i in xrange(numArrows):
+            # Create the arrow.
+            arrow = loader.loadModel('phase_3.5/models/gui/matching_game_gui').find('**/minnieArrow') # Get an arrow immediately.
+            arrow.setScale(5.0) # Maybe could be adjusted?
+            arrow.setBillboardPointEye() # This could increase how much of a particle effect it's intended to look like.
+            arrow.setR(270) # Arrow points up.
+            color = random.choice([(1, 0, 0, 1),
+             (1, 1, 0, 1),
+             (0, 0, 1, 1)]) # Color the arrows according to these colors as that is what the status effect icon looks like.
+            arrow.setColor(*color)
+
+            # Now get the position of the arrow.
+            angle = random.random() * 2.0 * math.pi # Have a random angle decided.  360-degree limit, but due to the angle being in radians, use such units.  360 degrees in radians is 2 times pi.
+            x = radius * math.cos(angle) + toon.getX(battle)
+            y = radius * math.sin(angle) + toon.getY(battle)
+
+            # Now assemble the arrow movement.
+            oneArrowTrack = Sequence(
+                Wait(0.9 + i * 0.25), # The delay for the arrow.
+                Func(arrow.reparentTo, battle),
+                Func(arrow.setPos, Point3(x, y, 0)),
+                Track(
+                    (0.0, LerpFunctionInterval(arrow.setZ, 0.8, 0, 3, blendType='easeOut')), # Raise the arrow.
+                    (0.6, LerpFunctionInterval(arrow.setAlphaScale, 0.2, 1, 0)) # Before the arrow completes raising, make it fade.
+                ),
+                Func(MovieUtil.removeProp, arrow)
+            )
+            partTrack.append(oneArrowTrack)
+        
+        partTracks.append(partTrack)
+
+    return Parallel(suitTrack, partTracks)
 
 def doRolled(attack):
     suit = attack['suit']
