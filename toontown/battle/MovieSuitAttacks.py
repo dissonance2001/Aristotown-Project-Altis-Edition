@@ -4066,11 +4066,6 @@ def doFloodTheMarket(attack):
     battle = attack['battle']
     targets = attack['target']
     damageDelay = 1.7
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     particleEffect = BattleParticles.createParticleEffect(file='floodTheMarket')
     waterfallEffect = BattleParticles.createParticleEffect(file='floodTheMarketWaterfall')
     suitTrack = getSuitAnimTrack(attack)
@@ -4085,51 +4080,18 @@ def doFloodTheMarket(attack):
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0, showDamageExtraTime=1.0)
-    synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('SA_synergy.ogg'), node=suit))
-    if hitAtleastOneToon > 0:
-        puddleCounter = 0
-        for t in targets:
-            toon = t['toon']
-            if t['hp'] > 0:
-                if puddleCounter == 0:
-                    puddle = globalPropPool.getProp('quicksand')
-                    puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
-                    puddle.setHpr(Point3(120, 0, 0))
-                    puddle.setScale(0.01)
-                    puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Func(puddle.reparentTo, battle), Func(puddle.setPos, toon.getPos(battle)), LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
-                if puddleCounter == 1:
-                    puddle2 = globalPropPool.getProp('quicksand')
-                    puddle2.setColor(Vec4(0.0, 0.0, 1.0, 1))
-                    puddle2.setHpr(Point3(120, 0, 0))
-                    puddle2.setScale(0.01)
-                    puddleTrack1 = Sequence(Func(battle.movie.needRestoreRenderProp, puddle2), Func(puddle2.reparentTo, battle), Func(puddle2.setPos, toon.getPos(battle)), LerpScaleInterval(puddle2, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle2.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle2), Func(battle.movie.clearRenderProp, puddle2))
-                if puddleCounter == 2:
-                    puddle3 = globalPropPool.getProp('quicksand')
-                    puddle3.setColor(Vec4(0.0, 0.0, 1.0, 1))
-                    puddle3.setHpr(Point3(120, 0, 0))
-                    puddle3.setScale(0.01)
-                    puddleTrack2 = Sequence(Func(battle.movie.needRestoreRenderProp, puddle3), Func(puddle3.reparentTo, battle), Func(puddle3.setPos, toon.getPos(battle)), LerpScaleInterval(puddle3, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle3.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle3), Func(battle.movie.clearRenderProp, puddle3))
-                if puddleCounter == 3:
-                    puddle4 = globalPropPool.getProp('quicksand')
-                    puddle4.setColor(Vec4(0.0, 0.0, 1.0, 1))
-                    puddle4.setHpr(Point3(120, 0, 0))
-                    puddle4.setScale(0.01)
-                    puddleTrack3 = Sequence(Func(battle.movie.needRestoreRenderProp, puddle4), Func(puddle4.reparentTo, battle), Func(puddle4.setPos, toon.getPos(battle)), LerpScaleInterval(puddle4, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle4.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle4), Func(battle.movie.clearRenderProp, puddle4))
-                puddleCounter +=1
-        if puddleCounter == 1:
-            puddleCounter = 0
-            return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, puddleTrack, toonTracks)
-        if puddleCounter == 2:
-            puddleCounter = 0
-            return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, puddleTrack, puddleTrack1, toonTracks)
-        if puddleCounter == 3:
-            puddleCounter = 0
-            return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, puddleTrack, puddleTrack1,  puddleTrack2, toonTracks)
-        if puddleCounter == 4:
-            puddleCounter = 0
-            return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, puddleTrack, puddleTrack1,  puddleTrack2,  puddleTrack3, toonTracks)
-    else:
-        return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, toonTracks)
+    synergySoundTrack = getSoundTrack('SA_synergy.ogg', delay=0.9, node=suit)
+    puddleTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        if t['hp'] > 0:
+            puddle = globalPropPool.getProp('quicksand')
+            puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
+            puddle.setHpr(Point3(120, 0, 0))
+            puddle.setScale(0.01)
+            puddleTracks.append(Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Func(puddle.reparentTo, battle), Func(puddle.setPos, toon.getPos(battle)), LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle)))
+    
+    return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, puddleTracks, toonTracks)
 
 
 def doWhitePowder(attack):
