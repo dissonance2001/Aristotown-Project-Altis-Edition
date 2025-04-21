@@ -564,6 +564,8 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == DOUBLE_TALK:
         camTrack.append(defaultCamera(openShotDuration=2.9))
+    elif name == DOUBLE_WINDSOR:
+        camTrack.append(defaultCamera(openShotDuration=1.8))
     elif name == EVICTION_NOTICE:
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == LD_EVICTION_NOTICE:
