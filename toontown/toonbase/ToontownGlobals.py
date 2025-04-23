@@ -212,6 +212,9 @@ LegumeLane = 6400
 FunnyFarm = 500000
 GoofySpeedway = 8000
 YeOlde = 7000
+KnightKnoll = 7100
+NobleNook = 7200
+WizardWay=7300
 DonaldsDreamland = 9000
 BarnacleBoulevard = 1100
 SeaweedStreet = 1200
@@ -237,10 +240,12 @@ LullabyLane = 9100
 PajamaPlace = 9200
 TwilightTerrace = 9300
 ToonHall = 2513
+PacesetterLobby = 9613
 ToontownCentralOld = 20000
 HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, WackyWay),
  DonaldsDock: (BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue),
  TheBrrrgh: (WalrusWay, SleetStreet, PolarPlace, ArcticAvenue),
+ YeOlde: (KnightKnoll, NobleNook, WizardWay),
  MinniesMelodyland: (AltoAvenue, BaritoneBoulevard, TenorTerrace, SopranoStreet),
  DaisyGardens: (ElmStreet, MapleStreet, OakStreet, RoseValley),
  OutdoorZone: (AcornAvenue, PeanutPlace, WalnutWay, LegumeLane),
