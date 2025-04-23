@@ -1,5 +1,3 @@
-// the highest phase in this file should be phase 4
-
 hood_model "phase_3.5/models/modules/TT_A1" [
 	store_node [ "toon_landmark" "toon_landmark_TT_A1" "TT_A1"  ]
 	]
@@ -11,7 +9,7 @@ hood_model "phase_3.5/models/modules/hqTT" [
 hood_model "phase_3.5/models/props/HQ_telescope-mod" [
 	store_node [ "prop" "animated_prop_HQTelescopeAnimatedProp" "telescope" ]
 	]
-	
+
 hood_model "phase_3.5/models/props/HQ_periscope-mod" [
 	store_node [ "prop" "animated_prop_HQPeriscopeAnimatedProp" "periscope" ]
 	]
@@ -40,38 +38,68 @@ hood_model "phase_3.5/models/props/trees" [
 	store_node [ "holiday_prop" "prop_tree_fat_ur" "prop_tree_fat_no_box_ur" ]
 	store_node [ "holiday_prop" "prop_tree_fat_ul" "prop_tree_fat_no_box_ul" ]
 	]
-    
-store_texture [ "texture" "street_street_TT_tex"	
-		"phase_3.5/maps/sidewalkbrown.jpg"		]
+
+store_texture [ "texture" "street_street_TT_tex"
+		"phase_3.5/maps/sidewalkbrown.png"		]
 store_texture [ "texture" "street_sidewalk_TT_tex"
-		"phase_3.5/maps/sidewalk_4cont_brown.jpg"	]
+		"phase_3.5/maps/sidewalk_4cont_brown.png"	]
 store_texture [ "texture" "street_curb_TT_tex"
-		"phase_3.5/maps/curb_brown_even.jpg"	]
+		"phase_3.5/maps/curb_brown_even.png"	]
 
 store_font [ "font" "TT_Comedy"
-             "phase_3/models/fonts/Comedy" ]
-store_font [ "font" "BR_Aftershock" 
-             "phase_3/models/fonts/Aftershock" ]
+             "phase_3/fonts/Comedy.ttf" ]
+store_font [ "font" "BR_Aftershock"
+             "phase_3/fonts/Aftershock.ttf" ]
 store_font [ "font" "DD_Portago"
-             "phase_3/models/fonts/Portago" ]
+             "phase_3/fonts/Portago.ttf" ]
 
 hood_model "phase_4/models/props/signs_TTC" [
 	store_node [ "sign" "TTC_sign1" ]
 	store_node [ "sign" "TTC_sign2" ]
 	store_node [ "sign" "TTC_sign3" ]
 	]
-	
+
 hood_model "phase_6/models/props/signs_DD" [
 	store_node [ "sign" "DD_sign1" ]
 	store_node [ "sign" "DD_sign2" ]
 	store_node [ "sign" "DD_sign3" ]
 	]
 
-hood_model "phase_3.5/models/props/streetlight_TT" [
-	store_node [ "holiday_prop" "prop_post_sign" ]
-	store_node [ "holiday_prop" "prop_post_one_light" ]
-	store_node [ "holiday_prop" "prop_post_three_light" ]
-	]
+hood_model "phase_4/models/accessories/outback/boomerang" [
+	store_node [ "prop" "ttcc_prop_boomerang" "" ]
+        ]
+		
+hood_model "phase_13/models/events/apriltoons/fusionpack" [
+	store_node [ "prop" "ttcc_prop_fusionpack" "" ]
+        ]
+		
+hood_model "phase_13/models/events/mayday/plane" [
+	store_node [ "prop" "ttcc_prop_plane" "" ]
+        ]
+		
+hood_model "phase_13/models/events/mayday/plane_blue" [
+	store_node [ "prop" "ttcc_prop_plane_blue" "" ]
+        ]
+
+hood_model "phase_4/models/accessories/apriltoons/tt_t_chr_avt_acc_pac_kite" [
+	store_node [ "prop" "ttcc_prop_backpack_kite" "" ]
+        ]
+
+hood_model "phase_3.5/models/props/tt_m_ara_TT_streetlight_sign"[
+    store_node ["prop" "prop_post_sign"]
+    ]
+
+hood_model "phase_3.5/models/props/tt_m_ara_TT_streetlight_one_light"[
+    store_node ["prop" "prop_post_one_light"]
+    ]
+
+hood_model "phase_3.5/models/props/tt_m_ara_TT_streetlight_three_light"[
+    store_node ["prop" "prop_post_three_light"]
+    ]
+
+hood_model "phase_13/models/events/halloween/count_office_facade" [
+	store_node [ "prop" "prop_count_office_facade" "" ]
+        ]
 
 hood_model "phase_3.5/models/modules/wood_fence" [
 	store_node [ "prop" "prop_wood_fence" "" ]
@@ -93,40 +121,18 @@ hood_model "phase_4/models/props/goofy_statue" [
 	store_node [ "prop" "prop_goofy_statue" "" ]
         ]
 
-hood_model "phase_4/models/props/tt_m_ara_gen_sillyMeterSign" [
-	store_node [ "prop" "prop_tt_m_ara_gen_sillyMeterSign" "" ]
-        ]
-
-hood_model "phase_4/models/props/tt_m_ara_gen_victorySoonSign" [
-	store_node [ "prop" "prop_tt_m_ara_gen_victorySoonSign" "" ]
-        ]
-        
-hood_model "phase_4/models/props/tt_m_ara_gen_victoryPartySign" [
-	store_node [ "prop" "prop_tt_m_ara_gen_victoryPartySign" "" ]
-        ]
-
-hood_model "phase_4/models/props/tt_m_ara_ttc_sillyMeterSign_groupA" [
-	store_node [ "prop" "prop_tt_m_ara_ttc_sillyMeterSign_groupA" "" ]
-        ]
-hood_model "phase_4/models/props/tt_m_ara_ttc_sillyMeterSign_groupB" [
-	store_node [ "prop" "prop_tt_m_ara_ttc_sillyMeterSign_groupB" "" ]
-        ]
-hood_model "phase_4/models/props/tt_m_ara_gen_stormSellbotSign" [
-	store_node [ "prop" "prop_tt_m_ara_gen_stormSellbotSign" "" ]
-        ]
-
-hood_model "phase_4/models/props/tt_m_ara_gen_jellybeanJamSign" [
-	store_node [ "prop" "prop_tt_m_ara_gen_jellybeanJamSign" "" ]
-        ]
-
-hood_model "phase_4/models/props/tt_m_ara_gen_foreSign" [
-	store_node [ "prop" "prop_tt_m_ara_gen_foreSign" "" ]
-        ]
-
 hood_model "phase_4/models/props/tt_m_ara_gen_tunnelAheadSign" [
 	store_node [ "prop" "prop_tt_m_ara_gen_tunnelAheadSign" "" ]
         ]
 
 hood_model "phase_6/models/golf/outdoor_zone_entrance" [
 	store_node [ "prop" "prop_outdoor_zone_entrance" "" ]
+	]
+
+hood_model "phase_5/models/char/tt_r_ara_ttc_trashcan" [
+	store_node [ "anim_prop" "animated_prop_generic_phase_5_models_char__ttc_trashcan" ""]
+	]
+
+hood_model "phase_5/models/char/tt_r_ara_ttc_trashcan" [
+	store_node [ "interactive_prop" "interactive_prop_phase_5_models_char__ttc_trashcan" ""]
 	]

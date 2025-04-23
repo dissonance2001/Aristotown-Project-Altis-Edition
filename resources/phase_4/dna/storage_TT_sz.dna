@@ -1,17 +1,12 @@
-// Parties
-model "phase_4/models/modules/partyGate_TT" [
- 	store_node [ "prop" "prop_party_gate" "" ]
-	]
-    
 place_model "phase_4/models/neighborhoods/toontown_central" [
  	store_node [ "prop" "toontown_central" "" ]
 	]
 
-place_model "phase_4/models/modules/trolley_station_TT" [
+place_model "phase_4/models/modules/trolley_station_default" [
 	store_node [ "prop" "prop_trolley_station" ]
 	]
 
-place_model "phase_4/models/modules/safe_zone_tunnel_TT" [
+place_model "phase_3.5/models/modules/cc_m_gen_prp_tunnel_sz2st" [
 	store_node [ "prop" "prop_safe_zone_tunnel" ]
         ]
 
@@ -23,19 +18,15 @@ place_model "phase_4/models/modules/library" [
 	store_node [ "toon_landmark" "toon_landmark_TT_library" "" ]
         ]
 
-place_model "phase_4/models/modules/school_house" [
+place_model "phase_3.5/models/schoolhouse/schoolhouse_exterior" [
 	store_node [ "toon_landmark" "toon_landmark_TT_school_house" "" ]
-        ]
-
-place_model "phase_4/models/modules/mercantile" [
-	store_node [ "toon_landmark" "toon_landmark_TT_mercantile" "" ]
         ]
 
 place_model "phase_4/models/modules/gagShop_TT" [
 	store_node [ "toon_landmark" "toon_landmark_TT_gag_shop" "" ]
         ]
 
-place_model "phase_4/models/modules/PetShopExterior_TT" [
+place_model "phase_3.5/models/modules/PetShopExterior_TT" [
 	store_node [ "toon_landmark" "toon_landmark_TT_pet_shop" "" ]
         ]
 
@@ -46,14 +37,6 @@ place_model "phase_4/models/modules/clothshopTT" [
 place_model "phase_4/models/modules/gazebo" [
 	store_node [ "prop" "prop_gazebo" "" ]
         ]
-
-place_model "phase_4/models/modules/blockade" [
-	store_node [ "prop" "prop_blockade" "" ]
-        ]
-		
-place_model "phase_3.5/models/props/barrier_cone.bam" [
-	store_node [ "prop" "prop_barrier_cone" "" ]
-	]
 
 place_model "phase_4/models/modules/toonhall" [
 	store_node [ "toon_landmark" "toon_landmark_TT_toonhall" "" ]
@@ -66,7 +49,7 @@ place_model "phase_4/models/props/exteriorfish-zero" [
 place_model "phase_8/models/props/daisys_flowerbox_yellow" [
 	store_node [ "prop" "prop_daisys_flowerbox_yellow" "" ]
 	]
-    
+
 place_model "phase_6/models/karting/KartArea_Tires" [
 	store_node [ "prop" "gs_tires" "" ]
 	]
@@ -74,3 +57,7 @@ place_model "phase_6/models/karting/KartArea_Tires" [
 place_model "phase_4/models/modules/Speedway_Tunnel" [
 	store_node [ "prop" "prop_GS_tunnel" "" ]
         ]
+
+place_model "phase_4/models/modules/restoration_station" [
+    store_node [ "prop" "prop_restoration_station" "" ]
+    ]
