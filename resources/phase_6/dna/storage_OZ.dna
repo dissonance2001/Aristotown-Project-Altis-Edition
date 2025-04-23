@@ -18,36 +18,20 @@ hood_model "phase_3.5/models/modules/walls_basement" [
 	store_node [ "wall" "wall_basement_rock_dl" ]
 	]
 
-hood_model "phase_8/models/modules/DG_windows" [
-	store_node [ "window" "window_sm_pointed_DG_ur" ]
-	store_node [ "window" "window_sm_pointed_DG_ul" ]
+hood_model "phase_6/models/modules/OZ_windows" [
+	store_node [ "window" "window_sm_OZ_ur" ]
+	store_node [ "window" "window_sm_OZ_ul" ]
 
-	store_node [ "window" "window_flower_porthole_ur" ]
-	store_node [ "window" "window_flower_porthole_ul" ]
+	store_node [ "window" "window_OZ_circle_ur" ]
+	store_node [ "window" "window_OZ_circle_ul" ]
 
-	store_node [ "window" "window_md_curved_DG_ur" ]
-	store_node [ "window" "window_md_curved_DG_ul" ]
+	store_node [ "window" "window_md_OZ_acorn_ur" ]
+	store_node [ "window" "window_md_OZ_acorn_ul" ]
+
+	store_node [ "window" "window_md_OZ_blinds_ur" ]
+	store_node [ "window" "window_md_OZ_blinds_ul" ]
 	]
 
-place_model "phase_3.5/models/modules/TT_A1" [
-	store_node [ "toon_landmark" "toon_landmark_TT_A1" "TT_A1"  ]
-	]
-place_model "phase_5/models/modules/TT_A2" [
-	store_node [ "toon_landmark" "toon_landmark_TT_A2" "TT_A2"  ]
-	]
-place_model "phase_5/models/modules/TT_A3" [
-	store_node [ "toon_landmark" "toon_landmark_TT_A3" "TT_A3"  ]
-	]
-place_model "phase_5/models/modules/TT_B1" [
-	store_node [ "toon_landmark" "toon_landmark_TT_B1" "TT_B1"  ]
-	]
-place_model "phase_5/models/modules/TT_B2" [
-	store_node [ "toon_landmark" "toon_landmark_TT_B2" "TT_B2"  ]
-	]
-place_model "phase_5/models/modules/TT_C1" [
-	store_node [ "toon_landmark" "toon_landmark_TT_C1" "TT_C1"  ]
-	]
-	
 place_model "phase_8/models/props/neighborhood_sign_bossBotHQ" [
 	store_node [ "prop" "neighborhood_sign_bossBotHQ" "" ]
 ]
@@ -68,27 +52,27 @@ hood_model "phase_8/models/props/daisy_park_table" [
 	store_node [ "prop" "prop_daisy_park_table" "" ]
 	]
 
-store_font [ "font" "DG_Ironwork" 
-             "phase_3/models/fonts/Ironwork" ]
+store_font [ "font" "DG_Ironwork"
+             "phase_3/fonts/Ironwork.ttf" ]
 
 hood_model "phase_8/models/props/signs_DG" [
 	store_node [ "sign" "DG_sign1" ]
 	store_node [ "sign" "DG_sign2" ]
 	store_node [ "sign" "DG_sign3" ]
 	]
-	
+
 hood_model "phase_4/models/props/signs_TTC" [
 	store_node [ "sign" "TTC_sign1" ]
 	store_node [ "sign" "TTC_sign2" ]
 	store_node [ "sign" "TTC_sign3" ]
 	]
-	
-store_texture [ "texture" "street_street_OZ_tex"	
-		"phase_6/maps/acorn_acres_road.jpg"		]
+
+store_texture [ "texture" "street_street_OZ_tex"
+		"phase_6/maps/acorn_acres/streets/ttcc_aa_street_road.png"		]
 store_texture [ "texture" "street_sidewalk_OZ_tex"
-		"phase_3.5/maps/grassAA.jpg"	]
+		"phase_6/maps/acorn_acres/streets/ttcc_aa_street_sidewalk.png"	]
 store_texture [ "texture" "street_curb_OZ_tex"
-		"phase_6/maps/outdoor_zone_board.jpg"	]
+		"phase_6/maps/acorn_acres/streets/ttcc_aa_street_curb.png"	]
 
 hood_model "phase_8/models/props/streetlight_DG" [
 	store_node [ "holiday_prop" "prop_DG_flower_lamp1" ]
@@ -133,24 +117,34 @@ hood_model "phase_8/models/props/window_flowerbox_wood" [
 	store_node [ "prop" "prop_window_flowerbox_wood" "" ]
 	]
 
+hood_model "phase_6/models/char/aa_hydrant" [
+	store_node [ "anim_prop" "animated_prop_generic_phase_6_models_char__aa_hydrant" ""]
+	]
+
+hood_model "phase_6/models/char/aa_hydrant" [
+	store_node [ "interactive_prop" "interactive_prop_phase_6_models_char__aa_hydrant" ""]
+	]
+
 hood_model "phase_8/models/modules/hqDG" [
 	store_node [ "toon_landmark" "toon_landmark_hqDG" "" ]
 	]
-	
+
 hood_model "phase_6/models/golf/outdoor_zone_entrance" [
 	store_node [ "prop" "prop_outdoor_zone_entrance" "" ]
 	]
 
-store_font [ "font" "TT_Comedy" "phase_3/models/fonts/Comedy" ]
+store_font [ "font" "TT_Comedy" "phase_3/fonts/Comedy.ttf" ]
 
 hood_model "phase_6/models/props/signs_DD" [
 	store_node [ "sign" "DD_sign1" ]
 	store_node [ "sign" "DD_sign2" ]
 	store_node [ "sign" "DD_sign3" ]
 	]
-	
+
 hood_model "phase_6/models/golf/Golfzone_To_Bossbot_Tunnel" [
 	store_node [ "prop" "prop_golf_cog_tunnel" "" ]
 	]
 
-
+hood_model "phase_12/models/bossbotHQ/CogGolfCourtyard_Simple" [
+	store_node [ "prop" "CogGolfCourtyard_Simple" ""]
+	]
