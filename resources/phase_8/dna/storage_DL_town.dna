@@ -1,4 +1,3 @@
-
 place_model "phase_6/models/cogHQ/Cog_Tunnel" [
 	store_node [ "prop" "prop_cog_tunnel" "" ]
 	]
@@ -11,7 +10,6 @@ place_model "phase_6/models/cogHQ/WaterTowerSimple" [
 	store_node [ "prop" "prop_cog_water_tower" "" ]
 	]
 
-
 place_model "phase_4/models/props/mickey_on_horse" [
 	store_node [ "prop" "prop_mickey_on_horse" "" ]
         ]
@@ -23,7 +21,7 @@ place_model "phase_5/models/modules/street_low_fence" [
         store_node [ "prop" "post_brick" "p_brick" ]
         store_node [ "prop" "post_brick2" "p_brick2" ]
         store_node [ "prop" "post_brick3" "p_brick3" ]
-        
+
         store_node [ "prop" "fence_woodflower_sandstone" "f_woodflower_sandstone" ]
         store_node [ "prop" "fence_woodflower_brickstucco" "f_woodflower_brickstucco" ]
         store_node [ "prop" "fence_ironbar_stuccobrick" "f_ironbar_stuccobrick" ]
@@ -40,9 +38,13 @@ place_model "phase_8/models/modules/neighborhood_tunnel_DL" [
 	store_node [ "prop" "prop_neighborhood_tunnel" ]
         ]
 
-place_model "phase_8/models/modules/safe_zone_entrance_tunnel_DL" [
+place_model "phase_3.5/models/modules/cc_m_gen_prp_tunnel_st2sz" [
 	store_node [ "prop" "prop_safe_zone_entrance_tunnel" ]
         ]
+
+place_model "phase_4/models/props/desat_pillar_cracked" [
+	store_node [ "prop" "prop_desat_pillar_cracked" "" ]
+		]
 
 place_model "phase_8/models/props/DL_hydrant" [
 	store_node [ "prop" "prop_DL_hydrant" "" ]
@@ -67,10 +69,6 @@ place_model "phase_3.5/models/props/cellar_door" [
 
 place_model "phase_5/models/props/roman_entrance" [
 	store_node [ "prop" "prop_roman_entrance" "" ]
-	]
-
-place_model "phase_5/models/props/crate" [
-	store_node [ "prop" "prop_crate" "crate" ]
 	]
 
 place_model "phase_5/models/props/chimneys" [
@@ -103,4 +101,8 @@ place_model "phase_8/models/modules/DL_pond" [
 
 place_model "phase_4/models/props/construction_sign" [
 	store_node [ "prop" "prop_construction_sign" "" ]
+	]
+
+place_model "phase_8/models/areas/ttcc_ext_psetter" [
+	store_node [ "toon_landmark" "toon_landmark_psetter" "suite" ]
 	]

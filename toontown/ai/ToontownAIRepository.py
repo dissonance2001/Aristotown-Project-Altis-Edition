@@ -44,6 +44,7 @@ from toontown.hood import GSHoodAI
 from toontown.hood import GZHoodAI
 from toontown.hood import LawbotHQAI
 from toontown.hood import MMHoodAI
+from toontown.hood import OTHoodAI
 from toontown.hood import OZHoodAI
 from toontown.hood import SellbotHQAI
 from toontown.hood import TTHoodAI
@@ -223,6 +224,9 @@ class ToontownAIRepository(ToontownInternalRepository):
             self.hoods.append(hood)
             self.hoodId2Hood[hood.zoneId] = hood
         hood = TTOHoodAI.TTOHoodAI(self)
+        self.hoods.append(hood)
+        self.hoodId2Hood[hood.zoneId] = hood
+        hood = OTHoodAI.OTHoodAI(self)
         self.hoods.append(hood)
         self.hoodId2Hood[hood.zoneId] = hood
 

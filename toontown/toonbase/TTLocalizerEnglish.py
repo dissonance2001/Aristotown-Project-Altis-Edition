@@ -84,6 +84,7 @@ lFunnyFarm = 'Funny Farms'
 lToonHQ = 'Toon HQ'
 lSellbotHQ = 'Sellbot HQ'
 lGoofySpeedway = 'Roadster Raceway'
+lYeOlde = 'Ye Olde Toontown'
 lOutdoorZone = 'Acorn Acres'
 lGolfZone = 'Acorn Acres Minigames'
 lPartyHood = 'Party Grounds'
@@ -118,6 +119,7 @@ GlobalStreetNames = {15000: ('to', 'on', 'Tutorial Terrace'),
  6200: ('to', 'on', 'Peanut Place'),
  6300: ('to', 'on', 'Walnut Way'),
  6400: ('to', 'on', 'Legume Lane'),
+ 7000: ('to the', 'in the', 'Playground'),
  9000: ('to the', 'in the', 'Playground'),
  9100: ('to', 'on', 'Lullaby Lane'),
  9200: ('to', 'on', 'Pajama Place'),
@@ -162,6 +164,7 @@ DaisyGardens = ('to', 'in', lDaisyGardens)
 OutdoorZone = ('to', 'in', lOutdoorZone)
 FunnyFarm = ('to', 'in', lFunnyFarm)
 GoofySpeedway = ('to', 'in', lGoofySpeedway)
+YeOlde =  ('to the', 'in the', lYeOlde)
 DonaldsDreamland = ('to', 'in', lDonaldsDreamland)
 BossbotHQ = ('to', 'in', 'Bossbot HQ')
 SellbotHQ = ('to', 'in', 'Sellbot HQ')
