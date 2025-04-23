@@ -8,6 +8,7 @@ TreasureMM = 4
 TreasureDL = 5
 TreasureOZ = 6
 TreasureE  = 7
+TreasureOT = 8
 TreasureETargetGame = 8 # Just for a special sound effect during target game
 
 TreasureModels = {
@@ -43,6 +44,10 @@ TreasureModels = {
         'phase_4/models/props/mg-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
     ),
+    TreasureOT: (
+        'phase_4/models/props/yott-treasure',
+        'phase_4/audio/sfx/SZ_DD_treasure.ogg',
+    )
     TreasureETargetGame: (
         'phase_4/models/props/mg-treasure',
         'phase_5/audio/sfx/tt_s_ara_cfg_propellerBreaks.ogg',
@@ -231,6 +236,25 @@ SafeZoneTreasureSpawns = {
         ],
         10, # Rate
         9 # Maximum
+    ),
+    ToontownGlobals.YeOlde: (
+        TreasureOT, 8,  # +4 laff for alpha
+        [
+            (-67, -104.811, -5.439),
+            (-8, 41, 10),
+            (-94, -58, 6),
+            (-57, -90, 7.2),
+            (37.7, 0, 7.7),
+            (91, 40, 11.7),
+            (40, 187, 9.3),
+            (-118, 138, 9),
+            (-168, 21, 9),
+            (124, -172, 8.6),
+            (180, -40, 9),
+            (121, 9.8, 9.7),
+        ],
+        10,  # Rate
+        999  # Maximum
     ),
     ToontownGlobals.MyEstate: (
         TreasureE, 2, # +2 laff
