@@ -1568,7 +1568,7 @@ def doFillWithLead(attack):
     else:
         return Parallel(suitTrack, pencilPropTrack, sharpenerPropTrack, sprayTrack, toonTrack)
 
-def doBeguile(attack):
+def doBeguileOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
@@ -1600,6 +1600,34 @@ def doBeguile(attack):
     soundTrack = getSoundTrack('ttr_s_ene_bat_beguile.ogg', delay=1.3, node=suit)
     soundMissTrack = getSoundTrack('ttr_s_ene_bat_beguileMiss.ogg', delay=1.3, node=suit)
     return Parallel(suitTrack, toonTrack, soundTrack)
+
+
+def doBeguile(attack):
+    suit = attack['suit']
+    targets = attack['target']
+    if base.config.GetBool('want-new-cogs', False):
+        head = suit.find('**/to_head')
+        if head.isEmpty():
+            head = suit.find('**/joint_head')
+    else:
+        head = suit.find('**/joint_head')
+    hitAtleastOneToon = 0
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = 1
+    
+    sparkle = globalPropPool.getProp('smile')
+    suitTrack = getSuitAnimTrack(attack)
+    sparklePosPoints = [Point3(-0.1, 0.35, -1.5), VBase3(335, 0, 0)]
+    sparklePropTrack = Sequence(Wait(1.5))
+    sparklePropTrack.append(Func(__showProp, sparkle, head, sparklePosPoints[0], sparklePosPoints[1]))
+    sparklePropTrack.append(Func(sparkle.find('**/scale_joint_sign').hide))
+    sparklePropTrack.append(ActorInterval(sparkle, 'smile', startFrame=39))
+    sparklePropTrack.append(Func(MovieUtil.removeProp, sparkle))
+    dodgeAnims = [['duck', 1e-06, 0.8]]
+    toonTracks = getToonTracks(attack, damageDelay=2.6, damageAnimNames=['cringe'], dodgeDelay=2.2, splicedDodgeAnims=dodgeAnims)
+    soundTrack = getSoundTrack('ttr_s_ene_bat_beguile%s.ogg' % ('' if hitAtleastOneToon else 'Miss'), node=suit)
+    return Parallel(suitTrack, sparklePropTrack, toonTracks, soundTrack)
 
 def doCloseTheLoop(attack):
     suit = attack['suit']

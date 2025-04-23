@@ -6243,9 +6243,9 @@ ATK_TGT_SINGLE = 2
 ATK_TGT_GROUP = 3
 SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
  'Audit': ('calculator', ATK_TGT_SINGLE),
+ 'Beguile': ('glower', ATK_TGT_GROUP),
  'Bite': ('throw-object', ATK_TGT_SINGLE),
  'BounceCheck': ('throw-paper', ATK_TGT_SINGLE),
-               'Beguile': ('glower', ATK_TGT_SINGLE),
                'CloseTheLoop': ('phone', ATK_TGT_SINGLE),
                'BrainStorm': ('effort', ATK_TGT_SINGLE),
                'HostileTakeover': ('effort', ATK_TGT_SINGLE),
