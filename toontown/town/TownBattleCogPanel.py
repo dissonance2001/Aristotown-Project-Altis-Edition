@@ -1501,8 +1501,6 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
         elif name == 'isw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'ls':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .09, .09, .09)
         elif name == 'dvg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .1, .1, .1)
         elif name == 'trm':
@@ -1514,7 +1512,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'bg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
         elif name == 'gry':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .10, .10, .10)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .065, .065, .065)
         elif name == 'scg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .1, .1, .1)
         elif name == 'kpn':
@@ -1537,7 +1535,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
         elif name == 'bs':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .075, .075, .075)
-        elif name == 'ssm' or name == 'cvy' or name == 'mka' or name == 'txm' or name == 'tw':
+        elif name == 'ssm' or name == 'cvy' or name == 'mka' or name == 'txm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .089, .089, .089)
         elif name == 'pp' or name == 'nc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .06, .06, .06)
@@ -1563,16 +1561,20 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .16, .16, .16)
         elif name == 'trb':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'ssr' or name == 'mm' or name == 'ds' or name == 'pht' or name == 'jb' or name == 'ms' or name == 'ka' or name == 'pyc' or name == 'vpr':
+        elif name == 'ssr' or name == 'mm' or name == 'ds' or name == 'pht' or name == 'jb' or name == 'ka' or name == 'vpr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
+        elif name == 'ms':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .11, .11, .11)
+        elif name == 'pyc':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .13, .13, .13)
         elif name == 'ym':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
         elif name == 'mh' or name == 'inw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .085, .085, .085)
         elif name == 'ls':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .075, .075, .075)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .12, .12, .12)
         elif name == 'm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .07, .07, .07)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .09, .09, .09)
         elif name == 'sb':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .075, .075, .075)
         elif name == 'cfp':
@@ -1585,8 +1587,10 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .09, .09, .09)
         elif name == 'brv':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
-        elif name == 'rus' or name == 'tm' or name == 'sdb':
+        elif name == 'rus' or name == 'tm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .085, .085, .085)
+        elif name == 'sdb':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0675, .0675, .0675)
         elif name == 'tbc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
         elif name == 'nd':
@@ -1699,6 +1703,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
         elif name == 'tg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .14, .14, .14)
+        elif name == 'tw':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1225, -180, 0, 0, .14, .14, .14)
         else:
             self.suitHead.setPos(-0.27, 0.5, 0.13)
 

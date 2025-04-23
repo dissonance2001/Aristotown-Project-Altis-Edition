@@ -1485,6 +1485,29 @@ dclass DistributedBoardbotBoss : DistributedBossCog {
   toonPromoted(uint8(0-1));
 };
 
+struct ToonAttack {
+int8 index;
+int8 track;
+int8 level;
+int32 target;
+int32[] hp;
+bool accBonus;
+int16 hpBonus;
+int16[] kbBonus;
+int8 suitDied;
+int8 suitRevive;
+};
+
+struct SuitAttack {
+  int8 index;
+  int8 attack;
+  int8 target;
+  int16[] damage;
+  int8 toonDied;
+  int8 beforeToons;
+  int8 taunt;
+};
+
 dclass DistributedBattleBase : DistributedObject {
   setLevelDoId(uint32) required broadcast ram;
   setBattleCellId(uint32) required broadcast ram;
@@ -1494,7 +1517,7 @@ dclass DistributedBattleBase : DistributedObject {
   setInitialSuitPos(int16/10, int16/10, int16/10) required broadcast ram;
   setMembers(uint32[], string, string, string, string, string, uint32[], string, string, string, string, string, string, string, string, int16) required broadcast ram;
   adjust(int16) broadcast;
-  setMovie(int8, uint32[], uint32[], int8, int8, int8, int32, int64[], int16, int16, int64[], int8, int8, int8, int8, int8, int32, int16[], int16, int16, int16[], int8, int8, int8, int8, int8, int32, int16[], int16, int16, int16[], int8, int8, int8, int8, int8, int32, int16[], int16, int16, int16[], int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8, int8, int8, int8, int16[], int8, int8, int8) required broadcast ram;
+  setMovie(int8, uint32[], uint32[], int8, int8, int8, int32, int64[], int16, int16, int64[], int8, int8, int8, int8, int8, int32, int16[], int16, int16, int16[], int8, int8, int8, int8, int8, int32, int16[], int16, int16, int16[], int8, int8, int8, int8, int8, int32, int16[], int16, int16, int16[], int8, int8, SuitAttack[]) required broadcast ram;
   setChosenToonAttacks(uint32[], int16[], int16[], int32[]) broadcast ram;
   setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
   denyLocalToonJoin();

@@ -5064,8 +5064,8 @@ class BattleCalculatorAI:
         self.notify.debug('\n')
 
     def __calculateSuitAttacks(self):
-        for i in xrange(len(self.battle.suitAttacks)):
-            if i < len(self.battle.activeSuits):
+        for i in xrange(len(self.battle.activeSuits)):
+            #if i < len(self.battle.activeSuits):
                 suitId = self.battle.activeSuits[i].doId
                 self.battle.suitAttacks[i][SUIT_ID_COL] = suitId
                 if self.battle.activeSuits[i].dna.name == 'mad':
