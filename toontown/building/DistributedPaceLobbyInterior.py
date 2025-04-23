@@ -76,5 +76,6 @@ class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
     def disable(self):
         self.interior.removeNode()
         del self.interior
-        self.pacelobbyMusic.stop()
+        if hasattr(self, 'pacelobbyMusicFile'):
+            self.pacelobbyMusicFile.stop()
         DistributedObject.DistributedObject.disable(self)
