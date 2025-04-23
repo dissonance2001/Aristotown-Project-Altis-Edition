@@ -254,7 +254,7 @@ SafeZoneTreasureSpawns = {
             (121, 9.8, 9.7),
         ],
         10,  # Rate
-        999  # Maximum
+        9  # Maximum
     ),
     ToontownGlobals.MyEstate: (
         TreasureE, 2, # +2 laff
