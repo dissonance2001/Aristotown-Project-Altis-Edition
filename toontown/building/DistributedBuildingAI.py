@@ -5,6 +5,7 @@ from toontown.building import DistributedElevatorExtAI
 from toontown.building import DistributedKnockKnockDoorAI
 from toontown.building import DistributedSuitInteriorAI
 from toontown.building import DistributedToonHallInteriorAI
+from toontown.building import DistributedPaceLobbyInteriorAI
 from toontown.building import DistributedToonInteriorAI
 from toontown.building import DoorTypes
 from toontown.building import FADoorCodes
@@ -414,7 +415,9 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
             self.interior = DistributedToonHallInteriorAI.DistributedToonHallInteriorAI(self.block, self.air, interiorZoneId, self)
         else:
             self.interior = DistributedToonInteriorAI.DistributedToonInteriorAI(self.block, self.air, interiorZoneId, self)
-        
+        if ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.PacesetterLobby:
+            self.interior = DistributedPaceLobbyInteriorAI.DistributedPaceLobbyInteriorAI(self.block, self.air, interiorZoneId, self)
+
         self.interior.generateWithRequired(interiorZoneId)
         door = self.createExteriorDoor()
         insideDoor = DistributedDoorAI.DistributedDoorAI(self.air, self.block, DoorTypes.INT_STANDARD)

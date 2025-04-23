@@ -2,7 +2,15 @@
 model "phase_3.5/models/modules/walls_2" [
     store_node [ "wall" "wall_oz_1" ]
     store_node [ "wall" "wall_oz_2" ]
+	store_node [ "wall_yott7" "wall_yott_7" ]
+	store_node [ "wall_yott6" "wall_yott_6" ]
+	store_node [ "wall_yott5" "wall_yott_5" ]
+	store_node [ "wall_yott4" "wall_yott_4" ]
+	store_node [ "wall_yott3" "wall_yott_3" ]
+	store_node [ "wall_yott2" "wall_yott_2" ]
+	store_node [ "wall_yott1" "wall_yott_1" ]
     ]
+
 
 model "phase_3.5/models/modules/walls" [
 	store_node [ "wall_collide" "wall_collide" ]

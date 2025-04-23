@@ -602,6 +602,7 @@ from toontown.building import DistributedHQInterior/AI
 from toontown.building import DistributedGagshopInterior/AI
 from toontown.building import DistributedPetshopInterior/AI
 from toontown.building import DistributedKartShopInterior/AI
+from toontown.building import DistributedPaceLobbyInterior/AI
 from toontown.building import DistributedDoor/AI
 from toontown.building import DistributedAnimDoor/AI
 from toontown.building import DistributedLightSwitch/AI
@@ -1483,6 +1484,29 @@ dclass DistributedBoardbotBoss : DistributedBossCog {
   doStrafe(uint8, uint8) broadcast;
   cagedToonBattleThree(uint16, uint32) broadcast;
   toonPromoted(uint8(0-1));
+};
+
+struct ToonAttack {
+int8 index;
+int8 track;
+int8 level;
+int32 target;
+int32[] hp;
+bool accBonus;
+int16 hpBonus;
+int16[] kbBonus;
+int8 suitDied;
+int8 suitRevive;
+};
+
+struct SuitAttack {
+  int8 index;
+  int8 attack;
+  int8 target;
+  int16[] damage;
+  int8 toonDied;
+  int8 beforeToons;
+  int8 taunt;
 };
 
 dclass DistributedBattleBase : DistributedObject {
@@ -2393,6 +2417,11 @@ dclass DistributedPetshopInterior : DistributedObject {
 dclass DistributedKartShopInterior : DistributedObject {
   setZoneIdAndBlock(uint32, uint16) required broadcast ram;
 };
+
+dclass DistributedPaceLobbyInterior : DistributedObject {
+  setZoneIdAndBlock(uint32, uint16) required broadcast ram;
+};
+
 
 dclass DistributedDoor : DistributedObject {
   setZoneIdAndBlock(uint32, uint32) required broadcast ram;

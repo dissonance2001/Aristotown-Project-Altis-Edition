@@ -209,8 +209,12 @@ AcornAvenue = 6100
 PeanutPlace = 6200
 WalnutWay = 6300
 LegumeLane = 6400
-FunnyFarm = 7000
+FunnyFarm = 500000
 GoofySpeedway = 8000
+YeOlde = 7000
+KnightKnoll = 7100
+NobleNook = 7200
+WizardWay=7300
 DonaldsDreamland = 9000
 BarnacleBoulevard = 1100
 SeaweedStreet = 1200
@@ -236,10 +240,12 @@ LullabyLane = 9100
 PajamaPlace = 9200
 TwilightTerrace = 9300
 ToonHall = 2513
+PacesetterLobby = 9613
 ToontownCentralOld = 20000
 HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, WackyWay),
  DonaldsDock: (BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue),
  TheBrrrgh: (WalrusWay, SleetStreet, PolarPlace, ArcticAvenue),
+ YeOlde: (KnightKnoll, NobleNook, WizardWay),
  MinniesMelodyland: (AltoAvenue, BaritoneBoulevard, TenorTerrace, SopranoStreet),
  DaisyGardens: (ElmStreet, MapleStreet, OakStreet, RoseValley),
  OutdoorZone: (AcornAvenue, PeanutPlace, WalnutWay, LegumeLane),
@@ -418,6 +424,7 @@ Hoods = (DonaldsDock,
  OutdoorZone,
  FunnyFarm,
  GoofySpeedway,
+ YeOlde,
  DonaldsDreamland,
  BossbotHQ,
  SellbotHQ,
@@ -432,6 +439,7 @@ HoodsForTeleportAll = (DonaldsDock,
  DaisyGardens,
  OutdoorZone,
  GoofySpeedway,
+ YeOlde,
  DonaldsDreamland,
  BossbotHQ,
  SellbotHQ,
@@ -518,6 +526,7 @@ phaseMap = {Tutorial: 4,
  DonaldsDock: 6,
  MinniesMelodyland: 6,
  GoofySpeedway: 6,
+ YeOlde: 7,
  TheBrrrgh: 8,
  DaisyGardens: 8,
  FunnyFarm: 8,
@@ -536,6 +545,7 @@ streetPhaseMap = {
  DonaldsDock: 6,
  MinniesMelodyland: 6,
  GoofySpeedway: 6,
+ YeOlde: 7,
  TheBrrrgh: 8,
  DaisyGardens: 8,
  FunnyFarm: 8,
@@ -555,8 +565,8 @@ dnaMap = {Tutorial: 'toontown_central',
  GoofySpeedway: 'goofy_speedway',
  TheBrrrgh: 'the_burrrgh',
  DaisyGardens: 'daisys_garden',
- FunnyFarm: 'not done yet',
  DonaldsDreamland: 'donalds_dreamland',
+ YeOlde: 'olde_toontown',
  OutdoorZone: 'outdoor_zone',
  BossbotHQ: 'cog_hq_bossbot',
  SellbotHQ: 'cog_hq_sellbot',
@@ -573,6 +583,7 @@ hoodNameMap = {DonaldsDock: TTLocalizer.DonaldsDock,
  OutdoorZone: TTLocalizer.OutdoorZone,
  FunnyFarm: TTLocalizer.FunnyFarm,
  GoofySpeedway: TTLocalizer.GoofySpeedway,
+ YeOlde: TTLocalizer.YeOlde,
  DonaldsDreamland: TTLocalizer.DonaldsDreamland,
  BossbotHQ: TTLocalizer.BossbotHQ,
  SellbotHQ: TTLocalizer.SellbotHQ,
@@ -587,6 +598,7 @@ safeZones = [ToontownCentral,
  OutdoorZone,
  DonaldsDock,
  DaisyGardens,
+ YeOlde,
  MinniesMelodyland,
  TheBrrrgh,
  DonaldsDreamland]
@@ -597,6 +609,7 @@ safeZoneCountMap = {MyEstate: 8,
  DonaldsDock: 10,
  MinniesMelodyland: 5,
  GoofySpeedway: 500,
+ YeOlde: 500,
  TheBrrrgh: 8,
  DaisyGardens: 9,
  FunnyFarm: 500,
@@ -613,6 +626,7 @@ townCountMap = {MyEstate: 8,
  GoofySpeedway: 40,
  TheBrrrgh: 40,
  DaisyGardens: 40,
+ YeOlde: 40,
  FunnyFarm: 40,
  DonaldsDreamland: 40,
  OutdoorZone: 40,
@@ -627,6 +641,7 @@ hoodCountMap = {MyEstate: 2,
  TheBrrrgh: 2,
  DaisyGardens: 2,
  FunnyFarm: 2,
+ YeOlde: 2,
  DonaldsDreamland: 2,
  OutdoorZone: 2,
  BossbotHQ: 2,

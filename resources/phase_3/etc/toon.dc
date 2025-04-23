@@ -94,6 +94,7 @@ from toontown.building import DistributedBuilding/AI
 from toontown.building import DistributedAnimBuilding/AI
 from toontown.building import DistributedToonInterior/AI
 from toontown.building import DistributedToonHallInterior/AI
+from toontown.building import DistributedPaceLobbyInterior/AI
 from toontown.building import DistributedSuitInterior/AI
 from toontown.building import DistributedHQInterior/AI
 from toontown.building import DistributedGagshopInterior/AI
@@ -1600,6 +1601,9 @@ dclass DistributedToonInterior : DistributedObject {
 };
 
 dclass DistributedToonHallInterior : DistributedToonInterior {
+};
+
+dclass DistributedPaceLobbyInterior : DistributedToonInterior {
 };
 
 dclass DistributedSuitInterior : DistributedObject {
