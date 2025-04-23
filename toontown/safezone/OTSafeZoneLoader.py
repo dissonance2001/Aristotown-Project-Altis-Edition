@@ -12,7 +12,7 @@ class OTSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         self.playgroundClass = OTPlayground.OTPlayground
         self.musicFile = 'phase_7/audio/bgm/OT_nbrhood.ogg'
         self.activityMusicFile = 'phase_7/audio/bgm/OT_SZ_activity.ogg'
-        self.dnaFile = 'phase_7/dna/olde_toontown_sz.dna'
+        self.dnaFile = 'phase_7/dna/olde_toontown_sz.pdna'
         self.safeZoneStorageDNAFile = 'phase_7/dna/storage_OT_sz.dna'
 
     def load(self):

@@ -227,7 +227,7 @@ WackyWay = 2400
 WalrusWay = 3100
 SleetStreet = 3200
 PolarPlace = 3300
-ArcticAvenue = 3400
+ArcticAvenue = 340FunnyFarm = 70000
 AltoAvenue = 4100
 BaritoneBoulevard = 4200
 TenorTerrace = 4300

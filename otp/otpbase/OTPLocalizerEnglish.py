@@ -1,5 +1,6 @@
 import string
 from otp.otpbase.OTPLocalizerEnglishProperty import *
+
 lTheBrrrgh = 'The Brrrgh'
 lDaisyGardens = 'Daisy Gardens'
 lDonaldsDock = "Donald's Dock"
@@ -7,6 +8,7 @@ lDonaldsDreamland = "Donald's Dreamland"
 lMinniesMelodyland = "Minnie's Melodyland"
 lToontownCentral = 'Toontown Central'
 lGoofySpeedway = 'Goofy Speedway'
+lYeOlde = 'Ye Olde Toontown'
 lOutdoorZone = "Chip 'n Dale's Acorn Acres"
 lGolfZone = "Chip 'n Dale's MiniGolf"
 lCancel = 'Cancel'
