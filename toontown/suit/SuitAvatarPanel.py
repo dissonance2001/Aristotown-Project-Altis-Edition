@@ -174,11 +174,10 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         else:
             HP = 0
         if avatar.isFired:
-            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
-                                       frameSize=(0, 0, 0, 0),
-                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
-                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
-                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=0,
+                                            frameSize=(0, 0, 0, 0), barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                            frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHP),
                                        text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
         elif revives > 2 and avatar.isVirtual and avatar.maxHP > 9999:
             healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,

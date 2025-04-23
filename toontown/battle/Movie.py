@@ -507,7 +507,7 @@ class Movie(DirectObject.DirectObject):
                                                   Func(theSuit.setNeutralAnimation))
                             camTrack4 = MovieCamera.chooseSuitShotCheatPowerhouseSnipe(a, 4)
                             suitTrack3 = Sequence(MovieSuitAttacks.doSyphon(a), Func(theSuit.setNeutralAnimation))
-                            camTrack3 = MovieCamera.chooseSuitShotCheatPowerhouseSyphon(a, 4)
+                            camTrack3 = MovieCamera.chooseSuitShotCheatPowerhouseSyphon(battle)
                             ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
                             ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
                         if a['id'] == COURT_MANDATE_3:
@@ -602,7 +602,7 @@ class Movie(DirectObject.DirectObject):
                             camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorMulligan(a, 4)
                             ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doMulligan(a), camTrack2),
                                                    Func(theSuit.setNeutralAnimation)))
-                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorImmune(a, 4)
+                            camTrack2 = MovieCamera.chooseSuitShotCheatAmbassadorImmune(battle)
                             ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doManagerialProtection(a), camTrack2),
                                        Func(theSuit.setNeutralAnimation)))
                             ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
@@ -681,8 +681,8 @@ class Movie(DirectObject.DirectObject):
                                                                            #  '',
                                                                            #  CFSpeech | CFTimeout)))
                     ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
-                              '',
-                              CFSpeech | CFTimeout)))
+                                                                             '',
+                                                                             CFSpeech | CFTimeout)))
         ptrack.append(Func(callback))
         self._deleteTrack()
         self.track = Sequence(ptrack, name='movie-track-%d' % self.battle.doId)
@@ -1546,9 +1546,7 @@ class Movie(DirectObject.DirectObject):
 
     def genAttackDicts(self, toons, suits, id0, tr0, le0, tg0, hp0, ac0, hpb0, kbb0, died0, revive0, id1, tr1, le1, tg1,
                        hp1, ac1, hpb1, kbb1, died1, revive1, id2, tr2, le2, tg2, hp2, ac2, hpb2, kbb2, died2, revive2,
-                       id3, tr3, le3, tg3, hp3, ac3, hpb3, kbb3, died3, revive3, sid0, at0, stg0, dm0, sd0, sb0, st0,
-                       sid1, at1, stg1, dm1, sd1, sb1, st1, sid2, at2, stg2, dm2, sd2, sb2, st2, sid3, at3, stg3, dm3,
-                       sd3, sb3, st3, sid4, at4, stg4, dm4, sd4, sb4, st4, sid5, at5, stg5, dm5, sd5, sb5, st5):
+                       id3, tr3, le3, tg3, hp3, ac3, hpb3, kbb3, died3, revive3, suitAttacks):
         if self.track and self.track.isPlaying():
             self.notify.warning('genAttackDicts() - track is playing!')
         toonAttacks = ((id0,
@@ -1592,48 +1590,6 @@ class Movie(DirectObject.DirectObject):
           died3,
           revive3))
         self.__genToonAttackDicts(toons, suits, toonAttacks)
-        suitAttacks = ((sid0,
-                        at0,
-                        stg0,
-                        dm0,
-                        sd0,
-                        sb0,
-                        st0),
-                       (sid1,
-                        at1,
-                        stg1,
-                        dm1,
-                        sd1,
-                        sb1,
-                        st1),
-                       (sid2,
-                        at2,
-                        stg2,
-                        dm2,
-                        sd2,
-                        sb2,
-                        st2),
-                       (sid3,
-                        at3,
-                        stg3,
-                        dm3,
-                        sd3,
-                        sb3,
-                        st3),
-                       (sid4,
-                        at4,
-                        stg4,
-                        dm4,
-                        sd4,
-                        sb4,
-                        st4),
-                       (sid5,
-                        at5,
-                        stg5,
-                        dm5,
-                        sd5,
-                        sb5,
-                        st5))
         self.__genSuitAttackDicts(toons, suits, suitAttacks)
 
     def __genSuitCheatDicts(self, toons, suits, suitCheats):
