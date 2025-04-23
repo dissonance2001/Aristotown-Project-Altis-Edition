@@ -429,9 +429,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         for i in range(4 - len(self.activeToons)):
             p = p + getToonAttack(-1)
 
-        suitAttacks = []
         for sa in self.suitAttacks:
-            suitAttack = ()
             index = -1
             id = sa[SUIT_ID_COL]
             if id != -1:
@@ -444,14 +442,12 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                     self.notify.debug('suit attack: %d must be group' % sa[SUIT_ATK_COL])
                 else:
                     toonId = self.activeToons[targetIndex]
-            suitAttack = suitAttack + (index, sa[SUIT_ATK_COL], targetIndex)
+            p = p + [index, sa[SUIT_ATK_COL], targetIndex]
             sa[SUIT_TAUNT_COL] = 0
             if sa[SUIT_ATK_COL] != -1:
                 suit = self.findSuit(id)
                 sa[SUIT_TAUNT_COL] = getAttackTauntIndexFromIndex(suit, sa[SUIT_ATK_COL])
-            suitAttack = suitAttack + tuple(sa[3:])
-            suitAttacks = suitAttacks + [suitAttack]
-        p.append(suitAttacks)
+            p = p + sa[3:]
 
         return p
 

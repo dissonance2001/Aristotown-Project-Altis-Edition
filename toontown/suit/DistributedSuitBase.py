@@ -73,7 +73,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.manager = 0
         self.dizzy = 0
         self.playRate = 1
-        self.actualLevel = 0
         self.governaught = 0
         self.maxHP = 10
         self.currHP = 10
@@ -217,7 +216,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             level += TTLocalizer.ManagerPostFix
         if self.getGovernaught():
             level += TTLocalizer.GovernaughtPostFix
-        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': self.name,
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': 'Virtual Cog',
                                                         'dept': dept,
                                                         'level': level}
         return nameInfo

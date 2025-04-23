@@ -4561,7 +4561,6 @@ def doBarNew(attack):
         suitTracks.append(suitTrack)
         suitTrack.append(Func(suit.checkCogHPLaser, battle))
         suitTrack.append(Func(suit.setNeutralAnimation))
-        suitTrack.append(Wait(5.0))
     objZOffset = 0.0
     landFrames = 2
     node = ship.node()
@@ -7831,7 +7830,6 @@ def doDiceRouletteCogs(attack):
         toonTrack.append(Func(suit.checkCogHPLaser, battle))
         toonTrack.append(
                 Func(suit.setNeutralAnimation))
-        toonTrack.append(Wait(5.0))
         toonTracks.append(toonTrack)
     soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=1.5, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack)
@@ -7996,7 +7994,6 @@ def doDiceRouletteAll(attack):
         toonTrack.append(Func(suit.checkCogHPLaser, battle))
         toonTrack.append(
             Func(suit.setNeutralAnimation))
-        toonTrack.append(Wait(5.0))
         toonTracks.append(toonTrack)
     for t in targets:
         toon = t['toon']
@@ -8592,7 +8589,8 @@ def doTeeOff2(attack):
     toonTrack = getToonTrack(attack, suitTrack.getDuration() - 1.75, ['slip-backward'], 1.5, ['duck'],
                              showMissedExtraTime=1.7)
     soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2.5, node=suit)
-    return Parallel(suitTrack, toonTrack, clubPropTrack, ballPropTrack, soundTrack)
+    mulliganTrack = Sequence(Wait(6.0), doMulligan(attack))
+    return Parallel(suitTrack, toonTrack, clubPropTrack, ballPropTrack, soundTrack, mulliganTrack)
 
 def doTeeOffRefinementManagerProtection(attack):
     suit = attack['suit']
@@ -14683,19 +14681,9 @@ def doAudit(attack):
     partTrack4 = getPartTrack(particleEffect4, 1.8, 1.7, [particleEffect4, suit, 0])
     partTrack5 = getPartTrack(particleEffect5, 1.9, 1.8, [particleEffect5, suit, 0])
     suitName = attack['suitName']
-    suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'a':
-        calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-        calcDuration = 1.3
-        scaleUpPoint = Point3(1.5, 1.5, 1.5)
-    elif suitType == 'b':
-        calcPosPoints = [Point3(0, 0.5, -0.1), VBase3(1.352, 0.0, 180.0)]
-        calcDuration = 1.3
-        scaleUpPoint = Point3(1.5, 1.5, 1.5)
-    elif suitType == 'c':
-        calcPosPoints = [Point3(0, 0.5, -0.1), VBase3(1.352, 0.0, 180.0)]
-        calcDuration = 1.3
-        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcDuration = 1.3
+    scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = getPropTrack(calculator, suit.getLeftHand(), calcPosPoints, 0, calcDuration,
                                  scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='calculator',
                                  animStartTime=0,
@@ -14737,19 +14725,9 @@ def doCalculate(attack):
     partTrack4 = getPartTrack(particleEffect4, 1.8, 1.7, [particleEffect4, suit, 0])
     partTrack5 = getPartTrack(particleEffect5, 1.9, 1.8, [particleEffect5, suit, 0])
     suitName = attack['suitName']
-    suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'a':
-        calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-        calcDuration = 1.3
-        scaleUpPoint = Point3(1.5, 1.5, 1.5)
-    elif suitType == 'b':
-        calcPosPoints = [Point3(0, 0.5, -0.1), VBase3(1.352, 0.0, 180.0)]
-        calcDuration = 1.3
-        scaleUpPoint = Point3(1.5, 1.5, 1.5)
-    elif suitType == 'c':
-        calcPosPoints = [Point3(0, 0.5, -0.1), VBase3(1.352, 0.0, 180.0)]
-        calcDuration = 1.3
-        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcDuration = 1.3
+    scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = getPropTrack(calculator, suit.getLeftHand(), calcPosPoints, 0, calcDuration,
                                  scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='calculator',
                                  animStartTime=0,
@@ -14791,19 +14769,9 @@ def doTabulate(attack):
     partTrack4 = getPartTrack(particleEffect4, 1.8, 1.7, [particleEffect4, suit, 0])
     partTrack5 = getPartTrack(particleEffect5, 1.9, 1.8, [particleEffect5, suit, 0])
     suitName = attack['suitName']
-    suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'a':
-        calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-        calcDuration = 1.3
-        scaleUpPoint = Point3(1.5, 1.5, 1.5)
-    elif suitType == 'b':
-        calcPosPoints = [Point3(0, 0.5, -0.1), VBase3(1.352, 0.0, 180.0)]
-        calcDuration = 1.3
-        scaleUpPoint = Point3(1.5, 1.5, 1.5)
-    elif suitType == 'c':
-        calcPosPoints = [Point3(0, 0.5, -0.1), VBase3(1.352, 0.0, 180.0)]
-        calcDuration = 1.3
-        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcDuration = 1.3
+    scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = getPropTrack(calculator, suit.getLeftHand(), calcPosPoints, 0, calcDuration,
                                  scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='calculator',
                                  animStartTime=0,
@@ -16977,20 +16945,15 @@ def doRefinement(attack):
     return Parallel(suitTrackAnim, makeUnVulnerable, suitTracks, multiTrack, knifeTracks)
 
 def doAmbassadorPhase3(attack):
-    theSuit = attack['suit']
-    battle = attack['battle']
     ambassadorPhase3 = Func(theSuit.makeAmbassadorPhase3)
-    suitPos, suitHpr = battle.getActorPosHpr(theSuit)
-    gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + theSuit.height - 0.2)
-    explosionTrack = Sequence()
-    explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
     suitTrackAnim = Sequence()
     soundTrack3 = getSoundTrack('ENC_cogfall_apart.ogg', node=theSuit)
-    suitTrackAnim.append(MovieUtil.createAmbassadorReviveTrack(theSuit, battle))
+    suitTrackAnim.append(Wait(4))
     suitTrackAnim.append(Func(theSuit.showHpString, "1.5x DMG MULTIPLIER!"))
+    suitTrackAnim.append(MovieUtil.createAmbassadorReviveTrack(theSuit, battle))
     suitTrackAnim.append(Wait(2))
     suitTrackAnim.append(Parallel(Func(theSuit.updateHealthBar, 0), ActorInterval(theSuit, 'frustrated'), Func(theSuit.setChatAbsolute, "I've had enough of all of this!!! You Toons are in for a rude awakening now!!!", CFSpeech | CFTimeout)))
-    return Parallel(suitTrackAnim, soundTrack3, ambassadorPhase3, explosionTrack)
+    return Parallel(suitTrackAnim, soundTrack3)
 
 def doNotThrowPiano(attack):
     suit = attack['suit']

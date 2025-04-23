@@ -785,19 +785,8 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.isVulnerable and self.dna.name == 'crf':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
-        elif float(self.currHP) > float(self.maxHP * 1.5):
-            Sequence(Func(self.loop, 'neutral-unstable', fromFrame=60, toFrame=100)
-                     ).start()
         else:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)), Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-            ).start()
-
-    def setNeutralAnimationRolled(self):
-        if self.getDizzy():
-            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'lured'), Func(self.setPlayRate, self.getPlayRate2(), 'lured2'), Func(self.loop, 'lured')
-                     ).start()
-        else:
-            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'rolled'), Func(self.loop, 'rolled')
             ).start()
 
     def setNeutralAnimationTrap(self):
@@ -813,9 +802,6 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                      ).start()
         elif self.isVulnerable and self.dna.name == 'crf':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-                     ).start()
-        elif float(self.currHP) > float(self.maxHP * 1.5):
-            Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()
         else:
             Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
@@ -870,73 +856,23 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.nametag.setChatText(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if self.animHead == None and self.getDizzy():
-            if self.dna.name == 'crf':
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
-                    ).start()
-            elif self.dna.name == 'mad':
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
-                    ).start()
-            elif self.dna.name == 'dsf':
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
-                    ).start()
-            else:
-                for headPart in self.animatedHeadParts: Sequence(
+            for headPart in self.animatedHeadParts: Sequence(
                     Func(headPart.loop, 'neutral-lured')
-                    ).start()
+                ).start()
         elif self.animHead == None:
-            if self.dna.name == 'crf' and (float(self.currHP) / float(self.maxHP) <= 0.25):
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
-                    ).start()
-            elif self.dna.name == 'mad' and (float(self.currHP) / float(self.maxHP) <= 0.25):
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
-                    ).start()
-            elif self.dna.name == 'dsf' and (float(self.currHP) / float(self.maxHP) <= 0.25):
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
-                    ).start()
-            else:
-                for headPart in self.animatedHeadParts: Sequence(
+            for headPart in self.animatedHeadParts: Sequence(
                     Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-                    ).start()
+                ).start()
         elif self.getDizzy():
-            if self.dna.name == 'crf':
-                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
-                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
-                ).start()
-            elif self.dna.name == 'mad':
-                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
-                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
-                ).start()
-            elif self.dna.name == 'dsf':
-                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
-                    Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
-                ).start()
-            else:
-                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
+            for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral-lured')
                 ).start()
         else:
-            if self.dna.name == 'crf' and (float(self.currHP) / float(self.maxHP) <= 0.25):
-                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
-                    Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
-                    ).start()
-            elif self.dna.name == 'mad' and (float(self.currHP) / float(self.maxHP) <= 0.25):
-                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
-                    Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
-                    ).start()
-            elif self.dna.name == 'dsf' and (float(self.currHP) / float(self.maxHP) <= 0.25):
-                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
-                    Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
-                    ).start()
-            else:
-                for headPart in self.animatedHeadParts: Sequence( ActorInterval(headPart, self.animHead),
+            for headPart in self.animatedHeadParts: Sequence(
+                    ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-                    ).start()
+                ).start()
 
     def cleanUpSoundList(self):
         removeList = []
