@@ -1,19 +1,27 @@
+// Parties
+model "phase_6/models/modules/partyGate_MM" [
+ 	store_node [ "prop" "prop_party_gate" "" ]
+	]
+    
 place_model "phase_6/models/neighborhoods/minnies_melody_land_ext" [
- 	store_node [ "prop" "mml_ext_pink" "" ]
- 	store_node [ "prop" "mml_ext_purple" "" ]
+ 	store_node [ "prop" "minnies_melody_land_ext" "" ]
 	]
-
+	
 place_model "phase_6/models/neighborhoods/minnies_melody_land" [
- 	store_node [ "prop" "mml_playground" "" ]
+ 	store_node [ "prop" "minnies_melody_land" ]
 	]
 
-place_model "phase_3.5/models/modules/cc_m_gen_prp_tunnel_sz2st" [
+place_model "phase_6/models/modules/safe_zone_tunnel_MM" [
 	store_node [ "prop" "prop_safe_zone_tunnel" ]
         ]
 
-place_model "phase_4/models/modules/trolley_station_default" [
+place_model "phase_6/models/modules/trolley_station_MM" [
 	store_node [ "prop" "prop_trolley_station" ]
 	]
+	
+place_model "phase_4/models/modules/blockade" [
+	store_node [ "prop" "prop_blockade" "" ]
+        ]
 
 place_model "phase_6/models/modules/gagShop_MM" [
 	store_node [ "toon_landmark" "toon_landmark_MM_gag_shop" "" ]

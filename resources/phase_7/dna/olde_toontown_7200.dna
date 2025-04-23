@@ -4844,8 +4844,10 @@ node "level" [
     color [ 0.73 0.48 0.37 1 ]
    ]
   ]
-  prop "prop_gng_truck_DNARoot" [
-   code [ "prop_gng_truck" ]
+  landmark_building "tb1:toon_landmark_hqOT_DNARoot" [
+   code [ "toon_landmark_hqOT" ]
+   building_type [ "hq" ]
+   title [ "Toon HQ" ]
    pos [ 135 -275 0.1 ]
    nhpr [ 180 0 0 ]
   ]

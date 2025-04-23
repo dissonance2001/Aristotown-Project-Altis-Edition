@@ -123,9 +123,6 @@ class HoodMgr(DirectObject.DirectObject):
             [-30, -25, -0.373, 326, 0, 0],
             [29, -17, -0.373, 32, 0, 0]
         ),
-        ToontownGlobals.YeOlde: (
-            [-135.882, -29.421, 9.110, -274.047, 0, 0],
-        ),
         ToontownGlobals.GolfZone: (
             [-49.6, 102, 0, 162, 0, 0],
             [-22.8, 36.6, 0, 157.5, 0, 0],
@@ -205,7 +202,6 @@ class HoodMgr(DirectObject.DirectObject):
         'mm': ToontownGlobals.MinniesMelodyland,
         'dg': ToontownGlobals.DaisyGardens,
         'oz': ToontownGlobals.OutdoorZone,
-        'ot': ToontownGlobals.YeOlde,
         'ff': ToontownGlobals.FunnyFarm,
         'gs': ToontownGlobals.GoofySpeedway,
         'dl': ToontownGlobals.DonaldsDreamland,
@@ -225,7 +221,6 @@ class HoodMgr(DirectObject.DirectObject):
         ToontownGlobals.MinniesMelodyland: 'mm',
         ToontownGlobals.DaisyGardens: 'dg',
         ToontownGlobals.OutdoorZone: 'oz',
-        ToontownGlobals.YeOlde: 'ot',
         ToontownGlobals.FunnyFarm: 'ff',
         ToontownGlobals.GoofySpeedway: 'gs',
         ToontownGlobals.DonaldsDreamland: 'dl',

@@ -271,8 +271,8 @@ group "minniesMelodyLand" [
    ]
    prop "linktunnel_mm_4340_DNARoot" [
     code [ "prop_safe_zone_tunnel" ]
-    pos [ -170.012 44.58 -0.17 ]
-    nhpr [ 270 0 -0 ]
+    pos [ -25 -209.95 -0.17 ]
+    nhpr [ 0 0 0 ]
     sign [
      code [ "tunnel_sign_magenta" ]
      scale [ 1.5 1 1.5 ]
@@ -335,16 +335,25 @@ group "minniesMelodyLand" [
        letters [ "M" ]
       ]
       text [
+       letters [ "I" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "I" ]
+      ]
+      text [
        letters [ "E" ]
       ]
       text [
-       letters [ "Z" ]
+       letters [ "'" ]
       ]
       text [
-       letters [ "Z" ]
-      ]
-      text [
-       letters [ "O" ]
+       letters [ "S" ]
       ]
       text [
        letters [ " " ]
@@ -391,8 +400,8 @@ group "minniesMelodyLand" [
    ]
    prop "linktunnel_mm_4222_DNARoot" [
     code [ "prop_safe_zone_tunnel" ]
-    pos [ 80 169.99 -0.17 ]
-    nhpr [ 180 0 -0 ]
+    pos [ -170.012 44.58 -0.5 ]
+    nhpr [ -90 0 0 ]
     sign [
      code [ "tunnel_sign_magenta" ]
      scale [ 1.5 1 1.5 ]
@@ -442,16 +451,25 @@ group "minniesMelodyLand" [
        letters [ "M" ]
       ]
       text [
+       letters [ "I" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "I" ]
+      ]
+      text [
        letters [ "E" ]
       ]
       text [
-       letters [ "Z" ]
+       letters [ "'" ]
       ]
       text [
-       letters [ "Z" ]
-      ]
-      text [
-       letters [ "O" ]
+       letters [ "S" ]
       ]
       text [
        letters [ " " ]
@@ -533,8 +551,8 @@ group "minniesMelodyLand" [
    ]
    prop "linktunnel_mm_4127_DNARoot" [
     code [ "prop_safe_zone_tunnel" ]
-    pos [ 232.45 -80.0493 -0.44 ]
-    nhpr [ 90 0 0 ]
+    pos [ 80 169.99 -0.17 ]
+    nhpr [ 180 0 0 ]
     sign [
      code [ "tunnel_sign_magenta" ]
      scale [ 1.5 1 1.5 ]
@@ -591,16 +609,25 @@ group "minniesMelodyLand" [
        letters [ "M" ]
       ]
       text [
+       letters [ "I" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "I" ]
+      ]
+      text [
        letters [ "E" ]
       ]
       text [
-       letters [ "Z" ]
+       letters [ "'" ]
       ]
       text [
-       letters [ "Z" ]
-      ]
-      text [
-       letters [ "O" ]
+       letters [ "S" ]
       ]
       text [
        letters [ " " ]
@@ -679,125 +706,9 @@ group "minniesMelodyLand" [
     nhpr [ 0 0 0 ]
     prop "animated_prop_HQPeriscopeAnimatedProp_DNARoot" [
      code [ "animated_prop_HQPeriscopeAnimatedProp" ]
-     pos [ 6 -12 20.8 ]
+     pos [ 6.0 -12 20.8 ]
      nhpr [ 110 0 0 ]
      scale [ 4 4 4 ]
-    ]
-   ]
-   landmark_building "sz7:toon_landmark_MM_C1_DNARoot" [
-    code [ "toon_landmark_MM_C1" ]
-    title [ "Random Tunes for Random Toons" ]
-    pos [ -96.9616 -76.2613 6.5 ]
-    nhpr [ 120 0 -0 ]
-    door [
-     code [ "door_double_round_ur" ]
-     color [ 0 0.501961 0.752941 1 ]
-    ]
-    sign [
-     code [ "MM_sign1" ]
-     pos [ 0 0 0.5 ]
-     baseline [
-      code [ "mickey" ]
-      color [ 0 0.85098 1 1 ]
-      pos [ 0 0 -0.4 ]
-      scale [ 1 1 1.2 ]
-      width [ 33.3333 ]
-      height [ 33.3333 ]
-      text [
-       letters [ "R" ]
-      ]
-      text [
-       letters [ "a" ]
-      ]
-      text [
-       letters [ "n" ]
-      ]
-      text [
-       letters [ "d" ]
-      ]
-      text [
-       letters [ "o" ]
-      ]
-      text [
-       letters [ "m" ]
-      ]
-      text [
-       letters [ " " ]
-      ]
-      text [
-       letters [ "T" ]
-      ]
-      text [
-       letters [ "u" ]
-      ]
-      text [
-       letters [ "n" ]
-      ]
-      text [
-       letters [ "e" ]
-      ]
-      text [
-       letters [ "s" ]
-      ]
-     ]
-     baseline [
-      code [ "mickey" ]
-      color [ 0 1 1 1 ]
-      pos [ 0 0 -0.75 ]
-      scale [ 0.5 1 0.5 ]
-      text [
-       letters [ "F" ]
-      ]
-      text [
-       letters [ "o" ]
-      ]
-      text [
-       letters [ "r" ]
-      ]
-     ]
-     baseline [
-      code [ "mickey" ]
-      color [ 0 0.501961 1 1 ]
-      pos [ 0 0 -1.5 ]
-      width [ 33.3333 ]
-      height [ 33.3333 ]
-      text [
-       letters [ "R" ]
-      ]
-      text [
-       letters [ "a" ]
-      ]
-      text [
-       letters [ "n" ]
-      ]
-      text [
-       letters [ "d" ]
-      ]
-      text [
-       letters [ "o" ]
-      ]
-      text [
-       letters [ "m" ]
-      ]
-      text [
-       letters [ " " ]
-      ]
-      text [
-       letters [ "T" ]
-      ]
-      text [
-       letters [ "o" ]
-      ]
-      text [
-       letters [ "o" ]
-      ]
-      text [
-       letters [ "n" ]
-      ]
-      text [
-       letters [ "s" ]
-      ]
-     ]
     ]
    ]
    flat_building "tb0:random_DNARoot" [
@@ -821,10 +732,6 @@ group "minniesMelodyLand" [
     title [ "Clothing Shop" ]
     pos [ -54.9522 -88.7614 6.5 ]
     nhpr [ 131 0 0 ]
-    door [
-     code [ "door_double_clothesshop_ur" ]
-     color [ 1 0.64 0.74 1 ]
-    ]
     sign [
      baseline [
       code [ "mickey" ]
@@ -874,6 +781,10 @@ group "minniesMelodyLand" [
        letters [ "e" ]
       ]
      ]
+    ]
+    door [
+     code [ "door_double_clothesshop_ur" ]
+     color [ 1 0.64 0.74 1 ]
     ]
    ]
    flat_building "sz0:random_DNARoot" [
@@ -988,135 +899,10 @@ group "minniesMelodyLand" [
      ]
     ]
    ]
-   prop "linktunnel_mm_4401_DNARoot" [
-    code [ "prop_safe_zone_tunnel" ]
-    pos [ -25 -209.95 -0.17 ]
-    nhpr [ 0 0 0 ]
-    sign [
-     code [ "tunnel_sign_magenta" ]
-     scale [ 1.5 1 1.5 ]
-     baseline [
-      code [ "mickey" ]
-      color [ 0.443137 0.541176 0.941176 1 ]
-      pos [ 0 0 -0.81 ]
-      nhpr [ -0 0 2 ]
-      scale [ 1.4 1 1.5 ]
-      wiggle [ 2.60407 ]
-      width [ 33.3333 ]
-      height [ 33.3333 ]
-      text [
-       letters [ "S" ]
-      ]
-      text [
-       letters [ "O" ]
-      ]
-      text [
-       letters [ "P" ]
-      ]
-      text [
-       letters [ "R" ]
-      ]
-      text [
-       letters [ "A" ]
-      ]
-      text [
-       letters [ "N" ]
-      ]
-      text [
-       letters [ "O" ]
-      ]
-      text [
-       letters [ " " ]
-      ]
-      text [
-       letters [ "S" ]
-      ]
-      text [
-       letters [ "T" ]
-      ]
-      text [
-       letters [ "R" ]
-      ]
-      text [
-       letters [ "E" ]
-      ]
-      text [
-       letters [ "E" ]
-      ]
-      text [
-       letters [ "T" ]
-      ]
-     ]
-     baseline [
-      pos [ 0 0 1.71 ]
-      scale [ 2.5 1 2.5 ]
-      graphic [
-       code [ "minnieSZ" ]
-      ]
-     ]
-     baseline [
-      code [ "mickey" ]
-      color [ 0.501961 0.501961 1 1 ]
-      pos [ 0 0 -1.89 ]
-      nhpr [ -0 0 2 ]
-      scale [ 0.8 1 0.8 ]
-      width [ 45.4545 ]
-      height [ 45.4545 ]
-      text [
-       letters [ "M" ]
-      ]
-      text [
-       letters [ "E" ]
-      ]
-      text [
-       letters [ "Z" ]
-      ]
-      text [
-       letters [ "Z" ]
-      ]
-      text [
-       letters [ "O" ]
-      ]
-      text [
-       letters [ " " ]
-      ]
-      text [
-       letters [ "M" ]
-      ]
-      text [
-       letters [ "E" ]
-      ]
-      text [
-       letters [ "L" ]
-      ]
-      text [
-       letters [ "O" ]
-      ]
-      text [
-       letters [ "D" ]
-      ]
-      text [
-       letters [ "Y" ]
-      ]
-      text [
-       letters [ "L" ]
-      ]
-      text [
-       letters [ "A" ]
-      ]
-      text [
-       letters [ "N" ]
-      ]
-      text [
-       letters [ "D" ]
-      ]
-     ]
-    ]
-   ]
   ]
   group "props" [
-   prop "mml_playground" [
-    code [ "mml_playground" ]
+   prop "minnies_melody_land" [
+    code [ "minnies_melody_land" ]
     pos [ 20 -20 0 ]
     nhpr [ -90 0 0 ]
    ]
@@ -1241,6 +1027,11 @@ group "minniesMelodyLand" [
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
+    pos [ -44.11 68.08 26.88 ]
+    nhpr [ 45 0 0 ]
+   ]
+   prop "prop_stovepipe_DNARoot" [
+    code [ "prop_stovepipe" ]
     pos [ -9.2 -121.55 24.91 ]
     nhpr [ 180 0 0 ]
    ]
@@ -1261,52 +1052,42 @@ group "minniesMelodyLand" [
     nhpr [ -90 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
-   prop "neighborhood_sign_TT_DNARoot" [
-    code [ "neighborhood_sign_TT" ]
-    pos [ 135.33 -33 6.0769 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "neighborhood_sign_TT_DNARoot" [
-    code [ "neighborhood_sign_TT" ]
-    pos [ 135.351 -7.2816 6.19735 ]
-    nhpr [ -90 0 0 ]
-   ]
-   prop "neighborhood_sign_cashBotHQ_DNARoot" [
-    code [ "neighborhood_sign_cashBotHQ" ]
-    pos [ 51.2461 -113 6.5 ]
-    nhpr [ 180 0 -0 ]
+   prop "neighborhood_sign_DL_DNARoot" [
+    code [ "neighborhood_sign_DL" ]
+    pos [ 51.2461 -112.704 6.76006 ]
+    nhpr [ -180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
     color [ 0.75 0.75 0.75 1 ]
    ]
-   prop "neighborhood_sign_cashBotHQ_DNARoot" [
-    code [ "neighborhood_sign_cashBotHQ" ]
-    pos [ 18.42 -113 6.5 ]
+   prop "neighborhood_sign_DL_DNARoot" [
+    code [ "neighborhood_sign_DL" ]
+    pos [ 18.42 -113.71 6.59 ]
     nhpr [ 0 0 0 ]
     scale [ 1.5 1.5 1.5 ]
     color [ 0.75 0.75 0.75 1 ]
    ]
-   prop "neighborhood_sign_DL_DNARoot" [
-    code [ "neighborhood_sign_DL" ]
-    pos [ -72.6 -30.66 6.48 ]
-    nhpr [ 90 0 -0 ]
-    scale [ 1.5 1.5 1.5 ]
-   ]
-   prop "neighborhood_sign_DL_DNARoot" [
-    code [ "neighborhood_sign_DL" ]
-    pos [ -72.6 -0.15 6.48 ]
-    nhpr [ -90 0 -0 ]
+   prop "neighborhood_sign_BR_DNARoot" [
+    code [ "neighborhood_sign_BR" ]
+    pos [ -73.6 -35.66 6.47 ]
+    nhpr [ 90 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
    prop "neighborhood_sign_BR_DNARoot" [
     code [ "neighborhood_sign_BR" ]
-    pos [ 35.79 72.7503 6.49998 ]
-    nhpr [ -180 0 -0 ]
+    pos [ -73.67 -4.15 6.48 ]
+    nhpr [ -90 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
-    pos [ 4.49004 72.77 6.49999 ]
-    nhpr [ -0 0 -0 ]
+   prop "neighborhood_sign_TT_DNARoot" [
+    code [ "neighborhood_sign_TT" ]
+    pos [ 35.79 73.75 6.5 ]
+    nhpr [ 180 0 0 ]
+    scale [ 1.5 1.5 1.5 ]
+   ]
+   prop "neighborhood_sign_TT_DNARoot" [
+    code [ "neighborhood_sign_TT" ]
+    pos [ 4.49 73.77 6.5 ]
+    nhpr [ 0 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
@@ -1391,7 +1172,12 @@ group "minniesMelodyLand" [
   prop "prop_party_gate_DNARoot" [
    code [ "prop_party_gate" ]
    pos [ -89.4911 -67.2785 6.51 ]
-   nhpr [ 120 1.10607e-06 0 ]
+   nhpr [ 120 1.10607e-006 0 ]
+  ]
+  prop "minnies_melody_land_ext_DNARoot" [
+   code [ "minnies_melody_land_ext" ]
+   pos [ -81.9737 -72.8169 6.5 ]
+   nhpr [ 90 0 0 ]
   ]
   flat_building "tb0:random_DNARoot" [
    pos [ -88.3944 -88.2447 6.51 ]

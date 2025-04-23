@@ -6,7 +6,7 @@ place_model "phase_7/models/neighborhoods/olde_toontown" [
   	store_node [ "prop" "olde_toontown" "" ]
  	]
 
-place_model "phase_3.5/models/modules/cc_m_gen_prp_tunnel_sz2st" [
+place_model "phase_7/models/modules/safe_zone_tunnel_OT" [
 	store_node [ "prop" "prop_safe_zone_tunnel" ]
         ]
 

@@ -3375,7 +3375,7 @@ node "level" [
   ]
   landmark_building "tb20:toon_landmark_OT_C1_Str_DNARoot" [
    code [ "toon_landmark_OT_C1_Str" ]
-   title [ "Wish Upon A Starfish - Magical Aquarium" ]
+   title [ "Smallpoxets for Large Pantsets" ]
    pos [ 276.999 130 5 ]
    nhpr [ -90 0 -0 ]
    door [
@@ -3387,88 +3387,13 @@ node "level" [
     baseline [
      code [ "DL_JiggeryPokery" ]
      color [ 1 0.282353 0.643137 1 ]
-     pos [ 0 0 -0.039366 ]
+     pos [ 0 0 0.75 ]
      scale [ 0.7 1 0.7 ]
-     text [
-      letters [ "W" ]
-     ]
-     text [
-      letters [ "i" ]
-     ]
-     text [
-      letters [ "s" ]
-     ]
-     text [
-      letters [ "h" ]
-     ]
-     text [
-      letters [ " " ]
-     ]
-     text [
-      letters [ "U" ]
-     ]
-     text [
-      letters [ "p" ]
-     ]
-     text [
-      letters [ "o" ]
-     ]
-     text [
-      letters [ "n" ]
-     ]
-     text [
-      letters [ " " ]
-     ]
-     text [
-      letters [ "A" ]
-     ]
-     text [
-      letters [ " " ]
-     ]
      text [
       letters [ "S" ]
      ]
      text [
-      letters [ "t" ]
-     ]
-     text [
-      letters [ "a" ]
-     ]
-     text [
-      letters [ "r" ]
-     ]
-     text [
-      letters [ "f" ]
-     ]
-     text [
-      letters [ "i" ]
-     ]
-     text [
-      letters [ "s" ]
-     ]
-     text [
-      letters [ "h" ]
-     ]
-    ]
-    baseline [
-     code [ "DL_JiggeryPokery" ]
-     color [ 0.584314 0 0.290196 1 ]
-     pos [ 0 0 -1.13184 ]
-     scale [ 1.2 1 1.2 ]
-     text [
-      letters [ "M" ]
-     ]
-     text [
-      letters [ "a" ]
-     ]
-     text [
-      letters [ "g" ]
-     ]
-     text [
-      letters [ "i" ]
-     ]
-     text [
-      letters [ "c" ]
+      letters [ "m" ]
      ]
      text [
       letters [ "a" ]
@@ -3477,16 +3402,48 @@ node "level" [
       letters [ "l" ]
      ]
      text [
-      letters [ " " ]
+      letters [ "l" ]
      ]
      text [
-      letters [ "A" ]
+      letters [ "p" ]
      ]
      text [
-      letters [ "q" ]
+      letters [ "o" ]
      ]
      text [
-      letters [ "u" ]
+      letters [ "x" ]
+     ]
+     text [
+      letters [ "e" ]
+     ]
+     text [
+      letters [ "t" ]
+     ]
+     text [
+      letters [ "s" ]
+     ]
+    ]
+    baseline [
+     code [ "DL_JiggeryPokery" ]
+     color [ 0.65098 0 0.65098 1 ]
+     pos [ 0 0 -0.139366 ]
+     text [
+      letters [ "F" ]
+     ]
+     text [
+      letters [ "o" ]
+     ]
+     text [
+      letters [ "r" ]
+     ]
+    ]
+    baseline [
+     code [ "DL_JiggeryPokery" ]
+     color [ 0.584314 0 0.290196 1 ]
+     pos [ 0 0 -1.13184 ]
+     scale [ 1.2 1 1.2 ]
+     text [
+      letters [ "L" ]
      ]
      text [
       letters [ "a" ]
@@ -3495,13 +3452,37 @@ node "level" [
       letters [ "r" ]
      ]
      text [
-      letters [ "i" ]
+      letters [ "g" ]
      ]
      text [
-      letters [ "u" ]
+      letters [ "e" ]
      ]
      text [
-      letters [ "m" ]
+      letters [ " " ]
+     ]
+     text [
+      letters [ "P" ]
+     ]
+     text [
+      letters [ "a" ]
+     ]
+     text [
+      letters [ "n" ]
+     ]
+     text [
+      letters [ "t" ]
+     ]
+     text [
+      letters [ "s" ]
+     ]
+     text [
+      letters [ "e" ]
+     ]
+     text [
+      letters [ "t" ]
+     ]
+     text [
+      letters [ "s" ]
      ]
     ]
    ]
@@ -4853,8 +4834,10 @@ node "level" [
    pos [ 87.0253 160.664 5 ]
    nhpr [ 120 0 0 ]
   ]
-  prop "prop_gng_truck_DNARoot" [
-   code [ "prop_gng_truck" ]
+  landmark_building "tb1:toon_landmark_hqOT_DNARoot" [
+   code [ "toon_landmark_hqOT" ]
+   building_type [ "hq" ]
+   title [ "Toon HQ" ]
    pos [ 83.9998 139.999 5.1 ]
    nhpr [ 90 0 0 ]
   ]

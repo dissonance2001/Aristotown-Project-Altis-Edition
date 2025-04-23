@@ -62,14 +62,14 @@ group "oldeToontown" [
   ]
   landmark_building "tb2:toon_landmark_OT_gag_shop_DNARoot" [
    code [ "toon_landmark_OT_gag_shop" ]
-   building_type [ "gagshop" ]
+   building_type [ "uncapturable" ]
    title [ "Gag Shop" ]
    pos [ -118.889 -169.004 -5.28666 ]
    nhpr [ -45 0 0 ]
   ]
   landmark_building "tb3:toon_landmark_OT_pet_shop_DNARoot" [
    code [ "toon_landmark_OT_pet_shop" ]
-   building_type [ "petshop" ]
+   building_type [ "uncapturable" ]
    title [ "Pet Shop" ]
    pos [ -151.605 69.3326 -9.81966 ]
    nhpr [ 165 0 0 ]
@@ -91,7 +91,7 @@ group "oldeToontown" [
   ]
   landmark_building "tb6:toon_landmark_OT_clothes_shop_DNARoot" [
    code [ "toon_landmark_OT_clothes_shop" ]
-   building_type [ "clotheshop" ]
+   building_type [ "uncapturable" ]
    title [ "" ]
    pos [ 71.7426 169.286 11 ]
    nhpr [ -165 0 0 ]

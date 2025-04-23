@@ -3643,8 +3643,10 @@ node "level" [
     ]
    ]
   ]
-  prop "prop_gng_truck_DNARoot" [
-   code [ "prop_gng_truck" ]
+  landmark_building "tb1:toon_landmark_hqOT_DNARoot" [
+   code [ "toon_landmark_hqOT" ]
+   building_type [ "hq" ]
+   title [ "Toon HQ" ]
    pos [ 428 95.0014 0.1 ]
    nhpr [ 270 0 0 ]
   ]
@@ -6866,43 +6868,34 @@ node "level" [
      width [ 33.3333 ]
      height [ 33.3333 ]
      text [
-      letters [ "P" ]
+      letters [ "E" ]
+     ]
+     text [
+      letters [ "L" ]
+     ]
+     text [
+      letters [ "M" ]
+     ]
+     text [
+      letters [ " " ]
+     ]
+     text [
+      letters [ "S" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "R" ]
+     ]
+     text [
+      letters [ "E" ]
      ]
      text [
       letters [ "E" ]
      ]
      text [
       letters [ "T" ]
-     ]
-     text [
-      letters [ "U" ]
-     ]
-     text [
-      letters [ "N" ]
-     ]
-     text [
-      letters [ "I" ]
-     ]
-     text [
-      letters [ "A" ]
-     ]
-     text [
-      letters [ " " ]
-     ]
-     text [
-      letters [ "P" ]
-     ]
-     text [
-      letters [ "L" ]
-     ]
-     text [
-      letters [ "A" ]
-     ]
-     text [
-      letters [ "C" ]
-     ]
-     text [
-      letters [ "E" ]
      ]
     ]
     baseline [
@@ -6919,22 +6912,13 @@ node "level" [
       letters [ "A" ]
      ]
      text [
-      letters [ "F" ]
-     ]
-     text [
-      letters [ "F" ]
-     ]
-     text [
-      letters [ "O" ]
-     ]
-     text [
-      letters [ "D" ]
-     ]
-     text [
       letters [ "I" ]
      ]
      text [
-      letters [ "L" ]
+      letters [ "S" ]
+     ]
+     text [
+      letters [ "Y" ]
      ]
      text [
       letters [ " " ]

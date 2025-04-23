@@ -306,7 +306,7 @@ store_suit_point [ 404, FRONT_DOOR_POINT, 309.266 -126.686 0, 25 ]
 store_suit_point [ 405, FRONT_DOOR_POINT, 275.875 -39.3814 0, 11 ]
 store_suit_point [ 406, SIDE_DOOR_POINT, 268.413 -52.292 0, 11 ]
 store_suit_point [ 407, FRONT_DOOR_POINT, 256.741 -97.3037 0, 13 ]
-store_suit_point [ 408, FRONT_DOOR_POINT, 233.369 6.8717 1.90735e-06, 37 ]
+store_suit_point [ 408, FRONT_DOOR_POINT, 233.369 6.8717 1.90735e-006, 37 ]
 store_suit_point [ 409, FRONT_DOOR_POINT, 207.953 -86.9567 0, 16 ]
 store_suit_point [ 410, FRONT_DOOR_POINT, 152.766 -92.6484 0, 38 ]
 store_suit_point [ 411, FRONT_DOOR_POINT, 250.172 -129.107 0, 54 ]
@@ -419,7 +419,7 @@ group "donaldsDreamland" [
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
      pos [ 7.453 -6.331 0 ]
-     nhpr [ 8.58077e-07 0 -0 ]
+     nhpr [ 8.58077e-007 0 -0 ]
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
@@ -615,9 +615,9 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
-    pos [ 107.988 90.9562 -1.52588e-05 ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
+    pos [ 107.988 90.9562 -1.52588e-005 ]
     nhpr [ -180 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
    ]
@@ -626,7 +626,7 @@ group "donaldsDreamland" [
     pos [ 80 130 0 ]
     nhpr [ -0 0 -0 ]
     sign [
-     code [ "tunnel_sign_purple" ]
+     code [ "tunnel_sign_magenta" ]
      color [ 0.501961 0.501961 0.501961 1 ]
      pos [ 0.00229422 0 -3.21825 ]
      scale [ 1.32499 1 1.25185 ]
@@ -688,19 +688,25 @@ group "donaldsDreamland" [
        letters [ "D" ]
       ]
       text [
-       letters [ "R" ]
-      ]
-      text [
        letters [ "O" ]
       ]
       text [
-       letters [ "W" ]
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "A" ]
+      ]
+      text [
+       letters [ "L" ]
+      ]
+      text [
+       letters [ "D" ]
+      ]
+      text [
+       letters [ "'" ]
       ]
       text [
        letters [ "S" ]
-      ]
-      text [
-       letters [ "Y" ]
       ]
       text [
        letters [ " " ]
@@ -888,7 +894,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_40x20_DNARoot" [
     code [ "street_curved_corner" ]
-    pos [ 20 90 -7.62939e-06 ]
+    pos [ 20 90 -7.62939e-006 ]
     nhpr [ -0 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -1090,7 +1096,7 @@ group "donaldsDreamland" [
     prop "prop_chimney_DNARoot" [
      code [ "prop_chimney" ]
      pos [ 8.039 3.3404 18.5999 ]
-     nhpr [ 4.22897e-07 0 -0 ]
+     nhpr [ 4.22897e-007 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
    ]
@@ -1101,13 +1107,13 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 34.6341 124.667 -7.62939e-06 ]
+   pos [ 34.6341 124.667 -7.62939e-006 ]
    nhpr [ 16.8891 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 29.3059 126.568 -2.28882e-05 ]
+   pos [ 29.3059 126.568 -2.28882e-005 ]
    nhpr [ -0 0 -0 ]
   ]
  ]
@@ -1199,7 +1205,7 @@ group "donaldsDreamland" [
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
      pos [ 5.05881 0.0558861 0.00247096 ]
-     nhpr [ -1.47878e-06 0 -0 ]
+     nhpr [ -1.47878e-006 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
    ]
@@ -1284,12 +1290,12 @@ group "donaldsDreamland" [
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
      pos [ 4.17367 0.0309821 0 ]
-     nhpr [ -1.47878e-06 0 -0 ]
+     nhpr [ -1.47878e-006 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 16.9905 -2.11049 6.66804e-06 ]
+     pos [ 16.9905 -2.11049 6.66804e-006 ]
      nhpr [ 180 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
@@ -1360,7 +1366,7 @@ group "donaldsDreamland" [
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 7.93277 -15.1099 5.5696 ]
-     nhpr [ 90 -1.00179e-05 6.56845e-13 ]
+     nhpr [ 90 -1.00179e-005 6.56845e-013 ]
     ]
     prop "prop_DL_flat_owl_DNARoot" [
      code [ "prop_DL_flat_owl" ]
@@ -1412,7 +1418,7 @@ group "donaldsDreamland" [
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
      pos [ 5.55504 -22.0276 0.00249004 ]
-     nhpr [ -2.93375e-06 0 -0 ]
+     nhpr [ -2.93375e-006 0 -0 ]
      scale [ 1.17292 1.17292 1.17292 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
@@ -1591,14 +1597,14 @@ group "donaldsDreamland" [
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 17.9854 -1.9056 -1.14441e-05 ]
+     pos [ 17.9854 -1.9056 -1.14441e-005 ]
      nhpr [ -0 0 -0 ]
      scale [ 1.19701 1.19701 1.19701 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 15.0204 -1.05402 1.52588e-05 ]
+     pos [ 15.0204 -1.05402 1.52588e-005 ]
      nhpr [ -75 0 -0 ]
      color [ 0.6 0.75 0.75 1 ]
     ]
@@ -1953,7 +1959,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 2.8134 -11.2214 2.28882e-05 ]
+     pos [ 2.8134 -11.2214 2.28882e-005 ]
      nhpr [ 120 0 -0 ]
     ]
    ]
@@ -1997,14 +2003,14 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 9.4128 -1.6481 -1.52588e-05 ]
+     pos [ 9.4128 -1.6481 -1.52588e-005 ]
      nhpr [ 60 0 -0 ]
      scale [ 1.15792 1.15792 1.15792 ]
      color [ 0.75 0.75 0.75 1 ]
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 13.4603 -4.9955 -1.52588e-05 ]
+     pos [ 13.4603 -4.9955 -1.52588e-005 ]
      nhpr [ 105 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
@@ -2085,7 +2091,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 2.1041 -2.5038 -1.52588e-05 ]
+     pos [ 2.1041 -2.5038 -1.52588e-005 ]
      nhpr [ -165 0 -0 ]
      scale [ 1.24365 1.24365 1.24365 ]
      color [ 0.6 0.75 0.75 1 ]
@@ -2351,7 +2357,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 17.9024 -2.3209 -1.52588e-05 ]
+     pos [ 17.9024 -2.3209 -1.52588e-005 ]
      nhpr [ -105 0 -0 ]
      scale [ 1.42144 1.42144 1.42144 ]
      color [ 0.47 0.49 0.66 1 ]
@@ -2557,8 +2563,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ -2.56707e-06 5.1963e-07 0 ]
-     nhpr [ 2.95756e-06 0 -0 ]
+     pos [ -2.56707e-006 5.1963e-007 0 ]
+     nhpr [ 2.95756e-006 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
    ]
@@ -2604,7 +2610,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_mailbox" ]
    anim [ "tt_a_ara_ddl_mailbox_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 113.525 51.4232 -2.28882e-05 ]
+   pos [ 113.525 51.4232 -2.28882e-005 ]
    nhpr [ -90 0 -0 ]
   ]
  ]
@@ -2726,7 +2732,7 @@ group "donaldsDreamland" [
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
      pos [ 2.85074 -6.21302 0 ]
-     nhpr [ -1.70755e-06 0 -0 ]
+     nhpr [ -1.70755e-006 0 -0 ]
     ]
     prop "prop_DL_clouds_DNARoot" [
      code [ "prop_DL_clouds" ]
@@ -2865,9 +2871,9 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
-    pos [ 116.223 38.6322 -7.62939e-06 ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
+    pos [ 116.223 38.6322 -7.62939e-006 ]
     nhpr [ -90 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
    ]
@@ -3092,7 +3098,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 15.4082 -5.38501 -7.6294e-06 ]
+     pos [ 15.4082 -5.38501 -7.6294e-006 ]
      nhpr [ 85 0 -0 ]
     ]
     prop "DD_barrel_DNARoot" [
@@ -3209,7 +3215,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 79.3335 -10.3044 -7.62939e-06 ]
+   pos [ 79.3335 -10.3044 -7.62939e-006 ]
    nhpr [ 105 0 -0 ]
   ]
  ]
@@ -3907,7 +3913,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 5.8948 -4.60582 2.28882e-05 ]
+     pos [ 5.8948 -4.60582 2.28882e-005 ]
      nhpr [ 90 0 -0 ]
     ]
     prop "prop_chimney_DNARoot" [
@@ -3919,8 +3925,8 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
     pos [ 180.867 -6.35105 0 ]
     nhpr [ 60 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
@@ -4014,7 +4020,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 6.25848 -5.58958 2.28882e-05 ]
+     pos [ 6.25848 -5.58958 2.28882e-005 ]
      nhpr [ -95 0 -0 ]
     ]
    ]
@@ -4067,13 +4073,13 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 0.409073 -2.21535 2.28882e-05 ]
+     pos [ 0.409073 -2.21535 2.28882e-005 ]
      nhpr [ -150 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 3.3336 -1.62 -3.05176e-05 ]
+     pos [ 3.3336 -1.62 -3.05176e-005 ]
      nhpr [ -165 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
@@ -4214,7 +4220,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_40x40_DNARoot" [
     code [ "street_full_corner" ]
-    pos [ 136.569 60 2.28882e-05 ]
+    pos [ 136.569 60 2.28882e-005 ]
     nhpr [ -0 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -4252,7 +4258,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 21.0066 -6.816 2.28882e-05 ]
+     pos [ 21.0066 -6.816 2.28882e-005 ]
      nhpr [ 90 0 -0 ]
     ]
     prop "prop_chimney_DNARoot" [
@@ -4568,7 +4574,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 173.503 95.8773 2.28882e-05 ]
+   pos [ 173.503 95.8773 2.28882e-005 ]
    nhpr [ -17.5006 0 -0 ]
   ]
  ]
@@ -4748,7 +4754,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 6.80299 -21.8678 2.28882e-05 ]
+     pos [ 6.80299 -21.8678 2.28882e-005 ]
      nhpr [ -180 0 -0 ]
     ]
     prop "prop_crate_DNARoot" [
@@ -4765,7 +4771,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 4.62 -1.535 -1.52588e-05 ]
+     pos [ 4.62 -1.535 -1.52588e-005 ]
      nhpr [ -45 0 -0 ]
     ]
    ]
@@ -4988,12 +4994,12 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 26.7551 -6.767 2.28882e-05 ]
+     pos [ 26.7551 -6.767 2.28882e-005 ]
      nhpr [ 90 0 -0 ]
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ 7.7173 -2.08579e-06 0 ]
+     pos [ 7.7173 -2.08579e-006 0 ]
      nhpr [ -0 0 -0 ]
      color [ 0.5 0.5 0.5 1 ]
     ]
@@ -5130,12 +5136,12 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 37.723 -72.065 -1.52588e-05 ]
+     pos [ 37.723 -72.065 -1.52588e-005 ]
      nhpr [ 120 0 -0 ]
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 37.896 -68.881 -1.52588e-05 ]
+     pos [ 37.896 -68.881 -1.52588e-005 ]
      nhpr [ 120 0 -0 ]
     ]
    ]
@@ -5175,8 +5181,8 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
     pos [ 202.463 113.743 0 ]
     nhpr [ -0 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
@@ -5186,13 +5192,13 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_hydrant" ]
    anim [ "tt_a_ara_ddl_hydrant_idle0" ]
    cell_id [ 0 ]
-   pos [ 213.098 109.023 -1.52588e-05 ]
+   pos [ 213.098 109.023 -1.52588e-005 ]
    nhpr [ -30 0 0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 188.401 105.55 -7.62939e-06 ]
+   pos [ 188.401 105.55 -7.62939e-006 ]
    nhpr [ 90 0 -0 ]
   ]
  ]
@@ -5394,13 +5400,13 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 2.537 -2.06501 -1.52588e-05 ]
+     pos [ 2.537 -2.06501 -1.52588e-005 ]
      nhpr [ 30 0 -0 ]
      scale [ 0.789565 0.789565 0.789566 ]
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 4.738 -1.30401 -1.52588e-05 ]
+     pos [ 4.738 -1.30401 -1.52588e-005 ]
      nhpr [ 60 0 -0 ]
      scale [ 0.762505 0.762505 0.762505 ]
     ]
@@ -5554,8 +5560,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 6.92199 -26.1606 2.28882e-05 ]
-     nhpr [ -1.00179e-05 0 -0 ]
+     pos [ 6.92199 -26.1606 2.28882e-005 ]
+     nhpr [ -1.00179e-005 0 -0 ]
     ]
    ]
   ]
@@ -5565,13 +5571,13 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_mailbox" ]
    anim [ "tt_a_ara_ddl_mailbox_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 247.009 97.0516 -7.62939e-06 ]
+   pos [ 247.009 97.0516 -7.62939e-006 ]
    nhpr [ 0 0 0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_hydrant_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_hydrant" ]
    anim [ "tt_a_ara_ddl_hydrant_idle0" ]
-   pos [ 231.034 51.6699 2.28882e-05 ]
+   pos [ 231.034 51.6699 2.28882e-005 ]
    nhpr [ 180 0 -0 ]
   ]
  ]
@@ -6175,7 +6181,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_40x20_DNARoot" [
     code [ "street_keyboard_40x40" ]
-    pos [ 261.569 55 -1.52588e-05 ]
+    pos [ 261.569 55 -1.52588e-005 ]
     nhpr [ -90 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_bed_DL_tex" ]
@@ -6554,7 +6560,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_hydrant" ]
    anim [ "tt_a_ara_ddl_hydrant_idle0" ]
    cell_id [ 0 ]
-   pos [ 266.621 47.0541 -1.52588e-05 ]
+   pos [ 266.621 47.0541 -1.52588e-005 ]
    nhpr [ 75 0 0 ]
   ]
  ]
@@ -6717,8 +6723,8 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
     pos [ 272.798 -7.73785 0 ]
     nhpr [ -45 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
@@ -6846,14 +6852,14 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 2.63439 -1.78691 -1.52588e-05 ]
+     pos [ 2.63439 -1.78691 -1.52588e-005 ]
      nhpr [ 15 0 -0 ]
      color [ 0.5 0.5 0.5 1 ]
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 13.485 -6.56077 2.28882e-05 ]
-     nhpr [ -90 -1.00179e-05 -6.56845e-13 ]
+     pos [ 13.485 -6.56077 2.28882e-005 ]
+     nhpr [ -90 -1.00179e-005 -6.56845e-013 ]
     ]
    ]
   ]
@@ -6878,7 +6884,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_40x20_DNARoot" [
     code [ "street_keyboard_40x40" ]
-    pos [ 296.178 -74.305 -3.8147e-06 ]
+    pos [ 296.178 -74.305 -3.8147e-006 ]
     nhpr [ 60 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_bed_DL_tex" ]
@@ -7046,7 +7052,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_mailbox" ]
    anim [ "tt_a_ara_ddl_mailbox_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 284.182 -28.1167 -3.8147e-06 ]
+   pos [ 284.182 -28.1167 -3.8147e-006 ]
    nhpr [ 45 0 0 ]
   ]
  ]
@@ -7065,7 +7071,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_40x20_DNARoot" [
     code [ "street_keyboard_40x40" ]
-    pos [ 316.178 -39.664 1.52588e-05 ]
+    pos [ 316.178 -39.664 1.52588e-005 ]
     nhpr [ -30 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_bed_DL_tex" ]
@@ -7246,13 +7252,13 @@ group "donaldsDreamland" [
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ 2.09249 0.111097 -1.52588e-05 ]
-     nhpr [ 4.57536e-07 0 -0 ]
+     pos [ 2.09249 0.111097 -1.52588e-005 ]
+     nhpr [ 4.57536e-007 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 2.27233 -15.1472 2.28882e-05 ]
+     pos [ 2.27233 -15.1472 2.28882e-005 ]
      nhpr [ -45 0 -0 ]
     ]
    ]
@@ -7351,8 +7357,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 10.1733 -36.0779 2.28882e-05 ]
-     nhpr [ -90 1.00179e-05 6.56845e-13 ]
+     pos [ 10.1733 -36.0779 2.28882e-005 ]
+     nhpr [ -90 1.00179e-005 6.56845e-013 ]
     ]
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
@@ -7392,25 +7398,25 @@ group "donaldsDreamland" [
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 17.0272 -5.78399 0 ]
-     nhpr [ 4.00117e-06 0 -0 ]
+     nhpr [ 4.00117e-006 0 -0 ]
      scale [ 0.691029 0.691029 0.691029 ]
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ -1.62024 -33.7577 2.28882e-05 ]
+     pos [ -1.62024 -33.7577 2.28882e-005 ]
      nhpr [ -180 0 -0 ]
     ]
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 0.438623 -45.7897 0 ]
-     nhpr [ 3.04139e-06 0 -0 ]
+     nhpr [ 3.04139e-006 0 -0 ]
      scale [ 1.2154 1.2154 1.2154 ]
      color [ 0.75 0.75 0.75 1 ]
     ]
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 25.9743 -36.8208 0 ]
-     nhpr [ 2.95756e-06 0 -0 ]
+     nhpr [ 2.95756e-006 0 -0 ]
     ]
    ]
    flat_building "tb10:random_DNARoot" [
@@ -7434,18 +7440,18 @@ group "donaldsDreamland" [
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 11.9621 -5.69304 0 ]
-     nhpr [ -3.18633e-06 0 -0 ]
+     nhpr [ -3.18633e-006 0 -0 ]
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ 19.7891 0.0381873 -1.52588e-05 ]
-     nhpr [ -3.18633e-06 0 -0 ]
+     pos [ 19.7891 0.0381873 -1.52588e-005 ]
+     nhpr [ -3.18633e-006 0 -0 ]
      color [ 0.75 0.75 0.75 1 ]
     ]
     prop "prop_DL_clouds_DNARoot" [
      code [ "prop_DL_clouds" ]
      pos [ 9.8798 -33.3543 29.0169 ]
-     nhpr [ -2.61839e-06 0 -0 ]
+     nhpr [ -2.61839e-006 0 -0 ]
      scale [ 3.05717 3.05717 3.05717 ]
     ]
    ]
@@ -7469,12 +7475,12 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 2.4362 -1.77588 -1.52588e-05 ]
+     pos [ 2.4362 -1.77588 -1.52588e-005 ]
      nhpr [ 90 0 -0 ]
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 1.39085 -4.19687 -1.52588e-05 ]
+     pos [ 1.39085 -4.19687 -1.52588e-005 ]
      nhpr [ 90 0 -0 ]
      color [ 0.6 0.75 0.75 1 ]
     ]
@@ -7485,7 +7491,7 @@ group "donaldsDreamland" [
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 349.668 -17.0469 1.52588e-05 ]
+   pos [ 349.668 -17.0469 1.52588e-005 ]
    nhpr [ -0 0 -0 ]
   ]
  ]
@@ -7668,24 +7674,39 @@ group "donaldsDreamland" [
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ 14.2228 0.0593651 -1.52588e-05 ]
-     nhpr [ -4.66511e-06 0 -0 ]
+     pos [ 14.2228 0.0593651 -1.52588e-005 ]
+     nhpr [ -4.66511e-006 0 -0 ]
      color [ 0.6 0.75 0.75 1 ]
     ]
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 9.79169 -35.3987 0 ]
-     nhpr [ 90 -1.00179e-05 6.56845e-13 ]
+     nhpr [ 90 -1.00179e-005 6.56845e-013 ]
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 19.5701 -35.8164 2.28882e-05 ]
-     nhpr [ -90 -1.00179e-05 -6.56845e-13 ]
+     pos [ 19.5701 -35.8164 2.28882e-005 ]
+     nhpr [ -90 -1.00179e-005 -6.56845e-013 ]
+    ]
+    prop "prop_crate_DNARoot" [
+     code [ "prop_crate" ]
+     pos [ 1.89525 -50.2161 -1.52588e-005 ]
+     nhpr [ 90 -1.00179e-005 6.56845e-013 ]
+    ]
+    prop "prop_crate_DNARoot" [
+     code [ "prop_crate" ]
+     pos [ 4.15393 -52.0632 -1.52588e-005 ]
+     nhpr [ 60 0 -0 ]
+    ]
+    prop "prop_crate_DNARoot" [
+     code [ "prop_crate" ]
+     pos [ 5.3951 -54.865 -1.52588e-005 ]
+     nhpr [ 90 -1.00179e-005 6.56845e-013 ]
     ]
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 8.24694 -5.38613 0 ]
-     nhpr [ 90 -1.00179e-05 6.56845e-13 ]
+     nhpr [ 90 -1.00179e-005 6.56845e-013 ]
      scale [ 0.83092 0.83092 0.83092 ]
      color [ 0.75 0.75 0.75 1 ]
     ]
@@ -7711,55 +7732,13 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-  ]
-  prop "prop_crate_DNARoot" [
-   code [ "prop_crate" ]
-   pos [ 328.556 -77.8253 -1.52588e-05 ]
-   nhpr [ -30 -1.00179e-05 0 ]
-  ]
-  prop "prop_crate_DNARoot" [
-   code [ "prop_crate" ]
-   pos [ 325.827 -78.8578 -1.52588e-05 ]
-   nhpr [ -60 0 0 ]
-  ]
-  prop "prop_crate_DNARoot" [
-   code [ "prop_crate" ]
-   pos [ 322.78 -78.5318 -1.52588e-05 ]
-   nhpr [ -30 -1.00179e-05 0 ]
-  ]
-  prop "prop_gng_truck_DNARoot" [
-   code [ "prop_gng_truck" ]
-   pos [ 323.499 -66.9848 0.03 ]
-   nhpr [ 240 0 0 ]
-  ]
-  prop "prop_crate_DNARoot" [
-   code [ "prop_crate" ]
-   pos [ 341.489 -65.8245 0 ]
-   nhpr [ 0 0 0 ]
-  ]
-  prop "prop_crate_DNARoot" [
-   code [ "prop_crate" ]
-   pos [ 341.489 -68.8245 0 ]
-   nhpr [ -30 0 -0 ]
-   scale [ 1.30041 1.30041 1.30041 ]
-  ]
-  prop "prop_crate_DNARoot" [
-   code [ "prop_crate" ]
-   pos [ 322.339 -48.9945 0 ]
-   nhpr [ 15 -0 0 ]
-   scale [ 1.79751 1.79751 1.79751 ]
-  ]
-  prop "prop_crate_DNARoot" [
-   code [ "prop_crate" ]
-   pos [ 322.36 -53.1303 0 ]
-   nhpr [ -15 0 0 ]
-   scale [ 1.40529 1.40529 1.40529 ]
-  ]
-  prop "prop_crate_DNARoot" [
-   code [ "prop_crate" ]
-   pos [ 318.427 -50.0432 0 ]
-   nhpr [ 45 -0 0 ]
-   scale [ 1.10211 1.10211 1.10211 ]
+   landmark_building "tb56:toon_landmark_hqDL_DNARoot" [
+    code [ "toon_landmark_hqDL" ]
+    building_type [ "hq" ]
+    title [ "" ]
+    pos [ 322.91 -67.1147 0 ]
+    nhpr [ 60 0 -0 ]
+   ]
   ]
  ]
  visgroup "9224" [
@@ -7894,7 +7873,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 14.5745 -13.5097 2.28882e-05 ]
+     pos [ 14.5745 -13.5097 2.28882e-005 ]
      nhpr [ -45 0 -0 ]
     ]
    ]
@@ -7927,13 +7906,13 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 21.0146 -6.84239 2.28882e-05 ]
+     pos [ 21.0146 -6.84239 2.28882e-005 ]
      nhpr [ 90 0 -0 ]
     ]
     prop "prop_DL_post_three_light_DNARoot" [
      code [ "prop_DL_post_three_light" ]
-     pos [ 21.6222 -33.2008 2.28882e-05 ]
-     nhpr [ 1.70755e-06 0 -0 ]
+     pos [ 21.6222 -33.2008 2.28882e-005 ]
+     nhpr [ 1.70755e-006 0 -0 ]
     ]
     prop "prop_tree_DL_brickbox_ul_DNARoot" [
      code [ "prop_tree_DL_brickbox_ul" ]
@@ -8088,19 +8067,19 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 334.289 -137.412 -7.62939e-06 ]
+   pos [ 334.289 -137.412 -7.62939e-006 ]
    nhpr [ 162.691 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 337.499 -142.202 7.62939e-06 ]
+   pos [ 337.499 -142.202 7.62939e-006 ]
    nhpr [ 150 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 348.605 -139.338 -7.62939e-06 ]
+   pos [ 348.605 -139.338 -7.62939e-006 ]
    nhpr [ 165 0 -0 ]
   ]
  ]
@@ -8118,7 +8097,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_40x20_DNARoot" [
     code [ "street_t_intersection" ]
-    pos [ 296.178 -74.305 -1.14441e-05 ]
+    pos [ 296.178 -74.305 -1.14441e-005 ]
     nhpr [ 150 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -8327,9 +8306,9 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
-    pos [ 248.745 -91.395 -1.52588e-05 ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
+    pos [ 248.745 -91.395 -1.52588e-005 ]
     nhpr [ 150 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
    ]
@@ -8338,7 +8317,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_hydrant" ]
    anim [ "tt_a_ara_ddl_hydrant_idle0" ]
    cell_id [ 0 ]
-   pos [ 265.93 -59.9049 -1.14441e-05 ]
+   pos [ 265.93 -59.9049 -1.14441e-005 ]
    nhpr [ 30 0 0 ]
   ]
  ]
@@ -8355,7 +8334,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_80x40_DNARoot" [
     code [ "street_curved_corner" ]
-    pos [ 241.537 -88.946 2.28882e-05 ]
+    pos [ 241.537 -88.946 2.28882e-005 ]
     nhpr [ 60 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -8428,7 +8407,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ 14.9492 -2.12469 2.28882e-05 ]
+     pos [ 14.9492 -2.12469 2.28882e-005 ]
      nhpr [ -90 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
@@ -8555,7 +8534,7 @@ group "donaldsDreamland" [
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 224.87 -52.7145 2.28882e-05 ]
+   pos [ 224.87 -52.7145 2.28882e-005 ]
    nhpr [ 60 0 -0 ]
   ]
  ]
@@ -8576,7 +8555,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_40x40_DNARoot" [
     code [ "street_curved_corner" ]
-    pos [ 246.896 0.336018 -7.62939e-06 ]
+    pos [ 246.896 0.336018 -7.62939e-006 ]
     nhpr [ -120 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -8652,7 +8631,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 7.7965 -10.5987 2.28882e-05 ]
+     pos [ 7.7965 -10.5987 2.28882e-005 ]
      nhpr [ -135 0 -0 ]
     ]
    ]
@@ -8769,7 +8748,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 262.922 -14.4087 -7.62939e-06 ]
+   pos [ 262.922 -14.4087 -7.62939e-006 ]
    nhpr [ -105.365 0 -0 ]
   ]
  ]
@@ -8967,7 +8946,7 @@ group "donaldsDreamland" [
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 2.52499 9.57859 0 ]
-     nhpr [ 3.912e-06 0 -0 ]
+     nhpr [ 3.912e-006 0 -0 ]
      scale [ 1.66155 1.66155 1.66155 ]
      color [ 0.6 0.75 0.75 1 ]
     ]
@@ -9045,8 +9024,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ 16.2495 0.0562993 -3.05176e-05 ]
-     nhpr [ -1.25001e-06 0 -0 ]
+     pos [ 16.2495 0.0562993 -3.05176e-005 ]
+     nhpr [ -1.25001e-006 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
     prop "prop_chimney_DNARoot" [
@@ -9058,7 +9037,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 18.4558 -16.0227 2.28882e-05 ]
+     pos [ 18.4558 -16.0227 2.28882e-005 ]
      nhpr [ 60 0 -0 ]
     ]
    ]
@@ -9109,7 +9088,7 @@ group "donaldsDreamland" [
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 13.9461 -6.27329 0 ]
-     nhpr [ 2.12249e-06 0 -0 ]
+     nhpr [ 2.12249e-006 0 -0 ]
      scale [ 0.839676 0.839676 0.839676 ]
     ]
    ]
@@ -9433,9 +9412,9 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
-    pos [ 182.904 -32.4911 -1.52588e-05 ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
+    pos [ 182.904 -32.4911 -1.52588e-005 ]
     nhpr [ -120 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
    ]
@@ -9444,7 +9423,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_hydrant" ]
    anim [ "tt_a_ara_ddl_hydrant_idle0" ]
    cell_id [ 0 ]
-   pos [ 179.267 -49.6409 -7.62939e-06 ]
+   pos [ 179.267 -49.6409 -7.62939e-006 ]
    nhpr [ 90 0 0 ]
   ]
  ]
@@ -9468,7 +9447,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_80x40_DNARoot" [
     code [ "street_tight_corner" ]
-    pos [ 215.556 -73.946 3.05176e-05 ]
+    pos [ 215.556 -73.946 3.05176e-005 ]
     nhpr [ 150 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -9643,20 +9622,20 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 14.3305 -1.40717 -1.52588e-05 ]
-     nhpr [ 90 1.00179e-05 -6.56845e-13 ]
+     pos [ 14.3305 -1.40717 -1.52588e-005 ]
+     nhpr [ 90 1.00179e-005 -6.56845e-013 ]
      color [ 0.75 0.75 0.75 1 ]
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 11.0598 -1.35815 -1.52588e-05 ]
-     nhpr [ 90 1.00179e-05 -6.56845e-13 ]
+     pos [ 11.0598 -1.35815 -1.52588e-005 ]
+     nhpr [ 90 1.00179e-005 -6.56845e-013 ]
      color [ 0.75 0.75 0.75 1 ]
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 7.8076 -1.31717 -1.52588e-05 ]
-     nhpr [ 90 1.00179e-05 -6.56845e-13 ]
+     pos [ 7.8076 -1.31717 -1.52588e-005 ]
+     nhpr [ 90 1.00179e-005 -6.56845e-013 ]
      color [ 0.6 0.75 0.75 1 ]
     ]
     prop "DD_barrel_DNARoot" [
@@ -9701,7 +9680,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 6.86966 -16.8034 2.28882e-05 ]
+     pos [ 6.86966 -16.8034 2.28882e-005 ]
      nhpr [ -0 0 -0 ]
     ]
    ]
@@ -9739,8 +9718,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 26.3091 -6.60191 2.28882e-05 ]
-     nhpr [ -1.70755e-06 0 -0 ]
+     pos [ 26.3091 -6.60191 2.28882e-005 ]
+     nhpr [ -1.70755e-006 0 -0 ]
     ]
    ]
    flat_building "tb38:random_DNARoot" [
@@ -9849,14 +9828,14 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 14.6072 -1.99346 -1.52588e-05 ]
+     pos [ 14.6072 -1.99346 -1.52588e-005 ]
      nhpr [ -180 0 -0 ]
      scale [ 1.74349 1.74349 1.74349 ]
      color [ 0.5 0.5 0.5 1 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 18.6042 -7.29416 1.52588e-05 ]
+     pos [ 18.6042 -7.29416 1.52588e-005 ]
      nhpr [ -165 0 -0 ]
     ]
    ]
@@ -9867,13 +9846,13 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_mailbox" ]
    anim [ "tt_a_ara_ddl_mailbox_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 209.688 -76.4014 7.62939e-06 ]
+   pos [ 209.688 -76.4014 7.62939e-006 ]
    nhpr [ -105 0 0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 154.992 -46.6806 3.05176e-05 ]
+   pos [ 154.992 -46.6806 3.05176e-005 ]
    nhpr [ -120 0 -0 ]
   ]
  ]
@@ -9896,7 +9875,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_80x40_DNARoot" [
     code [ "street_full_corner" ]
-    pos [ 175.556 -143.228 -8.39233e-05 ]
+    pos [ 175.556 -143.228 -8.39233e-005 ]
     nhpr [ 60 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -10297,15 +10276,15 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 13.0149 -1.96248 -1.52588e-05 ]
+     pos [ 13.0149 -1.96248 -1.52588e-005 ]
      nhpr [ -165 0 -0 ]
      scale [ 1.36864 1.36864 1.36864 ]
      color [ 0.6 0.75 0.75 1 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 5.04486 -1.30199 1.52588e-05 ]
-     nhpr [ 90 1.00179e-05 -6.56845e-13 ]
+     pos [ 5.04486 -1.30199 1.52588e-005 ]
+     nhpr [ 90 1.00179e-005 -6.56845e-013 ]
      color [ 0.5 0.5 0.5 1 ]
     ]
    ]
@@ -10453,7 +10432,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 13.1823 -4.96848 -1.52588e-05 ]
+     pos [ 13.1823 -4.96848 -1.52588e-005 ]
      nhpr [ -165 0 -0 ]
      color [ 0.65 0.62 0.8 1 ]
     ]
@@ -10466,13 +10445,13 @@ group "donaldsDreamland" [
     ]
     prop "DD_barrel_DNARoot" [
      code [ "DD_barrel" ]
-     pos [ 9.98367 -1.50823 2.28882e-05 ]
+     pos [ 9.98367 -1.50823 2.28882e-005 ]
      nhpr [ 93 0 -0 ]
      scale [ 1.31097 1.31097 1.31097 ]
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ 1.85418 -0.0495509 -3.05176e-05 ]
+     pos [ 1.85418 -0.0495509 -3.05176e-005 ]
      nhpr [ 1.00001 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
@@ -10580,13 +10559,13 @@ group "donaldsDreamland" [
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 145.075 -110.779 -8.39233e-05 ]
+   pos [ 145.075 -110.779 -8.39233e-005 ]
    nhpr [ 75 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 143.505 -145.365 -7.62939e-06 ]
+   pos [ 143.505 -145.365 -7.62939e-006 ]
    nhpr [ -180 0 -0 ]
   ]
  ]
@@ -11075,8 +11054,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 1.96904 -17.4285 -7.6294e-06 ]
-     nhpr [ 90 1.00179e-05 -6.56845e-13 ]
+     pos [ 1.96904 -17.4285 -7.6294e-006 ]
+     nhpr [ 90 1.00179e-005 -6.56845e-013 ]
     ]
    ]
    flat_building "tb54:random_DNARoot" [
@@ -11114,22 +11093,22 @@ group "donaldsDreamland" [
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 1.13852 -1.30198 1.52588e-05 ]
+     pos [ 1.13852 -1.30198 1.52588e-005 ]
      nhpr [ -75 0 -0 ]
      color [ 0.65 0.62 0.8 1 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 1.25376 -4.12359 1.52588e-05 ]
+     pos [ 1.25376 -4.12359 1.52588e-005 ]
      nhpr [ -45 0 -0 ]
      color [ 0.6 0.75 0.75 1 ]
     ]
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
-    pos [ 182.805 -145.313 -1.52588e-05 ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
+    pos [ 182.805 -145.313 -1.52588e-005 ]
     nhpr [ -30 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
    ]
@@ -11176,7 +11155,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_80x40_DNARoot" [
     code [ "street_full_corner" ]
-    pos [ 235.197 -119.927 1.52588e-05 ]
+    pos [ 235.197 -119.927 1.52588e-005 ]
     nhpr [ -120 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -11184,7 +11163,7 @@ group "donaldsDreamland" [
    ]
    street "street_sidewalk_20x20_DNARoot" [
     code [ "street_sidewalk_20x20" ]
-    pos [ 269.838 -139.927 3.8147e-06 ]
+    pos [ 269.838 -139.927 3.8147e-006 ]
     nhpr [ -120 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -11289,7 +11268,7 @@ group "donaldsDreamland" [
     prop "prop_DL_flat_owl_DNARoot" [
      code [ "prop_DL_flat_owl" ]
      pos [ 5.32555 -4.80613 0 ]
-     nhpr [ -1.25001e-06 0 -0 ]
+     nhpr [ -1.25001e-006 0 -0 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
@@ -11706,7 +11685,7 @@ group "donaldsDreamland" [
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 277.327 -146.537 3.8147e-06 ]
+   pos [ 277.327 -146.537 3.8147e-006 ]
    nhpr [ -60 0 0 ]
   ]
  ]
@@ -11722,7 +11701,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_80x40_DNARoot" [
     code [ "street_tight_corner" ]
-    pos [ 258.499 -179.568 1.52588e-05 ]
+    pos [ 258.499 -179.568 1.52588e-005 ]
     nhpr [ 150 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -11773,13 +11752,13 @@ group "donaldsDreamland" [
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ 10.151 -0.0860492 -3.05176e-05 ]
+     pos [ 10.151 -0.0860492 -3.05176e-005 ]
      nhpr [ 1.00001 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ -1.99925 -2.80321 2.28882e-05 ]
+     pos [ -1.99925 -2.80321 2.28882e-005 ]
      nhpr [ 90 0 -0 ]
     ]
    ]
@@ -11967,8 +11946,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
-     pos [ 14.1033 0.102358 -3.05176e-05 ]
-     nhpr [ -2.72879e-06 0 -0 ]
+     pos [ 14.1033 0.102358 -3.05176e-005 ]
+     nhpr [ -2.72879e-006 0 -0 ]
      color [ 0.5 0.5 0.5 1 ]
     ]
    ]
@@ -12038,8 +12017,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 6.88238 -17.0466 -7.6294e-06 ]
-     nhpr [ 1.70755e-06 0 -0 ]
+     pos [ 6.88238 -17.0466 -7.6294e-006 ]
+     nhpr [ 1.70755e-006 0 -0 ]
     ]
     prop "prop_chimney_DNARoot" [
      code [ "prop_chimney" ]
@@ -12084,19 +12063,19 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 251.147 -186.25 -7.62939e-06 ]
+   pos [ 251.147 -186.25 -7.62939e-006 ]
    nhpr [ -117.749 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 208.258 -188.288 -7.62939e-06 ]
+   pos [ 208.258 -188.288 -7.62939e-006 ]
    nhpr [ 135 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 195.194 -163.316 1.52588e-05 ]
+   pos [ 195.194 -163.316 1.52588e-005 ]
    nhpr [ -30 0 -0 ]
   ]
  ]
@@ -12121,7 +12100,7 @@ group "donaldsDreamland" [
    ]
    street "street_20x40_DNARoot" [
     code [ "street_20x40" ]
-    pos [ 228.499 -231.529 3.8147e-06 ]
+    pos [ 228.499 -231.529 3.8147e-006 ]
     nhpr [ 60 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -12205,7 +12184,7 @@ group "donaldsDreamland" [
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
      pos [ 1.1215 0.147494 -0.00250148 ]
-     nhpr [ 1.70755e-06 0 -0 ]
+     nhpr [ 1.70755e-006 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
    ]
@@ -12260,7 +12239,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_hydrant" ]
    anim [ "tt_a_ara_ddl_hydrant_idle0" ]
    cell_id [ 0 ]
-   pos [ 231.925 -213.283 3.8147e-06 ]
+   pos [ 231.925 -213.283 3.8147e-006 ]
    nhpr [ -120 0 0 ]
   ]
  ]
@@ -12366,23 +12345,23 @@ group "donaldsDreamland" [
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
      pos [ 6.08912 -15.4527 5.17821 ]
-     nhpr [ 90 -1.00179e-05 6.56845e-13 ]
+     nhpr [ 90 -1.00179e-005 6.56845e-013 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 7.5575 -21.286 1.52588e-05 ]
+     pos [ 7.5575 -21.286 1.52588e-005 ]
      nhpr [ 45 0 -0 ]
      color [ 0.65 0.62 0.8 1 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 4.28016 -21.6055 1.52588e-05 ]
+     pos [ 4.28016 -21.6055 1.52588e-005 ]
      nhpr [ 45 0 -0 ]
      color [ 0.6 0.75 0.75 1 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 1.82146 -22.9269 1.52588e-05 ]
+     pos [ 1.82146 -22.9269 1.52588e-005 ]
      nhpr [ 45 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
@@ -12622,7 +12601,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_80x40_DNARoot" [
     code [ "street_full_corner" ]
-    pos [ 213.498 -257.51 -4.57764e-05 ]
+    pos [ 213.498 -257.51 -4.57764e-005 ]
     nhpr [ 150 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -12865,7 +12844,7 @@ group "donaldsDreamland" [
     prop "prop_DL_weathervane_DNARoot" [
      code [ "prop_DL_weathervane" ]
      pos [ 4.63733 0.0758512 29.5044 ]
-     nhpr [ 90 1.00179e-05 -6.56845e-13 ]
+     nhpr [ 90 1.00179e-005 -6.56845e-013 ]
     ]
    ]
    flat_building "tb17:random_DNARoot" [
@@ -13053,8 +13032,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 1.65883 -6.90921 -7.6294e-06 ]
-     nhpr [ -4.66511e-06 0 -0 ]
+     pos [ 1.65883 -6.90921 -7.6294e-006 ]
+     nhpr [ -4.66511e-006 0 -0 ]
     ]
    ]
    flat_building "tb18:random_DNARoot" [
@@ -13196,9 +13175,9 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
-    pos [ 180.74 -283.104 -1.52588e-05 ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
+    pos [ 180.74 -283.104 -1.52588e-005 ]
     nhpr [ 150 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
    ]
@@ -13216,7 +13195,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_80x40_DNARoot" [
     code [ "street_tight_corner" ]
-    pos [ 144.216 -217.51 -7.62939e-06 ]
+    pos [ 144.216 -217.51 -7.62939e-006 ]
     nhpr [ -120 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -13468,7 +13447,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 13.1075 -2.22888 -1.52588e-05 ]
+     pos [ 13.1075 -2.22888 -1.52588e-005 ]
      nhpr [ -165 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
@@ -13480,7 +13459,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 2.21785 -11.8635 -1.52588e-05 ]
+     pos [ 2.21785 -11.8635 -1.52588e-005 ]
      nhpr [ -165 0 -0 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
@@ -13683,7 +13662,7 @@ group "donaldsDreamland" [
     prop "prop_chimney_DNARoot" [
      code [ "prop_chimney" ]
      pos [ 2.54192 3.49525 15 ]
-     nhpr [ 1.70755e-06 0 -0 ]
+     nhpr [ 1.70755e-006 0 -0 ]
      color [ 0.25 0.25 0.25 1 ]
     ]
    ]
@@ -13833,8 +13812,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 12.1642 -7.50893 -7.6294e-06 ]
-     nhpr [ 90 1.00179e-05 -0 ]
+     pos [ 12.1642 -7.50893 -7.6294e-006 ]
+     nhpr [ 90 1.00179e-005 -0 ]
     ]
    ]
    flat_building "tb59:random_DNARoot" [
@@ -13889,7 +13868,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 2.26575 -16.9604 -7.6294e-06 ]
+     pos [ 2.26575 -16.9604 -7.6294e-006 ]
      nhpr [ -90 0 -0 ]
     ]
     prop "DD_barrel_DNARoot" [
@@ -13920,13 +13899,13 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_hydrant" ]
    anim [ "tt_a_ara_ddl_hydrant_idle0" ]
    cell_id [ 0 ]
-   pos [ 159.751 -234.645 -7.62939e-06 ]
+   pos [ 159.751 -234.645 -7.62939e-006 ]
    nhpr [ -30 0 0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 135.386 -275.489 1.14441e-05 ]
+   pos [ 135.386 -275.489 1.14441e-005 ]
    nhpr [ 105 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
@@ -13998,7 +13977,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 15.8909 -2.15184 -2.28882e-05 ]
+     pos [ 15.8909 -2.15184 -2.28882e-005 ]
      nhpr [ 90 0 -0 ]
      scale [ 1.56721 1.56721 1.56721 ]
      color [ 0.65 0.62 0.8 1 ]
@@ -14011,7 +13990,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ -4.92553 -4.3645 -7.6294e-06 ]
+     pos [ -4.92553 -4.3645 -7.6294e-006 ]
      nhpr [ -45 0 -0 ]
     ]
    ]
@@ -14129,7 +14108,7 @@ group "donaldsDreamland" [
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
      pos [ -0.00927101 0.0420232 -0.00250148 ]
-     nhpr [ 1.70755e-06 0 -0 ]
+     nhpr [ 1.70755e-006 0 -0 ]
      color [ 0.75 0.75 0.75 1 ]
     ]
    ]
@@ -14322,7 +14301,7 @@ group "donaldsDreamland" [
     prop "post_brick2_DNARoot" [
      code [ "prop_anvil_sign" ]
      pos [ 9.97569 0.0875842 10.2422 ]
-     nhpr [ 90 -1.00179e-05 6.56845e-13 ]
+     nhpr [ 90 -1.00179e-005 6.56845e-013 ]
     ]
    ]
   ]
@@ -14584,7 +14563,7 @@ group "donaldsDreamland" [
     ]
     prop "DD_barrel_DNARoot" [
      code [ "DD_barrel" ]
-     pos [ 6.8944 -1.1766 1.52588e-05 ]
+     pos [ 6.8944 -1.1766 1.52588e-005 ]
      nhpr [ 138 0 -0 ]
      scale [ 1.31097 1.31097 1.31097 ]
     ]
@@ -14596,7 +14575,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_mailbox" ]
    anim [ "tt_a_ara_ddl_mailbox_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 83.0878 -233.535 -5.72205e-06 ]
+   pos [ 83.0878 -233.535 -5.72205e-006 ]
    nhpr [ 150 0 0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
@@ -14704,7 +14683,7 @@ group "donaldsDreamland" [
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
      pos [ 5.85305 0.0202554 -0.00249385 ]
-     nhpr [ -4.66511e-06 0 -0 ]
+     nhpr [ -4.66511e-006 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
    ]
@@ -14764,7 +14743,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_80x40_DNARoot" [
     code [ "street_curved_corner" ]
-    pos [ 89.811 -101.575 5.34058e-05 ]
+    pos [ 89.811 -101.575 5.34058e-005 ]
     nhpr [ -90 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -15002,13 +14981,13 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 6.437 -2.208 -9.09495e-13 ]
+     pos [ 6.437 -2.208 -9.09495e-013 ]
      nhpr [ 45 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
     prop "prop_tree_DL_brickbox_ur_DNARoot" [
      code [ "prop_tree_DL_brickbox_ur" ]
-     pos [ 16.37 9.65989 5.34058e-05 ]
+     pos [ 16.37 9.65989 5.34058e-005 ]
      nhpr [ -45 0 -0 ]
      scale [ 1.72331 1.72331 1.72331 ]
      color [ 0.5 0.5 0.5 1 ]
@@ -15113,7 +15092,7 @@ group "donaldsDreamland" [
     prop "prop_DL_weathervane_DNARoot" [
      code [ "prop_DL_weathervane" ]
      pos [ 21.61 0.097998 29.4962 ]
-     nhpr [ 90 1.00179e-05 -6.56845e-13 ]
+     nhpr [ 90 1.00179e-005 -6.56845e-013 ]
     ]
     prop "prop_DL_clouds_DNARoot" [
      code [ "prop_DL_clouds" ]
@@ -15140,7 +15119,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_40x40_DNARoot" [
     code [ "street_keyboard_40x40" ]
-    pos [ 89.8115 -101.575 5.34058e-05 ]
+    pos [ 89.8115 -101.575 5.34058e-005 ]
     nhpr [ -180 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_bed_DL_tex" ]
@@ -15353,7 +15332,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_mailbox" ]
    anim [ "tt_a_ara_ddl_mailbox_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ 63.8351 -136.846 5.34058e-05 ]
+   pos [ 63.8351 -136.846 5.34058e-005 ]
    nhpr [ 180 0 0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
@@ -15576,7 +15555,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 4.93966 -7.79564 -7.6294e-06 ]
+     pos [ 4.93966 -7.79564 -7.6294e-006 ]
      nhpr [ -90 0 -0 ]
     ]
    ]
@@ -15867,12 +15846,12 @@ group "donaldsDreamland" [
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
      pos [ 18.5126 -1.53657 0 ]
-     nhpr [ 90 1.00179e-05 -1.52006e-13 ]
+     nhpr [ 90 1.00179e-005 -1.52006e-013 ]
     ]
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
      pos [ 7.12586 0.0203449 -0.00248622 ]
-     nhpr [ 4.66511e-06 0 -0 ]
+     nhpr [ 4.66511e-006 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
    ]
@@ -15912,7 +15891,7 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 21.0405 -6.58704 -7.6294e-06 ]
+     pos [ 21.0405 -6.58704 -7.6294e-006 ]
      nhpr [ 180 0 -0 ]
     ]
     prop "prop_chimney_DNARoot" [
@@ -15930,8 +15909,8 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
     pos [ 1.27769 -80.1102 0 ]
     nhpr [ 30 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
@@ -15941,7 +15920,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_hydrant" ]
    anim [ "tt_a_ara_ddl_hydrant_idle0" ]
    cell_id [ 0 ]
-   pos [ 14.6238 -77.2247 7.62939e-06 ]
+   pos [ 14.6238 -77.2247 7.62939e-006 ]
    nhpr [ 45 0 -0 ]
   ]
  ]
@@ -16007,7 +15986,7 @@ group "donaldsDreamland" [
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
      pos [ 0.383372 0.020216 -0.00248622 ]
-     nhpr [ -1.70755e-06 0 -0 ]
+     nhpr [ -1.70755e-006 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
    ]
@@ -16188,7 +16167,7 @@ group "donaldsDreamland" [
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ 74.1863 -69.9014 2.28882e-05 ]
+   pos [ 74.1863 -69.9014 2.28882e-005 ]
    nhpr [ -45 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
@@ -16432,8 +16411,8 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 33.0585 -29.1605 -7.6294e-06 ]
-     nhpr [ 1.47878e-06 0 -0 ]
+     pos [ 33.0585 -29.1605 -7.6294e-006 ]
+     nhpr [ 1.47878e-006 0 -0 ]
     ]
    ]
    flat_building "tb8:random_DNARoot" [
@@ -16588,7 +16567,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_80x40_DNARoot" [
     code [ "street_curved_corner" ]
-    pos [ 19.8115 -49.613 -2.28882e-05 ]
+    pos [ 19.8115 -49.613 -2.28882e-005 ]
     nhpr [ 120 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -16652,7 +16631,7 @@ group "donaldsDreamland" [
     prop "prop_cellar_door_DNARoot" [
      code [ "prop_cellar_door" ]
      pos [ 1.71478 0.0222962 -0.00248622 ]
-     nhpr [ 4.66511e-06 0 -0 ]
+     nhpr [ 4.66511e-006 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
    ]
@@ -16775,19 +16754,19 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
    cell_id [ 0 ]
-   pos [ -11.9112 -56.6274 -2.28882e-05 ]
+   pos [ -11.9112 -56.6274 -2.28882e-005 ]
    nhpr [ 144.829 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ -9.24541 -64.4177 -2.28882e-05 ]
+   pos [ -9.24541 -64.4177 -2.28882e-005 ]
    nhpr [ -180 0 -0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__ddl_trashcan_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__ddl_trashcan" ]
    anim [ "tt_a_ara_ddl_trashcan_idleSleep0" ]
-   pos [ -13.9491 -66.4154 -2.28882e-05 ]
+   pos [ -13.9491 -66.4154 -2.28882e-005 ]
    nhpr [ -150 0 -0 ]
   ]
  ]
@@ -17040,14 +17019,14 @@ group "donaldsDreamland" [
     ]
     prop "prop_crate_DNARoot" [
      code [ "prop_crate" ]
-     pos [ 6.49377 -1.44567 7.62939e-06 ]
+     pos [ 6.49377 -1.44567 7.62939e-006 ]
      nhpr [ 60 0 -0 ]
      scale [ 0.82312 0.82312 0.82312 ]
      color [ 0.65 0.62 0.8 1 ]
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 2.03311 -16.1446 -7.6294e-06 ]
+     pos [ 2.03311 -16.1446 -7.6294e-006 ]
      nhpr [ -45 0 -0 ]
     ]
    ]
@@ -17058,7 +17037,7 @@ group "donaldsDreamland" [
    code [ "interactive_prop_phase_8_models_char__ddl_hydrant" ]
    anim [ "tt_a_ara_ddl_hydrant_idle0" ]
    cell_id [ 0 ]
-   pos [ -10.3332 -11.3436 7.62939e-06 ]
+   pos [ -10.3332 -11.3436 7.62939e-006 ]
    nhpr [ -60 0 0 ]
   ]
  ]
@@ -17088,7 +17067,7 @@ group "donaldsDreamland" [
   group "streets" [
    street "street_40x40_DNARoot" [
     code [ "street_40x40" ]
-    pos [ -54.8295 -0.330967 0 ]
+    pos [ -54.8295 -0.330963 0 ]
     nhpr [ -150 0 -0 ]
     texture [ "street_street_DL_tex" ]
     texture [ "street_sidewalk_DL_tex" ]
@@ -17371,8 +17350,8 @@ group "donaldsDreamland" [
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
     pos [ -67.445 -9.711 0 ]
     nhpr [ -150 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
@@ -17380,219 +17359,8 @@ group "donaldsDreamland" [
   ]
   prop "prop_tt_m_ara_gen_tunnelAheadSign_DNARoot" [
    code [ "prop_tt_m_ara_gen_tunnelAheadSign" ]
-   pos [ -81.4582 -21.9902 3.8147e-06 ]
+   pos [ -81.4582 -21.9902 3.8147e-006 ]
    nhpr [ 75 0 -0 ]
-  ]
-  street "street_80x40_DNARoot" [
-   code [ "street_keyboard_40x40" ]
-   pos [ -104.112 -74.972 0 ]
-   nhpr [ 30 0 -0 ]
-   texture [ "street_street_DL_tex" ]
-   texture [ "street_bed_DL_tex" ]
-   texture [ "street_bed_DL_tex" ]
-  ]
-  prop "linktunnel_br_3422_DNARoot" [
-   code [ "prop_neighborhood_tunnel" ]
-   pos [ -114.112 -57.6515 0 ]
-   nhpr [ 120 0 0 ]
-   sign [
-    code [ "tunnel_sign_blue" ]
-    pos [ 0 0 0.58 ]
-    scale [ 1.5 1 1.5 ]
-    baseline [
-     code [ "mickey" ]
-     color [ 0 0.501961 0.501961 1 ]
-     pos [ 0 0 -0.98 ]
-     scale [ 1.5 1 1.5 ]
-     width [ 44.5573 ]
-     height [ 44.5573 ]
-     text [
-      letters [ "A" ]
-     ]
-     text [
-      letters [ "R" ]
-     ]
-     text [
-      letters [ "C" ]
-     ]
-     text [
-      letters [ "T" ]
-     ]
-     text [
-      letters [ "I" ]
-     ]
-     text [
-      letters [ "C" ]
-     ]
-     text [
-      letters [ " " ]
-     ]
-     text [
-      letters [ "A" ]
-     ]
-     text [
-      letters [ "V" ]
-     ]
-     text [
-      letters [ "E" ]
-     ]
-     text [
-      letters [ "N" ]
-     ]
-     text [
-      letters [ "U" ]
-     ]
-     text [
-      letters [ "E" ]
-     ]
-    ]
-    baseline [
-     pos [ 0 0 1.63 ]
-     scale [ 2.5 1 2.5 ]
-     graphic [
-      code [ "plutoSZ" ]
-     ]
-    ]
-    baseline [
-     code [ "mickey" ]
-     color [ 0 0.501961 0.501961 1 ]
-     pos [ 0 0 -1.91 ]
-     scale [ 0.8 1 0.8 ]
-     width [ 33.0786 ]
-     height [ 33.0786 ]
-     text [
-      letters [ "T" ]
-     ]
-     text [
-      letters [ "H" ]
-     ]
-     text [
-      letters [ "E" ]
-     ]
-     text [
-      letters [ " " ]
-     ]
-     text [
-      letters [ "B" ]
-     ]
-     text [
-      letters [ "R" ]
-     ]
-     text [
-      letters [ "R" ]
-     ]
-     text [
-      letters [ "R" ]
-     ]
-     text [
-      letters [ "G" ]
-     ]
-     text [
-      letters [ "H" ]
-     ]
-    ]
-   ]
-  ]
-  flat_building "tb19:random_DNARoot" [
-   pos [ -115.451 -35.331 0 ]
-   nhpr [ 30 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 12 ]
-    code [ "wall_bricks_ur" ]
-    color [ 0.29 0.35 0.45 1 ]
-   ]
-   wall [
-    height [ 8 ]
-    code [ "wall_bricks_ur" ]
-    color [ 0.29 0.35 0.45 1 ]
-    windows [
-     code [ "window_sm_round2DL_ul" ]
-     color [ 1 1 1 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_curved_ur" ]
-     color [ 0.36 0.22 0.27 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb19:random_DNARoot" [
-   pos [ -124.111 -40.331 0 ]
-   nhpr [ 30 0 -0 ]
-   width [ 10 ]
-   wall [
-    height [ 20 ]
-    code [ "wall_md_blank_ur" ]
-    color [ 0.27 0.17 0.31 1 ]
-    windows [
-     code [ "window_sm_round2DL_ur" ]
-     color [ 1 1 1 1 ]
-     count [ 1 ]
-    ]
-    cornice [
-     code [ "cornice_brick_ur" ]
-     color [ 0.39 0.3 0.25 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb22:random_DNARoot" [
-   pos [ -78.1308 -59.972 0 ]
-   nhpr [ -150 0 -0 ]
-   width [ 15 ]
-   wall [
-    height [ 12 ]
-    code [ "wall_md_bricks_ur" ]
-    color [ 0.47 0.36 0.23 1 ]
-    windows [
-     code [ "window_sm_square_ur" ]
-     color [ 0.31 0.25 0.24 1 ]
-     count [ 1 ]
-    ]
-   ]
-   wall [
-    height [ 8 ]
-    code [ "wall_md_bricks_ur" ]
-    color [ 0.47 0.36 0.23 1 ]
-    windows [
-     code [ "window_sm_roundDL_ul" ]
-     color [ 1 1 1 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_curved_ur" ]
-     color [ 0.25 0.25 0.25 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb22:random_DNARoot" [
-   pos [ -91.1212 -67.472 0 ]
-   nhpr [ -150 0 -0 ]
-   width [ 15 ]
-   wall [
-    height [ 12 ]
-    code [ "wall_md_bricks_ur" ]
-    color [ 0.37 0.27 0.36 1 ]
-    windows [
-     code [ "window_sm_curved_ur" ]
-     color [ 0.27 0.25 0.35 1 ]
-     count [ 1 ]
-    ]
-   ]
-   wall [
-    height [ 8 ]
-    code [ "wall_md_bricks_ur" ]
-    color [ 0.37 0.27 0.36 1 ]
-    windows [
-     code [ "window_sm_curvedDL_ul" ]
-     color [ 1 1 1 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_curved_ur" ]
-     color [ 0.31 0.29 0.36 1 ]
-    ]
-   ]
   ]
  ]
  visgroup "9251" [
@@ -17602,19 +17370,639 @@ group "donaldsDreamland" [
   suit_edge [ 323 320 ]
   battle_cell [ 20 20 -93.9857 -45.8716 -0.5 ]
   group "streets" [
+   street "street_80x40_DNARoot" [
+    code [ "street_keyboard_40x40" ]
+    pos [ -104.112 -74.972 0 ]
+    nhpr [ 30 0 -0 ]
+    texture [ "street_street_DL_tex" ]
+    texture [ "street_bed_DL_tex" ]
+    texture [ "street_bed_DL_tex" ]
+   ]
   ]
   group "buildings" [
+   flat_building "tb22:random_DNARoot" [
+    pos [ -126.252 -116.623 4.36375 ]
+    nhpr [ 120 0 -0 ]
+    width [ 20 ]
+    wall [
+     height [ 12 ]
+     code [ "wall_suit_build5_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+     windows [
+      code [ "window_sm_curved_ur" ]
+      color [ 0.31 0.25 0.24 1 ]
+      count [ 1 ]
+     ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build5_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+     windows [
+      code [ "window_md_curvedDL_ul" ]
+      color [ 1 1 1 1 ]
+      count [ 2 ]
+     ]
+    ]
+   ]
+   flat_building "tb22:random_DNARoot" [
+    pos [ -81.6116 -113.943 5.01076 ]
+    nhpr [ 120 0 -0 ]
+    width [ 20 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build3_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
+   flat_building "tb19:random_DNARoot" [
+    pos [ -136.603 -18.6937 4.47683 ]
+    nhpr [ 120 0 -0 ]
+    width [ 20 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build3_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
+   flat_building "tb19:random_DNARoot" [
+    pos [ -161.244 -56.0142 4.43805 ]
+    nhpr [ 120 0 -0 ]
+    width [ 20 ]
+    wall [
+     height [ 12 ]
+     code [ "wall_suit_build5_ur" ]
+     color [ 0.25 0.25 0.25 1 ]
+     flat_door [
+      code [ "door_single_shuttered_ur" ]
+      color [ 0.5 0.5 0.5 1 ]
+     ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build5_ur" ]
+     color [ 0.25 0.25 0.25 1 ]
+     windows [
+      code [ "window_sm_roundDL_ul" ]
+      color [ 1 1 1 1 ]
+      count [ 2 ]
+     ]
+    ]
+   ]
+   flat_building "tb19:random_DNARoot" [
+    pos [ -115.452 -35.331 0 ]
+    nhpr [ 30 0 -0 ]
+    width [ 20 ]
+    wall [
+     height [ 20 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    prop "prop_DL_clouds_DNARoot" [
+     code [ "prop_DL_clouds" ]
+     pos [ 13.7601 -10.3428 23.0431 ]
+     nhpr [ 150 0 -0 ]
+     scale [ 4.44793 4.44793 4.44793 ]
+    ]
+   ]
+   flat_building "tb19:random_DNARoot" [
+    pos [ -124.112 -40.331 0 ]
+    nhpr [ 30 0 -0 ]
+    width [ 10 ]
+    wall [
+     height [ 12 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
+   flat_building "tb22:random_DNARoot" [
+    pos [ -78.1308 -59.972 0 ]
+    nhpr [ -150 0 -0 ]
+    width [ 20 ]
+    wall [
+     height [ 12 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+   ]
+   flat_building "tb22:random_DNARoot" [
+    pos [ -95.4513 -69.972 0 ]
+    nhpr [ -150 0 -0 ]
+    width [ 10 ]
+    wall [
+     height [ 12 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+   ]
+   flat_building "tb0:random_DNARoot" [
+    pos [ -151.959 -3.59358 19.2544 ]
+    nhpr [ 30 0 -0 ]
+    width [ 25 ]
+    wall [
+     height [ 20 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 10 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
+   flat_building "tb0:random_DNARoot" [
+    pos [ -130.308 8.90644 19.2544 ]
+    nhpr [ 120 0 -0 ]
+    width [ 20 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
   ]
   group "props" [
+   prop "prop_cog_water_tower_DNARoot" [
+    code [ "prop_cog_water_tower" ]
+    pos [ -112.772 -15.821 3.19589 ]
+    nhpr [ 30 0 -0 ]
+   ]
   ]
  ]
  visgroup "9252" [
   vis [   "9252"   "9251"   "9250"   "9249"   "9248"   "9247"   ]
   group "streets" [
+   street "street_10x20_DNARoot" [
+    code [ "street_sidewalk_10x40" ]
+    pos [ -91.6116 -96.6226 4.43199 ]
+    nhpr [ 120 0 -0 ]
+    texture [ "street_street_DL_tex" ]
+    texture [ "street_sidewalk_DL_tex" ]
+    texture [ "street_curb_DL_tex" ]
+   ]
+   street "street_4way_intersection_DNARoot" [
+    code [ "street_stairs_40x10x5" ]
+    pos [ -136.199 -99.3953 -0.578773 ]
+    nhpr [ -60 -5.47327e-009 -9.48005e-009 ]
+    texture [ "street_street_DL_tex" ]
+    texture [ "street_sidewalk_DL_tex" ]
+    texture [ "street_curb_DL_tex" ]
+   ]
+   street "street_4way_intersection_DNARoot" [
+    code [ "street_4way_intersection" ]
+    pos [ -104.112 -74.972 0 ]
+    nhpr [ 120 0 -0 ]
+    texture [ "street_street_DL_tex" ]
+    texture [ "street_sidewalk_DL_tex" ]
+    texture [ "street_curb_DL_tex" ]
+   ]
+   street "street_10x20_DNARoot" [
+    code [ "street_10x40" ]
+    pos [ -163.753 -51.6707 0 ]
+    nhpr [ -60 0 -0 ]
+    texture [ "street_street_DL_tex" ]
+    texture [ "street_sidewalk_DL_tex" ]
+    texture [ "street_curb_DL_tex" ]
+   ]
+   street "street_4way_intersection_DNARoot" [
+    code [ "street_stairs_40x10x5" ]
+    pos [ -126.656 -35.9218 -0.561953 ]
+    nhpr [ 120 0 -0 ]
+    texture [ "street_street_DL_tex" ]
+    texture [ "street_sidewalk_DL_tex" ]
+    texture [ "street_curb_DL_tex" ]
+   ]
+   street "street_10x20_DNARoot" [
+    code [ "street_sidewalk_10x40" ]
+    pos [ -131.603 -27.3539 4.43805 ]
+    nhpr [ 120 0 -0 ]
+    texture [ "street_street_DL_tex" ]
+    texture [ "street_sidewalk_DL_tex" ]
+    texture [ "street_curb_DL_tex" ]
+   ]
+   street "street_10x20_DNARoot" [
+    code [ "street_10x40" ]
+    pos [ -138.753 -94.972 0 ]
+    nhpr [ -60 0 -0 ]
+    texture [ "street_street_DL_tex" ]
+    texture [ "street_sidewalk_DL_tex" ]
+    texture [ "street_curb_DL_tex" ]
+   ]
   ]
   group "buildings" [
+   flat_building "tb0:random_DNARoot" [
+    pos [ -139.914 -115.865 23.5799 ]
+    nhpr [ 120 0 -0 ]
+    width [ 20 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build3_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+   ]
+   flat_building "tb0:random_DNARoot" [
+    pos [ -149.914 -98.544 23.5799 ]
+    nhpr [ -150 0 -0 ]
+    width [ 25 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build3_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
+   flat_building "tb0:random_DNARoot" [
+    pos [ -159.459 9.39679 19.2544 ]
+    nhpr [ -60 0 -0 ]
+    width [ 15 ]
+    wall [
+     height [ 20 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 10 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
+   flat_building "tb22:random_DNARoot" [
+    pos [ -113.262 -109.123 4.43199 ]
+    nhpr [ -150 0 -0 ]
+    width [ 15 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build3_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+   ]
+   flat_building "tb22:random_DNARoot" [
+    pos [ -104.602 -104.123 4.43199 ]
+    nhpr [ -150 0 -0 ]
+    width [ 10 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+   ]
+   flat_building "tb22:random_DNARoot" [
+    pos [ -91.6116 -96.6226 4.43199 ]
+    nhpr [ -150 0 -0 ]
+    width [ 15 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build3_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+   ]
+   flat_building "tb19:random_DNARoot" [
+    pos [ -171.244 -38.6937 4.43805 ]
+    nhpr [ 30 0 -0 ]
+    width [ 15 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+   ]
+   flat_building "tb19:random_DNARoot" [
+    pos [ -158.254 -31.1937 4.43805 ]
+    nhpr [ 30 0 -0 ]
+    width [ 10 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+   ]
+   flat_building "tb19:random_DNARoot" [
+    pos [ -149.593 -26.1937 4.43805 ]
+    nhpr [ 30 0 -0 ]
+    width [ 15 ]
+    wall [
+     height [ 13 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 9 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build3_ur" ]
+     color [ 0.75 0.75 0.75 1 ]
+    ]
+   ]
+   flat_building "tb19:random_DNARoot" [
+    pos [ -136.611 -18.6803 -0.561953 ]
+    nhpr [ -60 0 -0 ]
+    width [ 10 ]
+    wall [
+     height [ 12 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
+   flat_building "tb19:random_DNARoot" [
+    pos [ -131.611 -27.3405 -0.561953 ]
+    nhpr [ -60 0 -0 ]
+    width [ 15 ]
+    wall [
+     height [ 12 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build1_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
+   flat_building "tb22:random_DNARoot" [
+    pos [ -104.112 -74.972 0 ]
+    nhpr [ -60 0 -0 ]
+    width [ 10 ]
+    wall [
+     height [ 12 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build2_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
+   flat_building "tb22:random_DNARoot" [
+    pos [ -99.1116 -83.6322 0 ]
+    nhpr [ -60 0 -0 ]
+    width [ 15 ]
+    wall [
+     height [ 12 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+    wall [
+     height [ 8 ]
+     code [ "wall_suit_build4_ur" ]
+     color [ 0.5 0.5 0.5 1 ]
+    ]
+   ]
   ]
   group "props" [
+   prop "prop_cog_smoke_stack_DNARoot" [
+    code [ "prop_cog_smoke_stack" ]
+    pos [ -169.912 -61.0008 0 ]
+    nhpr [ 120 0 -0 ]
+    scale [ 0.782119 0.782119 0.782119 ]
+   ]
+   prop "prop_cog_smoke_stack_DNARoot" [
+    code [ "prop_cog_smoke_stack" ]
+    pos [ -177.412 -48.0104 0 ]
+    nhpr [ 120 0 -0 ]
+    scale [ 0.789164 0.789164 0.789164 ]
+   ]
+   prop "prop_cog_water_tower_DNARoot" [
+    code [ "prop_cog_water_tower" ]
+    pos [ -137.39 -36.1215 4.4691 ]
+    nhpr [ -60 0 -0 ]
+    scale [ 0.491224 0.491224 0.491224 ]
+   ]
+   prop "prop_cog_water_tower_DNARoot" [
+    code [ "prop_cog_water_tower" ]
+    pos [ -106.525 -89.0184 4.45267 ]
+    nhpr [ 30 0 -0 ]
+    scale [ 0.558264 0.558264 0.558264 ]
+   ]
+   prop "prop_cog_water_tower_DNARoot" [
+    code [ "prop_cog_water_tower" ]
+    pos [ -126.059 -100.162 5.00001 ]
+    nhpr [ 30 0 -0 ]
+    scale [ 0.620002 0.620002 0.620002 ]
+   ]
+   prop "prop_cog_water_tower_DNARoot" [
+    code [ "prop_cog_water_tower" ]
+    pos [ -157.564 -46.1268 4.62218 ]
+    nhpr [ -60 0 -0 ]
+    scale [ 0.738382 0.738382 0.738382 ]
+   ]
+   prop "prop_cog_tunnel_DNARoot" [
+    code [ "prop_cog_tunnel" ]
+    pos [ -146.735 -76.4866 -0.496864 ]
+    nhpr [ -60 0 -0 ]
+    sign [
+     baseline [
+      code [ "suit" ]
+      color [ 0.752941 0.752941 0.752941 1 ]
+      pos [ 0 0 -0.454734 ]
+      scale [ 1.94135 1 1.34943 ]
+      text [
+       letters [ "U" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "D" ]
+      ]
+      text [
+       letters [ "E" ]
+      ]
+      text [
+       letters [ "R" ]
+      ]
+     ]
+     baseline [
+      code [ "suit" ]
+      color [ 0.752941 0.752941 0.752941 1 ]
+      pos [ -0.145453 0 -1.58779 ]
+      scale [ 2.00652 1 1.22781 ]
+      text [
+       letters [ "C" ]
+      ]
+      text [
+       letters [ "O" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+      text [
+       letters [ "S" ]
+      ]
+      text [
+       letters [ "T" ]
+      ]
+      text [
+       letters [ "R" ]
+      ]
+      text [
+       letters [ "U" ]
+      ]
+      text [
+       letters [ "C" ]
+      ]
+      text [
+       letters [ "T" ]
+      ]
+      text [
+       letters [ "I" ]
+      ]
+      text [
+       letters [ "O" ]
+      ]
+      text [
+       letters [ "N" ]
+      ]
+     ]
+    ]
+   ]
+   prop "prop_cog_water_tower_DNARoot" [
+    code [ "prop_cog_water_tower" ]
+    pos [ -113.35 -73.1421 0 ]
+    nhpr [ 90 39.8056 21.8014 ]
+   ]
+   prop "prop_cog_water_tower_DNARoot" [
+    code [ "prop_cog_water_tower" ]
+    pos [ -119.332 -59.3928 0 ]
+    nhpr [ 45 33.5494 11.8887 ]
+   ]
+   prop "prop_cog_water_tower_DNARoot" [
+    code [ "prop_cog_water_tower" ]
+    pos [ -126.832 -46.4024 0 ]
+    nhpr [ 120 0 337.467 ]
+   ]
+  ]
+  prop "prop_cog_water_tower_DNARoot" [
+   code [ "prop_cog_water_tower" ]
+   pos [ -115.452 -35.331 0 ]
+   nhpr [ 30 90 0 ]
+  ]
+  prop "prop_cog_water_tower_DNARoot" [
+   code [ "prop_cog_water_tower" ]
+   pos [ -95.4518 -69.972 0 ]
+   nhpr [ 30.0006 296.565 0 ]
   ]
  ]
  visgroup "9253" [
@@ -17846,14 +18234,14 @@ group "donaldsDreamland" [
     ]
     prop "prop_DL_post_one_light_DNARoot" [
      code [ "prop_DL_post_one_light" ]
-     pos [ 15.217 -4.623 -7.6294e-06 ]
+     pos [ 15.217 -4.623 -7.6294e-006 ]
      nhpr [ 135 0 -0 ]
     ]
    ]
   ]
   group "props" [
-   prop "neighborhood_sign_BR_DNARoot" [
-    code [ "neighborhood_sign_BR" ]
+   prop "neighborhood_sign_cashBotHQ_DNARoot" [
+    code [ "neighborhood_sign_cashBotHQ" ]
     pos [ 89.1286 -155.976 0 ]
     nhpr [ 60 0 -0 ]
     color [ 0.47 0.49 0.66 1 ]
@@ -18177,13 +18565,13 @@ group "donaldsDreamland" [
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 13.3641 -21.8873 1.52588e-05 ]
+     pos [ 13.3641 -21.8873 1.52588e-005 ]
      nhpr [ 135 0 -0 ]
      color [ 0.47 0.49 0.66 1 ]
     ]
     prop "neighborhood_sign_DL_DNARoot" [
      code [ "prop_trashcan_metal" ]
-     pos [ 17.6185 -21.8802 1.52588e-05 ]
+     pos [ 17.6185 -21.8802 1.52588e-005 ]
      nhpr [ 135 0 -0 ]
      color [ 0.5 0.5 0.5 1 ]
     ]

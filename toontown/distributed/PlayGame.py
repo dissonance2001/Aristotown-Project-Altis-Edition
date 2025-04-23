@@ -12,7 +12,6 @@ from toontown.hood import TTOHood
 from toontown.hood import DDHood
 from toontown.hood import MMHood
 from toontown.hood import BRHood
-from toontown.hood import OTHood
 from toontown.hood import DGHood
 from toontown.hood import DLHood
 from toontown.hood import GSHood
@@ -35,7 +34,6 @@ class PlayGame(StateData.StateData):
      ToontownGlobals.ToontownCentralOld: TTOHood.TTOHood,
      ToontownGlobals.DonaldsDock: DDHood.DDHood,
      ToontownGlobals.TheBrrrgh: BRHood.BRHood,
-     ToontownGlobals.YeOlde: OTHood.OTHood,
      ToontownGlobals.MinniesMelodyland: MMHood.MMHood,
      ToontownGlobals.DaisyGardens: DGHood.DGHood,
      ToontownGlobals.DonaldsDreamland: DLHood.DLHood,
@@ -55,7 +53,6 @@ class PlayGame(StateData.StateData):
      ToontownGlobals.DonaldsDock: 'DDHood',
      ToontownGlobals.TheBrrrgh: 'BRHood',
      ToontownGlobals.MinniesMelodyland: 'MMHood',
-     ToontownGlobals.YeOlde: 'OTHood',
      ToontownGlobals.DaisyGardens: 'DGHood',
      ToontownGlobals.DonaldsDreamland: 'DLHood',
      ToontownGlobals.GoofySpeedway: 'GSHood',
@@ -82,7 +79,6 @@ class PlayGame(StateData.StateData):
           'DGHood',
           'DLHood',
           'GSHood',
-          'OTHood',
           'OZHood',
           'GZHood',
           'SellbotHQ',
@@ -96,7 +92,6 @@ class PlayGame(StateData.StateData):
          State.State('TTHood', self.enterTTHood, self.exitTTHood, ['quietZone']),
          State.State('TTOHood', self.enterTTOHood, self.exitTTOHood, ['quietZone']),
          State.State('DDHood', self.enterDDHood, self.exitDDHood, ['quietZone']),
-         State.State('OTHood', self.enterOTHood, self.exitOTHood, ['quietZone']),
          State.State('BRHood', self.enterBRHood, self.exitBRHood, ['quietZone']),
          State.State('MMHood', self.enterMMHood, self.exitMMHood, ['quietZone']),
          State.State('DGHood', self.enterDGHood, self.exitDGHood, ['quietZone']),
@@ -320,13 +315,6 @@ class PlayGame(StateData.StateData):
         self.hood.enter(requestStatus)
 
     def exitDDHood(self):
-        self._destroyHood()
-
-    def enterOTHood(self, requestStatus):
-        self.accept(self.hoodDoneEvent, self.handleHoodDone)
-        self.hood.enter(requestStatus)
-
-    def exitOTHood(self):
         self._destroyHood()
 
     def enterMMHood(self, requestStatus):
