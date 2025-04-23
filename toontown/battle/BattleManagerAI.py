@@ -1,5 +1,6 @@
 from toontown.battle import DistributedBattleAI
 from direct.directnotify import DirectNotifyGlobal
+from toontown.dna import DNABattleCell
 
 class BattleManagerAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleManagerAI')

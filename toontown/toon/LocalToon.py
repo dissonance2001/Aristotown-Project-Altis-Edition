@@ -66,6 +66,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.toontowngui import NewsPageButtonManager
 from toontown.friends.FriendHandle import FriendHandle
+from direct.controls import ControlManager
 
 WantNewsPage = base.config.GetBool('want-news-page', ToontownGlobals.DefaultWantNewsPageSetting)
 if WantNewsPage:
