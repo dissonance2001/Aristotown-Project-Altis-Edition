@@ -47,7 +47,7 @@ TreasureModels = {
     TreasureOT: (
         'phase_4/models/props/yott-treasure',
         'phase_4/audio/sfx/SZ_DD_treasure.ogg',
-    )
+    ),
     TreasureETargetGame: (
         'phase_4/models/props/mg-treasure',
         'phase_5/audio/sfx/tt_s_ara_cfg_propellerBreaks.ogg',
