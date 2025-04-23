@@ -7,9 +7,20 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.building import ToonInteriorColors
 from toontown.dna.DNAParser import DNADoor
 from toontown.hood import ZoneUtil
+from toontown.hood import QuietZoneState
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
 
 class DistributedGagshopInterior(DistributedObject.DistributedObject):
+    zone2music = {
+        ToontownCentral: 'phase_3.5/audio/bgm/TC_gag_shop.ogg',
+        DonaldsDock: 'phase_3.5/audio/bgm/DD_gag_shop.ogg',
+        DaisyGardens: 'phase_3.5/audio/bgm/DG_gag_shop.ogg',
+        MinniesMelodyland: 'phase_3.5/audio/bgm/MM_gag_shop.ogg',
+        TheBrrrgh: 'phase_3.5/audio/bgm/TB_gag_shop.ogg',
+        DonaldsDreamland: 'phase_3.5/audio/bgm/DL_gag_shop.ogg',
+        YeOlde: 'phase_3.5/audio/bgm/OT_gag_shop.ogg',
+        OutdoorZone: 'phase_3.5/audio/bgm/AA_gag_shop.ogg',
+    }
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
@@ -25,7 +36,8 @@ class DistributedGagshopInterior(DistributedObject.DistributedObject):
 		
     def doMusic(self, task):
         base.musicManager.stopAllSounds()
-        self.gagshopMusicFile = loader.loadMusic("phase_4/audio/bgm/FF_safezone.ogg")
+        self.gagshopMusicFile = base.loadMusic(
+            self.zone2music.get(ZoneUtil.getHoodId(self.zoneId), 'phase_4/audio/bgm/FF_safezone.ogg'))
         self.gagshopMusic = base.playMusic(self.gagshopMusicFile, looping = 1)
         return task.done
 

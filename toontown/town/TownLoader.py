@@ -33,7 +33,7 @@ class TownLoader(StateData.StateData):
         TheBrrrgh: 'phase_8/audio/bgm/TB_encntr.ogg',
         DonaldsDreamland: 'phase_8/audio/bgm/DL_encntr.ogg',
         YeOlde: 'phase_7/audio/bgm/OT_encntr.ogg',
-        OutdoorZone: 'phase_6/audio/bgm/AA_encntr',
+        OutdoorZone: 'phase_6/audio/bgm/AA_encntr.ogg',
     }
 
 
