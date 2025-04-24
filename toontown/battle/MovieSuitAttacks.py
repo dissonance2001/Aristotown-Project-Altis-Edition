@@ -1648,7 +1648,7 @@ def doCloseTheLoop(attack):
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=1.3, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack)
 
-def doHostileTakeover(attack):
+def doHostileTakeoverOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
@@ -1688,6 +1688,33 @@ def doHostileTakeover(attack):
     soundTrack = getSoundTrack('SA_liquidate.ogg', delay=2.6, node=suit)
     #soundTrack = getSoundTrack('ttr_s_ene_bat_hostileTakeover.ogg', delay=2.6, node=suit)
     return Parallel(suitTrack, toonTrack, cloudPropTrack, soundTrack)
+
+def doHostileTakeover(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    knifeDelay = 4.0
+    suitTrack = getSuitAnimTrack(attack)
+    knifeTracks = Parallel()
+    for i in xrange(0, 60):
+        knife = globalPropPool.getProp('dagger')
+        knifePos = Point3(random.random() * 17.0 - 7.0, (random.random() * 2.0 + 4.0) * -1.0, 10.0)
+        landPos = Point3(knifePos.getX() - 3.0, knifePos.getY(), -2.0)
+        knifeTracks.append(Sequence(
+            Wait(knifeDelay + 0.05 * i),
+            Func(knife.reparentTo, battle),
+            Func(knife.setPos, knifePos),
+            Func(knife.lookAt, landPos),
+            Func(knife.setScale, Point3(0.4)),
+            LerpPosInterval(knife, 0.2, landPos),
+            Func(MovieUtil.removeProp, knife)
+        ))
+
+    damageAnims = [['slip-forward', 0.01, 0.4, 1.2],
+     ['slip-forward', 0.01, 1.0]]
+    dodgeAnims = [['duck', 1e-06, 0.8]]
+    toonTracks = getToonTracks(attack, damageDelay=knifeDelay + 0.11, splicedDamageAnims=damageAnims, dodgeDelay=knifeDelay - 0.1, splicedDodgeAnims=dodgeAnims)
+    soundTrack = getSoundTrack('ttr_s_ene_bat_hostileTakeover.ogg', delay=knifeDelay, node=suit)
+    return Parallel(suitTrack, knifeTracks, toonTracks, soundTrack)
 
 def doNickelAndDime(attack):
     suit = attack['suit']

@@ -781,9 +781,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == LIQUIDATE:
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == HOSTILE_TAKEOVER:
-        camTrack.append(defaultCamera(openShotDuration=2.5))
-    elif name == HOSTILE_TAKEOVER:
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera())
     elif name == MARKET_CRASH:
         camTrack.append(defaultCamera(openShotDuration=1.9))
     elif name == MUMBO_JUMBO:
