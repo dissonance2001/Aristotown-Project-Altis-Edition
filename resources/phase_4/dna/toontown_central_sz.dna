@@ -872,13 +872,13 @@ group "toontownCentral" [
    pos [ 85 10 4 ]
    nhpr [ -60 0 0 ]
   ]
-  prop "neighborhood_sign_DD_DNARoot" [
-   code [ "animated_prop_SignDDProp" ]
+  prop "animated_prop_SignDDProp_DNARoot" [
+   code [ "neighborhood_sign_DD" ]
    pos [ 22 -149 3 ]
    nhpr [ -45 0 -0 ]
   ]
-  prop "neighborhood_sign_DD_DNARoot" [
-   code [ "animated_prop_SignDDProp" ]
+  prop "animated_prop_SignDDProp_DNARoot" [
+   code [ "neighborhood_sign_DD" ]
    pos [ 40.9998 -160 3 ]
    nhpr [ 165 0 -0 ]
   ]

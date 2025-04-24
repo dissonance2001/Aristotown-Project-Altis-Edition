@@ -18,8 +18,6 @@ class OZHoodAI(HoodAI.HoodAI):
 
         self.trolley = None
         self.timer = None
-        self.classicCharChip = None
-        self.classicCharDale = None
 
         self.startup()
 
@@ -28,25 +26,8 @@ class OZHoodAI(HoodAI.HoodAI):
         if simbase.config.GetBool('want-minigames', True):
             self.createTrolley()
             pass
-        self.createTimer()
-        if simbase.config.GetBool('want-classic-chars', True):
-            if simbase.config.GetBool('want-chip-and-dale', True):
-                self.createClassicChars()
-
-    def createTimer(self):
-        self.timer = DistributedTimerAI(self.air)
-        self.timer.generateWithRequired(self.zoneId)
 
     def createTrolley(self):
         self.trolley = DistributedTrolleyAI.DistributedTrolleyAI(self.air)
         self.trolley.generateWithRequired(self.zoneId)
         self.trolley.start()
-        
-    def createClassicChars(self):
-        self.classicCharChip = DistributedChipAI.DistributedChipAI(self.air)
-        self.classicCharChip.generateWithRequired(self.zoneId)
-        self.classicCharChip.start()
-        self.classicCharDale = DistributedDaleAI.DistributedDaleAI(self.air, self.classicCharChip.doId)
-        self.classicCharDale.generateWithRequired(self.zoneId)
-        self.classicCharDale.start()
-        self.classicCharChip.setDaleId(self.classicCharDale.doId)
