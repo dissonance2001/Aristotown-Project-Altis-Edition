@@ -7,7 +7,7 @@ echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 echo What do you want to do!
 echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 echo.
-echo #1 - Run Project Altis
+echo #1 - Run Aristotown
 echo #2 - Exit
 echo. 
 choice /C:123 /n /m "Selection: "%1
