@@ -180,6 +180,86 @@ base.loader = base.loader
 __builtin__.loader = base.loader
 autoRun = ConfigVariableBool('toontown-auto-run', 1)
 
+def printCameraPos():
+    print(camera.getPos())
+    print(camera.getHpr())
+
+base.accept('[', printCameraPos)
+
+def printToonPos():
+    print(camera.getPos())
+    print(camera.getHpr())
+
+base.accept('[', printCameraPos)
+
+# X movement
+def cameraX():
+    camera.setX(camera.getX() + 1)
+
+base.accept('f1', cameraX)
+
+def cameraXDecrease():
+    camera.setX(camera.getX() - 1)
+
+base.accept('f2', cameraXDecrease)
+
+# Y movement
+def cameraY():
+    camera.setY(camera.getY() + 1)
+
+base.accept('f3', cameraY)
+
+def cameraYDecrease():
+    camera.setY(camera.getY() - 1)
+
+base.accept('f4', cameraYDecrease)
+
+# Z movement
+def cameraZ():
+    camera.setZ(camera.getZ() + 1)
+
+base.accept('f5', cameraZ)
+
+def cameraZDecrease():
+    camera.setZ(camera.getZ() - 1)
+
+base.accept('f6', cameraZDecrease)
+
+# H rotation (Heading)
+def cameraH():
+    camera.setH(camera.getH() + 1)
+
+base.accept('f7', cameraH)
+
+def cameraHDecrease():
+    camera.setH(camera.getH() - 1)
+
+base.accept('f8', cameraHDecrease)
+
+# P rotation (Pitch)
+def cameraP():
+    camera.setP(camera.getP() + 1)
+
+base.accept('f9', cameraP)
+
+def cameraPDecrease():
+    camera.setP(camera.getP() - 1)
+
+base.accept('f10', cameraPDecrease)
+
+# R rotation (Roll)
+def cameraR():
+    camera.setR(camera.getR() + 1)
+
+base.accept('f11', cameraR)
+
+def cameraRDecrease():
+    camera.setR(camera.getR() - 1)
+
+base.accept('f12', cameraRDecrease)
+
+
+
 if autoRun:
     try:
         base.run()

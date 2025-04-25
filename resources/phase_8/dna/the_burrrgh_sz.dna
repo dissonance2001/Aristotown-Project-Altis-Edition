@@ -1127,11 +1127,6 @@ group "theBurrrgh" [
     pos [ -27.32 -127.71 6 ]
     nhpr [ 22 0 0 ]
    ]
-   prop "prop_snowman_DNARoot" [
-    code [ "prop_snowman" ]
-    pos [ 18.19 0.16 6.28 ]
-    nhpr [ -45 0 0 ]
-   ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 30.95 83.01 26.06 ]
@@ -1248,27 +1243,27 @@ group "theBurrrgh" [
     pos [ -46.56 -149.33 6.15 ]
     nhpr [ 5 0 0 ]
    ]
-   prop "prop_icecube_shoe_v_DNARoot" [
+   prop "prop_icecube_shoe_v_DNARoot_1" [
     code [ "prop_icecube_shoe_v" ]
     pos [ 38.49 -101.61 6.17 ]
     nhpr [ 5 0 0 ]
    ]
-   prop "prop_icecube_shoe_v_DNARoot" [
+   prop "prop_icecube_shoe_v_DNARoot_2" [
     code [ "prop_icecube_sunglasses" ]
     pos [ 35.55 -102.39 6.15 ]
     nhpr [ 70 0 0 ]
    ]
-   prop "prop_icecube_shoe_v_DNARoot" [
+   prop "prop_icecube_shoe_v_DNARoot_3" [
     code [ "prop_icecube_ear_protection" ]
     pos [ 37.48 -101.76 8.13 ]
     nhpr [ 40 0 0 ]
    ]
-   prop "prop_icecube_shoe_v_DNARoot" [
+   prop "prop_icecube_shoe_v_DNARoot_4" [
     code [ "prop_icecube_shoe_h" ]
     pos [ 13.15 85.79 6.17 ]
     nhpr [ 40 0 0 ]
    ]
-   prop "prop_icecube_shoe_v_DNARoot" [
+   prop "prop_icecube_shoe_v_DNARoot_5" [
     code [ "prop_icecube_glove" ]
     pos [ 10.86 88.67 6.17 ]
     nhpr [ 65 0 0 ]
@@ -1353,14 +1348,14 @@ group "theBurrrgh" [
    pos [ -92.593 105.676 6.19787 ]
    nhpr [ 30 0 0 ]
   ]
-  prop "neighborhood_sign_lawBotHQ_DNARoot" [
-   code [ "neighborhood_sign_DD" ]
+  prop "animated_prop_SignDDProp_DNARoot" [
+   code [ "animated_prop_SignDDProp" ]
    pos [ -11.2839 104.749 6.17428 ]
    nhpr [ -30 0 -0 ]
    scale [ 1.17266 1.17266 1.17266 ]
   ]
-  prop "neighborhood_sign_lawBotHQ_DNARoot" [
-   code [ "neighborhood_sign_DD" ]
+  prop "animated_prop_SignDDProp_DNARoot" [
+   code [ "animated_prop_SignDDProp" ]
    pos [ 15.1895 90.242 6.19097 ]
    nhpr [ 150 -0 0 ]
    scale [ 1.17266 1.17266 1.17266 ]
@@ -1782,12 +1777,12 @@ group "theBurrrgh" [
  ]
  prop "neighborhood_sign_lawBotHQ_DNARoot" [
   code [ "neighborhood_sign_lawBotHQ" ]
-  pos [ -144.215 12.4895 6.16051 ]
+  pos [ -144.215 12.4895 6.2 ]
   nhpr [ 255 0 -0 ]
  ]
  prop "neighborhood_sign_lawBotHQ_DNARoot" [
   code [ "neighborhood_sign_lawBotHQ" ]
-  pos [ -150.944 -12.6245 6.16 ]
-  nhpr [ 75 0 0 ]
+  pos [ -150.944 -12.6245 6.2 ]
+  nhpr [ 75 0 -0 ]
  ]
 ]

@@ -109,7 +109,7 @@ store_suit_point [ 434, STREET_POINT, 375 205 -0.5 ]
 store_suit_point [ 435, STREET_POINT, 390 215 -0.5 ]
 store_suit_point [ 436, STREET_POINT, 365 215 -0.5 ]
 store_suit_point [ 437, STREET_POINT, 365 190 -0.5 ]
-store_suit_point [ 440, FRONT_DOOR_POINT, 374 -6 0, 7 ]
+store_suit_point [ 440, FRONT_DOOR_POINT, 374 -6 0, 55 ]
 store_suit_point [ 444, STREET_POINT, 365 168 -0.5 ]
 store_suit_point [ 445, STREET_POINT, 375 168 -0.5 ]
 store_suit_point [ 446, FRONT_DOOR_POINT, 386 168 0, 2 ]
@@ -187,7 +187,7 @@ store_suit_point [ 541, SIDE_DOOR_POINT, 350 135 0, 5 ]
 store_suit_point [ 542, SIDE_DOOR_POINT, 390 98 0, 38 ]
 store_suit_point [ 543, SIDE_DOOR_POINT, 350 65 0, 48 ]
 store_suit_point [ 544, SIDE_DOOR_POINT, 390 12 0, 49 ]
-store_suit_point [ 545, SIDE_DOOR_POINT, 390 -2 0, 7 ]
+store_suit_point [ 545, SIDE_DOOR_POINT, 390 -2 0, 55 ]
 store_suit_point [ 546, SIDE_DOOR_POINT, 325 -10 0, 8 ]
 store_suit_point [ 547, SIDE_DOOR_POINT, 280 7 0, 50 ]
 store_suit_point [ 548, SIDE_DOOR_POINT, 320 50 0, 10 ]
@@ -251,7 +251,7 @@ group "theBurrrgh" [
    ]
    street "street_10x40_DNARoot" [
     code [ "street_10x40" ]
-    pos [ 400 230 -7.62939e-006 ]
+    pos [ 400 230 -7.62939e-06 ]
     nhpr [ -180 0 -0 ]
     texture [ "street_street_BR_tex" ]
     texture [ "street_sidewalk_BR_tex" ]
@@ -591,10 +591,13 @@ group "theBurrrgh" [
       width [ 31.25 ]
       height [ 31.25 ]
       text [
-       letters [ "D" ]
+       letters [ "B" ]
       ]
       text [
-       letters [ "O" ]
+       letters [ "A" ]
+      ]
+      text [
+       letters [ "R" ]
       ]
       text [
        letters [ "N" ]
@@ -603,31 +606,40 @@ group "theBurrrgh" [
        letters [ "A" ]
       ]
       text [
+       letters [ "C" ]
+      ]
+      text [
        letters [ "L" ]
       ]
       text [
-       letters [ "D" ]
-      ]
-      text [
-       letters [ "'" ]
-      ]
-      text [
-       letters [ "S" ]
+       letters [ "E" ]
       ]
       text [
        letters [ " " ]
       ]
       text [
-       letters [ "D" ]
+       letters [ "B" ]
       ]
       text [
        letters [ "O" ]
       ]
       text [
-       letters [ "C" ]
+       letters [ "A" ]
       ]
       text [
-       letters [ "K" ]
+       letters [ "T" ]
+      ]
+      text [
+       letters [ "Y" ]
+      ]
+      text [
+       letters [ "A" ]
+      ]
+      text [
+       letters [ "R" ]
+      ]
+      text [
+       letters [ "D" ]
       ]
      ]
     ]
@@ -639,7 +651,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_mailbox" ]
    anim [ "tt_a_ara_tbr_mailbox_idle0" ]
    cell_id [ 0 ]
-   pos [ 418.745 224.279 -7.62939e-006 ]
+   pos [ 418.745 224.279 -7.62939e-06 ]
    nhpr [ -30 0 0 ]
   ]
   prop "prop_tt_m_ara_gen_tunnelAheadSign_DNARoot" [
@@ -870,7 +882,6 @@ group "theBurrrgh" [
   suit_edge [ 447 445 ]
   suit_edge [ 50 447 ]
   suit_edge [ 437 444 ]
-  suit_edge [ 444 25 ]
   suit_edge [ 447 448 ]
   suit_edge [ 448 447 ]
   suit_edge [ 25 448 ]
@@ -1106,7 +1117,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_trashcan" ]
    anim [ "tt_a_ara_tbr_trashcan_idle0" ]
    cell_id [ 0 ]
-   pos [ 384.494 176.234 7.62939e-006 ]
+   pos [ 384.494 176.234 7.62939e-06 ]
    nhpr [ -90 0 0 ]
   ]
  ]
@@ -1132,14 +1143,14 @@ group "theBurrrgh" [
    street "street_full_corner_DNARoot" [
     code [ "street_full_corner" ]
     pos [ 390 30 0 ]
-    nhpr [ 180 0 -0 ]
+    nhpr [ -180 0 -0 ]
     texture [ "street_street_BR_tex" ]
     texture [ "street_sidewalk_BR_tex" ]
     texture [ "street_sidewalk_BR_tex" ]
    ]
   ]
   group "buildings" [
-   flat_building "tb7:random20_DNARoot" [
+   flat_building "tb55:random20_DNARoot" [
     pos [ 390 -10 0 ]
     nhpr [ 180 0 -0 ]
     width [ 5 ]
@@ -1164,7 +1175,7 @@ group "theBurrrgh" [
      ]
     ]
    ]
-   flat_building "tb7:random20_DNARoot" [
+   flat_building "tb55:random20_DNARoot" [
     pos [ 360 -10 0 ]
     nhpr [ 180 0 -0 ]
     width [ 10 ]
@@ -1193,7 +1204,7 @@ group "theBurrrgh" [
      ]
     ]
    ]
-   flat_building "tb7:random20_DNARoot" [
+   flat_building "tb55:random20_DNARoot" [
     pos [ 390 5 0 ]
     nhpr [ -90 0 -0 ]
     width [ 15 ]
@@ -1226,8 +1237,9 @@ group "theBurrrgh" [
      nhpr [ -45 0 -0 ]
     ]
    ]
-   landmark_building "tb7:toon_landmark_BR_A1_DNARoot" [
+   landmark_building "tb55:toon_landmark_BR_A1_DNARoot" [
     code [ "toon_landmark_BR_A1" ]
+    building_type [ "uncapturable" ]
     title [ "The Blizzard Wizard" ]
     pos [ 385 -10 0 ]
     nhpr [ 180 0 -0 ]
@@ -1326,7 +1338,7 @@ group "theBurrrgh" [
      nhpr [ -0 0 -0 ]
     ]
    ]
-   flat_building "tb7:random20_DNARoot" [
+   flat_building "tb55:random20_DNARoot" [
     pos [ 390 20 0 ]
     nhpr [ -90 0 -0 ]
     width [ 15 ]
@@ -1355,9 +1367,9 @@ group "theBurrrgh" [
      nhpr [ -45 0 -0 ]
     ]
    ]
-   flat_building "tb7:random_DNARoot" [
+   flat_building "tb55:random_DNARoot" [
     pos [ 410 10 0 ]
-    nhpr [ 90 -0.104869 -1.51283e-009 ]
+    nhpr [ 90 -0.104869 -1.51283e-09 ]
     width [ 10 ]
     wall [
      height [ 10 ]
@@ -1380,7 +1392,7 @@ group "theBurrrgh" [
      ]
     ]
    ]
-   flat_building "tb7:20_DNARoot" [
+   flat_building "tb55:20_DNARoot" [
     pos [ 410 20 0 ]
     nhpr [ -180 0 -0 ]
     width [ 20 ]
@@ -1410,7 +1422,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_trashcan" ]
    anim [ "tt_a_ara_tbr_trashcan_idle0" ]
    cell_id [ 0 ]
-   pos [ 384.474 17.3028 3.8147e-006 ]
+   pos [ 384.474 17.3028 3.8147e-06 ]
    nhpr [ -90 0 0 ]
   ]
  ]
@@ -1560,11 +1572,6 @@ group "theBurrrgh" [
      nhpr [ -90 0 -0 ]
      scale [ 0.8 0.8 0.8 ]
     ]
-    prop "prop_snowman_flat_DNARoot" [
-     code [ "BR_potbelly_stove" ]
-     pos [ 14.2 -22.1 0 ]
-     nhpr [ -165 0 -0 ]
-    ]
     prop "prop_snow_pile_full_DNARoot" [
      code [ "prop_snow_pile_full" ]
      pos [ 12.16 -15.7 0 ]
@@ -1572,7 +1579,7 @@ group "theBurrrgh" [
      scale [ 1.3 1.3 1.3 ]
     ]
    ]
-   flat_building "tb7:random20_DNARoot" [
+   flat_building "tb55:random20_DNARoot" [
     pos [ 350 -10 0 ]
     nhpr [ 180 0 -0 ]
     width [ 20 ]
@@ -1662,7 +1669,7 @@ group "theBurrrgh" [
   group "streets" [
    street "street_full_corner_DNARoot" [
     code [ "street_full_corner" ]
-    pos [ 320 -10 7.62939e-006 ]
+    pos [ 320 -10 7.62939e-06 ]
     nhpr [ 90 0 -0 ]
     texture [ "street_street_BR_tex" ]
     texture [ "street_sidewalk_BR_tex" ]
@@ -1748,8 +1755,8 @@ group "theBurrrgh" [
      nhpr [ -90 0 -0 ]
      scale [ 1.6 1.6 1.6 ]
     ]
-    prop "neighborhood_sign_DD_DNARoot" [
-     code [ "neighborhood_sign_DD" ]
+    prop "animated_prop_SignDDProp_DNARoot" [
+     code [ "animated_prop_SignDDProp" ]
      pos [ 9.05 -1.26 0 ]
      nhpr [ 180 0 -0 ]
      scale [ 1.5 1.5 1.5 ]
@@ -1912,7 +1919,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_trashcan" ]
    anim [ "tt_a_ara_tbr_trashcan_idle0" ]
    cell_id [ 0 ]
-   pos [ 314.691 24.8183 7.62939e-006 ]
+   pos [ 314.691 24.8183 7.62939e-06 ]
    nhpr [ -45 0 0 ]
   ]
  ]
@@ -2430,13 +2437,13 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_mailbox" ]
    anim [ "tt_a_ara_tbr_mailbox_idle0" ]
    cell_id [ 0 ]
-   pos [ 236.713 87.0168 -1.52588e-005 ]
+   pos [ 236.713 87.0168 -1.52588e-05 ]
    nhpr [ 75 0 0 ]
   ]
   anim_prop "animated_prop_generic_phase_8_models_char__tbr_hydrant_DNARoot" [
    code [ "animated_prop_generic_phase_8_models_char__tbr_hydrant" ]
    anim [ "tt_a_ara_tbr_hydrant_fightIdle" ]
-   pos [ 269.746 67.2911 -2.28882e-005 ]
+   pos [ 269.746 67.2911 -2.28882e-05 ]
    nhpr [ -180 0 -0 ]
   ]
  ]
@@ -2471,7 +2478,7 @@ group "theBurrrgh" [
    ]
    street "street_full_corner_DNARoot" [
     code [ "street_full_corner" ]
-    pos [ 270 60 -1.52588e-005 ]
+    pos [ 270 60 -1.52588e-05 ]
     nhpr [ 90 0 -0 ]
     texture [ "street_street_BR_tex" ]
     texture [ "street_sidewalk_BR_tex" ]
@@ -2602,8 +2609,8 @@ group "theBurrrgh" [
       color [ 1 1 1 1 ]
      ]
     ]
-    prop "neighborhood_sign_DD_DNARoot" [
-     code [ "neighborhood_sign_DD" ]
+    prop "animated_prop_SignDDProp_DNARoot" [
+     code [ "animated_prop_SignDDProp" ]
      pos [ 7.62 -1.11 0 ]
      nhpr [ -180 0 -0 ]
      scale [ 1.5 1.5 1.5 ]
@@ -3061,7 +3068,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_hydrant" ]
    anim [ "tt_a_ara_tbr_hydrant_idleRubNose0" ]
    cell_id [ 0 ]
-   pos [ 237.125 125.523 -1.52588e-005 ]
+   pos [ 237.125 125.523 -1.52588e-05 ]
    nhpr [ 60 0 0 ]
   ]
  ]
@@ -3696,7 +3703,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_trashcan" ]
    anim [ "tt_a_ara_tbr_trashcan_idle0" ]
    cell_id [ 0 ]
-   pos [ 209.78 173.988 -7.62939e-006 ]
+   pos [ 209.78 173.988 -7.62939e-06 ]
    nhpr [ -0 0 -0 ]
   ]
  ]
@@ -3835,8 +3842,8 @@ group "theBurrrgh" [
      pos [ -0.17 2.52 20.63 ]
      nhpr [ -0 0 -0 ]
     ]
-    prop "neighborhood_sign_DD_DNARoot" [
-     code [ "neighborhood_sign_DD" ]
+    prop "animated_prop_SignDDProp_DNARoot" [
+     code [ "animated_prop_SignDDProp" ]
      pos [ 7.2 -1.12 0 ]
      nhpr [ -0 0 -0 ]
      scale [ 1.5 1.5 1.5 ]
@@ -3869,11 +3876,6 @@ group "theBurrrgh" [
       code [ "cornice_ice_ur" ]
       color [ 1 1 1 1 ]
      ]
-    ]
-    prop "prop_snowman_DNARoot" [
-     code [ "BR_potbelly_stove" ]
-     pos [ 8 -6 0 ]
-     nhpr [ -150 0 -0 ]
     ]
     prop "prop_snow_pile_quarter_DNARoot" [
      code [ "prop_snow_pile_quarter" ]
@@ -4262,7 +4264,7 @@ group "theBurrrgh" [
   ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
-   pos [ 190 100 -7.62939e-006 ]
+   pos [ 190 100 -7.62939e-06 ]
    nhpr [ 90 0 -0 ]
    texture [ "street_street_BR_tex" ]
    texture [ "street_sidewalk_BR_tex" ]
@@ -4272,7 +4274,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_mailbox" ]
    anim [ "tt_a_ara_tbr_mailbox_idle0" ]
    cell_id [ 0 ]
-   pos [ 155.688 111.242 -7.62939e-006 ]
+   pos [ 155.688 111.242 -7.62939e-06 ]
    nhpr [ 90 0 0 ]
   ]
  ]
@@ -4320,7 +4322,7 @@ group "theBurrrgh" [
    ]
    street "street_sidewalk_20x20_DNARoot" [
     code [ "street_sidewalk_20x20" ]
-    pos [ 150 40 0 ]
+    pos [ 150 40 -7.27596e-12 ]
     nhpr [ 90 0 -0 ]
     texture [ "street_street_BR_tex" ]
     texture [ "street_sidewalk_BR_tex" ]
@@ -4589,18 +4591,6 @@ group "theBurrrgh" [
      scale [ 0.9 0.9 0.9 ]
     ]
    ]
-   landmark_building "tb54:toon_landmark_hqBR_DNARoot" [
-    code [ "toon_landmark_hqBR" ]
-    building_type [ "hq" ]
-    title [ "" ]
-    pos [ 129.737 51.9612 0 ]
-    nhpr [ 90 0 -0 ]
-    prop "prop_snow_pile_full_DNARoot" [
-     code [ "prop_snow_pile_full" ]
-     pos [ -15.4494 -1.93094 0 ]
-     nhpr [ 45 0 -0 ]
-    ]
-   ]
    flat_building "tb21:random_DNARoot" [
     pos [ 165 0 0 ]
     nhpr [ -180 0 -0 ]
@@ -4636,6 +4626,50 @@ group "theBurrrgh" [
    ]
   ]
   group "props" [
+   prop "prop_gng_truck_DNARoot" [
+    code [ "prop_gng_truck" ]
+    pos [ 140 50.0001 0.025 ]
+    nhpr [ 45 0 0 ]
+   ]
+   prop "prop_snow_pile_full_DNARoot" [
+    code [ "prop_snow_pile_full" ]
+    pos [ 132.243 40.2429 -8.67362e-18 ]
+    nhpr [ 135 0 -0 ]
+    scale [ 1.59188 1.59188 1.59188 ]
+   ]
+  ]
+  group "icecubes" [
+   prop "prop_icecube_sunglasses_DNARoot" [
+    code [ "prop_icecube_sunglasses" ]
+    pos [ 148 33.9999 0 ]
+    nhpr [ 165 0 0 ]
+   ]
+   prop "prop_icecube_shoe_v_DNARoot" [
+    code [ "prop_icecube_shoe_v" ]
+    pos [ 150 35.9999 0 ]
+    nhpr [ -150 0 -0 ]
+   ]
+   prop "prop_icecube_glove_DNARoot" [
+    code [ "prop_icecube_glove" ]
+    pos [ 148.999 34.9998 1.8 ]
+    nhpr [ -180 0 -0 ]
+   ]
+  ]
+  prop "prop_snow_pile_full_DNARoot" [
+   code [ "prop_snow_pile_full" ]
+   pos [ 150 61 0 ]
+   nhpr [ 165 0 0 ]
+   scale [ 1.62557 1.62557 1.62557 ]
+  ]
+  prop "prop_snow_tree_small_brickbox_ul_DNARoot" [
+   code [ "prop_snow_tree_small_brickbox_ul" ]
+   pos [ 126 64 -7.27596e-12 ]
+   nhpr [ 90 0 -0 ]
+  ]
+  prop "prop_snow_tree_small_brickbox_ul_DNARoot" [
+   code [ "prop_snow_tree_small_brickbox_ul" ]
+   pos [ 126 34.0001 -7.27596e-12 ]
+   nhpr [ 90 0 -0 ]
   ]
  ]
  visgroup "3116" [
@@ -4784,11 +4818,6 @@ group "theBurrrgh" [
      pos [ 7.55 -7.56 0 ]
      nhpr [ -90 0 -0 ]
      scale [ 0.8 0.8 0.8 ]
-    ]
-    prop "prop_snowman_DNARoot" [
-     code [ "prop_snowman" ]
-     pos [ 12 -15 0 ]
-     nhpr [ -90 0 -0 ]
     ]
     prop "prop_post_three_light_DNARoot" [
      code [ "prop_post_three_light" ]
@@ -5027,8 +5056,8 @@ group "theBurrrgh" [
       color [ 1 1 1 1 ]
      ]
     ]
-    prop "neighborhood_sign_DD_DNARoot" [
-     code [ "neighborhood_sign_DD" ]
+    prop "animated_prop_SignDDProp_DNARoot" [
+     code [ "animated_prop_SignDDProp" ]
      pos [ 4.82 -1.11 0 ]
      nhpr [ 180 0 -0 ]
      scale [ 1.5 1.5 1.5 ]
@@ -5685,7 +5714,7 @@ group "theBurrrgh" [
   group "streets" [
    street "street_full_corner_DNARoot" [
     code [ "street_full_corner" ]
-    pos [ 350 -10 7.62939e-006 ]
+    pos [ 350 -10 7.62939e-06 ]
     nhpr [ -90 0 -0 ]
     texture [ "street_street_BR_tex" ]
     texture [ "street_sidewalk_BR_tex" ]
@@ -5793,11 +5822,6 @@ group "theBurrrgh" [
      pos [ 24.58 -4.89 0 ]
      nhpr [ 30 0 -0 ]
     ]
-    prop "prop_snowman_flat_DNARoot" [
-     code [ "prop_skates_flat" ]
-     pos [ 3.91 0.75 0 ]
-     nhpr [ 45 0 -0 ]
-    ]
    ]
    flat_building "tb42:random20_DNARoot" [
     pos [ 365 -10 0 ]
@@ -5880,7 +5904,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_hydrant" ]
    anim [ "tt_a_ara_tbr_hydrant_idleRubNose0" ]
    cell_id [ 0 ]
-   pos [ 355.166 -16.6593 7.62939e-006 ]
+   pos [ 355.166 -16.6593 7.62939e-06 ]
    nhpr [ 15 0 0 ]
   ]
  ]
@@ -6711,7 +6735,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_mailbox" ]
    anim [ "tt_a_ara_tbr_mailbox_idle0" ]
    cell_id [ 0 ]
-   pos [ 324.483 -135.173 -2.67029e-005 ]
+   pos [ 324.483 -135.173 -2.67029e-05 ]
    nhpr [ 0 0 0 ]
   ]
  ]
@@ -6985,8 +7009,8 @@ group "theBurrrgh" [
      nhpr [ -90 0 -0 ]
      scale [ 0.8 0.8 0.8 ]
     ]
-    prop "neighborhood_sign_DD_DNARoot" [
-     code [ "neighborhood_sign_DD" ]
+    prop "animated_prop_SignDDProp_DNARoot" [
+     code [ "animated_prop_SignDDProp" ]
      pos [ 6.97 -1.13 0 ]
      nhpr [ 180 0 -0 ]
      scale [ 1.5 1.5 1.5 ]
@@ -7114,7 +7138,7 @@ group "theBurrrgh" [
     ]
     prop "prop_snow_tree_small_brickbox_ul_DNARoot" [
      code [ "prop_snow_tree_small_brickbox_ul" ]
-     pos [ 15.21 -5.61998 -7.62939e-006 ]
+     pos [ 15.21 -5.61998 -7.62939e-06 ]
      nhpr [ -180 0 -0 ]
     ]
     prop "prop_icecube_shoe_h_DNARoot" [
@@ -7160,11 +7184,6 @@ group "theBurrrgh" [
       code [ "cornice_brick_ur" ]
       color [ 0.41 0.58 0.85 1 ]
      ]
-    ]
-    prop "prop_snowman_DNARoot" [
-     code [ "prop_snowman" ]
-     pos [ 7.03 -21.72 0 ]
-     nhpr [ -0 0 -0 ]
     ]
     prop "prop_snow_tree_large_brickbox_ul_DNARoot" [
      code [ "prop_snow_tree_large_brickbox_ul" ]
@@ -7354,7 +7373,7 @@ group "theBurrrgh" [
   group "streets" [
    street "street_40x40_DNARoot" [
     code [ "street_40x40" ]
-    pos [ 230 -130 -7.62939e-006 ]
+    pos [ 230 -130 -7.62939e-06 ]
     nhpr [ 90 0 -0 ]
     texture [ "street_street_BR_tex" ]
     texture [ "street_sidewalk_BR_tex" ]
@@ -7381,7 +7400,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_mailbox" ]
    anim [ "tt_a_ara_tbr_mailbox_idle0" ]
    cell_id [ 0 ]
-   pos [ 225.161 -99.822 -7.62939e-006 ]
+   pos [ 225.161 -99.822 -7.62939e-06 ]
    nhpr [ -90 0 -0 ]
   ]
  ]
@@ -7785,7 +7804,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_hydrant" ]
    anim [ "tt_a_ara_tbr_hydrant_fightCheer" ]
    cell_id [ 0 ]
-   pos [ 198.659 -45.8334 6.48499e-005 ]
+   pos [ 198.659 -45.8334 6.48499e-05 ]
    nhpr [ 15 0 0 ]
   ]
   prop "prop_tt_m_ara_gen_tunnelAheadSign_DNARoot" [
@@ -8069,7 +8088,7 @@ group "theBurrrgh" [
   battle_cell [ 20 20 370 90 -0.5 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
-   pos [ 390 70 3.8147e-006 ]
+   pos [ 390 70 3.8147e-06 ]
    nhpr [ 90 0 -0 ]
    texture [ "street_street_BR_tex" ]
    texture [ "street_sidewalk_BR_tex" ]
@@ -8324,7 +8343,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_mailbox" ]
    anim [ "tt_a_ara_tbr_mailbox_idle0" ]
    cell_id [ 0 ]
-   pos [ 386.098 104.234 3.8147e-006 ]
+   pos [ 386.098 104.234 3.8147e-06 ]
    nhpr [ -75 0 0 ]
   ]
  ]
@@ -8547,11 +8566,6 @@ group "theBurrrgh" [
     pos [ 11.4201 -3.09 -0.512608 ]
     nhpr [ -30 0 -0 ]
    ]
-   prop "prop_snowman_flat_DNARoot" [
-    code [ "prop_snowman_flat" ]
-    pos [ 15.9397 -9.939 -0.512608 ]
-    nhpr [ -45 0 -0 ]
-   ]
   ]
   flat_building "tb49:random_DNARoot" [
    pos [ 390 40.0001 0 ]
@@ -8588,6 +8602,17 @@ group "theBurrrgh" [
    cell_id [ 0 ]
    pos [ 357.062 59.6615 0 ]
    nhpr [ 75 0 0 ]
+  ]
+  landmark_building "tb7:toon_landmark_Door_Only_DNARoot" [
+   code [ "toon_landmark_Door_Only" ]
+   building_type [ "uncapturable" ]
+   title [ "Lil Oldman's Abode" ]
+   pos [ 412 17.05 0 ]
+   nhpr [ 180 0 -0 ]
+   door [
+    code [ "door_double_round_ur" ]
+    color [ 1 1 1 1 ]
+   ]
   ]
  ]
  visgroup "3130" [
@@ -8660,7 +8685,7 @@ group "theBurrrgh" [
    ]
    prop "prop_post_one_light_DNARoot" [
     code [ "prop_post_one_light" ]
-    pos [ 1 -8 0 ]
+    pos [ 0.999992 -7.99997 0 ]
     nhpr [ -0 0 -0 ]
    ]
    prop "prop_ski_flat_DNARoot" [
@@ -8807,8 +8832,8 @@ group "theBurrrgh" [
   ]
   street "street_20x40_DNARoot" [
    code [ "street_20x40" ]
-   pos [ 150 100 -2.28882e-005 ]
-   nhpr [ -180 0 -0 ]
+   pos [ 150 100 -2.28882e-05 ]
+   nhpr [ 180 0 -0 ]
    texture [ "street_street_BR_tex" ]
    texture [ "street_sidewalk_BR_tex" ]
    texture [ "street_curb_BR_tex" ]
@@ -8954,7 +8979,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_trashcan" ]
    anim [ "tt_a_ara_tbr_trashcan_idle0" ]
    cell_id [ 0 ]
-   pos [ 126.359 93.5269 -2.28882e-005 ]
+   pos [ 126.359 93.5269 -2.28882e-05 ]
    nhpr [ 30 0 0 ]
   ]
  ]
@@ -9136,7 +9161,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_hydrant" ]
    anim [ "tt_a_ara_tbr_hydrant_idleRubNose0" ]
    cell_id [ 0 ]
-   pos [ 178.573 5.5727 1.52588e-005 ]
+   pos [ 178.573 5.5727 1.52588e-05 ]
    nhpr [ -180 0 -0 ]
   ]
  ]
@@ -9303,8 +9328,8 @@ group "theBurrrgh" [
      ]
     ]
    ]
-   prop "neighborhood_sign_DD_DNARoot" [
-    code [ "neighborhood_sign_DD" ]
+   prop "animated_prop_SignDDProp_DNARoot" [
+    code [ "animated_prop_SignDDProp" ]
     pos [ 33.09 -1.22 0 ]
     nhpr [ 180 0 -0 ]
     scale [ 1.5 1.5 1.5 ]
@@ -9906,7 +9931,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_hydrant" ]
    anim [ "tt_a_ara_tbr_hydrant_fightCheer" ]
    cell_id [ 0 ]
-   pos [ 296.709 -163.161 -7.62939e-006 ]
+   pos [ 296.709 -163.161 -7.62939e-06 ]
    nhpr [ -165 0 0 ]
   ]
  ]
@@ -10111,7 +10136,7 @@ group "theBurrrgh" [
    code [ "interactive_prop_phase_8_models_char__tbr_trashcan" ]
    anim [ "tt_a_ara_tbr_trashcan_idle0" ]
    cell_id [ 0 ]
-   pos [ 238.969 -135.462 9.91821e-005 ]
+   pos [ 238.969 -135.462 9.91821e-05 ]
    nhpr [ 30 0 -0 ]
   ]
  ]
@@ -10189,13 +10214,13 @@ group "theBurrrgh" [
    ]
    prop "prop_post_one_light_DNARoot" [
     code [ "prop_post_one_light" ]
-    pos [ 448.522 47.8725 -1.49012e-008 ]
+    pos [ 448.522 47.8725 -1.49012e-08 ]
     nhpr [ 90 0 -0 ]
    ]
    prop "prop_snow_tree_large_ul_DNARoot" [
     code [ "prop_snow_tree_large_ul" ]
     pos [ 470.811 -33.6567 0 ]
-    nhpr [ 75 2.87986 4.92213e-007 ]
+    nhpr [ 75 2.87986 4.92213e-07 ]
    ]
    prop "prop_snow_tree_large_ul_DNARoot" [
     code [ "prop_snow_tree_large_ul" ]
@@ -10258,7 +10283,7 @@ group "theBurrrgh" [
    ]
    prop "prop_snow_tree_small_ul_DNARoot" [
     code [ "prop_snow_tree_small_ul" ]
-    pos [ 455.475 69.7023 7.62939e-006 ]
+    pos [ 455.475 69.7023 7.62939e-06 ]
     nhpr [ 75 0 -0 ]
    ]
    prop "prop_snow_tree_small_ur_DNARoot" [
@@ -10270,7 +10295,7 @@ group "theBurrrgh" [
   street "street_BR_pond_DNARoot" [
    code [ "street_BR_pond" ]
    pos [ 460 30 0 ]
-   nhpr [ 90 -0.179523 -8.95115e-009 ]
+   nhpr [ 90 -0.179523 -8.95115e-09 ]
    texture [ "street_street_BR_tex" ]
    texture [ "street_sidewalk_BR_tex" ]
    texture [ "street_curb_BR_tex" ]

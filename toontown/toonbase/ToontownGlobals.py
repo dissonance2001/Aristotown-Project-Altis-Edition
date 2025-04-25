@@ -241,6 +241,7 @@ PajamaPlace = 9200
 TwilightTerrace = 9300
 ToonHall = 2513
 PacesetterLobby = 9613
+DerrickmanInterior = 2921
 ToontownCentralOld = 20000
 HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, WackyWay),
  DonaldsDock: (BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue),

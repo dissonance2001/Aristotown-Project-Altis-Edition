@@ -27,7 +27,7 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.musicFile = random.choice(['phase_12/audio/bgm/Bossbot_Entry_v1.ogg', 'phase_12/audio/bgm/Bossbot_Entry_v2.ogg', 'phase_12/audio/bgm/Bossbot_Entry_v3.ogg'])
         self.cogHQExteriorModelPath = 'phase_12/models/bossbotHQ/CogGolfHub'
         self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_DA_Lobby'
-        self.cogHQLobbyModelPath = 'phase_12/models/bossbotHQ/CogGolfCourtyard'
+        self.cogHQLobbyModelPath = 'phase_12/models/bossbotHQ/CogGolfLobby'
         self.geom = None
 
     def load(self, zoneId):

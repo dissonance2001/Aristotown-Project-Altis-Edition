@@ -27,7 +27,7 @@ DELETE_POSITIONS = ((0.187, 0, -0.26),
 class AvatarChoice(DirectButton):
     notify = DirectNotifyGlobal.directNotify.newCategory('AvatarChoice')
     NEW_TRIALER_OPEN_POS = (1,)
-    OLD_TRIALER_OPEN_POS = (1, 4)
+    OLD_TRIALER_OPEN_POS = (16, 4)
     MODE_CREATE = 0
     MODE_CHOOSE = 1
     MODE_LOCKED = 2

@@ -186,7 +186,8 @@ class PickAToon(DirectObject):
             self.play = DirectButton(relief = None, image = (shuffleUp, shuffleDown, shuffleUp), image_scale = (0.8, 0.7, 0.7), image1_scale = (0.83, 0.73, 0.73), image2_scale = (0.83, 0.73, 0.73), text = 'PLAY THIS TOON', text_font = ToontownGlobals.getSignFont(), text_fg = (0.977, 0.816, 0.133, 1), text_pos = (0, -.016), text_scale = 0.035, scale = 1.4, pos = (0, 0, -0.90), command = self.playGame, parent = self.patNode2d)
 
             self.toon = Toon.Toon()
-            self.toon.setPosHpr(Vec3(5, 0, 0), Vec3(150, 0, 0))
+            self.toon.setPosHpr(Vec3(-1, 46.5, 9), Vec3(-167, -1, 1))
+            self.toon.setScale(Vec3(1, 1, 1))
             self.toon.reparentTo(base.cr.DMENU_SCREEN.background)
             self.toon.stopLookAroundNow()
 
@@ -293,10 +294,10 @@ class PickAToon(DirectObject):
         if self.jumpIn:
             self.jumpIn.finish()
         doneStatus = {'mode': 'chose', 'choice': self.selectedToon}
-        # Sequence (
-        #          Func(self.toon.animFSM.request, 'PATTeleportOut'),
-        #          Wait(4),
-        #          Func(messenger.send, self.doneEvent, [doneStatus]))#.start() # ALTIS: TODO: Add the states to toon.py
+        Sequence (
+                   Func(self.toon.animFSM.request, 'PATTeleportOut'),
+                   Wait(4),
+                   Func(messenger.send, self.doneEvent, [doneStatus]))#.start() # ALTIS: TODO: Add the states to toon.py
         messenger.send(self.doneEvent, [doneStatus])
 
     def makeToon(self, position = None):
