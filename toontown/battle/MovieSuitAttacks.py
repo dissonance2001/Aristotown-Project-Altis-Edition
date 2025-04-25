@@ -5527,12 +5527,8 @@ def doHeatWave(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
+    BattleParticles.loadParticles()
     damageDelay = 1.7
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     particleEffect = BattleParticles.createParticleEffect(file='heatwave')
     waterfallEffect = BattleParticles.createParticleEffect(file='heatwaveWaterfall')
     taunt = random.choice(
@@ -5544,7 +5540,72 @@ def doHeatWave(attack):
                          ActorInterval(suit, attack['animName']), Func(suit.setNeutralAnimation))
     partTrack = getPartTrack(particleEffect, 1.0, 1.9, [particleEffect, suit, 0])
     waterfallTrack = getPartTrack(waterfallEffect, 0.8, 1.9, [waterfallEffect, suit, 0])
-    damageAnims = [['slip-forward']]
+    baseFlameTracks = Parallel()
+    flameTracks = Parallel()
+    flecksTracks = Parallel()
+
+    def changeColor(parts):
+        track = Parallel()
+        for partNum in xrange(0, parts.getNumPaths()):
+            nextPart = parts.getPath(partNum)
+            track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
+
+        return track
+
+    def resetColor(parts):
+        track = Parallel()
+        for partNum in xrange(0, parts.getNumPaths()):
+            nextPart = parts.getPath(partNum)
+            track.append(Func(nextPart.clearColorScale))
+
+        return track
+
+    colorTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        BattleParticles.loadParticles()
+        sprayEffect = BattleParticles.createParticleEffect('HotAir')
+        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
+        flameEffect = BattleParticles.createParticleEffect('FiredFlame')
+        flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
+        BattleParticles.setEffectTexture(sprayEffect, 'fire')
+        BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
+        BattleParticles.setEffectTexture(flameEffect, 'fire')
+        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
+        flameDelay = 1.45
+        flameDuration = 1.5
+        flecksDelay = flameDelay + 0.8
+        flecksDuration = flameDuration - 0.8
+        if t['hp'] > 0:
+            baseFlameTracks.append(getPartTrack(baseFlameEffect, flameDelay, flameDuration, [baseFlameEffect, toon, 0]))
+            flameTracks.append(getPartTrack(flameEffect, flameDelay, flameDuration, [flameEffect, toon, 0]))
+            flecksTracks.append(getPartTrack(flecksEffect, flecksDelay, flecksDuration, [flecksEffect, toon, 0]))
+            headParts = toon.getHeadParts()
+            torsoParts = toon.getTorsoParts()
+            legsParts = toon.getLegsParts()
+            colorTracks.append(Sequence(
+                Wait(4.2),
+                Func(battle.movie.needRestoreColor),
+                changeColor(headParts),
+                changeColor(torsoParts),
+                changeColor(legsParts),
+                Wait(3.5),
+                resetColor(headParts),
+                resetColor(torsoParts),
+                resetColor(legsParts),
+                Func(battle.movie.clearRestoreColor)
+            ))
+
+    damageAnims = []
+    damageAnims.append(['cringe',
+     0.01,
+     0.7,
+     0.62])
+    damageAnims.append(['slip-forward',
+     0.01,
+     0.4,
+     1.2])
+    damageAnims.append(['slip-forward', 0.01, 1.0])
     dodgeAnims = []
     dodgeAnims.append(['jump',
                        0.01,
@@ -5552,13 +5613,10 @@ def doHeatWave(attack):
                        0.6])
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
     dodgeAnims.append(['jump', 0, 0.91])
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['slip-forward'], dodgeDelay=0.91,
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91,
                                splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
-    soundTrack1 = Sequence(Wait(.5), SoundInterval(globalBattleSoundCache.getSound('SA_hot_air.ogg'), node=suit))
-    if hitAtleastOneToon > 0:
-        return Parallel(suitTrack, partTrack, waterfallTrack, toonTracks, soundTrack1)
-    else:
-        return Parallel(suitTrack, partTrack, waterfallTrack, toonTracks, soundTrack1)
+    soundTrack = getSoundTrack('SA_hot_air.ogg', delay=.5, node=suit)
+    return Parallel(suitTrack, partTrack, waterfallTrack, toonTracks, soundTrack, baseFlameTracks, flameTracks, flecksTracks, colorTracks)
 
 
 def doConDuckTion(attack):

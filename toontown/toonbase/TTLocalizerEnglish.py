@@ -3645,7 +3645,7 @@ SuitCheatDescription = {
 'StealSafe': "Syphons the least dangerous toon's health!",
 'RevvingUp': "Reduces the least dangerous toon's gag power!",
 'Enraged': "The Scapegoat's temperature has boiled over!",
-'HeatWave': "It's getting hot in here!",
+ 'HeatWave': "It's getting hot in here!",
 'PaperCut': "The Bookkeeper retaliates against the\nleast dangerous toon!",
 'WireCut': "The Wiretapper retaliates against the\nleast dangerous toon!",
 'Wiretapped': "The Wiretapper syphons the toon's health!",
