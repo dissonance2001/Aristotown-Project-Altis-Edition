@@ -10,7 +10,7 @@ from toontown.hood import ZoneUtil
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
 
 
-class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
+class DistributedPizzeriaInterior(DistributedObject.DistributedObject):
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
@@ -26,8 +26,8 @@ class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
 
     def doMusic(self, task):
         base.musicManager.stopAllSounds()
-        self.pacelobbyMusicFile = loader.loadMusic("phase_9/audio/bgm/merc/instance_pacesetter_lobby.ogg")
-        self.pacelobbyMusic = base.playMusic(self.pacelobbyMusicFile, looping=1)
+        self.pizzerialobbyMusicFile = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_standard.ogg")
+        self.pizzerialobbyMusic = base.playMusic(self.pizzerialobbyMusicFile, looping=1)
         return task.done
 
     def setZoneIdAndBlock(self, zoneId, block):
@@ -47,7 +47,7 @@ class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
         self.dnaStore = base.cr.playGame.dnaStore
         self.randomGenerator = random.Random()
         self.randomGenerator.seed(self.zoneId)
-        self.interior = loader.loadModel('phase_8/models/areas/ttcc_int_psetter_lobby.bam')
+        self.interior = loader.loadModel('phase_8/models/areas/ttcc_int_pcrat_lobby.bam')
         self.interior.reparentTo(render)
         hoodId = ZoneUtil.getCanonicalHoodId(self.zoneId)
         self.colors = ToonInteriorColors.colors[hoodId]
@@ -60,11 +60,6 @@ class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
         DNADoor.setupDoor(doorNP, self.interior, doorOrigin, self.dnaStore, str(self.block), doorColor)
         doorFrame = doorNP.find('door_*_flat')
         doorFrame.wrtReparentTo(self.interior)
-        paceElevator = loader.loadModel('phase_8/models/modules/ttcc_psetter_elevator.bam')
-        paceElevator.reparentTo(self.interior)
-        ElevatorOrigin = render.find('**/elevator_origin;+s')
-        paceElevator.setHpr(0, -180, 0)
-        paceElevator.reparentTo(ElevatorOrigin)
         del self.colors
         del self.dnaStore
         del self.randomGenerator
@@ -75,6 +70,6 @@ class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
     def disable(self):
         self.interior.removeNode()
         del self.interior
-        if hasattr(self, 'pacelobbyMusicFile'):
-            self.pacelobbyMusicFile.stop()
+        if hasattr(self, 'pizzerialobbyMusicFile'):
+            self.pizzeralobbyMusicFile.stop()
         DistributedObject.DistributedObject.disable(self)

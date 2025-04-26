@@ -242,7 +242,11 @@ TwilightTerrace = 9300
 ToonHall = 2513
 PacesetterLobby = 9613
 DerrickmanInterior = 2921
+PizzariaInterior = 3740
 ToontownCentralOld = 20000
+SchoolHouseInterior = 2516
+OTGagShop = 7502
+Dungeon = 7507
 HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, WackyWay),
  DonaldsDock: (BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue),
  TheBrrrgh: (WalrusWay, SleetStreet, PolarPlace, ArcticAvenue),

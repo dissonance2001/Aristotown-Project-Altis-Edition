@@ -37,6 +37,24 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
         self.setup()
+        DistributedObject.DistributedObject.announceGenerate(self)
+        self.setup()
+        if self.zoneId == ToontownGlobals.PizzaeriaInterior:
+            taskMgr.doMethodLater(0, self.PizzeriaMusic, 'PizzeriaMusic')
+        if self.zoneId == ToontownGlobals.PacesetterLobby:
+            taskMgr.doMethodLater(0, self.PacesetterLobbyMusic, 'PacesetterLobbyMusic')
+
+    def PizzeriaMusic(self, task):
+        base.musicManager.stopAllSounds()
+        self.pizzeriaMusicFile = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_standard.ogg")
+        self.pizzeriaMusic = base.playMusic(self.pizzeriaMusicFile, looping = 1)
+        return task.done
+
+    def PacesetterLobbyMusic(self, task):
+        base.musicManager.stopAllSounds()
+        self.pacesetterLobbyMusicFile = loader.loadMusic("phase_9/audio/bgm/merc/instance_pacesetter_lobby.ogg")
+        self.pacesetterLobbyMusic = base.playMusic(self.pacesetterLobbyMusicFile, looping = 1)
+        return task.done
 
     def disable(self):
         self.interior.removeNode()
