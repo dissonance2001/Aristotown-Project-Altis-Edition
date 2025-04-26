@@ -5,6 +5,7 @@ from toontown.toonbase.ToontownGlobals import *
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building import ToonInteriorColors
+from toontown.building import DistributedToonInterior
 from toontown.dna.DNAParser import DNADoor
 from toontown.hood import ZoneUtil
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
@@ -22,7 +23,7 @@ class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
         self.setup()
-        taskMgr.doMethodLater(0.0, self.doMusic, 'pacelobbyMusic')  # gotta delay it a bit
+        taskMgr.doMethodLater(0.1, self.doMusic, 'pacelobbyMusic')  # gotta delay it a bit
 
     def doMusic(self, task):
         base.musicManager.stopAllSounds()

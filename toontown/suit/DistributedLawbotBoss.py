@@ -177,6 +177,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.betweenBattleMusic.stop()
         self.promotionMusic.stop()
         self.stingMusic.stop()
+        self.battleOneMusic.stop()
         self.battleTwoMusic.stop()
         self.battleThreeMusic.stop()
         self.epilogueMusic.stop()
@@ -475,9 +476,11 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         elevatorModel = loader.loadModel('phase_11/models/lawbotHQ/LB_Elevator')
         elevatorModel.reparentTo(self.elevatorEntrance)
         self.setupElevator(elevatorModel)
+        self.elevatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_elevator.ogg')
         self.promotionMusic = base.loader.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
         self.betweenBattleMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleTwoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_juryBG.ogg')
+        self.battleOneMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_hard_boss_encntr_1.ogg')
         floor = self.geom2.find('**/floor')
         if floor.isEmpty():
             floor = self.geom2.find('**/floor')
@@ -852,6 +855,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleFourPosHpr)
         self.loop('Ff_neutral')
         self.notify.debug('self.battleANode = %s' % self.battleANode)
+        base.playMusic(self.battleOneMusic, looping=1, volume=0.9)
         self.__hideWitnessToon()
         if self.battleA == None or self.battleB == None:
             pass
@@ -859,6 +863,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def exitBattleOne(self):
         self.notify.debug('----- exitBattleOne')
+        self.battleOneMusic.stop()
         DistributedBossCog.DistributedBossCog.exitBattleOne(self)
 
     def stashBoss(self):

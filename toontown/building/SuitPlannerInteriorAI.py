@@ -238,6 +238,14 @@ class SuitPlannerInteriorAI:
             miniboss7 = self.__genSuitObject(self.zoneId, 18, 'l', 18, 0)
             activeSuits.append(random.choice((miniboss4, miniboss6)))
             activeSuits.append(random.choice((miniboss2, miniboss7)))
+        elif specialCode == 'oclo1':
+            miniboss = self.__genSuitObject(self.zoneId, 22, 'l', 22, 0)
+            miniboss2 = self.__genSuitObject(self.zoneId, 23, 'l', 23, 0)
+            miniboss4 = self.__genSuitObject(self.zoneId, 24, 'l', 24, 0)
+            miniboss6 = self.__genSuitObject(self.zoneId, 17, 'l', 17, 0)
+            miniboss7 = self.__genSuitObject(self.zoneId, 18, 'l', 18, 0)
+            activeSuits.append(random.choice((miniboss, miniboss2, miniboss3, miniboss4)))
+            reserveSuits.append(random.choice((miniboss5, miniboss6, miniboss7, miniboss8, miniboss9, miniboss10, miniboss11, miniboss12, miniboss13,miniboss14, miniboss15, miniboss16, miniboss17, miniboss18)))
         elif specialCode == 'ffm2':
             miniboss2 = self.__genSuitObject(self.zoneId, 19, 's', 19, 0)
             miniboss3 = self.__genSuitObject(self.zoneId, 21, 's', 21, 0)

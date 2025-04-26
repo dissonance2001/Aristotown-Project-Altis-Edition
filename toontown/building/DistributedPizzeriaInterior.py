@@ -6,11 +6,23 @@ from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building import ToonInteriorColors
 from toontown.dna.DNAParser import DNADoor
+from toontown.building import DistributedToonInterior
 from toontown.hood import ZoneUtil
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
 
 
 class DistributedPizzeriaInterior(DistributedObject.DistributedObject):
+
+    def setupFreezer(self):
+        # DistributedSwitch.DistributedSwitch.setupSwitch(self)
+        radius = 45.0
+        cSphere = CollisionSphere(85.113,  49.793,  0.025, radius)
+        cSphere.setTangible(0)
+        cSphereNode = CollisionNode('FreezerTransition')
+        cSphereNode.addSolid(cSphere)
+        self.cSphereNodePath = self.interior.attachNewNode(cSphereNode)
+        cSphereNode.setCollideMask(ToontownGlobals.WallBitmask)
+        self.cSphereNodePath.show()
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
@@ -22,13 +34,13 @@ class DistributedPizzeriaInterior(DistributedObject.DistributedObject):
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
         self.setup()
-        taskMgr.doMethodLater(0.0, self.doMusic, 'pacelobbyMusic')  # gotta delay it a bit
+        #taskMgr.doMethodLater(0.0, self.doMusic, 'pacelobbyMusic')  # gotta delay it a bit
 
-    def doMusic(self, task):
-        base.musicManager.stopAllSounds()
-        self.pizzerialobbyMusicFile = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_standard.ogg")
-        self.pizzerialobbyMusic = base.playMusic(self.pizzerialobbyMusicFile, looping=1)
-        return task.done
+   # def doMusic(self, task):
+    #    base.musicManager.stopAllSounds()
+     #   self.pizzerialobbyMusicFile = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_standard.ogg")
+      #  self.pizzerialobbyMusic = base.playMusic(self.pizzerialobbyMusicFile, looping=1)
+       # return task.done
 
     def setZoneIdAndBlock(self, zoneId, block):
         self.zoneId = zoneId
@@ -49,6 +61,7 @@ class DistributedPizzeriaInterior(DistributedObject.DistributedObject):
         self.randomGenerator.seed(self.zoneId)
         self.interior = loader.loadModel('phase_8/models/areas/ttcc_int_pcrat_lobby.bam')
         self.interior.reparentTo(render)
+        self.setupFreezer()
         hoodId = ZoneUtil.getCanonicalHoodId(self.zoneId)
         self.colors = ToonInteriorColors.colors[hoodId]
         door = self.chooseDoor()
@@ -70,6 +83,4 @@ class DistributedPizzeriaInterior(DistributedObject.DistributedObject):
     def disable(self):
         self.interior.removeNode()
         del self.interior
-        if hasattr(self, 'pizzerialobbyMusicFile'):
-            self.pizzeralobbyMusicFile.stop()
         DistributedObject.DistributedObject.disable(self)

@@ -936,6 +936,25 @@ def skipCJ():
     boss.exitIntroduction()
     boss.b_setState('RollToBattleTwo')
 
+@magicWord(category=CATEGORY_ADMINISTRATOR)
+def skipCJ2():
+    """
+    Skips to the final round of the CJ.
+    """
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedLawbotBossAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+    if not boss:
+        return "You aren't in a CJ!"
+    if boss.state in ('PrepareBattleThree', 'BattleThree'):
+        return "You can't skip this round."
+    boss.exitIntroduction()
+    boss.b_setState('Frolic')
+
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
 def skipCJFinal():

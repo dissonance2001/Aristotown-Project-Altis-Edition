@@ -74,7 +74,6 @@ class ToonInterior(Place.Place):
          State.State('stopped', self.enterStopped, self.exitStopped, ['walk', 'doorOut']),
          State.State('final', self.enterFinal, self.exitFinal, ['start'])], 'start', 'final')
         self.parentFSMState = parentFSMState
-
     def load(self):
         Place.Place.load(self)
         self.parentFSMState.addChild(self.fsm)
@@ -98,6 +97,20 @@ class ToonInterior(Place.Place):
         self._telemLimiter = TLGatherAllAvs('ToonInterior', RotationLimitToH)
         NametagGlobals.setWant2dNametags(True)
         self.fsm.request(requestStatus['how'], [requestStatus])
+        if self.zoneId == ToontownGlobals.PizzariaInterior:
+            taskMgr.doMethodLater(0, self.PizzeriaMusic, 'PizzeriaMusic')
+        elif self.zoneId == ToontownGlobals.PacesetterLobby:
+            taskMgr.doMethodLater(0, self.PacesetterLobbyMusic, 'PacesetterLobbyMusic')
+
+    def PizzeriaMusic(self, task):
+            base.musicManager.stopAllSounds()
+            self.pizzeriaMusicFile = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_standard.ogg")
+            self.pizzeriaMusic = base.playMusic(self.pizzeriaMusicFile, looping=1)
+
+    def PacesetterLobbyMusic(self, task):
+            base.musicManager.stopAllSounds()
+            self.pacesetterLobbyMusicFile = loader.loadMusic("phase_9/audio/bgm/merc/instance_pacesetter_lobby.ogg")
+            self.pacesetterLobbyMusic = base.playMusic(self.pacesetterLobbyMusicFile, looping=1)
 
     def exit(self):
         self.ignoreAll()
@@ -106,6 +119,8 @@ class ToonInterior(Place.Place):
         del self._telemLimiter
         NametagGlobals.setWant2dNametags(False)
         self.loader.activityMusic.stop()
+        self.pacesetterLobbyMusic.stop()
+        self.pizzeriaMusic.stop()
 
     def setState(self, state):
         self.fsm.request(state)
