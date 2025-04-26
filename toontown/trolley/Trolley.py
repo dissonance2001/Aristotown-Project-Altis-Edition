@@ -157,20 +157,11 @@ class Trolley(StateData.StateData):
     def enterBoarded(self):
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: RIDETHETROLLEY: Ride the Trolley')
-        self.enableExitButton()
         return None
 
     def exitBoarded(self):
         self.cameraBoardTrack.finish()
-        self.disableExitButton()
         return None
-
-    def enableExitButton(self):
-        self.exitButton = DirectButton(relief=None, text=TTLocalizer.TrolleyHopOff, text_fg=(1, 1, 0.65, 1), text_pos=(0, -0.23), text_scale=TTLocalizer.TexitButton, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0, 0, 0.8), scale=0.15, command=lambda self = self: self.fsm.request('requestExit'))
-        return
-
-    def disableExitButton(self):
-        self.exitButton.destroy()
 
     def enterRequestExit(self):
         messenger.send('trolleyExitButton')
