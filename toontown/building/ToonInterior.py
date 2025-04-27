@@ -119,8 +119,6 @@ class ToonInterior(Place.Place):
         del self._telemLimiter
         NametagGlobals.setWant2dNametags(False)
         self.loader.activityMusic.stop()
-        self.pacesetterLobbyMusic.stop()
-        self.pizzeriaMusic.stop()
 
     def setState(self, state):
         self.fsm.request(state)

@@ -183,7 +183,7 @@ autoRun = ConfigVariableBool('toontown-auto-run', 1)
 def printCameraPos():
     print(camera.getPos())
     print(camera.getHpr())
-    
+
 base.accept('[', printCameraPos)
 
 def printOobePos():
