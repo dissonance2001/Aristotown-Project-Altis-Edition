@@ -421,10 +421,7 @@ class TownBattle(StateData.StateData):
             cogFireCostIndex += 1
 
         creditLevel = maxSuitLevel
-        if cogIds == self.cogs and creditLevel == self.creditLevel and luredIndices == self.luredIndices and trappedIndices == self.trappedIndices and toonIds == self.toons:
-            resetActivateMode = 0
-        else:
-            resetActivateMode = 1
+        resetActivateMode = not (cogIds == self.cogs and creditLevel == self.creditLevel and luredIndices == self.luredIndices and trappedIndices == self.trappedIndices and toonIds == self.toons)
         self.notify.debug('adjustCogsAndToons() resetActivateMode: %s' % resetActivateMode)
         self.cogs = cogIds
         self.numCogs = len(cogs)
@@ -650,10 +647,7 @@ class TownBattle(StateData.StateData):
             self.fsm.request('SOS')
 
     def __isCogChoiceNecessary(self):
-        if self.numCogs > 1 and not self.__isGroupAttack(self.track, self.level):
-            return 1
-        else:
-            return 0
+        return self.numCogs > 1 and not self.__isGroupAttack(self.track, self.level)
 
     def __isGroupAttack(self, trackNum, levelNum):
         retval = BattleBase.attackAffectsGroup(trackNum, levelNum)

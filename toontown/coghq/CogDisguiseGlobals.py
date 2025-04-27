@@ -2510,19 +2510,19 @@ def isSuitComplete(parts, dept):
     dept = dept2deptIndex(dept)
     for p in range(len(PartsQueryMasks)):
         if getNextPart(parts, p, dept):
-            return 0
+            return False
 
-    return 1
+    return True
     
 def isPaidSuitComplete(av, parts, dept):
-    isPaid = 0
+    isPaid = False
     base = getBase()
     if av and av.getGameAccess() == OTPGlobals.AccessFull:
-        isPaid = 1
+        isPaid = True
     if isPaid:
         if isSuitComplete(parts, dept):
-            return 1
-    return 0
+            return True
+    return False
 
 
 def getTotalMerits(toon, index):

@@ -845,12 +845,12 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 return
             buildingHeight = random.choice(smallestHeights)
             self.notify.info('Existing buildings are (%s, %s), choosing from (%s, %s), chose %s, %s.' % (self.formatNumSuitsPerTrack(numPerTrack), self.formatNumSuitsPerTrack(numPerHeight), smallestTracks, smallestHeights, buildingTrack, buildingHeight))
-            repeat = 1
+            repeat = True
             while repeat and (buildingTrack is not None) and (buildingHeight is not None):
                 if len(hoodInfo) == 0:
                     self.notify.warning('No more streets can have suit buildings, with %s buildings unassigned!' % numToAssign)
                     return
-                repeat = 0
+                repeat = False
                 currHoodInfo = self.chooseStreetWithPreference(hoodInfo, buildingTrackIndex, buildingHeight)
                 zoneId = currHoodInfo[self.SUIT_HOOD_INFO_ZONE]
                 if zoneId in self.air.suitPlanners:
@@ -882,7 +882,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                         buildingTrack = None
                     if totalWeightPerHeight[buildingHeight] <= 0:
                         buildingHeight = None
-                    repeat = 1
+                    repeat = True
             if (buildingTrack is not None) and (buildingHeight is not None):
                 sp.targetNumSuitBuildings += 1
                 sp.pendingBuildingTracks.append(buildingTrack)
@@ -896,12 +896,12 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         hoodInfo = self.SuitHoodInfo[:]
         totalWeight = self.TOTAL_BWEIGHT
         while numToAssign > 0:
-            repeat = 1
+            repeat = True
             while repeat:
                 if len(hoodInfo) == 0:
                     self.notify.warning('No more streets can remove suit buildings, with %s buildings too many!' % numToAssign)
                     return
-                repeat = 0
+                repeat = False
                 currHoodInfo = self.chooseStreetNoPreference(hoodInfo, totalWeight)
                 zoneId = currHoodInfo[self.SUIT_HOOD_INFO_ZONE]
                 if zoneId in self.air.suitPlanners:
@@ -915,7 +915,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                     self.notify.info("Zone %s can't remove any more buildings." % zoneId)
                     hoodInfo.remove(currHoodInfo)
                     totalWeight -= currHoodInfo[self.SUIT_HOOD_INFO_BWEIGHT]
-                    repeat = 1
+                    repeat = True
             self.notify.info('Unassigning building from zone %s.' % zoneId)
             sp.targetNumSuitBuildings -= 1
             numToAssign -= 1
