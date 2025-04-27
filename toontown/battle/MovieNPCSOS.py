@@ -126,10 +126,10 @@ def teleportIn(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0)):
 
 
 def teleportOut(attack, npc):
-    if npc.style.getGender() == 'm':
-        a = ActorInterval(npc, 'bow')
-    else:
+    if npc.style.torso[1] == 'd':
         a = ActorInterval(npc, 'curtsy')
+    else:
+        a = ActorInterval(npc, 'bow')
     if npc.nametag.getText() == 'Donald Frump':
         text = "Oh, by the way, you're fired. Get 'em out of here!"
     elif npc.nametag.getText() == 'Jakebooy':
