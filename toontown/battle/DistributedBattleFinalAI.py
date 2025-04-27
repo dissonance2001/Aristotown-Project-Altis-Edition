@@ -121,3 +121,14 @@ class DistributedBattleFinalAI(DistributedBattleBaseAI.DistributedBattleBaseAI):
         self.runableFsm.request('Unrunable')
         DistributedBattleBaseAI.DistributedBattleBaseAI.enterResume(self)
         self.finishCallback(self.zoneId, self.activeToons)
+
+    def d_setMusicFlags(suitName, musicFlags):
+     if suitName == 'scg':
+        musicFlags |= 0
+     elif suitName == 'ste':
+        musicFlags |= 1
+     elif suitName == 'lit':
+        musicFlags |= 2
+     elif suitName == 'csm' :
+        musicFlags |= 3
+     self.sendUpdate('setMusicFlags', musicFlags)

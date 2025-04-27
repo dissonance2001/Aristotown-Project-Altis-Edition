@@ -188,8 +188,8 @@ def printCameraPos():
 base.accept('[', printCameraPos)
 
 def printOobePos():
-    print(base.oobeCamera.getPos())
-    print(base.oobeCamera.getHpr())
+    print(base.oobeCameraTrackball.getPos())
+    print(base.oobeCameraTrackball.getHpr())
     print
 
 base.accept(']', printOobePos)

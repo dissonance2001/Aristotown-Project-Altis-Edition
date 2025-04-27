@@ -25,6 +25,7 @@ class DistributedBattleFinal(DistributedBattleBase.DistributedBattleBase):
         self.bossCogRequest = None
         self.streetBattle = 0
         self.joiningSuitsName = self.uniqueBattleName('joiningSuits')
+        self.setMusicFlags()
         self.fsm.addState(State.State('ReservesJoining', self.enterReservesJoining, self.exitReservesJoining, ['WaitForJoin']))
         offState = self.fsm.getStateNamed('Off')
         offState.addTransition('ReservesJoining')
@@ -32,6 +33,10 @@ class DistributedBattleFinal(DistributedBattleBase.DistributedBattleBase):
         waitForJoinState.addTransition('ReservesJoining')
         playMovieState = self.fsm.getStateNamed('PlayMovie')
         playMovieState.addTransition('ReservesJoining')
+        self.stenoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_stenograph.ogg')
+        self.litigatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_litigator.ogg')
+        self.caseMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_casemgr.ogg')
+        self.goatMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_scapegoat.ogg')
 
     def generate(self):
         DistributedBattleBase.DistributedBattleBase.generate(self)
@@ -187,3 +192,13 @@ class DistributedBattleFinal(DistributedBattleBase.DistributedBattleBase):
 
     def exitWaitForServer(self):
         pass
+
+    def setMusicFlags(flags):
+        if self.musicFlags & 0 and self.goatMusic.status() != AudioSound.PLAYING:
+            base.playSfx(self.goatMusic)
+        elif self.musicFlags & 1 and self.stenoMusic.status() != AudioSound.PLAYING:
+            base.playSfx(self.stenoMusic)
+        elif self.musicFlags & 2 and self.litigatorMusic.status() != AudioSound.PLAYING:
+            base.playSfx(self.litigatorMusic)
+        elif self.musicFlags & 3 and self.caseMusic.status() != AudioSound.PLAYING:
+            base.playSfx(self.caseMusic)
