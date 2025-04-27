@@ -128,7 +128,7 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
     elif type == NPC_LOOPY:
         npc =  DistributedNPCLoopyGAI.DistributedNPCLoopyGAI(air, npcId)
     elif type == NPC_INVISIBLE:
-		npc = DistributedNPCInvisibleAI.DistributedNPCInvisibleAI(air, npcId)
+        npc = DistributedNPCInvisibleAI.DistributedNPCInvisibleAI(air, npcId)
     elif type == NPC_RODCLERK:
         npc = DistributedNPCRodClerkAI.DistributedNPCRodClerkAI(air, npcId)
     else:
@@ -13429,185 +13429,143 @@ def getBuildingTitle(zoneId):
     return TTLocalizer.zone2TitleDict.get(zoneId, 'Toon Building')[0]
 
 
-HQnpcFriends = {2001: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, #HEAL
-        0,
-        50,
-        5),
- 2132: (ToontownBattleGlobals.HEAL_TRACK,
-        5,
-        ToontownGlobals.MaxHpLimit * 2,
-        4),
- 2121: (ToontownBattleGlobals.HEAL_TRACK,
-        3,
-        ToontownGlobals.MaxHpLimit,
-        3),
- 2011: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, #TRAP
-        1,
-        75,
-        5),
- 3007: (ToontownBattleGlobals.TRAP_TRACK,
-        6,
-        750,
-        4),
- 1001: (ToontownBattleGlobals.TRAP_TRACK,
-        5,
-        500,
-        3),
- 3112: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, #LURE
-        2,
-        50,
-        5),
- 1323: (ToontownBattleGlobals.LURE_TRACK,
-        5,
-        0,
-        4),
- 2308: (ToontownBattleGlobals.LURE_TRACK,
-        3,
-        0,
-        3),
- 4119: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, #SOUND
-        6,
-        50,
-        5),
- 4219: (ToontownBattleGlobals.SOUND_TRACK,
-        6,
-        345,
-        4),
- 4115: (ToontownBattleGlobals.SOUND_TRACK,
-        5,
-    190,
-        3),
- 7779: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, #THROw
-        3,
-        25,
-        5),
- 1116: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, # bessie
-        7,
-        25,
-        5),
- 2311: (ToontownBattleGlobals.DROP_TRACK, # franz
-        6,
-        300,
-        4),
- 4140: (ToontownBattleGlobals.DROP_TRACK, # clumsy
-        5,
-        220,
-        3),
- 7778: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, # rain
-        8,
-        5,
-        1),
- 7777: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, # boost all!
-        8,
-        15,
-        5),
- 3137: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, #SQUIRT
-        5,
-        25,
-        4),
- 4327: (ToontownBattleGlobals.NPC_COGS_MISS,
-        0,
-        0,
-        4),
- 4230: (ToontownBattleGlobals.NPC_COGS_MISS,
-        0,
-        0,
-        4),
- 3135: (ToontownBattleGlobals.NPC_DAMAGE_BOOST, #ZAP
-        4,
-        25,
-        5),
- 2208: (ToontownBattleGlobals.NPC_TOONS_HIT,
-        0,
-        0,
-        4),
- 5124: (ToontownBattleGlobals.NPC_TOONS_HIT,
-        0,
-        0,
-        4),
- 2003: (ToontownBattleGlobals.NPC_RESTOCK_GAGS,
-        -1,
-        0,
-        5),
- 2126: (ToontownBattleGlobals.NPC_RESTOCK_GAGS,
-        ToontownBattleGlobals.HEAL_TRACK,
-        0,
-        3),
- 4007: (ToontownBattleGlobals.NPC_RESTOCK_GAGS,
-        ToontownBattleGlobals.TRAP_TRACK,
-        0,
-        3),
- 1315: (ToontownBattleGlobals.NPC_RESTOCK_GAGS,
-        ToontownBattleGlobals.LURE_TRACK,
-        0,
-        3),
- 5207: (ToontownBattleGlobals.NPC_RESTOCK_GAGS,
-        ToontownBattleGlobals.SQUIRT_TRACK,
-        0,
-        3),
- 3129: (ToontownBattleGlobals.NPC_RESTOCK_GAGS,
-        ToontownBattleGlobals.THROW_TRACK,
-        0,
-        3),
- 4125: (ToontownBattleGlobals.NPC_RESTOCK_GAGS,
-        ToontownBattleGlobals.SOUND_TRACK,
-        0,
-        3),
- 1329: (ToontownBattleGlobals.NPC_RESTOCK_GAGS,
-        ToontownBattleGlobals.DROP_TRACK,
-        0,
-        3)}
-FOnpcFriends = {9310: (ToontownBattleGlobals.LURE_TRACK,
-        1,
-        0,
-        0),
- 9311: (ToontownBattleGlobals.LURE_TRACK,
-        1,
-        0,
-        1),
- 9312: (ToontownBattleGlobals.LURE_TRACK,
-        3,
-        0,
-        2),
- 9307: (ToontownBattleGlobals.SOUND_TRACK,
-        1,
-        10,
-        0),
- 9308: (ToontownBattleGlobals.SOUND_TRACK,
-        3,
-        20,
-        1),
- 9309: (ToontownBattleGlobals.SOUND_TRACK,
-        4,
-        30,
-        2),
- 9304: (ToontownBattleGlobals.DROP_TRACK,
-        1,
-        20,
-        0),
- 9305: (ToontownBattleGlobals.DROP_TRACK,
-        2,
-        35,
-        1),
- 9306: (ToontownBattleGlobals.DROP_TRACK,
-        3,
-        50,
-        2),
- 9301: (ToontownBattleGlobals.HEAL_TRACK,
-        3,
-        10,
-        0),
- 9302: (ToontownBattleGlobals.HEAL_TRACK,
-        3,
-        20,
-        1),
- 9303: (ToontownBattleGlobals.HEAL_TRACK,
-        3,
-        30,
-        2)}
-AprilToonsFriends = {1415: (ToontownBattleGlobals.SOUND_TRACK, 5, 0, 0),
- 3308: (100, 0, 0, 5)}
-DevFriends = {91917: (ToontownBattleGlobals.SOUND_TRACK, 6, 900, 5), 91920: (ToontownBattleGlobals.TRAP_TRACK, 1, 839, 5), 91925: (ToontownBattleGlobals.DROP_TRACK, 2, 1, 5),}
+# Professor Control: I want to try to do something that may make this a bit more organized by using new SOSCard objects.
+# Essentially, I can create a class like so and use __init__() to give it instance variables that will give it properties, which should be a lot easier to tell what they do rather than rely on tuple indexes.
+class SOSCard:
+    '''
+    Basic SOS Card.
+    '''
+    
+    def __init__(self, track, level, hp, rarity):
+        '''
+        track: The track of which the SOS Toon uses.
+        level: The level of the track the SOS Toon uses.
+        hp: The amount of damage the SOS Toon deals, or heals in the case of Toon-up.
+        rarity: The amount of stars that is listed.
+        '''
+        self.track = track
+        self.level = level
+        self.hp = hp
+        self.rarity = rarity
+
+
+class DamageBoostSOSCard(SOSCard):
+    '''
+    When this type of SOS Toon is called, boost a damage track.
+    '''
+
+    def __init__(self, track, hp, rarity):
+        '''
+        track: The track that the SOS Toon boosts.  8 for all Gags.
+        hp: Don't know if it's either a percent or a flat damage increase.
+        rarity: The amount of stars that is listed.
+        '''
+        # Besides organization, this is what's going to rock about using classes: inheritance, which, 
+        SOSCard.__init__(self, ToontownBattleGlobals.NPC_DAMAGE_BOOST, track, hp, rarity)
+
+
+class CogsMissSOSCard(SOSCard):
+    '''
+    When this type of SOS Toon is called, make all Cogs miss their attacks.
+    '''
+
+    def __init__(self):
+        SOSCard.__init__(self, ToontownBattleGlobals.NPC_COGS_MISS, 0, 0, 4) # All Cogs Miss SOS Cards are like this.  Unless we're planning to somehow make Cogs miss alterable in some way, we'll keep it like this.
+
+
+class ToonsHitSOSCard(SOSCard):
+    '''
+    When this type of SOS Toon is called, make all Toons have perfect accuracy.
+    '''
+
+    def __init__(self):
+        SOSCard.__init__(self, ToontownBattleGlobals.NPC_TOONS_HIT, 0, 0, 4) # All Toons Hit SOS Cards are like this.  Unless we're planning to somehow make Toons hit alterable in some way, we'll keep it like this.
+
+
+class RestockGagsSOSCard(SOSCard):
+    '''
+    When this type of SOS Toon is called, restock Toons' Gags based on track.
+    '''
+
+    def __init__(self, track):
+        '''
+        track: The Gag track that gets restocked; -1 to restock all Gag tracks.  It will also determine the rarity, with it being 5 stars if it restocks all Gags or 3 otherwise.
+        '''
+        SOSCard.__init__(self, ToontownBattleGlobals.NPC_RESTOCK_GAGS, track, 0, 5 if track == -1 else 3)
+
+
+HQnpcFriends = {
+    #HEAL
+    2001: DamageBoostSOSCard(ToontownBattleGlobals.HEAL_TRACK, 50, 5),
+    2132: SOSCard(ToontownBattleGlobals.HEAL_TRACK, 5, ToontownGlobals.MaxHpLimit * 2, 4),
+    2121: SOSCard(ToontownBattleGlobals.HEAL_TRACK, 3, ToontownGlobals.MaxHpLimit, 3),
+
+    #TRAP
+    2011: DamageBoostSOSCard(ToontownBattleGlobals.TRAP_TRACK, 75, 5),
+    # Wait, what's with these exorbitant damage values?
+    3007: SOSCard(ToontownBattleGlobals.TRAP_TRACK, 6, 750, 4),
+    1001: SOSCard(ToontownBattleGlobals.TRAP_TRACK, 5, 500, 3),
+
+    #LURE
+    3112: DamageBoostSOSCard(ToontownBattleGlobals.LURE_TRACK, 50, 5),
+    1323: SOSCard(ToontownBattleGlobals.LURE_TRACK, 5, 0, 4),
+    2308: SOSCard(ToontownBattleGlobals.LURE_TRACK, 3, 0, 3),
+
+    #SOUND
+    4119: DamageBoostSOSCard(ToontownBattleGlobals.SOUND_TRACK, 50, 5),
+    4219: SOSCard(ToontownBattleGlobals.SOUND_TRACK, 6, 345, 4),
+    4115: SOSCard(ToontownBattleGlobals.SOUND_TRACK, 5, 190, 3),
+
+    #THROW
+    7779: DamageBoostSOSCard(ToontownBattleGlobals.THROW_TRACK, 25, 5),
+
+    #DROP
+    1116: DamageBoostSOSCard(ToontownBattleGlobals.DROP_TRACK, 25, 5),
+    2311: SOSCard(ToontownBattleGlobals.DROP_TRACK, 6, 300, 4),
+    4140: SOSCard(ToontownBattleGlobals.DROP_TRACK, 5, 220, 3),
+
+    7778: DamageBoostSOSCard(8, 5, 1), # rain
+    7777: DamageBoostSOSCard(8, 15, 5), # boost all!
+
+    #SQUIRT
+    3137: DamageBoostSOSCard(ToontownBattleGlobals.SQUIRT_TRACK, 25, 4),
+
+    4327: CogsMissSOSCard(),
+    4230: CogsMissSOSCard(),
+
+    #ZAP
+    3135: DamageBoostSOSCard(ToontownBattleGlobals.ZAP_TRACK, 25, 5),
+
+    2208: ToonsHitSOSCard(),
+    5124: ToonsHitSOSCard(),
+
+    2003: RestockGagsSOSCard(-1),
+    2126: RestockGagsSOSCard(ToontownBattleGlobals.HEAL_TRACK),
+    4007: RestockGagsSOSCard(ToontownBattleGlobals.TRAP_TRACK),
+    1315: RestockGagsSOSCard(ToontownBattleGlobals.LURE_TRACK),
+    3129: RestockGagsSOSCard(ToontownBattleGlobals.THROW_TRACK),
+    5207: RestockGagsSOSCard(ToontownBattleGlobals.SQUIRT_TRACK),
+    3121: RestockGagsSOSCard(ToontownBattleGlobals.ZAP_TRACK),
+    4125: RestockGagsSOSCard(ToontownBattleGlobals.SOUND_TRACK),
+    1329: RestockGagsSOSCard(ToontownBattleGlobals.DROP_TRACK)
+}
+FOnpcFriends = {9310: SOSCard(ToontownBattleGlobals.LURE_TRACK, 1, 0, 0),
+ 9311: SOSCard(ToontownBattleGlobals.LURE_TRACK, 1, 0, 1),
+ 9312: SOSCard(ToontownBattleGlobals.LURE_TRACK, 3, 0, 2),
+ 9307: SOSCard(ToontownBattleGlobals.SOUND_TRACK, 1, 10, 0),
+ 9308: SOSCard(ToontownBattleGlobals.SOUND_TRACK, 3, 20, 1),
+ 9309: SOSCard(ToontownBattleGlobals.SOUND_TRACK, 4, 30, 2),
+ 9304: SOSCard(ToontownBattleGlobals.DROP_TRACK, 1, 20, 0),
+ 9305: SOSCard(ToontownBattleGlobals.DROP_TRACK, 2, 35, 1),
+ 9306: SOSCard(ToontownBattleGlobals.DROP_TRACK, 3, 50, 2),
+ 9301: SOSCard(ToontownBattleGlobals.HEAL_TRACK, 3, 10, 0),
+ 9302: SOSCard(ToontownBattleGlobals.HEAL_TRACK, 3, 20, 1),
+ 9303: SOSCard(ToontownBattleGlobals.HEAL_TRACK, 3, 30, 2)}
+AprilToonsFriends = {1415: SOSCard(ToontownBattleGlobals.SOUND_TRACK, 5, 0, 0),
+ 3308: SOSCard(100, 0, 0, 5)}
+DevFriends = {91917: SOSCard(ToontownBattleGlobals.SOUND_TRACK, 6, 900, 5),
+ 91920: SOSCard(ToontownBattleGlobals.TRAP_TRACK, 1, 839, 5),
+ 91925: SOSCard(ToontownBattleGlobals.DROP_TRACK, 2, 1, 5)}
 
 disabledSosCards = ConfigVariableList('disable-sos-card')
 for npcId in disabledSosCards:
@@ -13634,25 +13592,32 @@ def npcFriendsMinMaxStars(minStars, maxStars):
 
 def getNPCTrack(npcId):
     if npcId in npcFriends:
-        return npcFriends[npcId][0]
+        return npcFriends[npcId].track
     return None
 
 
 def getNPCTrackHp(npcId):
     if npcId in npcFriends:
-        track, level, hp, rarity = npcFriends[npcId]
+        track = npcFriends[npcId].track
+        hp = npcFriends[npcId].hp
         return (track, hp)
     return (None, None)
 
 
 def getNPCTrackLevelHp(npcId):
     if npcId in npcFriends:
-        track, level, hp, rarity = npcFriends[npcId]
+        track = npcFriends[npcId].track
+        level = npcFriends[npcId].level
+        hp = npcFriends[npcId].hp
         return (track, level, hp)
     return (None, None, None)
 
 
 def getNPCTrackLevelHpRarity(npcId):
     if npcId in npcFriends:
-        return npcFriends[npcId]
+        track = npcFriends[npcId].track
+        level = npcFriends[npcId].level
+        hp = npcFriends[npcId].hp
+        rarity = npcFriends[npcId].rarity
+        return (track, level, hp, rarity)
     return (None, None, None, None)
