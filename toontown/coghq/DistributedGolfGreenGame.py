@@ -572,7 +572,7 @@ class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
         self.sendUpdate('leaveGame', [])
         return
 
-    def findGrid(self, x, z, force = 0):
+    def findGrid(self, x, z, force = False):
         currentClosest = None
         currentDist = 10000000
         for countX in xrange(self.gridDimX):
@@ -820,11 +820,11 @@ class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
 
     def testGridfull(self, cell):
         if not cell:
-            return 0
+            return False
         elif cell[0] != None:
-            return 1
+            return True
         else:
-            return 0
+            return False
         return
 
     def getValidGrid(self, x, z):
@@ -963,7 +963,7 @@ class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
             self.placeIntoGrid(sprite, x + 1, z - 1)
         return
 
-    def stickInGrid(self, sprite, force = 0):
+    def stickInGrid(self, sprite, force = False):
         if sprite.isActive:
             gridCell = self.findGrid(sprite.getX(), sprite.getZ(), force)
             if gridCell:
@@ -1102,7 +1102,7 @@ class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
                     sprite.setX(self.wallMinX)
                     sprite.reflectX()
                 if sprite.getZ() > self.wallMaxZ:
-                    self.stickInGrid(sprite, 1)
+                    self.stickInGrid(sprite, True)
                 if sprite.getZ() < self.wallMinZ:
                     pass
 

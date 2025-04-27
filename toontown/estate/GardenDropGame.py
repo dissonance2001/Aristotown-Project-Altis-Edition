@@ -84,7 +84,7 @@ class GardenDropGame(DirectObject.DirectObject):
         for ball in xrange(0, 3):
             place = random.random() * self.rangeX
             newSprite = self.addSprite(self.block, size=0.5, posX=self.minX + place, posZ=0.0, found=1)
-            self.stickInGrid(newSprite, 1)
+            self.stickInGrid(newSprite, True)
 
         self.queBall = self.addSprite(self.block, posX=0.25, posZ=0.5, found=0)
         self.queBall.setColor(self.colorWhite)
@@ -96,7 +96,7 @@ class GardenDropGame(DirectObject.DirectObject):
         self.cogZ = 0
         self.__run()
 
-    def findGrid(self, x, z, force = 0):
+    def findGrid(self, x, z, force = False):
         currentClosest = None
         currentDist = 10000000
         for countX in xrange(self.gridDimX):
@@ -111,32 +111,32 @@ class GardenDropGame(DirectObject.DirectObject):
         return currentClosest
 
     def hasNeighbor(self, cellX, cellZ):
-        gotNeighbor = 0
+        gotNeighbor = False
         if cellZ % 2 == 0:
             if self.testGridfull(self.getValidGrid(cellX - 1, cellZ)):
-                gotNeighbor = 1
+                gotNeighbor = True
             elif self.testGridfull(self.getValidGrid(cellX + 1, cellZ)):
-                gotNeighbor = 1
+                gotNeighbor = True
             elif self.testGridfull(self.getValidGrid(cellX, cellZ + 1)):
-                gotNeighbor = 1
+                gotNeighbor = True
             elif self.testGridfull(self.getValidGrid(cellX + 1, cellZ + 1)):
-                gotNeighbor = 1
+                gotNeighbor = True
             elif self.testGridfull(self.getValidGrid(cellX, cellZ - 1)):
-                gotNeighbor = 1
+                gotNeighbor = True
             elif self.testGridfull(self.getValidGrid(cellX + 1, cellZ - 1)):
-                gotNeighbor = 1
+                gotNeighbor = True
         elif self.testGridfull(self.getValidGrid(cellX - 1, cellZ)):
-            gotNeighbor = 1
+            gotNeighbor = True
         elif self.testGridfull(self.getValidGrid(cellX + 1, cellZ)):
-            gotNeighbor = 1
+            gotNeighbor = True
         elif self.testGridfull(self.getValidGrid(cellX, cellZ + 1)):
-            gotNeighbor = 1
+            gotNeighbor = True
         elif self.testGridfull(self.getValidGrid(cellX - 1, cellZ + 1)):
-            gotNeighbor = 1
+            gotNeighbor = True
         elif self.testGridfull(self.getValidGrid(cellX, cellZ - 1)):
-            gotNeighbor = 1
+            gotNeighbor = True
         elif self.testGridfull(self.getValidGrid(cellX - 1, cellZ - 1)):
-            gotNeighbor = 1
+            gotNeighbor = True
         return gotNeighbor
 
     def clearMatchList(self):
@@ -184,11 +184,11 @@ class GardenDropGame(DirectObject.DirectObject):
 
     def testGridfull(self, cell):
         if not cell:
-            return 0
+            return False
         elif cell[0] != None:
-            return 1
+            return True
         else:
-            return 0
+            return False
 
     def getValidGrid(self, x, z):
         if x < 0 or x >= self.gridDimX:
@@ -231,7 +231,7 @@ class GardenDropGame(DirectObject.DirectObject):
     def doOnClearGrid(self):
         secondSprite = self.addSprite(self.block, posX=self.newBallX, posZ=0.0, found=1)
         secondSprite.addForce(0, 1.55 * pi)
-        self.stickInGrid(secondSprite, 1)
+        self.stickInGrid(secondSprite, True)
 
     def findGrid2(self, x, z):
         rangeX = self.maxX - self.minX
@@ -266,7 +266,7 @@ class GardenDropGame(DirectObject.DirectObject):
         else:
             self.placeIntoGrid(sprite, x + 1, z - 1)
 
-    def stickInGrid(self, sprite, force = 0):
+    def stickInGrid(self, sprite, force = False):
         if sprite.isActive and not sprite.isQue:
             gridCell = self.findGrid(sprite.getX(), sprite.getZ(), force)
             if gridCell:
@@ -363,7 +363,7 @@ class GardenDropGame(DirectObject.DirectObject):
                 sprite.setZ(self.maxZ)
                 sprite.velZ = -sprite.velZ
             if sprite.getZ() < self.minZ:
-                self.stickInGrid(sprite, 1)
+                self.stickInGrid(sprite, True)
             if sprite.isActive:
                 sprite.addForce(timeDelta * 0.9, pi * 1.5)
 

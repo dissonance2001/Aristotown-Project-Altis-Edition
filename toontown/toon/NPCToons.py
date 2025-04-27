@@ -223,13 +223,13 @@ badBlocks = [2606, 2602, 2605, 2708, 2705, 2704, 2701, 2803, 2804, 2809, 2805, 5
 protectedBlocks = [4908]
 def isZoneProtected(zoneId):
     if zoneId in badBlocks or zoneId in protectedBlocks:
-        return 1
+        return True
     npcIdList = zone2NpcDict.get(zoneId, [])
     for npcId in npcIdList:
         npcDesc = NPCToonDict.get(npcId)
         if npcDesc[4]:
-            return 1
-    return 0
+            return True
+    return False
 
 
 lnames = TTLocalizer.NPCToonNames

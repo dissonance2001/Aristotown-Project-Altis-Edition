@@ -32,7 +32,7 @@ class PurchaseBase(StateData.StateData):
         self.statusLabel = DirectLabel(parent=self.frame, relief=None, pos=(-0.25, 0, 0.675), text=TTLocalizer.GagShopYouHave % self.toon.getMoney(), text_scale=TTLocalizer.PBstatusLabel, text_fg=(0.05, 0.14, 0.4, 1))
         if self.toon.getMoney() == 1:
             self.statusLabel['text'] = TTLocalizer.GagShopYouHaveOne
-        self.isBroke = 0
+        self.isBroke = False
         self._teaserPanel = None
 
     def unload(self):
@@ -95,12 +95,12 @@ class PurchaseBase(StateData.StateData):
             if not self.isBroke:
                 self.toon.inventory.setActivateModeBroke()
                 taskMgr.doMethodLater(2.25, self.showBrokeMsg, 'showBrokeMsgTask')
-                self.isBroke = 1
+                self.isBroke = True
         else:
             if self.isBroke:
                 self.toon.inventory.setActivateMode(self.activateMode)
                 taskMgr.remove('showBrokeMsgTask')
-                self.isBroke = 0
+                self.isBroke = False
             if money == 1:
                 self.statusLabel['text'] = TTLocalizer.GagShopYouHaveOne
             else:

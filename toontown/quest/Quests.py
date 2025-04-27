@@ -5533,10 +5533,10 @@ def avatarHasAllRequiredRewards(av, tier):
     notify.debug('checking avatarHasAllRequiredRewards: history: %s, tier: %s' % (rewardHistory, rewardList))
     for rewardId in rewardList:
         if rewardId == 900:
-            found = 0
+            found = False
             for actualRewardId in (901, 902, 903, 904, 905, 906, 907, 908):
                 if actualRewardId in rewardHistory:
-                    found = 1
+                    found = True
                     rewardHistory.remove(actualRewardId)
                     if notify.getDebug():
                         notify.debug('avatarHasAllRequiredRewards: rewardId 900 found as: %s' % actualRewardId)
