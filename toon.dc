@@ -644,6 +644,7 @@ from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
 from toontown.building import DistributedBBElevator/AI
 from toontown.building import DistributedCMElevator/AI
+from toontown.building import DistributedMajorPlayerElevator/AI
 from toontown.building import DistributedBoardingParty/AI
 from toontown.building import DistributedTutorialInterior/AI
 from toontown.estate import DistributedBankMgr/AI
@@ -2423,6 +2424,9 @@ dclass DistributedPaceLobbyInterior : DistributedObject {
 };
 
 dclass DistributedPizzeriaInterior : DistributedObject {
+};
+
+dclass DistributedMajorPlayerLobby : DistributedObject {
 };
 
 dclass DistributedDoor : DistributedObject {

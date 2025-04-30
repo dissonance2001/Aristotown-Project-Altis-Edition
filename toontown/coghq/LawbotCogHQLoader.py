@@ -30,7 +30,7 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
 
         self.musicFile = 'phase_11/audio/bgm/LB_courtyard.ogg'
         self.cogHQExteriorModelPath = 'phase_11/models/lawbotHQ/LB_courtyard'
-        self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_lawfice_Lobby'
+        self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/cc_m_ara_lbhq_int_lawfice_lobby'
         self.cogHQLobbyModelPath = 'phase_11/models/lawbotHQ/LB_CH_Lobby'
         self.geom = None
 

@@ -230,6 +230,11 @@ class SuitPlannerInteriorAI:
             miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 1)
             activeSuits.append(random.choice((miniboss, miniboss3)))
             activeSuits.append(random.choice((miniboss2, miniboss4)))
+        elif specialCode == 'directors':
+            miniboss = self.__genSuitObject(self.zoneId, 17, 's', 28, 1)
+            miniboss2 = self.__genSuitObject(self.zoneId, 19, 'g', 27, 1)
+            miniboss3 = self.__genSuitObject(self.zoneId, 18, 'c', 26, 1)
+            activeSuits.append(random.choice((miniboss, miniboss2, miniboss3)))
         elif specialCode == 'lit2':
             miniboss = self.__genSuitObject(self.zoneId, 22, 'l', 22, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 23, 'l', 23, 0)
@@ -239,13 +244,14 @@ class SuitPlannerInteriorAI:
             activeSuits.append(random.choice((miniboss4, miniboss6)))
             activeSuits.append(random.choice((miniboss2, miniboss7)))
         elif specialCode == 'oclo1':
-            miniboss = self.__genSuitObject(self.zoneId, 22, 'l', 22, 0)
-            miniboss2 = self.__genSuitObject(self.zoneId, 23, 'l', 23, 0)
-            miniboss4 = self.__genSuitObject(self.zoneId, 24, 'l', 24, 0)
-            miniboss6 = self.__genSuitObject(self.zoneId, 17, 'l', 17, 0)
-            miniboss7 = self.__genSuitObject(self.zoneId, 18, 'l', 18, 0)
-            activeSuits.append(random.choice((miniboss, miniboss2, miniboss3, miniboss4)))
-            reserveSuits.append(random.choice((miniboss5, miniboss6, miniboss7, miniboss8, miniboss9, miniboss10, miniboss11, miniboss12, miniboss13,miniboss14, miniboss15, miniboss16, miniboss17, miniboss18)))
+            miniboss = self.__genSuitObject(self.zoneId, 14, 'l', 22, 0)
+            miniboss3 = self.__genSuitObject(self.zoneId, 12, 'l', 22, 0)
+            miniboss2 = self.__genSuitObject(self.zoneId, 12, 'l', 23, 0)
+            miniboss4 = self.__genSuitObject(self.zoneId, 14, 'l', 24, 0)
+            miniboss5 = self.__genSuitObject(self.zoneId, 12, 'l', 17, 0)
+            miniboss6 = self.__genSuitObject(self.zoneId, 14, 'l', 18, 0)
+            activeSuits.append(random.choice((miniboss, miniboss2)))
+            reserveSuits.append(random.choice((miniboss3, miniboss4, miniboss5, miniboss6)))
         elif specialCode == 'ffm2':
             miniboss2 = self.__genSuitObject(self.zoneId, 19, 's', 19, 0)
             miniboss3 = self.__genSuitObject(self.zoneId, 21, 's', 21, 0)
