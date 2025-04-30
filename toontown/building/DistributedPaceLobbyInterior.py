@@ -61,11 +61,6 @@ class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
         DNADoor.setupDoor(doorNP, self.interior, doorOrigin, self.dnaStore, str(self.block), doorColor)
         doorFrame = doorNP.find('door_*_flat')
         doorFrame.wrtReparentTo(self.interior)
-        paceElevator = loader.loadModel('phase_8/models/modules/ttcc_psetter_elevator.bam')
-        paceElevator.reparentTo(self.interior)
-        ElevatorOrigin = render.find('**/elevator_origin;+s')
-        paceElevator.setHpr(0, -180, 0)
-        paceElevator.reparentTo(ElevatorOrigin)
         del self.colors
         del self.dnaStore
         del self.randomGenerator

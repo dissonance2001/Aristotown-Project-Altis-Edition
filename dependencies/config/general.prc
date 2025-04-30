@@ -153,9 +153,6 @@ props-buff-battles #t
 prop-and-organic-bonus-stack #f
 prop-idle-pause-time 0.0
 
-# Events
-want-charity-screen #t
-
 # Developer options:
 want-dev #f
 want-pstats #f

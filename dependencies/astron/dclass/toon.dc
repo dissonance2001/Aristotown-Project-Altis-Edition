@@ -643,6 +643,7 @@ from toontown.building import DistributedCFOElevator/AI
 from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
 from toontown.building import DistributedBBElevator/AI
+from toontown.building import DistributedPaceElevator/AI
 from toontown.building import DistributedCMElevator/AI
 from toontown.building import DistributedBoardingParty/AI
 from toontown.building import DistributedTutorialInterior/AI
@@ -746,7 +747,6 @@ from toontown.estate import DistributedChangingStatuary/AI
 from toontown.estate import DistributedAnimatedStatuary/AI
 from toontown.estate import DistributedPlantBase/AI
 from toontown.estate import DistributedLawnDecor/AI
-from toontown.events import CharityScreen/AI
 from toontown.minigame import DistributedTravelGame/AI
 from toontown.minigame import DistributedPairingGame/AI
 from toontown.minigame import DistributedVineGame/AI
@@ -833,9 +833,6 @@ from toontown.cogdominium import DistCogdoFlyingGame/AI
 from toontown.cogdominium import DistCogdoCrane/AI
 from toontown.cogdominium import DistCogdoCraneMoneyBag/AI
 from toontown.cogdominium import DistCogdoCraneCog/AI
-from toontown.betaevent import DistributedEvent/AI
-from toontown.betaevent import DistributedBetaEvent/AI
-from toontown.betaevent import DistributedBetaEventTTC/AI
 from toontown.weather import DistributedWeatherCycle/AI
 from toontown.weather import DistributedWeatherStorm/AI
 from toontown.club import DistributedToonClub/AI
@@ -4068,12 +4065,6 @@ dclass DistributedSillyMeterMgr : DistributedPhaseEventMgr {
 dclass DistributedEvent : DistributedObject {
   start() broadcast ram;
   setState(string, int32) broadcast ram;
-};
-
-dclass DistributedBetaEvent : DistributedEvent {
-};
-
-dclass DistributedBetaEventTTC : DistributedEvent {
 };
 
 dclass DistributedWeatherCycle : DistributedObject {

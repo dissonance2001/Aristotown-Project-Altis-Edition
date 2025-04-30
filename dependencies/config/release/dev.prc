@@ -2,7 +2,7 @@
 model-path resources
 
 # Server:
-server-version TTPA-Beta-1.2.0
+server-version AristoTown-Altis-Edition-1.6.9
 min-access-level 700
 accountdb-type local
 shard-low-pop 50

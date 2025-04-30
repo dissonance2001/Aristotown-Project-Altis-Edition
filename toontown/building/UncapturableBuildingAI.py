@@ -38,8 +38,6 @@ class UncapturableBuildingAI:
 
     def setup(self, blockNumber):
         if self.interiorZone == ToontownGlobals.PacesetterLobby:
-            self.interior = DistributedPacesetterLobbyInteriorAI(blockNumber, self.air, self.interiorZone, self)
-        elif self.interiorZone == ToontownGlobals.Dungeon:
             self.interior = DistributedPaceLobbyInteriorAI(blockNumber, self.air, self.interiorZone, self)
         elif self.interiorZone == ToontownGlobals.OTGagShop:
             self.interior = DistributedGagshopInteriorAI(blockNumber, self.air, self.interiorZone)
@@ -48,7 +46,7 @@ class UncapturableBuildingAI:
         else:
             self.interior = DistributedToonInteriorAI(blockNumber, self.air, self.interiorZone, self)
         self.interior.generateWithRequired(self.interiorZone)
-        if self.interiorZone in [ToontownGlobals.PizzariaInterior, ToontownGlobals.PacesetterLobby]:
+        if self.interiorZone in [ToontownGlobals.SchoolHouse, ToontownGlobals.PizzariaInterior, ToontownGlobals.PacesetterLobby]:
             self.outsideDoor0 = DistributedDoorAI(self.air, blockNumber, DoorTypes.EXT_STANDARD, doorIndex=0)
             self.insideDoor0 = DistributedDoorAI(self.air, blockNumber, DoorTypes.INT_STANDARD, doorIndex=0)
         else:
@@ -62,17 +60,6 @@ class UncapturableBuildingAI:
         self.insideDoor0.sendUpdate('setDoorIndex', [self.insideDoor0.getDoorIndex()])
         self.outsideDoor0.setOtherDoor(self.insideDoor0)
         self.insideDoor0.setOtherDoor(self.outsideDoor0)
-        if self.interiorZone == ToontownGlobals.SchoolHouseInterior:
-            self.outsideDoor1 = DistributedDoorAI(self.air, blockNumber, DoorTypes.EXT_UNCAP, doorIndex=1)
-            self.insideDoor1 = DistributedDoorAI(self.air, blockNumber, DoorTypes.INT_HQ, doorIndex=1)
-            self.outsideDoor1.zoneId = self.exteriorZone
-            self.insideDoor1.zoneId = self.interiorZone
-            self.outsideDoor1.generateWithRequired(self.exteriorZone)
-            self.insideDoor1.generateWithRequired(self.interiorZone)
-            self.outsideDoor1.sendUpdate('setDoorIndex', [self.outsideDoor1.getDoorIndex()])
-            self.insideDoor1.sendUpdate('setDoorIndex', [self.insideDoor1.getDoorIndex()])
-            self.outsideDoor1.setOtherDoor(self.insideDoor1)
-            self.insideDoor1.setOtherDoor(self.outsideDoor1)
 
     def isSuitBlock(self):
         return 0

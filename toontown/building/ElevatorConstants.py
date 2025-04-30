@@ -12,6 +12,7 @@ ELEVATOR_COUNTRY_CLUB = 8
 ELEVATOR_BOARD_OFFICE = 9
 ELEVATOR_CM = 10
 ELEVATOR_CBM = 11
+ELEVATOR_PACE = 12
 REJECT_NOREASON = 0
 REJECT_SHUFFLE = 1
 REJECT_MINLAFF = 2
@@ -76,6 +77,12 @@ ElevatorData = {ELEVATOR_NORMAL: {'openTime': 2.0,
                   'sfxVolume': 1.0,
                   'collRadius': 9.5},
  ELEVATOR_BB: {'openTime': 4.0,
+               'closeTime': 4.0,
+               'width': 6.3,
+               'countdown': bboard.get('elevatorCountdown', 5.0),
+               'sfxVolume': 0.7,
+               'collRadius': 7.5},
+ELEVATOR_PACE: {'openTime': 4.0,
                'closeTime': 4.0,
                'width': 6.3,
                'countdown': bboard.get('elevatorCountdown', 5.0),

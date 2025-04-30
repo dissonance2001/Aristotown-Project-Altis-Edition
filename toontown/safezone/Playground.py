@@ -278,11 +278,6 @@ class Playground(BattlePlace.BattlePlace):
         if how == 'teleportIn':
             how = 'deathAck'
         self.fsm.request(how, [requestStatus])
-        if base.config.GetBool('want-charity-screen', False):
-            from toontown.events.CharityScreen import CharityScreen
-            if self.zoneId in ([ToontownGlobals.ToontownCentral, ToontownGlobals.DonaldsDock, ToontownGlobals.DaisyGardens, ToontownGlobals.MinniesMelodyland, ToontownGlobals.TheBrrrgh, ToontownGlobals.DonaldsDreamland]):
-                self.screen = CharityScreen(base.cr)
-                self.screen.start(self.zoneId)
 
 
     def exit(self):

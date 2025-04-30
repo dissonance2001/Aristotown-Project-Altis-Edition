@@ -810,6 +810,10 @@ group "toontownCentral" [
     title [ "Toontown School House" ]
     pos [ 26.5 160 3 ]
     nhpr [ 34 0 -0 ]
+	door [
+     code [ "door_double_square_ur" ]
+     color [ 0.88 0.45 0.38 1 ]
+    ]
    ]
   ]
   prop "toontown_central_DNARoot" [
