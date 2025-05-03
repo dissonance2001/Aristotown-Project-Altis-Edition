@@ -362,9 +362,21 @@ def getSuitVitals(name, level = -1):
         name = a[0]
         adict['name'] = name
         adict['animName'] = SuitAttacks[name][0]
-        adict['hp'] = a[1][level]
-        adict['acc'] = a[2][level]
-        adict['freq'] = a[3][level]
+        # Try and get the attack data from the appropriate index.
+        try:
+            adict['hp'] = a[1][level]
+        except IndexError:
+            # Chances are we went over.  Let's do overleveling logic!
+            adict['hp'] = a[1][len(a[1]) - 1] + (level - (len(a[1]) - 1))
+        # Same thing for the below, except we're just using the final index rather than adding anything to the final index.
+        try:
+            adict['acc'] = a[2][level]
+        except IndexError:
+            adict['acc'] = a[2][len(a[2]) - 1]
+        try:
+            adict['freq'] = a[3][level]
+        except:
+            adict['freq'] = a[3][len(a[3]) - 1]
         adict['group'] = SuitAttacks[name][1]
         alist.append(adict)
     for c in cheats:
