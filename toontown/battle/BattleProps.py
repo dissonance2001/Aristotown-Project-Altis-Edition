@@ -343,7 +343,7 @@ Variants = ('cupcake',
  'small-magnet',
  '5dollar',
  '10dollar',
-            '50dollar',
+ '50dollar',
  'suit_explosion',
  'quicksand',
  'trapdoor',
@@ -404,6 +404,9 @@ class PropPool:
         self.propStrings[propName] = (self.getPath(5, '1dollar-bill-mod'), self.getPath(5, '1dollar-bill-chan'))
         self.propTypes[propName] = 'actor'
         propName = '10dollar'
+        self.propStrings[propName] = (self.getPath(5, '1dollar-bill-mod'), self.getPath(5, '1dollar-bill-chan'))
+        self.propTypes[propName] = 'actor'
+        propName = '50dollar'
         self.propStrings[propName] = (self.getPath(5, '1dollar-bill-mod'), self.getPath(5, '1dollar-bill-chan'))
         self.propTypes[propName] = 'actor'
         propName = 'dust'
@@ -470,7 +473,7 @@ class PropPool:
             lips.setPos(0, 0, -3.04)
             lips.flattenMedium()
         elif name == '5dollar':
-            tex = loader.loadTexture('phase_5/maps/dollar_5.jpg')
+            tex = loader.loadTexture('phase_5/maps/gag_palette_4.png')
             tex.setMinfilter(Texture.FTLinearMipmapLinear)
             tex.setMagfilter(Texture.FTLinear)
             self.props[name].setTexture(tex, 1)
@@ -480,12 +483,12 @@ class PropPool:
             tex.setMagfilter(Texture.FTLinear)
             self.props[name].setTexture(tex, 1)
         elif name == '10dollar':
-            tex = loader.loadTexture('phase_5/maps/dollar_10.jpg')
+            tex = loader.loadTexture('phase_5/maps/gag_palette_5.png')
             tex.setMinfilter(Texture.FTLinearMipmapLinear)
             tex.setMagfilter(Texture.FTLinear)
             self.props[name].setTexture(tex, 1)
         elif name == '50dollar':
-            tex = loader.loadTexture('phase_5/maps/dollar_10.jpg')
+            tex = loader.loadTexture('phase_5/maps/gag_palette_6.png')
             tex.setMinfilter(Texture.FTLinearMipmapLinear)
             tex.setMagfilter(Texture.FTLinear)
             self.props[name].setTexture(tex, 1)
