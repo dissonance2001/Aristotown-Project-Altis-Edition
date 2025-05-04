@@ -84,19 +84,19 @@ def showLureRounds(suit, battle, level):
 def __doLureLevel(lure, npcs):
     level = lure['level']
     if level == 0:
-        return __lureOneDollar(lure)
+        return __lureOneDollar(lure, npcs)
     elif level == 1:
         return __lureSmallMagnet(lure, npcs)
     elif level == 2:
-        return __lureFiveDollar(lure)
+        return __lureFiveDollar(lure, npcs)
     elif level == 3:
         return __lureLargeMagnet(lure, npcs)
     elif level == 4:
-        return __lureTenDollar(lure)
+        return __lureTenDollar(lure, npcs)
     elif level == 5:
         return __lureHypnotize(lure, npcs)
     elif level == 6:
-        return __lureFiftyDollar(lure)
+        return __lureFiftyDollar(lure, npcs)
     elif level == 7:
         return __lureSlideshow(lure, npcs)
     
@@ -111,19 +111,14 @@ def getSoundTrack(fileName, delay = 0.01, duration = None, node = None):
         return Sequence(Wait(delay), SoundInterval(soundEffect, node=node))
 
 
-def __createFishingPoleMultiTrack(lure, dollar, dollarName):
+def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
     toon = lure['toon']
-    target = lure['target']
+    if 'npc' in lure:
+        toon = lure['npc']
+    targets = lure['target']
     battle = lure['battle']
     sidestep = lure['sidestep']
-    hp = target['hp']
-    kbbonus = target['kbbonus']
-    suit = target['suit']
-    targetPos = suit.getPos(battle)
-    died = target['died']
-    revived = target['revived']
     reachAnimDuration = 3.5
-    trapProp = suit.battleTrapProp
     pole = globalPropPool.getProp('fishing-pole')
     pole2 = MovieUtil.copyProp(pole)
     poles = [pole, pole2]
@@ -133,87 +128,96 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
         dollar.reparentTo(suit)
         dollar.setPos(0, MovieUtil.SUIT_LURE_DOLLAR_DISTANCE, 0)
 
-    dollarTrack = Sequence(Func(positionDollar, dollar, suit), Func(dollar.wrtReparentTo, battle), ActorInterval(dollar, dollarName, duration=3), getSplicedLerpAnimsTrack(dollar, dollarName, 0.7, 2.0, startTime=3), LerpPosInterval(dollar, 0.2, Point3(0, -10, 7)), Func(MovieUtil.removeProp, dollar))
     poleTrack = Sequence(Func(MovieUtil.showProps, poles, hands), ActorInterval(pole, 'fishing-pole'), Func(MovieUtil.removeProps, poles))
-    toonTrack = Sequence(Func(toon.headsUp, battle, targetPos), ActorInterval(toon, 'battlecast'), Func(toon.loop, 'neutral'))
-    tracks = Parallel(dollarTrack, poleTrack, toonTrack)
-    if sidestep == 0:
-        if kbbonus == 1 or hp > 0:
-            suitTrack = Sequence()
-            makeLured = Func(suit.makeLured)
-            makeUnLured = Func(suit.makeUnLured)
-            opos, ohpr = battle.getActorPosHpr(suit)
-            reachDist = MovieUtil.SUIT_LURE_DISTANCE
-            reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-            if suit.dna.name == 'scg' and suit.isAngry and suit.isDesperation:
-                suitTrack.append(Func(suit.loop, 'neutral-enraged'))
-                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
-            elif suit.dna.name == 'mad' and suit.maxHP > 0 and not suit.maxHP > 5000:
-                suitTrack.append(Func(suit.loop, 'neutral%s' % (
-                    '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
-            elif suit.isLureImmune:
-                suitTrack.append(Func(suit.loop, 'neutral%s' % (
-                    '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
-            elif suit.isImmortal and suit.dna.name == 'dsf':
-                suitTrack.append(Func(suit.loop, 'neutral%s' % (
-                    '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
-            elif suit.isImmortal:
-                suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
-                suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
-                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
-            else:
-                suitTrack.append(Func(suit.setNeutralAnimation))
-                suitTrack.append(Wait(3.5))
-                suitName = suit.getStyleName()
-                retardPos, retardHpr = battle.getActorPosHpr(suit)
-                retardPos.setY(retardPos.getY() + MovieUtil.SUIT_EXTRA_REACH_DISTANCE)
-                suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                if suitName in MovieUtil.largeSuits:
-                    moveTrack = lerpSuit(suit, 0.0, reachAnimDuration / 2.5, retardPos, battle, trapProp)
-                    reachTrack = ActorInterval(suit, 'reach', duration=reachAnimDuration)
-                    suitTrack.append(Parallel(moveTrack, reachTrack))
+    toonTrack = Sequence(Func(toon.headsUp, battle, MovieUtil.calcAvgSuitPos(lure)), ActorInterval(toon, 'battlecast'), Func(toon.loop, 'neutral'))
+    tracks = Parallel(poleTrack, toonTrack)
+    for target in targets:
+        hp = target['hp']
+        kbbonus = target['kbbonus']
+        suit = target['suit']
+        died = target['died']
+        revived = target['revived']
+        trapProp = suit.battleTrapProp
+        dollar = globalPropPool.getProp(dollarName)
+        tracks.append(Sequence(Func(positionDollar, dollar, suit), Func(dollar.wrtReparentTo, battle), ActorInterval(dollar, dollarName, duration=3), getSplicedLerpAnimsTrack(dollar, dollarName, 0.7, 2.0, startTime=3), LerpPosInterval(dollar, 0.2, Point3(0, -10, 7)), Func(MovieUtil.removeProp, dollar)))
+        if sidestep == 0:
+            if kbbonus == 1 or hp > 0:
+                suitTrack = Sequence()
+                makeLured = Func(suit.makeLured)
+                makeUnLured = Func(suit.makeUnLured)
+                opos, ohpr = battle.getActorPosHpr(suit)
+                reachDist = MovieUtil.SUIT_LURE_DISTANCE
+                reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
+                if suit.dna.name == 'scg' and suit.isAngry and suit.isDesperation:
+                    suitTrack.append(Func(suit.loop, 'neutral-enraged'))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                elif suit.dna.name == 'mad' and suit.maxHP > 0 and not suit.maxHP > 5000:
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                elif suit.isLureImmune:
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                elif suit.isImmortal and suit.dna.name == 'dsf':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                elif suit.isImmortal:
+                    suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
+                    suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
                 else:
-                    suitTrack.append(ActorInterval(suit, 'reach', duration=reachAnimDuration))
-                if trapProp:
-                    suitTrack.append(Func(trapProp.wrtReparentTo, battle))
-                suitTrack.append(Func(suit.setPos, battle, reachPos))
-                if trapProp:
-                    suitTrack.append(Func(trapProp.wrtReparentTo, suit))
-                    suit.battleTrapProp = trapProp
-                if trapProp:
-                    suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                else:
-                    suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                if suit.style.name == 'crf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'mad':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'dsf':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured'))
-                suitTrack.append(Func(battle.lureSuit, suit))
-                suitTrack.append(makeLured)
-                if hp > 0:
-                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
-                    suitTrack.append(makeUnLured)
-                tracks.append(suitTrack)
-    else:
-        if not suit.isLured:
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                    suitTrack.append(Func(suit.setNeutralAnimation))
+                    suitTrack.append(Wait(3.5))
+                    suitName = suit.getStyleName()
+                    retardPos, retardHpr = battle.getActorPosHpr(suit)
+                    retardPos.setY(retardPos.getY() + MovieUtil.SUIT_EXTRA_REACH_DISTANCE)
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    if suitName in MovieUtil.largeSuits:
+                        moveTrack = lerpSuit(suit, 0.0, reachAnimDuration / 2.5, retardPos, battle, trapProp)
+                        reachTrack = ActorInterval(suit, 'reach', duration=reachAnimDuration)
+                        suitTrack.append(Parallel(moveTrack, reachTrack))
+                    else:
+                        suitTrack.append(ActorInterval(suit, 'reach', duration=reachAnimDuration))
+                    if trapProp:
+                        suitTrack.append(Func(trapProp.wrtReparentTo, battle))
+                    suitTrack.append(Func(suit.setPos, battle, reachPos))
+                    if trapProp:
+                        suitTrack.append(Func(trapProp.wrtReparentTo, suit))
+                        suit.battleTrapProp = trapProp
+                    if trapProp:
+                        suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
+                        suitTrack.append(Func(suit.loop, 'lured2'))
+                    else:
+                        suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
+                        suitTrack.append(Func(suit.loop, 'lured2'))
+                    if suit.style.name == 'crf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'mad':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    elif suit.style.name == 'dsf':
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
+                    else:
+                        for headPart in suit.animatedHeadParts:
+                            suitTrack.append(Func(headPart.loop, 'neutral-lured'))
+                    suitTrack.append(Func(battle.lureSuit, suit))
+                    suitTrack.append(makeLured)
+                    if hp > 0:
+                        suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
+                        suitTrack.append(makeUnLured)
+                    tracks.append(suitTrack)
+        else:
+            if not suit.isLured:
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+
     tracks.append(getSoundTrack('TL_fishing_pole.ogg', delay=0.5, node=toon))
     return tracks
 
@@ -418,10 +422,9 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
     return tracks
 
 
-def __lureOneDollar(lure):
+def __lureOneDollar(lure, npcs = []):
     dollarProp = '1dollar'
-    dollar = globalPropPool.getProp(dollarProp)
-    return __createFishingPoleMultiTrack(lure, dollar, dollarProp)
+    return __createFishingPoleMultiTrack(lure, dollarProp, npcs=npcs)
 
 
 def __lureSmallMagnet(lure, npcs = []):
@@ -432,10 +435,9 @@ def __lureSmallMagnet(lure, npcs = []):
     return __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet=1, npcs=npcs)
 
 
-def __lureFiveDollar(lure):
+def __lureFiveDollar(lure, npcs = []):
     dollarProp = '5dollar'
-    dollar = globalPropPool.getProp(dollarProp)
-    return __createFishingPoleMultiTrack(lure, dollar, dollarProp)
+    return __createFishingPoleMultiTrack(lure, dollarProp, npcs=npcs)
 
 
 def __lureLargeMagnet(lure, npcs = []):
@@ -446,20 +448,18 @@ def __lureLargeMagnet(lure, npcs = []):
     return __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet=0, npcs=npcs)
 
 
-def __lureTenDollar(lure):
+def __lureTenDollar(lure, npcs = []):
     dollarProp = '10dollar'
-    dollar = globalPropPool.getProp(dollarProp)
-    return __createFishingPoleMultiTrack(lure, dollar, dollarProp)
+    return __createFishingPoleMultiTrack(lure, dollarProp, npcs=npcs)
 
 
 def __lureHypnotize(lure, npcs = []):
     return __createHypnoGogglesMultiTrack(lure, npcs)
 
 
-def __lureFiftyDollar(lure):
+def __lureFiftyDollar(lure, npcs = []):
     dollarProp = '10dollar'
-    dollar = globalPropPool.getProp(dollarProp)
-    return __createFishingPoleMultiTrack(lure, dollar, dollarProp)
+    return __createFishingPoleMultiTrack(lure, dollarProp, npcs=npcs)
 
 
 def __lureSlideshow(lure, npcs):

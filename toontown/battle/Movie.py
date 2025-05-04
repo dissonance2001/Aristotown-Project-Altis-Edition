@@ -1866,7 +1866,7 @@ class Movie(DirectObject.DirectObject):
                             pass
                         if sdict['died'] != 0:
                             pass
-                        if track == DROP or track == TRAP:
+                        if track == DROP or track == LURE or track == TRAP:
                             adict['target'] = [sdict]
                         else:
                             adict['target'] = sdict
