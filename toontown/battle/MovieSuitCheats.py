@@ -370,7 +370,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     toon = target['toon']
     name = attack['id']
     targetPos = toon.getPos(battle)
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     trapStorage = {}
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
@@ -512,7 +512,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     suit = attack['suit']
     tauntIndex = attack['taunt']
     name = attack['id']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     if attack[
         'suitName'] == 'csm':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
@@ -1333,7 +1333,7 @@ def doDisassemble(attack):
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     tauntInterval = Sequence(Wait(1), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     target = attack['target']
     toon = target['toon']
@@ -2688,7 +2688,7 @@ def doBookKeeping(attack):
     elif attack['suitName'] == 'fbd':
         taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
     else:
-        taunt = getAttackTaunt(attack['name'], tauntIndex)
+        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     suitTrack = Sequence(headsUp, Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
                          ActorInterval(suit, attack['animName'], duration=3.0), ActorInterval(suit, 'sanction'), suitReset, Func(suit.setNeutralAnimation))
 
@@ -2764,7 +2764,7 @@ def doElectrostaticEnergy(attack):
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     suitTrack = Sequence(getSuitAnimTrack(attack))
     targets = attack['target']
     cagePropTracks = Parallel()
@@ -2818,7 +2818,7 @@ def doCourtMandateHeadAttorney(attack):
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     suitTrack = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
                          ActorInterval(suit, attack['animName'], duration=3.0), ActorInterval(suit, 'objection-out'), ActorInterval(suit, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
 
@@ -2855,7 +2855,7 @@ def doCourtRecord3(attack):
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     tauntTrack = Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout)
     suitTrack = Sequence(ActorInterval(attack['suit'], 'cease'), ActorInterval(attack['suit'], 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
@@ -6227,7 +6227,7 @@ def doReprogram(attack):
     target = attack['target']
     toon = target['toon']
     name = attack['id']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     battle = attack['battle']
     sinkPos = suit.getPos(battle)
@@ -11717,7 +11717,7 @@ def doVoodooMagic(attack):
     target = attack['target']
     toon = target['toon']
     name = attack['id']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     battle = attack['battle']
     sinkPos = suit.getPos(battle)
@@ -11755,7 +11755,7 @@ def doCigarSmoke(attack):
     toon = target['toon']
     dmg = target['hp']
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     if suit.dna.name == 'tld' and not suit.isSkeleton:
         return doHeadHonchoCigarSmoke(attack)
     elif suit.dna.name == 'ffm':
@@ -12602,7 +12602,7 @@ def doBash(attack):
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     tauntInterval = Sequence(Wait(1), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(Wait(1), ActorInterval(suit, attack['animName']), Func(suit.setNeutralAnimation))
     suitPos = suit.getPos(battle)
@@ -12640,7 +12640,7 @@ def doDataCorruption(attack):
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     tauntInterval = Sequence(Wait(1), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(Wait(1), ActorInterval(suit, attack['animName']), Func(suit.setNeutralAnimation))
     suitPos = suit.getPos(battle)
@@ -12683,7 +12683,7 @@ def doEnraged(attack):
     suit = attack['suit']
     tauntIndex = attack['taunt']
     name = attack['id']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
     dodgeAnims = [['jump'], ['jump', 0.01]]
     toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
@@ -15739,7 +15739,7 @@ def doCaseInsurancePlan(attack):
     elif attack['suitName'] == 'fbd':
         taunt = 'Hrm...'
     else:
-        taunt = getAttackTaunt(attack['name'], tauntIndex)
+        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
 
     suitTracks = Parallel()
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -15832,7 +15832,7 @@ def doCaseInsurancePlanSkelecog(attack):
     elif attack['suitName'] == 'fbd':
         taunt = 'Hrm...'
     else:
-        taunt = getAttackTaunt(attack['name'], tauntIndex)
+        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
 
     suitTracks = Parallel()
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -15925,7 +15925,7 @@ def doCaseInsurancePlanInsurance(attack):
     elif attack['suitName'] == 'fbd':
         taunt = 'Hrm...'
     else:
-        taunt = getAttackTaunt(attack['name'], tauntIndex)
+        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
 
     suitTracks = Parallel()
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -15999,7 +15999,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
     elif attack['suitName'] == 'fbd':
         taunt = 'Hrm...'
     else:
-        taunt = getAttackTaunt(attack['name'], tauntIndex)
+        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
 
     suitTracks = Parallel()
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -16231,7 +16231,7 @@ def doFirestarterCigarSmoke(attack):
     tauntIndex = attack['taunt']
     toon = attack['target']['toon']
     dmg = target['hp']
-    taunt = getAttackTaunt(attack['name'], tauntIndex)
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     BattleParticles.loadParticles()
     smoke = BattleParticles.createParticleEffect('Smoke')
     BattleParticles.setEffectTexture(smoke, 'snow-particle')

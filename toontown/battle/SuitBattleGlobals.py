@@ -6326,22 +6326,51 @@ def getCheatTaunt(cheatname, index=None):
 
 def getAttackTauntIndexFromIndex(suit, attackIndex):
     adict = getSuitAttack(suit.getStyleName(), suit.getLevel(), attackIndex)
-    return getAttackTauntIndex(adict['name'])
+    return getAttackTauntIndex(adict['name'], suit.getStyleName())
 
 
-def getAttackTauntIndex(attackName):
+def setupSuitAttackTaunts(attackName, suitName):
+    '''
+    This function will conveniently return a list of taunts that should be used depending on the Cog.
+    '''
     if attackName in SuitAttackTaunts:
-        taunts = SuitAttackTaunts[attackName]
-        return random.randint(0, len(taunts) - 1)
-    else:
-        return 1
+        # Check to see if the attack has any custom phrases, which will be denoted by a dict object rather than a list.
+        if isinstance(SuitAttackTaunts[attackName], dict):
+            # Did we find the Cog in the dict?
+            if suitName in SuitAttackTaunts[attackName].keys():
+                # Then these are the taunts we are using.
+                return SuitAttackTaunts[attackName][suitName]
+            # We should be using the None key if it exists.
+            elif None in SuitAttackTaunts[attackName].keys():
+                # It does, so use those phrases.
+                return SuitAttackTaunts[attackName][None]
+        else:
+            # It's probably still a list then.
+            return SuitAttackTaunts[attackName]
+    
+    # If nothing above is returned, resort to this.
+    return TTLocalizer.SuitAttackDefaultTaunts
 
 
-def getAttackTaunt(attackName, index = None):
+def getAttackTauntIndex(attackName, suitName):
     if attackName in SuitAttackTaunts:
-        taunts = SuitAttackTaunts[attackName]
-    else:
-        taunts = TTLocalizer.SuitAttackDefaultTaunts
+        if isinstance(SuitAttackTaunts[attackName], dict):
+            if suitName in SuitAttackTaunts[attackName].keys():
+                taunts = SuitAttackTaunts[attackName][suitName]
+                return random.randint(0, len(taunts) - 1)
+            elif None in SuitAttackTaunts[attackName].keys():
+                taunts = SuitAttackTaunts[attackName][None]
+                return random.randint(0, len(taunts) - 1)
+
+        else:
+            taunts = SuitAttackTaunts[attackName]
+            return random.randint(0, len(taunts) - 1)
+    
+    return 1 # Since we're probably using the default phrases.
+
+
+def getAttackTaunt(attackName, suitName, index = None):
+    taunts = setupSuitAttackTaunts(attackName, suitName)
     if index != None:
         if index >= len(taunts):
             notify.warning('index exceeds length of taunts list in getAttackTaunt')
