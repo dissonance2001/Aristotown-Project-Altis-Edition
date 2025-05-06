@@ -5905,6 +5905,7 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
                'GuiltTripWSI': ('magic1', ATK_TGT_GROUP),
  'Demotion': ('magic1', ATK_TGT_SINGLE),
  'DoubleTalk': ('speak', ATK_TGT_SINGLE),
+ 'DoubleWindsor': ('throw-paper', ATK_TGT_SINGLE),
  'Downsize': ('magic2', ATK_TGT_SINGLE),
  'EvictionNotice': ('throw-paper', ATK_TGT_SINGLE),
  'EvilEye': ('glower', ATK_TGT_SINGLE),
@@ -6141,6 +6142,7 @@ DEMOTION = SuitAttacks.keys().index('Demotion')
 SPOTLIGHT = SuitAttacks.keys().index('Spotlight')
 DOWNSIZE = SuitAttacks.keys().index('Downsize')
 DOUBLE_TALK = SuitAttacks.keys().index('DoubleTalk')
+DOUBLE_WINDSOR = SuitAttacks.keys().index('DoubleWindsor')
 EVICTION_NOTICE = SuitAttacks.keys().index('EvictionNotice')
 EVIL_EYE = SuitAttacks.keys().index('EvilEye')
 COURT_RECORD_1 = SuitAttacks.keys().index('CourtRecord1')

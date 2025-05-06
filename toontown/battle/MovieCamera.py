@@ -2472,6 +2472,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         return Parallel(pbpTrack3, pbpDesc3, pbpTrack4, pbpDesc4, pbpTrack2, pbpTrack, pbpDesc, camTrack2)
     elif name == DOUBLE_TALK:
         camTrack.append(defaultCamera(openShotDuration=1.9))
+    elif name == DOUBLE_WINDSOR:
+        camTrack.append(defaultCamera(openShotDuration=1.8))
     elif name == EVICTION_NOTICE:
         camTrack.append(defaultCamera(openShotDuration=2))
     elif name == BASH:

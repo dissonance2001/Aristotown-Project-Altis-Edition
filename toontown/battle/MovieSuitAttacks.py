@@ -248,6 +248,8 @@ def doSuitAttack(attack):
         suitTrack = doDemotion(attack)
     elif name == DOUBLE_TALK:
         suitTrack = doDoubleTalk(attack)
+    elif name == DOUBLE_WINDSOR:
+        suitTrack = doDoubleWindsor(attack)
     elif name == DOWNSIZE:
         suitTrack = doDownsize(attack)
     elif name == EVICTION_NOTICE:
@@ -11507,6 +11509,51 @@ def doHalfWindsor(attack):
     toon = target['toon']
     dmg = target['hp']
     tie = globalPropPool.getProp('half-windsor')
+    throwDelay = 1.25
+    damageDelay = 2.25
+    dodgeDelay = 2
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+    posPoints = [Point3(-1, 0.5, -.1), VBase3(99, -90, -108.2)]
+    tiePropTrack = getPropAppearTrack(tie, suit.getRightHand(), posPoints, 0.5, Point3(7, 7, 7), scaleUpTime=0.25)
+    tiePropTrack.append(Wait(throwDelay))
+    missPoint = __toonMissBehindPoint(toon, parent=battle)
+    missPoint.setX(missPoint.getX() - 1.1)
+    missPoint.setZ(missPoint.getZ() + 4)
+    hitPoint = __toonFacePoint(toon, parent=battle)
+    hitPoint.setX(hitPoint.getX() - 1.1)
+    hitPoint.setY(hitPoint.getY() - 0.7)
+    hitPoint.setZ(hitPoint.getZ() + 0.9)
+    explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
+    splatName = 'dust'
+    splat = globalPropPool.getProp('dust')
+    explode = globalPropPool.getProp('dust')
+    explode.setTwoSided(True)
+
+
+    explode.setBillboardPointWorld(2)
+    explodeTrack = Sequence()
+    explodeTrack.append(
+    getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+    explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
+    tiePropTrack.append(getPropThrowTrack(attack, tie, [hitPoint], [missPoint], hitDuration=0.25, missDuration=0.8, missScaleDown=0.3, parent=battle))
+    soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
+    tiePropTrack.append(Parallel(explodeTrack, soundTrack))
+    damageAnims = [['conked',
+      0.01,
+      0.01,
+      0.4], ['cringe', 0.01, 0.7]]
+    soundTrack = getSoundTrack('SA_half_windsor_throw.ogg', delay=2.0, node=suit)
+    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
+    return Parallel(suitTrack, toonTrack, tiePropTrack, soundTrack)
+
+
+def doDoubleWindsor(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target['toon']
+    dmg = target['hp']
+    tie = globalPropPool.getProp('double-windsor')
     throwDelay = 1.25
     damageDelay = 2.25
     dodgeDelay = 2
