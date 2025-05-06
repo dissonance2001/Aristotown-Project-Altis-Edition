@@ -2561,6 +2561,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == WHEEL_SPIN:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == RAISING_THE_ANTE:
+        camTrack.append(defaultCamera(openShotDuration=1.2))
     elif name == SWIRL_BATH:
         camTrack2 = Sequence(cameraActorShot2(battle, 'highroller-wheelspin', 0),
                              heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 8))

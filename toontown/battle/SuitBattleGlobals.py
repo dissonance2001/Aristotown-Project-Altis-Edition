@@ -5924,6 +5924,7 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'MoneyTrip': ('magic3', ATK_TGT_GROUP),
  'HalfWindsor': ('throw-paper', ATK_TGT_SINGLE),
 'HypnoEyes': ('mob-mentality', ATK_TGT_SINGLE),
+ 'RaisingTheAnte': ('magic3', ATK_TGT_GROUP),
                'SwirlBath': ('magic3', ATK_TGT_GROUP),
  'HangUp': ('phone', ATK_TGT_SINGLE),
                'Spotlight': ('snap', ATK_TGT_SINGLE),
@@ -6210,6 +6211,7 @@ MONEY_TRIP = SuitAttacks.keys().index('MoneyTrip')
 BLAST = SuitAttacks.keys().index('Blast')
 CHAINSAW_ROLODEX = SuitAttacks.keys().index('ChainsawRolodex')
 CHAINSAW_REVVING_UP = SuitAttacks.keys().index('RevvingUp')
+RAISING_THE_ANTE = SuitAttacks.keys().index('RaisingTheAnte')
 SWIRL_BATH = SuitAttacks.keys().index('SwirlBath')
 COURT_COSTS = SuitAttacks.keys().index('CourtCosts')
 SNOW = SuitAttacks.keys().index('Snow')
