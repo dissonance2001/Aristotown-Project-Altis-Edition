@@ -711,7 +711,7 @@ def chooseSuitShotCheatWiretapperCollectCall(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -748,7 +748,7 @@ def chooseSuitShotCheatPowerhouseBlast(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -785,7 +785,7 @@ def chooseSuitShotCheatPowerhouseSnipe(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -822,7 +822,7 @@ def chooseSuitShotCheatPowerhouseSnipeRetaliation(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -970,7 +970,7 @@ def chooseSuitShotCheatWiretapperWiretapped(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1029,7 +1029,7 @@ def chooseSuitShotCheatBookkeeperBookkeeping(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1066,7 +1066,7 @@ def chooseSuitShotCheatBookkeeperBookkeepingRetaliation(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1103,7 +1103,7 @@ def chooseSuitShotCheatBookkeeperPaperCutMarked(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1140,7 +1140,7 @@ def chooseSuitShotCheatBookkeeperPaperCut(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1177,7 +1177,7 @@ def chooseSuitShotCheatBookkeeperPaperCutRetaliation(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1214,7 +1214,7 @@ def chooseSuitShotCheatBookkeeperExplodingBill(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1317,7 +1317,7 @@ def chooseSuitShotCheatStenographerSanction(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1354,7 +1354,7 @@ def chooseSuitShotCheatStenographerSanctionUnbound(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1478,7 +1478,7 @@ def chooseSuitShotCheatLitigatorSnapDangerous(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration, 'suit')
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration, 'suit')
     diedTrack = None
     camTrack = Sequence()
     camTrack3 = Sequence()
@@ -1556,7 +1556,7 @@ def chooseSuitShotCheatScapegoatGavel(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1835,7 +1835,7 @@ def chooseSuitShotCheatAmbassadorMulligan(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1872,7 +1872,7 @@ def chooseSuitShotCheatAmbassadorMulliganRetaliation(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1909,7 +1909,7 @@ def chooseSuitShotCheatCaseManagerBindings(attack, attackDuration):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration,
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration,
                                    'suit')
     pbpDc = PlayByPlayText.PlayByPlayText()
     pbpText = PlayByPlayText.PlayByPlayText()
@@ -1982,8 +1982,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     groupStatus = attack['group']
     target = attack['target']
     if groupStatus == ATK_TGT_SINGLE:
-        toon = target['toon']
-        died = attack['target']['died']
+        toon = target[0]['toon']
+        died = attack['target'][0]['died']
         if died != 0:
             pbpText = attack['playByPlayText']
             diedText = toon.getName() + ' was defeated!'
@@ -2014,7 +2014,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         if attack['group'] == ATK_TGT_GROUP:
             return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
         else:
-            return randomAttackCam(attack['suit'], target['toon'], attack['battle'], attackDuration, openShotDuration, 'suit')
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration, 'suit')
 
     def fromBehindCamera(attack=attack, attackDuration=attackDuration, openShotDuration=3.5, target=target):
         return fromBehindGroupCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
@@ -3361,9 +3361,9 @@ def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
     groupStatus = attack['group']
     diedTrack = None
     if groupStatus == ATK_TGT_SINGLE:
-        av = attack['target']['toon']
+        av = attack['target'][0]['toon']
         shotChoices = [avatarCloseUpThreeQuarterRightShot, suitGroupThreeQuarterLeftBehindShot]
-        died = attack['target']['died']
+        died = attack['target'][0]['died']
         if died != 0:
             pbpText = attack['playByPlayText']
             diedText = av.getName() + ' was defeated!'

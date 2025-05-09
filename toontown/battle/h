@@ -1,8 +1,8 @@
 suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
-    toon = target['toon']
-    dmg = target['hp']
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
     if suit.dna.name == 'tld':
         return doHeadHonchoCigarSmoke(attack)
     elif suit.dna.name == 'ffm':

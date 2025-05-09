@@ -2,7 +2,7 @@ def doPoisonSpray(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
-    dmg = target['hp']
+    dmg = target[0]['hp']
     theSuit = None
     for s in battle.suits:
         if s.dna.name == 'ste':

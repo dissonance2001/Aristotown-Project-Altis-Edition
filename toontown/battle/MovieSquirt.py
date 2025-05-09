@@ -630,7 +630,7 @@ def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Poin
 
 def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 0.0001, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, target = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
     if not target:
-        target = attack['target']
+        target = attack['target'][0]
     toon = attack['toon']
     battle = attack['battle']
     suit = target['suit']

@@ -137,8 +137,8 @@ class Movie(DirectObject.DirectObject):
                           hitPointNames='none', missPointNames='none', lookAt='none', groundPointOffSet=0,
                           missScaleDown=None, parent=render):
         target = attack['target']
-        toon = target['toon']
-        dmg = target['hp']
+        toon = target[0]['toon']
+        dmg = target[0]['hp']
         battle = attack['battle']
 
         def getLambdas(list, prop, toon):
@@ -727,8 +727,8 @@ class Movie(DirectObject.DirectObject):
         suit = attack['suit']
         battle = attack['battle']
         target = attack['target']
-        toon = target['toon']
-        dmg = target['hp']
+        toon = target[0]['toon']
+        dmg = target[0]['hp']
         teeth = BattleProps.globalPropPool.getProp('litigator-teeth')
         propDelay = 0.25
         propScaleUpTime = 0.25
@@ -837,10 +837,10 @@ class Movie(DirectObject.DirectObject):
     def doGavel(self, attack, suit):
         battle = attack['battle']
         target = attack['target']
-        toon = target['toon']
+        toon = target[0]['toon']
         targetPos = toon.getPos(battle)
         headsUp = Func(suit.headsUp, battle, targetPos)
-        dmg = target['hp']
+        dmg = target[0]['hp']
         gavel = BattleProps.globalPropPool.getProp('LB_gavel')
         toonPos = toon.getPos(battle)
         initialScale = toon.getScale()
@@ -905,8 +905,8 @@ class Movie(DirectObject.DirectObject):
     def doCourtSanction(self, attack, suit):
         battle = attack['battle']
         target = attack['target']
-        dmg = target['hp']
-        toon = target['toon']
+        dmg = target[0]['hp']
+        toon = target[0]['toon']
         sanctioned = self.__makeSanctionedNodePath()
         missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
         propTrack = Sequence(
@@ -1676,13 +1676,10 @@ class Movie(DirectObject.DirectObject):
                 targetField = cheat.get('target')
                 if targetField is None:
                     continue
-                if cheat['group'] == ATK_TGT_GROUP:
-                    for target in targetField:
-                        if target['died'] and target['toon'].doId == base.localAvatar.doId:
-                            isLocalToonSad = True
-                elif cheat['group'] == ATK_TGT_SINGLE:
-                    if targetField['died'] and targetField['toon'].doId == base.localAvatar.doId:
+                for target in targetField:
+                    if target['died'] and target['toon'].doId == base.localAvatar.doId:
                         isLocalToonSad = True
+                
                 if isLocalToonSad:
                     break
             if len(track) == 0:
@@ -1980,7 +1977,7 @@ class Movie(DirectObject.DirectObject):
 
                     tdict['leftToons'] = leftToons
                     tdict['rightToons'] = rightToons
-                    adict['target'] = tdict
+                    adict['target'] = [tdict]
                 else:
                     self.notify.warning('got suit attack not group or single!')
                 if targetGone == 0:
@@ -2001,14 +1998,18 @@ class Movie(DirectObject.DirectObject):
                 targetField = a.get('target')
                 if targetField is None:
                     continue
-                if a['group'] == ATK_TGT_GROUP:
-                    for target in targetField:
-                        if target['died'] and target['toon'].doId == base.localAvatar.doId:
-                            isLocalToonSad = False
-
-                elif a['group'] == ATK_TGT_SINGLE:
-                    if targetField['died'] and targetField['toon'].doId == base.localAvatar.doId:
+                # if a['group'] == ATK_TGT_GROUP:
+                #     for target in targetField:
+                #         if target['died'] and target['toon'].doId == base.localAvatar.doId:
+                #             isLocalToonSad = False
+                # 
+                # elif a['group'] == ATK_TGT_SINGLE:
+                #     if targetField['died'] and targetField['toon'].doId == base.localAvatar.doId:
+                #         isLocalToonSad = False
+                for target in targetField:
+                    if target['died'] and target['toon'].doId == base.localAvatar.doId:
                         isLocalToonSad = False
+                
                 if isLocalToonSad:
                     continue
 
