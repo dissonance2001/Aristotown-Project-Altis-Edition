@@ -59,9 +59,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             DoorTypes.EXT_COGHQ: 0,
             DoorTypes.INT_COGHQ: 0,
             DoorTypes.EXT_KS: 0,
-            DoorTypes.INT_KS: 0,
-            DoorTypes.EXT_UNCAP: 0,
-            DoorTypes.INT_UNCAP: 0,}
+            DoorTypes.INT_KS: 0 }
         self.doorX = 1.5
 
     def leaveDoor(self, collEntry):
@@ -250,7 +248,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
 
     def getBuilding(self):
         if not hasattr(self, 'building'):
-            if self.doorType == DoorTypes.INT_STANDARD or self.doorType == DoorTypes.INT_UNCAP:
+            if self.doorType == DoorTypes.INT_STANDARD:
                 door = render.find('**/leftDoor;+s')
                 self.building = door.getParent()
             elif self.doorType == DoorTypes.INT_HQ:
@@ -258,7 +256,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
                 self.building = door.getParent()
             elif self.doorType == DoorTypes.INT_KS:
                 self.building = render.find('**/KartShop_Interior*')
-            elif self.doorType == DoorTypes.EXT_STANDARD or self.doorType == DoorTypes.EXT_HQ or self.doorType == DoorTypes.EXT_KS or self.doorType == DoorTypes.EXT_UNCAP:
+            elif self.doorType == DoorTypes.EXT_STANDARD or self.doorType == DoorTypes.EXT_HQ or self.doorType == DoorTypes.EXT_KS:
                 self.building = self.cr.playGame.hood.loader.geom.find('**/??' + str(self.block) + ':*_landmark_*_DNARoot;+s')
                 if self.building.isEmpty():
                     self.building = self.cr.playGame.hood.loader.geom.find('**/??' + str(self.block) + ':animated_building_*_DNARoot;+s')

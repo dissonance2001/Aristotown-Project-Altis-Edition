@@ -37,8 +37,11 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
         self.setup()
+<<<<<<< HEAD
         DistributedObject.DistributedObject.announceGenerate(self)
         self.setup()
+=======
+>>>>>>> parent of 54913eb0 (Pluto Lobby, Uncapturable buildings YOTT doors fixed not functional though)
 
     def disable(self):
         self.interior.removeNode()
