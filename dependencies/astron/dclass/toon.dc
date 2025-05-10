@@ -602,6 +602,7 @@ from toontown.building import DistributedHQInterior/AI
 from toontown.building import DistributedGagshopInterior/AI
 from toontown.building import DistributedPetshopInterior/AI
 from toontown.building import DistributedKartShopInterior/AI
+from toontown.building import DistributedPizzeriaInterior/AI
 from toontown.building import DistributedPaceLobbyInterior/AI
 from toontown.building import DistributedDoor/AI
 from toontown.building import DistributedAnimDoor/AI
@@ -2234,15 +2235,12 @@ dclass DistributedToonInterior : DistributedObject {
 dclass DistributedToonHallInterior : DistributedToonInterior {
 };
 
-<<<<<<< HEAD
 dclass DistributedPizzeriaInterior : DistributedToonInterior {
 };
 
 dclass DistributedPaceLobbyInterior : DistributedToonInterior {
 };
 
-=======
->>>>>>> parent of 54913eb0 (Pluto Lobby, Uncapturable buildings YOTT doors fixed not functional though)
 dclass DistributedSuitInterior : DistributedObject {
   setZoneId(uint32) required broadcast ram;
   setExtZoneId(uint32) required broadcast ram;
@@ -2423,11 +2421,6 @@ dclass DistributedPetshopInterior : DistributedObject {
 dclass DistributedKartShopInterior : DistributedObject {
   setZoneIdAndBlock(uint32, uint16) required broadcast ram;
 };
-
-dclass DistributedPaceLobbyInterior : DistributedObject {
-  setZoneIdAndBlock(uint32, uint16) required broadcast ram;
-};
-
 
 dclass DistributedDoor : DistributedObject {
   setZoneIdAndBlock(uint32, uint32) required broadcast ram;

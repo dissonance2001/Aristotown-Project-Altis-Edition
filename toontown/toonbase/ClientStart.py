@@ -186,7 +186,6 @@ def printCameraPos():
 
 base.accept('[', printCameraPos)
 
-<<<<<<< HEAD
 def printOobePos():
     print(base.oobeCameraTrackball.getPos())
     print(base.oobeCameraTrackball.getHpr())
@@ -194,8 +193,6 @@ def printOobePos():
 
 base.accept(']', printOobePos)
 
-=======
->>>>>>> parent of 54913eb0 (Pluto Lobby, Uncapturable buildings YOTT doors fixed not functional though)
 def printToonPos():
     print(camera.getPos())
     print(camera.getHpr())
@@ -268,11 +265,6 @@ def cameraRDecrease():
 
 base.accept('f12', cameraRDecrease)
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> parent of 54913eb0 (Pluto Lobby, Uncapturable buildings YOTT doors fixed not functional though)
 if autoRun:
     try:
         base.run()

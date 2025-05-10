@@ -16,7 +16,6 @@ class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.dnaStore = cr.playGame.dnaStore
-        self.musicFile = 'phase_8/audio/bgm/merc/instance_pacesetter_lobby.ogg'
 
     def generate(self):
         DistributedObject.DistributedObject.generate(self)

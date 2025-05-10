@@ -6,6 +6,7 @@ from toontown.building import DistributedKnockKnockDoorAI
 from toontown.building import DistributedSuitInteriorAI
 from toontown.building import DistributedToonHallInteriorAI
 from toontown.building import DistributedPaceLobbyInteriorAI
+from toontown.building import DistributedPizzeriaInteriorAI
 from toontown.building import DistributedToonInteriorAI
 from toontown.building import DoorTypes
 from toontown.building import FADoorCodes
@@ -26,7 +27,7 @@ from toontown.toonbase import ToontownGlobals
 
 class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBuildingAI')
-    
+
     def __init__(self, air, blockNumber, zoneId, trophyMgr):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.block = blockNumber
@@ -77,12 +78,12 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     def cleanup(self):
         if self.isDeleted():
             return
-        
+
         self.fsm.requestFinalState()
         if hasattr(self, 'interior'):
             self.interior.requestDelete()
             del self.interior
-        
+
         if hasattr(self, 'door'):
             self.door.requestDelete()
             del self.door
@@ -90,11 +91,11 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
             del self.insideDoor
             self.knockKnock.requestDelete()
             del self.knockKnock
-        
+
         if hasattr(self, 'elevator'):
             self.elevator.requestDelete()
             del self.elevator
-        
+
         self.requestDelete()
 
     def delete(self):
@@ -204,11 +205,11 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     def isEstablishedSuitBlock(self):
         state = self.fsm.getCurrentState().getName()
         return state == 'suit'
-        
+
     def isEstablishedCogdoBlock(self):
         state = self.fsm.getCurrentState().getName()
         return state == 'cogdo'
-        
+
     def isToonBlock(self):
         state = self.fsm.getCurrentState().getName()
         return state in ('toon', 'becomingToon', 'becomingToonFromCogdo')
@@ -316,7 +317,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
                 continue
             event = self.air.getAvatarExitEvent(victor)
             self.accept(event, self.setVictorExited, extraArgs=[victor])
-        
+
         self.b_setVictorList(victorList)
         self.updateSavedBy(savedBy)
         self.victorResponses = [0, 0, 0, 0]
@@ -351,11 +352,11 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
                     cogdoNumFloors = 3
                 else:
                     cogdoNumFloors = 2
-                
+
                 if self.track not in ['l', 's', 'm', 'g', 'c', 't']:
                     self.notify.warning('Invalid track %s for cog building/cog dominium!' % (str(self.track)))
                     continue
-                
+
                 self.air.questManager.toonKilledCogdo(toon, self.track, self.difficulty, self.zoneId, activeToons)
                 self.air.questManager.toonKilledBuilding(toon, self.track, self.difficulty, cogdoNumFloors, self.zoneId, activeToons)
                 continue
@@ -413,11 +414,12 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         (exteriorZoneId, interiorZoneId) = self.getExteriorAndInteriorZoneId()
         if simbase.config.GetBool('want-new-toonhall', 1) and ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.ToonHall:
             self.interior = DistributedToonHallInteriorAI.DistributedToonHallInteriorAI(self.block, self.air, interiorZoneId, self)
+        elif ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.PacesetterLobby:
+            self.interior = DistributedPaceLobbyInteriorAI.DistributedPaceLobbyInteriorAI(self.block, self.air, interiorZoneId, self)
+        elif ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.PizzariaInterior:(
+            self.interior) = DistributedPizzeriaInteriorAI.DistributedPizzeriaInteriorAI(self.block, self.air, interiorZoneId, self)
         else:
             self.interior = DistributedToonInteriorAI.DistributedToonInteriorAI(self.block, self.air, interiorZoneId, self)
-        if ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.PacesetterLobby:
-            self.interior = DistributedPaceLobbyInteriorAI.DistributedPaceLobbyInteriorAI(self.block, self.air, interiorZoneId, self)
-
         self.interior.generateWithRequired(interiorZoneId)
         door = self.createExteriorDoor()
         insideDoor = DistributedDoorAI.DistributedDoorAI(self.air, self.block, DoorTypes.INT_STANDARD)
