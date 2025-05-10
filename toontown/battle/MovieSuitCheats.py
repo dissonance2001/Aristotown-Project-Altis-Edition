@@ -2191,11 +2191,7 @@ def doSongAndDanceRadioInfrequency(attack):
            # part.reparentTo(cogHead)
     hat = globalPropPool.getProp('hat')
     hat.setR(326.98)
-    taunt = random.choice(
-        ["A-one! A-two! A skiddly-diddly-doo!", "I assure you, I'm not dancing around the issue.",
-         "I'm afraid I have you beat.", "Step, kick, kick, leap, kick, touch... Again!", "Think of this as a dance to the death.",
-         "When you feel sad, dance!", "Woah Woah Woah...",
-         "It's like dreaming with your feet."])
+    taunt = getAttackTaunt('SongAndDance', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(tauntInterval, ActorInterval(suit, 'song-and-dance'), Func(suit.setNeutralAnimation))
     caneposPoints = [Point3(-0.13, 0.18, -0.08)]
@@ -3171,17 +3167,7 @@ def doWriteOffWritingDesk(attack):
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
 
-    taunt = random.choice(
-    ["I'll shuffle your accounts around.",
-"I'm looking for some dividends.",
-"Let me increase your losses.",
-"Let's make the best of a bad deal.",
-"This is going to hurt your bottom line.",
-"This won't look good on your books.",
-"Time to balance the books.",
-"You can forget about a bonus.",
-"You must account for your losses.",
-"You're about to suffer some losses."])
+    taunt = getAttackTaunt('WriteOff', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
     suitTrack = Sequence(headsUp, tauntInterval, ActorInterval(suit, 'hold-pencil'), suitReset,
@@ -3637,10 +3623,7 @@ def doBiteGavel(attack):
     toonTrack = getToonTrack(attack, damageDelay=2.6, splicedDamageAnims=damageAnims, dodgeDelay=2.3, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.4)
     soundTrack = getSoundTrack('SA_bite.ogg', delay=2.3, node=suit)
     soundTrack2 = getSoundTrack('SA_bite_miss.ogg', delay=2.3, node=suit)
-    taunt = random.choice(
-        ["I haven't had a bite all day.", "Would you like a bite?", "You're biting off more than you can chew.",
-         "I don't just bite when I'm cornered.", "My bite is bigger than my bark.", "Watch out, I may bite.", "Try a bite of this!", "Bite down on this!",
-         "I just want a bite. Is that too much to ask?"])
+    taunt = getAttackTaunt('Bite', attack['suitName'])
     battle = attack['battle']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
@@ -4710,12 +4693,7 @@ def doRazzleDazzleBomb(attack):
     sign = globalPropPool.getProp('smile')
     BattleParticles.loadParticles()
     particleEffect = BattleParticles.createParticleEffect('Smile')
-    taunt = random.choice(
-        ["Aren't I charming?", "Blinding, aren't they?",
-         "Hard to believe these aren't real.", "How about these choppers?", "Say 'Cheese!'",
-         "I floss after every meal.", "Read my lips.", "Shocking, aren't they?",
-         "I'm going to cap this off.", "I'm going to wow you.",
-         "My dentist does excellent work."])
+    taunt = getAttackTaunt('RazzleDazzle', attack['suitName'])
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -5439,12 +5417,7 @@ def doRolledTrickOfTheLight(attack):
     partDelay = 0.2
     damageDelay = 1.5
     dodgeDelay = 1.45
-    taunt = random.choice(
-        ["There'ff no fun in plaHAHAying it ffafe! Live a little!",
-"What'ff life without a little riffk here and there?",
-"You'd befft go big or GO HOME!",
-"It'ff all or nothing, doll!",
-"But what if the fftakeff were EVEN HIGHER?!"])
+    taunt = getAttackTaunt('SwirlBath', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(ActorInterval(suit, 'magic3', playRate=1.25))
     suitTrack.append(Wait(2.0))
@@ -5508,12 +5481,7 @@ def doRolled(attack):
     partDelay = 0.2
     damageDelay = 1.5
     dodgeDelay = 1.45
-    taunt = random.choice(
-        ["There'ff no fun in plaHAHAying it ffafe! Live a little!",
-"What'ff life without a little riffk here and there?",
-"You'd befft go big or GO HOME!",
-"It'ff all or nothing, doll!",
-"But what if the fftakeff were EVEN HIGHER?!"])
+    taunt = getAttackTaunt('SwirlBath', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(ActorInterval(suit, 'magic3', playRate=1.25))
     suitTrack.append(Wait(2.0))
@@ -5792,18 +5760,7 @@ def doFloodTheMarketPeckingGroup(attack):
 
     particleEffect = BattleParticles.createParticleEffect(file='floodTheMarket')
     waterfallEffect = BattleParticles.createParticleEffect(file='floodTheMarketWaterfall')
-    taunt = random.choice(
-        ["I'll put out a Flood Watch.",
-         'Looks like the Jellybean has been devalued.',
-         'Your worth is dropping, Toon.',
-         "I don't believe in pseudonyms.",
-         'The waters are rising for you, Toon.',
-         'You should have sold days ago.',
-         "This is why you shouldn't make bets.",
-         'Looks like you made the wrong investment.',
-         'You took the gamble, and look where it got you.',
-         'I hope you know how to swim.',
-         'High Tide is coming up.'])
+    taunt = getAttackTaunt('FloodTheMarket', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
 
@@ -6096,12 +6053,7 @@ def doPeckingOrderSlushFund(attack):
     dmg = target[0]['hp']
     throwDuration = 3.03
     throwDelay = 2
-    taunt = random.choice(
-        ["Looks like you're going to hit a birdie.", "Some think this attack is fowl.", "Sorry to bom-bird you with questions.",
-         "A bird in my hand is worth ten on your head!", "This one's for the birds.", "Why don't I peck on someone my own size? Nah.",
-         "Your order is up; the pecking order!", "Birds of a feather strike together.",
-         "Looks like you're going to hit a birdie.", "You're on the bottom of the pecking order.",
-         "Get ready for a bird bath."])
+    taunt = getAttackTaunt('PeckingOrder', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
 
@@ -6789,10 +6741,7 @@ def doCourtSanctionBindings(attack):
     )
     toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], - int(dmg / 2.38), 0.8, ['conked'])
     # toonTrack = getToonTrack(attack, 0.8, ['conked'], 0.2, ['sidestep'])
-    taunt = random.choice(
-        ["What happened to your little strategy called 'teamwork'?",
-         "I spy with my little eye, a Toon who isn't pulling their weight.",
-         "Someone isn't doing their part around here."])
+    taunt = getAttackTaunt('CourtSanction', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     battle = attack['battle']
     targetPos = toon.getPos(battle)
@@ -6861,17 +6810,7 @@ def doJargonSanction(attack):
     dodgeDelay = 0.9
     partDelay = 0.25
     partInterval = 1
-    taunt = random.choice(
-        ["Did you catch my meaning?",
-         "I hope you get this loud and clear.",
-         "I insist on having my say.",
-         "I must pontificate on this subject.",
-         "I'm very outspoken.",
-         "Looks like I'm going to have to raise my voice.",
-         "See if you can make sense of this.",
-         "See, words can hurt you.",
-         "What nonsense.",
-         "Words words, words, words, words."])
+    taunt = getAttackTaunt('Jargon', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     battle = attack['battle']
     toon = target[0]['toon']
@@ -6948,17 +6887,7 @@ def doMumboJumboSanction(attack):
     BattleParticles.setEffectTexture(particleEffect3, 'mumbojumbo-deben', color=Vec4(1, 0, 0, 1))
     BattleParticles.setEffectTexture(particleEffect4, 'mumbojumbo-high', color=Vec4(1, 0, 0, 1))
     BattleParticles.setEffectTexture(particleEffect5, 'mumbojumbo-iron', color=Vec4(1, 0, 0, 1))
-    taunt = random.choice(
-        ["Boy, this is a mouthfull.",
-         "Here are my five-dollar words.",
-         "I believe these are the right words.",
-         "It's as simple as this.",
-         "Let me just interject this.",
-         "Let me make this perfectly clear.",
-         "Let me supersize this for you.",
-         "Some call me bombastic.",
-         "This is how we're going to do this.",
-         "You might call this technobabble."])
+    taunt = getAttackTaunt('MumboJumbo', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     battle = attack['battle']
     toon = target[0]['toon']
@@ -8066,10 +7995,7 @@ def doTeeOffRefinementManagerProtection(attack):
     toon = target[0]['toon']
     club = globalPropPool.getProp('golf-club')
     ball = globalPropPool.getProp('golf-ball')
-    taunt = random.choice(
-        ['Just try and avoid this hazard.', "I'm getting teed off.", "Mind if I play through?",
-         "Watch the birdie!", "Swing!",  "You're not up to par.", "You're in my fairway.", "Keep your eye on the ball!",
-         "Fore!", 'Notice my grip.'])
+    taunt = getAttackTaunt('Golf', attack['suitName'])
     battle = attack['battle']
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
@@ -8102,10 +8028,7 @@ def doTeeOffTrap(attack):
     toon = target[0]['toon']
     club = globalPropPool.getProp('golf-club')
     ball = globalPropPool.getProp('golf-ball')
-    taunt = random.choice(
-        ['Just try and avoid this hazard.', "I'm getting teed off.", "Mind if I play through?",
-         "Watch the birdie!", "Swing!",  "You're not up to par.", "You're in my fairway.", "Keep your eye on the ball!",
-         "Fore!", 'Notice my grip.'])
+    taunt = getAttackTaunt('Golf', attack['suitName'])
     battle = attack['battle']
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
@@ -8138,10 +8061,7 @@ def doTeeOffHeal(attack):
     toon = target[0]['toon']
     club = globalPropPool.getProp('golf-club')
     ball = globalPropPool.getProp('golf-ball')
-    taunt = random.choice(
-        ['Just try and avoid this hazard.', "I'm getting teed off.", "Mind if I play through?",
-         "Watch the birdie!", "Swing!",  "You're not up to par.", "You're in my fairway.", "Keep your eye on the ball!",
-         "Fore!", 'Notice my grip.'])
+    taunt = getAttackTaunt('Golf', attack['suitName'])
     battle = attack['battle']
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
@@ -8174,10 +8094,7 @@ def doTeeOffRefinement(attack):
     toon = target[0]['toon']
     club = globalPropPool.getProp('golf-club')
     ball = globalPropPool.getProp('golf-ball')
-    taunt = random.choice(
-        ['Just try and avoid this hazard.', "I'm getting teed off.", "Mind if I play through?",
-         "Watch the birdie!", "Swing!",  "You're not up to par.", "You're in my fairway.", "Keep your eye on the ball!",
-         "Fore!", 'Notice my grip.'])
+    taunt = getAttackTaunt('Golf', attack['suitName'])
     battle = attack['battle']
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
@@ -8492,11 +8409,7 @@ def doBrainStormHeadRoller(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["I'm going to take you by storm.", "I forecast rain.", "Hope you packed your umbrella!",
-         "I want to enlighten you.", "I have a torrent of great ideas.",
-         "I call this a lightning attack.", "How about a few rain DROPS?", "Ready for a downpour?",
-         "I love to be a wet blanket."])
+    taunt = getAttackTaunt('BrainStorm', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(headsUp, ActorInterval(suit, 'effort', playRate=1.25), suitReset, Func(suit.setNeutralAnimation))
     initialCloudHeight = suit.height + 3
@@ -9602,17 +9515,7 @@ def doPinkSlipAftershock(attack):
     paper = globalPropPool.getProp('pink-slip')
     throwDelay = 2.43
     throwDuration = 0.5
-    taunt = random.choice(
-        ["Are you frightened? You've turned pink!",
-"This one's slippery when wet.",
-"Watch yourself, wouldn't want to slip!",
-"Oops, I guess you slipped there, huh?",
-"Don't mind if you slip by, do you?",
-"Try not to slip up.",
-"Pink isn't really your color.",
-"I'll just slip this one in.",
-"This one will surely slip you up.",
-"Here's your pink slip, you're outta here!"])
+    taunt = getAttackTaunt('PinkSlip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
     battle = attack['battle']
@@ -9666,17 +9569,7 @@ def doPinkSlipCage(attack):
     paper = globalPropPool.getProp('pink-slip')
     throwDelay = 2.43
     throwDuration = 0.5
-    taunt = random.choice(
-        ["Are you frightened? You've turned pink!",
-"This one's slippery when wet.",
-"Watch yourself, wouldn't want to slip!",
-"Oops, I guess you slipped there, huh?",
-"Don't mind if you slip by, do you?",
-"Try not to slip up.",
-"Pink isn't really your color.",
-"I'll just slip this one in.",
-"This one will surely slip you up.",
-"Here's your pink slip, you're outta here!"])
+    taunt = getAttackTaunt('PinkSlip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
     battle = attack['battle']
@@ -9730,17 +9623,7 @@ def doPinkSlipSnipe(attack):
     paper = globalPropPool.getProp('pink-slip')
     throwDelay = 2.43
     throwDuration = 0.5
-    taunt = random.choice(
-        ["Are you frightened? You've turned pink!",
-"This one's slippery when wet.",
-"Watch yourself, wouldn't want to slip!",
-"Oops, I guess you slipped there, huh?",
-"Don't mind if you slip by, do you?",
-"Try not to slip up.",
-"Pink isn't really your color.",
-"I'll just slip this one in.",
-"This one will surely slip you up.",
-"Here's your pink slip, you're outta here!"])
+    taunt = getAttackTaunt('PinkSlip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
     battle = attack['battle']
@@ -9872,12 +9755,7 @@ def doReOrgBreachOfContract(attack):
     suitReset = Func(suit.setHpr, battle, origHpr)
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["Not a fan of how I reorganized things?", "Do you like my organizational skills?",
-         "Hold on while I reorganize your thoughts.", "You don't mind if I just reorganize a bit?",
-         "You need to get organized!",
-         "I just thought I'd give things a new look.", "Perhaps a little organization is in order.",
-         "I'll just wait for you to get a little organized."])
+    taunt = getAttackTaunt('ReOrg', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
 
@@ -9948,12 +9826,7 @@ def doReOrgUnionBust(attack):
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
     sprayEffect = BattleParticles.createParticleEffect(file='reorgSpray')
-    taunt = random.choice(
-        ["Not a fan of how I reorganized things?", "Do you like my organizational skills?",
-         "Hold on while I reorganize your thoughts.", "You don't mind if I just reorganize a bit?",
-         "You need to get organized!",
-         "I just thought I'd give things a new look.", "Perhaps a little organization is in order.",
-         "I'll just wait for you to get a little organized."])
+    taunt = getAttackTaunt('ReOrg', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
     battle = attack['battle']
@@ -10229,12 +10102,7 @@ def doGlowerPowerContractEnforcement(attack):
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
 
-    taunt = random.choice(
-        ["Here's looking at you, kid.", "How's this for expressive eyes?",
-         "Jeepers Creepers, don't you love my peepers?", "I like to stay on the cutting edge.",
-         "The eyes have it.",
-         "Look into my eyes...",
-         "Peekaboo, I see you."])
+    taunt = getAttackTaunt('GlowerPower', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
 
@@ -10701,7 +10569,7 @@ def doSnipeLureResistance(attack):
     for i in xrange(0, 5):
         leftKnives.append(globalPropPool.getProp('dagger'))
         rightKnives.append(globalPropPool.getProp('dagger'))
-    taunt = random.choice(['Prepare for pain.', "Yikes, that one's gotta hurt."])
+    taunt = getAttackTaunt('Caress', attack['suitName'])
     battle = attack['battle']
     toon = target[0]['toon']
     origPos, origHpr = battle.getActorPosHpr(suit)
@@ -11032,6 +10900,7 @@ def doRolodexAggrandized(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
+    # Professor Control: No clue what to do here because it depends on the Chainsaw Consultant's phase.
     if suit.isChainsawPhase3:
         taunt = random.choice(
             [
@@ -11490,6 +11359,7 @@ def doDoubleTalkWhirlwind(attack):
     partDelay = 2.25
     damageDelay = 2.5
     dodgeDelay = 2.25
+    # Professor Control: No clue what's with the extra phrases (after the value proposition one), but until I figure that out I'll keep it like this.
     taunt = random.choice(
         ["Your services are no longer required here.", "Do you have the bandwidth for this?",
          "Allow me to reverbiagize.", "These words might be out of your grasp.", "You need to look on the bright side.",
@@ -11569,12 +11439,7 @@ def doFreezeAssetsAftershock(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["Are you feeling a little blue?", "Do you feel a draft?",
-         "Hope you don't have plans.", "I hope you like cold cuts.",
-         "Let me crystallize my plan.",
-         "This one will be cold.", "This should cause freezer burn.", "This should keep you on ice.", "Your assets are mine.", "You're going to take this hard.",
-         "Winter is coming early this year."])
+    taunt = getAttackTaunt('FreezeAssets', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
 
@@ -11977,10 +11842,7 @@ def doFilibusterVoicemail(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["I can always get a word in edgewise.", "This is going to take a while.",
-         "I never get tired of this one.", "I don't even need to take a breath.",
-         "I think I'll shoot the breeze.", "I keep going and going and going."])
+    taunt = getAttackTaunt('Filibuster', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(headsUp, ActorInterval(suit, 'speak', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
     sprayTrack = getPartTrack(sprayEffect, partDelay, partDuration, [sprayEffect, suit, 0])
@@ -12034,10 +11896,7 @@ def doFilibusterPhase2(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["I can always get a word in edgewise.", "This is going to take a while.",
-         "I never get tired of this one.", "I don't even need to take a breath.",
-         "I think I'll shoot the breeze.", "I keep going and going and going."])
+    taunt = getAttackTaunt('Filibuster', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(headsUp, ActorInterval(suit, 'speak', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
     sprayTrack = getPartTrack(sprayEffect, partDelay, partDuration, [sprayEffect, suit, 0])
@@ -12098,10 +11957,7 @@ def doFilibusterCollectCall(attack):
     tauntIndex = attack['taunt']
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
-    taunt = random.choice(
-        ["I can always get a word in edgewise.", "This is going to take a while.",
-         "I never get tired of this one.", "I don't even need to take a breath.",
-         "I think I'll shoot the breeze.", "I keep going and going and going."])
+    taunt = getAttackTaunt('Filibuster', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(headsUp, ActorInterval(suit, 'speak', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
     sprayTrack = getPartTrack(sprayEffect, partDelay, partDuration, [sprayEffect, suit, 0])
@@ -12215,12 +12071,7 @@ def doSchmoozeRadioInfrequency(attack):
     partDelay = 0.3
     damageDelay = partDelay + 0.4
     dodgeDelay = 0.4
-    taunt = random.choice(
-        ["Flattery will get me everywhere.", "I don't mean to gush.",
-         "I hate to knock you off your pedestal, but...", "I'm going to get on your good side.",
-         "I'm going to pile it on now.", "You'll never see this coming.", "You've earned this.",
-         "I'm going to ring your praises.", "That deserves a good slap on the back.", "This will look good on you.",
-         "Time to lay it on thick."])
+    taunt = getAttackTaunt('Schmooze', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
 
@@ -12275,9 +12126,7 @@ def doQuake(attack):
 
 def doQuakeEnraged(attack): # stomp
     tauntIndex = attack['taunt']
-    taunt = random.choice(
-        ['Did you feel that?', 'Not afraid of a little tremor are you?', 'You look jittery.', 'Why are you tremoring with fear?',
-        'Tremor with fear!', "What's wrong? You look shaken.", 'Are you ready to rumble?'])
+    taunt = getAttackTaunt('Tremor', attack['suitName'])
     suit = attack['suit']
     suitTrack = Sequence(ActorInterval(suit, 'stomp'), Func(suit.setNeutralAnimation))
     makeAngry = Func(suit.makeAngry)
@@ -12305,10 +12154,7 @@ def doParadigmShiftScapegoat(attack):
     sprayEffect = BattleParticles.createParticleEffect('ShiftSpray')
     suitName = suit.getStyleName()
     sprayEffect.setPos(Point3(-5.2, 4.6, 2.7))
-    taunt = random.choice(
-        ["Watch out! I'm rather shifty.", 'Prepare to have your paradigm shifted!', "Isn't this an interesting paradigm.",
-         "You'll get shifted out of place.", 'Look into my shifty eyes!',
-         "I'm giving you the bad shift!", "I guess it's your shift now.", "You've never shifted this much in your life."])
+    taunt = getAttackTaunt('ParadigmShift', attack['suitName'])
     suit = attack['suit']
     suitTrack = Sequence(ActorInterval(suit, 'magic2', playRate=1.25), Func(suit.setNeutralAnimation))
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -12393,10 +12239,7 @@ def doParadigmShiftFreezingRain(attack):
     sprayEffect = BattleParticles.createParticleEffect('ShiftSpray')
     suitName = suit.getStyleName()
     sprayEffect.setPos(Point3(-5.2, 4.6, 2.7))
-    taunt = random.choice(
-        ["Watch out! I'm rather shifty.", 'Prepare to have your paradigm shifted!', "Isn't this an interesting paradigm.",
-         "You'll get shifted out of place.", 'Look into my shifty eyes!',
-         "I'm giving you the bad shift!", "I guess it's your shift now.", "You've never shifted this much in your life."])
+    taunt = getAttackTaunt('ParadigmShift', attack['suitName'])
     suit = attack['suit']
     suitTrack = Sequence(ActorInterval(suit, 'magic2', playRate=1.25), Func(suit.setNeutralAnimation))
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -12481,10 +12324,7 @@ def doParadigmShiftWiretapped(attack):
     sprayEffect = BattleParticles.createParticleEffect('ShiftSpray')
     suitName = suit.getStyleName()
     sprayEffect.setPos(Point3(-5.2, 4.6, 2.7))
-    taunt = random.choice(
-        ["Watch out! I'm rather shifty.", 'Prepare to have your paradigm shifted!', "Isn't this an interesting paradigm.",
-         "You'll get shifted out of place.", 'Look into my shifty eyes!',
-         "I'm giving you the bad shift!", "I guess it's your shift now.", "You've never shifted this much in your life."])
+    taunt = getAttackTaunt('ParadigmShift', attack['suitName'])
     suit = attack['suit']
     suitTrack = Sequence(ActorInterval(suit, 'magic2', playRate=1.25), Func(suit.setNeutralAnimation))
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -12558,10 +12398,7 @@ def doParadigmShiftWiretapped(attack):
 
 def doShieldsUp(attack):
     tauntIndex = attack['taunt']
-    taunt = random.choice(
-        ['Did you feel that?', 'Not afraid of a little tremor are you?', 'You look jittery.',
-         'Why are you tremoring with fear?',
-         'Tremor with fear!', "What's wrong? You look shaken.", 'Are you ready to rumble?'])
+    taunt = getAttackTaunt('Tremor', attack['suitName'])
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
@@ -13214,11 +13051,7 @@ def doPowerTripKamikaze(attack):
     if suitName == 'mh':
         waterfallEffect.setPos(0, 4, 3.6)
     tauntIndex = attack['taunt']
-    taunt = random.choice(
-        ["You look a little tripped up.", "Sorry to trip you up there!", "Power corrupts, especially in my hands!",
-         "Did you have a nice trip?", "How was your trip?",
-         "Who's got the power now.", "Nice trip, I guess I'll see you next fall.", "Pack your bags, we're taking a little trip.",
-         "You can't fight the power."])
+    taunt = getAttackTaunt('PowerTrip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(ActorInterval(suit, 'magic1', playRate=1.25), Func(suit.setNeutralAnimation))
 
@@ -13261,11 +13094,7 @@ def doPowerTripHeavyRainfall(attack):
     if suitName == 'mh':
         waterfallEffect.setPos(0, 4, 3.6)
     tauntIndex = attack['taunt']
-    taunt = random.choice(
-        ["You look a little tripped up.", "Sorry to trip you up there!", "Power corrupts, especially in my hands!",
-         "Did you have a nice trip?", "How was your trip?",
-         "Who's got the power now.", "Nice trip, I guess I'll see you next fall.", "Pack your bags, we're taking a little trip.",
-         "You can't fight the power."])
+    taunt = getAttackTaunt('PowerTrip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(ActorInterval(suit, 'magic1', playRate=1.25), Func(suit.setNeutralAnimation))
 
@@ -13308,11 +13137,7 @@ def doPowerTripOilRain(attack):
     if suitName == 'mh':
         waterfallEffect.setPos(0, 4, 3.6)
     tauntIndex = attack['taunt']
-    taunt = random.choice(
-        ["You look a little tripped up.", "Sorry to trip you up there!", "Power corrupts, especially in my hands!",
-         "Did you have a nice trip?", "How was your trip?",
-         "Who's got the power now.", "Nice trip, I guess I'll see you next fall.", "Pack your bags, we're taking a little trip.",
-         "You can't fight the power."])
+    taunt = getAttackTaunt('PowerTrip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(ActorInterval(suit, 'magic1', playRate=1.25), Func(suit.setNeutralAnimation))
 
@@ -13355,11 +13180,7 @@ def doPowerTripScabbard(attack):
     if suitName == 'mh':
         waterfallEffect.setPos(0, 4, 3.6)
     tauntIndex = attack['taunt']
-    taunt = random.choice(
-        ["You look a little tripped up.", "Sorry to trip you up there!", "Power corrupts, especially in my hands!",
-         "Did you have a nice trip?", "How was your trip?",
-         "Who's got the power now.", "Nice trip, I guess I'll see you next fall.", "Pack your bags, we're taking a little trip.",
-         "You can't fight the power."])
+    taunt = getAttackTaunt('PowerTrip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(ActorInterval(suit, 'magic1', playRate=1.25), Func(suit.setNeutralAnimation))
 
@@ -13402,11 +13223,7 @@ def doPowerTripBayouBash(attack):
     if suitName == 'mh':
         waterfallEffect.setPos(0, 4, 3.6)
     tauntIndex = attack['taunt']
-    taunt = random.choice(
-        ["You look a little tripped up.", "Sorry to trip you up there!", "Power corrupts, especially in my hands!",
-         "Did you have a nice trip?", "How was your trip?",
-         "Who's got the power now.", "Nice trip, I guess I'll see you next fall.", "Pack your bags, we're taking a little trip.",
-         "You can't fight the power."])
+    taunt = getAttackTaunt('PowerTrip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(ActorInterval(suit, 'magic1', playRate=1.25), Func(suit.setNeutralAnimation))
 
@@ -13568,12 +13385,7 @@ def doBounceCheckPecking(attack):
     throwDelay = 1
     dodgeDelay = 3.1
     damageDelay = 3.5
-    taunt = random.choice(
-        ["I'm collecting on this debt.", "I believe this check is yours.",
-         "I'd like to cash this in.", "I'm just going to kick this back to you.", "You owed me for this.",
-         "This is one sour note.", "This is going to cost you.", "This check isn't going to be tender.",
-         "You're going to be charged for this.", "Check this out.",
-         "Ah, too bad, you're funless."])
+    taunt = getAttackTaunt('BounceCheck', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
     suitTrack = Sequence(tauntInterval, ActorInterval(suit, 'throw-paper', playRate=1.5))
@@ -13850,25 +13662,7 @@ def doFiredSnap(attack):
     headsUp = Func(suit.headsUp, battle, targetPos)
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
-    taunt = random.choice(
-        ["Can you say ouch?",
-         "Clearly, you don't own an air fryer.",
-         "Do you feel a little toasty?",
-         "Hope you wore sunscreen.",
-         "Hot, hot, and hotter.",
-         "How does 'well-done' sound?",
-         "I hope you brought some marshmallows.",
-         "I hope you're cold blooded.",
-         "I just sparkle, don't I?",
-         "I think I have a bit of flare about me.",
-         "It's going to get rather warm around here.",
-         "Oh look, a crispy critter.",
-         "This should take the chill out of the air.",
-         "You better stop, drop, and roll!",
-         "You'll go out in a blaze.",
-         "You're a flash in the pan.",
-         "You're going down in flames.",
-         "You're outta here."])
+    taunt = getAttackTaunt('Fired', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(headsUp, ActorInterval(suit, 'magic2', playRate=1.25), suitReset, Func(suit.setNeutralAnimation))
     suitTrack.append(Wait(2.0))
@@ -13956,25 +13750,7 @@ def doFiredConeOfShame(attack):
     headsUp = Func(suit.headsUp, battle, targetPos)
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
-    taunt = random.choice(
-        ["Can you say ouch?",
-         "Clearly, you don't own an air fryer.",
-         "Do you feel a little toasty?",
-         "Hope you wore sunscreen.",
-         "Hot, hot, and hotter.",
-         "How does 'well-done' sound?",
-         "I hope you brought some marshmallows.",
-         "I hope you're cold blooded.",
-         "I just sparkle, don't I?",
-         "I think I have a bit of flare about me.",
-         "It's going to get rather warm around here.",
-         "Oh look, a crispy critter.",
-         "This should take the chill out of the air.",
-         "You better stop, drop, and roll!",
-         "You'll go out in a blaze.",
-         "You're a flash in the pan.",
-         "You're going down in flames.",
-         "You're outta here."])
+    taunt = getAttackTaunt('Fired', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(headsUp, ActorInterval(suit, 'magic2', playRate=1.25), suitReset, Func(suit.setNeutralAnimation))
     suitTrack.append(Wait(2.0))
@@ -14298,11 +14074,7 @@ def doLiquidateSoakResist(attack):
     damageDelay = 1.5
     dodgeDelay = 1
     tauntIndex = attack['taunt']
-    taunt = random.choice(
-        ["Are you having some cash flow problems?", "I like to keep things fluid.", "I think you're diluted.",
-         "I'll have to purge your assets.", "It's all crashing down on you.",
-         "Remember, it's slippery when wet.", "Time for you to go with the flow.", "You seem to be slipping.",
-         "Your numbers are running."])
+    taunt = getAttackTaunt('Liquidate', attack['suitName'])
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
     tauntInterval = Sequence(Wait(0.5), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -14359,11 +14131,7 @@ def doLiquidateAftershock(attack):
     damageDelay = 1.5
     dodgeDelay = 1
     tauntIndex = attack['taunt']
-    taunt = random.choice(
-        ["Are you having some cash flow problems?", "I like to keep things fluid.", "I think you're diluted.",
-         "I'll have to purge your assets.", "It's all crashing down on you.",
-         "Remember, it's slippery when wet.", "Time for you to go with the flow.", "You seem to be slipping.",
-         "Your numbers are running."])
+    taunt = getAttackTaunt('Liquidate', attack['suitName'])
     tauntInterval = Sequence(Wait(0.5), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
@@ -14614,12 +14382,7 @@ def doMarketCrashPecking(attack):
     propDelay = 0.1
     throwDuration = 1.0
     paper = globalPropPool.getProp('newspaper')
-    taunt = random.choice(
-        ["I'm a real bull in the market.", "I'm going to crash your party.",
-         "I'm more than the market can bear.", "I've got a real crash course for you!",
-        "Now I'll come crashing down.",
-         "You had better get out quick!", "Sell! Sell! Sell!",
-         "You won't survive the crash."])
+    taunt = getAttackTaunt('MarketCrash', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
 
@@ -15066,7 +14829,7 @@ def doSnapBellow(attack):
     headsUp = Func(suit.headsUp, battle, targetPos)
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
-    speechTrack = Sequence(Func(suit.setChatAbsolute, random.choice(('These chompers can cut out diamonds!', "My colleagues don't like it when I get snappy.", 'This may hurt a little, but what comes next will hurt a lot.', "I've had enough with you!")), CFSpeech | CFTimeout))
+    speechTrack = Sequence(Func(suit.setChatAbsolute, getAttackTaunt('Snap', attack['suitName']), CFSpeech | CFTimeout))
     suitTrack = Sequence(headsUp, ActorInterval(suit, 'throw-object', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
     suitTrack.append(Wait(2))
     suitTrack.append(doBayouBash(attack))
@@ -16161,17 +15924,7 @@ def doHeadHonchoCigarSmoke(attack):
     tauntIndex = attack['taunt']
     toon = attack['target'][0]['toon']
     dmg = target[0]['hp']
-    taunt = random.choice([
-                "It's a good day for me to have a smoke.",
-                'Take a breath of this.',
-                "It's tradition you know.",
-                'Another day, another dollar spent.',
-                'I always have the occasional cigar.',
-                "I'll quit tomorrow, I swear.",
-                "You can't even escape my secondhand smoke.",
-                'These fumes are toxic.',
-                'I need a good smoke.',
-                'Smoking is a dirty habit.'])
+    taunt = getAttackTaunt('CigarSmoke', attack['suitName'], tauntIndex)
     BattleParticles.loadParticles()
     battle = attack['battle']
     toon = target[0]['toon']
@@ -16924,10 +16677,7 @@ def doFallingKnifeHeadRoller(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["Don't bring a Gag to a knife fight.", "Get to the point!", "I won't fall for your childish pranks!",
-         "I'll use this occasion to sharpen my skills.", "You'll find this company never cuts corners.",  "It's knife to meet you.",  "Toons like you can't cut it with us.", "Twice the pride, double the fall.",
-         "This attack is a cut above the rest."])
+    taunt = getAttackTaunt('FallingKnife', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
@@ -16980,10 +16730,7 @@ def doFallingKnifeUnionBuster(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["Don't bring a Gag to a knife fight.", "Get to the point!", "I won't fall for your childish pranks!",
-         "I'll use this occasion to sharpen my skills.", "You'll find this company never cuts corners.",  "It's knife to meet you.",  "Toons like you can't cut it with us.", "Twice the pride, double the fall.",
-         "This attack is a cut above the rest."])
+    taunt = getAttackTaunt('FallingKnife', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
@@ -17035,10 +16782,7 @@ def doFallingKnifeUnionBust(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["Don't bring a Gag to a knife fight.", "Get to the point!", "I won't fall for your childish pranks!",
-         "I'll use this occasion to sharpen my skills.", "You'll find this company never cuts corners.",  "It's knife to meet you.",  "Toons like you can't cut it with us.", "Twice the pride, double the fall.",
-         "This attack is a cut above the rest."])
+    taunt = getAttackTaunt('FallingKnife', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
@@ -17090,10 +16834,7 @@ def doFallingKnifePromotion(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["Don't bring a Gag to a knife fight.", "Get to the point!", "I won't fall for your childish pranks!",
-         "I'll use this occasion to sharpen my skills.", "You'll find this company never cuts corners.",  "It's knife to meet you.",  "Toons like you can't cut it with us.", "Twice the pride, double the fall.",
-         "This attack is a cut above the rest."])
+    taunt = getAttackTaunt('FallingKnife', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
@@ -17302,17 +17043,7 @@ def doShortSqueezeWritingDesk(attack):
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
 
-    taunt = random.choice(
-    ["Aw, are these coins for me?",
-"Cha-ching! That's what I like to hear!",
-"I like to extract maximum value for the shareholders.",
-"I'll squeeze you for all you're worth!",
-"The best market liquidity, 100% freshly-squeezed.",
-"This has got big implications for the stock market!",
-"This money belongs to the economy!",
-"This'll 'shake' up the stock market!",
-"Will you look at that! Your stock is rising!",
-"You're worth more than you look, Toon!"])
+    taunt = getAttackTaunt('ShortSqueeze', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
     suitTrack = Sequence(headsUp, tauntInterval, ActorInterval(suit, 'short-squeeze'), suitReset,
@@ -17392,11 +17123,7 @@ def doBlueChipSyphon(attack):
     tauntIndex = attack['taunt']
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
-    taunt = random.choice(
-        ["You're gonna flip when you see this..", "You're a real chip on my shoulder, Toon.", "You'll be feeling blue after this.",
-         "The house always wins.", "Take stock of this.",
-         "Sorry to crush your dreams.", "Our stocks are to the moon.", "I'm investing in your downfall.", "My methods are only of the highest quality.",
-         "my history shows I won't fall."])
+    taunt = getAttackTaunt('BlueChip', attack['suitName'])
     tauntInterval = Sequence(headsUp, Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(ActorInterval(suit, 'blue-chip'), suitReset, Func(suit.setNeutralAnimation))
     if getSuitBodyType(attack['suitName']) == 'a':
@@ -17460,11 +17187,7 @@ def doBlueChipHeadRoller(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["You're gonna flip when you see this..", "You're a real chip on my shoulder, Toon.", "You'll be feeling blue after this.",
-         "The house always wins.", "Take stock of this.",
-         "Sorry to crush your dreams.", "Our stocks are to the moon.", "I'm investing in your downfall.", "My methods are only of the highest quality.",
-         "my history shows I won't fall."])
+    taunt = getAttackTaunt('BlueChip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
@@ -17530,11 +17253,7 @@ def doBlueChipSnipe(attack):
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    taunt = random.choice(
-        ["You're gonna flip when you see this..", "You're a real chip on my shoulder, Toon.", "You'll be feeling blue after this.",
-         "The house always wins.", "Take stock of this.",
-         "Sorry to crush your dreams.", "Our stocks are to the moon.", "I'm investing in your downfall.", "My methods are only of the highest quality.",
-         "my history shows I won't fall."])
+    taunt = getAttackTaunt('BlueChip', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
@@ -17709,25 +17428,7 @@ def doThrowBookSnap(attack):
     headsUp = Func(suit.headsUp, battle, targetPos)
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
-    taunt = random.choice(
-        ['My book from Law School should help.',
-               'You better have a good lawyer.',
-               "I'll have to take legal action.",
-               'Legal Eagle will be pleased to see this.',
-               'Objection!',
-               'Under article 14 subsection C...',
-               'I see you have broken the law!',
-               "It seems you don't understand the authority of law.",
-              'Guilty! Guilty! Guilty!',
-              'This is an open and shut case.',
-              "You've severely violated the law.",
-              'I never cut a deal.',
-              'Your Statute of Limitations just ran out.',
-              'This case is one for the books.',
-              "There's nothing your lawyer can do now.",
-              'This is the final straw, Toon.',
-              "You've had your chance, Toon.",
-              "I'm putting you away for good."])
+    taunt = getAttackTaunt('ThrowBook', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(headsUp, ActorInterval(suit, 'throw-object', playRate=1.5), suitReset, Func(suit.setNeutralAnimation))
     suitTrack.append(Wait(2.0))
