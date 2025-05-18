@@ -399,7 +399,7 @@ class DistributedCogThiefGame(DistributedMinigame):
             return
         if self.gameIsEnding:
             return
-        self.notify.debug('avatar ' + `avId` + ' hit by a suit')
+        self.notify.debug('avatar ' + repr(avId) + ' hit by a suit')
         if avId != self.localAvId:
             self.showToonHitBySuit(avId, timestamp)
             self.makeSuitRespondToToonHit(timestamp, suitNum)
@@ -415,7 +415,7 @@ class DistributedCogThiefGame(DistributedMinigame):
             oldTrack.finish()
         toon.setPos(curPos)
         toon.setZ(self.TOON_Z)
-        parentNode = render.attachNewNode('mazeFlyToonParent-' + `avId`)
+        parentNode = render.attachNewNode('mazeFlyToonParent-' + repr(avId))
         parentNode.setPos(toon.getPos())
         toon.reparentTo(parentNode)
         toon.setPos(0, 0, 0)
@@ -645,7 +645,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         if self.gameFSM.getCurrentState().getName() not in ['play']:
             self.notify.warning('ignoring msg: av %s hit by suit' % avId)
             return
-        self.notify.debug('avatar ' + `avId` + ' throwing pie')
+        self.notify.debug('avatar ' + repr(avId) + ' throwing pie')
         if avId != self.localAvId:
             pos = Point3(x, y, z)
             self.showToonThrowingPie(avId, timestamp, heading, pos)
@@ -741,7 +741,7 @@ class DistributedCogThiefGame(DistributedMinigame):
             return
         if self.gameIsEnding:
             return
-        self.notify.debug('avatar ' + `avId` + ' hit by a suit')
+        self.notify.debug('avatar ' + repr(avId) + ' hit by a suit')
         if avId != self.localAvId:
             self.makeSuitRespondToPieHit(timestamp, suitNum)
 

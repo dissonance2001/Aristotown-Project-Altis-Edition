@@ -374,7 +374,7 @@ class InGameEditor(AppShell):
             if type(choice) is types.StringType:
                 choiceStr = choice
             else:
-                choiceStr = `choice`
+                choiceStr = repr(choice)
             if choiceStr not in valueDict:
                 valueDict[choiceStr] = choice
             choiceButton = Radiobutton(frame, text=choiceStr, value=choiceStr, variable=radioVar, command=radioCommand)
@@ -425,7 +425,7 @@ class InGameEditor(AppShell):
             if type(choice) is types.StringType:
                 labelStr = choice
             else:
-                labelStr = `choice`
+                labelStr = repr(choice)
             func = Functor(cbCommand, cbVar)
             choiceButton = Checkbutton(frame, text=labelStr, variable=cbVar, command=lambda : func())
             choiceButton.pack(side=LEFT, expand=0)
@@ -550,7 +550,7 @@ class InGameEditor(AppShell):
             if rawFilename != '':
                 filename = Filename.fromOsSpecific(rawFilename)
                 filename.findOnSearchpath(getModelPath().getValue())
-                text.set("'%s'" % `filename`)
+                text.set("'%s'" % repr(filename))
                 handleReturn(None)
             return
 

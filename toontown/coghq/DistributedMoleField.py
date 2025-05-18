@@ -339,7 +339,7 @@ class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBas
                 oldTrack.finish()
         toon.setPos(curPos)
         toon.setZ(self.getZ())
-        parentNode = render.attachNewNode('mazeFlyToonParent-' + `avId`)
+        parentNode = render.attachNewNode('mazeFlyToonParent-' + repr(avId))
         parentNode.setPos(toon.getPos(render))
         toon.reparentTo(parentNode)
         toon.setPos(0, 0, 0)
@@ -385,7 +385,7 @@ class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBas
                 camera.lookAt(toon)
                 return Task.cont
 
-            camTaskName = 'mazeToonFlyCam-' + `avId`
+            camTaskName = 'mazeToonFlyCam-' + repr(avId)
             taskMgr.add(camTask, camTaskName, priority=20)
 
             def cleanupCamTask(self = self, toon = toon, camTaskName = camTaskName, startCamPos = startCamPos):

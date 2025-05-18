@@ -90,7 +90,7 @@ class SafeZoneLoader(StateData.StateData):
         npl = self.geom.findAllMatches('**/=DNARoot=holiday_prop')
         for i in xrange(npl.getNumPaths()):
             np = npl.getPath(i)
-            np.setTag('transformIndex', `i`)
+            np.setTag('transformIndex', repr(i))
             self.holidayPropTransforms[i] = np.getNetTransform()
         gsg = base.win.getGsg()
         if gsg:

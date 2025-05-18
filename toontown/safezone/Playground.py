@@ -451,7 +451,7 @@ class Playground(BattlePlace.BattlePlace):
         elif ds == 'incomplete':
             self.fsm.request('DFAReject')
         else:
-            self.notify.error('Unknown done status for DownloadForceAcknowledge: ' + `doneStatus`)
+            self.notify.error('Unknown done status for DownloadForceAcknowledge: ' + repr(doneStatus))
 
     def enterHFA(self, requestStatus):
         self.acceptOnce(self.hfaDoneEvent, self.enterHFACallback, [requestStatus])
@@ -475,7 +475,7 @@ class Playground(BattlePlace.BattlePlace):
         elif doneStatus['mode'] == 'incomplete':
             self.fsm.request('HFAReject')
         else:
-            self.notify.error('Unknown done status for HealthForceAcknowledge: ' + `doneStatus`)
+            self.notify.error('Unknown done status for HealthForceAcknowledge: ' + repr(doneStatus))
 
     def enterHFAReject(self):
         self.fsm.request('walk')
@@ -499,7 +499,7 @@ class Playground(BattlePlace.BattlePlace):
         elif doneStatus['mode'] == 'incomplete':
             self.fsm.request('NPCFAReject')
         else:
-            self.notify.error('Unknown done status for NPCForceAcknowledge: ' + `doneStatus`)
+            self.notify.error('Unknown done status for NPCForceAcknowledge: ' + repr(doneStatus))
 
     def enterNPCFAReject(self):
         self.fsm.request('walk')

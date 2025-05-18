@@ -61,7 +61,7 @@ class MazeSuit(DirectObject):
         self.suit.delete()
 
     def uniqueName(self, str):
-        return str + `(self.serialNum)`
+        return str + repr(self.serialNum)
 
     def gameStart(self, gameStartTime):
         self.gameStartTime = gameStartTime

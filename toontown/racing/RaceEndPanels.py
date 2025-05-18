@@ -34,7 +34,7 @@ class RaceResultsPanel(DirectFrame):
         for x in xrange(self.numRacers):
             frame = DirectFrame(parent=self, relief=None, pos=self.getRowPos(x))
             self.rowFrame.append(frame)
-            pLabel = DirectLabel(parent=frame, relief=None, pos=(0.0, 0.0, -0.01), text=`(x + 1)` + ' -', text_fg=(0.5, 0.5, 0.5, 1.0), text_scale=TTLocalizer.REPlargeLabel, text_align=TextNode.ARight, text_font=DGG.getDefaultFont())
+            pLabel = DirectLabel(parent=frame, relief=None, pos=(0.0, 0.0, -0.01), text=repr(x + 1) + ' -', text_fg=(0.5, 0.5, 0.5, 1.0), text_scale=TTLocalizer.REPlargeLabel, text_align=TextNode.ARight, text_font=DGG.getDefaultFont())
             fFrame = DirectFrame(parent=frame, relief=None, pos=(0.1, -0.01, 0.01))
             nLabel = DirectLabel(parent=frame, relief=None, pos=(0.46, 0.0, 0.0), text='', text_fg=(0.0, 0.0, 0.0, 1.0), text_scale=TTLocalizer.REPsmallLabel, text_align=TextNode.ACenter, text_font=DGG.getDefaultFont())
             tLabel = DirectLabel(parent=frame, relief=None, pos=(0.9, 0.0, 0.0), text="--'--''--", text_fg=(0.5, 0.5, 0.5, 1.0), text_scale=TTLocalizer.REPsmallLabel, text_font=DGG.getDefaultFont())

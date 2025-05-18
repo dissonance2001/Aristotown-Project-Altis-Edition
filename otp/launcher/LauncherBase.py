@@ -207,7 +207,7 @@ class LauncherBase(DirectObject):
             self.fromCD = 0
         else:
             self.fromCD = tmpVal
-        self.notify.info('patch directory is ' + `(self.fromCD)`)
+        self.notify.info('patch directory is ' + repr(self.fromCD))
         self.dbDir = self.topDir
         self.patchDir = self.topDir
         self.mfDir = self.topDir
@@ -238,7 +238,7 @@ class LauncherBase(DirectObject):
             0.003]
         phaseIdx = 0
         for phase in self.LauncherPhases:
-            percentPhaseCompleteKey = 'PERCENT_PHASE_COMPLETE_' + `phase`
+            percentPhaseCompleteKey = 'PERCENT_PHASE_COMPLETE_' + repr(phase)
             self.setRegistry(percentPhaseCompleteKey, 0)
             self.phaseComplete[phase] = 0
             self.phaseNewDownload[phase] = 0
@@ -932,7 +932,7 @@ class LauncherBase(DirectObject):
         token = 'phase_'
         self.progressSum = self.getProgressSum(token)
         self.progressSum -= self.getProgressSum(token + '2')
-        self.notify.info('total phases to be downloaded = ' + `(self.progressSum)`)
+        self.notify.info('total phases to be downloaded = ' + repr(self.progressSum))
         self.checkClientDbExists()
 
     def prepareClient(self):
@@ -1099,7 +1099,7 @@ class LauncherBase(DirectObject):
         return
 
     def updatePhase(self, phase):
-        self.notify.info('Updating multifiles in phase: ' + `phase`)
+        self.notify.info('Updating multifiles in phase: ' + repr(phase))
         self.setPercentPhaseComplete(self.currentPhase, 0)
         self.phaseMultifileNames = []
         numfiles = self.dldb.getServerNumMultifiles()
@@ -1134,10 +1134,10 @@ class LauncherBase(DirectObject):
             vfs = VirtualFileSystem.getGlobalPtr()
             vfs.mount(localFilename, '.', VirtualFileSystem.MFReadOnly)
             self.setPercentPhaseComplete(self.currentPhase, 100)
-            self.notify.info('Done updating multifiles in phase: ' + `(self.currentPhase)`)
+            self.notify.info('Done updating multifiles in phase: ' + repr(self.currentPhase))
             self.progressSoFar += int(round(self.phaseOverallMap[self.currentPhase] * 100))
-            self.notify.info('progress so far ' + `(self.progressSoFar)`)
-            messenger.send('phaseComplete-' + `(self.currentPhase)`)
+            self.notify.info('progress so far ' + repr(self.progressSoFar))
+            messenger.send('phaseComplete-' + repr(self.currentPhase))
             if nextIndex < len(self.LauncherPhases):
                 self.currentPhase = self.LauncherPhases[nextIndex]
                 self.currentPhaseIndex = nextIndex + 1
@@ -1353,7 +1353,7 @@ class LauncherBase(DirectObject):
         self.patchMultifile()
 
     def getPatchFilename(self, fname, currentVersion):
-        return fname + '.v' + `currentVersion` + '.' + self.patchExtension
+        return fname + '.v' + repr(currentVersion) + '.' + self.patchExtension
 
     def downloadPatches(self):
         if len(self.patchList) > 0:
@@ -1369,7 +1369,7 @@ class LauncherBase(DirectObject):
             else:
                 self.download(serverPatchFilePath, localPatchFilename, self.downloadPatchDone, self.downloadPatchOverallProgress)
         else:
-            self.notify.info('applyNextPatch: Done patching multifile: ' + `(self.currentPhase)`)
+            self.notify.info('applyNextPatch: Done patching multifile: ' + repr(self.currentPhase))
             self.patchDone()
 
     def downloadPatchDone(self):
@@ -1378,7 +1378,7 @@ class LauncherBase(DirectObject):
         self.decompressFile(Filename(self.patchDir, Filename(self.currentPatch + '.pz')), self.decompressPatchDone)
 
     def decompressPatchDone(self):
-        self.notify.info('decompressPatchDone: Patching file: ' + self.currentPatchee + ' from ver: ' + `(self.currentPatchVersion)`)
+        self.notify.info('decompressPatchDone: Patching file: ' + self.currentPatchee + ' from ver: ' + repr(self.currentPatchVersion))
         patchFile = Filename(self.patchDir, Filename(self.currentPatch))
         patchFile.setBinary()
         patchee = Filename(self.mfDir, Filename(self.currentPatchee))
@@ -1396,7 +1396,7 @@ class LauncherBase(DirectObject):
         self.extract(self.currentMfname, localFilename, destDir, self.updateMultifileDone)
 
     def startReextractingFiles(self):
-        self.notify.info('startReextractingFiles: Reextracting ' + `(len(self.reextractList))` + ' files for multifile: ' + self.currentMfname)
+        self.notify.info('startReextractingFiles: Reextracting ' + repr(len(self.reextractList)) + ' files for multifile: ' + self.currentMfname)
         self.launcherMessage(self.Localizer.LauncherRecoverFiles)
         self.currentMfile = Multifile()
         decompressedMfname = os.path.splitext(self.currentMfname)[0]
@@ -1415,12 +1415,12 @@ class LauncherBase(DirectObject):
                     self.notify.warning('reextractNextFile: Failure on reextract.')
                     failure = 1
             else:
-                self.notify.warning('reextractNextFile: File not found in multifile: ' + `currentReextractFile`)
+                self.notify.warning('reextractNextFile: File not found in multifile: ' + repr(currentReextractFile))
                 failure = 1
 
         if failure:
             sys.exit()
-        self.notify.info('reextractNextFile: Done reextracting files for multifile: ' + `(self.currentPhase)`)
+        self.notify.info('reextractNextFile: Done reextracting files for multifile: ' + repr(self.currentPhase))
         del self.currentMfile
         self.updateMultifileDone()
 
@@ -1454,7 +1454,7 @@ class LauncherBase(DirectObject):
                 sys.exit()
             return
         elif clientVer > 1:
-            self.notify.info('patchMultifile: Old version for multifile: ' + self.currentMfname + ' Client ver: ' + `clientVer`)
+            self.notify.info('patchMultifile: Old version for multifile: ' + self.currentMfname + ' Client ver: ' + repr(clientVer))
             self.maybeStartGame()
             self.totalPatchDownload = 0
             self.patchDownloadSoFar = 0
@@ -1466,7 +1466,7 @@ class LauncherBase(DirectObject):
                 if self.currentPhase == 3:
                     self.totalPatchDownload += self.getProgressSum(patch)
 
-            self.notify.info('total patch to be downloaded = ' + `(self.totalPatchDownload)`)
+            self.notify.info('total patch to be downloaded = ' + repr(self.totalPatchDownload))
             self.downloadPatches()
             return
 
@@ -1605,7 +1605,7 @@ class LauncherBase(DirectObject):
              percent,
              self.getBandwidth(),
              self.byteRate])
-            percentPhaseCompleteKey = 'PERCENT_PHASE_COMPLETE_' + `phase`
+            percentPhaseCompleteKey = 'PERCENT_PHASE_COMPLETE_' + repr(phase)
             self.setRegistry(percentPhaseCompleteKey, percent)
             self.overallComplete = int(round(percent * self.phaseOverallMap[phase])) + self.progressSoFar
             self.setRegistry('PERCENT_OVERALL_COMPLETE', self.overallComplete)

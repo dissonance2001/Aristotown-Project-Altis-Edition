@@ -1457,7 +1457,7 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def handlePlayGame(self, msgType, di):
         if self.notify.getDebug():
-            self.notify.debug('handle play game got message type: ' + `msgType`)
+            self.notify.debug('handle play game got message type: ' + repr(msgType))
 
         if msgType == CLIENT_ENTER_OBJECT_REQUIRED:
             self.handleGenerateWithRequired(di)

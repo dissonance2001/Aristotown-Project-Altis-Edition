@@ -11,7 +11,7 @@ class CogdoFlyingLevelQuadrant:
         self.serialNum = serialNum
         self._model = model
         self._level = level
-        self._root = NodePath('Quadrant' + `serialNum`)
+        self._root = NodePath('Quadrant' + repr(serialNum))
         self._model.reparentTo(self._root)
         self._root.reparentTo(parent)
         self._visible = True

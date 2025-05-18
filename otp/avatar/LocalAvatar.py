@@ -1169,7 +1169,7 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         node = base.camera.getParent()
         pos = base.cam.getPos(node)
         hpr = base.cam.getHpr(node)
-        print 'cam pos = ', `pos`, ', cam hpr = ', `hpr`
+        print 'cam pos = ', repr(pos), ', cam hpr = ', repr(hpr)
 
     def d_broadcastPositionNow(self):
         self.d_clearSmoothing()

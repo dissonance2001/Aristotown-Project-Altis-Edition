@@ -500,7 +500,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         elif doneStatus['mode'] == 'incomplete':
             self.fsm.request('DFAReject')
         else:
-            Place.notify.error('Unknown done status for DownloadForceAcknowledge: ' + `doneStatus`)
+            Place.notify.error('Unknown done status for DownloadForceAcknowledge: ' + repr(doneStatus))
 
     def enterDFAReject(self):
         self.fsm.request('walk')

@@ -155,7 +155,7 @@ class ToontownLauncher(LauncherBase):
         elif t == types.StringType:
             WindowsRegistry.setStringValue(self.toontownRegistryKey, name, value)
         else:
-            self.notify.warning('setRegistry: Invalid type for registry value: ' + `value`)
+            self.notify.warning('setRegistry: Invalid type for registry value: ' + repr(value))
 
     def getRegistry(self, name, missingValue=None):
         self.notify.info('getRegistry%s' % ((name, missingValue),))
