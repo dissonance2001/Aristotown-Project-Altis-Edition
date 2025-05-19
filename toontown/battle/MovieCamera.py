@@ -2207,8 +2207,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3.7))
         camTrack.append(moveShot(-21.0, 8.0, 8.0, -120, 0, 0, 0.5))
         camTrack.append(heldShot(-21.0, 8.0, 8.0, -120, 0, 0, attackDuration - 3.7))
-    elif name == BLACK_ORB:
-        camTrack.append(defaultCamera(openShotDuration=2.7))
+    # elif name == BLACK_ORB:
+    #     camTrack.append(defaultCamera(openShotDuration=2.7))
     elif name == HEAVY_RAINFALL:
         camTrack2 = Sequence(defaultCamera(attackDuration=4.0, openShotDuration=1.0),
                              defaultCamera(attackDuration=5.0, openShotDuration=1.0), randomActorShot(suit, battle, attackDuration - 9, 'suit'))
@@ -3311,9 +3311,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpTrack4 = pbpText.getShowInterval('Fired!', 3.5)
         return Parallel(pbpTrack4, camTrack2)
-    elif name == WATERCOOLER:
-        camTrack.append(defaultCamera())
-    elif name == BLACK_ORB:
+    elif name == BLACK_ORB or name == WATERCOOLER:
         camTrack.append(defaultCamera())
     elif name == WITHDRAWAL:
         camTrack.append(defaultCamera(openShotDuration=1.2))

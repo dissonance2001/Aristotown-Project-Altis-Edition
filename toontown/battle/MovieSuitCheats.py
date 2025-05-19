@@ -1979,74 +1979,6 @@ def doUnionCalculations(attack):
     suitTrack.append(doUnionDues(attack))
     return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
 
-def doWatercoolerGroup(attack):
-    suit = attack['suit']
-    battle = attack['battle']
-    targets = attack['target']
-    toon = targets[0]['toon']
-    dmg = targets[0]['hp']
-    watercooler2 = globalPropPool.getProp('cc_a_prp_bat_watercooler')
-    watercooler = globalPropPool.getProp('watercooler')
-    watercooler.setScale(.1)
-
-    def getCoolerSpout(watercooler = watercooler):
-        spout = watercooler.find('**/joint_toSpray')
-        return spout.getPos(render)
-
-    suitTrack = getSuitAnimTrack(attack)
-    coolerPosPoints = [Point3(-0.75, 0.25, -0.1), VBase3(91.352, 0.0, 180.0)]
-    posPoints = [Point3(0, 0, 0), VBase3(0, 0, 0)]
-    scaleUpPoint = Point3(1.1, 1.1, 1.1)
-    propTrackNew = Sequence(
-        getPropTrack(watercooler2, suit.getLeftHand(), coolerPosPoints, 1e-06, 0, scaleUpPoint=scaleUpPoint, anim=1,
-                     animStartTime=0.5, animDuration=5.4, propName='cc_a_prp_bat_watercooler'), Wait(1.6))
-    propTrack = Sequence(Wait(1.01), Func(__showProp, watercooler, suit.getLeftHand(), posPoints[0], posPoints[1]), LerpScaleInterval(watercooler, 0.5, Point3(0.1, 0.1, 0.1)), Wait(1.6))
-    sprayTracks = Parallel()
-    for t in targets:
-        toon = t['toon']
-        dmg = t['hp']
-        hitPoint = lambda toon = toon: __toonFacePoint(toon)
-        missPoint = lambda prop = watercooler, toon = toon: __toonMissPoint(prop, toon, 0, parent=render)
-        hitSprayTrack = MovieUtil.getSprayTrack(battle, Point4(0.75, 0.75, 1.0, 0.8), getCoolerSpout, hitPoint, 0.2, 0.2, 0.2, horizScale=0.3, vertScale=0.3)
-        missSprayTrack = MovieUtil.getSprayTrack(battle, Point4(0.75, 0.75, 1.0, 0.8), getCoolerSpout, missPoint, 0.2, 0.2, 0.2, horizScale=0.3, vertScale=0.3)
-        toonTracks = Sequence(ActorInterval(toon, 'cringe', endTime=2))
-        damageTrack = Parallel(Func(toon.showHpText, -dmg, openEnded=0),
-                Func(__doDamage, toon, dmg, t['died'])
-            )
-        toonTracksMiss = Sequence(ActorInterval(toon, 'jump'))
-        damageTrackMiss = Parallel(Func(toon.showHpTextRed, "MISSED", 10))
-        if dmg > 0:
-            sprayTracks.append(hitSprayTrack)
-            sprayTracks.append(toonTracks)
-            sprayTracks.append(damageTrack)
-        else:
-            sprayTracks.append(missSprayTrack)
-            sprayTracks.append(toonTracksMiss)
-            sprayTracks.append(damageTrackMiss)
-
-    propTrack.append(sprayTracks)
-    propTrack += [Wait(0.01), LerpScaleInterval(watercooler, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProp, watercooler)]
-    propTrackNew += [Wait(0.01), LerpScaleInterval(watercooler2, 0.5, MovieUtil.PNT3_NEARZERO),
-                     Func(MovieUtil.removeProp, watercooler2)]
-    splashTracks = Parallel()
-    for t in targets:
-        if t['hp'] > 0:
-
-            def prepSplash(splash, targetPoint):
-                splash.reparentTo(render)
-                splash.setPos(targetPoint)
-                scale = splash.getScale()
-                splash.setBillboardPointWorld()
-                splash.setScale(scale)
-
-            splash = globalPropPool.getProp('splash-from-splat')
-            splash.setColor(0.75, 0.75, 1, 0.8)
-            splash.setScale(0.3)
-            splashTracks.append(Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(3.2), Func(prepSplash, splash, __toonFacePoint(toon)), ActorInterval(splash, 'splash-from-splat'), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash)))
-
-    soundTrack = Sequence(Wait(1.1), SoundInterval(globalBattleSoundCache.getSound('SA_watercooler_appear_only.ogg'), node=suit, duration=1.4722), Wait(0.4), SoundInterval(globalBattleSoundCache.getSound('SA_watercooler_spray_only.ogg'), node=suit, duration=2.313))
-    return Parallel(suitTrack, propTrack, propTrackNew, soundTrack, splashTracks)
-
 
 def doShred(attack):
     suit = attack['suit']
@@ -13427,51 +13359,56 @@ def doBounceCheckPecking(attack):
 def doWatercooler(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    watercooler2 = globalPropPool.getProp('cc_a_prp_bat_watercooler')
-    watercooler = globalPropPool.getProp('watercooler')
-    watercooler.setScale(.1)
+    targets = attack['target']
+    watercooler = globalPropPool.getProp('cc_a_prp_bat_watercooler')
 
     def getCoolerSpout(watercooler = watercooler):
-        spout = watercooler.find('**/joint_toSpray')
+        spout = watercooler.find('**/Dispenser') # Unlike the previous model, it appears that the spout's node is Dispenser.
         return spout.getPos(render)
 
-    hitPoint = lambda toon = toon: __toonFacePoint(toon)
-    missPoint = lambda prop = watercooler, toon = toon: __toonMissPoint(prop, toon, 0, parent=render)
-    coolerPosPoints = [Point3(-0.75, 0.25, -0.1), VBase3(91.352, 0.0, 180.0)]
-    hitSprayTrack = MovieUtil.getSprayTrack(battle, Point4(0.75, 0.75, 1.0, 0.8), getCoolerSpout, hitPoint, 0.2, 0.2, 0.2, horizScale=0.3, vertScale=0.3)
-    missSprayTrack = MovieUtil.getSprayTrack(battle, Point4(0.75, 0.75, 1.0, 0.8), getCoolerSpout, missPoint, 0.2, 0.2, 0.2, horizScale=0.3, vertScale=0.3)
-    suitTrack = getSuitTrack(attack)
-    posPoints = [Point3(0, 0, 0), VBase3(20.403, 33.158, 69.511)]
-    scaleUpPoint = Point3(1.1, 1.1, 1.1)
-    propTrackNew = Sequence(getPropTrack(watercooler2, suit.getLeftHand(), coolerPosPoints, 1e-06, 0, scaleUpPoint=scaleUpPoint, anim=1, animStartTime=0.5, animDuration=5.4, propName='cc_a_prp_bat_watercooler'), Wait(1.6))
-    propTrack = Sequence(Wait(1.01), Func(__showProp, watercooler, suit.getLeftHand(), posPoints[0], posPoints[1]), LerpScaleInterval(watercooler, 0.5, Point3(.1, .1, .1)), Wait(1.6))
-    if dmg > 0:
-        propTrack.append(hitSprayTrack)
-    else:
-        propTrack.append(missSprayTrack)
-    propTrack += [Wait(0.01), LerpScaleInterval(watercooler, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProp, watercooler)]
-    propTrackNew += [Wait(0.01), LerpScaleInterval(watercooler2, 0.5, MovieUtil.PNT3_NEARZERO),
-                  Func(MovieUtil.removeProp, watercooler2)]
-    splashTrack = Sequence()
-    if dmg > 0:
+    suitTrack = getSuitAnimTrack(attack) # I'm not going to have the Cog turn since it appears that, ever since Clash v1.7, Cogs no longer turn to face the Toon when performing the Watercooler attack.
+    posPoints = [Point3(0.5, 0.2, 0), VBase3(90, 0, 180)]
+    # Not a huge fan of how getPropTrack() is handling the watercooler prop.  I'll create my own version, then.
+    propTrack = Sequence(
+        Func(__showProp, watercooler, suit.getLeftHand(), *posPoints),
+        ActorInterval(watercooler, 'cc_a_prp_bat_watercooler'),
+        Func(MovieUtil.removeProp, watercooler)
+    )
+    sprayTracks = Parallel()
+    splashTracks = Parallel()
 
-        def prepSplash(splash, targetPoint):
-            splash.reparentTo(render)
-            splash.setPos(targetPoint)
-            scale = splash.getScale()
-            splash.setBillboardPointWorld()
-            splash.setScale(scale)
+    def prepSplash(splash, targetPoint):
+        splash.reparentTo(render)
+        splash.setPos(targetPoint)
+        scale = splash.getScale()
+        splash.setBillboardPointWorld()
+        splash.setScale(scale)
 
-        splash = globalPropPool.getProp('splash-from-splat')
-        splash.setColor(0.75, 0.75, 1, 0.8)
-        splash.setScale(0.3)
-        splashTrack = Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(3.2), Func(prepSplash, splash, __toonFacePoint(toon)), ActorInterval(splash, 'splash-from-splat'), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash))
-    toonTrack = getToonTrack(attack, suitTrack.getDuration() - 1.5, ['cringe'], 2.4, ['sidestep'])
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        hitPoint = lambda toon = toon: __toonFacePoint(toon)
+        missPoint = lambda prop = watercooler, toon = toon: __toonMissPoint(prop, toon, 0, parent=render)
+        sprayTrack = Sequence()
+        sprayTrack.append(Wait(3.11))
+        sprayTrack.append(MovieUtil.getSprayTrack(battle, Point4(0.75, 0.75, 1.0, 0.8), getCoolerSpout, hitPoint if dmg > 0 else missPoint, 0.2, 0.2, 0.2, horizScale=0.3, vertScale=0.3))
+        sprayTracks.append(sprayTrack)
+        if dmg > 0:
+            splash = globalPropPool.getProp('splash-from-splat')
+            splash.setColor(0.75, 0.75, 1, 0.8)
+            splash.setScale(0.3)
+            splashTracks.append(Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(3.2), Func(prepSplash, splash, __toonFacePoint(toon)), ActorInterval(splash, 'splash-from-splat'), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash)))
+
+    dodgeAnims = []
+    dodgeAnims.append(['jump',
+     0.01,
+     0,
+     0.6])
+    dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.0, startTime=0.6))
+    dodgeAnims.append(['jump', 0, 0.91])
+    toonTracks = getToonTracks(attack, damageDelay=suitTrack.getDuration() - 1.5, damageAnimNames=['cringe'], dodgeDelay=2.4, splicedDodgeAnims=dodgeAnims)
     soundTrack = Sequence(Wait(1.1), SoundInterval(globalBattleSoundCache.getSound('SA_watercooler_appear_only.ogg'), node=suit, duration=1.4722), Wait(0.4), SoundInterval(globalBattleSoundCache.getSound('SA_watercooler_spray_only.ogg'), node=suit, duration=2.313))
-    return Parallel(suitTrack, toonTrack, propTrackNew, soundTrack, propTrack, splashTrack)
+    return Parallel(suitTrack, toonTracks, propTrack, sprayTracks, soundTrack, splashTracks)
 
 def doAceInTheHoleNew(attack):
     suitHighRoller = attack['suit']
