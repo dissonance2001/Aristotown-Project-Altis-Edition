@@ -501,13 +501,13 @@ th = (('magic1', 'magic1', 4), #Rainmaker
         ('magic3', 'magic3', 4),
       ('lose3', 'wrecked', 4),
         ('glower', 'glower', 4))
-kc = (('mob-mentality', 'mob-mentality', 4), #Witch Hunter
-        ('sanction', 'sanction', 4),
-        ('speak', 'speak', 4),
-      ('lose3', 'wrecked', 4),
-        ('throw-object', 'throw-object', 4),
-        ('throw-paper', 'throw-paper', 4),
-        ('magic1', 'magic1', 4))
+whunter = (('mob-mentality', 'mob-mentality', 4), #Witch Hunter
+           ('sanction', 'sanction', 4),
+           ('speak', 'speak', 4),
+           ('lose3', 'wrecked', 4),
+           ('throw-object', 'throw-object', 4),
+           ('throw-paper', 'throw-paper', 4),
+           ('magic1', 'magic1', 4))
 tr = (('snap', 'mob-mentality', 4), #Count Erclaim
         ('pickpocket', 'defense', 4),
         ('throw-object', 'throw-object', 4),
@@ -927,12 +927,13 @@ jb = (('smile', 'smile', 4), #Mr. Hollywood (MP)
        ('golf-club-swing', 'golf-club-swing', 4),
        ('song-and-dance', 'song-and-dance', 4),
       ('neutral', 'rolled', 4))
-jg = (('pickpocket', 'rushjob', 4), #Prethinker
-        ('sanction', 'rushjob', 4),
-        ('effort', 'effort', 4), ('lose3', 'wrecked', 4),
-        ('magic3', 'magic3', 4),
-        ('magic2', 'magic2', 4),
-        ('speak', 'speak', 4))
+prethink = (('pickpocket', 'rushjob', 4), #Prethinker
+            ('sanction', 'rushjob', 4),
+            ('effort', 'effort', 4),
+            ('lose3', 'wrecked', 4),
+            ('magic3', 'magic3', 4),
+            ('magic2', 'magic2', 4),
+            ('speak', 'speak', 4))
 jr = (('throw-paper', 'throw-paper', 4), # Multislacker
       ('magic1', 'magic1', 4),
 ('magic2', 'magic2', 4),
@@ -2989,7 +2990,7 @@ class Suit(Avatar.Avatar):
             self.generateHead3('rainmaker', animated=True)
             self.setHeight(7.5)
             self.setTransparency(1)
-        elif dna.name == 'kc':
+        elif dna.name == 'whunter':
             self.scale = 6.0 / aSize
             self.handColor = VBase4(0.49, 0.494, 0.675, 1)
             self.generateBody()
@@ -3439,7 +3440,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.generateHead('shades')
             self.setHeight(8.95)
-        elif dna.name == 'jg':
+        elif dna.name == 'prethink':
             self.scale = 4.5 / bSize
             self.handColor = VBase4(0.682, 0.604, 0.765, 1)
             self.generateBody()
@@ -7699,7 +7700,7 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'ggm' and not self.isSkeleton:
             loadDialog(1)
             return MouthpieceDialogArray
-        if self.style.name == 'kc' and not self.isSkeleton:
+        if self.style.name == 'whunter' and not self.isSkeleton:
             loadDialog(1)
             return WitchHunterDialogArray
         if self.style.name == 'tr' and not self.isSkeleton:
@@ -7789,7 +7790,7 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'msp' and not self.isSkeleton:
             loadDialog(1)
             return CountErfitDialogArray
-        if self.style.name == 'jg' and not self.isSkeleton:
+        if self.style.name == 'prethink' and not self.isSkeleton:
             loadDialog(1)
             return PrethinkerDialogArray
         if self.style.name == 'jr' and not self.isSkeleton:

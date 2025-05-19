@@ -55,7 +55,7 @@ suitHeadTypes = ['f',
  'cm',
  'ggm',
                  'th',
-                 'kc',
+ 'whunter',
                  'tr',
                  'mp',
                  'laa',
@@ -111,7 +111,7 @@ suitHeadTypes = ['f',
  'fd',
  'fm',
                  'jb',
-                 'jg',
+ 'prethink',
                  'jr',
                  'prr',
                  'blr',
@@ -223,7 +223,7 @@ suitATypes = [
               'arb',
               'sjg',
               'lsc',
-              'kc',
+ 'whunter',
               'laa',
               'csm',
               'ste',
@@ -318,7 +318,7 @@ suitBTypes = ['p',
               'isw',
               'fb',
               'sft',
-              'jg']
+              'prethink']
 suitCTypes = ['f',
               'hh',
               'cpl',
@@ -562,7 +562,7 @@ class SuitDNA(AvatarDNA.AvatarDNA):
         dg = PyDatagram()
         dg.addFixedString(self.type, 1)
         if self.type == 's':
-            dg.addFixedString(self.name, 3)
+            dg.addFixedString(self.name, 20)
             dg.addFixedString(self.dept, 1)
         elif self.type == 'b':
             dg.addFixedString(self.dept, 1)
@@ -578,7 +578,7 @@ class SuitDNA(AvatarDNA.AvatarDNA):
         dgi = PyDatagramIterator(dg)
         self.type = dgi.getFixedString(1)
         if self.type == 's':
-            self.name = dgi.getFixedString(3)
+            self.name = dgi.getFixedString(20)
             self.dept = dgi.getFixedString(1)
             self.body = getSuitBodyType(self.name)
         elif self.type == 'b':

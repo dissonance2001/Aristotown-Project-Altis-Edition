@@ -246,7 +246,7 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 15
     elif name == 'th':
         actualLevel = relLevel + 15
-    elif name == 'kc':
+    elif name == 'whunter':
         actualLevel = relLevel + 19
     elif name == 'tr':
         actualLevel = relLevel + 19
@@ -284,7 +284,7 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 19
     elif name == 'mdr':
         actualLevel = relLevel + 12
-    elif name == 'jg':
+    elif name == 'prethink':
         actualLevel = relLevel + 11
     elif name == 'jr':
         actualLevel = relLevel + 23
@@ -556,7 +556,7 @@ SuitSizes = {
     'hho': 7.0,
 }
 
-SpecialCogDict = ('ddv', 'sya', 'fhj', 'dty', 'dar', 'dsf', 'nhy', 'wrt', 'auh', 'dfg', 'msp', 'dfr', 'bsh', 'ghd', 'tyh', 'jgd', 'dsf', 'bby', 'dvk', 'otm', 'cry', 'tcm', 'bg', 'msr', 'kb', 'ts', 'tc', 'tg', 'tb', 'adc', 'drm', 'cp', 'fbd', 'frs', 'gtk', 'jur', 'tlr', 'cm', 'ggm', 'th', 'kc', 'tr', 'mp', 'laa', 'scg', 'csm', 'ste', 'lit', 'bgr', 'mes', 'dm', 'tcc', 'fb', 'jl', 'gb', 'lbs', 'trk', 'mad', 'crf', 'mdr', 'nar', 'fd', 'fm', 'jg', 'jr', 'prr', 'blr', 'dvp', 'dsk', 'ffm', 'sft')
+SpecialCogDict = ('ddv', 'sya', 'fhj', 'dty', 'dar', 'dsf', 'nhy', 'wrt', 'auh', 'dfg', 'msp', 'dfr', 'bsh', 'ghd', 'tyh', 'jgd', 'dsf', 'bby', 'dvk', 'otm', 'cry', 'tcm', 'bg', 'msr', 'kb', 'ts', 'tc', 'tg', 'tb', 'adc', 'drm', 'cp', 'fbd', 'frs', 'gtk', 'jur', 'tlr', 'cm', 'ggm', 'th', 'whunter', 'tr', 'mp', 'laa', 'scg', 'csm', 'ste', 'lit', 'bgr', 'mes', 'dm', 'tcc', 'fb', 'jl', 'gb', 'lbs', 'trk', 'mad', 'crf', 'mdr', 'nar', 'fd', 'fm', 'prethink', 'jr', 'prr', 'blr', 'dvp', 'dsk', 'ffm', 'sft')
 
 SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Flunky', # cogs singular name, for tasks
@@ -1966,31 +1966,31 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (28,),
                (70,),
                (25,)))},
- 'jg': {'name': 'Prethinker',
-        'singularname': 'a Prethinker',
-		'pluralname': 'Prethinkers',
-		'level': 20,
-		'hp':(1000,),
-		'def':(60,),
-		'freq':(0,),
-		'acc':(75,),
-		'attacks':
-		        (('BuzzWord',
-				    (28,),
-					(100,),
-					(25,)),
-                ('BrainStorm',
-				    (28,),
-					(100,),
-					(25,)),
-                ('ParadigmShift',
-				    (24,),
-					(100,),
-					(25,)),
-                ('ReOrg',
-				    (29,),
-					(100,),
-					(25,)))},
+ 'prethink': {'name': 'Prethinker',
+              'singularname': 'a Prethinker',
+		      'pluralname': 'Prethinkers',
+		      'level': 20,
+		      'hp':(1000,),
+		      'def':(60,),
+		      'freq':(0,),
+		      'acc':(75,),
+		      'attacks':
+		              (('BuzzWord',
+				          (28,),
+					      (100,),
+					      (25,)),
+                      ('BrainStorm',
+				          (28,),
+					      (100,),
+					      (25,)),
+                      ('ParadigmShift',
+				          (24,),
+					      (100,),
+					      (25,)),
+                      ('ReOrg',
+				          (29,),
+					      (100,),
+					      (25,)))},
  'jr': {'name': 'Multislacker',
         'singularname': 'a Multislacker',
 		'pluralname': 'Multislackers',
@@ -3679,35 +3679,35 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (35,),
               (100,),
               (25,)))},
- 'kc': {'name': 'Witch Hunter',
-        'singularname': 'a Witch Hunter',
-		'pluralname': 'Witch Hunters',
-		'level': 20,
-		'hp':(3750,),
-		'def':(60,),
-		'freq':(0,),
-		'acc':(75,),
-		'attacks':
-		        (('MobMentality',
-				    (1,),
-					(100,),
-					(0,)),
-                ('Sacked',
-				    (19,),
-					(100,),
-					(25,)),
-                ('HotAir',
-				    (20,),
-					(100,),
-					(25,)),
-                ('GuiltTrip',
-				    (16,),
-					(100,),
-					(25,)),
-                ('LawBook',
-				    (21,),
-					(100,),
-					(25,)))},
+ 'whunter': {'name': 'Witch Hunter',
+             'singularname': 'a Witch Hunter',
+		     'pluralname': 'Witch Hunters',
+		     'level': 20,
+		     'hp':(3750,),
+		     'def':(60,),
+		     'freq':(0,),
+		     'acc':(75,),
+		     'attacks':
+		             (('MobMentality',
+		     		    (1,),
+		     			(100,),
+		     			(0,)),
+                     ('Sacked',
+		     		    (19,),
+		     			(100,),
+		     			(25,)),
+                     ('HotAir',
+		     		    (20,),
+		     			(100,),
+		     			(25,)),
+                     ('GuiltTrip',
+		     		    (16,),
+		     			(100,),
+		     			(25,)),
+                     ('LawBook',
+		     		    (21,),
+		     			(100,),
+		     			(25,)))},
  'tr': {'name': 'Count Erclaim',
         'singularname': 'a Count Erclaim',
 		'pluralname': 'Count Erclaims',

@@ -99,7 +99,7 @@ ggm - Mouthpiece Level 16.mgr
 
 	Kudos Managers:
 th - Rainmaker Level 16.mgr
-kc - Witch Hunter Level 20.mgr 
+whunter - Witch Hunter Level 20.mgr 
 
 	Lawbot Litigation Team:
 scg - Scapegoat Level 30.mgr
@@ -194,7 +194,7 @@ fm - Bellringer Level 13.mgr
 jb - Mr. Hollywood (MP) Level 25.exe
 
 	Kudos Managers:
-jg - Prethinker Level 12.mgr
+prethink - Prethinker Level 12.mgr
 jr - Multislacker Level 24.mgr
 sft - Pacesetter Level 66.mgr
 
