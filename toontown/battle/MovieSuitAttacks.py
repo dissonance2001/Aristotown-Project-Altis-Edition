@@ -1059,6 +1059,28 @@ def getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs):
     return Sequence(Wait(startDelay), ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True))
 
 
+def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelative = 1):
+    '''
+    Author: Professor Control
+    '''
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    partTracks = Parallel()
+    origHpr = battle.getActorPosHpr(suit)[1]
+    for i in xrange(len(targets)):
+        tgt = targets[i]
+        toon = tgt['toon']
+        origHpr = battle.getActorPosHpr(suit)[1] # We only want the rotation.
+        particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
+        suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
+        particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
+        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]))
+
+    suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
+    return partTracks
+
+
 def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 0.0001, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, target = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
     if not target:
         target = attack['target'][0]
@@ -11476,11 +11498,11 @@ def doHeadShrink(attack):
 def doRolodex(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
+    targets = attack['target']
+    toon = targets[0]['toon'] # I normally do not want to, but I'll leave this because the only thing that really needs it is hitPoint, which is pretty much for nothing since Anesidora reveals Disney's Toontown Online cut out one of their Rolodex particles that would have used it.
     rollodex = globalPropPool.getProp('rollodex')
     particleEffect2 = BattleParticles.createParticleEffect(file='rollodexWaterfall')
-    particleEffect3 = BattleParticles.createParticleEffect(file='rollodexStream')
+    particleEffects3 = [BattleParticles.createParticleEffect(file='rollodexStream') for t in targets]
     suitType = getSuitBodyType(attack['suitName'])
     propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
     propScale = Point3(1.2, 1.2, 1.2)
@@ -11494,21 +11516,21 @@ def doRolodex(attack):
     dodgeDelay = 1.9
     hitPoint = lambda toon = toon: __toonFacePoint(toon)
     partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, suit, 0])
-    partTrack3 = getPartTrack(particleEffect3, part3Delay, part3Duration, [particleEffect3, suit, 0])
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    partTracks3 = getPartTracks(attack, particleEffects3, part3Delay, part3Duration, 0)
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.7, scaleUpPoint=propScale, anim=0, propName='rollodex', animDuration=0, animStartTime=0)
-    toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
+    toonTracks = getToonTracks(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
     soundTrack = getSoundTrack('SA_rolodex.ogg', delay=1.8, node=suit)
-    return Parallel(suitTrack, toonTrack, propTrack, soundTrack, partTrack2, partTrack3)
+    return Parallel(suitTrack, toonTracks, propTrack, soundTrack, partTrack2, partTracks3)
 
 def doRolodexBindings(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
+    targets = attack['target']
+    toon = targets[0]['toon']
     rollodex = globalPropPool.getProp('rollodex')
     particleEffect2 = BattleParticles.createParticleEffect(file='rollodexWaterfall')
-    particleEffect3 = BattleParticles.createParticleEffect(file='rollodexStream')
+    particleEffects3 = [BattleParticles.createParticleEffect(file='rollodexStream') for t in targets]
     suitType = getSuitBodyType(attack['suitName'])
     propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
     propScale = Point3(1.2, 1.2, 1.2)
@@ -11522,34 +11544,28 @@ def doRolodexBindings(attack):
     dodgeDelay = 1.9
     hitPoint = lambda toon = toon: __toonFacePoint(toon)
     partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, suit, 0])
-    partTrack3 = getPartTrack(particleEffect3, part3Delay, part3Duration, [particleEffect3, suit, 0])
-    battle = attack['battle']
-    toon = target[0]['toon']
-    targetPos = toon.getPos(battle)
-    headsUp = Func(suit.headsUp, battle, targetPos)
+    partTracks3 = getPartTracks(attack, particleEffects3, part3Delay, part3Duration, 0)
     taunt = random.choice(
         ["Hmph...", "Hrnhmpf...",
          "Hrm...",
          "Hm, hm..."])
-    origPos, origHpr = battle.getActorPosHpr(suit)
-    suitReset = Func(suit.setHpr, battle, origHpr)
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    suitTrack = Sequence(headsUp, ActorInterval(suit, 'roll-o-dex', playRate=1.25), suitReset, Func(suit.setNeutralAnimation))
+    suitTrack = Sequence(ActorInterval(suit, 'roll-o-dex', playRate=1.25), Func(suit.setNeutralAnimation))
     propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.7, scaleUpPoint=propScale, anim=0, propName='rollodex', animDuration=0, animStartTime=0)
-    toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
+    toonTracks = getToonTracks(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
     soundTrack = getSoundTrack('SA_rolodex.ogg', delay=1.8, node=suit)
     #suitTrack.append(Wait(1.0))
     #suitTrack.append(doLegalBindings(attack))
-    return Parallel(suitTrack, toonTrack, propTrack, tauntInterval, soundTrack, partTrack2, partTrack3)
+    return Parallel(suitTrack, toonTracks, propTrack, tauntInterval, soundTrack, partTrack2, partTracks3)
 
 def doRolodexAggrandized(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
+    targets = attack['target']
+    toon = targets[0]['toon']
     rollodex = globalPropPool.getProp('rollodex')
     particleEffect2 = BattleParticles.createParticleEffect(file='rollodexWaterfall')
-    particleEffect3 = BattleParticles.createParticleEffect(file='rollodexStream')
+    particleEffects3 = [BattleParticles.createParticleEffect(file='rollodexStream') for t in targets]
     suitType = getSuitBodyType(attack['suitName'])
     propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
     propScale = Point3(1.2, 1.2, 1.2)
@@ -11563,11 +11579,7 @@ def doRolodexAggrandized(attack):
     dodgeDelay = 1.9
     hitPoint = lambda toon = toon: __toonFacePoint(toon)
     partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, suit, 0])
-    partTrack3 = getPartTrack(particleEffect3, part3Delay, part3Duration, [particleEffect3, suit, 0])
-    battle = attack['battle']
-    toon = target[0]['toon']
-    targetPos = toon.getPos(battle)
-    headsUp = Func(suit.headsUp, battle, targetPos)
+    partTracks3 = getPartTracks(attack, particleEffects3, part3Delay, part3Duration, 0)
     # Professor Control: No clue what to do here because it depends on the Chainsaw Consultant's phase.
     if suit.isChainsawPhase3:
         taunt = random.choice(
@@ -11582,12 +11594,10 @@ def doRolodexAggrandized(attack):
              "Is this how I can contact you?", "I've got you covered from A to Z.", "You'll flip over this.",
              "I've got your number right here.", "Take this for a spin.", "Your card's in here somewhere.",
              "Watch out for paper cuts."])
-    origPos, origHpr = battle.getActorPosHpr(suit)
-    suitReset = Func(suit.setHpr, battle, origHpr)
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    suitTrack = Sequence(headsUp, ActorInterval(suit, 'roll-o-dex', playRate=1.25), suitReset, Func(suit.setNeutralAnimation))
+    suitTrack = Sequence(ActorInterval(suit, 'roll-o-dex', playRate=1.25), Func(suit.setNeutralAnimation))
     propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.7, scaleUpPoint=propScale, anim=0, propName='rollodex', animDuration=0, animStartTime=0)
-    toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
+    toonTracks = getToonTracks(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
     soundTrack = getSoundTrack('SA_rolodex.ogg', delay=1.8, node=suit)
     soundTrack2 = getSoundTrack('SA_scabbard.ogg', node=suit)
     for headPart in suit.animatedHeadParts:
@@ -11606,16 +11616,16 @@ def doRolodexAggrandized(attack):
              "You don't think we're going down that easily, do you?"])
     suitTrack.append(Parallel(headInterval, soundTrack2, Func(suit.setChatAbsolute, taunt2, CFSpeech | CFTimeout), ActorInterval(suit, 'scabbard')))
     suitTrack.append(Func(suit.setChatAbsolute, '', CFSpeech | CFTimeout))
-    return Parallel(suitTrack, toonTrack, propTrack, tauntInterval, soundTrack, partTrack2, partTrack3)
+    return Parallel(suitTrack, toonTracks, propTrack, tauntInterval, soundTrack, partTrack2, partTracks3)
 
 def doRolodexBookKeeping(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
+    targets = attack['target']
+    toon = targets[0]['toon']
     rollodex = globalPropPool.getProp('rollodex')
     particleEffect2 = BattleParticles.createParticleEffect(file='rollodexWaterfall')
-    particleEffect3 = BattleParticles.createParticleEffect(file='rollodexStream')
+    particleEffects3 = [BattleParticles.createParticleEffect(file='rollodexStream') for t in targets]
     suitType = getSuitBodyType(attack['suitName'])
     propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
     propScale = Point3(1.2, 1.2, 1.2)
@@ -11629,32 +11639,26 @@ def doRolodexBookKeeping(attack):
     dodgeDelay = 1.9
     hitPoint = lambda toon = toon: __toonFacePoint(toon)
     partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, suit, 0])
-    partTrack3 = getPartTrack(particleEffect3, part3Delay, part3Duration, [particleEffect3, suit, 0])
-    battle = attack['battle']
-    toon = target[0]['toon']
-    targetPos = toon.getPos(battle)
-    headsUp = Func(suit.headsUp, battle, targetPos)
+    partTracks3 = getPartTracks(attack, particleEffects3, part3Delay, part3Duration, 0)
     taunt = random.choice(
         ["Hmph...", "Hrnhmpf...",
          "Hrm...",
          "Hm, hm..."])
-    origPos, origHpr = battle.getActorPosHpr(suit)
-    suitReset = Func(suit.setHpr, battle, origHpr)
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    suitTrack = Sequence(headsUp, ActorInterval(suit, 'roll-o-dex', playRate=1.25), suitReset, Func(suit.setNeutralAnimation))
+    suitTrack = Sequence(ActorInterval(suit, 'roll-o-dex', playRate=1.25), Func(suit.setNeutralAnimation))
     propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.7, scaleUpPoint=propScale, anim=0, propName='rollodex', animDuration=0, animStartTime=0)
-    toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
+    toonTracks = getToonTracks(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
     soundTrack = getSoundTrack('SA_rolodex.ogg', delay=1.8, node=suit)
-    return Parallel(suitTrack, toonTrack, propTrack, tauntInterval, soundTrack, partTrack2, partTrack3)
+    return Parallel(suitTrack, toonTracks, propTrack, tauntInterval, soundTrack, partTrack2, partTracks3)
 
 def doRolodexMarkedWood(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
+    targets = attack['target']
+    toon = targets[0]['toon']
     rollodex = globalPropPool.getProp('rollodex')
     particleEffect2 = BattleParticles.createParticleEffect(file='rollodexWaterfall')
-    particleEffect3 = BattleParticles.createParticleEffect(file='rollodexStream')
+    particleEffects3 = [BattleParticles.createParticleEffect(file='rollodexStream') for t in targets]
     suitType = getSuitBodyType(attack['suitName'])
     propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
     propScale = Point3(1.2, 1.2, 1.2)
@@ -11668,11 +11672,7 @@ def doRolodexMarkedWood(attack):
     dodgeDelay = 1.9
     hitPoint = lambda toon = toon: __toonFacePoint(toon)
     partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, suit, 0])
-    partTrack3 = getPartTrack(particleEffect3, part3Delay, part3Duration, [particleEffect3, suit, 0])
-    battle = attack['battle']
-    toon = target[0]['toon']
-    targetPos = toon.getPos(battle)
-    headsUp = Func(suit.headsUp, battle, targetPos)
+    partTracks3 = getPartTracks(attack, particleEffects3, part3Delay, part3Duration, 0)
     taunt = random.choice(
         ["OFFENSIVE ANOMALY HAS BEEN DETECTED, PUNISHING FROM POINT OF GREATEST RESISTANCE.", "UNAUTHORIZED PARTY HAS BEGUN TARGETED ACTION. REMOVAL OF GREATEST THREAT REQUIRED.",
          "ONE ANOMALY DEEMED AGGRESSIVE. PROTOCOL TO DISMISS THE ANOMALY ACTIVATED.", "UNSUPPORTED ACTION DETECTED, PUNISHMENT IN PROGRESS.",
@@ -11680,16 +11680,14 @@ def doRolodexMarkedWood(attack):
         "THREAT IDENTIFIED. TERMINATION PROTOCOL INITIATED.", "BUG IN THE SYSTEM IDENTIFIED. ELIMINATION IMMINENT.",
         "TARGET HAS HIRED OUTSIDE CONSULTANCY. ADDING INJURY TO OBSERVED INSULT.", "UNAUTHORIZED OUTSOURCING OF JOB DETECTED. ACTIVATING DISCIPLINARY PROTOCOL.",
     "ALL TARGETS ARE RESISTING. PUNISHING PERCEIVED LEADER.", "MAJOR ANOMALY DETECTED. ISOLATING GREATEST CONTRIBUTOR."])
-    origPos, origHpr = battle.getActorPosHpr(suit)
-    suitReset = Func(suit.setHpr, battle, origHpr)
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    suitTrack = Sequence(headsUp, ActorInterval(suit, 'roll-o-dex', playRate=1.25), suitReset, Func(suit.setNeutralAnimation))
+    suitTrack = Sequence(ActorInterval(suit, 'roll-o-dex', playRate=1.25), Func(suit.setNeutralAnimation))
     propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.7, scaleUpPoint=propScale, anim=0, propName='rollodex', animDuration=0, animStartTime=0)
-    toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
+    toonTracks = getToonTracks(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
     soundTrack = getSoundTrack('SA_rolodex.ogg', delay=1.8, node=suit)
     suitTrack.append(Wait(3.0))
     suitTrack.append(doMarkedWood(attack))
-    return Parallel(suitTrack, toonTrack, propTrack, tauntInterval, soundTrack, partTrack2, partTrack3)
+    return Parallel(suitTrack, toonTracks, propTrack, tauntInterval, soundTrack, partTrack2, partTracks3)
 
 def doMarkedWood(attack):
     suit = attack['suit']
