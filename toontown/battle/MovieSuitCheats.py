@@ -1125,8 +1125,12 @@ def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Poin
     return propTrack
 
 
-def getPropThrowTrack(attack, prop, hitPoints = [], missPoints = [], hitDuration = 0.25, missDuration = 0.25, hitPointNames = 'none', missPointNames = 'none', lookAt = 'none', groundPointOffSet = 0, missScaleDown = None, parent = render):
-    target = attack['target'][0]
+def getPropThrowTrack(attack, prop, hitPoints = [], missPoints = [], hitDuration = 0.25, missDuration = 0.25, hitPointNames = 'none', missPointNames = 'none', lookAt = 'none', groundPointOffSet = 0, missScaleDown = None, parent = render, target = None):
+    '''
+    target: Similar to what getToonTrack() has, we will use this to take note of a target.  Leave as none so that, by default, only the first targeted Toon gets the object thrown at them.
+    '''
+    if not target:
+        target = attack['target'][0]
     toon = target['toon']
     dmg = target['hp']
     battle = attack['battle']
@@ -12642,53 +12646,57 @@ def doWiretappedHighRoller(attack):
 def doRedTape(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    tape = globalPropPool.getProp('redtape')
-    tubes = []
-    for i in xrange(0, 3):
-        tubes.append(globalPropPool.getProp('redtape-tube'))
-
+    targets = attack['target']
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     suitName = suit.getStyleName()
     tapePosPoints = [Point3(-0.25, 0, -0.25), VBase3(0, 0, 0)]
     tapeScaleUpPoint = Point3(1, 1, 0.74)
-    propTrack = Sequence(getPropAppearTrack(tape, suit.getRightHand(), tapePosPoints, 0.25, tapeScaleUpPoint, scaleUpTime=0.25))
-    propTrack.append(Wait(1.55))
-    hitPoint = lambda toon = toon: __toonTorsoPoint(toon)
-    propTrack.append(getPropThrowTrack(attack, tape, [hitPoint], [__toonGroundPoint(attack, toon, 0)], .25))
-    hips = toon.getHipsParts()
-    animal = toon.style.getAnimal()
-    scale = ToontownGlobals.toonBodyScales[animal]
-    legs = toon.style.legs
-    torso = toon.style.torso
-    torso = torso[0]
-    animal = animal[0]
-    tubeHeight = -0.8
-    if torso == 's':
-        scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
-    elif torso == 'm':
-        scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
-    elif torso == 'l':
-        scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 1.11)
-    if animal == 'h' or animal == 'd':
-        tubeHeight = -0.87
-        scaleUpPoint = Point3(scale * 1.69, scale * 1.69, scale * 0.67)
-    tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
-    tubeTracks = Parallel()
-    tubeTracks.append(Func(battle.movie.needRestoreHips))
-    for partNum in xrange(0, hips.getNumPaths()):
-        nextPart = hips.getPath(partNum)
-        tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
+    propTracks = Parallel()
+    allTubeTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        tape = globalPropPool.getProp('redtape')
+        tubes = []
+        for i in xrange(0, 3):
+            tubes.append(globalPropPool.getProp('redtape-tube'))
 
-    tubeTracks.append(Func(battle.movie.clearRestoreHips))
-    toonTrack = getToonTrack(attack, 2.2, ['struggle'], 1.7, ['jump'])
+        propTrack = Sequence(getPropAppearTrack(tape, suit.getRightHand(), tapePosPoints, 0.25, tapeScaleUpPoint, scaleUpTime=0.25))
+        propTrack.append(Wait(1.55))
+        hitPoint = lambda toon = toon: __toonTorsoPoint(toon)
+        propTrack.append(getPropThrowTrack(attack, tape, [hitPoint], [__toonGroundPoint(attack, toon, 0)], .25, target=t))
+        propTracks.append(propTrack)
+        hips = toon.getHipsParts()
+        animal = toon.style.getAnimal()
+        scale = ToontownGlobals.toonBodyScales[animal]
+        legs = toon.style.legs
+        torso = toon.style.torso
+        torso = torso[0]
+        animal = animal[0]
+        tubeHeight = -0.8
+        if torso == 's':
+            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
+        elif torso == 'm':
+            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
+        elif torso == 'l':
+            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 1.11)
+        if animal == 'h' or animal == 'd':
+            tubeHeight = -0.87
+            scaleUpPoint = Point3(scale * 1.69, scale * 1.69, scale * 0.67)
+        tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
+        tubeTracks = Parallel()
+        tubeTracks.append(Func(battle.movie.needRestoreHips))
+        for partNum in xrange(0, hips.getNumPaths()):
+            nextPart = hips.getPath(partNum)
+            tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
+
+        tubeTracks.append(Func(battle.movie.clearRestoreHips))
+        if dmg > 0:
+            allTubeTracks.append(tubeTracks)
+
+    toonTracks = getToonTracks(attack, 2.2, ['struggle'], 1.7, ['jump'])
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=1.7, node=suit)
-    if dmg > 0:
-        return Parallel(suitTrack, toonTrack, propTrack, soundTrack, tubeTracks)
-    else:
-        return Parallel(suitTrack, toonTrack, propTrack, soundTrack)
+    return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks)
 
 def doLegalBindings(attack):
     suit = attack['suit']
