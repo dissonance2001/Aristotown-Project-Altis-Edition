@@ -377,7 +377,12 @@ def getSuitVitals(name, level = -1):
             adict['freq'] = a[3][level]
         except:
             adict['freq'] = a[3][len(a[3]) - 1]
-        adict['group'] = SuitAttacks[name][1]
+        # Attack tuples have four indices.  This will check to see if there is a fifth one, which I would like to use to make single-target attacks able to be used as group, provided we have a method for its use.
+        if len(a) > 4:
+            adict['group'] = a[4]
+        else:
+            # Use the default targeting in SuitAttacks.
+            adict['group'] = SuitAttacks[name][1]
         alist.append(adict)
     for c in cheats:
         cdict = {}
@@ -558,6 +563,9 @@ SuitSizes = {
 
 SpecialCogDict = ('ddv', 'sya', 'fhj', 'dty', 'dar', 'dsf', 'nhy', 'wrt', 'auh', 'dfg', 'msp', 'dfr', 'bsh', 'ghd', 'tyh', 'jgd', 'dsf', 'bby', 'dvk', 'otm', 'cry', 'tcm', 'bg', 'msr', 'kb', 'ts', 'tc', 'tg', 'tb', 'adc', 'drm', 'cp', 'fbd', 'frs', 'gtk', 'jur', 'tlr', 'cm', 'ggm', 'th', 'whunter', 'tr', 'mp', 'laa', 'scg', 'csm', 'ste', 'lit', 'bgr', 'mes', 'dm', 'tcc', 'fb', 'jl', 'gb', 'lbs', 'trk', 'mad', 'crf', 'mdr', 'nar', 'fd', 'fm', 'prethink', 'jr', 'prr', 'blr', 'dvp', 'dsk', 'ffm', 'sft')
 
+ATK_TGT_UNKNOWN = 1
+ATK_TGT_SINGLE = 2
+ATK_TGT_GROUP = 3
 SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Flunky', # cogs singular name, for tasks
        'pluralname': 'Flunkies', # cogs plural name, for tasks
@@ -2652,10 +2660,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (14, 17, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38),
               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-             ('BlackOrb',
+             ('Watercooler',
               (11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27),
               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-              (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+              (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20),
+              ATK_TGT_GROUP),
              ('Embezzle',
               (12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29),
               (100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
@@ -4254,10 +4263,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (5, 8, 11, 13, 15, 17, 19, 21, 23, 25),
                (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-              ('BlackOrb',
+              ('Watercooler',
                (9, 10, 13, 16, 17, 18, 20, 22, 24, 26),
                (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
-               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20),
+               ATK_TGT_GROUP),
               ('GlowerPower',
                (9, 10, 13, 16, 17, 18, 20, 22, 24, 26),
                (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
@@ -4283,10 +4293,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (17, 20, 23, 26, 28, 30, 32, 34, 36, 38),
                (80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
                (30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
-              ('BlackOrb',
+              ('Watercooler',
                (10, 11, 12, 14, 16, 18, 20, 22, 24, 26),
                (80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
-               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
+               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20),
+               ATK_TGT_GROUP))},
 'rng': {'name': 'Magnate',
         'singularname': 'a Magnate',
 		'pluralname': 'Magnates',
@@ -5834,9 +5845,6 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (100,),
               (20,))
              )}}
-ATK_TGT_UNKNOWN = 1
-ATK_TGT_SINGLE = 2
-ATK_TGT_GROUP = 3
 SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
  'Audit': ('calculator', ATK_TGT_SINGLE),
  'Bite': ('throw-object', ATK_TGT_SINGLE),
