@@ -2290,7 +2290,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == CHOMP:
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == NICKEL_AND_DIME:
-        camTrack2 = Sequence(defaultCamera(attackDuration=6.0, openShotDuration=1.0),
+        camTrack2 = Sequence(defaultCamera(attackDuration=6.0, openShotDuration=1.7),
                              heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 6.0))
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
