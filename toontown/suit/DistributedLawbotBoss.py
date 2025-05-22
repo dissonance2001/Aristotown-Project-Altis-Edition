@@ -290,7 +290,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return Sequence(Func(node.setPos, fromPos), Func(node.headsUp, toPos), node.posInterval(time, toPos))
 
     def __makeRollToBattleTwoMovie(self):
-        startPos = Point3(ToontownGlobals.LawbotBossBattleOnePosHpr[0], ToontownGlobals.LawbotBossBattleOnePosHpr[1], ToontownGlobals.LawbotBossBattleOnePosHpr[2])
+        startPos = Point3(ToontownGlobals.LawbotBossBattleTwoPosHpr[0], ToontownGlobals.LawbotBossBattleTwoPosHpr[1], ToontownGlobals.LawbotBossBattleTwoPosHpr[2])
         if self.arenaSide:
             topRampPos = Point3(*ToontownGlobals.LawbotBossTopRampPosB)
             topRampTurnPos = Point3(*ToontownGlobals.LawbotBossTopRampTurnPosB)
@@ -299,8 +299,12 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             topRampPos = Point3(*ToontownGlobals.LawbotBossTopRampPosA)
             topRampTurnPos = Point3(*ToontownGlobals.LawbotBossTopRampTurnPosA)
             p3Pos = Point3(*ToontownGlobals.LawbotBossP3PosA)
-        battlePos = Point3(ToontownGlobals.LawbotBossBattleTwoPosHpr[0], ToontownGlobals.LawbotBossBattleTwoPosHpr[1], ToontownGlobals.LawbotBossBattleTwoPosHpr[2])
-        battleHpr = VBase3(ToontownGlobals.LawbotBossBattleTwoPosHpr[3], ToontownGlobals.LawbotBossBattleTwoPosHpr[4], ToontownGlobals.LawbotBossBattleTwoPosHpr[5])
+        battlePos = Point3(ToontownGlobals.LawbotBossBattleThreePosHpr[0],
+                           ToontownGlobals.LawbotBossBattleThreePosHpr[1],
+                           ToontownGlobals.LawbotBossBattleThreePosHpr[2])
+        battleHpr = VBase3(ToontownGlobals.LawbotBossBattleThreePosHpr[3],
+                           ToontownGlobals.LawbotBossBattleThreePosHpr[4],
+                           ToontownGlobals.LawbotBossBattleThreePosHpr[5])
         bossTrack = Sequence()
         self.notify.debug('calling setPosHpr')
         myInterval = base.camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), startPos=Point3(-22, -90, 35), startHpr=Point3(-10, -13, 0), blendType='easeInOut')
@@ -324,7 +328,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTrialChat1, CFSpeech), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1))
         bossTrack.append(Func(self.setChatAbsolute, '', CFSpeech))
         bossTrack.append(Func(self.getGeomNode().setH, 180))
-        bossTrack.append(Func(self.loop, 'Ff_neutral'))
+        bossTrack.append(Func(self.loop, 'Ff_neutral_f'))
         track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
         bossTrack.append(track)
         track, hpr = self.rollBossToPoint(battlePos, hpr, battlePos, battleHpr, 0)
@@ -435,7 +439,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         deathPos = Point3(*ToontownGlobals.LawbotBossDeathPos)
         self.setPosHpr(startPos, startHpr)
         bossTrack = Sequence()
-        bossTrack.append(Func(self.loop, 'Ff_neutral'))
+        bossTrack.append(Func(self.loop, 'Ff_neutral_f'))
         track, hpr = self.rollBossToPoint(startPos, startHpr, bottomPos, None, 1)
         bossTrack.append(track)
         track, hpr = self.rollBossToPoint(bottomPos, startHpr, deathPos, None, 1)
@@ -856,8 +860,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.LawbotBossBattleFourPosHpr)
-        self.loop('Ff_neutral')
+        self.setPosHpr(*ToontownGlobals.LawbotBossBattleTwoPosHpr)
+        self.loop('Ff_neutral_f')
+        self.setChatAbsolute('', CFSpeech)
         self.notify.debug('self.battleANode = %s' % self.battleANode)
         base.playMusic(self.battleOneMusic, looping=1, volume=0.9)
         self.__hideWitnessToon()

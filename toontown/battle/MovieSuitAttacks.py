@@ -878,10 +878,6 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
     if attack[
-        'suitName'] == 'csm':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
-        track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
-                          CFSpeech | CFTimeout))
-    elif attack[
         'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
@@ -1018,10 +1014,6 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     if attack[
-        'suitName'] == 'csm':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
-        track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
-                          CFSpeech | CFTimeout))
-    elif attack[
         'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
@@ -3156,10 +3148,7 @@ def doFountainPenBindings(attack):
     penSpillTrack = getPartTrack(penSpill, 1.4, 0.7, [penSpill, pen, 0])
     toonTrack = getToonTrack(attack, 1.81, ['conked'], dodgeDelay=0.11, splicedDodgeAnims=[['duck', 0.01, 0.6]], showMissedExtraTime=1.66)
     soundTrack = getSoundTrack('SA_fountain_pen.ogg', delay=1.6, node=suit)
-    taunt = random.choice(
-        ["Hmph...", "Hrnhmpf...",
-         "Hrm...",
-         "Hm, hm..."])
+    taunt = getAttackTaunt('FountainPen', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     battle = attack['battle']
     targetPos = toon.getPos(battle)
@@ -11695,10 +11684,7 @@ def doRolodexBindings(attack):
     hitPoint = lambda toon = toon: __toonFacePoint(toon)
     partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, suit, 0])
     partTracks3 = getPartTracks(attack, particleEffects3, part3Delay, part3Duration, 0)
-    taunt = random.choice(
-        ["Hmph...", "Hrnhmpf...",
-         "Hrm...",
-         "Hm, hm..."])
+    taunt = getAttackTaunt('Rolodex', attack['suitName'])
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(ActorInterval(suit, 'roll-o-dex', playRate=1.25), Func(suit.setNeutralAnimation))
     propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.7, scaleUpPoint=propScale, anim=0, propName='rollodex', animDuration=0, animStartTime=0)
@@ -15895,10 +15881,7 @@ def doEvictionNoticeInsurance(attack):
     toon = target[0]['toon']
     dmg = target[0]['hp']
     paper = globalPropPool.getProp('shredder-paper')
-    taunt = random.choice(
-        ["Hmph...", "Hrnhmpf...",
-         "Hrm...",
-         "Hm, hm..."])
+    taunt = getAttackTaunt('EvictionNotice', attack['suitName'])
     battle = attack['battle']
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)

@@ -25,7 +25,7 @@ ModelDict = {'s': 'phase_9/models/char/sellbotBoss',
  'l': 'phase_11/models/char/lawbotBoss',
  'c': 'phase_12/models/char/bossbotBoss',
  'g': 'phase_14/models/char/boardbotBoss'}
-AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'Ff_neutral_f', 'turn2Fb', 'Ff_neutral', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
+AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'Ff_neutral_f', 'turn2Fb', 'Ff_neutral', 'Ff_neutral_f', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
 
 
 class BossCog(Avatar.Avatar):
@@ -889,7 +889,10 @@ class BossCog(Avatar.Avatar):
             if self.happy:
                 for headPart in self.animatedHeadParts:
                     headPart.setP(0)
-                animName = 'Ff_neutral'
+                if self.dna.dept == 'l':
+                    animName = 'Ff_neutral_f'
+                else:
+                    animName = 'Ff_neutral'
             else:
                 for headPart in self.animatedHeadParts:
                     headPart.setP(0)

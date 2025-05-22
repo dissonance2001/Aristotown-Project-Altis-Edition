@@ -1290,7 +1290,7 @@ def chooseSuitShotCheatStenographer(battle):
     for s in battle.suits:
         if s.dna.name == 'ste':
             theSuit = s
-            pbpDesc = pbpDc.getShowIntervalDesc("The Stenographer disables two gag tracks\nat random!", 3.5)
+            pbpDesc = pbpDc.getShowIntervalDesc("The Stenographer disables two gag levels\nat random!", 3.5)
             pbpTrack = pbpText.getShowIntervalCheat('Court Record!', 3.5)
             camTrack3.append(Parallel(randomActorShotCourtRecord(theSuit, battle, 4, 'suit'), pbpDesc, pbpTrack))
         else:

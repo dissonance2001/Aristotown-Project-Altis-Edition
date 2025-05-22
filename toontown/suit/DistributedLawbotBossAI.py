@@ -269,11 +269,11 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
 
     def makeBattleOneBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(1, ToontownGlobals.LawbotBossBattleFourPosHpr)
+        self.initializeBattles(2, ToontownGlobals.LawbotBossBattleLitigationPosHpr)
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            cogs = self.invokeEmptyPlanner(11, 'lit2')
+            cogs = self.invokeEmptyPlanner(11, 'lit')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)
@@ -306,7 +306,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
     def generateNewReserves(self, battleNumber):
         if battleNumber == 1:
             if self.battleA:
-                cogs = self.invokeReservesPlanner(11, 'lit2')
+                cogs = self.invokeReservesPlanner(11, 'lit')
                 reserveSuits = cogs['reserveSuits']
                 return {'reserveSuits': reserveSuits}
             elif self.battleB:

@@ -1673,7 +1673,7 @@ def createDesperationTrack(suit):
                               CFSpeech | CFTimeout),
                          Wait(2.0))
 
-    return Sequence(notifyTrack, cameraTrack, makeDamageUp, makeDesperate, talkTrack)
+    return Sequence(notifyTrack, cameraTrack, makeDamageUp, makeDesperate)
 
 def shortCircuitTrackOLD(suit, battle):
     if suit.isHidden():

@@ -430,6 +430,8 @@ class Movie(DirectObject.DirectObject):
                         SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=theSuit))
                         if a['id'] == POISON_SPRAY:
                             ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        if a['id'] == EXTRA_TIP:
+                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
                         if a['id'] == SNAP_WET:
                             suitTrack3 = Sequence(MovieSuitAttacks.doSnap(a, s), Func(theSuit.setNeutralAnimation))
                             camTrack3 = MovieCamera.chooseSuitShotCheatLitigatorSnapDangerous(a, 4)

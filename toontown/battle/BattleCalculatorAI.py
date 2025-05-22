@@ -3131,7 +3131,7 @@ class BattleCalculatorAI:
                 return 2
             currentBossHealth = -1
             for s in self.battle.suits:
-                if s.dna.name == 'csm' or s.dna.name == 'ste' or s.dna.name == 'scg':
+                if s.dna.name == 'csm':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
@@ -3147,17 +3147,17 @@ class BattleCalculatorAI:
                 return 1
             if x % 3 == 0:
                 return 2
-            if len(self.battle.activeSuits) >= 6 and x % 2 == 0 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                return 0
-            #if x % 2 == 0 and not len(self.battle.activeSuits) >= 6:
-                #return 1
+            #if len(self.battle.activeSuits) >= 6 and x % 2 == 0 and self.suitHasCondition(theSuit.doId, 'desperation'):
+                #return 0
+            if x % 2 == 0 and not len(self.battle.activeSuits) >= 6:
+                return 1
         if theSuit.dna.name == 'ste':
             x = self.TurnsElapsed
             if x % 99 == 0:
                 return 4
             currentBossHealth = -1
             for s in self.battle.suits:
-                if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'lit':
+                if s.dna.name == 'csm':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
@@ -3706,19 +3706,17 @@ class BattleCalculatorAI:
                             self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
                 self.setToonCondition(toon.doId, 'noGags', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'gavelcalculator', 0, 0, 'setBoth')
-                #from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
-                #boss = None
-                #for do in simbase.air.doId2do.values():
-                    #if isinstance(do, DistributedLawbotBossAI):
-                        #for toon in self.battle.activeToons:
-                            #if toon in do.involvedToons:
-                                #boss = do
-                                #break
-                #if len(self.battle.activeSuits) < 4 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                    #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                #elif len(self.battle.activeSuits) < 6 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                    #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedLawbotBossAI):
+                        for toon in self.battle.activeToons:
+                            if toon in do.involvedToons:
+                                boss = do
+                                break
+                if len(self.battle.activeSuits) < 6:
+                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'Cage':
                 result = 60
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3788,19 +3786,17 @@ class BattleCalculatorAI:
                 else:
                     self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
-                # from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
-                # boss = None
-                # for do in simbase.air.doId2do.values():
-                # if isinstance(do, DistributedLawbotBossAI):
-                # for toon in self.battle.activeToons:
-                # if toon in do.involvedToons:
-                # boss = do
-                # break
-                # if len(self.battle.activeSuits) < 4 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                # elif len(self.battle.activeSuits) < 6 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedLawbotBossAI):
+                        for toon in self.battle.activeToons:
+                            if toon in do.involvedToons:
+                                boss = do
+                                break
+                if len(self.battle.activeSuits) < 6:
+                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'Snap': #soaked snap
                 result = 81.5
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -4068,19 +4064,17 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'ExtraTip':
                 result = 38
                 attack[SUIT_HP_COL][targetIndex] = result
-                # from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
-                # boss = None
-                # for do in simbase.air.doId2do.values():
-                # if isinstance(do, DistributedLawbotBossAI):
-                # for toon in self.battle.activeToons:
-                # if toon in do.involvedToons:
-                # boss = do
-                # break
-                # if len(self.battle.activeSuits) < 4 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                # elif len(self.battle.activeSuits) < 6 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedLawbotBossAI):
+                        for toon in self.battle.activeToons:
+                            if toon in do.involvedToons:
+                                boss = do
+                                break
+                if len(self.battle.activeSuits) < 6:
+                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 1, 10, 'setBoth')
             elif atkInfo['name'] == 'CourtSanction': # jargon
@@ -4097,19 +4091,17 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-                # from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
-                # boss = None
-                # for do in simbase.air.doId2do.values():
-                # if isinstance(do, DistributedLawbotBossAI):
-                # for toon in self.battle.activeToons:
-                # if toon in do.involvedToons:
-                # boss = do
-                # break
-                # if len(self.battle.activeSuits) < 4 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                # elif len(self.battle.activeSuits) < 6 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedLawbotBossAI):
+                        for toon in self.battle.activeToons:
+                            if toon in do.involvedToons:
+                                boss = do
+                                break
+                if len(self.battle.activeSuits) < 6:
+                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'CourtRecord4': # NEW SANCTION mumbo jumbo
                 result = 59
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -4124,19 +4116,17 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-                # from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
-                # boss = None
-                # for do in simbase.air.doId2do.values():
-                # if isinstance(do, DistributedLawbotBossAI):
-                # for toon in self.battle.activeToons:
-                # if toon in do.involvedToons:
-                # boss = do
-                # break
-                # if len(self.battle.activeSuits) < 4 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                # elif len(self.battle.activeSuits) < 6 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedLawbotBossAI):
+                        for toon in self.battle.activeToons:
+                            if toon in do.involvedToons:
+                                boss = do
+                                break
+                if len(self.battle.activeSuits) < 6:
+                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'CeaseAndDesist': # NEW SANCTION mumbo jumbo
                 result = 59
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -4645,19 +4635,17 @@ class BattleCalculatorAI:
                         else:
                             suit.setHP(suit.currHP + 50)
                     continue
-                # from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
-                # boss = None
-                # for do in simbase.air.doId2do.values():
-                # if isinstance(do, DistributedLawbotBossAI):
-                # for toon in self.battle.activeToons:
-                # if toon in do.involvedToons:
-                # boss = do
-                # break
-                # if len(self.battle.activeSuits) < 4 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                # elif len(self.battle.activeSuits) < 6 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedLawbotBossAI):
+                        for toon in self.battle.activeToons:
+                            if toon in do.involvedToons:
+                                boss = do
+                                break
+                if len(self.battle.activeSuits) < 6:
+                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'Snow':
                 result = 42
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -5425,9 +5413,9 @@ class BattleCalculatorAI:
                     toon = self.battle.getToon(t)
                     if toon != None:
                         self.setToonCondition(toon.doId, lvToDict[npc_level], npc_hp, 3, 'alternateBoth')
-                        self.setToonCondition(toon.doId, 'noSOS', 1, 5, 'setBoth')
-                        self.setToonCondition(toon.doId, 'noFires', 1, 5, 'setBoth')
-                        self.setToonCondition(toon.doId, 'noUnites', 1, 5, 'setBoth')
+                        #self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
+                        #self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
+                        #self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')
                         # use alternate both because we want a better SOS card to replace a worse one
         if self.roundsToonsHit > 0:
            toonsHit =1
