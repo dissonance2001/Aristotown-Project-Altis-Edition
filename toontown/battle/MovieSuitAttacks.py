@@ -8681,26 +8681,30 @@ def doMoneyTrip(attack):
 def doTeeOff(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
+    targets = attack['target']
     club = globalPropPool.getProp('golf-club')
-    ball = globalPropPool.getProp('golf-ball')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
     clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 3, Point3(1.1, 1.1, 1.1))
     suitName = attack['suitName']
     ballPosPoints = [Point3(5.1, 4.0, 0.1)]
-    ballPropTrack = Sequence(getPropAppearTrack(ball, suit, ballPosPoints, 1.25, Point3(1.75, 1.75, 1.75)),
-                             Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),
-                             Wait(1.125))
-    missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
-    ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], .1))
-    ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
+    ballPropTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        ball = globalPropPool.getProp('golf-ball')
+        ballPropTrack = Sequence(getPropAppearTrack(ball, suit, ballPosPoints, 1.25, Point3(1.75, 1.75, 1.75)),
+                                 Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),
+                                 Wait(1.125))
+        missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
+        ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], .1, target=t))
+        ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
+        ballPropTracks.append(ballPropTrack)
+
     dodgeDelay = suitTrack.getDuration()
-    toonTrack = getToonTrack(attack, suitTrack.getDuration() - 1.75, ['slip-backward'], 1.5, ['duck'],
-                             showMissedExtraTime=1.7)
+    toonTracks = getToonTracks(attack, suitTrack.getDuration() - 1.75, ['slip-backward'], 1.5, ['duck'],
+                               showMissedExtraTime=1.7)
     soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2.5, node=suit)
-    return Parallel(suitTrack, toonTrack, clubPropTrack, ballPropTrack, soundTrack)
+    return Parallel(suitTrack, toonTracks, clubPropTrack, ballPropTracks, soundTrack)
 
 def doTeeOffGroup(attack):
     suit = attack['suit']
