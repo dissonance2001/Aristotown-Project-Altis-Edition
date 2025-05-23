@@ -793,7 +793,7 @@ def doSnapBellow(attack, suit):
                     -0.07],
                    ['spit', 0.01, 4.42]]
     toonTrack = Sequence(Wait(3.4), Func(toon.play, 'cringe'), ActorInterval(toon, 'spit', startTime=2.95))
-    soundEffect = globalBattleSoundCache.getSound('SA_chomp.ogg')
+    soundEffect = globalBattleSoundCache.getSound('SA_bite.ogg')
     soundTrack = Sequence()
     soundTrack.append(Wait(2))
     soundTrack.append(SoundInterval(soundEffect, node=suit))

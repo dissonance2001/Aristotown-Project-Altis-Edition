@@ -225,7 +225,7 @@ def doSuitAttack(attack):
     elif name == CLOCK_CHANGE:
         suitTrack = doClockChange(attack)
     elif name == WHITE_POWDER:
-        suitTrack = doFiredBellow(attack)
+        suitTrack = doChompBellow(attack)
     elif name == CLIPON_TIE:
         suitTrack = doClipOnTie(attack)
     elif name == LEGAL_BINDINGS:
@@ -1085,6 +1085,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
     currentBossHealth = -1
+    currentBossHealth2 = -1
     if suit.style.name == 'csm':
         for s in battle.activeSuits:
             if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'scg':
@@ -1094,22 +1095,34 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
             animTrack.append(Func(suit.makeDamageUp))
     elif suit.style.name == 'scg':
         for s in battle.activeSuits:
+            if s.dna.name == 'csm':
+                currentBossHealth2 = s.currHP
             if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'csm':
                 currentBossHealth = s.currHP
+        if currentBossHealth2 == -1:
+            animTrack.append(Func(suit.removeInsured))
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
     elif suit.style.name == 'lit':
         for s in battle.activeSuits:
-            if s.dna.name == 'ste' or s.dna.name == 'csm' or s.dna.name == 'scg':
+            if s.dna.name == 'csm':
+                currentBossHealth2 = s.currHP
+            if s.dna.name == 'ste' or s.dna.name == 'scg' or s.dna.name == 'csm':
                 currentBossHealth = s.currHP
+        if currentBossHealth2 == -1:
+            animTrack.append(Func(suit.removeInsured))
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
     elif suit.style.name == 'ste':
         for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
+            if s.dna.name == 'csm':
+                currentBossHealth2 = s.currHP
+            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'csm':
                 currentBossHealth = s.currHP
+        if currentBossHealth2 == -1:
+            animTrack.append(Func(suit.removeInsured))
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
@@ -6651,20 +6664,20 @@ def doWhitePowder(attack):
         resetTrack = getResetTrack(suit, battle)
         suitTrack.append(Func(battle.unlureSuit, suit))
         x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
-        if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-            suitTrack.append(Func(suit.showHpText, 0))
-        elif suit.currHP + 100 > (suit.maxHP * suit.hardMaxHP):
-            suitTrack.append(Func(suit.showHpTextCheat, x))
-            suitTrack.append(Func(suit.showHpString, "BELLOW!"))
-            suitTrack.append(Func(suit.setHealthForMe, + x))
-        else:
-            suitTrack.append(Func(suit.showHpTextCheat, 100))
-            suitTrack.append(Func(suit.showHpString, "BELLOW!"))
-            suitTrack.append(Func(suit.setHealthForMe,  + 100))
-        suitTrack.append(Func(suit.updateHealthBar, 0))
+        #if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+            #suitTrack.append(Func(suit.showHpText, 0))
+        #elif suit.currHP + 100 > (suit.maxHP * suit.hardMaxHP):
+            #suitTrack.append(Func(suit.showHpTextCheat, x))
+            #suitTrack.append(Func(suit.showHpString, "BELLOW!"))
+            #suitTrack.append(Func(suit.setHealthForMe, + x))
+        #else:
+            #suitTrack.append(Func(suit.showHpTextCheat, 100))
+            #suitTrack.append(Func(suit.showHpString, "BELLOW!"))
+           # suitTrack.append(Func(suit.setHealthForMe,  + 100))
+        #suitTrack.append(Func(suit.updateHealthBar, 0))
         suitTrack.append(resetTrack)
-        if not suit.dna.name == 'lit':
-            suitTrack.append(Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitBellowPhrases), CFSpeech | CFTimeout))
+        #if not suit.dna.name == 'lit':
+            #suitTrack.append(Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitBellowPhrases), CFSpeech | CFTimeout))
         suitTrack.append(Wait(1.0))
         suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
         suitTrack.append(
@@ -6674,8 +6687,8 @@ def doWhitePowder(attack):
         suitTracks.append(suitTrack)
         suitTracks.append(Func(suit.setNeutralAnimation))
     soundTrack = getSoundTrack('SA_bellow.ogg', delay=0.1, node=suit)
-    healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit))
-    return Parallel(suitTracks, healSound, soundTrack)
+    #healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit))
+    return Parallel(suitTracks, soundTrack)
 
 def __soakRemoval(suit, remove=0):
     if remove:
@@ -15339,8 +15352,88 @@ def doBite(attack):
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     return Parallel(suitTrack, toonTracks, soundTrack, propTracks)
 
-
 def doSnap(attack, suit):
+    #suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    hitAtleastOneToon = 0
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = 1
+
+    propDelay = 0.25
+    propScaleUpTime = 0.25
+    suitDelay = 1.45
+    throwDelay = propDelay + propScaleUpTime + suitDelay
+    throwDuration = 0.25
+    suitTrack = getSuitTrack(attack)
+    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
+    propTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        teeth = globalPropPool.getProp('litigator-teeth')
+        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4), scaleUpTime=propScaleUpTime))
+        teethAppearTrack.append(Wait(suitDelay))
+        teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
+        teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
+        if dmg > 0:
+            x = toon.getX(battle)
+            y = toon.getY(battle)
+            z = toon.getZ(battle)
+            toonHeight = z + toon.getHeight()
+            flyPoint = Point3(x, y + 2.7, toonHeight * 0.8)
+            teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.4, pos=Point3(x, y + 3.2, toonHeight * 0.7)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.3, pos=Point3(x, y + 4.7, toonHeight * 0.5)))
+            teethAppearTrack.append(Wait(0.2))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 0.2, toonHeight * 0.9)))
+            teethAppearTrack.append(Wait(0.4))
+            scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(teeth, throwDuration, Point3(8, 8, 8)), Wait(0.9), LerpScaleInterval(teeth, 0.2, Point3(14, 14, 14)), Wait(1.2), LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO))
+            hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.2), LerpHprInterval(teeth, 0.4, Point3(180, -35, 0), startHpr=Point3(180, 0, 0)), Wait(0.1), LerpHprInterval(teeth, 0.1, Point3(180, -75, 0), startHpr=Point3(180, -35, 0)))
+            animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'litigator-teeth', duration=throwDuration), ActorInterval(teeth, 'litigator-teeth', duration=0.3), Func(teeth.pose, 'litigator-teeth', 1), Wait(0.7), ActorInterval(teeth, 'litigator-teeth', duration=0.9))
+            propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(MovieUtil.removeProp, teeth), Func(battle.movie.clearRenderProp, teeth))
+        else:
+            flyPoint = __toonFacePoint(toon, parent=battle)
+            flyPoint.setY(flyPoint.getY() - 7.1)
+            teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
+            teethAppearTrack.append(Func(MovieUtil.removeProp, teeth))
+            teethAppearTrack.append(Func(battle.movie.clearRenderProp, teeth))
+            propTrack = teethAppearTrack
+        propTracks.append(propTrack)
+
+    damageAnims = [['cringe',
+      0.01,
+      0.7,
+      1.2], ['conked',
+      0.01,
+      0.2,
+      2.1], ['conked', 0.01, 3.2]]
+    dodgeAnims = [['cringe',
+      0.01,
+      0.7,
+      0.2], ['duck', 0.01, 1.6]]
+    #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon else '_miss'), delay=2, node=suit)
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    targetPos = toon.getPos(battle)
+    headsUp = Func(suit.headsUp, battle, targetPos)
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    suitReset = Func(suit.setHpr, battle, origHpr)
+    taunt = getAttackTaunt('Snap', attack['suitName'])
+    tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+    suitTrack = Sequence(headsUp, tauntInterval, ActorInterval(suit, 'throw-object', playRate=1.5), suitReset,
+                         Func(suit.setNeutralAnimation))
+    soundTrack = getSoundTrack('SA_bite.ogg', delay=2, node=suit)
+    toonTracks = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg / 2.33), 2.1,
+                                             splicedDamageAnims=damageAnims, showDamageExtraTime=1)
+    notifyTrack = Sequence(Wait(3.1), Func(toon.showHpTextCheat, - int(dmg / 2.33)),
+                           Func(toon.showHpString, "VULNERABLE!"))
+    return Parallel(suitTrack, toonTracks, soundTrack, propTracks, notifyTrack)
+
+
+def doSnapOLD(attack, suit):
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
@@ -15441,6 +15534,7 @@ def doSnap(attack, suit):
                    ['spit', 0.01, 4.42]]
     dodgeAnims = [['jump', 0.01, 0.01]]
     battle = attack['battle']
+    target = attack['target']
     toon = target[0]['toon']
     targetPos = toon.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
@@ -15799,6 +15893,127 @@ def doChomp(attack):
     soundTrack = getSoundTrack('SA_chomp.ogg', delay=2, node=suit)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     return Parallel(suitTrack, toonTracks, soundTrack, propTracks)
+
+def doChompBellow(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    propDelay = 0.25
+    propScaleUpTime = 0.25
+    suitDelay = 1.55
+    throwDelay = propDelay + propScaleUpTime + suitDelay
+    throwDuration = 0.25
+    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
+    propTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        teeth = globalPropPool.getProp('teeth')
+        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4),
+                                                       scaleUpTime=propScaleUpTime))
+        teethAppearTrack.append(Wait(suitDelay))
+        teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
+        teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
+        if dmg > 0:
+            x = toon.getX(battle)
+            y = toon.getY(battle)
+            z = toon.getZ(battle)
+            toonHeight = z + toon.getHeight()
+            flyPoint = Point3(x, y + 2.7, toonHeight * 0.7)
+            teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.4, pos=Point3(x, y + 3.2, toonHeight * 0.7)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.3, pos=Point3(x, y + 4.7, toonHeight * 0.5)))
+            teethAppearTrack.append(Wait(0.2))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y, toonHeight + 3)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 1.2, toonHeight * 0.7)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 0.7, toonHeight * 0.4)))
+            teethAppearTrack.append(Wait(0.4))
+            scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(teeth, throwDuration, Point3(6, 6, 6)), Wait(0.9),
+                                  LerpScaleInterval(teeth, 0.2, Point3(10, 10, 10)), Wait(1.2),
+                                  LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO))
+            hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.2),
+                                LerpHprInterval(teeth, 0.4, Point3(180, -35, 0), startHpr=Point3(180, 0, 0)), Wait(0.1),
+                                LerpHprInterval(teeth, 0.1, Point3(0, -35, 0), startHpr=Point3(180, -35, 0)))
+            animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'teeth', duration=throwDuration),
+                                 ActorInterval(teeth, 'teeth', duration=0.3),
+                                 Func(teeth.pose, 'teeth', 1), Wait(0.7),
+                                 ActorInterval(teeth, 'teeth', duration=0.9))
+            propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack),
+                                 Func(MovieUtil.removeProp, teeth), Func(battle.movie.clearRenderProp, teeth))
+        else:
+            x = toon.getX(battle)
+            y = toon.getY(battle)
+            z = toon.getZ(battle)
+            z = z + 0.2
+            flyPoint = Point3(x, y - 2.1, z)
+            teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
+            teethAppearTrack.append(Wait(0.2))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 0.5, y - 2.5, z)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 1.0, y - 3.0, z + 0.4)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 1.3, y - 3.6, z)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 0.9, y - 3.1, z + 0.4)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x + 0.3, y - 2.6, z)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.1, y - 2.2, z + 0.4)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.4, y - 1.9, z)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.7, y - 2.1, z + 0.4)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.8, y - 2.3, z)))
+            teethAppearTrack.append(LerpScaleInterval(teeth, 0.6, MovieUtil.PNT3_NEARZERO))
+            hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.5),
+                                LerpHprInterval(teeth, 0.4, Point3(80, 0, 0), startHpr=Point3(180, 0, 0)),
+                                LerpHprInterval(teeth, 0.8, Point3(-10, 0, 0), startHpr=Point3(80, 0, 0)))
+            animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'teeth', duration=3.6))
+            propTrack = Sequence(Parallel(teethAppearTrack, hprTrack, animTrack), Func(MovieUtil.removeProp, teeth),
+                                 Func(battle.movie.clearRenderProp, teeth))
+        propTracks.append(propTrack)
+
+    damageAnims = [['cringe',
+                    0.01,
+                    0.7,
+                    1.2],
+                   ['spit',
+                    0.01,
+                    2.95,
+                    1.47],
+                   ['spit',
+                    0.01,
+                    4.42,
+                    0.07],
+                   ['spit',
+                    0.08,
+                    4.49,
+                    -0.07],
+                   ['spit',
+                    0.08,
+                    4.42,
+                    0.07],
+                   ['spit',
+                    0.08,
+                    4.49,
+                    -0.07],
+                   ['spit',
+                    0.08,
+                    4.42,
+                    0.07],
+                   ['spit',
+                    0.08,
+                    4.49,
+                    -0.07],
+                   ['spit', 0.01, 4.42]]
+    dodgeAnims = [['jump', 0.01, 0.01]]
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    targetPos = toon.getPos(battle)
+    headsUp = Func(suit.headsUp, battle, targetPos)
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    suitReset = Func(suit.setHpr, battle, origHpr)
+    toonTracks = getToonTracks(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
+                               splicedDodgeAnims=dodgeAnims, showDamageExtraTime=1.4)
+    soundTrack = getSoundTrack('SA_chomp.ogg', delay=2, node=suit)
+    speechTrack = Sequence(Func(suit.setChatAbsolute, getAttackTaunt('Chomp', attack['suitName']), CFSpeech | CFTimeout))
+    suitTrack = Sequence(headsUp, ActorInterval(suit, 'throw-object', playRate=1.5), suitReset,
+                         Func(suit.setNeutralAnimation))
+    return Parallel(suitTrack, toonTracks, soundTrack, speechTrack, propTracks)
 
 def doInject(attack):
     suit = attack['suit']

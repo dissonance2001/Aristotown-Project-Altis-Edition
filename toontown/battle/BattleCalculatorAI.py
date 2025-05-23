@@ -3131,9 +3131,21 @@ class BattleCalculatorAI:
                 return 2
             currentBossHealth = -1
             for s in self.battle.suits:
-                if s.dna.name == 'csm':
+                if s.dna.name == 'ste':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'csm':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+            currentBossHealth2 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'scg':
+                    currentBossHealth2 = s.currHP
+            if currentBossHealth2 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
             if self.suitHasCondition(theSuit.doId, 'bellowcalculator'):
                 return 0
@@ -3157,9 +3169,21 @@ class BattleCalculatorAI:
                 return 4
             currentBossHealth = -1
             for s in self.battle.suits:
-                if s.dna.name == 'csm':
+                if s.dna.name == 'scg':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'csm':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+            currentBossHealth2 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'lit':
+                    currentBossHealth2 = s.currHP
+            if currentBossHealth2 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
             if self.suitHasCondition(theSuit.doId, 'costscalculator'):
                 return 4
@@ -3178,9 +3202,21 @@ class BattleCalculatorAI:
                 return 4
             currentBossHealth = -1
             for s in self.battle.suits:
-                if s.dna.name == 'scg' or s.dna.name == 'ste' or s.dna.name == 'lit':
+                if s.dna.name == 'ste':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'scg':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+            currentBossHealth2 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'lit':
+                    currentBossHealth2 = s.currHP
+            if currentBossHealth2 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
             if self.suitHasCondition(theSuit.doId, 'insurancecalculator'):
                 return 4
@@ -3194,9 +3230,21 @@ class BattleCalculatorAI:
                 return 2
             currentBossHealth = -1
             for s in self.battle.suits:
-                if s.dna.name == 'csm' or s.dna.name == 'ste' or s.dna.name == 'lit':
+                if s.dna.name == 'ste':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'csm':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+            currentBossHealth2 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'lit':
+                    currentBossHealth2 = s.currHP
+            if currentBossHealth2 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
             if self.getSuitConditionTurns(theSuit.doId, 'enraged') == 1 and self.suitHasCondition(theSuit.doId, 'desperation'):
                 return 9
@@ -3779,7 +3827,7 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
                 currentBossHealth = -1
                 for s in self.battle.suits:
-                    if s.dna.name == 'lit':
+                    if s.dna.name == 'ste':
                         currentBossHealth = s.currHP
                 if currentBossHealth >= 1:
                     self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
@@ -4742,21 +4790,28 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'WhitePowder':
                 result = 47.5
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
+                currentBossHealth = -1
+                for s in self.battle.suits:
+                    if s.dna.name == 'ste':
+                        currentBossHealth = s.currHP
+                if currentBossHealth >= 1:
+                    self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
+                else:
+                    self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'bellowcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 0, 0, 'setBoth')
                 for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
+                    #if suit.currHP <= 0:
+                        #continue
 
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + 0)
-                    elif suit.currHP + 100 > (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + x)
-                    else:
-                        suit.setHP(suit.currHP + 100)
+                    #x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
+                    #if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                        #suit.setHP(suit.currHP + 0)
+                    #elif suit.currHP + 100 > (suit.maxHP * suit.hardMaxHP):
+                        #suit.setHP(suit.currHP + x)
+                    #else:
+                        #suit.setHP(suit.currHP + 100)
                     self.setSuitCondition(suit.doId, 'soaked', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'dazed', 0, 0, 'setBoth')
                     if self.suitHasCondition(suit.doId, 'lured'):
@@ -5093,10 +5148,22 @@ class BattleCalculatorAI:
                         x = self.TurnsElapsed
                         currentBossHealth = -1
                         for s in self.battle.suits:
-                            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
+                            if s.dna.name == 'csm':
                                 currentBossHealth = s.currHP
-                        if currentBossHealth == -1 and not self.suitHasCondition(suitId, 'desperation'):
-                            self.setSuitCondition(suitId, 'desperation', 1, 100, 'setBoth')
+                        if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                            self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+                        currentBossHealth3 = -1
+                        for s in self.battle.suits:
+                            if s.dna.name == 'scg':
+                                currentBossHealth3 = s.currHP
+                        if currentBossHealth3 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                            self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+                        currentBossHealth2 = -1
+                        for s in self.battle.suits:
+                            if s.dna.name == 'lit':
+                                currentBossHealth2 = s.currHP
+                        if currentBossHealth2 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                            self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
                         if x % 3 == 0 and not self.suitHasCondition(suitId, 'desperation'):
                             self.setSuitCondition(suitId, 'costscalculator', 1, 10, 'setBoth')
                         for t in self.battle.activeToons:
@@ -5128,10 +5195,22 @@ class BattleCalculatorAI:
                         x = self.TurnsElapsed
                         currentBossHealth = -1
                         for s in self.battle.suits:
-                            if s.dna.name == 'csm' or s.dna.name == 'ste' or s.dna.name == 'scg':
+                            if s.dna.name == 'ste':
                                 currentBossHealth = s.currHP
-                        if currentBossHealth == -1 and not self.suitHasCondition(suitId, 'desperation'):
-                            self.setSuitCondition(suitId, 'desperation', 1, 100, 'setBoth')
+                        if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                            self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+                        currentBossHealth3 = -1
+                        for s in self.battle.suits:
+                            if s.dna.name == 'scg':
+                                currentBossHealth3 = s.currHP
+                        if currentBossHealth3 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                            self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+                        currentBossHealth2 = -1
+                        for s in self.battle.suits:
+                            if s.dna.name == 'csm':
+                                currentBossHealth2 = s.currHP
+                        if currentBossHealth2 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                            self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
                         if len(self.battle.activeSuits) < 6:
                             self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
                         if len(self.battle.activeSuits) >= 6 and x % 3 == 0 and not self.suitHasCondition(suitId, 'desperation'):
@@ -5142,10 +5221,22 @@ class BattleCalculatorAI:
                         x = self.TurnsElapsed
                         currentBossHealth = -1
                         for s in self.battle.suits:
-                            if s.dna.name == 'csm' or s.dna.name == 'ste' or s.dna.name == 'lit':
+                            if s.dna.name == 'ste':
                                 currentBossHealth = s.currHP
-                        if currentBossHealth == -1 and not self.suitHasCondition(suitId, 'desperation'):
-                            self.setSuitCondition(suitId, 'desperation', 1, 100, 'setBoth')
+                        if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                            self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+                        currentBossHealth3 = -1
+                        for s in self.battle.suits:
+                            if s.dna.name == 'csm':
+                                currentBossHealth3 = s.currHP
+                        if currentBossHealth3 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                            self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+                        currentBossHealth2 = -1
+                        for s in self.battle.suits:
+                            if s.dna.name == 'lit':
+                                currentBossHealth2 = s.currHP
+                        if currentBossHealth2 == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                            self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
                     if self.battle.activeSuits[i].dna.name == 'fbd':
                         x = self.TurnsElapsed
                         currentBossHealth = -1

@@ -375,16 +375,10 @@ class Movie(DirectObject.DirectObject):
                                                             camTrack), Func(theSuit.setNeutralAnimation)))
                         if a['id'] == POISON_SPRAY or a['id'] == ENRAGED:
                             if not theSuit.isSkeleton and a['suit'].dna.name == 'csm':
-                                ptrack.append(
-                                Sequence(Wait(1.0), Parallel(self.doCaseInsurancePlanInsurance(theSuit), camTrack),
-                                         Func(theSuit.setNeutralAnimation)))
                                 camTrack2 = MovieCamera.chooseSuitShotCheatCaseManagerBindings(a, 4)
                                 ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doLegalBindings(a), camTrack2),
                                                    Func(theSuit.setNeutralAnimation)))
                             if theSuit.isSkeleton and a['suit'].dna.name == 'csm':
-                                ptrack.append(Sequence(Wait(1.0),
-                                                   Parallel(self.doCaseInsurancePlanSkelecogInsurance(theSuit),
-                                                            camTrack), Func(theSuit.setNeutralAnimation)))
                                 camTrack2 = MovieCamera.chooseSuitShotCheatCaseManagerBindings(a, 4)
                                 ptrack.append(Sequence(Wait(1.0), Parallel(MovieSuitAttacks.doLegalBindings(a), camTrack2),
                                                    Func(theSuit.setNeutralAnimation)))
@@ -428,8 +422,8 @@ class Movie(DirectObject.DirectObject):
                         camTrack = MovieCamera.chooseSuitShotCheatLitigator(self.battle)
                         soundTrack = Sequence(
                         SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=theSuit))
-                        if a['id'] == POISON_SPRAY:
-                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                        #if a['id'] == POISON_SPRAY:
+                            #ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
                         if a['id'] == EXTRA_TIP:
                             ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
                         if a['id'] == SNAP_WET:
@@ -441,14 +435,14 @@ class Movie(DirectObject.DirectObject):
                             suitTrack3 = Sequence(MovieSuitAttacks.doSnap(a, s), Func(theSuit.setNeutralAnimation))
                             camTrack3 = MovieCamera.chooseSuitShotCheatLitigatorSnapDangerous(a, 4)
                             ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
-                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                            #ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
                         if a['id'] == WHITE_POWDER:
                             suitTrack3 = Sequence(MovieSuitAttacks.doSnap(a, s), Func(theSuit.setNeutralAnimation))
                             camTrack3 = MovieCamera.chooseSuitShotCheatLitigatorSnapDangerous(a, 4)
                             suitTrack4 = Sequence(MovieSuitAttacks.doWhitePowder(a), Func(theSuit.setNeutralAnimation))
                             camTrack4 = MovieCamera.chooseSuitShotCheatLitigatorBellow(self.battle)
                             ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack3, camTrack3)))
-                            ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
+                            #ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack, tauntTrack, soundTrack, camTrack)))
                             ptrack.append(Sequence(Wait(1.0), Parallel(suitTrack4, camTrack4)))
                     elif s.dna.name == 'frs':
                         theSuit = s

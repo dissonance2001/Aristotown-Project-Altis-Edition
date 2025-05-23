@@ -3306,10 +3306,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         shakeIntensity = 0.25
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
     elif name == WHITE_POWDER:
-        camTrack2 = Sequence(defaultCamera(attackDuration=attackDuration, openShotDuration=1.0))
+        camTrack2 = Sequence(defaultCamera(attackDuration=attackDuration, openShotDuration=2.0))
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpTrack4 = pbpText.getShowInterval('Fired!', 3.5)
+        pbpTrack4 = pbpText.getShowInterval('Chomp!', 3.5)
         return Parallel(pbpTrack4, camTrack2)
     elif name == BLACK_ORB or name == WATERCOOLER:
         camTrack.append(defaultCamera())
