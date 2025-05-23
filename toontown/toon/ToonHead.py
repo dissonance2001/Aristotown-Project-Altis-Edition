@@ -1129,11 +1129,11 @@ class ToonHead(Actor.Actor):
                 head = self.getPart('head', 'lodRoot')
             length = style.head[1]
             if length == 'l':
-                openString = 'open-long'
-                closedString = 'closed-long'
+                openString = 'classic-long'
+                closedString = 'classic-closed-long'
             else:
-                openString = 'open-short'
-                closedString = 'closed-short'
+                openString = 'classic-short'
+                closedString = 'classic-closed-short'
             self.__eyelashOpen = model.find('**/' + openString).copyTo(head)
             self.__eyelashClosed = model.find('**/' + closedString).copyTo(head)
             model.removeNode()
