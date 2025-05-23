@@ -223,7 +223,7 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'kb':
         actualLevel = relLevel + 24
     elif name == 'ts':
-        actualLevel = relLevel + 24
+        actualLevel = relLevel + 27
     elif name == 'tb':
         actualLevel = relLevel + 87
     elif name == 'drm':

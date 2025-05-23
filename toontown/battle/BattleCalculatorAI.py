@@ -5503,7 +5503,7 @@ class BattleCalculatorAI:
                 for t in self.battle.activeToons:
                     toon = self.battle.getToon(t)
                     if toon != None:
-                        self.setToonCondition(toon.doId, lvToDict[npc_level], npc_hp, 3, 'alternateBoth')
+                        self.setToonCondition(toon.doId, lvToDict[npc_level], npc_hp, 3, 'setBoth')
                         #self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
                         #self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
                         #self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')

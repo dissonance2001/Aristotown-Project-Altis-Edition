@@ -273,6 +273,7 @@ ts = (('pen-squirt', 'fountain-pen', 4),
       ('quick-jump', 'jump', 4),
       ('pickpocket', 'sanction', 4),
       ('magic1', 'magic1', 4),
+('neutral', 'rolled', 4),
       ('magic3', 'magic3', 4),
       ('lose3', 'wrecked', 4),
       ('defense', 'defense', 4),
@@ -4976,6 +4977,9 @@ class Suit(Avatar.Avatar):
             elif self.style.name == 'tb':
                 headModel.setZ(-.05)
                 headModel.setY(-.3)
+            elif self.style.name == 'ts':
+                headModel.setZ(-.05)
+                headModel.setY(-.3)
             elif self.style.name == 'scg':
                 headModel.setTwoSided(True)
             elif headType == 'clo':
@@ -5372,6 +5376,9 @@ class Suit(Avatar.Avatar):
             elif headType == 'highroller':
                 headModel.setScale(1.2)
             elif self.style.name == 'tb':
+                headModel.setZ(-.05)
+                headModel.setY(-.3)
+            elif self.style.name == 'ts':
                 headModel.setZ(-.05)
                 headModel.setY(-.3)
             elif headType == 'clo':
