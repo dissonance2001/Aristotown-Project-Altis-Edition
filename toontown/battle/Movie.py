@@ -355,15 +355,6 @@ class Movie(DirectObject.DirectObject):
                         camTrack = MovieCamera.chooseSuitShotCheatCaseManager(self.battle)
                         camTrack2 = MovieCamera.chooseSuitShotCheatCaseManagerGags(self.battle)
                         soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=theSuit))
-                        if not a['id'] == INSURANCE_PLAN:
-                            if not theSuit.isSkeleton and a['suit'].dna.name == 'csm':
-                                ptrack.append(
-                                Sequence(Wait(1.0), Parallel(self.doCaseInsurancePlanInsurance(theSuit), camTrack),
-                                         Func(theSuit.setNeutralAnimation)))
-                            if theSuit.isSkeleton and a['suit'].dna.name == 'csm':
-                                ptrack.append(Sequence(Wait(1.0),
-                                                   Parallel(self.doCaseInsurancePlanSkelecogInsurance(theSuit),
-                                                            camTrack), Func(theSuit.setNeutralAnimation)))
                         if a['id'] == INSURANCE_PLAN:
                             if not theSuit.isSkeleton and a['suit'].dna.name == 'csm':
                                 ptrack.append(
