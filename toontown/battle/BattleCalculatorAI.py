@@ -1645,7 +1645,7 @@ class BattleCalculatorAI:
                             else:
                                 attackDamageAbsorb = (int(attackDamage * .67) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
-                                target3.setHP(target3.currHP - int(attackDamage * 0.84))
+                                target3.setHP(target3.currHP - int(attackDamage * 0.67))
                             self.setSuitCondition(target3.doId, 'lured', 0, 0, 'setBoth')
                             self.setSuitCondition(target3.doId, 'soaked', 1, 1, 'setBoth')
                             self.__removeLured(target3.doId)
@@ -1707,11 +1707,11 @@ class BattleCalculatorAI:
                             if organicBonus:
                                 attackDamageAbsorb = (int(attackDamage * .67) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
-                                target4.setHP(target4.currHP - int(attackDamage * 0.84))
+                                target4.setHP(target4.currHP - int(attackDamage * 0.67))
                             else:
                                 attackDamageAbsorb = (int(attackDamage * .35) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .35) * .115)
-                                target4.setHP(target4.currHP - int(attackDamage * 0.84))
+                                target4.setHP(target4.currHP - int(attackDamage * 0.35))
                             self.__removeLured(target4.doId)
                             self.setSuitCondition(target4.doId, 'lured', 0, 0, 'setBoth')
                             self.setSuitCondition(target4.doId, 'soaked', 1, 1, 'setBoth')
@@ -1777,7 +1777,7 @@ class BattleCalculatorAI:
                             else:
                                 attackDamageAbsorb = (int(attackDamage * .67) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
-                                target2.setHP(target2.currHP - int(attackDamage * 0.84))
+                                target2.setHP(target2.currHP - int(attackDamage * 0.67))
                             self.__removeLured(target2.doId)
                             self.setSuitCondition(target2.doId, 'lured', 0, 0, 'setBoth')
                             self.setSuitCondition(target2.doId, 'soaked', 1, 1, 'setBoth')
@@ -1839,11 +1839,11 @@ class BattleCalculatorAI:
                             if organicBonus:
                                 attackDamageAbsorb = (int(attackDamage * .67) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .67) * .115)
-                                target1.setHP(target1.currHP - int(attackDamage * 0.84))
+                                target1.setHP(target1.currHP - int(attackDamage * 0.67))
                             else:
                                 attackDamageAbsorb = (int(attackDamage * .35) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage * .35) * .115)
-                                target1.setHP(target1.currHP - int(attackDamage * 0.84))
+                                target1.setHP(target1.currHP - int(attackDamage * 0.35))
                             self.__removeLured(target1.doId)
                             self.setSuitCondition(target1.doId, 'lured', 0, 0, 'setBoth')
                             self.setSuitCondition(target1.doId, 'soaked', 1, 1, 'setBoth')
