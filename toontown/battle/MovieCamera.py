@@ -1529,7 +1529,7 @@ def chooseSuitShotCheatScapegoatSyphon(battle):
     for s in battle.suits:
         if s.dna.name == 'scg':
             theSuit = s
-            pbpDesc = pbpDc.getShowIntervalDesc("The Scapegoat syphons health from the toons when\nhe is alone!", 3.5)
+            pbpDesc = pbpDc.getShowIntervalDesc("The Scapegoat syphons health from the toons when\nhe is in desperation!", 3.5)
             pbpTrack = pbpText.getShowIntervalCheat('Barnyard Bash!', 3.5)
             camTrack3.append(Parallel(randomActorShotCourtRecord(theSuit, battle, 4, 'suit'), pbpDesc, pbpTrack))
         else:

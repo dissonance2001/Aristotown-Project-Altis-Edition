@@ -118,6 +118,16 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
     def getDizzy(self):
         return self.dizzy
 
+    def setSoaked(self, soaked):
+        head = self.find('**/to_head')
+        #head = self.getHeadParts()[0]
+
+
+        self.soaked = soaked
+
+    def getSoaked(self):
+        return self.soaked
+
     def setExecutive(self, executive):
         self.executive = executive
         if self.executive:

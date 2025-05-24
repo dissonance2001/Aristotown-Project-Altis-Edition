@@ -232,7 +232,8 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         #if hpbonus > 0:
             #value += hpbonus
         updateHealthBar = Func(suit.updateHealthBar, value)
-        soakSuit = Func(suit.makeSoaked)
+        soakSuit = (Func(suit.makeSoaked))
+        suitTrack.append(Func(suit.setSoaked, 1))
         suitTrack.append(Wait(tContact))
         suitTrack.append(__soakSuit(suit, tContact))
         suitIndex = battle.activeSuits.index(suit)
@@ -417,6 +418,7 @@ def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, attack, lev
         suitTrack.append(updateHealthBar)
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
         suitTrack.append(soakSuit)
+        suitTrack.append(Func(suits[suitIndex].setSoaked, 1))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
         if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
             suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
@@ -454,6 +456,7 @@ def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
         showDamage = Sequence(Func(suits[suitIndex].showHpTextSquirt, level, -(hp / 2), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, 'SOAKED %i ROUNDS' % ToontownBattleGlobals.AvSoakRounds[level], openEnded=0))
         updateHealthBar = Func(suits[suitIndex].updateHealthBar, value)
         soakSuit = Func(suits[suitIndex].makeSoaked)
+        suitTrack.append(Func(suits[suitIndex].setSoaked, 1))
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
@@ -495,6 +498,7 @@ def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
         value = (hp / 4)
         showDamage = Sequence(Func(suits[suitIndex].showHpTextSquirt, level, -(hp / 4), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, 'SOAKED %i ROUNDS' % ToontownBattleGlobals.AvSoakRounds[level], openEnded=0))
         soakSuit = Func(suits[suitIndex].makeSoaked)
+        suitTrack.append(Func(suits[suitIndex].setSoaked, 1))
         updateHealthBar = Func(suits[suitIndex].updateHealthBar, value)
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
@@ -538,6 +542,7 @@ def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
         showDamage = Sequence(Func(suits[suitIndex].showHpTextSquirt, level, -(hp / 4), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, 'SOAKED %i ROUNDS' % ToontownBattleGlobals.AvSoakRounds[level], openEnded=0))
         updateHealthBar = Func(suits[suitIndex].updateHealthBar, value)
         soakSuit = Func(suits[suitIndex].makeSoaked)
+        suitTrack.append(Func(suits[suitIndex].setSoaked, 1))
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)

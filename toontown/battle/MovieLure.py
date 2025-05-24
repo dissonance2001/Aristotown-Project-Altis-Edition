@@ -178,12 +178,9 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                     retardPos, retardHpr = battle.getActorPosHpr(suit)
                     retardPos.setY(retardPos.getY() + MovieUtil.SUIT_EXTRA_REACH_DISTANCE)
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    if suitName in MovieUtil.largeSuits:
-                        moveTrack = lerpSuit(suit, 0.0, reachAnimDuration / 2.5, retardPos, battle, trapProp)
-                        reachTrack = ActorInterval(suit, 'reach', duration=reachAnimDuration)
-                        suitTrack.append(Parallel(moveTrack, reachTrack))
-                    else:
-                        suitTrack.append(ActorInterval(suit, 'reach', duration=reachAnimDuration))
+                    moveTrack = lerpSuit(suit, 0.0, reachAnimDuration / 2.5, retardPos, battle, trapProp)
+                    reachTrack = ActorInterval(suit, 'reach', duration=reachAnimDuration)
+                    suitTrack.append(Parallel(moveTrack, reachTrack))
                     if trapProp:
                         suitTrack.append(Func(trapProp.wrtReparentTo, battle))
                     suitTrack.append(Func(suit.setPos, battle, reachPos))
@@ -283,13 +280,13 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     suitTrack.append(Func(suit.setNeutralAnimation))
                     suitTrack.append(Wait(suitDelay))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    suitTrack.append(ActorInterval(suit, 'landing', startTime=2.37, endTime=1.82))
+                    suitTrack.append(ActorInterval(suit, 'magnet', startTime=2.37, endTime=1.82))
                     for i in xrange(0, numShakes):
                         suitTrack.append(
-                            ActorInterval(suit, 'landing', startTime=1.82, endTime=1.16, duration=shakeDuration))
+                            ActorInterval(suit, 'magnet', startTime=1.82, endTime=1.16, duration=shakeDuration))
 
-                    suitTrack.append(ActorInterval(suit, 'landing', startTime=1.16, endTime=0.7))
-                    suitTrack.append(ActorInterval(suit, 'landing', startTime=0.7, duration=1.3))
+                    suitTrack.append(ActorInterval(suit, 'magnet', startTime=1.16, endTime=0.7))
+                    suitTrack.append(ActorInterval(suit, 'magnet', startTime=0.7, duration=1.3))
                     if trapProp:
                         suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
                         suitTrack.append(Func(suit.loop, 'lured2'))
