@@ -392,7 +392,9 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         p = [self.movieHasBeenMade]
         p.append(self.activeToons)
         p.append(suitIds)
+        toonAttacks = []
         for t in self.activeToons:
+            toonAttack = ()
             if t in self.toonAttacks:
                 ta = self.toonAttacks[t]
                 index = -1
@@ -416,19 +418,18 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                     target = suitIds.index(ta[TOON_TGT_COL])
                 else:
                     target = -1
-                p = p + [index,
+                toonAttack = toonAttack + (index,
                  track,
                  ta[TOON_LVL_COL],
-                 target]
-                p = p + ta[4:]
+                 target)
+                toonAttack = toonAttack + tuple(ta[4:])
             else:
                 index = self.activeToons.index(t)
                 attack = getToonAttack(index)
-                p = p + attack
+                toonAttack = toonAttack + tuple(attack)
+            toonAttacks = toonAttacks + [toonAttack]
 
-        for i in range(4 - len(self.activeToons)):
-            p = p + getToonAttack(-1)
-
+        p.append(toonAttacks)
         suitAttacks = []
         for sa in self.suitAttacks:
             suitAttack = ()

@@ -679,18 +679,13 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.notify.debug('adjust(%f) from server' % globalClockDelta.localElapsedTime(timestamp))
         self.adjustFsm.request('Adjusting', [globalClockDelta.localElapsedTime(timestamp)])
 
-    def setMovie(self, active, toons, suits, id0, tr0, le0, tg0, hp0, ac0, hpb0, kbb0, died0, revive0, id1, tr1, le1,
-                 tg1, hp1, ac1, hpb1, kbb1, died1, revive1, id2, tr2, le2, tg2, hp2, ac2, hpb2, kbb2, died2, revive2,
-                 id3, tr3, le3, tg3, hp3, ac3, hpb3, kbb3, died3, revive3, suitAttacks):
+    def setMovie(self, active, toons, suits, toonAttacks, suitAttacks):
         if self.__battleCleanedUp:
             return
         self.notify.debug('setMovie()')
         if int(active) == 1:
             self.notify.debug('setMovie() - movie is active')
-            self.movie.genAttackDicts(toons, suits, id0, tr0, le0, tg0, hp0, ac0, hpb0, kbb0, died0, revive0, id1, tr1,
-                                      le1, tg1, hp1, ac1, hpb1, kbb1, died1, revive1, id2, tr2, le2, tg2, hp2, ac2,
-                                      hpb2, kbb2, died2, revive2, id3, tr3, le3, tg3, hp3, ac3, hpb3, kbb3, died3,
-                                      revive3, suitAttacks)
+            self.movie.genAttackDicts(toons, suits, toonAttacks, suitAttacks)
 
     def setChosenToonAttacks(self, ids, tracks, levels, targets):
         if self.__battleCleanedUp:
