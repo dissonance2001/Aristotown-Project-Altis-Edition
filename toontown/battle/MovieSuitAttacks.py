@@ -2371,16 +2371,20 @@ def doPoundKey(attack):
     phone = globalPropPool.getProp('phone')
     receiver = globalPropPool.getProp('receiver')
     BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('PoundKey')
-    BattleParticles.setEffectTexture(particleEffect, 'poundsign', color=Vec4(0, 0, 0, 1))
+    particleEffects = []
+    for t in attack['target']:
+        particleEffect = BattleParticles.createParticleEffect('PoundKey')
+        BattleParticles.setEffectTexture(particleEffect, 'poundsign', color=Vec4(0, 0, 0, 1))
+        particleEffects.append(particleEffect)
+
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    partTrack = getPartTrack(particleEffect, 1.1, 2.0, [particleEffect, suit, 0])
+    partTracks = getPartTracks(attack, particleEffects, 1.1, 2.0, 0)
     phonePosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
     receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
     propTrack = Sequence(Func(__showProp, phone, suit.getLeftHand(), phonePosPoints[0], phonePosPoints[1]), Func(__showProp, receiver, suit.getLeftHand(), receiverPosPoints[0], receiverPosPoints[1]), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_ONE, MovieUtil.PNT3_NEARZERO), Wait(0.24), Func(receiver.wrtReparentTo, suit.getRightHand()), LerpPosHprInterval(receiver, 0.0001, Point3(-0.45, 0.48, -0.62), VBase3(-87.47, -18.21, 7.82)), Wait(2.14), Func(receiver.wrtReparentTo, phone), Wait(0.62), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProps, [receiver, phone]))
-    toonTrack = getToonTrack(attack, 2.0, ['cringe'], 1.3, ['sidestep'])
+    toonTracks = getToonTracks(attack, 2.0, ['cringe'], 1.3, ['sidestep'])
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=.5, node=suit)
-    return Parallel(suitTrack, toonTrack, propTrack, partTrack, soundTrack)
+    return Parallel(suitTrack, toonTracks, propTrack, partTracks, soundTrack)
 
 def doBayouBash(attack):
     name = attack['id']
@@ -3053,59 +3057,67 @@ def doQuash(attack):
 def doFountainPen(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
     pen = globalPropPool.getProp('pen')
 
     def getPenTip(pen = pen):
         tip = pen.find('**/joint_toSpray')
         return tip.getPos(render)
 
-    hitPoint = lambda toon = toon: __toonFacePoint(toon)
-    missPoint = lambda prop = pen, toon = toon: __toonMissPoint(prop, toon, 0, parent=render)
-    hitSprayTrack = MovieUtil.getSprayTrack(battle, VBase4(0, 0, 0, 1), getPenTip, hitPoint, 0.2, 0.2, 0.2, horizScale=0.1, vertScale=0.1)
-    missSprayTrack = MovieUtil.getSprayTrack(battle, VBase4(0, 0, 0, 1), getPenTip, missPoint, 0.2, 0.2, 0.2, horizScale=0.1, vertScale=0.1)
     suitTrack = getSuitTrack(attack)
     propTrack = Sequence(Wait(0.01), Func(__showProp, pen, suit.getRightHand(), MovieUtil.PNT3_ZERO), LerpScaleInterval(pen, 0.5, Point3(1.5, 1.5, 1.5)), Wait(1.05))
-    if dmg > 0:
-        propTrack.append(hitSprayTrack)
-    else:
-        propTrack.append(missSprayTrack)
+    sprayTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        hitPoint = lambda toon = toon: __toonFacePoint(toon)
+        missPoint = lambda prop = pen, toon = toon: __toonMissPoint(prop, toon, 0, parent=render)
+        hitSprayTrack = MovieUtil.getSprayTrack(battle, VBase4(0, 0, 0, 1), getPenTip, hitPoint, 0.2, 0.2, 0.2, horizScale=0.1, vertScale=0.1)
+        missSprayTrack = MovieUtil.getSprayTrack(battle, VBase4(0, 0, 0, 1), getPenTip, missPoint, 0.2, 0.2, 0.2, horizScale=0.1, vertScale=0.1)
+        if t['hp'] > 0:
+            sprayTracks.append(hitSprayTrack)
+        else:
+            sprayTracks.append(missSprayTrack)
+    
+    propTrack.append(sprayTracks)
     propTrack += [LerpScaleInterval(pen, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProp, pen)]
-    splashTrack = Sequence()
-    if dmg > 0:
 
-        def prepSplash(splash, targetPoint):
-            splash.reparentTo(render)
-            splash.setPos(targetPoint)
-            scale = splash.getScale()
-            splash.setBillboardPointWorld()
-            splash.setScale(scale)
+    def prepSplash(splash, targetPoint):
+        splash.reparentTo(render)
+        splash.setPos(targetPoint)
+        scale = splash.getScale()
+        splash.setBillboardPointWorld()
+        splash.setScale(scale)
 
-        splash = globalPropPool.getProp('splash-from-splat')
-        splash.setColor(0, 0, 0, 1)
-        splash.setScale(0.15)
-        splashTrack = Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(1.65), Func(prepSplash, splash, __toonFacePoint(toon)), ActorInterval(splash, 'splash-from-splat'), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash))
-        headParts = toon.getHeadParts()
-        splashTrack.append(Func(battle.movie.needRestoreColor))
-        for partNum in xrange(0, headParts.getNumPaths()):
-            nextPart = headParts.getPath(partNum)
-            splashTrack.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
+    splashTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        if dmg > 0:
+            splash = globalPropPool.getProp('splash-from-splat')
+            splash.setColor(0, 0, 0, 1)
+            splash.setScale(0.15)
+            splashTrack = Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(1.65), Func(prepSplash, splash, __toonFacePoint(toon)), ActorInterval(splash, 'splash-from-splat'), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash))
+            headParts = toon.getHeadParts()
+            splashTrack.append(Func(battle.movie.needRestoreColor))
+            for partNum in xrange(0, headParts.getNumPaths()):
+                nextPart = headParts.getPath(partNum)
+                splashTrack.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
 
-        splashTrack.append(Func(MovieUtil.removeProp, splash))
-        splashTrack.append(Wait(2.6))
-        for partNum in xrange(0, headParts.getNumPaths()):
-            nextPart = headParts.getPath(partNum)
-            splashTrack.append(Func(nextPart.clearColorScale))
+            splashTrack.append(Func(MovieUtil.removeProp, splash))
+            splashTrack.append(Wait(2.6))
+            for partNum in xrange(0, headParts.getNumPaths()):
+                nextPart = headParts.getPath(partNum)
+                splashTrack.append(Func(nextPart.clearColorScale))
 
-        splashTrack.append(Func(battle.movie.clearRestoreColor))
+            splashTrack.append(Func(battle.movie.clearRestoreColor))
+            splashTracks.append(splashTrack)
+
     penSpill = BattleParticles.createParticleEffect(file='penSpill')
     penSpill.setPos(getPenTip())
     penSpillTrack = getPartTrack(penSpill, 1.4, 0.7, [penSpill, pen, 0])
-    toonTrack = getToonTrack(attack, 1.81, ['conked'], dodgeDelay=0.11, splicedDodgeAnims=[['duck', 0.01, 0.6]], showMissedExtraTime=1.66)
+    toonTracks = getToonTracks(attack, 1.81, ['conked'], dodgeDelay=0.11, splicedDodgeAnims=[['duck', 0.01, 0.6]], showMissedExtraTime=1.66)
     soundTrack = getSoundTrack('SA_fountain_pen.ogg', delay=1.6, node=suit)
-    return Parallel(suitTrack, toonTrack, propTrack, soundTrack, penSpillTrack, splashTrack)
+    return Parallel(suitTrack, toonTracks, propTrack, soundTrack, penSpillTrack, splashTracks)
 
 def doFountainPenBindings(attack):
     suit = attack['suit']
@@ -3517,39 +3529,15 @@ def doOceanliner(attack):
 def doRubOut(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
     pad = globalPropPool.getProp('pad')
     pencil = globalPropPool.getProp('pencil')
-    headEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getHeadColor())
-    torsoEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getArmColor())
-    legsEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getLegColor())
     suitTrack = getSuitTrack(attack)
     padPosPoints = [Point3(-0.66, 0.81, -0.06), VBase3(14.93, -2.29, 180.0)]
     padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5, 2.57)
     pencilPosPoints = [Point3(0.04, -0.38, -0.1), VBase3(-170.223, -3.762, -62.929)]
     pencilPropTrack = getPropTrack(pencil, suit.getRightHand(), pencilPosPoints, 0.5, 2.57)
-    toonTrack = getToonTrack(attack, 2.2, ['conked'], 2.0, ['jump'])
-    hideTrack = Sequence()
-    headParts = toon.getHeadParts()
-    torsoParts = toon.getTorsoParts()
-    legsParts = toon.getLegsParts()
-    animal = toon.style.getAnimal()
-    bodyScale = ToontownGlobals.toonBodyScales[animal]
-    headEffectHeight = __toonFacePoint(toon).getZ()
-    legsHeight = ToontownGlobals.legHeightDict[toon.style.legs] * bodyScale
-    torsoEffectHeight = ToontownGlobals.torsoHeightDict[toon.style.torso] * bodyScale / 2 + legsHeight
-    legsEffectHeight = legsHeight / 2
-    effectX = headEffect.getX()
-    effectY = headEffect.getY()
-    headEffect.setPos(effectX, effectY - 1.5, headEffectHeight)
-    torsoEffect.setPos(effectX, effectY - 1, torsoEffectHeight)
-    legsEffect.setPos(effectX, effectY - 0.6, legsEffectHeight)
-    partDelay = 2.5
-    headTrack = getPartTrack(headEffect, partDelay + 0, 0.5, [headEffect, toon, 0])
-    torsoTrack = getPartTrack(torsoEffect, partDelay + 1.1, 0.5, [torsoEffect, toon, 0])
-    legsTrack = getPartTrack(legsEffect, partDelay + 2.2, 0.5, [legsEffect, toon, 0])
+    toonTracks = getToonTracks(attack, 2.2, ['conked'], 2.0, ['jump'])
 
     def hideParts(parts):
         track = Parallel()
@@ -3569,23 +3557,52 @@ def doRubOut(attack):
 
         return track
 
+    hideTracks = Parallel()
+    headTracks = Parallel()
+    torsoTracks = Parallel()
+    legsTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        headEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getHeadColor())
+        torsoEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getArmColor())
+        legsEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getLegColor())
+        headParts = toon.getHeadParts()
+        torsoParts = toon.getTorsoParts()
+        legsParts = toon.getLegsParts()
+        animal = toon.style.getAnimal()
+        bodyScale = ToontownGlobals.toonBodyScales[animal]
+        headEffectHeight = __toonFacePoint(toon).getZ()
+        legsHeight = ToontownGlobals.legHeightDict[toon.style.legs] * bodyScale
+        torsoEffectHeight = ToontownGlobals.torsoHeightDict[toon.style.torso] * bodyScale / 2 + legsHeight
+        legsEffectHeight = legsHeight / 2
+        effectX = headEffect.getX()
+        effectY = headEffect.getY()
+        headEffect.setPos(effectX, effectY - 1.5, headEffectHeight)
+        torsoEffect.setPos(effectX, effectY - 1, torsoEffectHeight)
+        legsEffect.setPos(effectX, effectY - 0.6, legsEffectHeight)
+        partDelay = 2.5
+        if dmg > 0:
+            headTracks.append(getPartTrack(headEffect, partDelay + 0, 0.5, [headEffect, toon, 0]))
+            torsoTracks.append(getPartTrack(torsoEffect, partDelay + 1.1, 0.5, [torsoEffect, toon, 0]))
+            legsTracks.append(getPartTrack(legsEffect, partDelay + 2.2, 0.5, [legsEffect, toon, 0]))
+            hideTracks.append(Sequence(
+                Wait(2.2),
+                Func(battle.movie.needRestoreColor),
+                hideParts(headParts),
+                Wait(0.4),
+                hideParts(torsoParts),
+                Wait(0.4),
+                hideParts(legsParts),
+                Wait(1),
+                showParts(headParts),
+                showParts(torsoParts),
+                showParts(legsParts),
+                Func(battle.movie.clearRestoreColor)
+            ))
+
     soundTrack = getSoundTrack('SA_rubout.ogg', delay=1.7, node=suit)
-    if dmg > 0:
-        hideTrack.append(Wait(2.2))
-        hideTrack.append(Func(battle.movie.needRestoreColor))
-        hideTrack.append(hideParts(headParts))
-        hideTrack.append(Wait(0.4))
-        hideTrack.append(hideParts(torsoParts))
-        hideTrack.append(Wait(0.4))
-        hideTrack.append(hideParts(legsParts))
-        hideTrack.append(Wait(1))
-        hideTrack.append(showParts(headParts))
-        hideTrack.append(showParts(torsoParts))
-        hideTrack.append(showParts(legsParts))
-        hideTrack.append(Func(battle.movie.clearRestoreColor))
-        return Parallel(suitTrack, toonTrack, padPropTrack, pencilPropTrack, soundTrack, hideTrack, headTrack, torsoTrack, legsTrack)
-    else:
-        return Parallel(suitTrack, toonTrack, padPropTrack, pencilPropTrack, soundTrack)
+    return Parallel(suitTrack, toonTracks, padPropTrack, pencilPropTrack, soundTrack, hideTracks, headTracks, torsoTracks, legsTracks)
 
 def doDiskScratch(attack):
     suit = attack['suit']
@@ -3608,20 +3625,24 @@ def doFingerWag(attack):
     suit = attack['suit']
     battle = attack['battle']
     BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('FingerWag')
-    BattleParticles.setEffectTexture(particleEffect, 'blah', color=Vec4(0.55, 0, 0.55, 1))
+    particleEffects = []
+    for t in attack['target']:
+        particleEffect = BattleParticles.createParticleEffect('FingerWag')
+        BattleParticles.setEffectTexture(particleEffect, 'blah', color=Vec4(0.55, 0, 0.55, 1))
+        suitName = attack['suitName']
+        particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.8)
+        particleEffect.setP(-110)
+        particleEffects.append(particleEffect)
+
     suitType = getSuitBodyType(attack['suitName'])
     partDelay = 1.3
     damageDelay = 2.7
     dodgeDelay = 1.7
     suitTrack = getSuitTrack(attack)
-    partTrack = getPartTrack(particleEffect, partDelay, 3, [particleEffect, suit, 0])
-    suitName = attack['suitName']
-    particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.8)
-    particleEffect.setP(-110)
-    toonTrack = getToonTrack(attack, damageDelay, ['slip-backward'], dodgeDelay, ['sidestep'])
+    partTracks = getPartTracks(attack, particleEffects, partDelay, 3, 0)
+    toonTracks = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['sidestep'])
     soundTrack = getSoundTrack('SA_finger_wag.ogg', delay=1.3, node=suit)
-    return Parallel(suitTrack, toonTrack, partTrack, soundTrack)
+    return Parallel(suitTrack, toonTracks, partTracks, soundTrack)
 
 
 def doWriteOff(attack):
@@ -9125,18 +9146,9 @@ def doMulliganRetaliation(attack, suit):
 def doBrainStorm(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
+    targets = attack['target']
     name = attack['id']
-    toon = target[0]['toon']
     BattleParticles.loadParticles()
-    snowEffect = BattleParticles.createParticleEffect('BrainStorm')
-    snowEffect2 = BattleParticles.createParticleEffect('BrainStorm')
-    snowEffect3 = BattleParticles.createParticleEffect('BrainStorm')
-    effectColor = Vec4(0.65, 0.79, 0.93, 0.85)
-    BattleParticles.setEffectTexture(snowEffect, 'brainstorm-box', color=effectColor)
-    BattleParticles.setEffectTexture(snowEffect2, 'brainstorm-env', color=effectColor)
-    BattleParticles.setEffectTexture(snowEffect3, 'brainstorm-track', color=effectColor)
-    cloud = globalPropPool.getProp('stormcloud')
     suitType = getSuitBodyType(attack['suitName'])
     partDelay = 1.2
     damageDelay = 3.5
@@ -9144,28 +9156,41 @@ def doBrainStorm(attack):
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
     initialCloudHeight = suit.height + 3
     cloudPosPoints = [Point3(0, 3, initialCloudHeight), VBase3(180, 0, 0)]
-    cloudPropTrack = Sequence()
-    cloudPropTrack.append(Func(cloud.pose, 'stormcloud', 0))
-    cloudPropTrack.append(getPropAppearTrack(cloud, suit, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.7))
-    cloudPropTrack.append(Func(battle.movie.needRestoreRenderProp, cloud))
-    cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
-    targetPoint = __toonFacePoint(toon)
-    targetPoint.setZ(targetPoint[2] + 3)
-    cloudPropTrack.append(Wait(0.5))
-    cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
-    cloudPropTrack.append(Wait(partDelay))
-    cloudPropTrack.append(Parallel(ParticleInterval(snowEffect, cloud, worldRelative=0, duration=2.2, cleanup=True), Sequence(Wait(0.5), ParticleInterval(snowEffect2, cloud, worldRelative=0, duration=1.7, cleanup=True)), Sequence(Wait(1.0), ParticleInterval(snowEffect3, cloud, worldRelative=0, duration=1.2, cleanup=True)), Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.5), ActorInterval(cloud, 'stormcloud', startTime=2.5, duration=0.5), ActorInterval(cloud, 'stormcloud', startTime=1, duration=1.5))))
-    cloudPropTrack.append(Wait(0.4))
-    cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
-    cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
-    cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
+    cloudPropTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        snowEffect = BattleParticles.createParticleEffect('BrainStorm')
+        snowEffect2 = BattleParticles.createParticleEffect('BrainStorm')
+        snowEffect3 = BattleParticles.createParticleEffect('BrainStorm')
+        effectColor = Vec4(0.65, 0.79, 0.93, 0.85)
+        BattleParticles.setEffectTexture(snowEffect, 'brainstorm-box', color=effectColor)
+        BattleParticles.setEffectTexture(snowEffect2, 'brainstorm-env', color=effectColor)
+        BattleParticles.setEffectTexture(snowEffect3, 'brainstorm-track', color=effectColor)
+        cloud = globalPropPool.getProp('stormcloud')
+        cloudPropTrack = Sequence()
+        cloudPropTrack.append(Func(cloud.pose, 'stormcloud', 0))
+        cloudPropTrack.append(getPropAppearTrack(cloud, suit, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.7))
+        cloudPropTrack.append(Func(battle.movie.needRestoreRenderProp, cloud))
+        cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
+        targetPoint = __toonFacePoint(toon)
+        targetPoint.setZ(targetPoint[2] + 3)
+        cloudPropTrack.append(Wait(0.5))
+        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
+        cloudPropTrack.append(Wait(partDelay))
+        cloudPropTrack.append(Parallel(ParticleInterval(snowEffect, cloud, worldRelative=0, duration=2.2, cleanup=True), Sequence(Wait(0.5), ParticleInterval(snowEffect2, cloud, worldRelative=0, duration=1.7, cleanup=True)), Sequence(Wait(1.0), ParticleInterval(snowEffect3, cloud, worldRelative=0, duration=1.2, cleanup=True)), Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.5), ActorInterval(cloud, 'stormcloud', startTime=2.5, duration=0.5), ActorInterval(cloud, 'stormcloud', startTime=1, duration=1.5))))
+        cloudPropTrack.append(Wait(0.4))
+        cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
+        cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
+        cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
+        cloudPropTracks.append(cloudPropTrack)
+
     damageAnims = [['cringe',
       0.01,
       0.4,
       0.8], ['duck', 1e-06, 1.6]]
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showMissedExtraTime=1.1)
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showMissedExtraTime=1.1)
     soundTrack = getSoundTrack('SA_brainstorm.ogg', delay=1.9, node=suit)
-    return Parallel(suitTrack, toonTrack, cloudPropTrack, soundTrack)
+    return Parallel(suitTrack, toonTracks, cloudPropTracks, soundTrack)
 
 def doBrainStormHeadRoller(attack):
     suit = attack['suit']
@@ -10128,17 +10153,37 @@ def doScabbard(attack):
 def doDownsize(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
+    toon = targets[0]['toon']
+    dmg = targets[0]['hp']
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+
     damageDelay = 1.5
-    sprayEffect = BattleParticles.createParticleEffect(file='downsizeSpray')
+    sprayEffects = [BattleParticles.createParticleEffect(file='downsizeSpray') for t in targets]
     cloudEffect = BattleParticles.createParticleEffect(file='downsizeCloud')
     toonPos = toon.getPos(toon)
     cloudPos = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.getHeight() * 0.55)
     cloudEffect.setPos(cloudPos)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    sprayTrack = getPartTrack(sprayEffect, 1.0, 1.28, [sprayEffect, suit, 0])
+    sprayTracks = getPartTracks(attack, sprayEffects, 1.0, 1.28, 0)
+    cloudTracks = Parallel()
+    shrinkTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        cloudEffect = BattleParticles.createParticleEffect(file='downsizeCloud')
+        toonPos = toon.getPos(toon)
+        cloudPos = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.getHeight() * 0.55)
+        cloudEffect.setPos(cloudPos)
+        cloudTracks.append(getPartTrack(cloudEffect, 2.1, 1.9, [cloudEffect, toon, 0]))
+        if dmg > 0:
+            initialScale = toon.getScale()
+            downScale = Vec3(0.4, 0.4, 0.4)
+            shrinkTracks.append(Sequence(Wait(damageDelay + 0.5), Func(battle.movie.needRestoreToonScale), LerpScaleInterval(toon, 1.0, downScale * 1.1), LerpScaleInterval(toon, 0.1, downScale * 0.9), LerpScaleInterval(toon, 0.1, downScale * 1.05), LerpScaleInterval(toon, 0.1, downScale * 0.95), LerpScaleInterval(toon, 0.1, downScale), Wait(2.1), LerpScaleInterval(toon, 0.5, initialScale * 1.5), LerpScaleInterval(toon, 0.15, initialScale * 0.5), LerpScaleInterval(toon, 0.15, initialScale * 1.2), LerpScaleInterval(toon, 0.15, initialScale * 0.8), LerpScaleInterval(toon, 0.15, initialScale), Func(battle.movie.clearRestoreToonScale)))
+
     cloudTrack = getPartTrack(cloudEffect, 2.1, 1.9, [cloudEffect, toon, 0])
     if dmg > 0:
         initialScale = toon.getScale()
@@ -10165,12 +10210,12 @@ def doDownsize(attack):
      0.01,
      2.97,
      1.49])
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.6, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_head_shrink_only.ogg', delay=2, node=suit)
-    if dmg > 0:
-        return Parallel(suitTrack, sprayTrack, cloudTrack, shrinkTrack, soundTrack, toonTrack)
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.6, dodgeAnimNames=['sidestep'])
+    if hitAtleastOneToon:
+        soundTrack = getSoundTrack('SA_head_shrink_only.ogg', delay=2, node=suit)
+        return Parallel(suitTrack, sprayTracks, cloudTracks, shrinkTracks, soundTrack, toonTracks)
     else:
-        return Parallel(suitTrack, sprayTrack, toonTrack)
+        return Parallel(suitTrack, sprayTracks, cloudTracks, shrinkTracks, toonTracks)
 
 def doVersionControl(attack):
     suit = attack['suit']
@@ -10447,42 +10492,49 @@ def doPinkSlipSnipe(attack):
 def doReOrg(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
     damageDelay = 1.2
     attackDelay = 1.2
-    sprayEffect = BattleParticles.createParticleEffect(file='reorgSpray')
+    sprayEffects = [BattleParticles.createParticleEffect(file='reorgSpray') for t in targets]
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    partTrack = getPartTrack(sprayEffect, 0.5, 1.9, [sprayEffect, suit, 0])
-    if dmg > 0:
-        headParts = toon.getHeadParts()
-        print '***********headParts pos=', headParts[0].getPos()
-        print '***********headParts hpr=', headParts[0].getHpr()
-        headTracks = Parallel()
-        for partNum in xrange(0, headParts.getNumPaths()):
-            part = headParts.getPath(partNum)
-            x = part.getX()
-            y = part.getY()
-            z = part.getZ()
-            h = part.getH()
-            p = part.getP()
-            r = part.getR()
-            headTracks.append(Sequence(Wait(attackDelay), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.04)), LerpPosInterval(part, 0.25, Point3(x, y, z + 2.2)), LerpHprInterval(part, 0.25, VBase3(360, 0, 180)), LerpPosInterval(part, 0.25, Point3(x, y, z + 3.1)), LerpPosInterval(part, 0.1, Point3(x, y, z + 0.3)), Wait(0.1), LerpHprInterval(part, 0.35, VBase3(-745, 0, 180), startHpr=VBase3(0, 0, 180)), LerpHprInterval(part, 0.5, VBase3(25, 0, 180), startHpr=VBase3(0, 0, 180)), LerpPosInterval(part, 0.15, Point3(x, y, z + 1)), LerpHprInterval(part, 0.3, VBase3(h, p, r)), Wait(0.2), LerpPosInterval(part, 0.1, Point3(x, y, z)), Wait(0.1)))
+    partTracks = getPartTracks(attack, sprayEffects, 0.5, 1.9, 0)
+    allHeadTracks = Parallel()
+    allChestTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        if dmg > 0:
+            headParts = toon.getHeadParts()
+            print '***********headParts pos=', headParts[0].getPos()
+            print '***********headParts hpr=', headParts[0].getHpr()
+            headTracks = Parallel()
+            for partNum in xrange(0, headParts.getNumPaths()):
+                part = headParts.getPath(partNum)
+                x = part.getX()
+                y = part.getY()
+                z = part.getZ()
+                h = part.getH()
+                p = part.getP()
+                r = part.getR()
+                headTracks.append(Sequence(Wait(attackDelay), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.04)), LerpPosInterval(part, 0.25, Point3(x, y, z + 2.2)), LerpHprInterval(part, 0.25, VBase3(360, 0, 180)), LerpPosInterval(part, 0.25, Point3(x, y, z + 3.1)), LerpPosInterval(part, 0.1, Point3(x, y, z + 0.3)), Wait(0.1), LerpHprInterval(part, 0.35, VBase3(-745, 0, 180), startHpr=VBase3(0, 0, 180)), LerpHprInterval(part, 0.5, VBase3(25, 0, 180), startHpr=VBase3(0, 0, 180)), LerpPosInterval(part, 0.15, Point3(x, y, z + 1)), LerpHprInterval(part, 0.3, VBase3(h, p, r)), Wait(0.2), LerpPosInterval(part, 0.1, Point3(x, y, z)), Wait(0.1)))
+            
+            allHeadTracks.append(headTracks)
 
-        def getChestTrack(part, attackDelay = attackDelay):
-            origScale = part.getScale()
-            return Sequence(Wait(attackDelay), LerpHprInterval(part, 1.1, VBase3(180, 0, 0)), Wait(1.1), LerpHprInterval(part, 1.1, part.getHpr()))
+            def getChestTrack(part, attackDelay = attackDelay):
+                origScale = part.getScale()
+                return Sequence(Wait(attackDelay), LerpHprInterval(part, 1.1, VBase3(180, 0, 0)), Wait(1.1), LerpHprInterval(part, 1.1, part.getHpr()))
 
-        chestTracks = Parallel()
-        arms = toon.findAllMatches('**/arms')
-        sleeves = toon.findAllMatches('**/sleeves')
-        hands = toon.findAllMatches('**/hands')
-        print '*************arms hpr=', arms[0].getHpr()
-        for partNum in xrange(0, arms.getNumPaths()):
-            chestTracks.append(getChestTrack(arms.getPath(partNum)))
-            chestTracks.append(getChestTrack(sleeves.getPath(partNum)))
-            chestTracks.append(getChestTrack(hands.getPath(partNum)))
+            chestTracks = Parallel()
+            arms = toon.findAllMatches('**/arms')
+            sleeves = toon.findAllMatches('**/sleeves')
+            hands = toon.findAllMatches('**/hands')
+            print '*************arms hpr=', arms[0].getHpr()
+            for partNum in xrange(0, arms.getNumPaths()):
+                chestTracks.append(getChestTrack(arms.getPath(partNum)))
+                chestTracks.append(getChestTrack(sleeves.getPath(partNum)))
+                chestTracks.append(getChestTrack(hands.getPath(partNum)))
+            
+            allChestTracks.append(chestTracks)
 
     damageAnims = [['neutral',
       0.01,
@@ -10496,11 +10548,8 @@ def doReOrg(attack):
      0.01,
      0,
      0.6])
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.01, dodgeAnimNames=['duck'], showDamageExtraTime=2.1, showMissedExtraTime=2.0)
-    if dmg > 0:
-        return Parallel(suitTrack, partTrack, toonTrack, headTracks, chestTracks)
-    else:
-        return Parallel(suitTrack, partTrack, toonTrack)
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.01, dodgeAnimNames=['duck'], showDamageExtraTime=2.1, showMissedExtraTime=2.0)
+    return Parallel(suitTrack, partTracks, toonTracks, allHeadTracks, allChestTracks)
 
 def doReOrgBreachOfContract(attack):
     suit = attack['suit']
@@ -11549,79 +11598,91 @@ def doDoubleWindsor(attack):
 def doHeadShrink(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+
     damageDelay = 1.5
     dodgeDelay = 0.9
-    shrinkSpray = BattleParticles.createParticleEffect(file='headShrinkSpray')
-    shrinkCloud = BattleParticles.createParticleEffect(file='headShrinkCloud')
-    shrinkDrop = BattleParticles.createParticleEffect(file='headShrinkDrop')
+    shrinkSprays = [BattleParticles.createParticleEffect(file='headShrinkSpray') for t in targets]
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    sprayTrack = getPartTrack(shrinkSpray, 0.3, 1.4, [shrinkSpray, suit, 0])
-    shrinkCloud.reparentTo(battle)
-    adjust = 0.4
-    x = toon.getX(battle)
-    y = toon.getY(battle) - adjust
-    z = 8
-    shrinkCloud.setPos(Point3(x, y, z))
-    shrinkDrop.setPos(Point3(0, 0 - adjust, 7.5))
-    off = 0.7
-    cloudPoints = [Point3(x + off, y, z),
-     Point3(x + off / 2, y + off / 2, z),
-     Point3(x, y + off, z),
-     Point3(x - off / 2, y + off / 2, z),
-     Point3(x - off, y, z),
-     Point3(x - off / 2, y - off / 2, z),
-     Point3(x, y - off, z),
-     Point3(x + off / 2, y - off / 2, z),
-     Point3(x + off, y, z),
-     Point3(x, y, z)]
-    circleTrack = Sequence()
-    for point in cloudPoints:
-        circleTrack.append(LerpPosInterval(shrinkCloud, 0.14, point, other=battle))
+    sprayTracks = getPartTracks(attack, shrinkSprays, 0.3, 1.4, 0)
+    cloudTracks = Parallel()
+    shrinkTracks = Parallel()
+    dropTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        shrinkCloud = BattleParticles.createParticleEffect(file='headShrinkCloud')
+        shrinkDrop = BattleParticles.createParticleEffect(file='headShrinkDrop')
+        shrinkCloud.reparentTo(battle)
+        adjust = 0.4
+        x = toon.getX(battle)
+        y = toon.getY(battle) - adjust
+        z = 8
+        shrinkCloud.setPos(Point3(x, y, z))
+        shrinkDrop.setPos(Point3(0, 0 - adjust, 7.5))
+        off = 0.7
+        cloudPoints = [Point3(x + off, y, z),
+         Point3(x + off / 2, y + off / 2, z),
+         Point3(x, y + off, z),
+         Point3(x - off / 2, y + off / 2, z),
+         Point3(x - off, y, z),
+         Point3(x - off / 2, y - off / 2, z),
+         Point3(x, y - off, z),
+         Point3(x + off / 2, y - off / 2, z),
+         Point3(x + off, y, z),
+         Point3(x, y, z)]
+        circleTrack = Sequence()
+        for point in cloudPoints:
+            circleTrack.append(LerpPosInterval(shrinkCloud, 0.14, point, other=battle))
 
-    cloudTrack = Sequence()
-    cloudTrack.append(Wait(0.82))
-    cloudTrack.append(Func(battle.movie.needRestoreParticleEffect, shrinkCloud))
-    cloudTrack.append(Func(shrinkCloud.start, battle))
-    cloudTrack.append(circleTrack)
-    cloudTrack.append(circleTrack)
-    cloudTrack.append(LerpFunctionInterval(shrinkCloud.setAlphaScale, fromData=1, toData=0, duration=0.7))
-    cloudTrack.append(Func(shrinkCloud.cleanup))
-    cloudTrack.append(Func(battle.movie.clearRestoreParticleEffect, shrinkCloud))
-    shrinkDelay = 0.4
-    shrinkDuration = 0.6
-    shrinkTrack = Sequence()
-    if dmg > 0:
-        headParts = toon.getHeadParts()
-        initialScale = headParts.getPath(0).getScale()[0]
-        shrinkTrack.append(Wait(damageDelay + shrinkDelay))
+        cloudTrack = Sequence()
+        cloudTrack.append(Wait(0.82))
+        cloudTrack.append(Func(battle.movie.needRestoreParticleEffect, shrinkCloud))
+        cloudTrack.append(Func(shrinkCloud.start, battle))
+        cloudTrack.append(circleTrack)
+        cloudTrack.append(circleTrack)
+        cloudTrack.append(LerpFunctionInterval(shrinkCloud.setAlphaScale, fromData=1, toData=0, duration=0.7))
+        cloudTrack.append(Func(shrinkCloud.cleanup))
+        cloudTrack.append(Func(battle.movie.clearRestoreParticleEffect, shrinkCloud))
+        cloudTracks.append(cloudTrack)
+        shrinkDelay = 0.4
+        shrinkDuration = 0.6
+        shrinkTrack = Sequence()
+        if dmg > 0:
+            headParts = toon.getHeadParts()
+            initialScale = headParts.getPath(0).getScale()[0]
+            shrinkTrack.append(Wait(damageDelay + shrinkDelay))
 
-        def scaleHeadParallel(scale, duration, headParts = headParts):
-            headTracks = Parallel()
-            for partNum in xrange(0, headParts.getNumPaths()):
-                nextPart = headParts.getPath(partNum)
-                headTracks.append(LerpScaleInterval(nextPart, duration, Point3(scale, scale, scale)))
+            def scaleHeadParallel(scale, duration, headParts = headParts):
+                headTracks = Parallel()
+                for partNum in xrange(0, headParts.getNumPaths()):
+                    nextPart = headParts.getPath(partNum)
+                    headTracks.append(LerpScaleInterval(nextPart, duration, Point3(scale, scale, scale)))
 
-            return headTracks
+                return headTracks
 
-        shrinkTrack.append(Func(battle.movie.needRestoreHeadScale))
-        shrinkTrack.append(scaleHeadParallel(0.6, shrinkDuration))
-        shrinkTrack.append(Wait(1.0))
-        shrinkTrack.append(scaleHeadParallel(initialScale * 3.2, 0.4))
-        shrinkTrack.append(scaleHeadParallel(initialScale * 0.7, 0.4))
-        shrinkTrack.append(scaleHeadParallel(initialScale * 2.5, 0.3))
-        shrinkTrack.append(scaleHeadParallel(initialScale * 0.8, 0.3))
-        shrinkTrack.append(scaleHeadParallel(initialScale * 1.9, 0.2))
-        shrinkTrack.append(scaleHeadParallel(initialScale * 0.85, 0.2))
-        shrinkTrack.append(scaleHeadParallel(initialScale * 1.7, 0.15))
-        shrinkTrack.append(scaleHeadParallel(initialScale * 0.9, 0.15))
-        shrinkTrack.append(scaleHeadParallel(initialScale * 1.3, 0.1))
-        shrinkTrack.append(scaleHeadParallel(initialScale, 0.1))
-        shrinkTrack.append(Func(battle.movie.clearRestoreHeadScale))
-        shrinkTrack.append(Wait(0.7))
-    dropTrack = getPartTrack(shrinkDrop, 1.0, 2.0, [shrinkDrop, toon, 0])
+            shrinkTrack.append(Func(battle.movie.needRestoreHeadScale))
+            shrinkTrack.append(scaleHeadParallel(0.6, shrinkDuration))
+            shrinkTrack.append(Wait(1.0))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 3.2, 0.4))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 0.7, 0.4))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 2.5, 0.3))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 0.8, 0.3))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 1.9, 0.2))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 0.85, 0.2))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 1.7, 0.15))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 0.9, 0.15))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 1.3, 0.1))
+            shrinkTrack.append(scaleHeadParallel(initialScale, 0.1))
+            shrinkTrack.append(Func(battle.movie.clearRestoreHeadScale))
+            shrinkTrack.append(Wait(0.7))
+            shrinkTracks.append(shrinkTrack)
+        dropTracks.append(getPartTrack(shrinkDrop, 1.0, 2.0, [shrinkDrop, toon, 0]))
+
     damageAnims = []
     damageAnims.append(['cringe',
      0.01,
@@ -11637,14 +11698,14 @@ def doHeadShrink(attack):
      0.01,
      3.1,
      0.4])
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
-    if dmg > 0:
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
+    if hitAtleastOneToon:
         shrinkSound = globalBattleSoundCache.getSound('SA_head_shrink_only.ogg')
         growSound = globalBattleSoundCache.getSound('SA_head_grow_back_only.ogg')
         soundTrack = Sequence(Wait(1.5), SoundInterval(shrinkSound, duration=2.1, node=suit), SoundInterval(growSound, node=suit))
-        return Parallel(suitTrack, sprayTrack, cloudTrack, dropTrack, toonTrack, shrinkTrack, soundTrack)
+        return Parallel(suitTrack, sprayTracks, cloudTracks, dropTracks, toonTracks, shrinkTracks, soundTrack)
     else:
-        return Parallel(suitTrack, sprayTrack, cloudTrack, dropTrack, toonTrack)
+        return Parallel(suitTrack, sprayTracks, cloudTracks, dropTracks, toonTracks, shrinkTracks)
 
 
 def doRolodex(attack):
@@ -11988,10 +12049,7 @@ def doEvilEyeBreachOfContract(attack):
 def doEvilEye(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    eye = globalPropPool.getProp('evil-eye')
+    targets = attack['target']
     damageDelay = 2.44
     dodgeDelay = 1.64
     suitName = suit.getStyleName()
@@ -12017,85 +12075,101 @@ def doEvilEye(attack):
     suitSplicedAnims.extend(getSplicedLerpAnims('glower', suitHoldDuration, 1.1, startTime=suitHoldStart))
     suitSplicedAnims.append(['glower', 0.01, suitHoldStop])
     suitTrack = getSuitTrack(attack, splicedAnims=suitSplicedAnims)
-    eyeAppearTrack = Sequence(Wait(suitHoldStart), Func(__showProp, eye, suit, posPoints[0], posPoints[1]), LerpScaleInterval(eye, suitHoldDuration, Point3(11, 11, 11)), Wait(eyeHoldDuration * 0.3), LerpHprInterval(eye, 0.02, Point3(205, 40, 0)), Wait(eyeHoldDuration * 0.7), Func(battle.movie.needRestoreRenderProp, eye), Func(eye.wrtReparentTo, battle))
-    toonFace = __toonFacePoint(toon, parent=battle)
-    if dmg > 0:
-        lerpInterval = LerpPosInterval(eye, moveDuration, toonFace)
-    else:
-        lerpInterval = LerpPosInterval(eye, moveDuration, Point3(toonFace.getX(), toonFace.getY() - 5, toonFace.getZ() - 2))
-    eyeMoveTrack = lerpInterval
-    eyeRollTrack = LerpHprInterval(eye, moveDuration, Point3(0, 0, -180))
-    eyePropTrack = Sequence(eyeAppearTrack, Parallel(eyeMoveTrack, eyeRollTrack), Func(battle.movie.clearRenderProp, eye), Func(MovieUtil.removeProp, eye))
+    eyePropTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        eye = globalPropPool.getProp('evil-eye')
+        eyeAppearTrack = Sequence(Wait(suitHoldStart), Func(__showProp, eye, suit, posPoints[0], posPoints[1]), LerpScaleInterval(eye, suitHoldDuration, Point3(11, 11, 11)), Wait(eyeHoldDuration * 0.3), LerpHprInterval(eye, 0.02, Point3(205, 40, 0)), Wait(eyeHoldDuration * 0.7), Func(battle.movie.needRestoreRenderProp, eye), Func(eye.wrtReparentTo, battle))
+        toonFace = __toonFacePoint(toon, parent=battle)
+        if dmg > 0:
+            lerpInterval = LerpPosInterval(eye, moveDuration, toonFace)
+        else:
+            lerpInterval = LerpPosInterval(eye, moveDuration, Point3(toonFace.getX(), toonFace.getY() - 5, toonFace.getZ() - 2))
+        eyeMoveTrack = lerpInterval
+        eyeRollTrack = LerpHprInterval(eye, moveDuration, Point3(0, 0, -180))
+        eyePropTrack = Sequence(eyeAppearTrack, Parallel(eyeMoveTrack, eyeRollTrack), Func(battle.movie.clearRenderProp, eye), Func(MovieUtil.removeProp, eye))
+        eyePropTracks.append(eyePropTrack)
+
     damageAnims = [['duck',
       0.01,
       0.01,
       1.4], ['cringe', 0.01, 0.3]]
-    toonTrack = getToonTrack(attack, splicedDamageAnims=damageAnims, damageDelay=damageDelay, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], showDamageExtraTime=1.7, showMissedExtraTime=1.7)
+    toonTracks = getToonTracks(attack, splicedDamageAnims=damageAnims, damageDelay=damageDelay, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], showDamageExtraTime=1.7, showMissedExtraTime=1.7)
     soundTrack = getSoundTrack('SA_evil_eye.ogg', delay=1.3, node=suit)
-    return Parallel(suitTrack, toonTrack, eyePropTrack, soundTrack)
+    return Parallel(suitTrack, toonTracks, eyePropTracks, soundTrack)
 
 
 def doPlayHardball(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    ball = globalPropPool.getProp('baseball')
+    targets = attack['target']
+    hitAtleastOneToon = 0
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = 1
+
     suitType = getSuitBodyType(attack['suitName'])
     suitDelay = 1.3
     damageDelay = 2.25
     dodgeDelay = 1.86
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     ballPosPoints = [Point3(-0.25, 0.03, -0.31), VBase3(-1.152, 86.581, -76.784)]
-    propTrack = Sequence(getPropAppearTrack(ball, suit.getRightHand(), ballPosPoints, 0.5, Point3(7, 7, 7), scaleUpTime=0.25))
-    propTrack.append(Wait(suitDelay))
-    propTrack.append(Func(battle.movie.needRestoreRenderProp, ball))
-    propTrack.append(Func(ball.wrtReparentTo, battle))
-    toonPos = toon.getPos(battle)
-    x = toonPos.getX()
-    y = toonPos.getY()
-    z = toonPos.getZ()
-    z = z + 0.2
-    if dmg > 0:
-        propTrack.append(LerpPosInterval(ball, 0.25, __toonFacePoint(toon, parent=battle)))
-        propTrack.append(LerpPosInterval(ball, 0.5, Point3(x, y + 3, z)))
-        propTrack.append(LerpPosInterval(ball, 0.4, Point3(x, y + 5, z + 2)))
-        propTrack.append(LerpPosInterval(ball, 0.3, Point3(x, y + 6, z)))
-        propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 7, z + 1)))
-        propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 8, z)))
-        propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 8.5, z + 0.6)))
-        propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 9, z + 0.2)))
+    propTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        ball = globalPropPool.getProp('baseball')
+        propTrack = Sequence(getPropAppearTrack(ball, suit.getRightHand(), ballPosPoints, 0.5, Point3(7, 7, 7), scaleUpTime=0.25))
+        propTrack.append(Wait(suitDelay))
+        propTrack.append(Func(battle.movie.needRestoreRenderProp, ball))
+        propTrack.append(Func(ball.wrtReparentTo, battle))
+        toonPos = toon.getPos(battle)
+        x = toonPos.getX()
+        y = toonPos.getY()
+        z = toonPos.getZ()
+        z = z + 0.2
+        if dmg > 0:
+            propTrack.append(LerpPosInterval(ball, 0.25, __toonFacePoint(toon, parent=battle)))
+            propTrack.append(LerpPosInterval(ball, 0.5, Point3(x, y + 3, z)))
+            propTrack.append(LerpPosInterval(ball, 0.4, Point3(x, y + 5, z + 2)))
+            propTrack.append(LerpPosInterval(ball, 0.3, Point3(x, y + 6, z)))
+            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 7, z + 1)))
+            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 8, z)))
+            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 8.5, z + 0.6)))
+            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 9, z + 0.2)))
+        else:
+            propTrack.append(LerpPosInterval(ball, 0.25, Point3(x, y + 2, z)))
+            propTrack.append(LerpPosInterval(ball, 0.4, Point3(x, y - 1, z + 2)))
+            propTrack.append(LerpPosInterval(ball, 0.3, Point3(x, y - 3, z)))
+            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 4, z + 1)))
+            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 5, z)))
+            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 5.5, z + 0.6)))
+            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 6, z + 0.2)))
         propTrack.append(Wait(0.4))
-        soundTrack = getSoundTrack('SA_hardball_impact_only.ogg', delay=1.8, node=suit)
-    else:
-        propTrack.append(LerpPosInterval(ball, 0.25, Point3(x, y + 2, z)))
-        propTrack.append(LerpPosInterval(ball, 0.4, Point3(x, y - 1, z + 2)))
-        propTrack.append(LerpPosInterval(ball, 0.3, Point3(x, y - 3, z)))
-        propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 4, z + 1)))
-        propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 5, z)))
-        propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 5.5, z + 0.6)))
-        propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 6, z + 0.2)))
-        propTrack.append(Wait(0.4))
-        soundTrack = getSoundTrack('SA_hardball.ogg', delay=1.8, node=suit)
-    propTrack.append(LerpScaleInterval(ball, 0.3, MovieUtil.PNT3_NEARZERO))
-    propTrack.append(Func(MovieUtil.removeProp, ball))
-    propTrack.append(Func(battle.movie.clearRenderProp, ball))
+        propTrack.append(LerpScaleInterval(ball, 0.3, MovieUtil.PNT3_NEARZERO))
+        propTrack.append(Func(MovieUtil.removeProp, ball))
+        propTrack.append(Func(battle.movie.clearRenderProp, ball))
+        propTracks.append(propTrack)
+
     damageAnims = [['conked',
       damageDelay,
       0.01,
       0.5], ['slip-backward', 0.01, 0.7]]
-    toonTrack = getToonTrack(attack, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showDamageExtraTime=3.9)
-    return Parallel(suitTrack, toonTrack, propTrack, soundTrack)
+    toonTracks = getToonTracks(attack, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showDamageExtraTime=3.9)
+    soundTrack = getSoundTrack('SA_hardball%s.ogg' % ('_impact_only' if hitAtleastOneToon else ''), delay=1.8, node=suit)
+    return Parallel(suitTrack, toonTracks, propTracks, soundTrack)
 
 
 def doPowerTie(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    tie = globalPropPool.getProp('power-tie')
+    targets = attack['target']
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+
     suitType = getSuitBodyType(attack['suitName'])
     throwDelay = 1.25
     damageDelay = 2
@@ -12103,30 +12177,37 @@ def doPowerTie(attack):
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     posPoints = [Point3(-0.8, 0.5, -0.25), VBase3(90, 90, 0)]
     explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
-    splatName = 'dust'
-    splat = globalPropPool.getProp('dust')
-    explode = globalPropPool.getProp('dust')
-    explode.setTwoSided(True)
+    tiePropTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        tie = globalPropPool.getProp('power-tie')
+        splatName = 'dust'
+        splat = globalPropPool.getProp('dust')
+        explode = globalPropPool.getProp('dust')
+        explode.setTwoSided(True)
 
 
-    explode.setBillboardPointWorld(2)
-    explodeTrack = Sequence()
-    explodeTrack.append(
-    getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
-    explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-    tiePropTrack = Sequence(getPropAppearTrack(tie, suit.getRightHand(), posPoints, 0.5, Point3(3.5, 3.5, 3.5), scaleUpTime=0.25))
-    tiePropTrack.append(Wait(throwDelay))
-    tiePropTrack.append(Func(tie.setBillboardPointEye))
-    tiePropTrack.append(getPropThrowTrack(attack, tie, [__toonFacePoint(toon)], [__toonGroundPoint(attack, toon, 0.1)], hitDuration=0.25, missDuration=0.8))
-    soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    tiePropTrack.append(Parallel(explodeTrack, soundTrack))
-    toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
+        explode.setBillboardPointWorld(2)
+        explodeTrack = Sequence()
+        explodeTrack.append(
+        getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
+        tiePropTrack = Sequence(getPropAppearTrack(tie, suit.getRightHand(), posPoints, 0.5, Point3(3.5, 3.5, 3.5), scaleUpTime=0.25))
+        tiePropTrack.append(Wait(throwDelay))
+        tiePropTrack.append(Func(tie.setBillboardPointEye))
+        tiePropTrack.append(getPropThrowTrack(attack, tie, [__toonFacePoint(toon)], [__toonGroundPoint(attack, toon, 0.1)], hitDuration=0.25, missDuration=0.8, target=t))
+        soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
+        tiePropTrack.append(Parallel(explodeTrack, soundTrack))
+        tiePropTracks.append(tiePropTrack)
+
+    toonTracks = getToonTracks(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
     throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=2, node=suit)
-    if dmg > 0:
+    if hitAtleastOneToon:
         hitSound = getSoundTrack('SA_powertie_impact.ogg', delay=2.4, node=suit)
-        return Parallel(suitTrack, toonTrack, tiePropTrack, throwSound, hitSound)
+        return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound, hitSound)
     else:
-        return Parallel(suitTrack, toonTrack, tiePropTrack, throwSound)
+        return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound)
 
 
 def doDoubleTalk(attack):
@@ -13319,9 +13400,9 @@ def doHangUp(attack):
                          Wait(2.14), Func(receiver.wrtReparentTo, phone), Wait(0.62),
                          LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO),
                          Func(MovieUtil.removeProps, [receiver, phone]))
-    toonTrack = getToonTrack(attack, 3, ['slip-backward'], 2.5, ['jump'])
+    toonTracks = getToonTracks(attack, 3, ['slip-backward'], 2.5, ['jump'])
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=0.5, node=suit)
-    return Parallel(suitTrack, toonTrack, propTrack, soundTrack)
+    return Parallel(suitTrack, toonTracks, propTrack, soundTrack)
 
 def doVoicemail(attack):
     suit = attack['suit']
@@ -15188,13 +15269,10 @@ def doAcidRain(attack):
 def doMarketCrash(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
     suitDelay = 1.5
     propDelay = .5
     throwDuration = 1.0
-    paper = globalPropPool.getProp('newspaper')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     ceaseTrack = ActorInterval(suit, 'cease')
     ceaseSoundTrack = Parallel(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
@@ -15205,20 +15283,27 @@ def doMarketCrash(attack):
         suitTrack.append(Wait(1.0))
         suitTrack.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
     posPoints = [Point3(-1.6, -0.75, 0.2), VBase3(-90, 170, 0)]
-    paperTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, propDelay, Point3(3.5, 3.5, 3.5), scaleUpTime=0))
-    paperTrack.append(Wait(suitDelay))
-    hitPoint = toon.getPos(battle)
-    hitPoint.setX(hitPoint.getX() + 1.2)
-    hitPoint.setY(hitPoint.getY() + 1.5)
-    movePoint = Point3(hitPoint.getX(), hitPoint.getY() - 1.8, hitPoint.getZ() + 0.2)
-    paperTrack.append(Func(battle.movie.needRestoreRenderProp, paper))
-    paperTrack.append(Func(paper.wrtReparentTo, battle))
-    paperTrack.append(getThrowTrack(paper, hitPoint, duration=throwDuration, parent=battle))
-    paperTrack.append(Wait(0.6))
-    paperTrack.append(LerpPosInterval(paper, 0.4, movePoint))
-    spinTrack = Sequence(Wait(propDelay + suitDelay), LerpHprInterval(paper, throwDuration, Point3(0, 0, 0)))
-    sizeTrack = Sequence(Wait(propDelay + suitDelay), LerpScaleInterval(paper, throwDuration, Point3(6, 6, 6)), Wait(0.95), LerpScaleInterval(paper, 0.4, MovieUtil.PNT3_NEARZERO))
-    propTrack = Sequence(Parallel(paperTrack, spinTrack, sizeTrack), Func(MovieUtil.removeProp, paper), Func(battle.movie.clearRenderProp, paper))
+    propTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        paper = globalPropPool.getProp('newspaper')
+        paperTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, propDelay, Point3(3.5, 3.5, 3.5), scaleUpTime=0))
+        paperTrack.append(Wait(suitDelay))
+        hitPoint = toon.getPos(battle)
+        hitPoint.setX(hitPoint.getX() + 1.2)
+        hitPoint.setY(hitPoint.getY() + 1.5)
+        movePoint = Point3(hitPoint.getX(), hitPoint.getY() - 1.8, hitPoint.getZ() + 0.2)
+        paperTrack.append(Func(battle.movie.needRestoreRenderProp, paper))
+        paperTrack.append(Func(paper.wrtReparentTo, battle))
+        paperTrack.append(getThrowTrack(paper, hitPoint, duration=throwDuration, parent=battle))
+        paperTrack.append(Wait(0.6))
+        paperTrack.append(LerpPosInterval(paper, 0.4, movePoint))
+        spinTrack = Sequence(Wait(propDelay + suitDelay), LerpHprInterval(paper, throwDuration, Point3(0, 0, 0)))
+        sizeTrack = Sequence(Wait(propDelay + suitDelay), LerpScaleInterval(paper, throwDuration, Point3(6, 6, 6)), Wait(0.95), LerpScaleInterval(paper, 0.4, MovieUtil.PNT3_NEARZERO))
+        propTrack = Sequence(Parallel(paperTrack, spinTrack, sizeTrack), Func(MovieUtil.removeProp, paper), Func(battle.movie.clearRenderProp, paper))
+        propTracks.append(propTrack)
+
     damageAnims = []
     damageAnims.append(['cringe',
      0.01,
@@ -15230,9 +15315,9 @@ def doMarketCrash(attack):
      0.85])
     damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.95, startTime=1.2))
     damageAnims.append(['slip-forward', 0.01, 1.51])
-    toonTrack = getToonTrack(attack, damageDelay=3, splicedDamageAnims=damageAnims, dodgeDelay=2.5, dodgeAnimNames=['sidestep'], showDamageExtraTime=0.4, showMissedExtraTime=1.3)
+    toonTracks = getToonTracks(attack, damageDelay=3, splicedDamageAnims=damageAnims, dodgeDelay=2.5, dodgeAnimNames=['sidestep'], showDamageExtraTime=0.4, showMissedExtraTime=1.3)
     soundTrack = getSoundTrack('SA_market_crash.ogg', node=suit)
-    return Parallel(suitTrack, toonTrack, soundTrack, propTrack)
+    return Parallel(suitTrack, toonTracks, soundTrack, propTrack)
 
 def doMarketCrashPecking(attack):
     suit = attack['suit']
@@ -16056,38 +16141,38 @@ def doInject(attack):
 def doEvictionNotice(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    paper = globalPropPool.getProp('shredder-paper')
+    targets = attack['target']
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
-    propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
-    propTrack.append(Wait(1.55))
-    hitPoint = __toonFacePoint(toon, parent=battle)
-    hitPoint.setX(hitPoint.getX() - 1.4)
-    missPoint = __toonGroundPoint(attack, toon, 0.5, parent=battle)
-    missPoint.setX(missPoint.getX() - 1.1)
-    propTrack.append(getPropThrowTrack(attack, paper, [hitPoint], [missPoint], .25, parent=battle))
-    explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
-    splatName = 'dust'
-    splat = globalPropPool.getProp('dust')
-    explode = globalPropPool.getProp('dust')
-    explode.setTwoSided(True)
+    propTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        paper = globalPropPool.getProp('shredder-paper')
+        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+        propTrack.append(Wait(1.55))
+        hitPoint = __toonFacePoint(toon, parent=battle)
+        hitPoint.setX(hitPoint.getX() - 1.4)
+        missPoint = __toonGroundPoint(attack, toon, 0.5, parent=battle)
+        missPoint.setX(missPoint.getX() - 1.1)
+        propTrack.append(getPropThrowTrack(attack, paper, [hitPoint], [missPoint], .25, parent=battle, target=t))
+        explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
+        splatName = 'dust'
+        splat = globalPropPool.getProp('dust')
+        explode = globalPropPool.getProp('dust')
+        explode.setTwoSided(True)
 
 
-    explode.setBillboardPointWorld(2)
-    explodeTrack = Sequence()
-    explodeTrack.append(
-    getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
-    explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-    soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    propTrack.append(Parallel(explodeTrack, soundTrack))
-    toonTrack = getToonTrack(attack, 2, ['conked'], 2, ['jump'])
-    if dmg > 0:
-        return Parallel(suitTrack, toonTrack, propTrack)
-    else:
-        return Parallel(suitTrack, toonTrack, propTrack)
+        explode.setBillboardPointWorld(2)
+        explodeTrack = Sequence()
+        explodeTrack.append(
+        getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
+        soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
+        propTrack.append(Parallel(explodeTrack, soundTrack))
+        propTracks.append(propTrack)
+
+    toonTracks = getToonTracks(attack, 2, ['conked'], 2, ['jump'])
+    return Parallel(suitTrack, toonTracks, propTracks)
 
 def doEvictionNoticeInsurance(attack):
     suit = attack['suit']
@@ -18407,29 +18492,33 @@ def doBlueChip(attack):
 def doThrowBook(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
     suitDelay = 1.5
     propDelay = 0.1
     throwDuration = 1.0
     paper = globalPropPool.getProp('lawbook')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     posPoints = [Point3(-0.5, 0, 0), VBase3(0, 0, 180)]
-    paperTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, propDelay, Point3(2.25, 2.25, 2.25), scaleUpTime=0.5))
-    paperTrack.append(Wait(suitDelay))
-    hitPoint = toon.getPos(battle)
-    hitPoint.setX(hitPoint.getX() + 0)
-    hitPoint.setY(hitPoint.getY() + 1.5)
-    movePoint = Point3(hitPoint.getX(), hitPoint.getY() - 1.8, hitPoint.getZ() + 0.2)
-    paperTrack.append(Func(battle.movie.needRestoreRenderProp, paper))
-    paperTrack.append(Func(paper.wrtReparentTo, battle))
-    paperTrack.append(getThrowTrack(paper, hitPoint, duration=throwDuration, parent=battle))
-    paperTrack.append(Wait(0.6))
-    paperTrack.append(LerpPosInterval(paper, 0.4, movePoint))
-    spinTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpHprInterval(paper, throwDuration, Point3(-360, 360, 360)))
-    sizeTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpScaleInterval(paper, throwDuration, Point3(6, 6, 6)), Wait(0.95), LerpScaleInterval(paper, 0.75, MovieUtil.PNT3_NEARZERO))
-    propTrack = Sequence(Parallel(paperTrack, spinTrack, sizeTrack), Func(MovieUtil.removeProp, paper), Func(battle.movie.clearRenderProp, paper))
+    propTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        paperTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, propDelay, Point3(2.25, 2.25, 2.25), scaleUpTime=0.5))
+        paperTrack.append(Wait(suitDelay))
+        hitPoint = toon.getPos(battle)
+        hitPoint.setX(hitPoint.getX() + 0)
+        hitPoint.setY(hitPoint.getY() + 1.5)
+        movePoint = Point3(hitPoint.getX(), hitPoint.getY() - 1.8, hitPoint.getZ() + 0.2)
+        paperTrack.append(Func(battle.movie.needRestoreRenderProp, paper))
+        paperTrack.append(Func(paper.wrtReparentTo, battle))
+        paperTrack.append(getThrowTrack(paper, hitPoint, duration=throwDuration, parent=battle))
+        paperTrack.append(Wait(0.6))
+        paperTrack.append(LerpPosInterval(paper, 0.4, movePoint))
+        spinTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpHprInterval(paper, throwDuration, Point3(-360, 360, 360)))
+        sizeTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpScaleInterval(paper, throwDuration, Point3(6, 6, 6)), Wait(0.95), LerpScaleInterval(paper, 0.75, MovieUtil.PNT3_NEARZERO))
+        propTrack = Sequence(Parallel(paperTrack, spinTrack, sizeTrack), Func(MovieUtil.removeProp, paper), Func(battle.movie.clearRenderProp, paper))
+        propTracks.append(propTrack)
+
     damageAnims = []
     damageAnims.append(['cringe',
      0.01,
@@ -18442,8 +18531,8 @@ def doThrowBook(attack):
     damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.95, startTime=1.2))
     damageAnims.append(['slip-forward', 0.01, 1.51])
     soundTrack = getSoundTrack('SA_throw_book.ogg', node=suit)
-    toonTrack = getToonTrack(attack, damageDelay=3.15, splicedDamageAnims=damageAnims, dodgeDelay=2.4, dodgeAnimNames=['sidestep'], showDamageExtraTime=0.4, showMissedExtraTime=1.3)
-    return Parallel(suitTrack, toonTrack, propTrack, soundTrack)
+    toonTracks = getToonTracks(attack, damageDelay=3.15, splicedDamageAnims=damageAnims, dodgeDelay=2.4, dodgeAnimNames=['sidestep'], showDamageExtraTime=0.4, showMissedExtraTime=1.3)
+    return Parallel(suitTrack, toonTracks, propTracks, soundTrack)
 
 def doThrowBookSnap(attack):
     suit = attack['suit']
@@ -18658,18 +18747,13 @@ def doCloudStorage(attack):
 def doWithdrawal(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
     BattleParticles.loadParticles()
     particleEffect = BattleParticles.createParticleEffect('Withdrawal')
     BattleParticles.setEffectTexture(particleEffect, 'snow-particle')
     suitTrack = getSuitAnimTrack(attack)
     partTrack = getPartTrack(particleEffect, 1e-05, suitTrack.getDuration() + 1.2, [particleEffect, suit, 0])
-    toonTrack = getToonTrack(attack, 1.2, ['cringe'], 0.2, splicedDodgeAnims=[['duck', 1e-05, 0.8]], showMissedExtraTime=0.8)
-    headParts = toon.getHeadParts()
-    torsoParts = toon.getTorsoParts()
-    legsParts = toon.getLegsParts()
+    toonTracks = getToonTracks(attack, 1.2, ['cringe'], 0.2, splicedDodgeAnims=[['duck', 1e-05, 0.8]], showMissedExtraTime=0.8)
 
     def changeColor(parts):
         track = Parallel()
@@ -18688,42 +18772,59 @@ def doWithdrawal(attack):
         return track
 
     soundTrack = getSoundTrack('SA_withdrawl.ogg', delay=1.4, node=suit)
-    if dmg > 0:
-        colorTrack = Sequence()
-        colorTrack.append(Wait(1.6))
-        colorTrack.append(Func(battle.movie.needRestoreColor))
-        colorTrack.append(Parallel(changeColor(headParts), changeColor(torsoParts), changeColor(legsParts)))
-        colorTrack.append(Wait(2.9))
-        colorTrack.append(resetColor(headParts))
-        colorTrack.append(resetColor(torsoParts))
-        colorTrack.append(resetColor(legsParts))
-        colorTrack.append(Func(battle.movie.clearRestoreColor))
-        return Parallel(suitTrack, partTrack, toonTrack, soundTrack, colorTrack)
-    else:
-        return Parallel(suitTrack, partTrack, toonTrack, soundTrack)
+    colorTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        headParts = toon.getHeadParts()
+        torsoParts = toon.getTorsoParts()
+        legsParts = toon.getLegsParts()
+        if dmg > 0:
+            colorTrack = Sequence()
+            colorTrack.append(Wait(1.6))
+            colorTrack.append(Func(battle.movie.needRestoreColor))
+            colorTrack.append(Parallel(changeColor(headParts), changeColor(torsoParts), changeColor(legsParts)))
+            colorTrack.append(Wait(2.9))
+            colorTrack.append(resetColor(headParts))
+            colorTrack.append(resetColor(torsoParts))
+            colorTrack.append(resetColor(legsParts))
+            colorTrack.append(Func(battle.movie.clearRestoreColor))
+            colorTracks.append(colorTrack)
+
+    return Parallel(suitTrack, partTrack, toonTracks, soundTrack, colorTracks)
 
 
 def doJargon(attack):
     suit = attack['suit']
     battle = attack['battle']
     BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect(file='jargonSpray')
-    particleEffect2 = BattleParticles.createParticleEffect(file='jargonSpray')
-    particleEffect3 = BattleParticles.createParticleEffect(file='jargonSpray')
-    particleEffect4 = BattleParticles.createParticleEffect(file='jargonSpray')
-    BattleParticles.setEffectTexture(particleEffect, 'jargon-brow', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect2, 'jargon-deep', color=Vec4(0, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect3, 'jargon-hoop', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect4, 'jargon-ipo', color=Vec4(0, 0, 0, 1))
+    particleEffects = []
+    particleEffects2 = []
+    particleEffects3 = []
+    particleEffects4 = []
+    for t in attack['target']:
+        particleEffect = BattleParticles.createParticleEffect(file='jargonSpray')
+        particleEffect2 = BattleParticles.createParticleEffect(file='jargonSpray')
+        particleEffect3 = BattleParticles.createParticleEffect(file='jargonSpray')
+        particleEffect4 = BattleParticles.createParticleEffect(file='jargonSpray')
+        BattleParticles.setEffectTexture(particleEffect, 'jargon-brow', color=Vec4(1, 0, 0, 1))
+        BattleParticles.setEffectTexture(particleEffect2, 'jargon-deep', color=Vec4(0, 0, 0, 1))
+        BattleParticles.setEffectTexture(particleEffect3, 'jargon-hoop', color=Vec4(1, 0, 0, 1))
+        BattleParticles.setEffectTexture(particleEffect4, 'jargon-ipo', color=Vec4(0, 0, 0, 1))
+        particleEffects.append(particleEffect)
+        particleEffects2.append(particleEffect2)
+        particleEffects3.append(particleEffect3)
+        particleEffects4.append(particleEffect4)
+
     damageDelay = 1
     dodgeDelay = 0.9
     partDelay = 0.25
     partInterval = 1
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    partTrack = getPartTrack(particleEffect, partDelay + partInterval * 0, 2, [particleEffect, suit, 0])
-    partTrack2 = getPartTrack(particleEffect2, partDelay + partInterval * 1, 2, [particleEffect2, suit, 0])
-    partTrack3 = getPartTrack(particleEffect3, partDelay + partInterval * 2, 2, [particleEffect3, suit, 0])
-    partTrack4 = getPartTrack(particleEffect4, partDelay + partInterval * 3, 1.0, [particleEffect4, suit, 0])
+    partTracks = getPartTracks(attack, particleEffects, partDelay + partInterval * 0, 2, 0)
+    partTracks2 = getPartTracks(attack, particleEffects2, partDelay + partInterval * 1, 2, 0)
+    partTracks3 = getPartTracks(attack, particleEffects3, partDelay + partInterval * 2, 2, 0)
+    partTracks4 = getPartTracks(attack, particleEffects4, partDelay + partInterval * 3, 1.0, 0)
     damageAnims = []
     damageAnims.append(['conked',
      0.0001,
@@ -18759,9 +18860,9 @@ def doJargon(attack):
      0.86])
     damageAnims.append(['conked', 0.0001, 0.4])
     dodgeAnims = [['duck', 0.0001, 1.2], ['duck', 0.0001, 1.3]]
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.6, showDamageExtraTime=0.7)
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.6, showDamageExtraTime=0.7)
     soundTrack = getSoundTrack('SA_jargon.ogg', delay=1.5, node=suit)
-    return Parallel(suitTrack, toonTrack, soundTrack, partTrack, partTrack2, partTrack3, partTrack4)
+    return Parallel(suitTrack, toonTracks, soundTrack, partTracks, partTracks2, partTracks3, partTracks4)
 
 def doOverload(attack):
     suit = attack['suit']
@@ -18791,32 +18892,43 @@ def doOverload(attack):
 def doMumboJumbo(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
+    toon = targets[0]['toon']
+    dmg = targets[0]['hp']
     BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect(file='mumboJumboSpray')
-    particleEffect2 = BattleParticles.createParticleEffect(file='mumboJumboSpray')
-    particleEffect3 = BattleParticles.createParticleEffect(file='mumboJumboSmother')
-    particleEffect4 = BattleParticles.createParticleEffect(file='mumboJumboSmother')
-    particleEffect5 = BattleParticles.createParticleEffect(file='mumboJumboSmother')
-    BattleParticles.setEffectTexture(particleEffect, 'mumbojumbo-boiler', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect2, 'mumbojumbo-creative', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect3, 'mumbojumbo-deben', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect4, 'mumbojumbo-high', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect5, 'mumbojumbo-iron', color=Vec4(1, 0, 0, 1))
+    particleEffects = []
+    particleEffects2 = []
+    for t in targets:
+        particleEffect = BattleParticles.createParticleEffect(file='mumboJumboSpray')
+        particleEffect2 = BattleParticles.createParticleEffect(file='mumboJumboSpray')
+        BattleParticles.setEffectTexture(particleEffect, 'mumbojumbo-boiler', color=Vec4(1, 0, 0, 1))
+        BattleParticles.setEffectTexture(particleEffect2, 'mumbojumbo-creative', color=Vec4(1, 0, 0, 1))
+        particleEffects.append(particleEffect)
+        particleEffects2.append(particleEffect2)
+
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    partTrack = getPartTrack(particleEffect, 1.5, 2, [particleEffect, suit, 0])
-    partTrack2 = getPartTrack(particleEffect2, 1.5, 2, [particleEffect2, suit, 0])
-    partTrack3 = getPartTrack(particleEffect3, 2.25, 1.7, [particleEffect3, toon, 0])
-    partTrack4 = getPartTrack(particleEffect4, 2.25, 1.7, [particleEffect4, toon, 0])
-    partTrack5 = getPartTrack(particleEffect5, 2.25, 1.7, [particleEffect5, toon, 0])
-    toonTrack = getToonTrack(attack, 1.5, ['cringe'], 1.6, ['sidestep'])
+    partTracks = getPartTracks(attack, particleEffects, 1.5, 2, 0)
+    partTracks2 = getPartTracks(attack, particleEffects2, 1.5, 2, 0)
+    partTracks3 = Parallel()
+    partTracks4 = Parallel()
+    partTracks5 = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        particleEffect3 = BattleParticles.createParticleEffect(file='mumboJumboSmother')
+        particleEffect4 = BattleParticles.createParticleEffect(file='mumboJumboSmother')
+        particleEffect5 = BattleParticles.createParticleEffect(file='mumboJumboSmother')
+        BattleParticles.setEffectTexture(particleEffect3, 'mumbojumbo-deben', color=Vec4(1, 0, 0, 1))
+        BattleParticles.setEffectTexture(particleEffect4, 'mumbojumbo-high', color=Vec4(1, 0, 0, 1))
+        BattleParticles.setEffectTexture(particleEffect5, 'mumbojumbo-iron', color=Vec4(1, 0, 0, 1))
+        if dmg > 0:
+            partTracks3.append(getPartTrack(particleEffect3, 2.25, 1.7, [particleEffect3, toon, 0]))
+            partTracks4.append(getPartTrack(particleEffect4, 2.25, 1.7, [particleEffect4, toon, 0]))
+            partTracks5.append(getPartTrack(particleEffect5, 2.25, 1.7, [particleEffect5, toon, 0]))
+
+    toonTracks = getToonTracks(attack, 1.5, ['cringe'], 1.6, ['sidestep'])
     soundTrack = getSoundTrack('SA_mumbo_jumbo.ogg', delay=1.5, node=suit)
-    if dmg > 0:
-        return Parallel(suitTrack, toonTrack, soundTrack, partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
-    else:
-        return Parallel(suitTrack, toonTrack, soundTrack, partTrack, partTrack2)
+    return Parallel(suitTrack, toonTracks, soundTrack, partTracks, partTracks2, partTracks3, partTracks4, partTracks5)
 
 
 def doGuiltTrip(attack):
@@ -18860,46 +18972,47 @@ def doGuiltTrip(attack):
 def doRestrainingOrder(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    paper = globalPropPool.getProp('shredder-paper')
+    targets = attack['target']
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     #for s in battle.activeSuits:
         #if s.dna.name == 'laa':
             #theSuit = s
         #suitTrack.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
     posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
-    propTrack = Sequence(
-        getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0))
-    propTrack.append(Wait(1.55))
-    hitPoint = __toonFacePoint(toon, parent=battle)
-    hitPoint.setX(hitPoint.getX() - 1.4)
-    missPoint = __toonGroundPoint(attack, toon, 0.7, parent=battle)
-    missPoint.setX(missPoint.getX() - 1.1)
-    propTrack.append(getPropThrowTrack(attack, paper, [hitPoint], [missPoint], .25, parent=battle))
-    explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
-    splatName = 'dust'
-    splat = globalPropPool.getProp('dust')
-    explode = globalPropPool.getProp('dust')
-    explode.setTwoSided(True)
+    propTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        paper = globalPropPool.getProp('shredder-paper')
+        propTrack = Sequence(
+            getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0))
+        propTrack.append(Wait(1.55))
+        hitPoint = __toonFacePoint(toon, parent=battle)
+        hitPoint.setX(hitPoint.getX() - 1.4)
+        missPoint = __toonGroundPoint(attack, toon, 0.7, parent=battle)
+        missPoint.setX(missPoint.getX() - 1.1)
+        propTrack.append(getPropThrowTrack(attack, paper, [hitPoint], [missPoint], .25, parent=battle))
+        explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
+        splatName = 'dust'
+        splat = globalPropPool.getProp('dust')
+        explode = globalPropPool.getProp('dust')
+        explode.setTwoSided(True)
 
-    explode.setBillboardPointWorld(2)
-    explodeTrack = Sequence()
-    explodeTrack.append(
-        getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
-    explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-    soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    propTrack.append(Parallel(explodeTrack, soundTrack))
+        explode.setBillboardPointWorld(2)
+        explodeTrack = Sequence()
+        explodeTrack.append(
+            getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
+        soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
+        propTrack.append(Parallel(explodeTrack, soundTrack))
+        propTracks.append(propTrack)
+
     damageAnims = [['conked',
       0.01,
       0.3,
       0.2], ['struggle', 0.01, 0.2]]
-    toonTrack = getToonTrack(attack, damageDelay=2.3, splicedDamageAnims=damageAnims, dodgeDelay=1.7, dodgeAnimNames=['sidestep'])
-    if dmg > 0:
-        return Parallel(suitTrack, toonTrack, propTrack)
-    else:
-        return Parallel(suitTrack, toonTrack, propTrack)
+    toonTracks = getToonTracks(attack, damageDelay=2.3, splicedDamageAnims=damageAnims, dodgeDelay=1.7, dodgeAnimNames=['sidestep'])
+    return Parallel(suitTrack, toonTracks, propTracks)
 
 def doBreakthrough(attack):
     suit = attack['suit']
@@ -19149,21 +19262,29 @@ def doSpin(attack):
 def doLegalese(attack):
     suit = attack['suit']
     BattleParticles.loadParticles()
-    sprayEffect1 = BattleParticles.createParticleEffect(file='legaleseSpray')
-    sprayEffect2 = BattleParticles.createParticleEffect(file='legaleseSpray')
-    sprayEffect3 = BattleParticles.createParticleEffect(file='legaleseSpray')
-    color = Vec4(0.4, 0, 0, 1)
-    BattleParticles.setEffectTexture(sprayEffect1, 'legalese-hc', color=color)
-    BattleParticles.setEffectTexture(sprayEffect2, 'legalese-qpq', color=color)
-    BattleParticles.setEffectTexture(sprayEffect3, 'legalese-vd', color=color)
+    sprayEffects1 = []
+    sprayEffects2 = []
+    sprayEffects3 = []
+    for t in attack['target']:
+        sprayEffect1 = BattleParticles.createParticleEffect(file='legaleseSpray')
+        sprayEffect2 = BattleParticles.createParticleEffect(file='legaleseSpray')
+        sprayEffect3 = BattleParticles.createParticleEffect(file='legaleseSpray')
+        color = Vec4(0.4, 0, 0, 1)
+        BattleParticles.setEffectTexture(sprayEffect1, 'legalese-hc', color=color)
+        BattleParticles.setEffectTexture(sprayEffect2, 'legalese-qpq', color=color)
+        BattleParticles.setEffectTexture(sprayEffect3, 'legalese-vd', color=color)
+        sprayEffects1.append(sprayEffect1)
+        sprayEffects2.append(sprayEffect2)
+        sprayEffects3.append(sprayEffect3)
+
     partDelay = 0.5
     partDuration = 1.25
     damageDelay = 1
     dodgeDelay = 0.8
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    sprayTrack1 = getPartTrack(sprayEffect1, partDelay, partDuration, [sprayEffect1, suit, 0])
-    sprayTrack2 = getPartTrack(sprayEffect2, partDelay + 0.8, partDuration, [sprayEffect2, suit, 0])
-    sprayTrack3 = getPartTrack(sprayEffect3, partDelay + 1.6, partDuration, [sprayEffect3, suit, 0])
+    sprayTracks1 = getPartTracks(attack, sprayEffects1, partDelay, partDuration, 0)
+    sprayTracks2 = getPartTracks(attack, sprayEffects2, partDelay + 0.8, partDuration, 0)
+    sprayTracks3 = getPartTracks(attack, sprayEffects3, partDelay + 1.6, partDuration, 0)
     damageAnims = []
     damageAnims.append(['cringe',
      1e-05,
@@ -19175,8 +19296,8 @@ def doLegalese(attack):
      0.8])
     damageAnims.append(['cringe', 1e-05, 0.3])
     soundTrack = getSoundTrack('SA_jargon.ogg', delay=1, node=suit)
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showMissedExtraTime=0.8)
-    return Parallel(suitTrack, toonTrack, soundTrack, sprayTrack1, sprayTrack2, sprayTrack3)
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showMissedExtraTime=0.8)
+    return Parallel(suitTrack, toonTracks, soundTrack, sprayTracks1, sprayTracks2, sprayTracks3)
 
 
 def doPeckingOrder(attack):
