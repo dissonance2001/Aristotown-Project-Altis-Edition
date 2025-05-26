@@ -179,7 +179,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                     retardPos.setY(retardPos.getY() + MovieUtil.SUIT_EXTRA_REACH_DISTANCE)
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     moveTrack = lerpSuit(suit, 0.0, reachAnimDuration / 2.5, retardPos, battle, trapProp)
-                    reachTrack = ActorInterval(suit, 'reach', duration=reachAnimDuration)
+                    reachTrack = ActorInterval(suit, 'reach')
                     suitTrack.append(Parallel(moveTrack, reachTrack))
                     if trapProp:
                         suitTrack.append(Func(trapProp.wrtReparentTo, battle))
@@ -384,7 +384,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(suit.setNeutralAnimation))
                     suitTrack.append(Wait(suitDelay))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
+                    suitTrack.append(ActorInterval(suit, 'hypnotized'))
                     suitTrack.append(Func(suit.setPos, battle, reachPos))
                     if trapProp:
                         suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
@@ -1267,7 +1267,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(suit.setNeutralAnimation))
                     suitTrack.append(Wait(suitDelay))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
+                    suitTrack.append(ActorInterval(suit, 'hypnotized'))
                     suitTrack.append(Func(suit.setPos, battle, reachPos))
                     if trapProp:
                         suitTrack.append(Func(suit.setPlayRate, suit.getPlayRate2(), 'lured2'))
