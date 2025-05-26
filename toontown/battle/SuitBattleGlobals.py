@@ -1894,6 +1894,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (16,),
                   (100,),
                   (25,)),
+                 ('GlowerPower',
+                  (13,),
+                  (70,),
+                  (0,))
              )
          },
  'fd': {'name': 'Director Of\nPublic\nAffairs',
