@@ -233,9 +233,9 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 tracks.append(Parallel(suitTrack, bonusTrack))
         elif totalDamage[targetIndex] <= 0:
             battle = sound['battle']
-            if suit.isLured:
-                tracks.append(__createSuitResetPosTrack(suit, battle))
-                tracks.append(Func(battle.unlureSuit, suit))
+            #if suit.isLured:
+                #tracks.append(__createSuitResetPosTrack(suit, battle))
+                #tracks.append(Func(battle.unlureSuit, suit))
             tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, tSuitReact))
             tracks.append(Func(suit.setNeutralAnimation))
             tracks.append(Func(suit.setChatAbsolute,
