@@ -481,7 +481,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         elevatorModel.reparentTo(self.elevatorEntrance)
         self.setupElevator(elevatorModel)
         self.elevatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_elevator.ogg')
-        self.promotionMusic = base.loader.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
+        self.promotionMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_hard_boss_cutscene_1.ogg')
         self.betweenBattleMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleTwoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_base.ogg')
         self.stenoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_stenograph.ogg')
@@ -825,6 +825,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
+        base.camera.setPosHpr(-4, 173.1, 16, -1, 12, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -1539,19 +1540,26 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         track.append(bossAnimTrack)
         attackToons = TTLocalizer.BossCogAttackToons
         dialogTrack = Track(
-            (0, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro0, CFSpeech)),
-            (5.6, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro1, CFSpeech)),
-            (12, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro2, CFSpeech)),
-            (18, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro3, CFSpeech)),
-            (22, Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempIntro4, CFSpeech)),
-            (24, Sequence(
-                Func(self.clearChat),
-                self.loseCogSuits(self.toonsA + self.toonsB, render, (-2.798, -70, 10, 180, 0, 0)))),
-            (27, Sequence(
-                self.toonNormalEyes(self.involvedToons),
-                Func(self.loop, 'Ff_neutral'),
-                Func(self.setChatAbsolute, attackToons, CFSpeech))))
+            (0, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie1, CFSpeech)),
+
+            (5.6, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie2, CFSpeech)),
+
+            (12, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie3, CFSpeech)),
+
+            # Cut to toons losing their cog suits.
+            (18, Sequence(Func(self.clearChat),
+                          self.loseCogSuits(self.toonsA + self.toonsB, render, (-2.798, -70, 10, 180, 0, 0)),
+                          )),
+
+            # Cut to wide shot of battle arena.  Toons back up and
+            # ramps retract.
+            (24, Sequence(self.toonNormalEyes(self.involvedToons),
+                          Func(self.loop, 'Ff_neutral'),
+                          Func(self.setChatAbsolute, attackToons, CFSpeech)
+                          )),
+        )
         track.append(dialogTrack)
+
         return Sequence(
             Func(self.stickToonsToFloor),
             track,

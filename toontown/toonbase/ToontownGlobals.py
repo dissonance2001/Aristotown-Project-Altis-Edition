@@ -1145,7 +1145,7 @@ LawbotBossMaxDamage = 2700
 LawbotBossWinningTilt = 40
 LawbotBossInitialDamage = 1350
 LawbotBossBattleOnePosHpr = (-2.798,
- -60,
+ 220,
  0,
  0,
  0,
