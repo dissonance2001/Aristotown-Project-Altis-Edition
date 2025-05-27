@@ -475,10 +475,10 @@ mdr = (('throw-paper', 'throw-paper', 4),
        ('speak', 'speak', 4))
 nar = (('throw-paper', 'throw-paper', 4),
        ('magic2', 'magic2', 4),
-       ('lose3', 'wrecked', 4),
+       ('effort', 'effort', 4),
        ('magic1', 'magic1', 4),
-       ('frustrated', 'frustrated', 4),
-       ('magic3', 'magic3', 4),
+       ('glower', 'glower', 4),
+       ('magic3', 'magic2', 4),
        ('speak', 'speak', 4))
 fd = (('glower', 'glower', 4),
       ('speak', 'speak', 4),
