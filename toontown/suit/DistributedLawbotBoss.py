@@ -483,7 +483,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.elevatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_elevator.ogg')
         self.promotionMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_hard_boss_cutscene_1.ogg')
         self.betweenBattleMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
-        self.battleTwoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_base.ogg')
+        self.battleTwoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation.ogg')
         self.stenoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_stenograph.ogg')
         self.litigatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_litigator.ogg')
         self.caseMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_casemgr.ogg')
