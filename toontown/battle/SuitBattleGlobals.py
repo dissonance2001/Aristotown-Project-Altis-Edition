@@ -3823,44 +3823,36 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 					(30,)),
                 ('Tremor',
 				    (32,),
-					(100,),
+					(75,),
 					(15,)),
-                ('PoisonSpray',
-				    (0,),
-					(100,),
-                 (0,)),
                 ('Bite',
 				    (40,),
-					(100,),
+					(75,),
 					(30,)),
-                ('Enraged',
-				    (0,),
-					(100,),
-                    (0,)),
                 ('GuiltTrip',
 				    (35,),
-					(100,),
+					(75,),
 					(15,)),
-                ('Accusations',
-				    (1,),
-					(100,),
-					(0,)),
-                ('Caress',
+                ('ParadigmShift',
+				    (33,),
+					(75,),
+					(10,)),
+                ('ScapegoatGavel',
 				    (0,),
 					(100,),
 					(0,)),
-('Gavel',
+('ScapegoatShieldsUp',
 				    (0,),
 					(100,),
 					(0,)),
-('Snow',
+('ScapegoatEnraged',
 				    (0,),
 					(100,),
                  (0,)),
-                ('ParadigmShift',
-				    (33,),
-					(70,),
-					(10,)))},
+                ('ScapegoatBarnyardBash',
+				    (0,),
+					(100,),
+					(0,)))},
  'csm': {'name': 'Case Manager',
         'singularname': 'a Case Manager',
 		'pluralname': 'Case Managers',
@@ -3870,11 +3862,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(75,),
 		'attacks':
-		        (('LegalBindings',
-				    (0,),
-					(100,),
-					(0,)),
-                ('Rolodex',
+		        (('Rolodex',
 				    (36,),
 					(75,),
 					(10,)),
@@ -3886,26 +3874,37 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (39,),
 					(75,),
 					(10,)),
-                ('InsurancePlan',
-				    (0,),
-					(100,),
-					(0,)),
-('StealSafe',
-				    (0,),
-					(100,),
-					(0,)),
                 ('FountainPen',
 				    (33,),
 					(75,),
 					(35,)),
-('CloseTheLoop',
-				    (0,),
-					(100,),
-					(0,)),
-                ('GuiltTrip',
+('GuiltTrip',
 				    (31,),
 					(75,),
-					(30,)))},
+					(30,)),
+                 ('CaseManagerInsurancePlan',
+                  (0,),
+                  (100,),
+                  (0,)),
+ ('CaseManagerLegalBindings',
+                 (0,),
+					(100,),
+                 (0,)),
+ (random.choice(('BanToonup', 'BanTrap', 'BanLure', 'BanThrow', 'BanSquirt', 'BanZap', 'BanSound', 'BanDrop')),
+                 (0,),
+					(100,),
+                 (0,)),
+ (random.choice(('BanToonupTrap','BanToonupLure', 'BanToonupThrow', 'BanToonupSquirt', 'BanToonupZap', 'BanToonupSound', 'BanToonupDrop',
+                 'BanTrapLure', 'BanTrapThrow', 'BanTrapSquirt', 'BanTrapZap', 'BanTrapSound', 'BanTrapDrop',
+                 'BanLureThrow', 'BanLureSquirt', 'BanLureZap', 'BanLureSound', 'BanLureDrop',
+                 'BanThrowSquirt',  'BanThrowZap',  'BanThrowSound',  'BanThrowDrop',
+                 'BanSquirtZap', 'BanSquirtSound', 'BanSquirtDrop',
+                 'BanZapSound', 'BanZapDrop',
+                 'BanSoundDrop')),
+                 (0,),
+					(100,),
+                 (0,)),
+                 )},
  'ste': {'name': 'Stenographer',
         'singularname': 'Stenographer',
 		'pluralname': 'Stenographers',
@@ -3915,26 +3914,14 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(75,),
 		'attacks':
-		        (('CourtRecord4', #sanction 2
-				    (0,),
-					(100,),
-                    (0,)),
-                ('PoundKey',
+		        (('PoundKey',
 				    (45,),
 					(75,),
 					(30,)),
-                ('StealSafe',
-                 (0,),
-					(100,),
-                 (0,)),
                 ('BuzzWord',
 				    (36,),
 					(75,),
 					(20,)),
-                ('CourtCosts',
-				    (0,),
-					(100,),
-					(0,)),
                 ('MumboJumbo',
 				    (34,),
 					(75,),
@@ -3947,11 +3934,30 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (30,),
 					(75,),
 					(10,)),
-                ('CourtSanction',
+                ('StenographerSanctionBindings',
 				    (0,),
 					(100,),
 					(0,)),
-                 ('CeaseAndDesist',
+ ('CalculatingFees',
+				    (0,),
+					(100,),
+					(0,)),
+ ('SynergyFees',
+				    (0,),
+					(100,),
+					(0,)),
+ (random.choice(('BanLevel4', 'BanLevel5', 'BanLevel6', 'BanLevel7', 'BanLevel8')),
+				    (0,),
+					(100,),
+					(0,)),
+(random.choice(('BanLevel45', 'BanLevel46', 'BanLevel47', 'BanLevel48',
+                'BanLevel56', 'BanLevel57', 'BanLevel58',
+                'BanLevel67', 'BanLevel68',
+                'BanLevel78')),
+				    (0,),
+					(100,),
+					(0,)),
+                 ('StenographerSanction',
                   (0,),
                   (100,),
                   (0,))
@@ -3965,23 +3971,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(75,),
 		'attacks':
-            (('WhitePowder',
-              (0,),
-              (100,),
-              (0,)),
-             ('ExtraTip',
-              (0,),
-              (100,),
-              (0,)),
-             ('Snap2',
-              (0,),
-              (100,),
-              (0,)),
-            ('Snap',
-              (0,),
-              (100,),
-              (0,)),
-            ('LawBook',
+            (('LawBook',
               (40,),
               (100,),
               (15,)),
@@ -3993,10 +3983,6 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (38,),
               (100,),
               (20,)),
-            ('Accusations',
-				    (1,),
-					(100,),
-					(0,)),
              ('Chomp',
               (43,),
               (100,),
@@ -4004,7 +3990,24 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
             ('EvilEye',
               (36,),
               (100,),
-              (10,)))},
+              (10,)),
+ ('LitigatorBayouBellow',
+				    (0,),
+					(100,),
+					(0,)),
+ ('LitigatorBayouBash',
+				    (0,),
+					(100,),
+					(0,)),
+ ('LitigatorSnap',
+				    (0,),
+					(100,),
+					(0,)),
+                 ('LitigatorSnapSoak',
+                  (0,),
+                  (100,),
+                  (0,))
+                 )},
 'ca': {'name': 'Bagholder', # cog name
        'singularname': 'a Bagholder', # cogs singular name, for tasks
        'pluralname': 'Bagholders', # cogs plural name, for tasks
@@ -6077,7 +6080,78 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'QualityLvlControl1': ('sanction', ATK_TGT_SINGLE),
 'QualityLvlControl2': ('throw-paper', ATK_TGT_SINGLE),
 'QualityLvlControl3': ('sanction', ATK_TGT_SINGLE),
- 'Overdraft': ('hold-pencil', ATK_TGT_SINGLE)}
+ 'Overdraft': ('hold-pencil', ATK_TGT_SINGLE),
+#litigator cheats
+               'LitigatorSnapSoak': ('throw-object', ATK_TGT_SINGLE),
+'LitigatorSnap': ('throw-object', ATK_TGT_SINGLE),
+'LitigatorBayouBash': ('gsnap', ATK_TGT_GROUP),
+'LitigatorBayouBellow': ('bellow', ATK_TGT_SINGLE),
+#stenographer cheats
+'StenographerSanctionBindings': ('sanction', ATK_TGT_SINGLE),
+'StenographerSanction': ('sanction', ATK_TGT_SINGLE),
+#case manager cheats
+'CaseManagerLegalBindings': ('throw-object', ATK_TGT_SINGLE),
+'CaseManagerInsurancePlan': ('throw-insurance', ATK_TGT_SINGLE),
+#scapegoat cheats
+'ScapegoatShieldsUp': ('defense', ATK_TGT_SINGLE),
+'ScapegoatEnraged': ('enraged', ATK_TGT_SINGLE),
+'ScapegoatBarnyardBash': ('effort', ATK_TGT_GROUP),
+'ScapegoatGavel': ('effort', ATK_TGT_SINGLE),
+#universal cheats
+'SynergyFees': ('magic3', ATK_TGT_GROUP),
+'CalculatingFees': ('calculating-costs', ATK_TGT_SINGLE),
+'BanLevel4': ('cease', ATK_TGT_GROUP),
+'BanLevel5': ('cease', ATK_TGT_GROUP),
+'BanLevel6': ('cease', ATK_TGT_GROUP),
+'BanLevel7': ('cease', ATK_TGT_GROUP),
+'BanLevel8': ('cease', ATK_TGT_GROUP),
+'BanLevel45': ('cease', ATK_TGT_GROUP),
+'BanLevel46': ('cease', ATK_TGT_GROUP),
+'BanLevel47': ('cease', ATK_TGT_GROUP),
+'BanLevel48': ('cease', ATK_TGT_GROUP),
+'BanLevel56': ('cease', ATK_TGT_GROUP),
+'BanLevel57': ('cease', ATK_TGT_GROUP),
+'BanLevel58': ('cease', ATK_TGT_GROUP),
+'BanLevel67': ('cease', ATK_TGT_GROUP),
+'BanLevel68': ('cease', ATK_TGT_GROUP),
+'BanLevel78': ('cease', ATK_TGT_GROUP),
+'BanToonupTrap': ('cease', ATK_TGT_GROUP),
+'BanToonupLure': ('cease', ATK_TGT_GROUP),
+'BanToonupThrow': ('cease', ATK_TGT_GROUP),
+'BanToonupSquirt': ('cease', ATK_TGT_GROUP),
+'BanToonupZap': ('cease', ATK_TGT_GROUP),
+'BanToonupSound': ('cease', ATK_TGT_GROUP),
+'BanToonupDrop': ('cease', ATK_TGT_GROUP),
+'BanTrapLure': ('cease', ATK_TGT_GROUP),
+'BanTrapThrow': ('cease', ATK_TGT_GROUP),
+'BanTrapSquirt': ('cease', ATK_TGT_GROUP),
+'BanTrapZap': ('cease', ATK_TGT_GROUP),
+'BanTrapSound': ('cease', ATK_TGT_GROUP),
+'BanTrapDrop': ('cease', ATK_TGT_GROUP),
+'BanLureThrow': ('cease', ATK_TGT_GROUP),
+'BanLureSquirt': ('cease', ATK_TGT_GROUP),
+'BanLureZap': ('cease', ATK_TGT_GROUP),
+'BanLureSound': ('cease', ATK_TGT_GROUP),
+'BanLureDrop': ('cease', ATK_TGT_GROUP),
+'BanThrowSquirt': ('cease', ATK_TGT_GROUP),
+'BanThrowZap': ('cease', ATK_TGT_GROUP),
+'BanThrowSound': ('cease', ATK_TGT_GROUP),
+'BanThrowDrop': ('cease', ATK_TGT_GROUP),
+'BanSquirtZap': ('cease', ATK_TGT_GROUP),
+'BanSquirtSound': ('cease', ATK_TGT_GROUP),
+'BanSquirtDrop': ('cease', ATK_TGT_GROUP),
+'BanZapSound': ('cease', ATK_TGT_GROUP),
+'BanZapDrop': ('cease', ATK_TGT_GROUP),
+'BanSoundDrop': ('cease', ATK_TGT_GROUP),
+'BanToonup': ('cease', ATK_TGT_GROUP),
+'BanTrap': ('cease', ATK_TGT_GROUP),
+'BanLure': ('cease', ATK_TGT_GROUP),
+'BanThrow': ('cease', ATK_TGT_GROUP),
+'BanSquirt': ('cease', ATK_TGT_GROUP),
+'BanZap': ('cease', ATK_TGT_GROUP),
+'BanSound': ('cease', ATK_TGT_GROUP),
+'BanDrop': ('cease', ATK_TGT_GROUP),
+               }
 ACID_RAIN = SuitAttacks.keys().index('AcidRain')
 AUDIT = SuitAttacks.keys().index('Audit')
 BITE = SuitAttacks.keys().index('Bite')
@@ -6306,6 +6380,77 @@ QUALITY_CONTROL_LEVEL = SuitAttacks.keys().index('QualityLvlControl')
 QUALITY_CONTROL_LEVEL_1 = SuitAttacks.keys().index('QualityLvlControl1')
 QUALITY_CONTROL_LEVEL_2 = SuitAttacks.keys().index('QualityLvlControl2')
 QUALITY_CONTROL_LEVEL_3 = SuitAttacks.keys().index('QualityLvlControl3')
+#litigator cheats
+LITIGATOR_SNAP_SOAK = SuitAttacks.keys().index('LitigatorSnapSoak')
+LITIGATOR_SNAP = SuitAttacks.keys().index('LitigatorSnap')
+LITIGATOR_BAYOU_BASH = SuitAttacks.keys().index('LitigatorBayouBash')
+LITIGATOR_BAYOU_BELLOW = SuitAttacks.keys().index('LitigatorBayouBellow')
+#stenographer cheats
+STENOGRAPHER_SANCTION_BINDINGS = SuitAttacks.keys().index('StenographerSanctionBindings')
+STENOGRAPHER_SANCTION = SuitAttacks.keys().index('StenographerSanction')
+#case manager cheats
+CASE_MANAGER_LEGAL_BINDINGS = SuitAttacks.keys().index('CaseManagerLegalBindings')
+CASE_MANAGER_INSURANCE_PLAN = SuitAttacks.keys().index('CaseManagerInsurancePlan')
+#scapegoat cheats
+SCAPEGOAT_SHIELDS_UP = SuitAttacks.keys().index('ScapegoatShieldsUp')
+SCAPEGOAT_ENRAGED = SuitAttacks.keys().index('ScapegoatEnraged')
+SCAPEGOAT_GAVEL = SuitAttacks.keys().index('ScapegoatGavel')
+SCAPEGOAT_BARNYARD_BASH = SuitAttacks.keys().index('ScapegoatBarnyardBash')
+#universal cheats
+SYNERGY_FEES = SuitAttacks.keys().index('SynergyFees')
+CALCULATING_FEES = SuitAttacks.keys().index('CalculatingFees')
+BAN_LEVEL_4 = SuitAttacks.keys().index('BanLevel45')
+BAN_LEVEL_5 = SuitAttacks.keys().index('BanLevel5')
+BAN_LEVEL_6 = SuitAttacks.keys().index('BanLevel6')
+BAN_LEVEL_7 = SuitAttacks.keys().index('BanLevel7')
+BAN_LEVEL_8 = SuitAttacks.keys().index('BanLevel8')
+BAN_LEVEL_4_5 = SuitAttacks.keys().index('BanLevel45')
+BAN_LEVEL_4_6 = SuitAttacks.keys().index('BanLevel46')
+BAN_LEVEL_4_7 = SuitAttacks.keys().index('BanLevel47')
+BAN_LEVEL_4_8 = SuitAttacks.keys().index('BanLevel48')
+BAN_LEVEL_5_6 = SuitAttacks.keys().index('BanLevel56')
+BAN_LEVEL_5_7 = SuitAttacks.keys().index('BanLevel57')
+BAN_LEVEL_5_8 = SuitAttacks.keys().index('BanLevel58')
+BAN_LEVEL_6_7 = SuitAttacks.keys().index('BanLevel67')
+BAN_LEVEL_6_8 = SuitAttacks.keys().index('BanLevel68')
+BAN_LEVEL_7_8 = SuitAttacks.keys().index('BanLevel78')
+BAN_TOONUP_TRAP = SuitAttacks.keys().index('BanToonupTrap')
+BAN_TOONUP_LURE = SuitAttacks.keys().index('BanToonupLure')
+BAN_TOONUP_THROW = SuitAttacks.keys().index('BanToonupThrow')
+BAN_TOONUP_SQUIRT = SuitAttacks.keys().index('BanToonupSquirt')
+BAN_TOONUP_ZAP = SuitAttacks.keys().index('BanToonupZap')
+BAN_TOONUP_SOUND = SuitAttacks.keys().index('BanToonupSound')
+BAN_TOONUP_DROP = SuitAttacks.keys().index('BanToonupDrop')
+BAN_TRAP_LURE = SuitAttacks.keys().index('BanTrapLure')
+BAN_TRAP_THROW = SuitAttacks.keys().index('BanTrapThrow')
+BAN_TRAP_SQUIRT = SuitAttacks.keys().index('BanTrapSquirt')
+BAN_TRAP_ZAP = SuitAttacks.keys().index('BanTrapZap')
+BAN_TRAP_SOUND = SuitAttacks.keys().index('BanTrapSound')
+BAN_TRAP_DROP = SuitAttacks.keys().index('BanTrapDrop')
+BAN_LURE_THROW = SuitAttacks.keys().index('BanLureThrow')
+BAN_LURE_SQUIRT = SuitAttacks.keys().index('BanLureSquirt')
+BAN_LURE_ZAP = SuitAttacks.keys().index('BanLureZap')
+BAN_LURE_SOUND = SuitAttacks.keys().index('BanLureSound')
+BAN_LURE_DROP = SuitAttacks.keys().index('BanLureDrop')
+BAN_THROW_SQUIRT = SuitAttacks.keys().index('BanThrowSquirt')
+BAN_THROW_ZAP = SuitAttacks.keys().index('BanThrowZap')
+BAN_THROW_SOUND = SuitAttacks.keys().index('BanThrowSound')
+BAN_THROW_DROP = SuitAttacks.keys().index('BanThrowDrop')
+BAN_SQUIRT_ZAP = SuitAttacks.keys().index('BanSquirtZap')
+BAN_SQUIRT_SOUND = SuitAttacks.keys().index('BanSquirtSound')
+BAN_SQUIRT_DROP = SuitAttacks.keys().index('BanSquirtDrop')
+BAN_ZAP_SOUND = SuitAttacks.keys().index('BanZapSound')
+BAN_ZAP_DROP = SuitAttacks.keys().index('BanZapDrop')
+BAN_SOUND_DROP = SuitAttacks.keys().index('BanSoundDrop')
+BAN_TOONUP = SuitAttacks.keys().index('BanToonup')
+BAN_TRAP = SuitAttacks.keys().index('BanTrap')
+BAN_LURE = SuitAttacks.keys().index('BanThrow')
+BAN_THROW = SuitAttacks.keys().index('BanThrow')
+BAN_SQUIRT = SuitAttacks.keys().index('BanSquirt')
+BAN_ZAP = SuitAttacks.keys().index('BanZap')
+BAN_SOUND = SuitAttacks.keys().index('BanSound')
+BAN_DROP = SuitAttacks.keys().index('BanDrop')
+
 
 SuitCheats = {'TestCheat': ('finger-wag', ATK_TGT_SINGLE),}
 TEST_CHEAT = SuitCheats.keys().index('TestCheat')

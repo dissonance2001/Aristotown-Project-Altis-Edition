@@ -1,4 +1,6 @@
 from toontown.battle import MovieCamera
+from toontown.battle import MovieLawbotLitigationCheats
+from toontown.battle import MovieUniversalCheats
 from toontown.battle import MovieUtil
 from toontown.battle import BattleParticles
 from direct.directnotify import DirectNotifyGlobal
@@ -587,6 +589,144 @@ def doSuitAttack(attack):
         suitTrack = doWithdrawal(attack)
     elif name == WRITE_OFF:
         suitTrack = doWriteOff(attack)
+    #litigator cheats
+    elif name == LITIGATOR_SNAP_SOAK:
+        suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
+    elif name == LITIGATOR_SNAP:
+        suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
+    elif name == LITIGATOR_BAYOU_BASH:
+        suitTrack = MovieLawbotLitigationCheats.doBayouBash(attack)
+    elif name == LITIGATOR_BAYOU_BELLOW:
+        suitTrack = MovieLawbotLitigationCheats.doBayouBellow(attack)
+    #stenographer cheats
+    elif name == STENOGRAPHER_SANCTION_BINDINGS:
+        suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack, suit)
+    elif name == STENOGRAPHER_SANCTION:
+        suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack, suit)
+    #case manager cheats
+    elif name == CASE_MANAGER_INSURANCE_PLAN:
+        if not suit.isSkeleton:
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack)
+        else:
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanSkelecogInsurance(attack)
+    elif name == CASE_MANAGER_LEGAL_BINDINGS:
+        suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
+    #scapegoat cheats
+    elif name == SCAPEGOAT_SHIELDS_UP:
+        suitTrack = MovieLawbotLitigationCheats.doShieldsUp(attack)
+    elif name == SCAPEGOAT_ENRAGED:
+        suitTrack = MovieLawbotLitigationCheats.doEnraged(attack)
+    elif name == SCAPEGOAT_GAVEL:
+        suitTrack = MovieLawbotLitigationCheats.doGavel(attack)
+    elif name == SCAPEGOAT_BARNYARD_BASH:
+        suitTrack = MovieLawbotLitigationCheats.doBarnyardBash(attack)
+    #universal cheats
+    elif name == SYNERGY_FEES:
+        suitTrack = MovieUniversalCheats.doSynergy(attack)
+    elif name == CALCULATING_FEES:
+        suitTrack = MovieUniversalCheats.doCourtCalculations(attack)
+    elif name == BAN_LEVEL_4:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_5:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_6:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_7:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_8:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_4_5:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_4_6:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_4_7:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_4_8:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_5_6:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_5_7:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_5_8:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_6_7:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_6_8:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LEVEL_7_8:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TOONUP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TRAP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LURE:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_THROW:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_SQUIRT:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_ZAP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_SOUND:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_DROP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TOONUP_TRAP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TOONUP_LURE:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TOONUP_THROW:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TOONUP_SQUIRT:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TOONUP_ZAP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TOONUP_SOUND:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TOONUP_DROP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TRAP_LURE:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TRAP_THROW:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TRAP_SQUIRT:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TRAP_ZAP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TRAP_SOUND:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_TRAP_DROP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LURE_THROW:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LURE_SQUIRT:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LURE_ZAP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LURE_SOUND:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_LURE_DROP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_THROW_SQUIRT:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_THROW_ZAP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_THROW_SOUND:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_THROW_DROP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_SQUIRT_ZAP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_SQUIRT_SOUND:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_SQUIRT_DROP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_ZAP_SOUND:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_ZAP_DROP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+    elif name == BAN_SOUND_DROP:
+        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     else:
         notify.warning('unknown attack: %d substituting Finger Wag' % name)
         suitTrack = doDefault(attack)

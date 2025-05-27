@@ -3330,6 +3330,150 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         return Parallel(pbpTrack2, camTrack2)
     elif name == THROW_BOOK:
         camTrack.append(defaultCamera(openShotDuration=2.0))
+        # litigator cheats
+    elif name == LITIGATOR_SNAP_SOAK:
+        camTrack.append(defaultCamera(openShotDuration=2))
+    elif name == LITIGATOR_SNAP:
+        camTrack.append(defaultCamera(openShotDuration=2))
+    elif name == LITIGATOR_BAYOU_BASH:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == LITIGATOR_BAYOU_BELLOW:
+        camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0)), heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3))
+        # stenographer cheats
+    elif name == STENOGRAPHER_SANCTION_BINDINGS:
+        camTrack.append(defaultCamera(openShotDuration=0.75))
+    elif name == STENOGRAPHER_SANCTION:
+        camTrack.append(defaultCamera(openShotDuration=0.75))
+        # case manager cheats
+    elif name == CASE_MANAGER_INSURANCE_PLAN:
+        if not suit.isSkeleton:
+            camTrack.append(Sequence(randomActorShot(suit, battle, 1, 'suit'),
+                                      moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1),
+                                      heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3.0)))
+
+        else:
+            camTrack.append(Sequence(randomActorShot(suit, battle, 1, 'suit'),
+                                      moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1),
+                                      heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3.0)))
+
+    elif name == CASE_MANAGER_LEGAL_BINDINGS:
+        camTrack.append(defaultCamera(openShotDuration=2))
+        # scapegoat cheats
+    elif name == SCAPEGOAT_SHIELDS_UP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == SCAPEGOAT_ENRAGED:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == SCAPEGOAT_GAVEL:
+        camTrack.append(defaultCamera(openShotDuration=2))
+    elif name == SCAPEGOAT_BARNYARD_BASH:
+        camTrack.append(defaultCamera(openShotDuration=2))
+        # universal cheats
+    elif name == SYNERGY_FEES:
+        camTrack.append(defaultCamera(openShotDuration=2))
+    elif name == CALCULATING_FEES:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_4:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_5:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_6:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_7:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_8:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_4_5:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_4_6:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_4_7:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_4_8:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_5_6:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_5_7:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_5_8:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_6_7:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_6_8:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LEVEL_7_8:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TOONUP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TRAP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LURE:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_THROW:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_SQUIRT:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_ZAP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_SOUND:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_DROP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TOONUP_TRAP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TOONUP_LURE:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TOONUP_THROW:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TOONUP_SQUIRT:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TOONUP_ZAP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TOONUP_SOUND:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TOONUP_DROP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TRAP_LURE:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TRAP_THROW:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TRAP_SQUIRT:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TRAP_ZAP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TRAP_SOUND:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_TRAP_DROP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LURE_THROW:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LURE_SQUIRT:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LURE_ZAP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LURE_SOUND:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_LURE_DROP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_THROW_SQUIRT:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_THROW_ZAP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_THROW_SOUND:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_THROW_DROP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_SQUIRT_ZAP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_SQUIRT_SOUND:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_SQUIRT_DROP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_ZAP_SOUND:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_ZAP_DROP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == BAN_SOUND_DROP:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     else:
         notify.warning('unknown attack id in chooseSuitShot: %d using default cam' % name)
         camTrack.append(defaultCamera())
