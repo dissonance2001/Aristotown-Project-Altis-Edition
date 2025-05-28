@@ -4708,9 +4708,9 @@ class BattleCalculatorAI:
                     if s.dna.name == 'ste':
                         currentBossHealth = s.currHP
                 if currentBossHealth >= 1:
-                    self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'corruption', .4, 3, 'setBoth')
                 else:
-                    self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'corruption', .2, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
             elif atkInfo['name'] == 'LitigatorBayouBellow':
                 result = 0
