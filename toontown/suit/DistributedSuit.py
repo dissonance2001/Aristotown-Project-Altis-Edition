@@ -707,6 +707,28 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             soundSequence.start()
             self.cleanUpSoundList()
 
+    def checkCogLured(self, battle):
+        if self.getDizzy():
+            ival = self.__createSuitResetPosTrack(battle)
+            ival.start()
+        else:
+            pass
+
+    def __createSuitResetPosTrack(self, battle):
+        resetPos, resetHpr = battle.getActorPosHpr(self)
+        moveDist = Vec3(self.getPos(battle) - resetPos).length()
+        moveDuration = 0
+        neutralTrack = Func(self.setNeutralAnimation)
+        unluredTrack = Func(battle.unlureSuit, self)
+        unlureSuit = Func(self.makeUnLured)
+        updateTrack = Parallel(Func(self.setChatAbsolute,
+                                    '',
+                                    CFSpeech | CFTimeout))
+        walkTrack = Sequence(Func(self.setHpr, battle, resetHpr),
+                             neutralTrack)
+        moveTrack = LerpPosInterval(self, moveDuration, resetPos, other=battle)
+        return Parallel(unluredTrack, unlureSuit, walkTrack, moveTrack)
+
     def checkCogHP(self, battle):
         if self.getHP() <= 0:
             ival = Sequence(MovieUtil.createSuitDeathTrack(self, battle), Func(battle.unlureSuit, self))

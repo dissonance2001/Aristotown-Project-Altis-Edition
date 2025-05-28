@@ -25,7 +25,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                                  self.posInterval(0.25, (0, 0, -0.075))),
                         Parallel(self.scaleInterval(0.25, (1.1, 1.1, 1.1)),
                                  self.posInterval(0.25, (0, 0, -0.040))),
-                        Wait(2),
+                        Wait(duration),
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)))
 
     def getShowIntervalOvercharged(self, text, duration):
@@ -38,7 +38,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                                  self.posInterval(0.25, (0, 0, -0.075))),
                         Parallel(self.scaleInterval(0.25, (1.1, 1.1, 1.1)),
                                  self.posInterval(0.25, (0, 0, -0.040))),
-                        Wait(2),
+                        Wait(duration),
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)))
 
     def getShowIntervalCheat(self, text, duration):
@@ -51,11 +51,11 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                                  self.posInterval(0.25, (0, 0, -0.075))),
                         Parallel(self.scaleInterval(0.25, (1.1, 1.1, 1.1)),
                                  self.posInterval(0.25, (0, 0, -0.040))),
-                        Wait(2.25),
+                        Wait(duration),
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)))
 
     def getShowIntervalDesc(self, text, duration):
-        return Sequence(Wait(0.25), LerpColorScaleInterval(self, 0, Vec4(0.847, 0.784, 0.992, 1.0)), Func(self.hide), Func(self.setWordwrap, None), Func(self.setPos, 0.0, 0.65),
+        return Sequence(Wait(0.5), LerpColorScaleInterval(self, 0, Vec4(0.847, 0.784, 0.992, 1.0)), Func(self.hide), Func(self.setWordwrap, None), Func(self.setPos, 0.0, 0.65),
                         Func(self.setScale, 0.09), Wait(duration * 0.1),
                         Func(self.setText, text),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
@@ -66,7 +66,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                                  self.posInterval(0.25, (0, 0, -0.075))),
                         Parallel(self.scaleInterval(0.25, (1.1, 1.1, 1.1)),
                                  self.posInterval(0.25, (0, 0, -0.040))),
-                        Wait(1.75),
+                        Wait(duration - .5),
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)))
 
     def getToonsDiedInterval(self, textList, duration):

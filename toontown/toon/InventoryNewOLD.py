@@ -1274,35 +1274,50 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         else:
                             self.makeNoncreditPressable(button, track, level)
 
-                        if self.numItem(track, level) <= 0 or (
-                                'noGags' in base.localAvatar.battleConditions) or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
+                        if self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
                             self.makeUnpressable(button, track, level)
-                        if track == HEAL_TRACK and 'noToonUpGags' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if track == TRAP_TRACK and 'noTrapGags' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if track == LURE_TRACK and 'noLureGags' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if track == SOUND_TRACK and 'noSoundGags' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if track == THROW_TRACK and 'noThrowGags' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if track == SQUIRT_TRACK and 'noSquirtGags' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if track == ZAP_TRACK and 'noZapGags' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if level == 7 and 'nolevel8s' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if level == 3 and 'nolevel4s' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if level == 4 and 'nolevel5s' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if level == 5 and 'nolevel6s' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if level == 6 and 'nolevel7s' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
-                        if track == DROP_TRACK and 'noDropGags' in base.localAvatar.battleConditions:
-                            self.makeUnpressable(button, track, level)
+                        if ('noGags' in base.localAvatar.battleConditions):
+                            self.makeBannablePressable(button, track, level)
+                        if track == HEAL_TRACK and 'noToonUpGags' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if track == TRAP_TRACK and 'noTrapGags' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if track == LURE_TRACK and 'noLureGags' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if track == SOUND_TRACK and 'noSoundGags' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if track == THROW_TRACK and 'noThrowGags' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if track == SQUIRT_TRACK and 'noSquirtGags' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if track == ZAP_TRACK and 'noZapGags' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if level == 7 and 'nolevel8s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if level == 3 and 'nolevel4s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if level == 4 and 'nolevel5s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if level == 5 and 'nolevel6s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if level == 6 and 'nolevel7s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
+                        if track == DROP_TRACK and 'noDropGags' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track,
+                                              level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
 
                     else:
                         button.hide()
@@ -1443,6 +1458,21 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.addToPropBonusIval(button)
         else:
             button.configure(image_color=self.NoncreditPressableImageColor)
+
+    def makeBannablePressable(self, button, track, level):
+        organicBonus = self.toon.checkGagBonus(track, level)
+        propBonus = self.checkPropBonus(track)
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.ShadowBuffedColor
+        else:
+            shadowColor = self.ShadowColor
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
+        if self.interactivePropTrackBonus == track:
+            button.configure(image_color=(1, 0, 0, 1))
+            self.addToPropBonusIval(button)
+        else:
+            button.configure(image_color=(1, 0, 0, 1))
 
     def makeDeletePressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)

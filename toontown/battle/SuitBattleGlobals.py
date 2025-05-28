@@ -3852,7 +3852,12 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                 ('ScapegoatBarnyardBash',
 				    (0,),
 					(100,),
-					(0,)))},
+					(0,)),
+                 ('ScapegoatCourtRecordBan',  # 9
+                  (0,),
+                  (100,),
+                  (0,)),
+                 )},
  'csm': {'name': 'Case Manager',
         'singularname': 'a Case Manager',
 		'pluralname': 'Case Managers',
@@ -4034,6 +4039,18 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (0,),
                   (100,),
                   (0,)),
+('CaseManagerInsurance', #43
+                  (0,),
+                  (100,),
+                  (0,)),
+('CaseManagerLegallyBound', #44
+                  (0,),
+                  (100,),
+                  (0,)),
+('CaseManagerCourtRecordBan', #45
+                  (0,),
+                  (100,),
+                  (0,)),
                  )},
  'ste': {'name': 'Stenographer',
         'singularname': 'Stenographer',
@@ -4139,7 +4156,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  ('BanLevel78', #23
 				    (0,),
 					(100,),
-					(0,))
+					(0,)),
+('StenographerCourtRecordBan', #24
+                  (0,),
+                  (100,),
+                  (0,)),
                  )},
  'lit': {'name': 'Litigator',
         'singularname': 'a Litigator',
@@ -6268,14 +6289,19 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 #stenographer cheats
 'StenographerSanctionBindings': ('sanction', ATK_TGT_SINGLE),
 'StenographerSanction': ('sanction', ATK_TGT_SINGLE),
+'StenographerCourtRecordBan': ('nothing', ATK_TGT_GROUP),
 #case manager cheats
 'CaseManagerLegalBindings': ('throw-object', ATK_TGT_SINGLE),
 'CaseManagerInsurancePlan': ('throw-insurance', ATK_TGT_SINGLE),
+'CaseManagerInsurance': ('nothing', ATK_TGT_SINGLE),
+'CaseManagerLegallyBound': ('nothing', ATK_TGT_GROUP),
+'CaseManagerCourtRecordBan': ('nothing', ATK_TGT_GROUP),
 #scapegoat cheats
 'ScapegoatShieldsUp': ('defense', ATK_TGT_SINGLE),
 'ScapegoatEnraged': ('rage', ATK_TGT_SINGLE),
 'ScapegoatBarnyardBash': ('effort', ATK_TGT_GROUP),
 'ScapegoatGavel': ('effort', ATK_TGT_SINGLE),
+'ScapegoatCourtRecordBan': ('nothing', ATK_TGT_GROUP),
 #universal cheats
 'SynergyFees': ('magic3', ATK_TGT_GROUP),
 'CalculatingFees': ('calculating-costs', ATK_TGT_SINGLE),
@@ -6567,14 +6593,19 @@ LITIGATOR_BAYOU_BELLOW = SuitAttacks.keys().index('LitigatorBayouBellow')
 #stenographer cheats
 STENOGRAPHER_SANCTION_BINDINGS = SuitAttacks.keys().index('StenographerSanctionBindings')
 STENOGRAPHER_SANCTION = SuitAttacks.keys().index('StenographerSanction')
+STENOGRAPHER_COURT_RECORD_BAN = SuitAttacks.keys().index('StenographerCourtRecordBan')
 #case manager cheats
 CASE_MANAGER_LEGAL_BINDINGS = SuitAttacks.keys().index('CaseManagerLegalBindings')
 CASE_MANAGER_INSURANCE_PLAN = SuitAttacks.keys().index('CaseManagerInsurancePlan')
+CASE_MANAGER_INSURANCE = SuitAttacks.keys().index('CaseManagerInsurance')
+CASE_MANAGER_LEGALLY_BOUND = SuitAttacks.keys().index('CaseManagerLegallyBound')
+CASE_MANAGER_COURT_RECORD_BAN = SuitAttacks.keys().index('CaseManagerCourtRecordBan')
 #scapegoat cheats
 SCAPEGOAT_SHIELDS_UP = SuitAttacks.keys().index('ScapegoatShieldsUp')
 SCAPEGOAT_ENRAGED = SuitAttacks.keys().index('ScapegoatEnraged')
 SCAPEGOAT_GAVEL = SuitAttacks.keys().index('ScapegoatGavel')
 SCAPEGOAT_BARNYARD_BASH = SuitAttacks.keys().index('ScapegoatBarnyardBash')
+SCAPEGOAT_COURT_RECORD_BAN = SuitAttacks.keys().index('ScapegoatCourtRecordBan')
 #universal cheats
 SYNERGY_FEES = SuitAttacks.keys().index('SynergyFees')
 CALCULATING_FEES = SuitAttacks.keys().index('CalculatingFees')

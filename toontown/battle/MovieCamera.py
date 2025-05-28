@@ -3344,6 +3344,19 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=0.75))
     elif name == STENOGRAPHER_SANCTION:
         camTrack.append(defaultCamera(openShotDuration=0.75))
+    elif name == STENOGRAPHER_COURT_RECORD_BAN:
+        if attackDuration > 2:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc(
+            'Due to an illegal action, this toon takes 50 damage!',
+            attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Court Record!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
         # case manager cheats
     elif name == CASE_MANAGER_INSURANCE_PLAN:
         if not suit.isSkeleton:
@@ -3355,9 +3368,35 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'),
                                       moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
                                       heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 3.5)))
-
+    elif name == CASE_MANAGER_INSURANCE:
+        camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
     elif name == CASE_MANAGER_LEGAL_BINDINGS:
         camTrack.append(defaultCamera(openShotDuration=2))
+    elif name == CASE_MANAGER_LEGALLY_BOUND:
+        if attackDuration > 2:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc('This toon is legally bound to take 20 damage\nevery turn!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Legally Bound!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
+    elif name == CASE_MANAGER_COURT_RECORD_BAN:
+        if attackDuration > 2:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc(
+                'Due to an illegal action, this toon takes 50 damage!',
+                attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Court Record!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
         # scapegoat cheats
     elif name == SCAPEGOAT_SHIELDS_UP:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -3367,9 +3406,29 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2))
     elif name == SCAPEGOAT_BARNYARD_BASH:
         camTrack.append(defaultCamera(openShotDuration=2))
+    elif name == SCAPEGOAT_COURT_RECORD_BAN:
+        if attackDuration > 2:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc(
+                'Due to an illegal action, this toon takes 50 damage!',
+                attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Court Record!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
         # universal cheats
     elif name == SYNERGY_FEES:
-        camTrack.append(defaultCamera(openShotDuration=2))
+        camTrack2 = Sequence(defaultCamera(attackDuration=4, openShotDuration=2), randomActorShot(suit, battle, attackDuration - 4, 'suit'))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc2 =  Sequence(Wait(4.0), pbpDc.getShowIntervalDesc('An audit is approaching!',  attackDuration - 6))
+        pbpTrack2 =  Sequence(Wait(4.0), pbpText.getShowIntervalCheat('Calculating Costs!', attackDuration - 6))
+        pbpDesc = pbpDc.getShowIntervalDesc('The fees are racking up!', 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Court Costs!', 2)
+        return Parallel(pbpTrack2, pbpDesc2, pbpTrack, pbpDesc, camTrack2)
     elif name == CALCULATING_FEES:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_4:
@@ -3481,13 +3540,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
     if attack['name'] in TTLocalizer.SuitCheatNames:
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat(displayName, 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 2)
         return Parallel(camTrack, pbpTrack, pbpDesc)
     if float(suit.currHP) > float(suit.maxHP * 1.5):
-        pbpTrack = pbpText.getShowIntervalOvercharged(displayName, 3.5)
+        pbpTrack = pbpText.getShowIntervalOvercharged(displayName, attackDuration - 2)
     else:
-        pbpTrack = pbpText.getShowInterval(displayName, 3.5)
+        pbpTrack = pbpText.getShowInterval(displayName, attackDuration - 2)
     track = Sequence(Parallel(camTrack, pbpTrack))
     if diedTrack == None:
         return track

@@ -3575,7 +3575,7 @@ SuitCheatNames = ('CourtCosts', 'Cage', 'PaperCut', 'WireCut', 'Wiretapped',
                   'StealSafe', 'Synergy', 'HeatWave', 'Refinement', 'ExtraTip', 'LifeInsurance', 'WorkersCompensation',
                   'LitigatorSnapSoak', 'LitigatorSnap', 'LitigatorBayouBash', 'LitigatorBayouBellow',
                   'StenographerSanctionBindings', 'StenographerSanction', 'SynergyFees', 'CalculatingFees',
-                  'CaseManagerLegalBindings', 'CaseManagerInsurancePlan', 'ScapegoatGavel', 'ScapegoatShieldsUp', 'ScapegoatEnraged', 'ScapegoatBarnyardBash',
+                  'CaseManagerLegalBindings', 'CaseManagerInsurancePlan', 'CaseManagerLegallyBound', 'ScapegoatGavel', 'ScapegoatShieldsUp', 'ScapegoatEnraged', 'ScapegoatBarnyardBash',
                   'BanLevel4', 'BanLevel5', 'BanLevel6', 'BanLevel7', 'BanLevel8', 'BanLevel45', 'BanLevel46', 'BanLevel47', 'BanLevel48', 'BanLevel56', 'BanLevel57',
                   'BanLevel58', 'BanLevel67', 'BanLevel68', 'BanLevel78', 'BanToonup', 'BanTrap', 'BanLure', 'BanThrow', 'BanSquirt', 'BanZap', 'BanSound', 'BanDrop',
                   'BanToonupTrap', 'BanToonupLure', 'BanToonupThrow', 'BanToonupSquirt', 'BanToonupZap', 'BanToonupSound', 'BanToonupDrop', 'BanTrapLure', 'BanTrapThrow',
@@ -3685,8 +3685,9 @@ SuitCheatDescription = {
  'StenographerSanctionBindings' : "The Stenographer retaliates against unbound toons!",
 'StenographerSanction': "The Stenographer retaliates against the least\ndangerous toon!",
 #case manager cheats
-'CaseManagerLegalBindings' : "The Case Manager legally binds a toon to take\nextra damage!",
+'CaseManagerLegalBindings' : "The Case Manager legally binds a toon to take\nextra damage every turn!",
 'CaseManagerInsurancePlan' : "The Case Manager ensures that cogs are healed\nevery turn!",
+'CaseManagerLegallyBound' : "This toon is legally bound to take 20 damage\nevery turn!",
 #scapegoat cheats
 'ScapegoatGavel' : "The Scapegoat bans the gags of a random toon for\n1 turn!",
 'ScapegoatShieldsUp' : "The Scapegoat's temperature has cooled and is now\nprotecting cogs again!",
@@ -4006,14 +4007,18 @@ SuitAttackNames = {'Audit': 'Audit!',
                    # stenographer cheats
                    'StenographerSanctionBindings': "Court Sanction!",
                    'StenographerSanction': "Court Sanction!",
+'StenographerCourtRecordBan' : "Court Record!",
                    # case manager cheats
                    'CaseManagerLegalBindings': "Legal Bindings!",
                    'CaseManagerInsurancePlan': "Insurance Plan!",
+'CaseManagerLegallyBound' : "Legally Bound!",
+'CaseManagerCourtRecordBan' : "Court Record!",
                    # scapegoat cheats
                    'ScapegoatGavel': "Gavel!",
                    'ScapegoatShieldsUp': "Shield's Up!",
                    'ScapegoatEnraged': "Enraged!",
                    'ScapegoatBarnyardBash': "Barnyard Bash!",
+'ScapegoatCourtRecordBan' : "Court Record!",
                    # universal cheats
                    'SynergyFees': "Court Costs!",
                    'CalculatingFees': "Calculating Costs!",
@@ -5939,7 +5944,7 @@ SuitAttackTaunts = {'AcidRain': ["It's sulfur you.",
                     'BanSquirtSound': ["Any Squirt and Sound Gags Toons use can and will be held against them in a court of law."],
                     'BanSquirtDrop':  ["Any Squirt and Drop Gags Toons use can and will be held against them in a court of law."],
                     'BanZapSound': ["Any Zap and Sound Gags Toons use can and will be held against them in a court of law."],
-                    'BanZapDrop': ["Any Zap Drop Gags Toons use can and will be held against them in a court of law."],
+                    'BanZapDrop': ["Any Zap and Drop Gags Toons use can and will be held against them in a court of law."],
                     'BanSoundDrop':  ["Any Sound and Drop Gags Toons use can and will be held against them in a court of law."],
                     }
 BuildingWaitingForVictors = ('Waiting for other toons...',)

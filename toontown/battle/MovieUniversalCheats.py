@@ -1683,10 +1683,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         animTrack.append(syphonSuitTrack)
         return animTrack
-    elif dmg > 0 and suit.isInsured:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(insuredSuitTrack)
-        return animTrack
     elif dmg > 0 and suit.isOttomanPhase2:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         taunt = random.choice(
@@ -2015,6 +2011,7 @@ def doSynergy(attack):
     particleEffect = BattleParticles.createParticleEffect('Synergy')
     waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
     suitTrack = getSuitAnimTrack(attack)
+    suitTrack.append(doCourtCalculations(attack))
     partTrack = getPartTrack(particleEffect, 1.0, 1.9, [particleEffect, suit, 0])
     waterfallTrack = getPartTrack(waterfallEffect, 0.8, 1.9, [waterfallEffect, suit, 0])
     damageAnims = [['slip-forward']]
@@ -2038,7 +2035,12 @@ def doCourtCalculations(attack):
     battle = attack['battle']
     calculator = globalPropPool.getProp('court-costs-calculator')
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimation), Wait(2.0))
-    suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % attack['target'][0]['hp'], CFSpeech | CFTimeout)
+    if suit.isDesperation:
+        suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % int(attack['target'][0]['hp'] + 6), CFSpeech | CFTimeout)
+    else:
+        suitSpeechTrack = Func(suit.setChatAbsolute,
+                               "Calculating costs of litigation fees... Price index raised to %s." %
+                              int(attack['target'][0]['hp'] + 4), CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcDuration = 0.25
     scaleUpPoint = Point3(1.5, 1.5, 1.5)
@@ -2052,6 +2054,6 @@ def doCourtRecord(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack.append(Wait(2.0))
+    suitTrack.append(Wait(1.0))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack)

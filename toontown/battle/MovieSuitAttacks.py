@@ -603,14 +603,22 @@ def doSuitAttack(attack):
         suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack, suit)
     elif name == STENOGRAPHER_SANCTION:
         suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack, suit)
+    elif name == STENOGRAPHER_COURT_RECORD_BAN:
+        suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #case manager cheats
     elif name == CASE_MANAGER_INSURANCE_PLAN:
         if not suit.isSkeleton:
             suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack)
         else:
             suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanSkelecogInsurance(attack)
+    elif name == CASE_MANAGER_INSURANCE:
+        suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
     elif name == CASE_MANAGER_LEGAL_BINDINGS:
         suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
+    elif name == CASE_MANAGER_LEGALLY_BOUND:
+        suitTrack = MovieLawbotLitigationCheats.doLegallyBound(attack)
+    elif name == CASE_MANAGER_COURT_RECORD_BAN:
+        suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #scapegoat cheats
     elif name == SCAPEGOAT_SHIELDS_UP:
         suitTrack = MovieLawbotLitigationCheats.doShieldsUp(attack)
@@ -620,6 +628,8 @@ def doSuitAttack(attack):
         suitTrack = MovieLawbotLitigationCheats.doGavel(attack)
     elif name == SCAPEGOAT_BARNYARD_BASH:
         suitTrack = MovieLawbotLitigationCheats.doBarnyardBash(attack)
+    elif name == SCAPEGOAT_COURT_RECORD_BAN:
+        suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #universal cheats
     elif name == SYNERGY_FEES:
         suitTrack = MovieUniversalCheats.doSynergy(attack)
@@ -784,23 +794,36 @@ def doSuitAttack(attack):
     else:
         neutralIval =  Func(suit.setNeutralAnimation)
         preWalkTrack = Func(suit.setNeutralAnimation)
+    unlureSuit = Parallel(Func(suit.makeUnLured), Func(battle.unlureSuit, suit))
+    checkLuredCog = Func(suit.checkCogLured, battle)
     unlureSuit = Func(suit.makeUnLured)
     suitTrack = Sequence(unlureSuit, preWalkTrack, suitTrack, neutralIval, toonHprTrack)
     suitPos = suit.getPos(battle)
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     resetTrack = getResetTrack(suit, battle)
-    resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
-    waitTrack = Sequence(Wait(resetTrack.getDuration()), Func(battle.unlureSuit, suit))
+    if name == SCAPEGOAT_COURT_RECORD_BAN:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == CASE_MANAGER_COURT_RECORD_BAN:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == STENOGRAPHER_COURT_RECORD_BAN:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == CASE_MANAGER_LEGALLY_BOUND:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == CASE_MANAGER_INSURANCE:
+        resetSuitTrack = Sequence(suitTrack)
+    else:
+        resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
+    waitTrack = Sequence(Func(battle.unlureSuit, suit))
     resetCamTrack = Sequence(waitTrack, camTrack)
-    return (resetSuitTrack, resetCamTrack)
+    return (resetSuitTrack, camTrack)
 
 
 def getResetTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
-    moveDuration = 0.5
+    moveDuration = 0
     unluredTrack = Func(battle.unlureSuit, suit)
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=1e-05), (Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))))
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), Func(suit.setNeutralAnimation))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(unluredTrack, walkTrack, moveTrack)
 
@@ -1358,7 +1381,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
     if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
         syphonSuitTrack = Parallel(Func(suit.showHpTextCheat, +0), Func(suit.showHpString, "SYPHONED!"), Func(suit.setHealthForMe, + 0), Func(suit.updateHealthBar, 0))
-        insuredSuitTrack = Parallel(Func(suit.showHpTextCheat, +0), Func(suit.showHpString, "INSURED!"), Func(suit.setHealthForMe, 0), Func(suit.updateHealthBar, 0))
     elif suit.currHP + 50 > (suit.maxHP * suit.hardMaxHP) and suit.isInsured:
         insuredSuitTrack = Parallel(Func(suit.showHpTextCheat, x), Func(suit.showHpString, "INSURED!"),
                                     Func(suit.setHealthForMe, x), Func(suit.updateHealthBar, 0))
@@ -1368,8 +1390,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     else:
         syphonSuitTrack = Parallel(Func(suit.showHpTextCheat, +dmg), Func(suit.showHpString, "SYPHONED!"),
                                    Func(suit.setHealthForMe, + dmg), Func(suit.updateHealthBar, 0))
-        insuredSuitTrack = Parallel(Func(suit.showHpTextCheat, 50), Func(suit.showHpString, "INSURED!"),
-                                    Func(suit.setHealthForMe, 50), Func(suit.updateHealthBar, 0))
     if dmg > 0 and name == MULLIGAN and suit.isSyphon:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         animTrack.append(syphonSuitTrack)
@@ -1684,10 +1704,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     elif dmg > 0 and suit.isSyphon:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         animTrack.append(syphonSuitTrack)
-        return animTrack
-    elif dmg > 0 and suit.isInsured:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(insuredSuitTrack)
         return animTrack
     elif dmg > 0 and suit.isOttomanPhase2:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
