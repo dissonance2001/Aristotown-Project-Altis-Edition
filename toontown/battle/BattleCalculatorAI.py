@@ -5368,9 +5368,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noSoundGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 1, 3, 'setBoth')
             else:
-                attack[SUIT_HP_COL][targetIndex] = result * (
-                            self.getToonConditionModifier(toonId, 'corruption') + self.getToonConditionModifier(toonId,
-                                                                                                                'snapped') + theSuit.getDamageMultiplier())
+                attack[SUIT_HP_COL][targetIndex] = result
 
             if self.suitHasCondition(theSuit.doId, 'desperation') and self.suitHasCondition(theSuit.doId, 'enraged') and theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
                 attack[SUIT_HP_COL][targetIndex] *= (1.2 + self.getToonConditionModifier(toonId, 'snapped') + self.getToonConditionModifier(toonId, 'corruption') + theSuit.getDamageMultiplier())
@@ -5382,6 +5380,10 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] *= (.83 + self.getToonConditionModifier(toonId, 'snapped') + self.getToonConditionModifier(toonId, 'corruption') + theSuit.getDamageMultiplier())
             elif self.suitHasCondition(theSuit.doId, 'desperation'):
                 attack[SUIT_HP_COL][targetIndex] *= (.4 + self.getToonConditionModifier(toonId, 'snapped') + self.getToonConditionModifier(toonId, 'corruption') + theSuit.getDamageMultiplier())
+            else:
+                attack[SUIT_HP_COL][targetIndex] = result * (
+                            self.getToonConditionModifier(toonId, 'corruption') + self.getToonConditionModifier(toonId,
+                                                                                                                'snapped') + theSuit.getDamageMultiplier())
             toon.setHp(toon.hp - attack[SUIT_HP_COL][targetIndex])
             self.notify.debug('__calcSuitAtkHp - result is %s for index %i' % (str(attack[SUIT_HP_COL][targetIndex]), targetIndex))
 
