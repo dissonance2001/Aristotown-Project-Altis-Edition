@@ -3481,13 +3481,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
     if attack['name'] in TTLocalizer.SuitCheatNames:
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 1)
-        pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 1)
+        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat(displayName, 3.5)
         return Parallel(camTrack, pbpTrack, pbpDesc)
     if float(suit.currHP) > float(suit.maxHP * 1.5):
-        pbpTrack = pbpText.getShowIntervalOvercharged(displayName, attackDuration - 1)
+        pbpTrack = pbpText.getShowIntervalOvercharged(displayName, 3.5)
     else:
-        pbpTrack = pbpText.getShowInterval(displayName, attackDuration - 1)
+        pbpTrack = pbpText.getShowInterval(displayName, 3.5)
     track = Sequence(Parallel(camTrack, pbpTrack))
     if diedTrack == None:
         return track

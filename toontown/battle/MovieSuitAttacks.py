@@ -985,10 +985,10 @@ def doDefault(attack):
         attack['animName'] = 'finger-wag'
         return doFingerWag(attack)
     else:
-        attack['id'] = FINGER_WAG
-        attack['name'] = 'FingerWag'
-        attack['animName'] = 'finger-wag'
-        return doFingerWag(attack)
+        attack['id'] = RED_TAPE
+        attack['name'] = 'RedTape'
+        attack['animName'] = 'throw-object'
+        return doRedTape(attack)
     return None
 
 def __createSuitResetPosTrack(suit, battle):
