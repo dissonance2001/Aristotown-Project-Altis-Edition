@@ -4697,7 +4697,7 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'LitigatorSnapSoak': #soaked snap
                 result = 36
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'snapped', .1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
             elif atkInfo['name'] == 'LitigatorSnap':
@@ -4708,9 +4708,9 @@ class BattleCalculatorAI:
                     if s.dna.name == 'ste':
                         currentBossHealth = s.currHP
                 if currentBossHealth >= 1:
-                    self.setToonCondition(toon.doId, 'corruption', .4, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
                 else:
-                    self.setToonCondition(toon.doId, 'corruption', .2, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
             elif atkInfo['name'] == 'LitigatorBayouBellow':
                 result = 0
@@ -4740,8 +4740,8 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-                if len(self.battle.activeSuits) < 6:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                #if len(self.battle.activeSuits) < 6:
+                    #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'ScapegoatEnraged':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -5382,8 +5382,7 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] *= (.83 + self.getToonConditionModifier(toonId, 'snapped') + self.getToonConditionModifier(toonId, 'corruption') + theSuit.getDamageMultiplier())
             elif self.suitHasCondition(theSuit.doId, 'desperation'):
                 attack[SUIT_HP_COL][targetIndex] *= (.4 + self.getToonConditionModifier(toonId, 'snapped') + self.getToonConditionModifier(toonId, 'corruption') + theSuit.getDamageMultiplier())
-            if not atkInfo['name'] == 'CalculatingFees':
-                toon.setHp(toon.hp - attack[SUIT_HP_COL][targetIndex])
+            toon.setHp(toon.hp - attack[SUIT_HP_COL][targetIndex])
             self.notify.debug('__calcSuitAtkHp - result is %s for index %i' % (str(attack[SUIT_HP_COL][targetIndex]), targetIndex))
 
     def __getToonHp(self, toonDoId):
