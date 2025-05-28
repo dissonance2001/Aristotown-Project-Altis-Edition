@@ -22,7 +22,7 @@ echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 echo. 
 echo #1 - Locally Host a Server
 echo #2 - Connect to an Existing Server
-echo #3 - Connect to the Official Server
+echo #3 - Connect to Zen's server
 echo #4 - Go Back
 echo.
 choice /C:1234 /n /m "Selection: "
@@ -90,7 +90,7 @@ set /P TT_GAMESERVER="Server IP: "
 goto game
 
 :awsserver
-set TT_GAMESERVER=gs1.projectaltis.com
+set TT_GAMESERVER=82.5.38.255
 
 :game
 cls
@@ -104,7 +104,7 @@ set TT_PASSWORD=%ttUsername%
 echo.
 cls
 echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-echo Welcome to Project Altis, %ttUsername%!
+echo Welcome to Aristotown, %ttUsername%!
 echo The Tooniverse Awaits You!
 echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 :startgame
