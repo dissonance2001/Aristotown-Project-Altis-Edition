@@ -789,7 +789,7 @@ def doSuitAttack(attack):
     resetTrack = getResetTrack(suit, battle)
     resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
     waitTrack = Sequence(Wait(resetTrack.getDuration()), Func(battle.unlureSuit, suit))
-    resetCamTrack = Sequence(waitTrack, camTrack)
+    resetCamTrack = Sequence(camTrack)
     return resetCamTrack
 
 
@@ -2038,7 +2038,7 @@ def doCourtCalculations(attack):
     battle = attack['battle']
     calculator = globalPropPool.getProp('court-costs-calculator')
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimation), Wait(2.0))
-    suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price to be paid is %s." % attack['target'][0]['hp'], CFSpeech | CFTimeout)
+    suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % attack['target'][0]['hp'], CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcDuration = 0.25
     scaleUpPoint = Point3(1.5, 1.5, 1.5)
@@ -2046,12 +2046,12 @@ def doCourtCalculations(attack):
                                  scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='court-costs-calculator', animStartTime=0,
                                  animDuration=2.9)
     soundTrack = getSoundTrack('SA_calculating_costs.ogg', node=suit)
-    suitTrack.append(doCourtCosts(attack))
     return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
 
 def doCourtRecord(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack.append(Wait(2.0))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack)

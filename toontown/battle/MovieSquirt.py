@@ -293,8 +293,8 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
         suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
         suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
-        if suit.dna.name == 'lit' and not suit.isSoaked:
-            suitTrack.append(doSnapBellow(attack, suit))
+        #if suit.dna.name == 'lit' and not suit.isSoaked:
+            #suitTrack.append(doSnapBellow(attack, suit))
         return Parallel(suitTrack, bonusTrack, soakTracks)
     else:
         return MovieUtil.createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits)
@@ -420,9 +420,9 @@ def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, attack, lev
         suitTrack.append(soakSuit)
         suitTrack.append(Func(suits[suitIndex].setSoaked, 1))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
-            suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
-        elif suits[suitIndex].isVirtual:
+        #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
+            #suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
@@ -463,9 +463,9 @@ def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
         suitTrack.append(soakSuit)
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
-            suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
-        elif suits[suitIndex].isVirtual:
+        #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
+            #suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
@@ -506,9 +506,9 @@ def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
         suitTrack.append(soakSuit)
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
-            suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
-        elif suits[suitIndex].isVirtual:
+        #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
+            #suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
@@ -549,9 +549,9 @@ def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
         suitTrack.append(soakSuit)
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
-            suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
-        elif suits[suitIndex].isVirtual:
+        #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
+           # suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
+        if suits[suitIndex].isVirtual:
             suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
         elif not suits[suitIndex].isSkeleton and revives >= 2:
             suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))

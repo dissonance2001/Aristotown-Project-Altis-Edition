@@ -3338,7 +3338,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == LITIGATOR_BAYOU_BASH:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == LITIGATOR_BAYOU_BELLOW:
-        camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0)), heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3))
+        camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5)))
         # stenographer cheats
     elif name == STENOGRAPHER_SANCTION_BINDINGS:
         camTrack.append(defaultCamera(openShotDuration=0.75))
@@ -3347,14 +3347,14 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         # case manager cheats
     elif name == CASE_MANAGER_INSURANCE_PLAN:
         if not suit.isSkeleton:
-            camTrack.append(Sequence(randomActorShot(suit, battle, 1, 'suit'),
-                                      moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1),
-                                      heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3.0)))
+            camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'),
+                                      moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
+                                      heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 3.5)))
 
         else:
-            camTrack.append(Sequence(randomActorShot(suit, battle, 1, 'suit'),
-                                      moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1),
-                                      heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3.0)))
+            camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'),
+                                      moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
+                                      heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 3.5)))
 
     elif name == CASE_MANAGER_LEGAL_BINDINGS:
         camTrack.append(defaultCamera(openShotDuration=2))
@@ -3479,15 +3479,15 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera())
     pbpText = attack['playByPlayText']
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
-    if cheat:
+    if attack['name'] in TTLocalizer.SuitCheatNames:
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatNames[attack['name']][0], 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat(TTLocalizer.SuitCheatNames[attack['name']], 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 1)
+        pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 1)
         return Parallel(camTrack, pbpTrack, pbpDesc)
     if float(suit.currHP) > float(suit.maxHP * 1.5):
-        pbpTrack = pbpText.getShowIntervalOvercharged(displayName, 3.5)
+        pbpTrack = pbpText.getShowIntervalOvercharged(displayName, attackDuration - 1)
     else:
-        pbpTrack = pbpText.getShowInterval(displayName, 3.5)
+        pbpTrack = pbpText.getShowInterval(displayName, attackDuration - 1)
     track = Sequence(Parallel(camTrack, pbpTrack))
     if diedTrack == None:
         return track

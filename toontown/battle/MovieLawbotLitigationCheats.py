@@ -789,7 +789,7 @@ def doSuitAttack(attack):
     resetTrack = getResetTrack(suit, battle)
     resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
     waitTrack = Sequence(Wait(resetTrack.getDuration()), Func(battle.unlureSuit, suit))
-    resetCamTrack = Sequence(waitTrack, camTrack)
+    resetCamTrack = Sequence(camTrack)
     return resetCamTrack
 
 
@@ -2081,7 +2081,7 @@ def doSnap(attack, suit):
                            Func(toon.showHpString, "VULNERABLE!"))
     return Parallel(suitTrack, toonTracks, soundTrack, propTracks, notifyTrack)
 
-def doWhitePowder(attack):
+def doBayouBellow(attack):
     suit = attack['suit']
     theSuit = attack['suit']
     battle = attack['battle']
@@ -2110,6 +2110,7 @@ def doWhitePowder(attack):
         suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
         suitTrack.append(
             Func(suit.setNeutralAnimation))
+        suitTracks.append(Wait(0.5))
         suitTracks.append(MovieUtil.createSuitBellowInterval(theSuit))
         suitTracks.append(Wait(4.0))
         suitTracks.append(suitTrack)
@@ -2244,7 +2245,7 @@ def doLegalBindings(attack):
     #toonTrack = getToonTrack(attack, 2.4, ['struggle'], 3.4, ['struggle'])
     notifyTrack = Sequence(Wait(3.0), Func(toon.showHpTextWhite, "LEGALLY BOUND!", 10))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=1.9, node=suit)
-    return Parallel(suitTrack, toonTrack, propTrack, tauntInterval, soundTrack, tubeTracks, notifyTrack)
+    return Parallel(suitTrack, toonTrack, propTrack, soundTrack, tubeTracks, notifyTrack)
 
 def doCaseInsurancePlanInsurance(attack):
     suit = attack['suit']
@@ -2264,13 +2265,6 @@ def doCaseInsurancePlanInsurance(attack):
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         suitTrack.append(Wait(4.5))
-        x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
-        if suit.currHP >= (suit.maxHP * suit.hardMaxHP) and not suit.isLured:
-            suitTrack.append(Func(suit.showHpText, 0))
-        elif suit.currHP + 50 > (suit.maxHP * suit.hardMaxHP) and not suit.isLured:
-            suitTrack.append(Func(suit.setHealthForMe, x))
-        elif not suit.isLured:
-            suitTrack.append(Func(suit.setHealthForMe, 50))
         suitTrack.append(Func(suit.showHpTextWhite, "INSURANCE!", 0))
         suitTrack.append(Func(suit.updateHealthBar, 0))
         if not suit.dna.name == 'csm':
@@ -2331,13 +2325,6 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         suitTrack.append(Wait(4.5))
-        x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
-        if suit.currHP >= (suit.maxHP * suit.hardMaxHP) and not suit.isLured and not suit.isInsured:
-            suitTrack.append(Func(suit.showHpText, 0))
-        elif suit.currHP + 50 > (suit.maxHP * suit.hardMaxHP) and not suit.isLured and not suit.isInsured:
-            suitTrack.append(Func(suit.setHealthForMe, x))
-        elif not suit.isLured:
-            suitTrack.append(Func(suit.setHealthForMe, 50))
         suitTrack.append(Func(suit.showHpTextWhite, "INSURANCE!", 0))
         suitTrack.append(Func(suit.updateHealthBar, 0))
         if not suit.dna.name == 'csm':
@@ -2386,10 +2373,12 @@ def doEnraged(attack):
     dodgeAnims = [['jump'], ['jump', 0.01]]
     toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
     soundTrack = getSoundTrack('SA_rage.ogg', node=suit)
+    makeEnraged = Func(suit.makeAngry)
     suitTrack = getSuitTrack(attack)
+    suitTrack.append(Wait(2.0))
     headInterval = Sequence(MovieUtil.createSuitEnragedInterval(suit, 0))
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    return Parallel(suitTrack, soundTrack, headInterval)
+    return Parallel(suitTrack, soundTrack, headInterval, makeEnraged)
 
 def doShieldsUp(attack):
     suit = attack['suit']
@@ -2401,9 +2390,11 @@ def doShieldsUp(attack):
     toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
     soundTrack = getSoundTrack('SA_defense.ogg', node=suit)
     suitTrack = getSuitTrack(attack)
+    suitTrack.append(Wait(3.0))
+    makeShielding = Func(suit.makeShielding)
     headInterval = Sequence(MovieUtil.createSuitEnragedInterval(suit, 0))
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    return Parallel(suitTrack, soundTrack)
+    return Parallel(suitTrack, soundTrack, makeShielding)
 
 def doBarnyardBash(attack):
     suit = attack['suit']
