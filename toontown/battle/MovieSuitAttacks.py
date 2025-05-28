@@ -985,7 +985,10 @@ def doDefault(attack):
         attack['animName'] = 'finger-wag'
         return doFingerWag(attack)
     else:
-        self.notify.error('doDefault() - unsupported suit type: %s' % suitName)
+        attack['id'] = FINGER_WAG
+        attack['name'] = 'FingerWag'
+        attack['animName'] = 'finger-wag'
+        return doFingerWag(attack)
     return None
 
 def __createSuitResetPosTrack(suit, battle):
