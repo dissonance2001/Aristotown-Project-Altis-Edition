@@ -6426,7 +6426,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack5, self.battle.findSuit(attack5[SUIT_ID_COL]))
                     attack5[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack5)
-            if self.suitHasCondition(suitId, 'bellowattack') and not self.battle.activeSuits[i].dna.name == 'lit':
+            if self.suitHasCondition(suitId, 'bellowattack') and self.suitHasCondition(suitId, 'lured') and not self.battle.activeSuits[i].dna.name == 'lit':
                     attack2[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
                     attack2[SUIT_ATK_COL] = 0  # Index of Glower Power for the Director of Public Relations.
