@@ -58,7 +58,7 @@ class DMenuScreen(DirectObject):
             base.camera.posHprInterval(1, Point3(MAIN_POS), VBase3(MAIN_HPR), blendType = 'easeInOut')).start()
         if base.showDisclaimer:
             FeatureComingSoonDialog.FeatureComingSoonDialog(text = TTLocalizer.PopupAlphaDisclaimer)
-        self.background = loader.loadModel('phase_3/models/menu/TTC_Scene')
+        self.background = loader.loadModel('phase_3/models/menu/TTC_scene')
         self.background.reparentTo(render)
         self.background.setPosHpr(1.05473, 0, 0, 0, 0, 0)
         self.lampost1 = loader.loadModel('phase_3.5/models/props/streetlight_TT')
