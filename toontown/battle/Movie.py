@@ -361,7 +361,7 @@ class Movie(DirectObject.DirectObject):
             elif isinstance(seq, MetaInterval):
                 self.setTrackPlayRate(seq, playRate)
 
-    def __makeSanctioned    NodePath(self):
+    def __makeSanctioned_NodePath(self):
         tn = TextNode('CANCELLED')
         tn.setFont(getSuitFont())
         tn.setText('SANCTIONED\nSANCTIONED\nSANCTIONED')
