@@ -341,7 +341,7 @@ class Movie(DirectObject.DirectObject):
         for toon in self.battle.toons:
             self.track.delayDeletes.append(DelayDelete.DelayDelete(toon, 'Movie.play'))
 
-        playRate = 2
+        playRate = 1
         self.setTrackPlayRate(self.track, playRate)
         self.track.start(ts, playRate=playRate)
         for s in self.battle.suits:
@@ -361,7 +361,7 @@ class Movie(DirectObject.DirectObject):
             elif isinstance(seq, MetaInterval):
                 self.setTrackPlayRate(seq, playRate)
 
-    def __makeSanctioned_NodePath(self):
+    def __makeSanctionedNodePath(self):
         tn = TextNode('CANCELLED')
         tn.setFont(getSuitFont())
         tn.setText('SANCTIONED\nSANCTIONED\nSANCTIONED')
