@@ -4740,8 +4740,8 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-                #if len(self.battle.activeSuits) < 6:
-                    #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                if len(self.battle.activeSuits) < 6:
+                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'ScapegoatEnraged':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
