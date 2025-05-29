@@ -634,15 +634,15 @@ class BattleCalculatorAI:
                 organicBonus = toon.checkGagBonus(TRAP, trapLvl)
                 propBonus = self.__checkPropBonus(TRAP)
                 suit = self.battle.findSuit(suitId)
-                if self.toonHasCondition(toon.doId, 'nolevel8s') and attackLevel == 7:
+                if self.toonHasCondition(toon.doId, 'nolevel8s') and atkLevel == 7:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
-                if self.toonHasCondition(toon.doId, 'nolevel7s') and attackLevel == 6:
+                if self.toonHasCondition(toon.doId, 'nolevel7s') and atkLevel == 6:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
-                if self.toonHasCondition(toon.doId, 'nolevel6s') and attackLevel == 5:
+                if self.toonHasCondition(toon.doId, 'nolevel6s') and atkLevel == 5:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
-                if self.toonHasCondition(toon.doId, 'nolevel5s') and attackLevel == 4:
+                if self.toonHasCondition(toon.doId, 'nolevel5s') and atkLevel == 4:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
-                if self.toonHasCondition(toon.doId, 'nolevel4s') and attackLevel == 3:
+                if self.toonHasCondition(toon.doId, 'nolevel4s') and atkLevel == 3:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'noTrapGags'):
                     self.setToonCondition(toon.doId, 'banned2', 1, 3, 'setBoth')
@@ -746,15 +746,15 @@ class BattleCalculatorAI:
                 toon = self.battle.getToon(attackerId)
                 suit = self.battle.findSuit(suitId)
                 organicBonus = toon.checkGagBonus(TRAP, trapLvl)
-                if self.toonHasCondition(toon.doId, 'nolevel8s') and attackLevel == 7:
+                if self.toonHasCondition(toon.doId, 'nolevel8s') and atkLevel == 7:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
-                if self.toonHasCondition(toon.doId, 'nolevel7s') and attackLevel == 6:
+                if self.toonHasCondition(toon.doId, 'nolevel7s') and atkLevel == 6:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
-                if self.toonHasCondition(toon.doId, 'nolevel6s') and attackLevel == 5:
+                if self.toonHasCondition(toon.doId, 'nolevel6s') and atkLevel == 5:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
-                if self.toonHasCondition(toon.doId, 'nolevel5s') and attackLevel == 4:
+                if self.toonHasCondition(toon.doId, 'nolevel5s') and atkLevel == 4:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
-                if self.toonHasCondition(toon.doId, 'nolevel4s') and attackLevel == 3:
+                if self.toonHasCondition(toon.doId, 'nolevel4s') and atkLevel == 3:
                     self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'noTrapGags'):
                     self.setToonCondition(toon.doId, 'banned2', 1, 3, 'setBoth')
