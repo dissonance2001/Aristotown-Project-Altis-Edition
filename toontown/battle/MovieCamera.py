@@ -3346,7 +3346,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=0.75))
     elif name == STENOGRAPHER_COURT_RECORD_BAN:
         if attackDuration > 2:
-            camTrack2 = defaultCamera(openShotDuration=0)
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
@@ -3375,7 +3375,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2))
     elif name == CASE_MANAGER_LEGALLY_BOUND:
         if attackDuration > 2:
-            camTrack2 = defaultCamera(openShotDuration=0)
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc('This toon is legally bound to take 20 damage\nevery turn!', attackDuration - 2)
@@ -3386,7 +3386,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
     elif name == CASE_MANAGER_COURT_RECORD_BAN:
         if attackDuration > 2:
-            camTrack2 = defaultCamera(openShotDuration=0)
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
@@ -3408,7 +3408,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2))
     elif name == SCAPEGOAT_COURT_RECORD_BAN:
         if attackDuration > 2:
-            camTrack2 = defaultCamera(openShotDuration=0)
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(

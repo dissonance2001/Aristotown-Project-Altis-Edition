@@ -215,7 +215,7 @@ def __doToonsHit(attack, level, hp):
         text = TTLocalizer.MovieNPCSOSToonsHitS
     else:
         text = TTLocalizer.MovieNPCSOSToonsHitP % hp
-    pbpTrack = pbpText.getShowInterval(text, track.getDuration())
+    pbpTrack = pbpText.getShowInterval(text, track.getDuration() - 2)
     return (track, pbpTrack)
 
 
@@ -226,7 +226,7 @@ def __doCogsMiss(attack, level, hp):
         text = TTLocalizer.MovieNPCSOSCogsMissS
     else:
         text = TTLocalizer.MovieNPCSOSCogsMissP % hp
-    pbpTrack = pbpText.getShowInterval(text, track.getDuration())
+    pbpTrack = pbpText.getShowInterval(text, track.getDuration() - 2)
     return (track, pbpTrack)
 
 
@@ -260,7 +260,7 @@ def __doRestockGags(attack, level, hp):
         text = TTLocalizer.MovieNPCSOSAll
         index = 108
     track = __doUnite(attack, hp, index)
-    pbpTrack = pbpText.getShowInterval(TTLocalizer.MovieNPCSOSRestockGags % text, track.getDuration())
+    pbpTrack = pbpText.getShowInterval(TTLocalizer.MovieNPCSOSRestockGags % text, track.getDuration() - 2)
     return (track, pbpTrack)
 
 def __doSmooch(attack, hp = 0):
@@ -329,7 +329,7 @@ def __doDamageBoost(attack, level, hp):
         text = TTLocalizer.MovieNPCSOSAll
     else:
         text = 'Unknown Track'
-    pbpTrack = pbpText.getShowInterval(TTLocalizer.MovieNPCSOSBoostGags % (text, hp), track.getDuration())
+    pbpTrack = pbpText.getShowInterval(TTLocalizer.MovieNPCSOSBoostGags % (text, hp), track.getDuration() - 2)
     return (track, pbpTrack)
 
 
