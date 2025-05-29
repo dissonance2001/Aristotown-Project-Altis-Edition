@@ -1229,50 +1229,75 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('Blast', #absorption cheat
-              (0,),
-              (100,),
-              (0,)),
-('CourtMandate2', #syphon cheat
-              (0,),
-              (100,),
-              (0,)),
-('CourtMandate1', #soak cheat
-              (0,),
-              (100,),
-              (0,)),
-('Caress', #snipe
-              (0,),
-              (100,),
-              (0,)),
-('CourtMandate', #desperation syphon
-              (0,),
-              (100,),
-              (0,)),
-('CourtMandate3', #lure resistance cheat
-              (0,),
-              (100,),
-              (0,)),
-('Accusations2', #oil rain blow up into v2 cheat unused
-              (0,),
-              (100,),
-              (0,)),
-             ('Liquidate',
-              (37,),
-              (100,),
-              (25,)),
-            ('PowerTrip',
+            (('PowerTrip',
+              (35,),
+              (85,),
+              (15,)),
+('Fired',
+              (42,),
+              (90,),
+              (15,)),
+('GlowerPower',
               (40,),
+              (85,),
+              (15,)),
+('FallingKnife',
+              (45,),
+              (95,),
+              (20,)),
+('HotAir',
+              (32,),
+              (95,),
+              (15,)),
+('FloodTheMarket',
+              (38,),
+              (95,),
+              (20,)),
+('PowerhouseAbsorb', #6
+              (0,),
               (100,),
-              (25,)),
-             ('Fired',
-              (43,),
+              (0,)),
+             ('PowerhouseSoakImmune', #7
+              (0,),
               (100,),
-              (25,)),
-             ('FallingKnife',
-              (34,),
+              (0,)),
+            ('PowerhouseLureImmune', #8
+              (0,),
               (100,),
-              (25,)))},
+              (0,)),
+             ('PowerhouseSyphon', #9
+              (0,),
+              (100,),
+              (0,)),
+             ('PowerhouseSyphonDesperation', #10
+              (0,),
+              (100,),
+              (0,)),
+             ('PowerhouseSnipeVulnerable', #11
+              (0,),
+              (100,),
+              (0,)),
+('PowerhouseSnipeGagBan', #12
+              (0,),
+              (100,),
+              (0,)),
+('PowerhouseSnipeSoaked', #13
+              (0,),
+              (100,),
+              (0,)),
+('PowerhouseSnipeBookkept', #14
+              (0,),
+              (100,),
+              (0,)),
+('PowerhouseSnipeMulligan', #15
+              (0,),
+              (100,),
+              (0,)),
+('PowerhouseSnipeCollectCall', #16
+              (0,),
+              (100,),
+              (0,)),
+             )},
  'fbd': {'name': 'Bookkeeper',
         'singularname': 'a Bookkeeper',
 		'pluralname': 'Bookkeepers',
@@ -1282,42 +1307,55 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-		        (('ExplodingBill',
-				    (0,),
-					(100,),
-					(0,)),
-                ('CigarSmoke',
-				    (37,),
-					(100,),
-					(20,)),
-                ('PaperCut',
-				    (0,),
-					(100,),
-					(0,)),
-                ('RestrainingOrder',
-				    (41,),
-					(100,),
-					(20,)),
+		        (('RestrainingOrder',
+				    (40,),
+					(90,),
+					(15,)),
                 ('EvictionNotice',
-				    (48,),
-					(100,),
+				    (37,),
+					(85,),
+					(15,)),
+                ('MarketCrash',
+				    (42,),
+					(90,),
 					(20,)),
+                ('FountainPen',
+				    (41,),
+					(80,),
+					(15,)),
                 ('Rolodex',
 				    (38,),
-					(100,),
+					(95,),
+					(15,)),
+                ('RedTape',
+				    (35,),
+					(90,),
 					(20,)),
-                ('LawBook',
-				    (41,),
-					(100,),
-					(20,)),
-('BookKeeping',
+                ('BookkeeperPaperCutSoaked', #6
 				    (0,),
 					(100,),
-					(20,)),
-                ('WireCut',
+					(0,)),
+ ('BookkeeperPaperCutMarked', #7
 				    (0,),
 					(100,),
-					(0,)))},
+					(0,)),
+                 ('BookkeeperPaperCut',#8
+                  (0,),
+                  (100,),
+                  (0,)),
+                 ('BookkeeperExplodingDocument',#9
+                  (0,),
+                  (100,),
+                  (0,)),
+                 ('BookkeeperBookkeeping',#10
+                  (0,),
+                  (100,),
+                  (0,)),
+                 ('BookkeeperBookkeepingRetaliation',#11
+                  (0,),
+                  (100,),
+                  (0,)),
+                 )},
  'frs': {'name': 'Wiretapper',
         'singularname': 'a Wiretapper',
 		'pluralname': 'Wiretappers',
@@ -1327,42 +1365,103 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('Filibuster',
-               (41,),
-               (75,),
+             (('HangUp',
+               (45,),
+               (95,),
                (20,)),
-              ('BuzzWord',
-               (38,),
-               (75,),
-               (20,)),
-              ('CollectCall',
-               (0,),
-               (100,),
-               (0,)),
-              ('HangUp',
-               (46,),
-               (75,),
-               (30,)),
-              ('ParadigmShift',
-               (31,),
-               (75,),
-               (10,)),
-            ('Voicemail',
-               (0,),
-               (100,),
-               (0,)),
-            ('CollectCallFees',
-               (0,),
-               (100,),
-               (0,)),
-            ('Wiretapped',
-               (0,),
-               (100,),
-               (0,)),
               ('PoundKey',
-               (42,),
-               (75,),
-               (20,)))},
+               (48,),
+               (90,),
+               (20,)),
+              ('DoubleTalk',
+               (40,),
+               (85,),
+               (15,)),
+              ('BuzzWord',
+               (37,),
+               (95,),
+               (15,)),
+              ('MumboJumbo',
+               (38,),
+               (85,),
+               (15,)),
+            ('Rolodex',
+               (35,),
+               (80,),
+               (15,)),
+('WiretapperCollectCall', #6
+               (0,),
+               (100,),
+               (0,)),
+('WiretapperCollectCallDamage',#7
+               (0,),
+               (100,),
+               (0,)),
+('WiretapperWiretapped',#8
+               (0,),
+               (100,),
+               (0,)),
+('WiretapperVoicemail',#9
+               (0,),
+               (100,),
+               (0,)),
+('WiretapperBrokenConnection',#10
+               (0,),
+               (100,),
+               (0,)),
+              ('BanToonup',#11
+               (0,),
+               (100,),
+               (0,)),
+              ('BanTrap',#12
+               (0,),
+               (100,),
+               (0,)),
+              ('BanLure',#13
+               (0,),
+               (100,),
+               (0,)),
+              ('BanThrow',#14
+               (0,),
+               (100,),
+               (0,)),
+              ('BanSquirt',#15
+               (0,),
+               (100,),
+               (0,)),
+              ('BanZap',#16
+               (0,),
+               (100,),
+               (0,)),
+              ('BanSound',#17
+               (0,),
+               (100,),
+               (0,)),
+              ('BanDrop',#18
+               (0,),
+               (100,),
+               (0,)),
+('BanLevel4',#19
+				    (0,),
+					(100,),
+					(0,)),
+ ('BanLevel5',#20
+				    (0,),
+					(100,),
+					(0,)),
+ ('BanLevel6',#21
+				    (0,),
+					(100,),
+					(0,)),
+                 ('BanLevel7',#22
+                  (0,),
+                  (100,),
+                  (0,)),
+ ('BanLevel8',#23
+				    (0,),
+					(100,),
+					(0,)),
+              )},
  'gtk': {'name': 'Ambassador',
         'singularname': 'a Ambassador',
 		'pluralname': 'Ambassador',
@@ -1372,58 +1471,62 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('HeadRoller',
-              (0,),
-              (100,),
-              (0,)),
-             ('HeadRoller2',
-              (0,),
-              (100,),
-              (0,)),
+            (('Golf',
+              (49,),
+              (80,),
+              (20,)),
+             ('FallingKnife',
+              (45,),
+              (90,),
+              (20,)),
              ('BrainStorm',
               (38,),
+              (85,),
+              (15,)),
+             ('FloodTheMarket',
+              (39,),
               (100,),
-              (10,)),
-             ('Accusations',
-              (45,),
-              (100,),
-              (10,)),
-            ('FallingKnife',
+              (15,)),
+            ('GlowerPower',
               (41,),
               (100,),
-              (20,)),
-        ('Mulligan2',
-                (60,),
+              (15,)),
+        ('ReOrg',
+                (40,),
               (100,),
-              (20,)),
-('ManagerialProtection',
+              (15,)),
+('AmbassadorHeadRoller', #6
               (0,),
               (100,),
               (0,)),
-('Refinement',
+('AmbassadorHeadRollerGroup',#7
               (0,),
               (100,),
               (0,)),
-('HeadRoller3',
+('AmbassadorRefinement',#8
               (0,),
               (100,),
               (0,)),
-('Detonate3',
+('AmbassadorPhase2',#9
               (0,),
               (100,),
               (0,)),
-('Beguile',
-              (0,),
-              (100,),
-              (20,)),
-('EvilEyeWSI',
+('AmbassadorDamageUp',#10
               (0,),
               (100,),
               (0,)),
-             ('BlueChip',
-              (41,),
+('AmbassadorManagerialProtection',#11
+              (0,),
               (100,),
-              (20,)))},
+              (0,)),
+('AmbassadorManagerialProtectionImmunity',#12
+              (0,),
+              (100,),
+              (0,)),
+             ('AmbassadorMulligan',#13
+              (0,),
+              (80,),
+              (0,)))},
  'cc': {'name': 'Cold Caller',
         'singularname': 'a Cold Caller',
         'pluralname': 'Cold Callers',
@@ -6302,6 +6405,40 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'ScapegoatBarnyardBash': ('effort', ATK_TGT_GROUP),
 'ScapegoatGavel': ('effort', ATK_TGT_SINGLE),
 'ScapegoatCourtRecordBan': ('nothing', ATK_TGT_GROUP),
+#powerhouse cheats
+'PowerhouseAbsorb': ('defense', ATK_TGT_SINGLE),
+'PowerhouseSoakImmune': ('nothing', ATK_TGT_SINGLE),
+'PowerhouseLureImmune': ('nothing', ATK_TGT_SINGLE),
+'PowerhouseSyphon': ('summon', ATK_TGT_SINGLE),
+'PowerhouseSyphonDesperation': ('scabbard', ATK_TGT_SINGLE),
+'PowerhouseSnipeVulnerable': ('glower', ATK_TGT_GROUP),
+'PowerhouseSnipeGagBan': ('glower', ATK_TGT_GROUP),
+'PowerhouseSnipeSoaked': ('glower', ATK_TGT_GROUP),
+'PowerhouseSnipeBookkept': ('glower', ATK_TGT_GROUP),
+'PowerhouseSnipeMulligan': ('glower', ATK_TGT_GROUP),
+'PowerhouseSnipeCollectCall': ('glower', ATK_TGT_GROUP),
+#bookkeeper cheats
+'BookkeeperPaperCutSoaked': ('sanction', ATK_TGT_SINGLE),
+'BookkeeperPaperCutMarked': ('sanction', ATK_TGT_SINGLE),
+'BookkeeperPaperCut': ('sanction', ATK_TGT_SINGLE),
+'BookkeeperExplodingDocument': ('throw-paper', ATK_TGT_SINGLE),
+'BookkeeperBookkeepingRetaliation': ('nothing', ATK_TGT_GROUP),
+'BookkeeperBookkeeping': ('effort', ATK_TGT_SINGLE),
+#wiretapper cheats
+'WiretapperCollectCall': ('snap', ATK_TGT_SINGLE),
+'WiretapperCollectCallDamage': ('nothing', ATK_TGT_GROUP),
+'WiretapperWiretapped': ('phone', ATK_TGT_GROUP),
+'WiretapperVoicemail': ('phone', ATK_TGT_SINGLE),
+'WiretapperBrokenConnection': ('pie-small-react', ATK_TGT_SINGLE),
+#ambassador cheats
+'AmbassadorHeadRoller': ('snap', ATK_TGT_SINGLE),
+'AmbassadorHeadRollerGroup': ('snap', ATK_TGT_SINGLE),
+'AmbassadorRefinement': ('throw-object', ATK_TGT_SINGLE),
+'AmbassadorPhase2': ('pie-small-react', ATK_TGT_SINGLE),
+'AmbassadorDamageUp': ('summon', ATK_TGT_SINGLE),
+'AmbassadorManagerialProtection': ('snap', ATK_TGT_GROUP),
+'AmbassadorManagerialProtectionImmunity': ('cease', ATK_TGT_SINGLE),
+'AmbassadorMulligan': ('golf-club-swing', ATK_TGT_SINGLE),
 #universal cheats
 'SynergyFees': ('magic3', ATK_TGT_GROUP),
 'CalculatingFees': ('calculating-costs', ATK_TGT_SINGLE),
@@ -6606,6 +6743,40 @@ SCAPEGOAT_ENRAGED = SuitAttacks.keys().index('ScapegoatEnraged')
 SCAPEGOAT_GAVEL = SuitAttacks.keys().index('ScapegoatGavel')
 SCAPEGOAT_BARNYARD_BASH = SuitAttacks.keys().index('ScapegoatBarnyardBash')
 SCAPEGOAT_COURT_RECORD_BAN = SuitAttacks.keys().index('ScapegoatCourtRecordBan')
+#powerhouse cheats
+POWERHOUSE_ABSORB = SuitAttacks.keys().index('PowerhouseAbsorb')
+POWERHOUSE_SOAK_IMMUNE = SuitAttacks.keys().index('PowerhouseSoakImmune')
+POWERHOUSE_LURE_IMMUNE = SuitAttacks.keys().index('PowerhouseLureImmune')
+POWERHOUSE_SYPHON = SuitAttacks.keys().index('PowerhouseSyphon')
+POWERHOUSE_SYPHON_DESPERATION = SuitAttacks.keys().index('PowerhouseSyphonDesperation')
+POWERHOUSE_SNIPE_VULNERABLE = SuitAttacks.keys().index('PowerhouseSnipeVulnerable')
+POWERHOUSE_SNIPE_GAG_BAN = SuitAttacks.keys().index('PowerhouseSnipeGagBan')
+POWERHOUSE_SNIPE_SOAKED = SuitAttacks.keys().index('PowerhouseSnipeSoaked')
+POWERHOUSE_SNIPE_BOOKKEPT = SuitAttacks.keys().index('PowerhouseSnipeBookkept')
+POWERHOUSE_SNIPE_MULLIGAN = SuitAttacks.keys().index('PowerhouseSnipeMulligan')
+POWERHOUSE_SNIPE_COLLECT_CALL = SuitAttacks.keys().index('PowerhouseSnipeCollectCall')
+#bookkeeper cheats
+BOOKKEEPER_PAPER_CUT_SOAKED = SuitAttacks.keys().index('BookkeeperPaperCutSoaked')
+BOOKKEEPER_PAPER_CUT_MARKED = SuitAttacks.keys().index('BookkeeperPaperCutMarked')
+BOOKKEEPER_PAPER_CUT = SuitAttacks.keys().index('BookkeeperPaperCut')
+BOOKKEEPER_EXPLODING_DOCUMENT = SuitAttacks.keys().index('BookkeeperExplodingDocument')
+BOOKKEEPER_BOOKKEEPING_RETALIATION = SuitAttacks.keys().index('BookkeeperBookkeepingRetaliation')
+BOOKKEEPER_BOOKKEEPING = SuitAttacks.keys().index('BookkeeperBookkeeping')
+#wiretapper cheats
+WIRETAPPER_COLLECT_CALL = SuitAttacks.keys().index('WiretapperCollectCall')
+WIRETAPPER_COLLECT_CALL_DOT = SuitAttacks.keys().index('WiretapperCollectCallDamage')
+WIRETAPPER_WIRETAPPED = SuitAttacks.keys().index('WiretapperWiretapped')
+WIRETAPPER_VOICEMAIL = SuitAttacks.keys().index('WiretapperVoicemail')
+WIRETAPPER_BROKEN_CONNECTION = SuitAttacks.keys().index('WiretapperBrokenConnection')
+#ambassador cheats
+AMBASSADOR_HEAD_ROLLER = SuitAttacks.keys().index('AmbassadorHeadRoller')
+AMBASSADOR_HEAD_ROLLER_GROUP = SuitAttacks.keys().index('AmbassadorHeadRollerGroup')
+AMBASSADOR_REFINEMENT = SuitAttacks.keys().index('AmbassadorRefinement')
+AMBASSADOR_PHASE_2 = SuitAttacks.keys().index('AmbassadorPhase2')
+AMBASSADOR_DAMAGE_UP = SuitAttacks.keys().index('AmbassadorDamageUp')
+AMBASSADOR_MANAGERIAL_PROTECTION = SuitAttacks.keys().index('AmbassadorManagerialProtection')
+AMBASSADOR_MANAGERIAL_PROTECTION_IMMUNITY = SuitAttacks.keys().index('AmbassadorManagerialProtectionImmunity')
+AMBASSADOR_MULLIGAN = SuitAttacks.keys().index('AmbassadorMulligan')
 #universal cheats
 SYNERGY_FEES = SuitAttacks.keys().index('SynergyFees')
 CALCULATING_FEES = SuitAttacks.keys().index('CalculatingFees')

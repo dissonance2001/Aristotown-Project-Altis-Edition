@@ -1062,7 +1062,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             if simbase.config.GetBool('suits-always-join', 0):
                 return 1
             jChanceList = self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_JCHANCE]
-            ratioIdx = (len(battle.toons) - battle.numSuitsEver) + 5
+            ratioIdx = (len(battle.toons) - battle.numSuitsEver) + 2
             if ratioIdx >= 0:
                 if ratioIdx < len(jChanceList):
                     if random.randint(0, 99) < jChanceList[ratioIdx]:

@@ -1,5 +1,6 @@
 from toontown.battle import MovieCamera
 from toontown.battle import MovieLawbotLitigationCheats
+from toontown.battle import MovieBossbotLitigationCheats
 from toontown.battle import MovieUniversalCheats
 from toontown.battle import MovieUtil
 from toontown.battle import BattleParticles
@@ -630,21 +631,100 @@ def doSuitAttack(attack):
         suitTrack = MovieLawbotLitigationCheats.doBarnyardBash(attack)
     elif name == SCAPEGOAT_COURT_RECORD_BAN:
         suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
+    #powerhouse cheats
+    elif name == POWERHOUSE_ABSORB:
+        suitTrack = MovieBossbotLitigationCheats.doAbsorb(attack)
+    elif name == POWERHOUSE_SOAK_IMMUNE:
+        suitTrack = MovieBossbotLitigationCheats.doSoakImmune(attack)
+    elif name == POWERHOUSE_LURE_IMMUNE:
+        suitTrack = MovieBossbotLitigationCheats.doLureImmune(attack)
+    elif name == POWERHOUSE_SYPHON:
+        suitTrack = MovieBossbotLitigationCheats.doSyphon(attack)
+    elif name == POWERHOUSE_SYPHON_DESPERATION:
+        suitTrack = MovieBossbotLitigationCheats.doSyphonDesperation(attack)
+    elif name == POWERHOUSE_SNIPE_VULNERABLE:
+        suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
+    elif name == POWERHOUSE_SNIPE_GAG_BAN:
+        suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
+    elif name == POWERHOUSE_SNIPE_SOAKED:
+        suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
+    elif name == POWERHOUSE_SNIPE_BOOKKEPT:
+        suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
+    elif name == POWERHOUSE_SNIPE_MULLIGAN:
+        suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
+    elif name == POWERHOUSE_SNIPE_COLLECT_CALL:
+        suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
+    #bookkeeper cheats
+    elif name == BOOKKEEPER_PAPER_CUT_SOAKED:
+        suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
+    elif name == BOOKKEEPER_PAPER_CUT_MARKED:
+        suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
+    elif name == BOOKKEEPER_PAPER_CUT:
+        suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
+    elif name == BOOKKEEPER_EXPLODING_DOCUMENT:
+        suitTrack = MovieBossbotLitigationCheats.doExplodingDocument(attack)
+    elif name == BOOKKEEPER_BOOKKEEPING_RETALIATION:
+        suitTrack = MovieBossbotLitigationCheats.doBookkeepingRetaliation(attack)
+    elif name == BOOKKEEPER_BOOKKEEPING:
+        suitTrack = MovieBossbotLitigationCheats.doBookkeeping(attack)
+    #wiretapper cheats
+    elif name == WIRETAPPER_COLLECT_CALL:
+        suitTrack = MovieBossbotLitigationCheats.doCollectCall(attack)
+    elif name == WIRETAPPER_COLLECT_CALL_DOT:
+        suitTrack = MovieBossbotLitigationCheats.doCollectCallDamage(attack)
+    elif name == WIRETAPPER_WIRETAPPED:
+        suitTrack = MovieBossbotLitigationCheats.doWiretapped(attack)
+    elif name == WIRETAPPER_VOICEMAIL:
+        suitTrack = MovieBossbotLitigationCheats.doVoicemail(attack)
+    elif name == WIRETAPPER_BROKEN_CONNECTION:
+        suitTrack = MovieBossbotLitigationCheats.doCollectCall(attack)
+    #ambassador cheats
+    elif name == AMBASSADOR_HEAD_ROLLER:
+        suitTrack = MovieBossbotLitigationCheats.doHeadRoller(attack)
+    elif name == AMBASSADOR_HEAD_ROLLER_GROUP:
+        suitTrack = MovieBossbotLitigationCheats.doHeadRollerGroup(attack)
+    elif name == AMBASSADOR_REFINEMENT:
+        suitTrack = MovieBossbotLitigationCheats.doRefinement(attack)
+    elif name == AMBASSADOR_PHASE_2:
+        suitTrack = MovieBossbotLitigationCheats.doAmbassadorPhase2(attack)
+    elif name == AMBASSADOR_DAMAGE_UP:
+        suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUp(attack)
+    elif name == AMBASSADOR_MANAGERIAL_PROTECTION:
+        suitTrack = MovieBossbotLitigationCheats.doManagerialProtection(attack)
+    elif name == AMBASSADOR_MANAGERIAL_PROTECTION_IMMUNITY:
+        suitTrack = MovieBossbotLitigationCheats.doManagerialProtectionImmunity(attack)
+    elif name == AMBASSADOR_MULLIGAN:
+        suitTrack = doMulligan(attack)
     #universal cheats
     elif name == SYNERGY_FEES:
         suitTrack = MovieUniversalCheats.doSynergy(attack)
     elif name == CALCULATING_FEES:
         suitTrack = MovieUniversalCheats.doCourtCalculations(attack)
     elif name == BAN_LEVEL_4:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_LEVEL_5:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_LEVEL_6:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_LEVEL_7:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_LEVEL_8:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_LEVEL_4_5:
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_LEVEL_4_6:
@@ -666,21 +746,45 @@ def doSuitAttack(attack):
     elif name == BAN_LEVEL_7_8:
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_TOONUP:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_TRAP:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_LURE:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_THROW:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_SQUIRT:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_ZAP:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_SOUND:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_DROP:
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'frs':
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_TOONUP_TRAP:
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == BAN_TOONUP_LURE:
