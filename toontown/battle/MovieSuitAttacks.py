@@ -678,9 +678,11 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doVoicemail(attack)
     elif name == WIRETAPPER_BROKEN_CONNECTION:
         suitTrack = MovieBossbotLitigationCheats.doCollectCall(attack)
+    elif name == WIRETAPPER_GAG_BAN:
+        suitTrack = MovieBossbotLitigationCheats.doWiretapperGagBan(attack)
     #ambassador cheats
     elif name == AMBASSADOR_HEAD_ROLLER:
-        suitTrack = MovieBossbotLitigationCheats.doHeadRoller(attack)
+        suitTrack = MovieBossbotLitigationCheats.doHeadRoller(attack, 2)
     elif name == AMBASSADOR_HEAD_ROLLER_GROUP:
         suitTrack = MovieBossbotLitigationCheats.doHeadRollerGroup(attack)
     elif name == AMBASSADOR_REFINEMENT:
@@ -688,13 +690,16 @@ def doSuitAttack(attack):
     elif name == AMBASSADOR_PHASE_2:
         suitTrack = MovieBossbotLitigationCheats.doAmbassadorPhase2(attack)
     elif name == AMBASSADOR_DAMAGE_UP:
-        suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUp(attack)
+        if suit.isDesperation:
+            suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUpDesperation(attack)
+        else:
+            suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUp(attack)
     elif name == AMBASSADOR_MANAGERIAL_PROTECTION:
         suitTrack = MovieBossbotLitigationCheats.doManagerialProtection(attack)
     elif name == AMBASSADOR_MANAGERIAL_PROTECTION_IMMUNITY:
         suitTrack = MovieBossbotLitigationCheats.doManagerialProtectionImmunity(attack)
     elif name == AMBASSADOR_MULLIGAN:
-        suitTrack = doMulligan(attack)
+        suitTrack = MovieBossbotLitigationCheats.doMulligan(attack)
     #universal cheats
     elif name == SYNERGY_FEES:
         suitTrack = MovieUniversalCheats.doSynergy(attack)

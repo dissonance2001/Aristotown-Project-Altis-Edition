@@ -1562,33 +1562,36 @@ class Movie(DirectObject.DirectObject):
                         adict['target'] = targets
                     else:
                         targetGone = 1
-                elif adict['group'] == ATK_TGT_SINGLE:
-                    targetIndex = sa[SUIT_TGT_COL]
-                    targetId = toons[targetIndex]
-                    target = self.battle.findToon(targetId)
-                    if target == None:
-                        targetGone = 1
-                        break
-                    tdict = {}
-                    tdict['toon'] = target
-                    tdict['hp'] = hps[targetIndex]
-                    self.notify.debug('DAMAGE: toon: %d hit for hp: %d' % (target.doId, hps[targetIndex]))
-                    toonDied = sa[TOON_DIED_COL] & 1 << targetIndex
-                    tdict['died'] = toonDied
-                    toonIndex = self.battle.activeToons.index(target)
-                    rightToons = []
-                    for ti in xrange(0, toonIndex):
-                        rightToons.append(self.battle.activeToons[ti])
+                elif adict['group'] == ATK_TGT_SINGLE or adict['group'] == ATK_TGT_DOUBLE:
+                    targets = []
+                    for targetIndex in sa[SUIT_TGT_COL]:
+                        targetId = toons[targetIndex]
+                        target = self.battle.findToon(targetId)
+                        if target == None:
+                            targetGone = 1
+                            break
+                        tdict = {}
+                        tdict['toon'] = target
+                        tdict['hp'] = hps[targetIndex]
+                        self.notify.debug('DAMAGE: toon: %d hit for hp: %d' % (target.doId, hps[targetIndex]))
+                        toonDied = sa[TOON_DIED_COL] & 1 << targetIndex
+                        tdict['died'] = toonDied
+                        toonIndex = self.battle.activeToons.index(target)
+                        rightToons = []
+                        for ti in xrange(0, toonIndex):
+                            rightToons.append(self.battle.activeToons[ti])
 
-                    lenToons = len(self.battle.activeToons)
-                    leftToons = []
-                    if lenToons > toonIndex + 1:
-                        for ti in xrange(toonIndex + 1, lenToons):
-                            leftToons.append(self.battle.activeToons[ti])
+                        lenToons = len(self.battle.activeToons)
+                        leftToons = []
+                        if lenToons > toonIndex + 1:
+                            for ti in xrange(toonIndex + 1, lenToons):
+                                leftToons.append(self.battle.activeToons[ti])
 
-                    tdict['leftToons'] = leftToons
-                    tdict['rightToons'] = rightToons
-                    adict['target'] = [tdict]
+                        tdict['leftToons'] = leftToons
+                        tdict['rightToons'] = rightToons
+                        targets.append(tdict)
+
+                    adict['target'] = targets
                 else:
                     self.notify.warning('got suit attack not group or single!')
                 if targetGone == 0:

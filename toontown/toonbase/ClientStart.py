@@ -203,67 +203,67 @@ base.accept('[', printCameraPos)
 def cameraX():
     camera.setX(camera.getX() + 1)
 
-base.accept('f1', cameraX)
+#base.accept('f1', cameraX)
 
 def cameraXDecrease():
     camera.setX(camera.getX() - 1)
 
-base.accept('f2', cameraXDecrease)
+#base.accept('f2', cameraXDecrease)#
 
 # Y movement
 def cameraY():
     camera.setY(camera.getY() + 1)
 
-base.accept('f3', cameraY)
+#base.accept('f3', cameraY)
 
 def cameraYDecrease():
     camera.setY(camera.getY() - 1)
 
-base.accept('f4', cameraYDecrease)
+#base.accept('f4', cameraYDecrease)
 
 # Z movement
 def cameraZ():
     camera.setZ(camera.getZ() + 1)
 
-base.accept('f5', cameraZ)
+#base.accept('f5', cameraZ)
 
 def cameraZDecrease():
     camera.setZ(camera.getZ() - 1)
 
-base.accept('f6', cameraZDecrease)
+#base.accept('f6', cameraZDecrease)
 
 # H rotation (Heading)
 def cameraH():
     camera.setH(camera.getH() + 1)
 
-base.accept('f7', cameraH)
+#base.accept('f7', cameraH)
 
 def cameraHDecrease():
     camera.setH(camera.getH() - 1)
 
-base.accept('f8', cameraHDecrease)
+#base.accept('f8', cameraHDecrease)
 
 # P rotation (Pitch)
 def cameraP():
     camera.setP(camera.getP() + 1)
 
-base.accept('f9', cameraP)
+#base.accept('f9', cameraP)
 
 def cameraPDecrease():
     camera.setP(camera.getP() - 1)
 
-base.accept('f10', cameraPDecrease)
+#base.accept('f10', cameraPDecrease)
 
 # R rotation (Roll)
 def cameraR():
     camera.setR(camera.getR() + 1)
 
-base.accept('f11', cameraR)
+#base.accept('f11', cameraR)
 
 def cameraRDecrease():
     camera.setR(camera.getR() - 1)
 
-base.accept('f12', cameraRDecrease)
+#base.accept('f12', cameraRDecrease)
 
 if autoRun:
     try:

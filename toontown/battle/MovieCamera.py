@@ -1981,40 +1981,32 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     diedTrack = None
     groupStatus = attack['group']
     target = attack['target']
-    if groupStatus == ATK_TGT_SINGLE:
-        toon = target[0]['toon']
-        died = attack['target'][0]['died']
+    deadToons = []
+    targetDicts = attack['target']
+    for targetDict in targetDicts:
+        died = targetDict['died']
         if died != 0:
-            pbpText = attack['playByPlayText']
-            diedText = toon.getName() + ' was defeated!'
-            diedTextList = [diedText]
-            diedTrack = pbpText.getToonsDiedInterval(diedTextList, duration)
-    elif groupStatus == ATK_TGT_GROUP:
-        deadToons = []
-        targetDicts = attack['target']
-        for targetDict in targetDicts:
-            died = targetDict['died']
-            if died != 0:
-                deadToons.append(targetDict['toon'])
+            deadToons.append(targetDict['toon'])
 
-        if len(deadToons) > 0:
+    if len(deadToons) > 0:
+        pbpText = attack['playByPlayText']
+        diedTextList = []
+        for toon in deadToons:
             pbpText = attack['playByPlayText']
-            diedTextList = []
-            for toon in deadToons:
-                pbpText = attack['playByPlayText']
-                diedTextList.append(toon.getName() + ' was defeated!')
+            diedTextList.append(toon.getName() + ' was defeated!')
 
-            diedTrack = pbpText.getToonsDiedInterval(diedTextList, duration)            
+        diedTrack = pbpText.getToonsDiedInterval(diedTextList, duration)
     suit = attack['suit']
     name = attack['id']
     battle = attack['battle']
     camTrack = Sequence()
 
-    def defaultCamera(attack = attack, attackDuration = attackDuration, openShotDuration = 3.5, target = target):
-        if attack['group'] == ATK_TGT_GROUP:
-            return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
+    def defaultCamera(attack=attack, attackDuration=attackDuration, openShotDuration=3.5, target=target):
+        if attack['group'] == ATK_TGT_SINGLE:
+            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration,
+                                   openShotDuration, 'suit')
         else:
-            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration, openShotDuration, 'suit')
+            return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
 
     def fromBehindCamera(attack=attack, attackDuration=attackDuration, openShotDuration=3.5, target=target):
         return fromBehindGroupCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
@@ -2206,7 +2198,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == FREE_CRUISE:
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3.7))
         camTrack.append(moveShot(-21.0, 8.0, 8.0, -120, 0, 0, 0.5))
-        camTrack.append(heldShot(-21.0, 8.0, 8.0, -120, 0, 0, attackDuration - 3.7))
+        camTrack.append(heldShot(-21.0, 8.0, 8.0, -120, 0, 0, attackDuration - 4.2))
     # elif name == BLACK_ORB:
     #     camTrack.append(defaultCamera(openShotDuration=2.7))
     elif name == HEAVY_RAINFALL:
@@ -3471,6 +3463,19 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
+    elif name == WIRETAPPER_GAG_BAN:
+        if attackDuration > 2:
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc(
+                "Due to an overinflated budget this toon takes 50 damage!",
+                attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == WIRETAPPER_WIRETAPPED:
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == WIRETAPPER_VOICEMAIL:
@@ -3687,7 +3692,7 @@ def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
             diedText = av.getName() + ' was defeated!'
             diedTextList = [diedText]
             diedTrack = pbpText.getToonsDiedInterval(diedTextList, 3.5)
-    elif groupStatus == ATK_TGT_GROUP:
+    elif groupStatus == ATK_TGT_DOUBLE or groupStatus == ATK_TGT_GROUP:
         av = None
         shotChoices = [allGroupLowShot, suitGroupThreeQuarterLeftBehindShot]
         deadToons = []

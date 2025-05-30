@@ -438,13 +438,11 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             if id != -1:
                 index = suitIds.index(id)
             if sa[SUIT_ATK_COL] == -1:
-                targetIndex = -1
+                targetIndex = []
             else:
                 targetIndex = sa[SUIT_TGT_COL]
-                if targetIndex == -1:
+                if targetIndex == []:
                     self.notify.debug('suit attack: %d must be group' % sa[SUIT_ATK_COL])
-                else:
-                    toonId = self.activeToons[targetIndex]
             suitAttack = suitAttack + (index, sa[SUIT_ATK_COL], targetIndex)
             sa[SUIT_TAUNT_COL] = 0
             if sa[SUIT_ATK_COL] != -1:
@@ -1774,24 +1772,24 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                                     if toonDied != 0:
                                         toonHpDict[toon.doId][2] = 1
                                     toonHpDict[toon.doId][1] += hp
-
-                elif adict['group'] == ATK_TGT_SINGLE:
-                    targetIndex = self.suitAttacks[i][SUIT_TGT_COL]
-                    if targetIndex >= len(self.activeToons):
-                        self.notify.warning('movieDone() - toon: %d gone!' % targetIndex)
-                        break
-                    toonId = self.activeToons[targetIndex]
-                    toon = self.getToon(toonId)
-                    toonDied = self.suitAttacks[i][TOON_DIED_COL] & 1 << targetIndex
-                    if targetIndex >= len(hps):
-                        self.notify.warning('DAMAGE: toon %s is no longer in battle!' % toonId)
-                    else:
-                        hp = hps[targetIndex]
-                        if hp > 0:
-                            self.notify.debug('DAMAGE: toon: %d hit for dmg: %d' % (toonId, hp))
-                            if toonDied != 0:
-                                toonHpDict[toon.doId][2] = 1
-                            toonHpDict[toon.doId][1] += hp
+                
+                elif adict['group'] == ATK_TGT_DOUBLE or adict['group'] == ATK_TGT_SINGLE:
+                    for targetIndex in self.suitAttacks[i][SUIT_TGT_COL]:
+                        if targetIndex >= len(self.activeToons):
+                            self.notify.warning('movieDone() - toon: %d gone!' % targetIndex)
+                            continue
+                        toonId = self.activeToons[targetIndex]
+                        toon = self.getToon(toonId)
+                        toonDied = self.suitAttacks[i][TOON_DIED_COL] & 1 << targetIndex
+                        if targetIndex >= len(hps):
+                            self.notify.warning('DAMAGE: toon %s is no longer in battle!' % toonId)
+                        else:
+                            hp = hps[targetIndex]
+                            if hp > 0:
+                                self.notify.debug('DAMAGE: toon: %d hit for dmg: %d' % (toonId, hp))
+                                if toonDied != 0:
+                                    toonHpDict[toon.doId][2] = 1
+                                toonHpDict[toon.doId][1] += hp
 
         deadToons = []
         for activeToon in self.activeToons:
@@ -1814,7 +1812,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                     deadToons.append(activeToon)
                 self.notify.debug('AFTER ROUND: toon: %d setHp: %d' % (toon.doId, toon.hp))
                 if toon.unlimitedGags:
-	                toon.doRestock(noUber=0, noPaid=0)
+                    toon.doRestock(noUber=0, noPaid=0)
 
         for deadToon in deadToons:
             self.__removeToon(deadToon)

@@ -515,7 +515,10 @@ def getSuitAttack(suitName, suitLevel, attackNum = -1):
     adict['hp'] = attack[1][suitLevel]
     adict['acc'] = attack[2][suitLevel]
     adict['freq'] = attack[3][suitLevel]
-    adict['group'] = SuitAttacks[name][1]
+    if len(attack) > 4:
+        adict['group'] = attack[4]
+    else:
+        adict['group'] = SuitAttacks[name][1]
     return adict
 
 SuitSizes = {
@@ -565,7 +568,8 @@ SpecialCogDict = ('ddv', 'sya', 'fhj', 'dty', 'dar', 'dsf', 'nhy', 'wrt', 'auh',
 
 ATK_TGT_UNKNOWN = 1
 ATK_TGT_SINGLE = 2
-ATK_TGT_GROUP = 3
+ATK_TGT_DOUBLE = 3
+ATK_TGT_GROUP = 4
 SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Flunky', # cogs singular name, for tasks
        'pluralname': 'Flunkies', # cogs plural name, for tasks
@@ -1294,7 +1298,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (100,),
               (0,)),
 ('PowerhouseSnipeCollectCall', #16
-              (0,),
+              (1,),
               (100,),
               (0,)),
              )},
@@ -1352,7 +1356,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (100,),
                   (0,)),
                  ('BookkeeperBookkeepingRetaliation',#11
-                  (0,),
+                  (1,),
                   (100,),
                   (0,)),
                  )},
@@ -1457,7 +1461,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (0,),
                   (100,),
                   (0,)),
- ('BanLevel8',#23
+ ('BanLevel8',#23s
+				    (0,),
+					(100,),
+					(0,)),
+ ('WiretapperGagBan',#24
 				    (0,),
 					(100,),
 					(0,)),
@@ -1472,27 +1480,27 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'acc':(75,),
 		'attacks':
             (('Golf',
-              (49,),
+              (44,),
               (80,),
               (20,)),
              ('FallingKnife',
-              (45,),
+              (40,),
               (90,),
               (20,)),
              ('BrainStorm',
-              (38,),
+              (37,),
               (85,),
               (15,)),
              ('FloodTheMarket',
-              (39,),
+              (34,),
               (100,),
               (15,)),
             ('GlowerPower',
-              (41,),
+              (38,),
               (100,),
               (15,)),
         ('ReOrg',
-                (40,),
+                (35,),
               (100,),
               (15,)),
 ('AmbassadorHeadRoller', #6
@@ -4332,7 +4340,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  (3, 4, 5, 6, 8),
                  (75, 75, 75, 75, 75),  # attack accuracy
                  (25, 25, 25, 25, 25)),
-                ('FountainPen',
+                ('ShortSqueeze',
                  (1, 2, 3, 4, 5),
                  (75, 75, 75, 75, 75),  # attack accuracy
                  (25, 25, 25, 25, 25)))},
@@ -4400,16 +4408,16 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'acc': (45, 50, 55, 60, 65, 65, 65, 65),
        'attacks':
            (('PickPocket',
-             (1, 1, 1, 1, 1),
+             (3, 4, 6, 9, 12),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20)),
             ('PoundKey',
-             (1, 1, 1, 1, 1, 1, 1, 1),
+             (3, 4, 6, 9, 12),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20)),
             ('BlueChip',
              (1, 2, 3, 4, 5),
-             (100, 100, 100, 100, 100),
+             (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20)),
             ('PowerTrip',
              (3, 4, 5, 6, 9),
@@ -4463,7 +4471,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (20, 20, 20, 20, 20)),
              ('FallingKnife',
               (2, 3, 4, 5, 6),
-              (100, 100, 100, 100, 100),
+              (85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20)),
              ('Quake',
               (2, 3, 4, 5, 6),
@@ -4567,7 +4575,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
               ('FallingKnife',
                (8, 10, 12, 14, 16, 18, 20, 22, 24, 26),
-               (100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
+               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
               ('Bite',
                (5, 8, 11, 13, 15, 17, 19, 21, 23, 25),
@@ -4631,7 +4639,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
             ('BlueChip',
                (11, 12, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31),
-               (100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
+               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
               ('PeckingOrder',
                (12, 15, 18, 20, 22, 24, 27, 29, 32, 34, 36, 38),
@@ -4685,11 +4693,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
 ('FallingKnife',
                (14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
-               (100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
+ (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
               ('BlueChip',
                (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27),
-               (100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
+               (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
  'gkp': {'name': 'Chairperson',
         'singularname': 'a Chairperson',
@@ -4774,14 +4782,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(100,),
 		'acc':(75,),
 		'attacks':
-		        (('Watercooler',
-				    (1,),
-					(100,),
-					(50,)),
-                ('Watercooler',
-                 (1,),
-                 (100,),
-                 (50,)))},
+             (('Watercooler',
+               (7,),
+               (85,),
+               (100,),
+               ATK_TGT_DOUBLE),)},
  'dfg': {'name': 'Gatekeeper',
         'singularname': 'a Gatekeeper',
 		'pluralname': 'Gatekeepers',
@@ -6418,9 +6423,9 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'PowerhouseSnipeMulligan': ('glower', ATK_TGT_GROUP),
 'PowerhouseSnipeCollectCall': ('glower', ATK_TGT_GROUP),
 #bookkeeper cheats
-'BookkeeperPaperCutSoaked': ('sanction', ATK_TGT_SINGLE),
-'BookkeeperPaperCutMarked': ('sanction', ATK_TGT_SINGLE),
-'BookkeeperPaperCut': ('sanction', ATK_TGT_SINGLE),
+'BookkeeperPaperCutSoaked': ('nothing', ATK_TGT_SINGLE),
+'BookkeeperPaperCutMarked': ('nothing', ATK_TGT_SINGLE),
+'BookkeeperPaperCut': ('nothing', ATK_TGT_SINGLE),
 'BookkeeperExplodingDocument': ('throw-paper', ATK_TGT_SINGLE),
 'BookkeeperBookkeepingRetaliation': ('nothing', ATK_TGT_GROUP),
 'BookkeeperBookkeeping': ('effort', ATK_TGT_SINGLE),
@@ -6430,6 +6435,7 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'WiretapperWiretapped': ('phone', ATK_TGT_GROUP),
 'WiretapperVoicemail': ('phone', ATK_TGT_SINGLE),
 'WiretapperBrokenConnection': ('pie-small-react', ATK_TGT_SINGLE),
+'WiretapperGagBan': ('nothing', ATK_TGT_GROUP),
 #ambassador cheats
 'AmbassadorHeadRoller': ('snap', ATK_TGT_SINGLE),
 'AmbassadorHeadRollerGroup': ('snap', ATK_TGT_SINGLE),
@@ -6768,6 +6774,7 @@ WIRETAPPER_COLLECT_CALL_DOT = SuitAttacks.keys().index('WiretapperCollectCallDam
 WIRETAPPER_WIRETAPPED = SuitAttacks.keys().index('WiretapperWiretapped')
 WIRETAPPER_VOICEMAIL = SuitAttacks.keys().index('WiretapperVoicemail')
 WIRETAPPER_BROKEN_CONNECTION = SuitAttacks.keys().index('WiretapperBrokenConnection')
+WIRETAPPER_GAG_BAN = SuitAttacks.keys().index('WiretapperGagBan')
 #ambassador cheats
 AMBASSADOR_HEAD_ROLLER = SuitAttacks.keys().index('AmbassadorHeadRoller')
 AMBASSADOR_HEAD_ROLLER_GROUP = SuitAttacks.keys().index('AmbassadorHeadRollerGroup')
