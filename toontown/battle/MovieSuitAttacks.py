@@ -11039,11 +11039,7 @@ def doSacked(attack):
 def doGlowerPower(attack):
     suit = attack['suit']
     battle = attack['battle']
-    leftKnives = []
-    rightKnives = []
-    for i in xrange(0, 3):
-        leftKnives.append(globalPropPool.getProp('dagger'))
-        rightKnives.append(globalPropPool.getProp('dagger'))
+    targets = attack['target']
 
     suitTrack = getSuitTrack(attack)
     suitName = suit.getStyleName()
@@ -11058,25 +11054,32 @@ def doGlowerPower(attack):
         rightPosPoints = [Point3(-0.4, 6.0, 7.0), MovieUtil.PNT3_ZERO]
     leftKnifeTracks = Parallel()
     rightKnifeTracks = Parallel()
-    for i in xrange(0, 3):
-        knifeDelay = 0.11
-        leftTrack = Sequence()
-        leftTrack.append(Wait(1.1))
-        leftTrack.append(Wait(i * knifeDelay))
-        leftTrack.append(getPropAppearTrack(leftKnives[i], suit, leftPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
-        leftTrack.append(getPropThrowTrack(attack, leftKnives[i], hitPointNames=['face'], missPointNames=['miss'], hitDuration=0.3, missDuration=0.3))
-        leftKnifeTracks.append(leftTrack)
-        rightTrack = Sequence()
-        rightTrack.append(Wait(1.1))
-        rightTrack.append(Wait(i * knifeDelay))
-        rightTrack.append(getPropAppearTrack(rightKnives[i], suit, rightPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
-        rightTrack.append(getPropThrowTrack(attack, rightKnives[i], hitPointNames=['face'], missPointNames=['miss'], hitDuration=0.3, missDuration=0.3))
-        rightKnifeTracks.append(rightTrack)
+    for t in targets:
+        leftKnives = []
+        rightKnives = []
+        for i in xrange(0, 3):
+            leftKnives.append(globalPropPool.getProp('dagger'))
+            rightKnives.append(globalPropPool.getProp('dagger'))
+
+        for i in xrange(0, 3):
+            knifeDelay = 0.11
+            leftTrack = Sequence()
+            leftTrack.append(Wait(1.1))
+            leftTrack.append(Wait(i * knifeDelay))
+            leftTrack.append(getPropAppearTrack(leftKnives[i], suit, leftPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
+            leftTrack.append(getPropThrowTrack(attack, leftKnives[i], hitPointNames=['face'], missPointNames=['miss'], hitDuration=0.3, missDuration=0.3, target=t))
+            leftKnifeTracks.append(leftTrack)
+            rightTrack = Sequence()
+            rightTrack.append(Wait(1.1))
+            rightTrack.append(Wait(i * knifeDelay))
+            rightTrack.append(getPropAppearTrack(rightKnives[i], suit, rightPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
+            rightTrack.append(getPropThrowTrack(attack, rightKnives[i], hitPointNames=['face'], missPointNames=['miss'], hitDuration=0.3, missDuration=0.3, target=t))
+            rightKnifeTracks.append(rightTrack)
 
     damageAnims = [['slip-backward', 0.01, 0.35]]
-    toonTrack = getToonTrack(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['sidestep'])
+    toonTracks = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['sidestep'])
     soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
-    return Parallel(suitTrack, toonTrack, soundTrack, leftKnifeTracks, rightKnifeTracks)
+    return Parallel(suitTrack, toonTracks, soundTrack, leftKnifeTracks, rightKnifeTracks)
 
 def doGlowerPowerPhase3(attack):
     suit = attack['suit']
