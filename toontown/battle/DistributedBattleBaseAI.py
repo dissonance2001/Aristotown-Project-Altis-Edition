@@ -101,7 +101,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
 
     def clearAttacks(self):
         self.toonAttacks = {}
-        self.suitAttacks = getDefaultSuitAttacks()
+        self.suitAttacks = []
 
     def requestDelete(self):
         if hasattr(self, 'fsm'):
@@ -1742,7 +1742,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         lastActiveSuitDied = 0
         if len(self.activeSuits) == 0 and len(self.pendingSuits) == 0:
             lastActiveSuitDied = 1
-        for i in range(6):
+        for i in range(len(self.suitAttacks)):
             attack = self.suitAttacks[i][SUIT_ATK_COL]
             if attack != NO_ATTACK:
                 suitId = self.suitAttacks[i][SUIT_ID_COL]

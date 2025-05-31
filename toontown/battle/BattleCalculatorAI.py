@@ -2764,8 +2764,7 @@ class BattleCalculatorAI:
             return 1
         return 0
 
-    def __calcSuitAtkType(self, attackIndex):
-        theSuit = self.battle.activeSuits[attackIndex]
+    def __calcSuitAtkType(self, theSuit):
         attacks = SuitBattleGlobals.SuitAttributes[theSuit.dna.name]['attacks']
         atk = SuitBattleGlobals.pickSuitAttack(attacks, theSuit.getLevel())
         if theSuit.dna.name == 'lit':
@@ -3263,8 +3262,7 @@ class BattleCalculatorAI:
 
         return targetList
 
-    def __calcSuitAtkHp(self, attackIndex):
-        attack = self.battle.suitAttacks[attackIndex]
+    def __calcSuitAtkHp(self, attack):
         targetList = self.__createSuitTargetList(attack)
         for currTarget in xrange(len(targetList)):
             toonId = targetList[currTarget]
@@ -5651,7 +5649,6 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result * (
                             self.getToonConditionModifier(toonId, 'corruption') + self.getToonConditionModifier(toonId,
                                                                                                                 'snapped') + theSuit.getDamageMultiplier())
-            toon.setHp(toon.hp - attack[SUIT_HP_COL][targetIndex])
             self.notify.debug('__calcSuitAtkHp - result is %s for index %i' % (str(attack[SUIT_HP_COL][targetIndex]), targetIndex))
 
     def __getToonHp(self, toonDoId):
@@ -5732,7 +5729,7 @@ class BattleCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             #if i < len(self.battle.activeSuits):
                 suitId = self.battle.activeSuits[i].doId
-                self.battle.suitAttacks[i][SUIT_ID_COL] = suitId
+                # self.battle.suitAttacks[i][SUIT_ID_COL] = suitId
                 if self.battle.activeSuits[i].dna.name == 'mad':
                     if self.battle.activeSuits[i].maxHP > 10000:
                         self.setSuitCondition(suitId, 'zapImmune', 0, 0, 'setBoth')
@@ -5951,14 +5948,14 @@ class BattleCalculatorAI:
                     continue
                 if self.battle.pendingSuits.count(self.battle.activeSuits[i]) > 0 or self.battle.joiningSuits.count(self.battle.activeSuits[i]) > 0:
                     continue
-                attack = self.battle.suitAttacks[i]
+                attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = self.__calcSuitAtkType(i)
+                attack[SUIT_ATK_COL] = self.__calcSuitAtkType(self.battle.activeSuits[i])
                 attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                 if attack[SUIT_TGT_COL] == []:
-                    self.battle.suitAttacks[i] = getDefaultSuitAttack()
-                    attack = self.battle.suitAttacks[i]
-                self.__calcSuitAtkHp(i)
+                    attack = getDefaultSuitAttack()
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHp(attack)
                 if attack[SUIT_ATK_COL] != NO_ATTACK:
                     if self.__suitAtkAffectsGroup(attack):
                         for currTgt in self.battle.activeToons:
@@ -5969,18 +5966,18 @@ class BattleCalculatorAI:
                         for currTgt in attack[SUIT_TGT_COL]:
                             self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
                 targets = self.__createSuitTargetList(attack)
-                allTargetsDead = 1
+                allTargetsDead = True
                 for currTgt in targets:
                     if self.__getToonHp(currTgt) > 0:
-                        allTargetsDead = 0
+                        allTargetsDead = False
                         break
 
                 if allTargetsDead:
-                    self.battle.suitAttacks[i] = getDefaultSuitAttack()
-                    attack = self.battle.suitAttacks[i]
+                    attack = getDefaultSuitAttack()
                 if self.__attackHasHit(attack, suit=1):
                     self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                 attack[SUIT_BEFORE_TOONS_COL] = 0
+                self.battle.suitAttacks.append(attack)
         
         # The cheaters who act after all above attacks have played.
         for i in xrange(len(self.battle.activeSuits)):
@@ -7484,10 +7481,6 @@ class BattleCalculatorAI:
             for j in xrange(longest):
                 self.battle.toonAttacks[t][TOON_HP_COL].append(-1)
                 self.battle.toonAttacks[t][TOON_KBBONUS_COL].append(-1)
-
-        for i in xrange(6):
-            for j in xrange(len(self.battle.activeToons)):
-                self.battle.suitAttacks[i][SUIT_HP_COL].append(-1)
 
         toonsHit, cogsMiss = self.__initRound()
         for suit in self.battle.activeSuits:
