@@ -1218,6 +1218,9 @@ class BattleCalculatorAI:
                             if target2.dna.name == 'fbd':
                                 self.setSuitCondition(target2.doId, 'soakedcalculator', 1, 10, 'setBoth')
                                 self.setSuitCondition(target2.doId, 'soakedcalculator2', 0, 0, 'setBoth')
+                            if target2.dna.name == 'cp':
+                                self.setSuitCondition(target2.doId, 'soakedcalculator', 1, 10, 'setBoth')
+                                self.setSuitCondition(target2.doId, 'soakedcalculator2', 0, 0, 'setBoth')
                             if target2.dna.name == 'dvp':
                                 self.setSuitCondition(target2.doId, 'soakedcalculator', 1, 10, 'setBoth')
                                 self.setSuitCondition(target2.doId, 'soakedcalculator2', 0, 0, 'setBoth')
@@ -1295,6 +1298,9 @@ class BattleCalculatorAI:
                             if target3.dna.name == 'fbd':
                                 self.setSuitCondition(target3.doId, 'soakedcalculator', 1, 10, 'setBoth')
                                 self.setSuitCondition(target3.doId, 'soakedcalculator2', 0, 0, 'setBoth')
+                            if target3.dna.name == 'cp':
+                                self.setSuitCondition(target3.doId, 'soakedcalculator', 1, 10, 'setBoth')
+                                self.setSuitCondition(target3.doId, 'soakedcalculator2', 0, 0, 'setBoth')
                             if target3.dna.name == 'dvp':
                                 self.setSuitCondition(target3.doId, 'soakedcalculator', 1, 10, 'setBoth')
                                 self.setSuitCondition(target3.doId, 'soakedcalculator2', 0, 0, 'setBoth')
@@ -1366,6 +1372,9 @@ class BattleCalculatorAI:
                         self.setSuitCondition(targetId, 'soakedcalculator', 1, 10, 'setBoth')
                         self.setSuitCondition(targetId, 'soakedcalculator2', 0, 0, 'setBoth')
                     if suit.dna.name == 'fbd':
+                        self.setSuitCondition(targetId, 'soakedcalculator', 1, 10, 'setBoth')
+                        self.setSuitCondition(targetId, 'soakedcalculator2', 0, 0, 'setBoth')
+                    if suit.dna.name == 'cp':
                         self.setSuitCondition(targetId, 'soakedcalculator', 1, 10, 'setBoth')
                         self.setSuitCondition(targetId, 'soakedcalculator2', 0, 0, 'setBoth')
                     if suit.dna.name == 'blr':
@@ -4587,6 +4596,7 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'StenographerCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned'):
                     self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
+                    self.setToonCondition(toon.doId, 'banned3', 1, 2, 'setBoth')
                     result = 50
                 else:
                     result = 0
@@ -4671,7 +4681,8 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'LitigatorSnapSoak': #soaked snap
                 result = 36
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'snapped', .1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'corruption', .1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'corruptedtarget', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
             elif atkInfo['name'] == 'LitigatorSnap':
@@ -4683,8 +4694,10 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                 if currentBossHealth >= 1:
                     self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'snappedtarget', 1, 2, 'setBoth')
                 else:
                     self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'snappedtarget', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
             elif atkInfo['name'] == 'LitigatorBayouBellow':
                 result = 0
@@ -4701,21 +4714,6 @@ class BattleCalculatorAI:
                     continue
                 for suit in self.currentlyLuredSuits.keys():
                     self.__removeLured(suit)
-            elif atkInfo['name'] == 'LitigatorBayouBash':
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
-                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedLawbotBossAI):
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                boss = do
-                                break
-               # if len(self.battle.activeSuits) < 6:
-                    #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'ScapegoatEnraged':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -4765,7 +4763,7 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                         if currentBossHealth >= 1:
                             self.setSuitCondition(suit.doId, 'bellowcalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'ScapegoatGavel': #scapegoat bite into gavel
+            elif atkInfo['name'] == 'ScapegoatGavel':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'noGags', 1, 2, 'setBoth')
@@ -4774,6 +4772,301 @@ class BattleCalculatorAI:
                 result = 30
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(int(theSuit.currHP + result))
+            elif atkInfo['name'] == 'PowerhouseAbsorb':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'shielding', 1, 10, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'soakImmune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'syphon', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'lureImmune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'rotationcalculator', 0, 0, 'setBoth')
+            elif atkInfo['name'] == 'PowerhouseSoakImmune':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'soakImmune', 1, 10, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'syphon', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'lureImmune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'rotationcalculator', 0, 0, 'setBoth')
+            elif atkInfo['name'] == 'PowerhouseLureImmune':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'soakImmune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'syphon', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'lureImmune', 1, 10, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'rotationcalculator', 0, 0, 'setBoth')
+            elif atkInfo['name'] == 'PowerhouseSyphon':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'shielding', 1, 10, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'soakImmune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'syphon', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'lureImmune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'rotationcalculator', 0, 0, 'setBoth')
+            elif atkInfo['name'] == 'PowerhouseSyphonDesperation':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'soakImmune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'lureImmune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'rotationcalculator', 1, 10, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'syphoncalculator', 1, 5, 'setBoth')
+                for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'syphon', 1, 99, 'setBoth')
+            elif atkInfo['name'] == 'PowerhouseSnipeVulnerable':
+                if self.toonHasCondition(toon.doId, 'snappedtarget'):
+                    result = 30
+                elif self.toonHasCondition(toon.doId, 'corruptedtarget'):
+                    result = 30
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkInfo['name'] == 'PowerhouseSnipeMulligan':
+                if self.toonHasCondition(toon.doId, 'mulligan'):
+                    result = 30
+                elif self.toonHasCondition(toon.doId, 'mulligan2'):
+                    result = 30
+                elif self.toonHasCondition(toon.doId, 'mulligan3'):
+                     result = 30
+                elif self.toonHasCondition(toon.doId, 'mulligan4'):
+                     result = 30
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkInfo['name'] == 'PowerhouseSnipeCollectCall':
+                if self.toonHasCondition(toon.doId, 'bound') and self.getToonConditionTurns(toon.doId, 'bound') < 1:
+                    result = 35
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkInfo['name'] == 'PowerhouseSnipeBookkept':
+                if self.toonHasCondition(toon.doId, 'bookkeepertoon') and self.getToonConditionTurns(toon.doId, 'bookkeepertoon') < 1:
+                    result = 50
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkInfo['name'] == 'PowerhouseSnipeSoaked':
+                result = 35
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
+            elif atkInfo['name'] == 'PowerhouseSnipeGagBan':
+                if self.toonHasCondition(toon.doId, 'banned3'):
+                    result = 50
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkInfo['name'] == 'AmbassadorManagerialProtection':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'refinementcalculator', 1, 10, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
+            elif atkInfo['name'] == 'AmbassadorRefinement':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'refinementcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bashcalculator', 1, 10, 'setBoth')
+                currentBossHealth = -1
+                for s in self.battle.suits:
+                    if s.dna.name == 'cp':
+                        currentBossHealth = s.currHP
+                if currentBossHealth >= 1:
+                    for suit in self.battle.activeSuits:
+                        if suit.currHP <= 0:
+                            continue
+                        x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
+                        if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                            suit.setHP(suit.currHP + 0)
+                        elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
+                            suit.setHP(suit.currHP + x)
+                        else:
+                            suit.setHP(suit.currHP + 200)
+                elif currentBossHealth <= 0:
+                    for suit in self.battle.activeSuits:
+                        if suit.currHP <= 0:
+                            continue
+                        x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
+                        if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                            suit.setHP(suit.currHP + 0)
+                        elif suit.currHP + 125 > (suit.maxHP * suit.hardMaxHP):
+                            suit.setHP(suit.currHP + x)
+                        else:
+                            suit.setHP(suit.currHP + 125)
+                    continue
+            elif atkInfo['name'] == 'AmbassadorHeadRoller':
+                result = 41
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'damageupcalculator1', 1, 1, 'setBoth')
+                targetSuit = self.battle.activeSuits[2]
+                if not targetSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
+                    targetSuit.setHP(targetSuit.currHP - targetSuit.currHP)
+                    self.__removeLured(targetSuit.doId)
+                    if self.suitHasCondition(targetSuit.doId, 'lured'):
+                        self.setSuitCondition(targetSuit.doId, 'lured', 0, 0, 'setBoth')
+                else:
+                    targetSuit.setHP(targetSuit.currHP - 250)
+                    self.__removeLured(targetSuit.doId)
+            elif atkInfo['name'] == 'AmbassadorPhase2':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
+                theSuit.setHP(1500)
+                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.5)
+                self.setSuitCondition(theSuit.doId, 'mulligancalculator', 1, 99, 'setBoth')
+                if self.suitHasCondition(theSuit.doId, 'mulligancalculator') and self.getSuitConditionTurns(
+                        theSuit.doId,
+                        'mulligancalculator2') < 97:
+                    self.setSuitCondition(theSuit.doId, 'mulligancalculator2', 1, 99, 'setBoth')
+                if self.suitHasCondition(theSuit.doId, 'mulligancalculator2') and self.getSuitConditionTurns(
+                        theSuit.doId,
+                        'mulligancalculator2') < 97:
+                    self.setSuitCondition(theSuit.doId, 'mulligancalculator3', 1, 99, 'setBoth')
+                if self.suitHasCondition(theSuit.doId, 'mulligancalculator3') and self.getSuitConditionTurns(theSuit.doId,
+                                                                                                         'mulligancalculator3') < 97:
+                    self.setSuitCondition(theSuit.doId, 'mulligancalculator4', 1, 99, 'setBoth')
+            elif atkInfo['name'] == 'AmbassadorMulligan':
+                if self.toonHasCondition(toon.doId, 'mulligan') and self.getToonConditionTurns(toon.doId, 'mulligan') < 2:
+                    self.setToonCondition(toon.doId, 'mulligan2', 1, 2, 'setBoth')
+                elif self.toonHasCondition(toon.doId, 'mulligan2') and self.getToonConditionTurns(toon.doId, 'mulligan2') < 2:
+                    self.setToonCondition(toon.doId, 'mulligan3', 1, 2, 'setBoth')
+                elif self.toonHasCondition(toon.doId, 'mulligan3') and self.getToonConditionTurns(toon.doId, 'mulligan3') < 2:
+                    self.setToonCondition(toon.doId, 'mulligan4', 1, 2, 'setBoth')
+                else:
+                    self.setToonCondition(toon.doId, 'mulligan', 1, 2, 'setBoth')
+                result = 36
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkInfo['name'] == 'AmbassadorManagerialProtectionImmunity':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'immune', 1, 4, 'setBoth')
+            elif atkInfo['name'] == 'AmbassadorHeadRollerGroup':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'damageupcalculator2', 1, 1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'mulligancalculator', 1, 99, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'mulligancalculator') and self.getToonConditionTurns(toon.doId,
+                                                                                                         'mulligancalculator') < 97:
+                    self.setSuitCondition(theSuit.doId, 'mulligancalculator2', 1, 99, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'mulligancalculator2') and self.getToonConditionTurns(toon.doId,
+                                                                                                          'mulligancalculator2') < 97:
+                    self.setSuitCondition(theSuit.doId, 'mulligancalculator3', 1, 99, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'mulligancalculator3') and self.getToonConditionTurns(toon.doId,
+                                                                                                          'mulligancalculator3') < 97:
+                    self.setSuitCondition(theSuit.doId, 'mulligancalculator4', 1, 99, 'setBoth')
+                for suit in self.battle.activeSuits:
+                    if suit.currHP <= 0:
+                        continue
+                    if not suit.dna.name in SuitBattleGlobals.SpecialCogDict:
+                        suit.setHP(suit.currHP - suit.currHP)
+                        if self.suitHasCondition(suit.doId, 'lured'):
+                            self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
+                    else:
+                        suit.setHP(suit.currHP - 250)
+                    continue
+                for suit in self.currentlyLuredSuits.keys():
+                    self.__removeLured(suit)
+            elif atkInfo['name'] == 'AmbassadorDamageUp':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                if self.suitHasCondition(theSuit.doId, 'damageupcalculator1'):
+                    self.setSuitCondition(theSuit.doId, 'damageupcalculator1', 1, 1, 'setBoth')
+                    theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
+                elif self.suitHasCondition(theSuit.doId, 'damageupcalculator2'):
+                    self.setSuitCondition(theSuit.doId, 'damageupcalculator1', 1, 1, 'setBoth')
+                    theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.5)
+            elif atkInfo['name'] == 'BookkeeperBookkeepingRetaliation':
+                if self.toonHasCondition(toon.doId, 'bookkeepingtoon'):
+                    self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
+                    result = 50
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'bookkeeping2', 0, 0, 'setBoth')
+            elif atkInfo['name'] == 'BookkeeperBookkeeping':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'bookkeeping', 1, 4, 'setBoth')
+            elif atkInfo['name'] == 'BookkeeperExplodingDocument':
+                result = 72
+                attack[SUIT_HP_COL][targetIndex] = result
+                currentBossHealth = -1
+                for s in self.battle.suits:
+                    if s.dna.name == 'frs':
+                        currentBossHealth = s.currHP
+                if currentBossHealth >= 1:
+                    self.setToonCondition(toon.doId, 'allGagBoost', -75, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'lureBoost', -75, 3, 'setBoth')
+                else:
+                    self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'explodingcalculator', 0, 0, 'setBoth')
+            elif atkInfo['name'] == 'BookkeeperPaperCutMarked':
+                result = 40
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'markedcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'markedcalculator2', 1, 10, 'setBoth')
+            elif atkInfo['name'] == 'BookkeeperPaperCutSoaked':
+                result = 40
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
+            elif atkInfo['name'] == 'BookkeeperPaperCut':
+                result = 30
+                attack[SUIT_HP_COL][targetIndex] = result
+                currentBossHealth = -1
+                for s in self.battle.suits:
+                    if s.dna.name == 'cp':
+                        currentBossHealth = s.currHP
+                if currentBossHealth >= 1:
+                    self.setToonCondition(toon.doId, 'snapped', .5, 3, 'setBoth')
+                else:
+                    self.setToonCondition(toon.doId, 'snapped', .25, 3, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'papercutcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bookkeeping', 0, 0, 'setBoth')
+            elif atkInfo['name'] == 'WiretapperGagBan':
+                if self.toonHasCondition(toon.doId, 'banned2'):
+                    self.setToonCondition(toon.doId, 'banned2', 1, 1, 'setBoth')
+                    self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
+                    result = 50
+                elif self.toonHasCondition(toon.doId, 'banned'):
+                    self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
+                    self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
+                    result = 50
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkInfo['name'] == 'WiretapperVoicemail':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'immune', 1, 4, 'setBoth')
+            elif atkInfo['name'] == 'WiretapperBrokenConnection':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'vulnerable', 1, 4, 'setBoth')
+            elif atkInfo['name'] == 'WiretapperWiretapped':
+                result = random.randint(25, 45)
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'wiretappedcalculator', 0, 0, 'setBoth')
+                theSuit.setHP(int(theSuit.currHP + attack[SUIT_HP_COL][
+                    targetIndex]))
+            elif atkInfo['name'] == 'WiretapperCollectCall':
+                result = (24 + (self.TurnsElapsed * 1.3))
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setToonCondition(toon.doId, 'bound', 1, 3, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'collectcallcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'wiretappedcalculator', 1, 10, 'setBoth')
+            elif atkInfo['name'] == 'WiretapperCollectCallDamage':
+                if self.toonHasCondition(toon.doId, 'bound') and self.getToonConditionTurns(toon.doId, 'bound') < 3:
+                    result = (24 + (self.TurnsElapsed * 1.3))
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'BanLevel4':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -5796,8 +6089,8 @@ class BattleCalculatorAI:
                                     allTargetsDead = False
                                     break
 
-                            if allTargetsDead:
-                                attack7 = getDefaultSuitAttack()
+                            #if allTargetsDead:
+                                #attack7 = getDefaultSuitAttack()
                             if self.__attackHasHit(attack7, suit=1):
                                 self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
                             attack7[SUIT_BEFORE_TOONS_COL] = 0
@@ -6654,10 +6947,105 @@ class BattleCalculatorAI:
                     attack7[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack7)
             if self.battle.activeSuits[i].dna.name == 'cp': #powerhouse
+                if x % 3 == 0:
+                    self.setSuitCondition(suitId, 'rotationcalculator', 1, 10, 'setBoth')
+                if self.suitHasCondition(suitId, 'desperation') and not self.suitHasCondition(suitId, 'syphoncalculator') and self.__suitCanAttack(suitId):
+                    attack8[SUIT_ID_COL] = self.battle.activeSuits[
+                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
+                    attack8[SUIT_ATK_COL] = 10 # Index of Glower Power for the Director of Public Relations.
+                    attack8[SUIT_TGT_COL] = self.__calcSuitTarget(attack8)
+                    if attack8[SUIT_TGT_COL] == []:
+                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
+                    attack8[SUIT_HP_COL] = [-1 for j in
+                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                    self.__calcSuitAtkHpALT(attack8)
+                    if attack8[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack8):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack8[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack8)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                  #  if allTargetsDead:
+                      #  attack8 = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack8, suit=1):
+                        self.__applySuitAttackDamages(attack8, self.battle.findSuit(attack8[SUIT_ID_COL]))
+                    attack8[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack8)
+                if self.suitHasCondition(suitId, 'rotationcalculator') and self.__suitCanAttack(suitId):
+                    attack9[SUIT_ID_COL] = self.battle.activeSuits[
+                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
+                    attack9[SUIT_ATK_COL] = random.choice((6, 7, 8, 9))  # Index of Glower Power for the Director of Public Relations.
+                    attack9[SUIT_TGT_COL] = self.__calcSuitTarget(attack9)
+                    if attack9[SUIT_TGT_COL] == []:
+                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
+                    attack9[SUIT_HP_COL] = [-1 for j in
+                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                    self.__calcSuitAtkHpALT(attack9)
+                    if attack9[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack9):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack9[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack9)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                  #  if allTargetsDead:
+                       # attack9 = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack9, suit=1):
+                        self.__applySuitAttackDamages(attack9, self.battle.findSuit(attack9[SUIT_ID_COL]))
+                    attack9[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack9)
+                if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
+                    attack3[SUIT_ID_COL] = self.battle.activeSuits[
+                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
+                    attack3[SUIT_ATK_COL] = 13  # Index of Glower Power for the Director of Public Relations.
+                    attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
+                    if attack3[SUIT_TGT_COL] == []:
+                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
+                    attack3[SUIT_HP_COL] = [-1 for j in
+                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                    self.__calcSuitAtkHpALT(attack3)
+                    if attack3[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack3):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack3[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack3)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                 #   if allTargetsDead:
+                     #   attack3 = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack3, suit=1):
+                        self.__applySuitAttackDamages(attack3, self.battle.findSuit(attack3[SUIT_ID_COL]))
+                    attack3[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack3)
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 16 # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = 16  # Index of Glower Power for the Director of Public Relations.
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6679,12 +7067,137 @@ class BattleCalculatorAI:
                             allTargetsDead = False
                             break
 
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
+                  #  if allTargetsDead:
+                     #   attack = getDefaultSuitAttack()
                     if self.__attackHasHit(attack, suit=1):
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
+                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
+                    attack4[SUIT_ATK_COL] = 11 # Index of Glower Power for the Director of Public Relations.
+                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
+                    if attack4[SUIT_TGT_COL] == []:
+                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
+                    attack4[SUIT_HP_COL] = [-1 for j in
+                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                    self.__calcSuitAtkHpALT(attack4)
+                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack4):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack4[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack4)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                 #   if allTargetsDead:
+                       # attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack4, suit=1):
+                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
+                    attack4[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack4)
+                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                    attack6[SUIT_ID_COL] = self.battle.activeSuits[
+                    i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
+                    attack6[SUIT_ATK_COL] = 15  # Index of Glower Power for the Director of Public Relations.
+                    attack6[SUIT_TGT_COL] = self.__calcSuitTarget(attack6)
+                    if attack6[SUIT_TGT_COL] == []:
+                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
+                    attack6[SUIT_HP_COL] = [-1 for j in
+                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                    self.__calcSuitAtkHpALT(attack6)
+                    if attack6[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack6):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack6[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack6)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                   # if allTargetsDead:
+                       # attack6 = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack6, suit=1):
+                        self.__applySuitAttackDamages(attack6, self.battle.findSuit(attack6[SUIT_ID_COL]))
+                    attack6[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack6)
+                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                    attack5[SUIT_ID_COL] = self.battle.activeSuits[
+                    i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
+                    attack5[SUIT_ATK_COL] = 14  # Index of Glower Power for the Director of Public Relations.
+                    attack5[SUIT_TGT_COL] = self.__calcSuitTarget(attack5)
+                    if attack5[SUIT_TGT_COL] == []:
+                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
+                    attack5[SUIT_HP_COL] = [-1 for j in
+                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                    self.__calcSuitAtkHpALT(attack5)
+                    if attack5[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack5):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack5[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack5)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                   # if allTargetsDead:
+                       # attack5 = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack5, suit=1):
+                        self.__applySuitAttackDamages(attack5, self.battle.findSuit(attack5[SUIT_ID_COL]))
+                    attack5[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack5)
+                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                            attack7[SUIT_ID_COL] = self.battle.activeSuits[
+                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
+                            attack7[SUIT_ATK_COL] = 12 # Index of Glower Power for the Director of Public Relations.
+                            attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
+                            if attack7[SUIT_TGT_COL] == []:
+                                continue  # If there is no target, then it's whatever.  Move on to the next iteration.
+                            attack7[SUIT_HP_COL] = [-1 for j in
+                                                   xrange(
+                                                       len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                            self.__calcSuitAtkHpALT(attack7)
+                            if attack7[SUIT_ATK_COL] != NO_ATTACK:
+                                if self.__suitAtkAffectsGroup(attack7):
+                                    for currTgt in self.battle.activeToons:
+                                        self.__updateSuitAtkStat(currTgt)
+
+                                else:
+                                    for currTgt in attack7[SUIT_TGT_COL]:
+                                        self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                            targets = self.__createSuitTargetList(attack7)
+                            allTargetsDead = True
+                            for currTgt in targets:
+                                if self.__getToonHp(currTgt) > 0:
+                                    allTargetsDead = False
+                                    break
+
+                           # if allTargetsDead:
+                                #attack7 = getDefaultSuitAttack()
+                            if self.__attackHasHit(attack7, suit=1):
+                                self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
+                            attack7[SUIT_BEFORE_TOONS_COL] = 0
+                            self.battle.suitAttacks.append(attack7)
             if self.battle.activeSuits[i].dna.name == 'fbd':  # bookkeeper
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
@@ -6753,7 +7266,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 9  # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = 13  # Index of Glower Power for the Director of Public Relations.
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6781,6 +7294,38 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                            attack7[SUIT_ID_COL] = self.battle.activeSuits[
+                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
+                            attack7[SUIT_ATK_COL] = 13 # Index of Glower Power for the Director of Public Relations.
+                            attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
+                            if attack7[SUIT_TGT_COL] == []:
+                                continue  # If there is no target, then it's whatever.  Move on to the next iteration.
+                            attack7[SUIT_HP_COL] = [-1 for j in
+                                                   xrange(
+                                                       len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                            self.__calcSuitAtkHpALT(attack7)
+                            if attack7[SUIT_ATK_COL] != NO_ATTACK:
+                                if self.__suitAtkAffectsGroup(attack7):
+                                    for currTgt in self.battle.activeToons:
+                                        self.__updateSuitAtkStat(currTgt)
+
+                                else:
+                                    for currTgt in attack7[SUIT_TGT_COL]:
+                                        self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                            targets = self.__createSuitTargetList(attack7)
+                            allTargetsDead = True
+                            for currTgt in targets:
+                                if self.__getToonHp(currTgt) > 0:
+                                    allTargetsDead = False
+                                    break
+
+                           # if allTargetsDead:
+                                #attack7 = getDefaultSuitAttack()
+                            if self.__attackHasHit(attack7, suit=1):
+                                self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
+                            attack7[SUIT_BEFORE_TOONS_COL] = 0
+                            self.battle.suitAttacks.append(attack7)
             if self.suitHasCondition(suitId, 'bellowattack') and not self.battle.activeSuits[i].dna.name == 'lit' and not self.battle.activeSuits[i].dna.name == 'ste' and not self.battle.activeSuits[i].dna.name == 'scg' and not self.battle.activeSuits[i].dna.name == 'csm':
                     attack2[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.

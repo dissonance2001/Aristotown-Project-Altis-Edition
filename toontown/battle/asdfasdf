@@ -1,3 +1,0 @@
-tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))

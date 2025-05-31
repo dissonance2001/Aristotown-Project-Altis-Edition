@@ -677,7 +677,7 @@ def doSuitAttack(attack):
     elif name == WIRETAPPER_VOICEMAIL:
         suitTrack = MovieBossbotLitigationCheats.doVoicemail(attack)
     elif name == WIRETAPPER_BROKEN_CONNECTION:
-        suitTrack = MovieBossbotLitigationCheats.doCollectCall(attack)
+        suitTrack = MovieBossbotLitigationCheats.doBrokenConnection(attack)
     elif name == WIRETAPPER_GAG_BAN:
         suitTrack = MovieBossbotLitigationCheats.doWiretapperGagBan(attack)
     #ambassador cheats

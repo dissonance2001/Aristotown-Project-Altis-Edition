@@ -3423,17 +3423,72 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == POWERHOUSE_SYPHON_DESPERATION:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == POWERHOUSE_SNIPE_VULNERABLE:
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        if attackDuration > 2:
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc(
+                'The Powerhouse retaliates against toons with existing\nvulnerabilities!',
+                attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=1.5)
+            return camTrack2
     elif name == POWERHOUSE_SNIPE_GAG_BAN:
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        if attackDuration > 2:
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc(
+                'The Powerhouse doubles down damage on toons who chose\nbanned gags!',
+                attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=1.5)
+            return camTrack2
     elif name == POWERHOUSE_SNIPE_SOAKED:
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == POWERHOUSE_SNIPE_BOOKKEPT:
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        if attackDuration > 2:
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc(
+                'The Powerhouse doubles down damage on toons who attacked\nthe Bookkeeper while Bookkeeping!',
+                attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=1.5)
+            return camTrack2
     elif name == POWERHOUSE_SNIPE_MULLIGAN:
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        if attackDuration > 2:
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc(
+                'The Powerhouse retaliates against toons who took damage\nfrom the Mulligan!',
+                attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=1.5)
+            return camTrack2
     elif name == POWERHOUSE_SNIPE_COLLECT_CALL:
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        if attackDuration > 2:
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc(
+                'The Powerhouse retaliates against toons with who owe\ncollect call dues!',
+                attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=1.5)
+            return camTrack2
     # bookkeeper cheats
     elif name == BOOKKEEPER_PAPER_CUT_SOAKED:
         camTrack.append(defaultCamera(openShotDuration=0.75))
