@@ -3706,9 +3706,9 @@ SuitCheatDescription = {
 'PowerhouseSyphon': "The Powerhouse is now syphoning health from the toons!",
 'PowerhouseSyphonDesperation': "The Powerhouse gives a syphon ability to all cogs!",
 'PowerhouseSnipeVulnerable': "The Powerhouse retaliates against toons with existing\ndamage vulnerabilities!",
-'PowerhouseSnipeGagBan': "The Powerhouse doubles down damage on toons who picked\nbanned gags!",
+'PowerhouseSnipeGagBan':  'The Powerhouse retaliates against random toons\nwhen changing abilities!',
 'PowerhouseSnipeSoaked': "The Powerhouse retaliates when soaked!",
-'PowerhouseSnipeBookkept': "The Powerhouse retaliates against toons who attacked the\nBookkeeper while Bookkeeping!",
+'PowerhouseSnipeBookkept': 'The Powerhouse retaliates against all toons while\nin desperation!',
 'PowerhouseSnipeMulligan': "The Powerhouse retaliates against toons who were affected\nby the Mulligan!",
 'PowerhouseSnipeCollectCall': "The Powerhouse retaliates against toons who were affected\nby the Collect Call!",
 #bookkeeper cheats

@@ -2666,7 +2666,8 @@ def doSyphonDesperation(attack):
         makeSyphon = Func(suit.makeSyphon)
         suitTrack = Sequence()
         suitTrack.append(Wait(3))
-        suitTrack.append(Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout))
+        if not suit.dna.name == 'cp':
+            suitTrack.append(Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout))
         suitTrack.append(makeSyphon)
         suitTrack.append(Func(suit.setNeutralAnimation))
         suitTracks.append(suitTrack)
