@@ -347,7 +347,8 @@ fbd = (('throw-object', 'throw-object', 4),
        ('roll-o-dex', 'roll-o-dex', 4))
 frs = (('speak', 'speak', 4),
        ('snap', 'snap', 4),
-       ('cease', 'calculator', 4),
+       ('cease', 'nothing', 4),
+('calculating-costs', 'calculating-costs', 4),
 ('calculator', 'calculator', 4),
 ('roll-o-dex', 'roll-o-dex', 4),
        ('phone', 'phone', 4))
@@ -3155,7 +3156,7 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'mld':
             self.scale = 7.5 / cSize
             self.handColor = VBase4(0.659, 0, 0, 1)
-            self.generateBody()
+            self.generateFemaleBody()
             self.generateHead('bigfish')
             self.setHeight(10.7)
         elif dna.name == 'pht':
@@ -5908,6 +5909,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'ls':
             self.corpMedallion.setZ(.2)
+        elif self.style.name == 'mld':
+            self.corpMedallion.setZ(.2)
         elif self.style.name == 'dfh':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'cm':
@@ -5958,6 +5961,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'crf':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'le':
+            self.corpMedallion.setZ(.2)
+        elif self.style.name == 'mld':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'hh':
             self.corpMedallion.setZ(.2)
@@ -6050,6 +6055,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'phs':
             self.corpMedallion.setZ(.2)
+        elif self.style.name == 'mld':
+            self.corpMedallion.setZ(.2)
         elif self.style.name == 'cm':
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'bdb':
@@ -6108,6 +6115,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'dty':
             self.hpBase.setZ(.2)
         elif self.style.name == 'cfp':
+            self.hpBase.setZ(.2)
+        elif self.style.name == 'mld':
             self.hpBase.setZ(.2)
         elif self.style.name == 'phs':
             self.hpBase.setZ(.2)
@@ -6168,6 +6177,8 @@ class Suit(Avatar.Avatar):
             self.healthBar.setY(-.1)
             self.healthBar.setZ(-.1)
         if self.style.name == 'le':
+            self.healthBar.setZ(.2)
+        elif self.style.name == 'mld':
             self.healthBar.setZ(.2)
         elif self.style.name == 'dfh':
             self.healthBar.setZ(.2)
@@ -7735,6 +7746,12 @@ class Suit(Avatar.Avatar):
             loadDialog(1)
             return SkelecogDialogFemaleArray
         if self.style.name == 'jdg' and not self.isSkeleton:
+            loadDialog(1)
+            return FemaleDialogArray
+        if self.style.name == 'mld' and self.isSkeleton:
+            loadDialog(1)
+            return SkelecogDialogFemaleArray
+        if self.style.name == 'mld' and not self.isSkeleton:
             loadDialog(1)
             return FemaleDialogArray
         if self.style.name == 'isw' and self.isSkeleton:

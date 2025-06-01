@@ -777,9 +777,6 @@ def doSuitAttack(attack):
         neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         preWalkTrack = Func(suit.loop,
                             'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-    elif suit.isImmortal:
-        neutralIval = Func(suit.loop, 'highroller-neutral-levitate-loop')
-        preWalkTrack = ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1)
     else:
         neutralIval =  Func(suit.setNeutralAnimation)
         preWalkTrack = Func(suit.setNeutralAnimation)
@@ -2065,7 +2062,7 @@ def doExplodingDocument(attack):
     missPoint.setX(missPoint.getX() - 1.1)
     propTrack.append(getPropThrowTrack(attack, tnt, [hitPoint], [missPoint], .25, parent=battle))
     toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2.5, ['slip-forward'])
-    soundTrack = getSoundTrack('ENC_cogfall_apart.ogg', delay=2.25, node=suit)
+    soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25, node=suit)
     notifyTrack = Sequence(Wait(2.5), Func(toon.showHpTextCheat, - int(dmg)), Func(toon.showHpString, "GAG DEBUFF!"))
     return Parallel(explodeTracks, suitTrack, toonTrack, soundTrack, propTrack, notifyTrack, explosionTrack)
 
@@ -2187,7 +2184,7 @@ def doCollectCall(attack):
     suitTrack.append(Sequence(ActorInterval(suit, 'phone', duration=3.0), Wait(3.0), ActorInterval(suit, 'phone', startTime=3.0), Func(suit.setNeutralAnimation)))
     soundTrack1 = getSoundTrack('tt_s_ara_cmg_itemHitsFloor.ogg', delay=1.75, node=suit)
     soundTrack2 = getSoundTrack('SA_bash.ogg', delay=0, node=suit)
-    soundTrack3 = getSoundTrack('ENC_cogfall_apart.ogg', delay=8.25, node=suit)
+    soundTrack3 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=8.25, node=suit)
     soundTrack4 = getSoundTrack('telephone_ring.ogg', delay=2.0, node=suit)
     soundTrack = Parallel(soundTrack1, soundTrack2, soundTrack3, soundTrack4)
     toonTrack = Sequence(ActorInterval(toon, 'confused'), ActorInterval(toon, 'takePhone'), ActorInterval(toon, 'phoneNeutral', duration=1))
@@ -2195,15 +2192,16 @@ def doCollectCall(attack):
     notifyTrack = Sequence(Wait(8.25), Func(toon.showHpTextCheat, - int(dmg)),
                            Func(toon.showHpString, "DUES INCREASED!"))
     makeUnVulnerable = Func(suit.makeUnVulnerable)
-    return Parallel(explodeTracks, suitTrack, cagePropTracks, makeUnVulnerable, toonTrack, notifyTrack, makeUnvulnerable, soundTrack, suitSpeechTrack, explosionTrack, propTrack)
+    return Parallel(explodeTracks, suitTrack, cagePropTracks, makeUnVulnerable, toonTrack, notifyTrack, soundTrack, suitSpeechTrack, explosionTrack, propTrack)
 
-def doWiretapperBrokenConnection(attack):
+def doBrokenConnection(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence(getSuitTrack(attack))
     makeImmune = Func(suit.makeVulnerable)
+    makeImmune2 = Func(suit.makeNonImmortal)
     selfDamageTrack = Func(suit.showHpText, "VULNERABLE!", 2, openEnded=0)
-    return Parallel(suitTrack, makeImmune, selfDamageTrack)
+    return Parallel(suitTrack, makeImmune, makeImmune2, selfDamageTrack)
 
 def doVoicemail(attack):
     suit = attack['suit']
@@ -2222,11 +2220,10 @@ def doVoicemail(attack):
                          Wait(2.14), Func(receiver.wrtReparentTo, phone), Wait(0.62),
                          LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO),
                          Func(MovieUtil.removeProps, [receiver, phone]))
-    suitSpeechTrack = Sequence(Wait(3.0), Func(suit.setChatAbsolute, "You'll have to attack somebody else this turn, I'm taking a break from this nonsense.", CFSpeech | CFTimeout))
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=0.5, node=suit)
     notifyTrack = Func(suit.showHpTextWhite, 'IMMUNE!')
     makeImmune = Func(suit.makeImmortal)
-    return Parallel(suitTrack, propTrack, soundTrack, suitSpeechTrack, notifyTrack, makeImmune)
+    return Parallel(suitTrack, propTrack, soundTrack, notifyTrack, makeImmune)
 
 def doWiretapped(attack):
     suit = attack['suit']
@@ -2272,16 +2269,15 @@ def doWiretapped(attack):
                          Wait(2.14), Func(receiver.wrtReparentTo, phone), Wait(0.62),
                          LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO),
                          Func(MovieUtil.removeProps, [receiver, phone]))
-    makeVulnerable = Func(suit.makeVulnerable)
     selfDamageTrack = Sequence(Wait(4), Func(suit.showHpTextCheat, +dmg), Func(suit.showHpString, "SYPHONED!", openEnded=0), Func(suit.setHealthForMe, +dmg), Func(suit.updateHealthBar, 0))
     #propTrack = Sequence(Wait(0.3), Func(__showProp, phone, suit.getLeftHand(), phonePosPoints[0], phonePosPoints[1]), Func(__showProp, receiver, suit.getLeftHand(), receiverPosPoints[0], receiverPosPoints[1]), LerpScaleInterval(phone, 0.5, scaleUpPoint, MovieUtil.PNT3_NEARZERO), Wait(pickupDelay), Func(receiver.wrtReparentTo, suit.getRightHand()), LerpScaleInterval(receiver, 0.01, receiverAdjustScale), LerpPosHprInterval(receiver, 0.0001, Point3(-0.53, 0.21, -0.54), VBase3(-99.49, -35.27, 1.84)), Wait(dialDuration), Func(receiver.wrtReparentTo, phone), Wait(finalPhoneDelay), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProps, [receiver, phone]))
     toonTracks = getToonTracks(attack, 2.8, ['slip-backward'], 4.7, ['jump'])
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=0.5, node=suit)
-    soundTrack1 = getSoundTrack('ENC_cogfall_apart.ogg', delay=2.8, node=suit)
+    soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.8, node=suit)
     makeNotImmune = Func(suit.makeNonImmortal)
     #suitTrack.append(Wait(1.0))
     #suitTrack.append(doPayback(attack))
-    return Parallel(suitTrack, propTrack, soundTrack, makeVulnerable, selfDamageTrack, soundTrack1, toonTracks, makeNotImmune, explodeTracks, explosionTrack)
+    return Parallel(suitTrack, propTrack, soundTrack, selfDamageTrack, soundTrack1, toonTracks, makeNotImmune, explodeTracks, explosionTrack)
 
 def doManagerialProtectionImmunity(attack):
     suit = attack['suit']
@@ -2440,7 +2436,7 @@ def doAmbassadorPhase2(attack):
     battle = attack['battle']
     ambassadorPhase3 = Func(theSuit.makeAmbassadorPhase3)
     suitTrackAnim = Sequence()
-    soundTrack3 = getSoundTrack('ENC_cogfall_apart.ogg', node=theSuit)
+    soundTrack3 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), node=theSuit)
     suitTrackAnim.append(MovieUtil.createAmbassadorReviveTrack(theSuit, battle))
     suitTrackAnim.append(Func(theSuit.makeAmbassadorPhase3))
     suitTrackAnim.append(Func(theSuit.setNeutralAnimation))
@@ -2689,11 +2685,10 @@ def doLureImmune(attack):
 
 def doBudgetCuts(attack):
     suit = attack['suit']
-    battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
     calculator = globalPropPool.getProp('calculator')
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'calculator', playRate=1.25), Func(suit.setNeutralAnimation))
+    suitTrack2.append(Wait(2.0))
     calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcDuration = 1.3
     scaleUpPoint = Point3(1.5, 1.5, 1.5)
@@ -2702,7 +2697,23 @@ def doBudgetCuts(attack):
                                  animStartTime=0,
                                  animDuration=2.5)
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
-    return Parallel(suitTrack, calcPropTrack, soundTrack)
+    return Parallel(suitTrack, calcPropTrack, suitTrack2, soundTrack)
+
+def doBudgetCuts2(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    calculator = globalPropPool.getProp('court-costs-calculator')
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'calculating-costs'), Func(suit.setNeutralAnimation))
+    suitTrack2.append(Wait(2.0))
+    calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcDuration = 0.25
+    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPropTrack = getPropTrack(calculator, suit.getRightHand(), calcPosPoints, 0, calcDuration,
+                                 scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='court-costs-calculator', animStartTime=0,
+                                 animDuration=2.9)
+    soundTrack = getSoundTrack('SA_calculating_costs.ogg', node=suit)
+    return Parallel(suitTrack, soundTrack, suitTrack2, calcPropTrack)
 
 def doSnipe(attack):
     suit = attack['suit']
@@ -2755,7 +2766,7 @@ def doSnipe(attack):
         damageAnims = [['slip-backward', 0.01, 0.35]]
         toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
-        soundTrack2 = getSoundTrack('ENC_cogfall_apart.ogg', delay=1.5, node=suit)
+        soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
         suitTrack = Sequence(getSuitAnimTrack(attack))
         suitTrack.append(Wait(2.0))
         if dmg > 0:

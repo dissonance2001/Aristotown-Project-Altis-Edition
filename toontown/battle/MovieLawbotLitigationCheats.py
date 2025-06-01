@@ -2279,9 +2279,11 @@ def doLegalBindings(attack):
     dmg = target[0]['hp']
     tauntIndex = attack['taunt']
     tape = globalPropPool.getProp('redtape')
+    tape.setColor(0.129, 0, 0.329, 1)
     tubes = []
     for i in xrange(0, 3):
         tubes.append(globalPropPool.getProp('redtape-tube'))
+        tubes[i].setColor(0.129, 0, 0.329, 1)
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
     taunt = random.choice(

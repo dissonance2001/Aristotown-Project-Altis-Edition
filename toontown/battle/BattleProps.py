@@ -382,6 +382,9 @@ class PropPool:
         propName = 'cupcake'
         self.propStrings[propName] = (self.getPath(3.5, 'cupcake'),)
         self.propTypes[propName] = 'model'
+        propName = 'bindings-tube'
+        self.propStrings[propName] = (self.getPath(5, 'redtape-tube'),)
+        self.propTypes[propName] = 'model'
         propName = 'fruitpie'
         self.propStrings[propName] = (self.getPath(5, 'fruit-pie'),)
         self.propTypes[propName] = 'model'
@@ -459,6 +462,8 @@ class PropPool:
         elif name == 'splash-from-splat':
             self.props[name].setColor(0.75, 0.75, 1.0, 1.0)
             self.props[name].setTwoSided(True)
+        elif name == 'bindings-tube':
+            self.props[name].setColor(0.235, 0, 0.612, 1)
         elif name == 'clip-on-tie':
             tie = self.props[name]
             tie.getChild(0).setHpr(23.86, -16.03, 9.18)

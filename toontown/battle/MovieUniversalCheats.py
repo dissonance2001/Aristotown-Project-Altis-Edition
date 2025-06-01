@@ -2010,7 +2010,6 @@ def doSynergy(attack):
     particleEffect = BattleParticles.createParticleEffect('Synergy')
     waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
     suitTrack = getSuitAnimTrack(attack)
-    suitTrack.append(doCourtCalculations(attack))
     partTrack = getPartTrack(particleEffect, 1.0, 1.9, [particleEffect, suit, 0])
     waterfallTrack = getPartTrack(waterfallEffect, 0.8, 1.9, [waterfallEffect, suit, 0])
     damageAnims = [['slip-forward']]
@@ -2035,11 +2034,11 @@ def doCourtCalculations(attack):
     calculator = globalPropPool.getProp('court-costs-calculator')
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimation), Wait(2.0))
     if suit.isDesperation:
-        suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % int(attack['target'][0]['hp'] + 6), CFSpeech | CFTimeout)
+        suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     else:
         suitSpeechTrack = Func(suit.setChatAbsolute,
                                "Calculating costs of litigation fees... Price index raised to %s." %
-                              int(attack['target'][0]['hp'] + 4), CFSpeech | CFTimeout)
+                              int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcDuration = 0.25
     scaleUpPoint = Point3(1.5, 1.5, 1.5)

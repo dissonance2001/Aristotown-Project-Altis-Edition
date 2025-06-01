@@ -1346,7 +1346,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (0,),
 					(100,),
 					(0,)),
-                 ('BookkeeperPaperCut',#8
+                 ('BookkeeperPaperCut',#8 #bookkeeper take out of
                   (0,),
                   (100,),
                   (0,)),
