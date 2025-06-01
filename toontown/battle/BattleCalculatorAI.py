@@ -3195,13 +3195,13 @@ class BattleCalculatorAI:
             else:
                 chosen = self.__pickRandomToon(suitId)
             # If for some reason the Toon has already been chosen, pick a completely random Toon.
-            if not atkInfo['name'] == 'PowerhouseSnipeVulnerable' and not atkInfo[
-                                                                              'name'] == 'PowerhouseSnipeGagBan' and not \
-            atkInfo['name'] == 'PowerhouseSnipeBookkept' \
-                    and not atkInfo['name'] == 'PowerhouseSnipeMulligan' and not atkInfo[
-                                                                                     'name'] == 'PowerhouseSnipeCollectCall':
-                while chosen in targets:
-                    chosen = self.__pickRandomToon(suitId)
+           # if not atkInfo['name'] == 'PowerhouseSnipeVulnerable' and not atkInfo[
+            #                                                                  'name'] == 'PowerhouseSnipeGagBan' and not \
+           # atkInfo['name'] == 'PowerhouseSnipeBookkept' \
+                   # and not atkInfo['name'] == 'PowerhouseSnipeMulligan' and not atkInfo[
+                                                                                  #   'name'] == 'PowerhouseSnipeCollectCall':
+               # while chosen in targets:
+                   # chosen = self.__pickRandomToon(suitId)
             targets.append(chosen)
 
         return targets
@@ -6111,7 +6111,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack8, self.battle.findSuit(attack8[SUIT_ID_COL]))
                     attack8[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack8)
-                if self.suitHasCondition(suitId, 'sanctioncalculator4'):
+                if self.suitHasCondition(suitId, 'sanctioncalculator4') and self.__suitCanAttack(suitId):
                     attack9[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
                     attack9[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
@@ -6814,7 +6814,7 @@ class BattleCalculatorAI:
                     attack2[SUIT_TGT_COL] = self.__calcSuitTarget(attack2)
                     if attack2[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attac2k[SUIT_HP_COL] = [-1 for j in
+                    attack2[SUIT_HP_COL] = [-1 for j in
                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
                     self.__calcSuitAtkHpALT(attack2)
                     if attack2[SUIT_ATK_COL] != NO_ATTACK:
