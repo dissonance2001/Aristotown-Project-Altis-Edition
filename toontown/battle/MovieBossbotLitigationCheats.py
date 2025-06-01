@@ -2756,7 +2756,8 @@ def doSnipe(attack):
         toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart.ogg', delay=1.5, node=suit)
-        suitTrack = getSuitAnimTrack(attack)
+        suitTrack = Sequence(getSuitAnimTrack(attack))
+        suitTrack.append(Wait(2.0))
         if dmg > 0:
             toonTracks.append(toonTrack)
             soundTracks.append(soundTrack)
