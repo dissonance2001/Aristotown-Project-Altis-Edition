@@ -5983,7 +5983,7 @@ class BattleCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'nar':
                 if self.TurnsElapsed % 2 == 0:
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 3 # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('nar', 'MoneyTrip')
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6013,8 +6013,8 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soaked'):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 4
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)# Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('nar', 'GlowerPower')
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
                     attack[SUIT_HP_COL] = [-1 for j in
@@ -6052,7 +6052,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                             attack7[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                            attack7[SUIT_ATK_COL] = 24 # Index of Glower Power for the Director of Public Relations.
+                            attack7[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('ste', 'StenographerCourtRecordBan')
                             attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
                             if attack7[SUIT_TGT_COL] == []:
                                 continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6083,7 +6083,7 @@ class BattleCalculatorAI:
                 if (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 8 and self.__suitCanAttack(suitId)):
                     attack8[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack8[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
+                    attack8[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('ste', 'StenographerSanctionBindings')
                     attack8[SUIT_TGT_COL] = self.__calcSuitTarget(attack8)
                     if attack8[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6114,7 +6114,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'sanctioncalculator4') and self.__suitCanAttack(suitId):
                     attack9[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack9[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
+                    attack9[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('ste', 'StenographerSanctionBindings')
                     attack9[SUIT_TGT_COL] = self.__calcSuitTarget(attack9)
                     if attack9[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6145,7 +6145,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'costscalculator') and self.__suitCanAttack(suitId):
                     attack3[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
+                    attack3[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('ste', 'SynergyFees')
                     attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
                     if attack3[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6176,7 +6176,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('ste', 'SynergyFees')
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6207,7 +6207,7 @@ class BattleCalculatorAI:
                 if (self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 8 and self.__suitCanAttack(suitId)):
                     attack6[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack6[SUIT_ATK_COL] = 8  # Index of Glower Power for the Director of Public Relations.
+                    attack6[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('ste', 'StenographerSanction')
                     attack6[SUIT_TGT_COL] = self.__calcSuitTarget(attack6)
                     if attack6[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6238,7 +6238,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0  and self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
                     attack4[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = random.randint(14, 23) # Index of Glower Power for the Director of Public Relations.
+                    attack4[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('ste', 'BanLevel%s' % (random.choice(['45', '46', '47', '48', '56', '57', '58', '67', '68', '78'])))
                     attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
                     if attack4[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6269,7 +6269,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0  and not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
                     attack4[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = random.randint(9, 13) # Index of Glower Power for the Director of Public Relations.
+                    attack4[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('ste', 'BanLevel%s' % random.randint(4, 8))
                     attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
                     if attack4[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6300,7 +6300,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack5[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 24  # Index of Glower Power for the Director of Public Relations.
+                    attack5[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('ste', 'StenographerCourtRecordBan')
                     attack5[SUIT_TGT_COL] = self.__calcSuitTarget(attack5)
                     if attack5[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6336,7 +6336,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('csm', 'CaseManagerInsurancePlan')
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6367,7 +6367,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'insurancecalculator') and self.__suitCanAttack(suitId):
                     attack2[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack2[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
+                    attack2[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('csm', 'CaseManagerInsurancePlan')
                     attack2[SUIT_TGT_COL] = self.__calcSuitTarget(attack2)
                     if attack2[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6398,7 +6398,7 @@ class BattleCalculatorAI:
                 if (self.TurnsElapsed % 4 == 0 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'bindingscalculator') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'bindingscalculator') == 8 and self.__suitCanAttack(suitId)):
                     attack3[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
+                    attack3[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('csm', 'CaseManagerLegalBindings')
                     attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
                     if attack3[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6429,7 +6429,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
                     attack4[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = random.randint(15, 42)  # Index of Glower Power for the Director of Public Relations.
+                    attack4[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('csm', 'Ban%s' % random.choice(['ToonupTrap', 'ToonupLure', 'ToonupThrow', 'ToonupSquirt', 'ToonupZap', 'ToonupSound', 'ToonupDrop', 'TrapLure', 'TrapThrow', 'TrapSquirt', 'TrapZap', 'TrapSound', 'TrapDrop', 'LureThrow', 'LureSquirt', 'LureZap', 'LureSound', 'LureDrop', 'ThrowSquirt', 'ThrowZap', 'ThrowSound', 'ThrowDrop', 'SquirtZap', 'SquirtSound', 'SquirtDrop', 'ZapSound', 'ZapDrop', 'SoundDrop']))
                     attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
                     if attack4[SUIT_TGT_COL] == -1:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6460,7 +6460,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
                     attack4[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = random.randint(7, 14)  # Index of Glower Power for the Director of Public Relations.
+                    attack4[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('csm', 'Ban%s' % random.choice(['Toonup', 'Trap', 'Lure', 'Throw', 'Squirt', 'Zap', 'Sound', 'Drop']))
                     attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
                     if attack4[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6491,7 +6491,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack6[SUIT_ID_COL] = self.battle.activeSuits[
                     i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack6[SUIT_ATK_COL] = 43  # Index of Glower Power for the Director of Public Relations.
+                    attack6[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('csm', 'CaseManagerInsurance')
                     attack6[SUIT_TGT_COL] = self.__calcSuitTarget(attack6)
                     if attack6[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6522,7 +6522,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack5[SUIT_ID_COL] = self.battle.activeSuits[
                     i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 44  # Index of Glower Power for the Director of Public Relations.
+                    attack5[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('csm', 'CaseManagerLegallyBound')
                     attack5[SUIT_TGT_COL] = self.__calcSuitTarget(attack5)
                     if attack5[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6553,7 +6553,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                             attack7[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                            attack7[SUIT_ATK_COL] = 45 # Index of Glower Power for the Director of Public Relations.
+                            attack7[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('csm', 'CaseManagerCourtRecordBan')
                             attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
                             if attack7[SUIT_TGT_COL] == []:
                                 continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6592,7 +6592,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 99 == 0 and self.__suitCanAttack(suitId):
                     attack4[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 6 # Index of Glower Power for the Director of Public Relations.
+                    attack4[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('lit', 'LitigatorBayouBash')
                     attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
                     if attack4[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6623,7 +6623,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('lit', 'LitigatorSnap')
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6654,7 +6654,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'snappedcalculator') and self.__suitCanAttack(suitId):
                     attack2[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack2[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
+                    attack2[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('lit', 'LitigatorSnap')
                     attack2[SUIT_TGT_COL] = self.__calcSuitTarget(attack2)
                     if attack2[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6685,7 +6685,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
                     attack3[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 8  # Index of Glower Power for the Director of Public Relations.
+                    attack3[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('lit', 'LitigatorSnapSoak')
                     attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
                     if attack3[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6716,7 +6716,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
                     attack4[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
+                    attack4[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('lit', 'LitigatorBayouBash')
                     attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
                     if attack4[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6747,7 +6747,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'bellowcalculator') and self.__suitCanAttack(suitId):
                     attack7[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack7[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
+                    attack7[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('lit', 'LitigatorBayouBellow')
                     attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
                     if attack7[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6779,7 +6779,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 99 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('scg', 'ScapegoatEnraged')
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6810,7 +6810,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'gavelcalculator') and self.__suitCanAttack(suitId):
                     attack2[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack2[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
+                    attack2[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('scg', 'ScapegoatGavel')
                     attack2[SUIT_TGT_COL] = self.__calcSuitTarget(attack2)
                     if attack2[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6841,7 +6841,7 @@ class BattleCalculatorAI:
                 if self.getSuitConditionTurns(suitId, 'enraged') == 1:
                     attack5[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
+                    attack5[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('scg', 'ScapegoatShieldsUp')
                     attack5[SUIT_TGT_COL] = self.__calcSuitTarget(attack5)
                     if attack5[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6872,7 +6872,7 @@ class BattleCalculatorAI:
                 if self.getSuitConditionTurns(suitId, 'shielding') == 1:
                     attack5[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
+                    attack5[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('scg', 'ScapegoatEnraged')
                     attack5[SUIT_TGT_COL] = self.__calcSuitTarget(attack5)
                     if attack5[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6903,7 +6903,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack7[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack7[SUIT_ATK_COL] = 9  # Index of Glower Power for the Director of Public Relations.
+                    attack7[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('scg', 'ScapegoatCourtRecordBan')
                     attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
                     if attack7[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6937,7 +6937,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'desperation') and not self.suitHasCondition(suitId, 'syphoncalculator') and self.__suitCanAttack(suitId):
                     attack8[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack8[SUIT_ATK_COL] = 10 # Index of Glower Power for the Director of Public Relations.
+                    attack8[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('cp', 'PowerhouseSyphonDesperation')
                     attack8[SUIT_TGT_COL] = self.__calcSuitTarget(attack8)
                     if attack8[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6968,7 +6968,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'rotationcalculator') and self.__suitCanAttack(suitId):
                     attack9[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack9[SUIT_ATK_COL] = random.choice((6, 7, 8, 9))  # Index of Glower Power for the Director of Public Relations.
+                    attack9[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('cp', 'Powerhouse%s' % random.choice(['Absorb', 'SoakImmune', 'LureImmune', 'Syphon']))
                     attack9[SUIT_TGT_COL] = self.__calcSuitTarget(attack9)
                     if attack9[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -6999,7 +6999,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
                     attack3[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 13  # Index of Glower Power for the Director of Public Relations.
+                    attack3[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('cp', 'PowerhouseSnipeSoaked')
                     attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
                     if attack3[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7030,7 +7030,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 16  # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('cp', 'PowerhouseSnipeCollectCall')
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7061,7 +7061,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack4[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 11 # Index of Glower Power for the Director of Public Relations.
+                    attack4[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('cp', 'PowerhouseSnipeVulnerable')
                     attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
                     if attack4[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7092,7 +7092,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack6[SUIT_ID_COL] = self.battle.activeSuits[
                     i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack6[SUIT_ATK_COL] = 15  # Index of Glower Power for the Director of Public Relations.
+                    attack6[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('cp', 'PowerhouseSnipeMulligan')
                     attack6[SUIT_TGT_COL] = self.__calcSuitTarget(attack6)
                     if attack6[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7123,7 +7123,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack5[SUIT_ID_COL] = self.battle.activeSuits[
                     i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 14  # Index of Glower Power for the Director of Public Relations.
+                    attack5[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('cp', 'PowerhouseSnipeBookkept')
                     attack5[SUIT_TGT_COL] = self.__calcSuitTarget(attack5)
                     if attack5[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7154,7 +7154,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                             attack7[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                            attack7[SUIT_ATK_COL] = 12 # Index of Glower Power for the Director of Public Relations.
+                            attack7[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('cp', 'PowerhouseSnipeGagBan')
                             attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
                             if attack7[SUIT_TGT_COL] == []:
                                 continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7187,7 +7187,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
                     attack3[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
+                    attack3[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('fbd', 'BookkeeperPaperCutSoaked')
                     attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
                     if attack3[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7218,7 +7218,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'markedcalculator') and self.__suitCanAttack(suitId):
                     attack4[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
+                    attack4[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('fbd', 'BookkeeperPaperCutMarked')
                     attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
                     if attack4[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7249,7 +7249,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 10  # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('fbd', 'BookkeeperBookkeeping')
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7281,7 +7281,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 8  # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('frs', 'WiretapperWiretapped')
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7313,7 +7313,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 13  # Index of Glower Power for the Director of Public Relations.
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('gtk', 'AmbassadorMulligan')
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
@@ -7344,7 +7344,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                             attack7[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                            attack7[SUIT_ATK_COL] = 13 # Index of Glower Power for the Director of Public Relations.
+                            attack7[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('gtk', 'AmbassadorMulligan')
                             attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
                             if attack7[SUIT_TGT_COL] == []:
                                 continue  # If there is no target, then it's whatever.  Move on to the next iteration.

@@ -500,6 +500,21 @@ def getSuitCheat(suitName, suitLevel, cheatNum = -1):
     return cdict
 
 
+def getAttackIndex(suitName, attackName):
+    '''
+    This method is used to easily get the target index of the attack so that it's clearer to us what attack is being.
+    suitName: The Cog's shorthand.
+    attackName: The attack name.
+    '''
+    attackChoices = SuitAttributes[suitName]['attacks']
+    for i in range(len(attackChoices)): # Look through each attack.
+        if attackChoices[i][0] == attackName: # Compare the name to our target.
+            return i
+
+    notify.warning('Did not find index of attack %s for %s.' % (attackName, suitName))
+    return -1 # Only return this if the attack does not exist.
+
+
 def getSuitAttack(suitName, suitLevel, attackNum = -1):
     attackChoices = SuitAttributes[suitName]['attacks']
     if attackNum == -1:
