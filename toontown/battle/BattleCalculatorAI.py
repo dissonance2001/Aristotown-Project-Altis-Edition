@@ -2832,107 +2832,38 @@ class BattleCalculatorAI:
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-        if theSuit.dna.name == 'cpee':
+        if theSuit.dna.name == 'cp':
             x = self.TurnsElapsed
-            if x % 99 == 0:
-                return 0
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-                return 4
-            if x % 10 == 0 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                return 4
-            if self.suitHasCondition(theSuit.doId, 'rotationcalculator') and self.suitHasCondition(theSuit.doId, 'desperation'):
-                return random.choice((0, 5))
-            if x % 3 == 0 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                return random.choice((0, 5))
-            if self.suitHasCondition(theSuit.doId, 'rotationcalculator'):
-                return random.choice((1, 2, 0, 5))
-            if x % 3 == 0:
-                return random.choice((1, 2, 0, 5))
-        if theSuit.dna.name == 'fbdee':
+        if theSuit.dna.name == 'fbd':
             x = self.TurnsElapsed
-            if x % 99 == 0:
-                return 0
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'frs' or s.dna.name == 'cp' or s.dna.name == 'gtk':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-            if self.suitHasCondition(theSuit.doId, 'explodingbillcalculator'):
-                return 0
-            if self.suitHasCondition(theSuit.doId, 'markedcalculator'):
-                return 8
-            if self.suitHasCondition(theSuit.doId, 'soakedcalculator'):
-                return 7
-            if self.suitHasCondition(theSuit.doId, 'papercutcalculator'):
-                return 2
-            if x % 3 == 0:
-                return 0
-        if theSuit.dna.name == 'frsee':
+        if theSuit.dna.name == 'frs':
             x = self.TurnsElapsed
-            if x % 99 == 0:
-                return 6
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'cp' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-            if self.suitHasCondition(theSuit.doId, 'immune'):
-                return 7
-            if self.suitHasCondition(theSuit.doId, 'vulnerable') and x % 2 == 0:
-                self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
-                return 2
-            if self.suitHasCondition(theSuit.doId, 'collectcallfeescalculator'):
-                return 6
-            if len(self.battle.activeSuits) >= 6 and not self.suitHasCondition(theSuit.doId, 'immune') and not self.suitHasCondition(theSuit.doId, 'desperation') and x % 2 == 0:
-                return 5
-            if self.suitHasCondition(theSuit.doId, 'collectcallcalculator'):
-                return 2
-            if x % 4 == 0:
-                return 2
-            if x % 3 == 0:
-                return 6
-            if x % 5 == 0:
-                return 7
-        if theSuit.dna.name == 'gtkee':
+        if theSuit.dna.name == 'gtk':
             x = self.TurnsElapsed
-            #if x % 1 == 0:
-                #boss.appendSuitsToBattle(boss.battleNumber, 'gtk')
-            if x % 99 == 0:
-                #boss.appendSuitsToBattle(boss.battleNumber, 'gtk')
-                return 7
             currentBossHealth = -1
             for s in self.battle.suits:
                 if s.dna.name == 'cp' or s.dna.name == 'fbd' or s.dna.name == 'frs':
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-            if theSuit.currHP <= 1500 and not self.suitHasCondition(theSuit.doId, 'phase3'):
-                return 9
-            if self.suitHasCondition(theSuit.doId, 'immune'):
-                return 10
-            if self.suitHasCondition(theSuit.doId, 'refinementcalculator') and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                return random.choice((7, 11))
-            if len(self.battle.activeSuits) >= 6 and not self.suitHasCondition(theSuit.doId, 'immune') and not self.suitHasCondition(theSuit.doId, 'desperation') and x % 2 == 0:
-                return 6
-            if len(self.battle.activeSuits) >= 6 and self.suitHasCondition(theSuit.doId, 'desperation') and x % 2 == 0:
-                return 8
-            if len(self.battle.activeSuits) >= 4 and x % 4 == 0:
-                return 0
-            if x % 4 == 0:
-                return 10
-            if x % 3 == 0 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                return random.choice((7, 11))
-            if len(self.battle.activeSuits) >= 5 and x % 2 == 0:
-                return random.choice((0, 1))
-            if len(self.battle.activeSuits) >= 4 and self.suitHasCondition(theSuit.doId, 'phase3') and x % 2 == 0:
-                return 0
         if theSuit.dna.name == 'dsf':
             x = self.TurnsElapsed
             if x % 99 == 0:
@@ -7776,7 +7707,7 @@ class BattleCalculatorAI:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack8[SUIT_TGT_COL]:
+                            for currTgt in attack6[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
                     targets = self.__createSuitTargetList(attack6)
                     allTargetsDead = True
@@ -7794,7 +7725,7 @@ class BattleCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'gtk': #ambassador
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'refinementcalculator', 1, 10, 'setBoth')
-                if len(self.battle.activeSuits) >= 3 and len(self.battle.activeSuits) <= 6 and x % 4 and not self.suitHasCondition(suitId, 'desperation'):
+                if x % 4 and (len(self.battle.activeSuits) >= 3 and len(self.battle.activeSuits) <= 6) and not self.suitHasCondition(suitId, 'desperation'):
                     self.setSuitCondition(suitId, 'headrollercalculator', 1, 10, 'setBoth')
                 if len(self.battle.activeSuits) >= 6 and x % 3 == 0 and self.suitHasCondition(suitId, 'desperation'):
                     self.setSuitCondition(suitId, 'headroller2calculator', 1, 10, 'setBoth')
