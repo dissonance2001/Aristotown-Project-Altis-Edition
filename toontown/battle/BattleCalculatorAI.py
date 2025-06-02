@@ -6995,7 +6995,7 @@ class BattleCalculatorAI:
                     attack7[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
                     attack7[SUIT_ATK_COL] = 9  # Index of Glower Power for the Director of Public Relations.
-                    attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
+                    attack7[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack7)
                     if attack7[SUIT_TGT_COL] == []:
                         continue  # If there is no target, then it's whatever.  Move on to the next iteration.
                     attack7[SUIT_HP_COL] = [-1 for j in
