@@ -28,15 +28,15 @@ ds - Enforcer Level 3-9
 trb - The Molder Level 5-15
 
 	Field Specialists:
-cr - Fore-Caddie Level 4-12
-dvg - Blowhard Level 6-15
+cr - Blowhard Level 4-12
+dvg - Big Shot Level 6-15
 bkp - Toxic Leader Level 7-18
 
 	Facility Cog:
 cg - Autocaddie Level 14-15.exe
 
 	Facility Manager:
-bg - Club President Level 18.mgr
+bg - Club President Level 20-25.mgr (OFTF)
 
 	Directors:
 msr - Derrick Man Level 5.mgr
@@ -82,10 +82,10 @@ cfp - Shyster Level 6-15
 sjg - Barrister Level 7-18
 
 	Facility Cog:
-jdg - Magistrate Level 15-20.exe
+jdg - Whistleblower Level 15-20.exe
 
 	Facility Manager:
-jur - Head Attorney Level 16.mgr
+jur - Head Attorney Level 20-25.mgr (OFTF)
 
 	Extra Managers:
 tlr - Arbitrator Level 50.mgr
@@ -119,12 +119,12 @@ ptr - Loan Shark Level 7-18
 pht - Robber Baron Level 8-25
 
 	Operation Analysts:
-ls - Watchdog Level 4-10
+ls - Fat Cat Level 4-10
 
 	Field Specialists:
-tw - Patronizer Level 2-8
+tw - Shylock Level 2-8
 nc - The Swindler Level 3-9
-gm - Mercenary Level 5-15
+gm - Overtimer Level 5-15
 cvy - Treasurer Level 6-15
 mld - Big Fish Level 7-18
 
@@ -132,7 +132,7 @@ mld - Big Fish Level 7-18
 csh - Mint Auditor Level 10-12.exe
 
 	Facility Manager:
-bgr - Mint Supervisor Level 13.mgr
+bgr - Mint Supervisor Level 20-25.mgr (OFTF)
 
 	Street Managers:
 mes - Duck Shuffler Level 5.mgr
@@ -168,20 +168,20 @@ ssm - The Mingler Level 7-18
 ssr - Mr. Hollywood Level 8-25
 
 	Operations Analysts:
-ms - Lobbyist Level 3-9
-m - Gazetteer Level 4-12
+ms - Double Crosser Level 3-9
+m - Forecaster Level 4-12
 
 	Field Specialists:
 nd - Connoisseur Level 2-8
 ka - Candidate Level 5-15
-trm - Assembly Assassin Level 6-15
-isw - Overtimer Level 7-18
+trm - People Pleaser Level 6-15
+isw - Kiss-Up Level 7-18
 
 	Facility Cog:
 fas - Watchman Level 8-10.exe
 
 	Faclity Manager:
-mdr - Factory Foreman Level 11.mgr
+mdr - Factory Foreman Level 20-25.mgr (OFTF)
 
 	Directors:
 nar - Director Of Public Relations Level 10.mgr
@@ -203,7 +203,7 @@ prr - Videographer Level 90.mgr (broken)
 
 	Sellbot 'Litigation' Team:
 blr - Radiographer Level 28.mgr v2.0
-dvp - Perpetrator Level 32.mgr
+dvp - Liquidator (to be changed most likely) Level 32.mgr
 dsk - Union Buster Level 32.mgr v2.0
 ffm - Safe-ty Supervisor Level 38.mgr
 

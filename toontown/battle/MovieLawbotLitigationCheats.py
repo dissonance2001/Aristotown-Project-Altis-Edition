@@ -1222,513 +1222,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     dmg = target['hp']
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
-    currentBossHealth = -1
-    currentBossHealth2 = -1
-    if suit.style.name == 'csm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'scg':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm':
-                currentBossHealth2 = s.currHP
-            if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'csm':
-                currentBossHealth = s.currHP
-        if currentBossHealth2 == -1:
-            animTrack.append(Func(suit.removeInsured))
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'lit':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm':
-                currentBossHealth2 = s.currHP
-            if s.dna.name == 'ste' or s.dna.name == 'scg' or s.dna.name == 'csm':
-                currentBossHealth = s.currHP
-        if currentBossHealth2 == -1:
-            animTrack.append(Func(suit.removeInsured))
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'ste':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm':
-                currentBossHealth2 = s.currHP
-            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'csm':
-                currentBossHealth = s.currHP
-        if currentBossHealth2 == -1:
-            animTrack.append(Func(suit.removeInsured))
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'gtk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'frs':
-        for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'fbd':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'cp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'ffm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'dsk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'blr' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'dvp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'ffm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'blr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'ffm' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'cry':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvk' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'tcm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvk' or s.dna.name == 'cry' or s.dna.name == 'otm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'otm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvk' or s.dna.name == 'tcm' or s.dna.name == 'cry':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'dvk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    for s in battle.activeSuits:
-        if s.dna.name == 'csm':
-            currentBossHealth = s.currHP
-    if currentBossHealth == -1:
-        animTrack.append(Func(suit.removeInsured))
-    x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
-    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-        syphonSuitTrack = Parallel(Func(suit.showHpTextCheat, +0), Func(suit.showHpString, "SYPHONED!"), Func(suit.setHealthForMe, + 0), Func(suit.updateHealthBar, 0))
-        insuredSuitTrack = Parallel(Func(suit.showHpTextCheat, +0), Func(suit.showHpString, "INSURED!"), Func(suit.setHealthForMe, 0), Func(suit.updateHealthBar, 0))
-    elif suit.currHP + 50 > (suit.maxHP * suit.hardMaxHP) and suit.isInsured:
-        insuredSuitTrack = Parallel(Func(suit.showHpTextCheat, x), Func(suit.showHpString, "INSURED!"),
-                                    Func(suit.setHealthForMe, x), Func(suit.updateHealthBar, 0))
-    elif suit.currHP + dmg > (suit.maxHP * suit.hardMaxHP) and suit.isSyphon:
-        syphonSuitTrack = Parallel(Func(suit.showHpTextCheat, x), Func(suit.showHpString, "SYPHONED!"),
-                                   Func(suit.setHealthForMe, x), Func(suit.updateHealthBar, 0))
-    else:
-        syphonSuitTrack = Parallel(Func(suit.showHpTextCheat, +dmg), Func(suit.showHpString, "SYPHONED!"),
-                                   Func(suit.setHealthForMe, + dmg), Func(suit.updateHealthBar, 0))
-        insuredSuitTrack = Parallel(Func(suit.showHpTextCheat, 50), Func(suit.showHpString, "INSURED!"),
-                                    Func(suit.setHealthForMe, 50), Func(suit.updateHealthBar, 0))
-    if dmg > 0 and name == MULLIGAN and suit.isSyphon:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(syphonSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == MULLIGAN:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == BLAST and suit.isSyphon:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(syphonSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == BLAST:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == COURT_MANDATE and suit.isSyphon:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(syphonSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == COURT_MANDATE:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == COURT_MANDATE_1 and suit.isSyphon:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(syphonSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == COURT_MANDATE_1:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == COURT_MANDATE_2 and suit.isSyphon:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(syphonSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == COURT_MANDATE_2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == COURT_MANDATE_3 and suit.isSyphon:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(syphonSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == COURT_MANDATE_3:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == KICK_UP:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == SHAKEDOWN:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == FIRE_COG and suit.isOttomanPhase2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(
-            getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims,
-                                   showDamageExtraTime))
-        taunt = random.choice(
-            ["You've gotta be quicker than that!", "Move it!", "Think fast!", "Eyes on the prize!",
-             "Follow the groove!",
-             "Step on it!", "Hurry it up!", "Pump up those reflexes!", "Follow the groove!"])
-        animTrack.append(Func(suit.setChatAbsolute,
-                              taunt,
-                              CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.showHpString, "1.05x DMG MULTIPLIER!"))
-        animTrack.append(ActorInterval(suit, 'come-on', playRate=suit.getPlayRate('pace')))
-        animTrack.append(Func(suit.setPlayRate, suit.getPlayRate() + 0.1, 'pace'))
-        return animTrack
-    elif dmg > 0 and name == FIRE_COG:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == USURY and suit.isChainsawPhase3:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(
-            getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims,
-                                   showDamageExtraTime))
-        taunt = random.choice(
-            ["DAMAGE TO SHELL- increasing- IDENTIFIED. RETALIATION SHALL BE MET WITH- power- EQUAL FORCE.",
-             "OUTER LAYERS AT- getting- RISK. TAKING DEFENSIVE- faster- ACTION.",
-             "THREATS HAVE- i have- BEGUN TO- been- ADVANCE. BEGIN- hit- INCREASING ATTACK POWER.", ])
-        animTrack.append(Func(suit.setChatAbsolute,
-                              taunt,
-                              CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.showHpString, "1.1x DMG MULTIPLIER!"))
-        for headPart in suit.animatedHeadParts:
-            headInterval = ActorInterval(headPart, 'revvedup', playRate=suit.getPlayRate('revvedup'))
-        animTrack.append(Parallel(headInterval, SoundInterval(base.loadSfx('phase_5/audio/sfx/SA_revving_up.ogg')),
-                                  ActorInterval(suit, 'revvedup', playRate=suit.getPlayRate('revvedup'))))
-        animTrack.append(Func(suit.setPlayRate, suit.getPlayRate() + 0.1, 'revvedup'))
-        animTrack.append(Func(suit.setChatAbsolute, '', CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.setNeutralAnimation))
-        return animTrack
-    elif dmg > 0 and name == USURY:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == OIL_RAIN:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == CHAINSAW_QUAKE and suit.isChainsawPhase2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(
-            getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims,
-                                   showDamageExtraTime))
-        taunt = random.choice(
-            ["DAMAGE TO SHELL IDENTIFIED. RETALIATION WILL BE MET WITH EQUAL FORCE.",
-             "OUTER LAYERS AT RISK. TAKING DEFENSIVE ACTION.",
-             "THREATS HAVE BEGUN TO ADVANCE. BEGIN INCREASING ATTACK POWER."])
-        animTrack.append(Func(suit.setChatAbsolute,
-                              taunt,
-                              CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.showHpString, "1.05x DMG MULTIPLIER!"))
-        animTrack.append(Parallel(SoundInterval(base.loadSfx('phase_5/audio/sfx/SA_revving_up.ogg')),
-                                  ActorInterval(suit, 'revvedup', playRate=suit.getPlayRate('revvedup'))))
-        animTrack.append(Func(suit.setPlayRate, suit.getPlayRate() + 0.1, 'revvedup'))
-        animTrack.append(Func(suit.setNeutralAnimation))
-        return animTrack
-    elif dmg > 0 and name == CHAINSAW_QUAKE:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == CHAINSAW_DETONATE_2 and suit.isChainsawPhase2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(
-            getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims,
-                                   showDamageExtraTime))
-        taunt = random.choice(
-            ["DAMAGE TO SHELL IDENTIFIED. RETALIATION WILL BE MET WITH EQUAL FORCE.",
-             "OUTER LAYERS AT RISK. TAKING DEFENSIVE ACTION.",
-             "THREATS HAVE BEGUN TO ADVANCE. BEGIN INCREASING ATTACK POWER."])
-        animTrack.append(Func(suit.setChatAbsolute,
-                              taunt,
-                              CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.showHpString, "1.05x DMG MULTIPLIER!"))
-        animTrack.append(Parallel(SoundInterval(base.loadSfx('phase_5/audio/sfx/SA_revving_up.ogg')),
-                                  ActorInterval(suit, 'revvedup', playRate=suit.getPlayRate('revvedup'))))
-        animTrack.append(Func(suit.setPlayRate, suit.getPlayRate() + 0.1, 'revvedup'))
-        animTrack.append(Func(suit.setNeutralAnimation))
-        return animTrack
-    elif dmg > 0 and name == CHAINSAW_DETONATE_2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == CHAINSAW_DETONATE and suit.isChainsawPhase2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(
-            getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims,
-                                   showDamageExtraTime))
-        taunt = random.choice(
-            ["DAMAGE TO SHELL IDENTIFIED. RETALIATION WILL BE MET WITH EQUAL FORCE.",
-             "OUTER LAYERS AT RISK. TAKING DEFENSIVE ACTION.",
-             "THREATS HAVE BEGUN TO ADVANCE. BEGIN INCREASING ATTACK POWER."])
-        animTrack.append(Func(suit.setChatAbsolute,
-                              taunt,
-                              CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.showHpString, "1.05x DMG MULTIPLIER!"))
-        animTrack.append(Parallel(SoundInterval(base.loadSfx('phase_5/audio/sfx/SA_revving_up.ogg')),
-                                  ActorInterval(suit, 'revvedup', playRate=suit.getPlayRate('revvedup'))))
-        animTrack.append(Func(suit.setPlayRate, suit.getPlayRate() + 0.1, 'revvedup'))
-        animTrack.append(Func(suit.setNeutralAnimation))
-        return animTrack
-    elif dmg > 0 and name == CHAINSAW_DETONATE:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == BEGUILE and suit.isSyphon:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(syphonSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == BOMB_CAKE:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == CHAINSAW_CANNED:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == TRIBUTE_2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == SLUSHFUND_2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == CAGE:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == NOT_THROW_PIANO:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == DETONATE_2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == COLLECT_CALL:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == BEGUILE:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == CEASE_AND_DESIST and suit.isInsured:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.74), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(insuredSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == CEASE_AND_DESIST:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.74), damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == UNION_BUSTER:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(insuredSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == WHITE_POWDER:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.83), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == WIRETAPPED:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == BOOKKEEPING:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == WIRE_CUT:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == FREEZING_RAIN:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == HEAVY_RAINFALL:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == COLLECT_CALL:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == CONE_OF_SHAME:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == QUALITY_CONTROL_LEVEL_3:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.83), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == QUALITY_CONTROL_LEVEL_1:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.83), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == AFTERSHOCK:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == QUALITY_CONTROL_LEVEL:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == BOMB:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == DROWNING:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.83), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == PAPER_CUT:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == EXPLODING_BILL:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], (dmg / 2), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == SNAP_WET and suit.isInsured:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.75), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(insuredSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == SNAP_WET:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.75), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == COURT_SANCTION and suit.isInsured:
-        animTrack.append(
-            getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.55), damageDelay, damageAnimNames,
-                                   splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(insuredSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == COURT_SANCTION:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.55), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == COURT_RECORD_4 and suit.isInsured:
-        animTrack.append(
-            getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.74), damageDelay, damageAnimNames,
-                                   splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(insuredSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == COURT_RECORD_4:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.74), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and name == SNAP and suit.isInsured:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.69), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(insuredSuitTrack)
-        return animTrack
-    elif dmg > 0 and name == SNAP:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], int(dmg / 1.69), damageDelay, damageAnimNames,
-                                                splicedDamageAnims, showDamageExtraTime))
-        return animTrack
-    elif dmg > 0 and suit.isSyphon:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        animTrack.append(syphonSuitTrack)
-        return animTrack
-    elif dmg > 0 and suit.isOttomanPhase2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        taunt = random.choice(
-            ["You've gotta be quicker than that!", "Move it!", "Think fast!", "Eyes on the prize!", "Follow the groove!",
-             "Step on it!", "Hurry it up!", "Pump up those reflexes!", "Follow the groove!"])
-        animTrack.append(Func(suit.setChatAbsolute,
-                              taunt,
-                              CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.showHpString, "1.05x DMG MULTIPLIER!"))
-        animTrack.append(ActorInterval(suit, 'come-on', playRate=suit.getPlayRate('pace')))
-        animTrack.append(Func(suit.setPlayRate, suit.getPlayRate() + 0.1, 'pace'))
-        return animTrack
-    elif dmg > 0 and suit.isChainsawPhase2:
-        animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        taunt = random.choice(
-            ["DAMAGE TO SHELL IDENTIFIED. RETALIATION WILL BE MET WITH EQUAL FORCE.", "OUTER LAYERS AT RISK. TAKING DEFENSIVE ACTION.",
-             "THREATS HAVE BEGUN TO ADVANCE. BEGIN INCREASING ATTACK POWER."])
-        animTrack.append(Func(suit.setChatAbsolute,
-                              taunt,
-                              CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.showHpString, "1.05x DMG MULTIPLIER!"))
-        animTrack.append(Parallel(SoundInterval(base.loadSfx('phase_5/audio/sfx/SA_revving_up.ogg')),
-                                           ActorInterval(suit, 'revvedup', playRate=suit.getPlayRate('revvedup'))))
-        animTrack.append(Func(suit.setPlayRate, suit.getPlayRate() + 0.1, 'revvedup'))
-        animTrack.append(Func(suit.setNeutralAnimation))
-        return animTrack
-    elif dmg > 0 and suit.isChainsawPhase3:
-        animTrack.append(
-            getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims,
-                                   showDamageExtraTime))
-        taunt = random.choice(
-            ["DAMAGE TO SHELL- increasing- IDENTIFIED. RETALIATION SHALL BE MET WITH- power- EQUAL FORCE.", "OUTER LAYERS AT- getting- RISK. TAKING DEFENSIVE- faster- ACTION.",
-             "THREATS HAVE- i have- BEGUN TO- been- ADVANCE. BEGIN- hit- INCREASING ATTACK POWER.",])
-        animTrack.append(Func(suit.setChatAbsolute,
-                              taunt,
-                              CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.showHpString, "1.1x DMG MULTIPLIER!"))
-        for headPart in suit.animatedHeadParts:
-            headInterval =  ActorInterval(headPart, 'revvedup', playRate=suit.getPlayRate('revvedup'))
-        animTrack.append(Parallel(headInterval, SoundInterval(base.loadSfx('phase_5/audio/sfx/SA_revving_up.ogg')),
-                                  ActorInterval(suit, 'revvedup', playRate=suit.getPlayRate('revvedup'))))
-        animTrack.append(Func(suit.setPlayRate, suit.getPlayRate() + 0.1, 'revvedup'))
-        animTrack.append(Func(suit.setChatAbsolute, '', CFSpeech | CFTimeout))
-        animTrack.append(Func(suit.setNeutralAnimation))
-        return animTrack
-    elif dmg > 0:
+    if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         return animTrack
     else:
@@ -1743,6 +1237,35 @@ def getToonTracks(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDela
     for i in xrange(len(targets)):
         tgt = targets[i]
         toonTracks.append(getToonTrack(attack, damageDelay, damageAnimNames, dodgeDelay, dodgeAnimNames, splicedDamageAnims, splicedDodgeAnims, target=tgt, showDamageExtraTime=showDamageExtraTime, showMissedExtraTime=showMissedExtraTime))
+
+    return toonTracks
+
+def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 0.0001, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, target = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
+    if not target:
+        target = attack['target'][0]
+    toon = target['toon']
+    battle = attack['battle']
+    suit = attack['suit']
+    name = attack['id']
+    suitPos = suit.getPos(battle)
+    dmg = target['hp']
+    animTrack = Sequence()
+    animTrack.append(Func(toon.headsUp, battle, suitPos))
+    if dmg > 0:
+        animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
+        return animTrack
+    else:
+        animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
+        #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
+        return animTrack
+
+
+def getToonTracksCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 1e-06, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
+    toonTracks = Parallel()
+    targets = attack['target']
+    for i in xrange(len(targets)):
+        tgt = targets[i]
+        toonTracks.append(getToonTrackCheat(attack, damageDelay, damageAnimNames, dodgeDelay, dodgeAnimNames, splicedDamageAnims, splicedDodgeAnims, target=tgt, showDamageExtraTime=showDamageExtraTime, showMissedExtraTime=showMissedExtraTime))
 
     return toonTracks
 
@@ -2071,8 +1594,10 @@ def doSnap(attack, suit):
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     soundTrack = getSoundTrack('SA_bite.ogg', delay=2, node=suit)
-    toonTracks = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2.1,
-                                             splicedDamageAnims=damageAnims, showDamageExtraTime=1)
+    toonTracks = getToonTracksCheat(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
+                               splicedDodgeAnims=dodgeAnims, showDamageExtraTime=1.4)
+    #toonTracks = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2.1,
+                             #                splicedDamageAnims=damageAnims, showDamageExtraTime=1)
     notifyTrack = Sequence(Wait(3.1), Func(toon.showHpTextCheat, - int(dmg)),
                            Func(toon.showHpString, "VULNERABLE!"))
     return Parallel(suitTrack, toonTracks, soundTrack, propTracks, notifyTrack)
@@ -2147,12 +1672,11 @@ def doBayouBash(attack):
     name = attack['id']
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Sequence(MovieUtil.createSuitSnapInterval(suit), Func(suit.setNeutralAnimation))
-    suitTrack.append(Wait(1.25))
-    #cameraTrack = Func(camera.setPosHpr, 0, -10, 10, 0, -30, 0)
-    suitSpeechTrack = Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitBashPhrases), CFSpeech | CFTimeout)
+    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack2 = Sequence(MovieUtil.createSuitSnapInterval(suit), Func(suit.setNeutralAnimation))
+    suitTrack2.append(Wait(1.25))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
-    return Parallel(suitTrack, soundTrack, suitSpeechTrack)
+    return Parallel(suitTrack, suitTrack2, soundTrack)
 
 def doCourtSanction(attack, suit):
     battle = attack['battle']
@@ -2173,8 +1697,9 @@ def doCourtSanction(attack, suit):
         Func(MovieUtil.removeProp, sanctioned),
         Func(battle.movie.clearRenderProp, sanctioned)
     )
-    toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 0.8,
-                                             ['conked'], showDamageExtraTime=0)
+    toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
+    #toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 0.8,
+           #                                  ['conked'], showDamageExtraTime=0)
     notifyTrack = Sequence(Wait(0.8), Func(toon.showHpTextCheat, - int(dmg)),
                            Func(toon.showHpString, "SANCTIONED!"))
     #toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], - int(dmg), 0.8, ['conked'])
@@ -2210,7 +1735,7 @@ def doCourtSanctionBindings(attack, suit):
     )
         suitTrack = getSuitAnimTrack(attack)
         soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
-        toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 0.8,
+        toonTrack = getToonTakeDamageTrackCheat(attack, toon, t['died'], int(dmg), 0.8,
                                                 ['conked'], showDamageExtraTime=0)
         notifyTrack = Sequence(Wait(0.8), Func(toon.showHpTextCheat, - int(dmg)),
                                Func(toon.showHpString, "SANCTIONED!"))
@@ -2329,9 +1854,7 @@ def doLegalBindings(attack):
         tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
     tubeTracks.append(Func(battle.movie.clearRestoreHips))
-    toonTrack = getToonTakeDamageTrack(attack, toon, target[0]['died'], 0, 2.2,
-                                       ['struggle'])
-    #toonTrack = getToonTrack(attack, 2.4, ['struggle'], 3.4, ['struggle'])
+    toonTrack = getToonTrackCheat(attack, 1.9, ['struggle'], 3.4, ['struggle'])
     notifyTrack = Sequence(Wait(3.0), Func(toon.showHpTextWhite, "LEGALLY BOUND!", 10))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=1.9, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, tubeTracks, notifyTrack)

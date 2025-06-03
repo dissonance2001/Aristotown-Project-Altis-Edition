@@ -3198,7 +3198,7 @@ class BattleCalculatorAI:
                 if toonId == -1 or toonId not in self.battle.activeToons:
                     continue
                 self.notify.debug('Suit attacking back at toon ' + str(toonId))
-                chosen = self.battle.activeToons.index(toonId)
+                chosen = self.__pickRandomToon(suitId)
             else:
                 chosen = self.__pickRandomToon(suitId)
             # If for some reason the Toon has already been chosen, pick a completely random Toon.
@@ -4559,10 +4559,7 @@ class BattleCalculatorAI:
                     result = int(result * ToontownBattleGlobals.GOVERNAUGHT_DMG_MULT)
             targetIndex = self.battle.activeToons.index(toonId)
             if atkInfo['name'] == 'SynergyFees':
-                if self.suitHasCondition(theSuit.doId, 'lured'):
-                    result = (24 + ((self.TurnsElapsed - 2) * 1.3))
-                else:
-                    result = (24 + ((self.TurnsElapsed - 1) * 1.3))
+                result = (24 + ((self.TurnsElapsed - 1) * 1.3))
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
                 #self.setSuitCondition(theSuit.doId, 'calculatingcalculator', 1, 10, 'setBoth')
@@ -4618,7 +4615,6 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'insurancecalculator', 0, 0, 'setBoth')
-                #self.setSuitCondition(theSuit.doId, 'bindingscalculator', 1, 10, 'setBoth')
                 for suit in self.battle.activeSuits:
                     if not self.suitHasCondition(suit.doId, 'insured'):
                         self.setSuitCondition(suit.doId, 'insured', 1, 99, 'setBoth')
@@ -5726,6 +5722,8 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result * (
                             self.getToonConditionModifier(toonId, 'corruption') + self.getToonConditionModifier(toonId,
                                                                                                                 'snapped') + theSuit.getDamageMultiplier())
+            if self.suitHasCondition(theSuit.doId, 'lured'):
+                self.setSuitCondition(theSuit.doId, 'lured', 1, 1, 'setBoth')
             self.notify.debug('__calcSuitAtkHp - result is %s for index %i' % (str(attack[SUIT_HP_COL][targetIndex]), targetIndex))
 
     def __getToonHp(self, toonDoId):
@@ -6052,20 +6050,11 @@ class BattleCalculatorAI:
         
         # The cheaters who act after all above attacks have played.
         for i in xrange(len(self.battle.activeSuits)):
-            attack = getDefaultSuitAttack()
-            attack2 = getDefaultSuitAttack()
-            attack3 = getDefaultSuitAttack()
-            attack4 = getDefaultSuitAttack()
-            attack5 = getDefaultSuitAttack()
-            attack6 = getDefaultSuitAttack()# Let's prepare an attack.
-            attack7 = getDefaultSuitAttack()
-            attack8 = getDefaultSuitAttack()
-            attack9 = getDefaultSuitAttack()
-            attack10 = getDefaultSuitAttack()
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             if self.battle.activeSuits[i].dna.name == 'nar':
                 if self.TurnsElapsed % 2 == 0:
+                    attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
                     attack[SUIT_ATK_COL] = 3 # Index of Glower Power for the Director of Public Relations.
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
@@ -6095,6 +6084,7 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'soaked'):
+                    attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[
                         i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
                     attack[SUIT_ATK_COL] = 4
@@ -6131,173 +6121,14 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'sanctioncalculator', 1, 9, 'setBoth')
                 if (x + 3) % 3 == 0:
                     self.setSuitCondition(suitId, 'calculatingcalculator', 1, 10, 'setBoth')
-                for t in self.battle.activeToons:
-                    if self.toonHasCondition(t, 'bound') and not self.__suitCanAttack(suitId):
-                        self.setSuitCondition(suitId, 'sanctioncalculator2', 1, 10, 'setBoth')
                 if self.TurnsElapsed % 1 == 0:
-                            attack7[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                            attack7[SUIT_ATK_COL] = 24 # Index of Glower Power for the Director of Public Relations.
-                            attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
-                            if attack7[SUIT_TGT_COL] == []:
-                                continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                            attack7[SUIT_HP_COL] = [-1 for j in xrange(
-                                len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                            self.__calcSuitAtkHpALT(attack7)
-                            if attack7[SUIT_ATK_COL] != NO_ATTACK:
-                                if self.__suitAtkAffectsGroup(attack7):
-                                    for currTgt in self.battle.activeToons:
-                                        self.__updateSuitAtkStat(currTgt)
-
-                                else:
-                                    for currTgt in attack7[SUIT_TGT_COL]:
-                                        self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                            targets = self.__createSuitTargetList(attack7)
-                            allTargetsDead = True
-                            for currTgt in targets:
-                                if self.__getToonHp(currTgt) > 0:
-                                    allTargetsDead = False
-                                    break
-
-                            if allTargetsDead:
-                                attack7 = getDefaultSuitAttack()
-                            if self.__attackHasHit(attack7, suit=1):
-                                self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
-                            attack7[SUIT_BEFORE_TOONS_COL] = 0
-                            self.battle.suitAttacks.append(attack7)
-                if (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 8 and self.__suitCanAttack(suitId)):
-                    attack8[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack8[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
-                    attack8[SUIT_TGT_COL] = self.__calcSuitTarget(attack8)
-                    if attack8[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack8[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack8)
-                    if attack8[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack8):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack8[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack8)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack8 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack8, suit=1):
-                        self.__applySuitAttackDamages(attack8, self.battle.findSuit(attack8[SUIT_ID_COL]))
-                    attack8[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack8)
-                if self.suitHasCondition(suitId, 'sanctioncalculator4') and self.__suitCanAttack(suitId):
-                    attack9[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack9[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
-                    attack9[SUIT_TGT_COL] = self.__calcSuitTarget(attack9)
-                    if attack9[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack9[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack9)
-                    if attack9[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack9):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack9[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack9)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack9 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack9, suit=1):
-                        self.__applySuitAttackDamages(attack9, self.battle.findSuit(attack9[SUIT_ID_COL]))
-                    attack9[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack9)
-                if self.suitHasCondition(suitId, 'costscalculator') and self.__suitCanAttack(suitId):
-                    attack3[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
-                    attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
-                    if attack3[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack3[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack3)
-                    if attack3[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack3):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack3[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack3)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack3 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack3, suit=1):
-                        self.__applySuitAttackDamages(attack3, self.battle.findSuit(attack3[SUIT_ID_COL]))
-                    attack3[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack3)
-                if (self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 8 and self.__suitCanAttack(suitId)):
-                    attack6[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack6[SUIT_ATK_COL] = 8  # Index of Glower Power for the Director of Public Relations.
-                    attack6[SUIT_TGT_COL] = self.__calcSuitTarget(attack6)
-                    if attack6[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack6[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack6)
-                    if attack6[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack6):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack6[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack6)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack6 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack6, suit=1):
-                        self.__applySuitAttackDamages(attack6, self.battle.findSuit(attack6[SUIT_ID_COL]))
-                    attack6[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack6)
-                if self.suitHasCondition(suitId, 'calculatingcalculator'):
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 24 #Court Record Retaliation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
                     if attack[SUIT_ATK_COL] != NO_ATTACK:
                         if self.__suitAtkAffectsGroup(attack):
@@ -6307,38 +6138,187 @@ class BattleCalculatorAI:
                         else:
                             for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack3)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
                             allTargetsDead = False
                             break
 
-                   # if allTargetsDead:
-                      #  attack = getDefaultSuitAttack()
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 8 and self.__suitCanAttack(suitId)):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 5  # Court Sanction Legal Bindings Retaliation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'sanctioncalculator4') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 5  # Court Sanction Legal Bindings Retaliation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'costscalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 7  # Court Costs
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if (self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 8 and self.__suitCanAttack(suitId)):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 8  # Court Sanction Regular
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'calculatingcalculator'):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 6  # Calculating Costs
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
                     if self.__attackHasHit(attack, suit=1):
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0  and self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = random.randint(14, 23) # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
-                    if attack4[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = random.randint(14,23)  # Court Record Banning 2 Levels
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack4[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack4)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6346,30 +6326,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack4 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0  and not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = random.randint(9, 13) # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
-                    if attack4[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = random.randint(9,13)  # Court Record Banning 1 Level
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack4[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack4)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6377,58 +6356,56 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack4 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
-                    attack5[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 24  # Index of Glower Power for the Director of Public Relations.
-                    attack5[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack5)
-                    if attack5[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack5[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack5)
-                    if attack5[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack5):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack5[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack5)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack5 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack5, suit=1):
-                        self.__applySuitAttackDamages(attack5, self.battle.findSuit(attack5[SUIT_ID_COL]))
-                    attack5[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack5)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'csm':
+                if x % 3 == 0:
+                    self.setSuitCondition(suitId, 'bindingscalculator2', 1, 9, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'bindingscalculator', 1, 9, 'setBoth')
                 if (x + 3) % 3 == 0:
                     self.setSuitCondition(suitId, 'insurancecalculator', 1, 10, 'setBoth')
-                if x % 3 == 0 and not  self.__suitCanAttack(suitId):
-                    self.setSuitCondition(suitId, 'bindingscalculator', 1, 9, 'setBoth')
+                if self.TurnsElapsed % 1 == 0:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 45  # Court Record Ban Retaliation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId):
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 5  # Insurance Plan
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
                     if attack[SUIT_ATK_COL] != NO_ATTACK:
                         if self.__suitAtkAffectsGroup(attack):
@@ -6452,24 +6429,23 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'insurancecalculator') and self.__suitCanAttack(suitId):
-                    attack2[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack2[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
-                    attack2[SUIT_TGT_COL] = self.__calcSuitTarget(attack2)
-                    if attack2[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack2[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack2)
-                    if attack2[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack2):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 5  # Insurance Plan
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack2[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack2)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6477,30 +6453,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack2 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack2, suit=1):
-                        self.__applySuitAttackDamages(attack2, self.battle.findSuit(attack2[SUIT_ID_COL]))
-                    attack2[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack2)
-                if (self.getSuitConditionTurns(suitId, 'bindingscalculator') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'bindingscalculator') == 8 and self.__suitCanAttack(suitId)):
-                    attack3[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
-                    attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
-                    if attack3[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack3[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack3)
-                    if attack3[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack3):
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 43  # Insurance Healing
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack3[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack3)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6508,30 +6483,59 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack3 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack3, suit=1):
-                        self.__applySuitAttackDamages(attack3, self.battle.findSuit(attack3[SUIT_ID_COL]))
-                    attack3[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack3)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 44  # Legally Bound
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = random.randint(15, 42)  # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
-                    if attack4[SUIT_TGT_COL] == -1:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = random.randint(15,42)  # Court Record Ban 2 Tracks
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            tgtId = self.battle.activeToons[attack4[SUIT_TGT_COL]]
-                            self.__updateSuitAtkStat(tgtId)
-                    targets = self.__createSuitTargetList(attack4)
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6539,30 +6543,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack4 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = random.randint(7, 14)  # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
-                    if attack4[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = random.randint(7,14)  # Court Record Ban 1 Track
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack4[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack4)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6570,30 +6573,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack4 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
-                if self.TurnsElapsed % 1 == 0:
-                    attack6[SUIT_ID_COL] = self.battle.activeSuits[
-                    i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack6[SUIT_ATK_COL] = 43  # Index of Glower Power for the Director of Public Relations.
-                    attack6[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack6)
-                    if attack6[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack6[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack6)
-                    if attack6[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack6):
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if (self.getSuitConditionTurns(suitId, 'bindingscalculator') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'bindingscalculator') == 8 and self.__suitCanAttack(suitId)):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 6  # Legal Bindings
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack6[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack6)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6601,30 +6603,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack6 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack6, suit=1):
-                        self.__applySuitAttackDamages(attack6, self.battle.findSuit(attack6[SUIT_ID_COL]))
-                    attack6[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack6)
-                if self.TurnsElapsed % 1 == 0:
-                    attack5[SUIT_ID_COL] = self.battle.activeSuits[
-                    i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 44  # Index of Glower Power for the Director of Public Relations.
-                    attack5[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack5)
-                    if attack5[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack5[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack5)
-                    if attack5[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack5):
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if (self.getSuitConditionTurns(suitId, 'bindingscalculator2') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'bindingscalculator2') == 8 and self.__suitCanAttack(suitId)):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 6  # Legal Bindings
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack5[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack5)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6632,71 +6633,71 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack5 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack5, suit=1):
-                        self.__applySuitAttackDamages(attack5, self.battle.findSuit(attack5[SUIT_ID_COL]))
-                    attack5[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack5)
-                if self.TurnsElapsed % 1 == 0:
-                            attack7[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                            attack7[SUIT_ATK_COL] = 45 # Index of Glower Power for the Director of Public Relations.
-                            attack7[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack7)
-                            if attack7[SUIT_TGT_COL] == []:
-                                continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                            attack7[SUIT_HP_COL] = [-1 for j in
-                                                   xrange(
-                                                       len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                            self.__calcSuitAtkHpALT(attack7)
-                            if attack7[SUIT_ATK_COL] != NO_ATTACK:
-                                if self.__suitAtkAffectsGroup(attack7):
-                                    for currTgt in self.battle.activeToons:
-                                        self.__updateSuitAtkStat(currTgt)
-
-                                else:
-                                    for currTgt in attack7[SUIT_TGT_COL]:
-                                        self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                            targets = self.__createSuitTargetList(attack7)
-                            allTargetsDead = True
-                            for currTgt in targets:
-                                if self.__getToonHp(currTgt) > 0:
-                                    allTargetsDead = False
-                                    break
-
-                            if allTargetsDead:
-                                attack7 = getDefaultSuitAttack()
-                            if self.__attackHasHit(attack7, suit=1):
-                                self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
-                            attack7[SUIT_BEFORE_TOONS_COL] = 0
-                            self.battle.suitAttacks.append(attack7)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'lit':
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'snappedcalculator', 1, 10, 'setBoth')
-                if len(self.battle.activeSuits) < 6 and x % 2:
+                if self.battle.activeSuits[i].currHP <= 4000 and not self.suitHasCondition(suitId, 'bash1'):
+                    self.setSuitCondition(suitId, 'bash1', 1, 99, 'setBoth')
+                if self.battle.activeSuits[i].currHP <= 3000 and not self.suitHasCondition(suitId, 'bash2'):
+                    self.setSuitCondition(suitId, 'bash2', 1, 99, 'setBoth')
+                if self.battle.activeSuits[i].currHP <= 2000 and not self.suitHasCondition(suitId, 'bash3'):
+                    self.setSuitCondition(suitId, 'bash3', 1, 99, 'setBoth')
+                if self.battle.activeSuits[i].currHP <= 1000 and not self.suitHasCondition(suitId, 'bash4'):
+                    self.setSuitCondition(suitId, 'bash4', 1, 99, 'setBoth')
+                if x % 4 and len(self.battle.activeSuits) < 4 and not self.suitHasCondition(suitId, 'bash1') and not self.suitHasCondition(suitId, 'bash2') and not self.suitHasCondition(suitId, 'bash3') \
+                        and not self.suitHasCondition(suitId, 'bash4'):
                     self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if len(self.battle.activeSuits) >= 6 and x % 4 == 0:
+                if x % 4 and len(self.battle.activeSuits) < 5 and self.suitHasCondition(suitId, 'bash1') and not self.suitHasCondition(suitId, 'bash2') and not self.suitHasCondition(suitId, 'bash3') \
+                        and not self.suitHasCondition(suitId, 'bash4'):
+                    self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                if len(self.battle.activeSuits) >= 5 and x % 4 == 0 and self.suitHasCondition(suitId, 'bash1') and not self.suitHasCondition(suitId, 'bash2') and not self.suitHasCondition(suitId, 'bash3') \
+                        and not self.suitHasCondition(suitId, 'bash4'):
                     self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                if len(self.battle.activeSuits) >= 6 and x % 2 == 0 and self.suitHasCondition(suitId, 'desperation'):
+                if x % 3 and len(self.battle.activeSuits) < 6 and self.suitHasCondition(suitId, 'bash1') and self.suitHasCondition(suitId, 'bash2') and not self.suitHasCondition(suitId, 'bash3') \
+                        and not self.suitHasCondition(suitId, 'bash4'):
+                    self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                if len(self.battle.activeSuits) >= 6 and x % 3 == 0 and self.suitHasCondition(suitId, 'bash1') and self.suitHasCondition(suitId, 'bash2') and not self.suitHasCondition(suitId, 'bash3') \
+                        and not self.suitHasCondition(suitId, 'bash4'):
+                    self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                if x % 2 and len(self.battle.activeSuits) < 6 and self.suitHasCondition(suitId, 'bash1') and self.suitHasCondition(suitId, 'bash2') and self.suitHasCondition(suitId, 'bash3') \
+                        and not self.suitHasCondition(suitId, 'bash4'):
+                    self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                if len(self.battle.activeSuits) >= 6 and x % 2 == 0 and self.suitHasCondition(suitId, 'bash1') and self.suitHasCondition(suitId, 'bash2') and self.suitHasCondition(suitId, 'bash3') \
+                        and not self.suitHasCondition(suitId, 'bash4'):
+                    self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                if x % 1 and len(self.battle.activeSuits) < 6 and self.suitHasCondition(suitId, 'bash1') and self.suitHasCondition(suitId,
+                                                                                              'bash2') and self.suitHasCondition(
+                        suitId, 'bash3') \
+                        and self.suitHasCondition(suitId, 'bash4') and not self.suitHasCondition(suitId, 'bash5'):
+                    self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                if len(self.battle.activeSuits) >= 6 and x % 1 == 0 and self.suitHasCondition(suitId,
+                                                                                              'bash1') and self.suitHasCondition(
+                        suitId, 'bash2') and self.suitHasCondition(suitId, 'bash3') \
+                        and self.suitHasCondition(suitId, 'bash4'):
                     self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
                 if self.TurnsElapsed % 99 == 0 and self.__suitCanAttack(suitId):
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 6 # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
-                    if attack4[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 6  # First Turn Bayou Bash
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack4[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack4)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6704,20 +6705,19 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack4 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
-                if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId):
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 8  # Snap Soaked
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
                     if attack[SUIT_ATK_COL] != NO_ATTACK:
                         if self.__suitAtkAffectsGroup(attack):
@@ -6741,24 +6741,23 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'snappedcalculator') and self.__suitCanAttack(suitId):
-                    attack2[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack2[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
-                    attack2[SUIT_TGT_COL] = self.__calcSuitTarget(attack2)
-                    if attack2[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack2[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack2)
-                    if attack2[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack2):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 7  # Snap Most Dangerous
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack2[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack2)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6766,61 +6765,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack2 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack2, suit=1):
-                        self.__applySuitAttackDamages(attack2, self.battle.findSuit(attack2[SUIT_ID_COL]))
-                    attack2[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack2)
-                if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
-                    attack3[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 8  # Index of Glower Power for the Director of Public Relations.
-                    attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
-                    if attack3[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack3[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack3)
-                    if attack3[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack3):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack3[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack3)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack3 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack3, suit=1):
-                        self.__applySuitAttackDamages(attack3, self.battle.findSuit(attack3[SUIT_ID_COL]))
-                    attack3[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack3)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
-                    if attack4[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 6  # Bayou Bash
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack4[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack4)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6828,30 +6795,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack4 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'bellowcalculator') and self.__suitCanAttack(suitId):
-                    attack7[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack7[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
-                    attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
-                    if attack7[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack7[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack7)
-                    if attack7[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack7):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 5  # Bayou Bellow
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack7[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack7)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -6859,23 +6825,22 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack7 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack7, suit=1):
-                        self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
-                    attack7[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack7)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'scg':
                 if (x + 3) % 3 == 0:
                     self.setSuitCondition(suitId, 'gavelcalculator', 1, 10, 'setBoth')
                 if self.TurnsElapsed % 99 == 0 and self.__suitCanAttack(suitId):
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 7  # First Turn Enraged
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
                     if attack[SUIT_ATK_COL] != NO_ATTACK:
                         if self.__suitAtkAffectsGroup(attack):
@@ -6899,234 +6864,73 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'gavelcalculator') and self.__suitCanAttack(suitId):
-                    attack2[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack2[SUIT_ATK_COL] = 5  # Index of Glower Power for the Director of Public Relations.
-                    attack2[SUIT_TGT_COL] = self.__calcSuitTarget(attack2)
-                    if attack2[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack2[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack2)
-                    if attack2[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack2):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack2[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack2)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack2 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack2, suit=1):
-                        self.__applySuitAttackDamages(attack2, self.battle.findSuit(attack2[SUIT_ID_COL]))
-                    attack2[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack2)
-                if self.getSuitConditionTurns(suitId, 'enraged') == 1:
-                    attack5[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
-                    attack5[SUIT_TGT_COL] = self.__calcSuitTarget(attack5)
-                    if attack5[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack5[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack5)
-                    if attack5[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack5):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack5[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack5)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack5 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack5, suit=1):
-                        self.__applySuitAttackDamages(attack5, self.battle.findSuit(attack5[SUIT_ID_COL]))
-                    attack5[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack5)
-                if self.getSuitConditionTurns(suitId, 'shielding') == 1:
-                    attack5[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
-                    attack5[SUIT_TGT_COL] = self.__calcSuitTarget(attack5)
-                    if attack5[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack5[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack5)
-                    if attack5[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack5):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack5[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack5)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack5 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack5, suit=1):
-                        self.__applySuitAttackDamages(attack5, self.battle.findSuit(attack5[SUIT_ID_COL]))
-                    attack5[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack5)
-                if self.TurnsElapsed % 1 == 0:
-                    attack7[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack7[SUIT_ATK_COL] = 9  # Index of Glower Power for the Director of Public Relations.
-                    attack7[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack7)
-                    if attack7[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack7[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack7)
-                    if attack7[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack7):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack7[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack7)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack7 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack7, suit=1):
-                        self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
-                    attack7[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack7)
-            if self.battle.activeSuits[i].dna.name == 'cp': #powerhouse
-                if x % 3 == 0:
-                    self.setSuitCondition(suitId, 'rotationcalculator', 1, 10, 'setBoth')
-                if self.suitHasCondition(suitId, 'desperation') and not self.suitHasCondition(suitId, 'syphoncalculator') and self.__suitCanAttack(suitId):
-                    attack8[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack8[SUIT_ATK_COL] = 10 # Index of Glower Power for the Director of Public Relations.
-                    attack8[SUIT_TGT_COL] = self.__calcSuitTarget(attack8)
-                    if attack8[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack8[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack8)
-                    if attack8[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack8):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack8[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack8)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack8 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack8, suit=1):
-                        self.__applySuitAttackDamages(attack8, self.battle.findSuit(attack8[SUIT_ID_COL]))
-                    attack8[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack8)
-                if self.suitHasCondition(suitId, 'rotationcalculator') and self.__suitCanAttack(suitId):
-                    attack9[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack9[SUIT_ATK_COL] = random.choice((6, 7, 8, 9))  # Index of Glower Power for the Director of Public Relations.
-                    attack9[SUIT_TGT_COL] = self.__calcSuitTarget(attack9)
-                    if attack9[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack9[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack9)
-                    if attack9[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack9):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack9[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack9)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack9 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack9, suit=1):
-                        self.__applySuitAttackDamages(attack9, self.battle.findSuit(attack9[SUIT_ID_COL]))
-                    attack9[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack9)
-                if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
-                    attack3[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 13  # Index of Glower Power for the Director of Public Relations.
-                    attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
-                    if attack3[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack3[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack3)
-                    if attack3[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack3):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack3[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack3)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack3 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack3, suit=1):
-                        self.__applySuitAttackDamages(attack3, self.battle.findSuit(attack3[SUIT_ID_COL]))
-                    attack3[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack3)
-                if self.TurnsElapsed % 1 == 0:
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 16  # Index of Glower Power for the Director of Public Relations.
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 5  # Gavel
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.getSuitConditionTurns(suitId, 'enraged') == 1:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 6  # Shield's Up
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.getSuitConditionTurns(suitId, 'shielding') == 1:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 7  # Enraged
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
                     if attack[SUIT_ATK_COL] != NO_ATTACK:
                         if self.__suitAtkAffectsGroup(attack):
@@ -7150,24 +6954,23 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0:
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 11 # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack4)
-                    if attack4[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 9  # Gavel Court Record Ban Retaliation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack4[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack4)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7176,29 +6979,31 @@ class BattleCalculatorAI:
 
                     if allTargetsDead:
                         attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
-                if self.TurnsElapsed % 1 == 0:
-                    attack6[SUIT_ID_COL] = self.battle.activeSuits[
-                    i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack6[SUIT_ATK_COL] = 15  # Index of Glower Power for the Director of Public Relations.
-                    attack6[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack6)
-                    if attack6[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack6[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack6)
-                    if attack6[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack6):
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'cp': #powerhouse
+                if x % 3 == 0:
+                    self.setSuitCondition(suitId, 'rotationcalculator', 1, 10, 'setBoth')
+                if self.suitHasCondition(suitId, 'desperation') and not self.suitHasCondition(suitId, 'syphoncalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 10  # Desperation Syphon For All Cogs
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack6[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack6)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7206,30 +7011,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack6 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack6, suit=1):
-                        self.__applySuitAttackDamages(attack6, self.battle.findSuit(attack6[SUIT_ID_COL]))
-                    attack6[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack6)
-                if self.TurnsElapsed % 1 == 0:
-                    attack5[SUIT_ID_COL] = self.battle.activeSuits[
-                    i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 14  # Index of Glower Power for the Director of Public Relations.
-                    attack5[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack5)
-                    if attack5[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack5[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack5)
-                    if attack5[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack5):
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'rotationcalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = random.randint(6,9)  # Rotation Of Conditions
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack5[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack5)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7237,43 +7041,191 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack5 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack5, suit=1):
-                        self.__applySuitAttackDamages(attack5, self.battle.findSuit(attack5[SUIT_ID_COL]))
-                    attack5[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack5)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 13  # Soak Retaliation Snipe
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0:
-                            attack7[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                            attack7[SUIT_ATK_COL] = 12 # Index of Glower Power for the Director of Public Relations.
-                            attack7[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack7)
-                            if attack7[SUIT_TGT_COL] == []:
-                                continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                            attack7[SUIT_HP_COL] = [-1 for j in
-                                                   xrange(
-                                                       len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                            self.__calcSuitAtkHpALT(attack7)
-                            if attack7[SUIT_ATK_COL] != NO_ATTACK:
-                                if self.__suitAtkAffectsGroup(attack7):
-                                    for currTgt in self.battle.activeToons:
-                                        self.__updateSuitAtkStat(currTgt)
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 16  # Snipe Retaliation Collect Call
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
 
-                                else:
-                                    for currTgt in attack7[SUIT_TGT_COL]:
-                                        self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                            targets = self.__createSuitTargetList(attack7)
-                            allTargetsDead = True
-                            for currTgt in targets:
-                                if self.__getToonHp(currTgt) > 0:
-                                    allTargetsDead = False
-                                    break
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
 
-                            if allTargetsDead:
-                                attack7 = getDefaultSuitAttack()
-                            if self.__attackHasHit(attack7, suit=1):
-                                self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
-                            attack7[SUIT_BEFORE_TOONS_COL] = 0
-                            self.battle.suitAttacks.append(attack7)
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 11  # Snipe Retaliation Vulnerabilities
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 15  # Snipe Retaliation For Being On Cooldown
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 14  # Snipe Retaliation For Bookkeeping
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 12  # Snipe Retaliation For Gag Bans
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'fbd':  # bookkeeper
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'explodingcalculator', 1, 9, 'setBoth')
@@ -7282,24 +7234,23 @@ class BattleCalculatorAI:
                 if x % 5 == 0:
                     self.setSuitCondition(suitId, 'bookkeepingcalculator', 1, 10, 'setBoth')
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
-                    attack3[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
-                    attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
-                    if attack3[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack3[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack3)
-                    if attack3[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack3):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 6  # Soaked Paper Cut Retaliation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack3[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack3)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7307,30 +7258,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack3 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack3, suit=1):
-                        self.__applySuitAttackDamages(attack3, self.battle.findSuit(attack3[SUIT_ID_COL]))
-                    attack3[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack3)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'markedcalculator') and self.__suitCanAttack(suitId):
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
-                    if attack4[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 7  # Marked Paper Cut Retaliation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack4[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack4)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7338,30 +7288,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack4 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'explodingcalculator') and self.__suitCanAttack(suitId):
-                    attack8[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack8[SUIT_ATK_COL] = 9  # Index of Glower Power for the Director of Public Relations.
-                    attack8[SUIT_TGT_COL] = self.__calcSuitTarget(attack8)
-                    if attack8[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack8[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack8)
-                    if attack8[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack8):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 9  # Exploding Document
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack8[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack8)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7369,30 +7318,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack8 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack8, suit=1):
-                        self.__applySuitAttackDamages(attack8, self.battle.findSuit(attack8[SUIT_ID_COL]))
-                    attack8[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack8)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'papercutcalculator') and self.__suitCanAttack(suitId):
-                    attack9[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack9[SUIT_ATK_COL] = 8  # Index of Glower Power for the Director of Public Relations.
-                    attack9[SUIT_TGT_COL] = self.__calcSuitTarget(attack9)
-                    if attack9[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack9[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack9)
-                    if attack9[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack9):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 8  # Paper Cut
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack9[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack9)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7400,30 +7348,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack9 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack9, suit=1):
-                        self.__applySuitAttackDamages(attack9, self.battle.findSuit(attack9[SUIT_ID_COL]))
-                    attack9[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack9)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'bookkeepingcalculator'):
-                    attack7[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack7[SUIT_ATK_COL] = 10  # Index of Glower Power for the Director of Public Relations.
-                    attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
-                    if attack7[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack7[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack7)
-                    if attack7[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack7):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 10  # Bookkeeping
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack7[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack7)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7431,20 +7378,19 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack7 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack7, suit=1):
-                        self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
-                    attack7[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack7)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 11  # Index of Glower Power for the Director of Public Relations.
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 11  # Bookkeeping Retaliation
                     attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
                     if attack[SUIT_ATK_COL] != NO_ATTACK:
                         if self.__suitAtkAffectsGroup(attack):
@@ -7475,138 +7421,133 @@ class BattleCalculatorAI:
                 if len(self.battle.activeSuits) >= 6 and x % 3 == 0:
                     self.setSuitCondition(suitId, 'voicemailcalculator', 1, 10, 'setBoth')
                 if self.suitHasCondition(suitId, 'collectcallcalculator') and self.__suitCanAttack(suitId):
-                    attack9[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack9[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
-                    attack9[SUIT_TGT_COL] = self.__calcSuitTarget(attack9)
-                    if attack9[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack9[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack9)
-                    if attack9[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack9):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack9[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack9)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack9 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack9, suit=1):
-                        self.__applySuitAttackDamages(attack9, self.battle.findSuit(attack9[SUIT_ID_COL]))
-                    attack9[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack9)
-                if self.suitHasCondition(suitId, 'wiretappedcalculator') and self.__suitCanAttack(suitId):
-                    attack8[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack8[SUIT_ATK_COL] = 8  # Index of Glower Power for the Director of Public Relations.
-                    attack8[SUIT_TGT_COL] = self.__calcSuitTarget(attack8)
-                    if attack8[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack8[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack8)
-                    if attack8[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack8):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack8[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack8)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack8 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack8, suit=1):
-                        self.__applySuitAttackDamages(attack8, self.battle.findSuit(attack8[SUIT_ID_COL]))
-                    attack8[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack8)
-                if self.suitHasCondition(suitId, 'brokenconnectioncalculator') and self.__suitCanAttack(suitId):
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 10  # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
-                    if attack4[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack4[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack4)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack4 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
-                    attack7[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack7[SUIT_ATK_COL] = random.randint(19, 23)  # Index of Glower Power for the Director of Public Relations.
-                    attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
-                    if attack7[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack7[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack7)
-                    if attack7[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack7):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack7[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack7)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack7 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack7, suit=1):
-                        self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
-                    attack7[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack7)
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'bantracks'):
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = random.randint(11, 18)  # Index of Glower Power for the Director of Public Relations.
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 6 # Collect Call
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'wiretappedcalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 8  # Wiretapped
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'brokenconnectioncalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 10  # Broken Connection
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = random.randint(19,23)  # Budget Cuts Level Ban
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'bantracks'):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = random.randint(11,18)  # Budget Cuts Track Ban
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
                     if attack[SUIT_ATK_COL] != NO_ATTACK:
                         if self.__suitAtkAffectsGroup(attack):
@@ -7630,24 +7571,23 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0:
-                    attack5[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
-                    attack5[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack5)
-                    if attack5[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack5[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack5)
-                    if attack5[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack5):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 7  # Collect Call Fees
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack5[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack5)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7655,30 +7595,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack5 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack5, suit=1):
-                        self.__applySuitAttackDamages(attack5, self.battle.findSuit(attack5[SUIT_ID_COL]))
-                    attack5[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack5)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0:
-                    attack2[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack2[SUIT_ATK_COL] = 24  # Index of Glower Power for the Director of Public Relations.
-                    attack2[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack2)
-                    if attack2[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack2[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack2)
-                    if attack2[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack2):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 24  # Budget Cuts Gag Ban Retaliation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack2[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack2)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7686,30 +7625,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack2 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack2, suit=1):
-                        self.__applySuitAttackDamages(attack2, self.battle.findSuit(attack2[SUIT_ID_COL]))
-                    attack2[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack2)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'voicemailcalculator') and self.__suitCanAttack(suitId):
-                    attack6[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack6[SUIT_ATK_COL] = 9  # Index of Glower Power for the Director of Public Relations.
-                    attack6[SUIT_TGT_COL] = self.__calcSuitTarget(attack6)
-                    if attack6[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack6[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack6)
-                    if attack6[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack6):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 9  # Voicemail
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack6[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack6)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -7717,11 +7655,11 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack6 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack6, suit=1):
-                        self.__applySuitAttackDamages(attack6, self.battle.findSuit(attack6[SUIT_ID_COL]))
-                    attack6[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack6)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'gtk': #ambassador
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'refinementcalculator', 1, 10, 'setBoth')
@@ -7730,232 +7668,193 @@ class BattleCalculatorAI:
                 if len(self.battle.activeSuits) >= 6 and x % 3 == 0 and self.suitHasCondition(suitId, 'desperation'):
                     self.setSuitCondition(suitId, 'headroller2calculator', 1, 10, 'setBoth')
                 if self.suitHasCondition(suitId, 'refinementcalculator') and self.__suitCanAttack(suitId):
-                            attack7[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                            attack7[SUIT_ATK_COL] = 8 # Index of Glower Power for the Director of Public Relations.
-                            attack7[SUIT_TGT_COL] = self.__calcSuitTarget(attack7)
-                            if attack7[SUIT_TGT_COL] == []:
-                                continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                            attack7[SUIT_HP_COL] = [-1 for j in
-                                                   xrange(
-                                                       len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                            self.__calcSuitAtkHpALT(attack7)
-                            if attack7[SUIT_ATK_COL] != NO_ATTACK:
-                                if self.__suitAtkAffectsGroup(attack7):
-                                    for currTgt in self.battle.activeToons:
-                                        self.__updateSuitAtkStat(currTgt)
-
-                                else:
-                                    for currTgt in attack7[SUIT_TGT_COL]:
-                                        self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                            targets = self.__createSuitTargetList(attack7)
-                            allTargetsDead = True
-                            for currTgt in targets:
-                                if self.__getToonHp(currTgt) > 0:
-                                    allTargetsDead = False
-                                    break
-
-                            if allTargetsDead:
-                                attack7 = getDefaultSuitAttack()
-                            if self.__attackHasHit(attack7, suit=1):
-                                self.__applySuitAttackDamages(attack7, self.battle.findSuit(attack7[SUIT_ID_COL]))
-                            attack7[SUIT_BEFORE_TOONS_COL] = 0
-                            self.battle.suitAttacks.append(attack7)
-                if self.battle.activeSuits[i].currHP <= 1500 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
-                    attack10[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack10[SUIT_ATK_COL] = 9  # Index of Glower Power for the Director of Public Relations.
-                    attack10[SUIT_TGT_COL] = self.__calcSuitTarget(attack10)
-                    if attack10[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack10[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack10)
-                    if attack10[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack10):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack10[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack10)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack10 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack10, suit=1):
-                        self.__applySuitAttackDamages(attack10, self.battle.findSuit(attack10[SUIT_ID_COL]))
-                    attack10[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack10)
-                if self.suitHasCondition(suitId, 'headrollercalculator') and self.__suitCanAttack(suitId):
-                    attack2[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack2[SUIT_ATK_COL] = 6  # Index of Glower Power for the Director of Public Relations.
-                    attack2[SUIT_TGT_COL] = self.__calcSuitTarget(attack2)
-                    if attack2[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack2[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack2)
-                    if attack2[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack2):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack2[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack2)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack2 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack2, suit=1):
-                        self.__applySuitAttackDamages(attack2, self.battle.findSuit(attack2[SUIT_ID_COL]))
-                    attack2[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack2)
-                if self.suitHasCondition(suitId, 'headroller2calculator') and self.__suitCanAttack(suitId):
-                    attack8[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack8[SUIT_ATK_COL] = 7  # Index of Glower Power for the Director of Public Relations.
-                    attack8[SUIT_TGT_COL] = self.__calcSuitTarget(attack8)
-                    if attack8[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack8[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack8)
-                    if attack8[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack8):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack8[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack8)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack8 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack8, suit=1):
-                        self.__applySuitAttackDamages(attack8, self.battle.findSuit(attack8[SUIT_ID_COL]))
-                    attack8[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack8)
-                if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
-                    attack9[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack9[SUIT_ATK_COL] = 11  # Index of Glower Power for the Director of Public Relations.
-                    attack9[SUIT_TGT_COL] = self.__calcSuitTarget(attack9)
-                    if attack9[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack9[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack9)
-                    if attack9[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack9):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack9[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack9)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack9 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack9, suit=1):
-                        self.__applySuitAttackDamages(attack9, self.battle.findSuit(attack9[SUIT_ID_COL]))
-                    attack9[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack9)
-                if self.suitHasCondition(suitId, 'immunecalculator') and self.__suitCanAttack(suitId):
-                    attack3[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack3[SUIT_ATK_COL] = 12  # Index of Glower Power for the Director of Public Relations.
-                    attack3[SUIT_TGT_COL] = self.__calcSuitTarget(attack3)
-                    if attack3[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack3[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack3)
-                    if attack3[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack3):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack3[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack3)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack3 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack3, suit=1):
-                        self.__applySuitAttackDamages(attack3, self.battle.findSuit(attack3[SUIT_ID_COL]))
-                    attack3[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack3)
-                if (self.suitHasCondition(suitId, 'damageupcalculator1') and self.__suitCanAttack(suitId)) or (self.suitHasCondition(suitId, 'damageupcalculator2') and self.__suitCanAttack(suitId)):
-                    attack4[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack4[SUIT_ATK_COL] = 10  # Index of Glower Power for the Director of Public Relations.
-                    attack4[SUIT_TGT_COL] = self.__calcSuitTarget(attack4)
-                    if attack4[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack4[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack4)
-                    if attack4[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack4):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack4[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack4)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack4 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack4, suit=1):
-                        self.__applySuitAttackDamages(attack4, self.battle.findSuit(attack4[SUIT_ID_COL]))
-                    attack4[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack4)
-                if self.suitHasCondition(suitId, 'mulligancalculator3'):
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack[SUIT_ATK_COL] = 13  # Index of Glower Power for the Director of Public Relations.
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 8  # Refinement
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.battle.activeSuits[i].currHP <= 1500 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 9  # 'Phase 2'
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'headrollercalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 6  # Single Head Roller
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'headroller2calculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 7  # Group Head Roller
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 11  # Managerial Protection
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'immunecalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 12  # Managerial Protection Immunity
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if (self.suitHasCondition(suitId, 'damageupcalculator1') and self.__suitCanAttack(suitId)) or (self.suitHasCondition(suitId, 'damageupcalculator2') and self.__suitCanAttack(suitId)):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 10  # Compensation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
                     if attack[SUIT_ATK_COL] != NO_ATTACK:
                         if self.__suitAtkAffectsGroup(attack):
@@ -7979,24 +7878,23 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'mulligancalculator'):
-                    attack6[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack6[SUIT_ATK_COL] = 13  # Index of Glower Power for the Director of Public Relations.
-                    attack6[SUIT_TGT_COL] = self.__calcSuitTarget(attack6)
-                    if attack6[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack6[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack6)
-                    if attack6[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack6):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 13  # Mulligan
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack8[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack6)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -8004,30 +7902,29 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack6 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack6, suit=1):
-                        self.__applySuitAttackDamages(attack6, self.battle.findSuit(attack6[SUIT_ID_COL]))
-                    attack6[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack6)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'mulligancalculator2'):
-                    attack6[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack6[SUIT_ATK_COL] = 13  # Index of Glower Power for the Director of Public Relations.
-                    attack6[SUIT_TGT_COL] = self.__calcSuitTarget(attack6)
-                    if attack6[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack6[SUIT_HP_COL] = [-1 for j in
-                                            xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack6)
-                    if attack6[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack6):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 13  # Mulligan #2
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack8[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack6)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -8035,30 +7932,59 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack6 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack6, suit=1):
-                        self.__applySuitAttackDamages(attack6, self.battle.findSuit(attack6[SUIT_ID_COL]))
-                    attack6[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack6)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'mulligancalculator3'):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 13  # Mulligan #3
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'mulligancalculator4'):
-                    attack5[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack5[SUIT_ATK_COL] = 13  # Index of Glower Power for the Director of Public Relations.
-                    attack5[SUIT_TGT_COL] = self.__calcSuitTarget(attack5)
-                    if attack5[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack5[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack5)
-                    if attack5[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack5):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 13  # Mulligan #4
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
 
                         else:
-                            for currTgt in attack5[SUIT_TGT_COL]:
+                            for currTgt in attack[SUIT_TGT_COL]:
                                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack5)
+                    targets = self.__createSuitTargetList(attack)
                     allTargetsDead = True
                     for currTgt in targets:
                         if self.__getToonHp(currTgt) > 0:
@@ -8066,42 +7992,41 @@ class BattleCalculatorAI:
                             break
 
                     if allTargetsDead:
-                        attack5 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack5, suit=1):
-                        self.__applySuitAttackDamages(attack5, self.battle.findSuit(attack5[SUIT_ID_COL]))
-                    attack5[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack5)
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'bellowattack') and not self.battle.activeSuits[i].dna.name == 'lit' and not self.battle.activeSuits[i].dna.name == 'ste' and not self.battle.activeSuits[i].dna.name == 'scg' and not self.battle.activeSuits[i].dna.name == 'csm':
-                    attack2[SUIT_ID_COL] = self.battle.activeSuits[
-                        i].doId  # We may want the Cog to attack, and we may not want to.  In the latter case, use -1.
-                    attack2[SUIT_ATK_COL] = 0  # Index of Glower Power for the Director of Public Relations.
-                    attack2[SUIT_TGT_COL] = self.__calcSuitTarget(attack2)
-                    if attack2[SUIT_TGT_COL] == []:
-                        continue  # If there is no target, then it's whatever.  Move on to the next iteration.
-                    attack2[SUIT_HP_COL] = [-1 for j in
-                                           xrange(len(self.battle.activeToons))]  # This is to avoid an IndexError.
-                    self.__calcSuitAtkHpALT(attack2)
-                    if attack2[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack2):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = 0  # Random Extra Attack From Bayou Bellow
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL] != NO_ATTACK:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
 
-                        else:
-                            for currTgt in attack2[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack2)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
 
-                    if allTargetsDead:
-                        attack2 = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack2, suit=1):
-                        self.__applySuitAttackDamages(attack2, self.battle.findSuit(attack2[SUIT_ID_COL]))
-                    attack2[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack2)
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
+                self.battle.suitAttacks.append(attack)
 
 
 

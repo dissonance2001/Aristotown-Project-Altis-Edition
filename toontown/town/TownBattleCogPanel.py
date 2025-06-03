@@ -1492,7 +1492,7 @@ class TownBattleCogPanel(DirectFrame):
         self.suitHead.setScale(0.1)
         AnimList = 'neutral'
         if name == 'dfh':
-            self.suitHead.setPosHprScale(-0.26, 0.5, 0.125, -90, 0, 0, .105, .105, .105)
+            self.suitHead.setPosHprScale(-0.26, 0.5, 0.115, -90, 0, 0, .105, .105, .105)
         elif name == 'ptr':
             self.suitHead.setPosHprScale(-0.26, 0.5, 0.12, -90, 0, 0, .085, .085, .085)
         elif name == 'rng':

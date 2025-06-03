@@ -11045,15 +11045,8 @@ def doGlowerPower(attack):
 
     suitTrack = getSuitTrack(attack)
     suitName = suit.getStyleName()
-    if suitName == 'hh':
-        leftPosPoints = [Point3(0.3, 4.3, 5.3), MovieUtil.PNT3_ZERO]
-        rightPosPoints = [Point3(-0.3, 4.3, 5.3), MovieUtil.PNT3_ZERO]
-    elif suitName == 'tbc':
-        leftPosPoints = [Point3(0.6, 4.5, 6), MovieUtil.PNT3_ZERO]
-        rightPosPoints = [Point3(-0.6, 4.5, 6), MovieUtil.PNT3_ZERO]
-    else:
-        leftPosPoints = [Point3(0.4, 6.0, 7.0), MovieUtil.PNT3_ZERO]
-        rightPosPoints = [Point3(-0.4, 6.0, 7.0), MovieUtil.PNT3_ZERO]
+    leftPosPoints = [Point3(0.5, 3.0, suit.height - 1), MovieUtil.PNT3_ZERO]
+    rightPosPoints = [Point3(-0.5, 3.0, suit.height - 1), MovieUtil.PNT3_ZERO]
     leftKnifeTracks = Parallel()
     rightKnifeTracks = Parallel()
     for t in targets:
@@ -15083,9 +15076,19 @@ def doAudit(attack):
     partTrack4 = getPartTrack(particleEffect4, 1.8, 1.7, [particleEffect4, suit, 0])
     partTrack5 = getPartTrack(particleEffect5, 1.9, 1.8, [particleEffect5, suit, 0])
     suitName = attack['suitName']
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-    calcDuration = 1.3
-    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    suitType = getSuitBodyType(attack['suitName'])
+    if suitType == 'a':
+        calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 1.3
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    if suitType == 'b':
+        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 1.3
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    if suitType == 'c':
+        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 1.3
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = getPropTrack(calculator, suit.getLeftHand(), calcPosPoints, 0, calcDuration,
                                  scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='calculator',
                                  animStartTime=0,
@@ -15126,10 +15129,19 @@ def doCalculate(attack):
     partTrack3 = getPartTrack(particleEffect3, 1.7, 1.6, [particleEffect3, suit, 0])
     partTrack4 = getPartTrack(particleEffect4, 1.8, 1.7, [particleEffect4, suit, 0])
     partTrack5 = getPartTrack(particleEffect5, 1.9, 1.8, [particleEffect5, suit, 0])
-    suitName = attack['suitName']
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-    calcDuration = 1.3
-    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    suitType = getSuitBodyType(attack['suitName'])
+    if suitType == 'a':
+        calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 1.3
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    if suitType == 'b':
+        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 1.3
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    if suitType == 'c':
+        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 1.3
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = getPropTrack(calculator, suit.getLeftHand(), calcPosPoints, 0, calcDuration,
                                  scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='calculator',
                                  animStartTime=0,
@@ -15170,10 +15182,19 @@ def doTabulate(attack):
     partTrack3 = getPartTrack(particleEffect3, 1.7, 1.6, [particleEffect3, suit, 0])
     partTrack4 = getPartTrack(particleEffect4, 1.8, 1.7, [particleEffect4, suit, 0])
     partTrack5 = getPartTrack(particleEffect5, 1.9, 1.8, [particleEffect5, suit, 0])
-    suitName = attack['suitName']
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-    calcDuration = 1.3
-    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    suitType = getSuitBodyType(attack['suitName'])
+    if suitType == 'a':
+        calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 1.3
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    if suitType == 'b':
+        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 1.3
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    if suitType == 'c':
+        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcDuration = 1.3
+        scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = getPropTrack(calculator, suit.getLeftHand(), calcPosPoints, 0, calcDuration,
                                  scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='calculator',
                                  animStartTime=0,

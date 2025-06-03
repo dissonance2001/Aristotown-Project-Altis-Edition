@@ -5803,6 +5803,12 @@ class Suit(Avatar.Avatar):
                 headPart.setZ(-.4)
                 headPart.setScale(.7)
                 headPart.setH(180)
+            if self.style.name == 'dfh':
+                headPart.setX(-.03)
+                headPart.setZ(.1)
+                headPart.setY(.1)
+            if self.style.name == 'cr':
+                headPart.setY(.1)
             if self.style.name == 'trm':
                 headPart.setZ(0.9)
                 headPart.setY(1)
