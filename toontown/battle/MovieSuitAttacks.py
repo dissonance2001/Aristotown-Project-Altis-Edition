@@ -2852,7 +2852,7 @@ def doShred(attack):
     partTrack = getPartTrack(particleEffect, 3.5, 1.9, [particleEffect, suit, 0])
     paperPosPoints = [Point3(0.59, -0.31, 0.81), VBase3(79.224, 32.576, -179.449)]
     paperPropTrack = getPropTrack(paper, suit.getRightHand(), paperPosPoints, 2.4, 1e-05, scaleUpTime=0.2, anim=1, propName='shredder-paper', animDuration=1.5, animStartTime=2.8)
-    shredderPosPoints = [Point3(0, -0.12, -0.34), VBase3(-90.0, -53.77, -0.0)]
+    shredderPosPoints = [Point3(0, 0, -0.5), VBase3(-90.0, -53.77, -0.0)]
     shredderPropTrack = getPropTrack(shredder, suit.getLeftHand(), shredderPosPoints, 1, 3, scaleUpPoint=Point3(4.81, 4.81, 4.81))
     toonTrack = getToonTrack(attack, suitTrack.getDuration() - 1.1, ['conked'], suitTrack.getDuration() - 3.1, ['sidestep'])
     soundTrack = getSoundTrack('SA_shred.ogg', delay=3.4, node=suit)
@@ -3992,19 +3992,12 @@ def doRubberStamp(attack):
     target = attack['target']
     toon = target[0]['toon']
     suitTrack = getSuitTrack(attack)
-    stamp = globalPropPool.getProp('rubber-stamp')
-    pad = globalPropPool.getProp('pad')
+    stamp = globalPropPool.getProp('cc_m_prp_bat_rubberStamp')
+    pad = globalPropPool.getProp('cc_m_prp_bat_rubberStamp_pad')
     cancelled = __makeCancelledNodePath()
     suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'a':
-        padPosPoints = [Point3(-0.65, 0.83, -0.04), VBase3(5.625, 4.456, -165.125)]
-        stampPosPoints = [Point3(-0.64, -0.17, -0.03), MovieUtil.PNT3_ZERO]
-    elif suitType == 'c':
-        padPosPoints = [Point3(0.19, -0.55, -0.21), VBase3(-166.76, -4.001, -1.658)]
-        stampPosPoints = [Point3(-0.64, -0.08, 0.11), MovieUtil.PNT3_ZERO]
-    else:
-        padPosPoints = [Point3(-0.65, 0.83, -0.04), VBase3(5.625, 4.456, -165.125)]
-        stampPosPoints = [Point3(-0.64, -0.17, -0.03), MovieUtil.PNT3_ZERO]
+    padPosPoints = [Point3(-0.75, 0, -0.125), VBase3(0, 0, 180)]
+    stampPosPoints = [Point3(-0.25, -0.5, -0.25), VBase3(0, -90, 0)]
     padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 1e-06, 3.2)
     missPoint = lambda cancelled = cancelled, toon = toon: __toonMissPoint(cancelled, toon)
     propTrack = Sequence(Func(__showProp, stamp, suit.getRightHand(), stampPosPoints[0], stampPosPoints[1]), LerpScaleInterval(stamp, 0.5, MovieUtil.PNT3_ONE), Wait(2.6), Func(battle.movie.needRestoreRenderProp, cancelled), Func(cancelled.reparentTo, render), Func(cancelled.setScale, 0.6), Func(cancelled.setPosHpr, stamp, 0.81, -1.11, -0.16, 0, 0, 90), Func(cancelled.setP, 0), Func(cancelled.setR, 0))
@@ -15598,7 +15591,7 @@ def doMarketCrash(attack):
     if attack['suit'].dna.name == 'dvk':
         suitTrack.append(Wait(1.0))
         suitTrack.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
-    posPoints = [Point3(-1.6, -0.75, 0.2), VBase3(-90, 170, 0)]
+    posPoints = [Point3(-0.25, 1, 0), VBase3(90, 90, 0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']

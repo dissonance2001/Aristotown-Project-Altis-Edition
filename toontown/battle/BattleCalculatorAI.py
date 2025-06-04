@@ -6680,36 +6680,6 @@ class BattleCalculatorAI:
                         suitId, 'bash2') and self.suitHasCondition(suitId, 'bash3') \
                         and self.suitHasCondition(suitId, 'bash4'):
                     self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                if self.TurnsElapsed % 99 == 0 and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 6  # First Turn Bayou Bash
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
@@ -7110,7 +7080,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 11  # Snipe Retaliation Vulnerabilities
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'snapped'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
