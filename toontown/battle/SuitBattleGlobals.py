@@ -1502,7 +1502,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (38,),
               (80,),
               (15,)),
-        ('ReOrg',
+        ('BlueChip',
                 (35,),
               (95,),
               (15,)),
