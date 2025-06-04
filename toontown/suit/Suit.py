@@ -1030,7 +1030,7 @@ mdm = (('pickpocket', 'pickpocket', 4),
        ('lose3', 'wrecked', 4),
        ('magic1', 'magic1', 4))
 txm = (('magic3', 'magic3', 4),
-       ('glower', 'glower', 4),
+       ('smile', 'smile', 4),
        ('throw-paper', 'throw-paper', 4),
        ('lose3', 'wrecked', 4),
        ('roll-o-dex', 'roll-o-dex', 4))
@@ -1051,7 +1051,7 @@ hho = (('glower', 'glower', 4),
        ('short-squeeze', 'short-squeeze', 4))
 bdb = (('glower', 'glower', 4),
        ('phone', 'phone', 5),
-       ('magic3', 'magic3', 4),
+       ('magic1', 'magic1', 4),
 ('speak', 'speak', 4),
 ('magic2', 'magic2', 4),
 ('smile', 'smile', 4),
@@ -2577,14 +2577,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(3.25)
         elif dna.name == 'cr':
-            self.scale = 6.0 / cSize
+            self.scale = 5.0 / cSize
             self.handColor = VBase4(0.878, 0.733, 0.71, 1)
             self.generateBody()
             self.generateHead2('Blowhard')
             texture = loader.loadTexture('phase_3.5/maps/ttrm_t_ene_head_blowhard.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(7.5)
+            self.setHeight(6.25)
         elif dna.name == 'tbc':
             self.scale = 4.5 / bSize
             self.handColor = VBase4(0.643, 0.608, 0.596, 1)

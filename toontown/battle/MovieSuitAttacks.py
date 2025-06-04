@@ -14392,7 +14392,11 @@ def doBounceCheck(attack):
     dmg = target[0]['hp']
     hitSuit = dmg > 0
     check = globalPropPool.getProp('bounced-check')
-    checkPosPoints = [Point3(-0.25, -0.425, 0), VBase3(-180, 0, 0)]
+    suitType = getSuitBodyType(attack['suitName'])
+    if suitType == 'c':
+        checkPosPoints = [Point3(0, -0.5, 0), VBase3(-90, 90, 0)]
+    else:
+        checkPosPoints = [Point3(-0.25, -0.425, 0), VBase3(-180, 0, 0)]
     bounce1Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'one')
     bounce2Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'two')
     hit3Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'threeHit')
@@ -14442,7 +14446,11 @@ def doBounceRate(attack):
     dmg = target[0]['hp']
     hitSuit = dmg > 0
     check = globalPropPool.getProp('ttrpg_m_ene_prp_bouncedRate')
-    checkPosPoints = [Point3(1.5, 0.65, 0), VBase3(-180, 0, 0)]
+    suitType = getSuitBodyType(attack['suitName'])
+    if suitType == 'c':
+        checkPosPoints = [Point3(0, 0.5, -1), VBase3(-90, 90, 0)]
+    else:
+        checkPosPoints = [Point3(1.5, 0.65, 0), VBase3(-180, 0, 0)]
     bounce1Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'one')
     bounce2Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'two')
     hit3Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'threeHit')
@@ -18789,8 +18797,9 @@ def doBlueChip(attack):
     sizeTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpScaleInterval(chip, throwDuration, Point3(6)), Wait(0.95), LerpScaleInterval(chip, 0.4, MovieUtil.PNT3_NEARZERO))
     propTrack = Sequence(Parallel(chipTrack, sizeTrack, spinTrack), Effects.createZBounce(chip, 2, endingPos, 0.5, 1.5), Func(MovieUtil.removeProp, chip), Func(battle.movie.clearRenderProp, chip))
     propTracks.append(propTrack)
+    soundTrack2 = getSoundTrack('toon_decompress.ogg', node=suit)
     toonTracks = getToonTrack(attack, 3.3, ['squish'], 2.0, ['sidestep'])
-    squishTrack = Sequence(Wait(3.05), Func(toon.enterFlattened), Wait(2.0), Func(toon.exitFlattened))
+    squishTrack = Sequence(Wait(3.05), Func(toon.enterFlattened), Wait(2.0), Parallel(ActorInterval(toon, 'jump'), soundTrack2, Func(toon.loop, 'neutral'), Sequence(Wait(0.5), Func(toon.exitFlattened))))
     soundTrack = getSoundTrack('SA_blue_chip.ogg', node=suit)
     if dmg > 0:
         return Parallel(suitTrack, toonTracks, propTracks, soundTrack, squishTrack)

@@ -1542,7 +1542,7 @@ def doPaperCut(attack):
     soundTrack = getSoundTrack('SA_shred.ogg', delay=0.5, node=suit)
     notifyTrack = Sequence(Wait(2), Func(toon.showHpTextCheat, - int(dmg)),
                            Func(toon.showHpString, "VULNERABLE!"))
-    return Parallel(suitTrack, paperPropTrack, partTrack, suitTrack2, notifyTrack, toonTrack, soundTrack)
+    return Parallel(suitTrack, partTrack, suitTrack2, notifyTrack, toonTrack, soundTrack)
 
 def doExplodingDocument(attack):
     suit = attack['suit']
