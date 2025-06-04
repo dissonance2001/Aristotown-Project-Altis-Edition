@@ -3469,7 +3469,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                'The Powerhouse retaliates against toons who took damage\nfrom the Mulligan!',
+                'The Powerhouse retaliates against toons on cooldown!',
                 attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)

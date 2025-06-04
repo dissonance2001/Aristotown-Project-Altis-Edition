@@ -4860,7 +4860,7 @@ class BattleCalculatorAI:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'PowerhouseSnipeMulligan':
-                if self.toonHasCondition(toon.doId, 'mulligan'):
+                if self.toonHasCondition(toon.doId, 'noUnites'):
                     if self.suitHasCondition(theSuit.doId, 'lured'):
                         self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
                     self.__removeLured(theSuit.doId)
@@ -6124,7 +6124,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 24 #Court Record Retaliation
+                    attack[SUIT_ATK_COL] = 24  # Court Record Retaliation
                     attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
@@ -6151,7 +6151,10 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 8 and self.__suitCanAttack(suitId)):
+                if (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 9 and self.__suitCanAttack(
+                        suitId)) or (
+                        self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 8 and self.__suitCanAttack(
+                        suitId)):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 5  # Court Sanction Legal Bindings Retaliation
@@ -6241,7 +6244,8 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if (self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 9 and self.__suitCanAttack(suitId)) or (self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 8 and self.__suitCanAttack(suitId)):
+                if (self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 9 and self.__suitCanAttack(suitId)) or (
+                        self.getSuitConditionTurns(suitId, 'sanctioncalculator') == 8 and self.__suitCanAttack(suitId)):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 8  # Court Sanction Regular
@@ -6301,10 +6305,11 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0  and self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
+                if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(
+                        suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.randint(14,23)  # Court Record Banning 2 Levels
+                    attack[SUIT_ATK_COL] = random.randint(14, 23)  # Court Record Banning 2 Levels
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
@@ -6331,10 +6336,12 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0  and not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
+                if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId,
+                                                                            'ban2levels') and self.__suitCanAttack(
+                        suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.randint(9,13)  # Court Record Banning 1 Level
+                    attack[SUIT_ATK_COL] = random.randint(9, 13)  # Court Record Banning 1 Level
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
@@ -6372,7 +6379,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 45  # Court Record Ban Retaliation
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'banned2'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6492,67 +6502,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 44  # Legally Bound
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.randint(15,42)  # Court Record Ban 2 Tracks
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.randint(7,14)  # Court Record Ban 1 Track
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'bound'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6612,6 +6565,66 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 6  # Legal Bindings
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = random.randint(15,42)  # Court Record Ban 2 Tracks
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = random.randint(7,14)  # Court Record Ban 1 Track
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
@@ -6927,7 +6940,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 9  # Gavel Court Record Ban Retaliation
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'banned3'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7050,7 +7066,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 16  # Snipe Retaliation Collect Call
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'bound'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7113,7 +7132,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 15  # Snipe Retaliation For Being On Cooldown
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'noUnites'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7143,7 +7165,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 14  # Snipe Retaliation For Bookkeeping
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'bookkeepingtoon'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7173,7 +7198,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 12  # Snipe Retaliation For Gag Bans
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'banned') or selftoonHasCondition(t, 'banned2'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7360,7 +7388,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 11  # Bookkeeping Retaliation
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'bookkeepingtoon'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7547,7 +7578,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 7  # Collect Call Fees
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'bound'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7577,7 +7611,10 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 24  # Budget Cuts Gag Ban Retaliation
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for t in self.battle.activeToons:
+                        if self.toonHasCondition(t, 'banned') or self.toonHasCondition(t, 'banned2'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -8101,9 +8138,9 @@ class BattleCalculatorAI:
                     toon = self.battle.getToon(t)
                     if toon != None:
                         self.setToonCondition(toon.doId, lvToDict[npc_level], npc_hp, 3, 'setBoth')
-                        #self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
-                        #self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
-                        #self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')
+                        self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
+                        self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
+                        self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')
                         # use alternate both because we want a better SOS card to replace a worse one
         if self.roundsToonsHit > 0:
            toonsHit =1
