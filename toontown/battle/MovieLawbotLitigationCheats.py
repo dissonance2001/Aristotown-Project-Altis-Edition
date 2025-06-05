@@ -1854,8 +1854,8 @@ def doLegalBindings(attack):
         tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
     tubeTracks.append(Func(battle.movie.clearRestoreHips))
-    toonTrack = getToonTrackCheat(attack, 1.9, ['struggle'], 3.4, ['struggle'])
-    notifyTrack = Sequence(Wait(3.0), Func(toon.showHpTextWhite, "LEGALLY BOUND!", 10))
+    toonTrack = getToonTrackCheat(attack, 1.9, ['struggle'], 1.9, ['struggle'])
+    notifyTrack = Sequence(Wait(1.9), Func(toon.showHpTextWhite, "LEGALLY BOUND!", 10))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=1.9, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, tubeTracks, notifyTrack)
 

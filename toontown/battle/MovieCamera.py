@@ -3075,9 +3075,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == RESTRAINING_ORDER_WSI:
         camTrack.append(defaultCamera(openShotDuration=2.8))
     elif name == QUAKE:
-        shakeIntensity = 5.15
-        quake = 1
-        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity, quake))
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == LD_AFTERSHOCK:
         camTrack2 = Sequence(randomActorShot(suit, battle, 2, 'suit'), randomActorShot(suit, battle, 3.75, 'suit'),
                              heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 5.75))
@@ -3180,8 +3178,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpTrack3 = Sequence(Wait(15.0), (pbpText.getShowIntervalCheat('Safe-ty Promotion!', 3.5)))
         return Parallel(pbpTrack2, pbpTrack, pbpDesc, pbpTrack3, pbpDesc3, camTrack2)
     elif name == SHAKE:
-        shakeIntensity = 1.75
-        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == SHRED:
         camTrack.append(defaultCamera(openShotDuration=4.1))
     elif name == SONG_AND_DANCE:
@@ -3295,8 +3292,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == CLOCK_CHANGE:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == TREMOR:
-        shakeIntensity = 0.25
-        camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == WHITE_POWDER:
         camTrack2 = Sequence(defaultCamera(attackDuration=attackDuration, openShotDuration=2.0))
         pbpText = attack['playByPlayText']
