@@ -4562,8 +4562,6 @@ class BattleCalculatorAI:
                 result = (24 + ((self.TurnsElapsed - 1) * 1.3))
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                #self.setSuitCondition(theSuit.doId, 'calculatingcalculator', 1, 10, 'setBoth')
-                #self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
             elif atkInfo['name'] == 'CalculatingFees':
                 result = (24 + (self.TurnsElapsed * 1.3))
                 toon.setHp(toon.hp + result)
@@ -4585,7 +4583,6 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'sanctioncalculator3', 0, 0, 'setBoth')
-                #self.setSuitCondition(theSuit.doId, 'calculatingcalculator', 1, 3, 'setBoth')
                 from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
                 boss = None
@@ -4602,7 +4599,6 @@ class BattleCalculatorAI:
                     attack[SUIT_HP_COL][targetIndex] = result
                     self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'bound', 0, 0, 'setBoth')
                     self.setSuitCondition(theSuit.doId, 'sanctioncalculator2', 0, 0, 'setBoth')
                     self.setSuitCondition(theSuit.doId, 'sanctioncalculator4', 1, 1, 'setBoth')
             elif atkInfo['name'] == 'StenographerCourtRecordBan':
@@ -4682,7 +4678,6 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'CaseManagerCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned2'):
-                    self.setToonCondition(toon.doId, 'banned2', 1, 1, 'setBoth')
                     result = 50
                 else:
                     result = 0
@@ -4691,7 +4686,6 @@ class BattleCalculatorAI:
                 result = 36
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'snapped', .1, 3, 'setBoth')
-                #self.setToonCondition(toon.doId, 'snappedtarget', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
             elif atkInfo['name'] == 'LitigatorSnap':
@@ -4703,10 +4697,8 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                 if currentBossHealth >= 1:
                     self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
-                    #self.setToonCondition(toon.doId, 'snappedtarget', 1, 2, 'setBoth')
                 else:
                     self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
-                    #self.setToonCondition(toon.doId, 'snappedtarget', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
             elif atkInfo['name'] == 'LitigatorBayouBellow':
                 result = 0

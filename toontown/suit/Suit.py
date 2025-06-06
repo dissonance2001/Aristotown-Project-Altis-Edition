@@ -3260,10 +3260,10 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'cc':
             self.scale = 3.5 / cSize
-            self.handColor = VBase4(0.039, 0.09, 0.702, 1)
+            self.handColor = VBase4(0, 0.024, 0.941, 1)
             self.generateBody()
             self.generateHead2('coldcaller')
-            texture = loader.loadTexture('phase_3.5/maps/coldcaller.jpg')
+            texture = loader.loadTexture('phase_3.5/maps/tutorial_suits_palette_3cmla_69.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(4.63)
