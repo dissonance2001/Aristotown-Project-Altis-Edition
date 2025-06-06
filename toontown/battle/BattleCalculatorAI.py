@@ -3174,42 +3174,10 @@ class BattleCalculatorAI:
         atkType = attack[SUIT_ATK_COL]
         theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
         atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
-        if self.__suitAtkAffectsGroup(attack):
-            toonCount = len(self.battle.activeToons)
-        else:
-            toonCount = min(len(self.battle.activeToons),
-                            2 if atkInfo['group'] == SuitBattleGlobals.ATK_TGT_DOUBLE else 1)
+        toonCount = len(self.battle.activeToons)
         suitId = attack[SUIT_ID_COL]
-        for i in xrange(0, toonCount):
-            if suitId in self.SuitAttackers and random.randint(0, 99) < 75:
-                totalDamage = 0
-                for currToon in self.SuitAttackers[suitId].keys():
-                    totalDamage += self.SuitAttackers[suitId][currToon]
-
-                dmgs = []
-                for currToon in self.SuitAttackers[suitId].keys():
-                    dmgs.append(self.SuitAttackers[suitId][currToon] / totalDamage * 100)
-
-                dmgIdx = SuitBattleGlobals.pickFromFreqList(dmgs)
-                if dmgIdx == None:
-                    toonId = self.__pickRandomToon(suitId)
-                else:
-                    toonId = self.SuitAttackers[suitId].keys()[dmgIdx]
-                if toonId == -1 or toonId not in self.battle.activeToons:
-                    continue
-                self.notify.debug('Suit attacking back at toon ' + str(toonId))
-                chosen = self.__pickRandomToon(suitId)
-            else:
-                chosen = self.__pickRandomToon(suitId)
-            # If for some reason the Toon has already been chosen, pick a completely random Toon.
-           # if not atkInfo['name'] == 'PowerhouseSnipeVulnerable' and not atkInfo[
-            #                                                                  'name'] == 'PowerhouseSnipeGagBan' and not \
-           # atkInfo['name'] == 'PowerhouseSnipeBookkept' \
-                   # and not atkInfo['name'] == 'PowerhouseSnipeMulligan' and not atkInfo[
-                                                                                  #   'name'] == 'PowerhouseSnipeCollectCall':
-               # while chosen in targets:
-                   # chosen = self.__pickRandomToon(suitId)
-            targets.append(chosen)
+        chosen = self.__pickRandomToon(suitId)
+        targets.append(chosen)
 
         return targets
 
@@ -6138,10 +6106,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 24  # Court Record Retaliation
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'banned'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6172,10 +6137,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 44  # Legally Bound
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'bound'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6205,10 +6167,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 45  # Court Record Ban Retaliation
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'banned2'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6239,10 +6198,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 12  # Snipe Retaliation For Gag Bans
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'banned') or selftoonHasCondition(t, 'banned2'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6273,10 +6229,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 11  # Bookkeeping Retaliation
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'bookkeepingtoon'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6307,10 +6260,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 7  # Collect Call Fees
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'bound'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6340,10 +6290,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 24  # Budget Cuts Gag Ban Retaliation
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'banned') or self.toonHasCondition(t, 'banned2'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]

@@ -6501,9 +6501,9 @@ class Suit(Avatar.Avatar):
 
     def __pulsePurple(self, task):
         if not self.virtual:
-            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(0.702, 0, 1, 1),
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(0.992, 0.227, 1, 1),
                                    blendType='easeInOut'))
-            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(0.702, 0, 1, 1),
+            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(0.992, 0.227, 1, 1),
                                    blendType='easeInOut'))
             self.interval.start()
             self.glowInterval.start()

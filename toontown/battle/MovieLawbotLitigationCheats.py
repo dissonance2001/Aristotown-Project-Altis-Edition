@@ -1672,7 +1672,7 @@ def doBayouBash(attack):
     name = attack['id']
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack2 = Sequence(MovieUtil.createSuitSnapInterval(suit), Func(suit.setNeutralAnimation))
     suitTrack2.append(Wait(1.25))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)

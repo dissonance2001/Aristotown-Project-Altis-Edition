@@ -1730,7 +1730,7 @@ def doCollectCall(attack):
 def doBrokenConnection(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(2.0))
     makeImmune = Func(suit.makeVulnerable)
     makeImmune2 = Func(suit.makeNonImmortal)
@@ -1742,7 +1742,7 @@ def doVoicemail(attack):
     battle = attack['battle']
     phone = globalPropPool.getProp('phone')
     receiver = globalPropPool.getProp('receiver')
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     suitName = suit.getStyleName()
     phonePosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
     receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
@@ -1816,7 +1816,7 @@ def doWiretapped(attack):
 def doManagerialProtectionImmunity(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     notifyTrack = Func(suit.showHpTextWhite, 'IMMUNE!')
     makeImmune = Func(suit.makeImmortal)
     makeUnVulnerable = Func(suit.makeUnVulnerable)
@@ -1825,7 +1825,7 @@ def doManagerialProtectionImmunity(attack):
 
 def doManagerialProtection(attack):
     suit = attack['suit']
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(2.0))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     return Parallel(suitTrack, soundTrack)
@@ -1908,8 +1908,7 @@ def doRefinement(attack):
     explosionTrack = Sequence()
     explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
     name = attack['id']
-    suitTrackAnim = Sequence(Func(theSuit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
-                         ActorInterval(theSuit, 'throw-object', playRate=1.5))
+    suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack1 = getSoundTrack('SA_repair.ogg', delay=2.5, node=theSuit)
     soundTrack2 = getSoundTrack('SA_refinement.ogg', delay=2, node=theSuit)
     multiTrack = Parallel(soundTrack1, soundTrack2)
@@ -1921,7 +1920,7 @@ def doHeadRoller(attack, ind):
     battle = attack['battle']
     targetSuit = battle.activeSuits[ind]
 
-    managerTrack = Sequence(getSuitTrack(attack))
+    managerTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack = Sequence(Wait(1.0), ActorInterval(targetSuit, 'soak', duration=2.25), Sequence(MovieUtil.spawnHeadExplosion(targetSuit, battle)), Func(targetSuit.setChatAbsolute,
                                                        "Ouch.",
                                                        CFSpeech | CFTimeout), Wait(1.0), MovieUtil.createSuitHeadlessDeathTrack(targetSuit, battle))
@@ -2022,7 +2021,7 @@ def doMulligan(attack):
 
 def doAmbassadorDamageUpDesperation(attack):
     suit = attack['suit']
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0, node=suit)
     makeImmune = Func(suit.makeDamageUp)
     managerHealTrack = Sequence(Wait(2), Func(suit.showHpTextCheat, + 250), Func(suit.showHpString, "1.25x DMG MULTIPLIER!"), Func(suit.setHealthForMe, + 250), Func(suit.updateHealthBar, 0))
@@ -2030,7 +2029,7 @@ def doAmbassadorDamageUpDesperation(attack):
 
 def doAmbassadorDamageUp(attack):
     suit = attack['suit']
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0, node=suit)
     makeImmune = Func(suit.makeDamageUp)
     managerHealTrack = Sequence(Wait(2), Func(suit.showHpTextCheat, + 100), Func(suit.showHpString, "1.1x DMG MULTIPLIER!"), Func(suit.setHealthForMe, + 100), Func(suit.updateHealthBar, 0))
@@ -2161,7 +2160,7 @@ def doWiretapperGagBan(attack):
 
 def doBookkeeping(attack):
     suit = attack['suit']
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack)
 
@@ -2182,7 +2181,7 @@ def doSoakImmune(attack):
     makeUnShielding = Func(suit.makeUnSyphon)
     makeUnShielding2 = Func(suit.makeUnShielding)
     makeUnShielding3 = Func(suit.makeUnLureImmune)
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(3.0))
     suitTrack2 = Sequence(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.setNeutralAnimation))
     return Parallel(suitTrack, makeShielding, makeUnShielding2, suitTrack2, makeUnShielding3, makeUnShielding)
@@ -2193,7 +2192,7 @@ def doSyphon(attack):
     makeUnShielding = Func(suit.makeSyphon)
     makeUnShielding2 = Func(suit.makeUnShielding)
     makeUnShielding3 = Func(suit.makeUnLureImmune)
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     suitTrack.append(Wait(3.0))
     return Parallel(suitTrack, makeShielding, makeUnShielding3, makeUnShielding2, makeUnShielding)
 
@@ -2221,7 +2220,7 @@ def doLureImmune(attack):
     makeUnShielding = Func(suit.makeUnSyphon)
     makeUnShielding2 = Func(suit.makeUnShielding)
     makeUnShielding3 = Func(suit.makeLureImmune)
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(3.0))
     suitTrack2 = Sequence(ActorInterval(attack['suit'], 'rake-react'), Func(suit.setNeutralAnimation))
     return Parallel(suitTrack, suitTrack2, makeShielding, makeUnShielding2, makeUnShielding3, makeUnShielding)
