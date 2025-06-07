@@ -58,17 +58,17 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
          (3, 4, 5, 6, 7), [], 0],
         [ToontownGlobals.WalrusWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (65, 5, 0, 0, 20, 10, 0),
          (6, 7, 8, 9, 10), [], 0],
-        [ToontownGlobals.SleetStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 0, 30, 40, 10, 10, 10),
+        [ToontownGlobals.SleetStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 10, 10, 20, 10, 10, 30),
          (6, 7, 8, 9), [], 0],
         [ToontownGlobals.PolarPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 70, 5, 5, 5, 5, 5),
          (6, 7, 8, 9, 10, 11), [], 0],
-        [ToontownGlobals.ArcticAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 5, 5, 10, 60, 10, 0),
+        [ToontownGlobals.ArcticAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 5, 5, 10, 30, 10, 30),
          (7, 8, 9, 10, 11, 12), [], 0],
         [ToontownGlobals.AltoAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 25, 50, 15, 5, 5),
          (5, 6, 7, 8, 9), [], 0],
-        [ToontownGlobals.BaritoneBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 0, 40, 10, 45, 5, 0),
+        [ToontownGlobals.BaritoneBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 0, 20, 10, 45, 5, 20),
          (5, 6, 7, 8, 9, 10), [], 0],
-        [ToontownGlobals.TenorTerrace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 40, 0, 0, 10, 5, 5),
+        [ToontownGlobals.TenorTerrace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (30, 30, 0, 0, 10, 5, 25),
          (5, 6, 7, 8, 9, 10), [], 0],
         [ToontownGlobals.SopranoStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(5, 5, 70, 5, 5, 5, 5),
          (5, 6, 7, 8, 9, 10, 11), [], 0],
@@ -78,17 +78,17 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
          (3, 4, 5, 6, 7), [], 0],
         [ToontownGlobals.OakStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(5, 5, 5, 70, 5, 10, 0),
          (3, 4, 5, 6, 7, 8), [], 0],
-        [ToontownGlobals.RoseValley, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 10, 20, 10, 10, 5, 5),
+        [ToontownGlobals.RoseValley, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 10, 20, 10, 10, 5, 25),
          (3, 4, 5, 6, 7), [], 0],
         [ToontownGlobals.AcornAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 10, 10, 20, 30, 10, 10),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.PeanutPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 20, 30, 30, 10, 5, 5),
+        [ToontownGlobals.PeanutPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 20, 20, 20, 10, 5, 25),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
         [ToontownGlobals.WalnutWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),  (70, 5, 5, 5, 5, 5, 5),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
         [ToontownGlobals.LegumeLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),  (20, 10, 35, 0, 0, 5, 30),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.KnightKnoll, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (65, 5, 0, 0, 20, 10, 0),
+        [ToontownGlobals.KnightKnoll, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 10, 10, 10, 20, 20, 20),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
         [ToontownGlobals.NobleNook,8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),  (10, 10, 10, 20, 30, 10, 10),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
@@ -494,11 +494,11 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             self.numBuildingSuits += 1
         if newSuit.attemptingTakeover:
             if newSuit.dna.dept == 't':
-                self.numAttemptingTakeover = 0
+                self.numAttemptingTakeover += 0
             elif newSuit.dna.dept == 'p':
-                self.numAttemptingTakeover = 0
+                self.numAttemptingTakeover += 0
             elif newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
-                self.numAttemptingTakeover = 0
+                self.numAttemptingTakeover += 0
             else:
                 self.numAttemptingTakeover += 1
         return newSuit

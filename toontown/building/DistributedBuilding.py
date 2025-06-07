@@ -311,7 +311,8 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         if self.mode == 'suit':
             self.cab = self.elevatorModel.find('**/elevator')
             cogIcons = loader.loadModel('phase_3/models/gui/cog_icons')
-            cogIcons2 = loader.loadModel('phase_3.5/models/gui/cog_icons')
+            cogIcons2 = loader.loadModel('phase_3/models/gui/cog_icons')
+            cogIcons3 = loader.loadModel('phase_3/models/gui/cog_icons')
             dept = chr(self.track)
             if dept == 'c':
                 corpIcon = cogIcons.find('**/CorpIcon').copyTo(self.cab)
@@ -324,9 +325,13 @@ class DistributedBuilding(DistributedObject.DistributedObject):
             elif dept == 'g':
                 corpIcon = cogIcons.find('**/BoardIcon').copyTo(self.cab)
             elif dept == 't':
-                corpIcon = cogIcons2.find('**/emblem_board').copyTo(self.cab)
+                corpIcon = cogIcons.find('**/BoardIcon').copyTo(self.cab)
+                texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette2.png')
+                corpIcon.setTexture(texture, 1)
             elif dept == 'p':
-                corpIcon = cogIcons2.find('**/emblem_board').copyTo(self.cab)
+                corpIcon = cogIcons.find('**/BoardIcon').copyTo(self.cab)
+                texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette3.png')
+                corpIcon.setTexture(texture, 1)
             corpIcon.setPos(0, 6.79, 6.8)
             corpIcon.setScale(3)
             from toontown.suit import Suit
@@ -440,8 +445,8 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         # if the suit node path is not in the dna store, dont setup
         # the building specified
         if not suitNP:
-            self.notify.warning("Suit NP could not be found for building!")
-            return
+           self.notify.warning("Suit NP could not be found for building!")
+           return
 
         zoneId = dnaStore.getZoneFromBlockNumber(self.block)
         zoneId = ZoneUtil.getTrueZoneId(zoneId, self.interiorZoneId)
