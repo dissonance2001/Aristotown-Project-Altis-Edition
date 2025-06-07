@@ -124,16 +124,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.glasses = (0, 0, 0)
         self.backpack = (0, 0, 0)
         self.shoes = (0, 0, 0)
-        self.cogTypes = [0, 0, 0, 0, 0, 0]
-        self.cogLevels = [0, 0, 0, 0, 0, 0]
-        self.cogReviveLevels = [0, 0, 0, 0, 0, 0]
-        self.cogParts = [0, 0, 0, 0, 0, 0]
-        self.cogRadar = [0, 0, 0, 0, 0, 0]
+        self.cogTypes = [0, 0, 0, 0, 0, 0, 0]
+        self.cogLevels = [0, 0, 0, 0, 0, 0, 0]
+        self.cogReviveLevels = [0, 0, 0, 0, 0, 0, 0]
+        self.cogParts = [0, 0, 0, 0, 0, 0, 0]
+        self.cogRadar = [0, 0, 0, 0, 0, 0, 0]
         self.trackBonusLevel = [0] * 9
         self.cogIndex = -1
         self.disguisePageFlag = 0
         self.sosPageFlag = 0
-        self.buildingRadar = [0, 0, 0, 0, 0, 0]
+        self.buildingRadar = [0, 0, 0, 0, 0, 0, 0]
         self.fishingRod = 0
         self.fishingTrophies = []
         self.trackArray = []
@@ -203,7 +203,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self._dbCheckDoLater = None
         self.teleportOverride = 0
         self._gmDisabled = False
-        self.promotionStatus = [0, 0, 0, 0, 0, 0]
+        self.promotionStatus = [0, 0, 0, 0, 0, 0, 0]
         self.magicWordTeleportRequests = []
         self.buffs = []
         self.stats = [0] * ToontownGlobals.TOTAL_STATS
@@ -1212,6 +1212,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
              0,
              0,
              0,
+             0,
              0]
         else:
             self.cogRadar = radar
@@ -1230,6 +1231,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not radar:
             self.notify.warning('buildingRadar set to bad value: %s. Resetting to [0,0,0,0,0]' % radar)
             self.buildingRadar = [0,
+             0,
              0,
              0,
              0,
@@ -1256,6 +1258,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
              0,
              0,
              0,
+             0,
              0]
         else:
             self.cogTypes = types
@@ -1274,6 +1277,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not levels:
             self.notify.warning('cogLevels set to bad value: %s. Resetting to [0,0,0,0,0]' % levels)
             self.cogLevels = [0,
+             0,
              0,
              0,
              0,
@@ -1336,6 +1340,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not levels:
             self.notify.warning('cogLevels set to bad value: %s. Resetting to [0,0,0,0,0]' % levels)
             self.cogReviveLevels = [0,
+             0,
              0,
              0,
              0,
@@ -1408,6 +1413,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
              0,
              0,
              0,
+             0,
              0]
         else:
             self.cogParts = parts
@@ -1471,6 +1477,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if not merits:
             self.notify.warning('cogMerits set to bad value: %s. Resetting to [0,0,0,0,0]' % merits)
             self.cogMerits = [0,
+             0,
              0,
              0,
              0,

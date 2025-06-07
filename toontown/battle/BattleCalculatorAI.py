@@ -5812,7 +5812,7 @@ class BattleCalculatorAI:
                         for s in self.battle.suits:
                             if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'scg':
                                 currentBossHealth = s.currHP
-                        if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                        if currentBossHealth == -1 and not self.suitHasCondition(suitId, 'desperation'):
                             self.setSuitCondition(suitId, 'desperation', 1, 100, 'setBoth')
                         if x % 3 == 0 and not self.suitHasCondition(suitId, 'desperation'):
                             self.setSuitCondition(suitId, 'insurancecalculator', 1, 10, 'setBoth')

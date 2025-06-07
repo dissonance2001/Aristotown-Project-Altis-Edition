@@ -2166,30 +2166,35 @@ Cashbot = 'Cashbot'
 Sellbot = 'Sellbot'
 Boardbot = 'Boardbot'
 Techbot = 'Techbot'
+Pressbot = 'Pressbot'
 BossbotS = 'a Bossbot'
 LawbotS = 'a Lawbot'
 CashbotS = 'a Cashbot'
 SellbotS = 'a Sellbot'
 BoardbotS = 'a Boardbot'
 TechbosS = 'a Techbot'
+PressbotS = 'a Pressbot'
 BossbotP = 'Bossbots'
 LawbotP = 'Lawbots'
 CashbotP = 'Cashbots'
 SellbotP = 'Sellbots'
 BoardbotP = 'Boardbots'
 TechbotP = 'Techbots'
+PressbotP = 'Pressbots'
 BossbotSkelS = 'a Bossbot Skelecog'
 LawbotSkelS = 'a Lawbot Skelecog'
 CashbotSkelS = 'a Cashbot Skelecog'
 SellbotSkelS = 'a Sellbot Skelecog'
 BoardbotSkelS = 'a Boardbot Skelecog'
 TechbotSkelS = 'a Techbot Skelecog'
+PressbotSkelS = 'a Pressbot Skelecog'
 BossbotSkelP = 'Bossbot Skelecogs'
 LawbotSkelP = 'Lawbot Skelecogs'
 CashbotSkelP = 'Cashbot Skelecogs'
 SellbotSkelP = 'Sellbot Skelecogs'
 BoardbotSkelP = 'Boardbot Skelecogs'
 TechbotSkelP = 'Techbot Skelecogs'
+PressbotSkelP = 'Pressbot Skelecogs'
 SuitBaseNameWithLevelExe = '%(name)s\n%(dept)s\nLevel %(level)s.exe'
 SuitBaseNameWithLevelMgr = '%(name)s\n%(dept)s\nLevel %(level)s.mgr'
 SuitBaseNameWithLevelGov = '%(name)s\n%(dept)s\nLevel %(level)s.gov'
@@ -2579,7 +2584,8 @@ RewardPanelMeritBarLabels = ['Stock Options',
  'Cogbucks',
  'Invoices',
  'Shares',
- 'Subscriptions']
+ 'Subscriptions',
+ 'Merits']
 RewardPanelMeritAlert = 'Ready for promotion!'
 RewardPanelCogPart = 'You gained a Cog disguise part!'
 RewardPanelPromotion = 'Ready for promotion in %s  track!'
@@ -2980,14 +2986,171 @@ SuitFaceoffTaunts = {'b': ['Do you have a donation for me?',
 		"Civil discussions? What are those?"
 	],
 'shp': [
-		"This will be easy - I know my way around things.",
-		"My proficiency with tech is magical.",
-		"I spell DEFEAT.",
-		"I'm going to put you in a cast.",
-		"You're not ready for what I'm conjuring.",
-		"This next script will be enchanting.",
-		"Prepare for your last duel, Toon.",
-		"The Mages Guild knows all about you, Toon."
+		"Toons like you have no chance against my security precautions.",
+		"Your defenses look easily exploitable.",
+		"It seems like I've identified a vulnerability for removal - YOU!",
+		"Your code has some flaws in it.",
+		"As we speak, I am cracking into your system.",
+		"Looks like you have some cracks in your firewall.",
+		"Hats off Toon, this is serious business.",
+		"I can be a real mad hatter."
+	],
+'ppb': [
+		"I'll be delivering you a swift defeat.",
+		"Extra! Extra! Toon loses yet another battle!",
+		"I specialize in the delivery of news and Toon defeating.",
+		"The newspaper your defeat is printed on will be 100% recyclable.",
+		"News delivery and your defeat are regularly scheduled.",
+		"I just finished my shift, but I can still deliver your defeat.",
+		"There's a big shipment of sadness coming your way.",
+		"You're no match Toon. Dogs are afraid of THIS paperboy.",
+		"Sad news delivered straight to you. Only one small payment of all your gags!",
+		"You better watch out, Toon. I've got a good aim with newspapers.",
+		"This is no laughing matter.",
+		"I'm going to give you the business."
+	],
+'shb': [
+		"Shall I document this moment of sadness, toon?",
+		"It'll all flash before your eyes very quickly.",
+		"You'll be sad faster than the flash of my camera.",
+		"It looks like a bad hair day for you, toon.",
+		"I'll make you shutter in fear.",
+		"Your defeat will make for a great photo opportunity.",
+		"The cogs will love a photo of you going sad.",
+		"Photographers usually don't interfere, but this opportunity is MUCH too easy!",
+		"Say 'Sadness!'",
+		"Stop slouching. You'll get to slouch plenty once we're finished."
+	],
+'gms': [
+		"Time to investigate your weaknesses, Toon.",
+		"The only real fact is that you'll be defeated.",
+		"You'll have to do some deep digging to defeat me.",
+		"It's no secret that you're going to lose, Toon.",
+		"I'll be bringing your secrets into the public eye.",
+		"Your weaknesses will be a great write-up.",
+		"Spare a moment to answer a few questions?",
+		"Reports indicate this won't be a favourable result.",
+		"Glad you bumped into me. I needed something to investigate.",
+		"My discovery of your sadness will be breaking news!"
+	],
+'hck':[
+		"My report on you being a hack is nearly complete.",
+		"Will you enjoy your losses being publicized?",
+		"'Toon defeated ruthlessly' will be my next big headline.",
+		"Journalism moves fast, just like your defeat will be",
+		"I'm eyeing your defeat to be my next big break.",
+		"It's improper etiquette to attack a journalist, Toon.",
+		"You better give me a good fight. I'm itching for a good story.",
+		"This better be good. I'm this close to finishing my magnum opus.",
+		"The deadline for your sadness report is coming up.",
+		"Any final statements before I publish your defeat?"
+	],
+'ghw': [
+		"'I will lose.' Your words, not mine.",
+		"It's no secret that you'll be on the losing end today.",
+		"You're not aware of what I'm capable of.",
+		"Anchor Man sends his regards - through me.",
+		"Afraid of ghosts, Toon?",
+		"Coming face to face with a ghost is no laughing matter.",
+		"I'll be the one writing your final words, Toon.",
+		"The writing of your defeat is on the wall.",
+		"I may be just a writer, but my words are way stronger than you may think.",
+		"I have a few words in mind for you, Toon."
+	],
+'gzt': [
+		"Oh deer. I hope you're not another Toon looking for a story.",
+		"Defeating Toons like you make for an easy headline.",
+		"Mess with my writings and you'll get the horns.",
+		"I'll let you gaze upon the headline of your defeat.",
+		"Let me recite you a story. Would you prefer the antlers or the hooves?",
+		"I shouldn't waste my time on such an uninteresting source of news.",
+		"My sources say you'll be no match for me.",
+		"The reports are in, and they're not favorable for you.",
+		"Thinking you'll defeat me is fake news, Toon.",
+		"I'll be your source of sadness today."
+	],
+'nsh': [
+		"You smell of nothing but bad news, Toon.",
+		"My pawprints will be all over the reports of your defeat, Toon.",
+		"Your presence is making my ears itch. Wait - scratch that report.",
+		"You'll just be another line stacked inside my report when we're finished.",
+		"I'm sure you'll find this breaking news to be quite ruff.",
+		"You're barking at the wrong source of news, toon.",
+		"Sniffing out bad sources is my job, and you're one of them.",
+		"Play dead, it'll make for some lighthearted news.",
+		"I only sit, shake and speak to reputable sources.",
+		"I'm going to keep this battle on a short leash."
+	],
+'anc': [
+		"Good news: I'll be defeating you. Bad news: you'll be defeated.",
+		"Breaking news! You're going to be defeated.",
+		"I'm Anchor Man, and welcome to your daily Toon beatdown.",
+		"This just in - Toon goes WAY over their head trying to battle me.",
+		"Why look at that, it's time for me to give you a Toon-o'clock news report!",
+		"It is with a heavy heart that I report on the news of your defeat.",
+		"We interrupt your program to bring a wave of sadness.",
+		"The tragic story of your defeat is the top story of the night.",
+		"Ghost Writer sends his regards.",
+		"My teleprompter is only showing me images of your defeat."
+	],
+'bsd': [
+		"I suggest you turn around.",
+		"How about we go forward with this?",
+		"Perhaps the way is backwards?",
+		"TURN!",
+		"I think the nagivation brought you to the wrong place.",
+		"You can call me Carlos.",
+		"Careful, I'm the one driving now.",
+		"Look at you. You are driving for defeat!",
+		"I'm going to keep your eyes on the road.",
+		"Careful, I leave quite the skidmark."
+	],
+'fpn': [
+		"My time in the shadows is over.",
+"I'm the one who pulls the strings.",
+"Prepare for a ghastly defeat.",
+"The specter of defeat looms over you.",
+"I'll be sure to write you an epitaph.",
+"You'll find I have a lot of spirit.",
+"You're in grave trouble."
+	],
+'sbg': [
+		"I take you with a grain of sand.",
+		"I plan on going out of the ordinary.",
+		"Don't worry, I'm new at this.",
+		"You won't expect much out of me.",
+		"You should know, I always achieve expectations.",
+		"You know, I bake a mean BAGuette.",
+		"My sands are very soft.",
+		"I sell a great peanut butter & jelly sandwich.",
+		"You're quite the punching bag.",
+		"Family or party size?"
+	],
+'bbr': [
+		"An apple a day won't keep me away.",
+"You're going to need a bigger boat.",
+"I don't need a stethoscope to hear your heart pounding.",
+"Step into my office.",
+"You're in deep waters now, Toon."
+	],
+'wnk': [
+		"I am about to give you the worst knight of your life.",
+		"Whether you like it or not, your knight is about to be turned around.",
+		"Today, YOU will be working the knight shift.",
+		"I hope you are prepared -- I can go at it for a fortknight.",
+		"Ready or not, your knightmares have arrived.",
+		"My friend, this will be a knight to remember.",
+		"I wish you a 'good' knight.",
+		"Careful, I am a part of the knight-wing.",
+		"I just acquired 'Saturday Knight Live'. The next joke will be - YOU!",
+		"You are not getting the knight off under my watch!"
+	],
+'std': [
+		"Mr. Hollywood is busy. You'll have to answer to me.",
+"The director will surely notice this stunt.",
+"Let's get this over with, I've got a big scene to shoot.",
+"Beating you will get me a leading role.",
+"Time for an action shot!"
 	],
 'phs': [
 		"According to my data, this will be easy.",
@@ -3435,16 +3598,13 @@ SuitFaceoffTaunts = {'b': ['Do you have a donation for me?',
         'You may want to double up against me.',
         'Doubles anyone??'],
                      'ym': [
-		"Time to investigate your weaknesses, Toon.",
-		"The only real fact is that you'll be defeated.",
-		"You'll have to do some deep digging to defeat me.",
-		"It's no secret that you're going to lose, Toon.",
-		"I'll be bringing your secrets into the public eye.",
-		"Your weaknesses will be a great write-up.",
-		"Spare a moment to answer a few questions?",
-		"Reports indicate this won't be a favourable result.",
-		"Glad you bumped into me. I needed something to investigate.",
-		"My discovery of your sadness will be breaking news!"
+		"They call me Stooge - but I'm real huge.",
+		"I might use you to climb up the corporate ladder.",
+		"The boss sent me after you!",
+		"Between you and me, you are the bigger joke.",
+		"It is my duty to eliminate you.",
+		"Soup or Salad?",
+		"I always complete the hard work."
 	],
                      'isw': ["Pucker up, Toon.",
 "Aren't you just darling?",

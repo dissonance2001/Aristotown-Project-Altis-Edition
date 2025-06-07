@@ -38,77 +38,77 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     CogdoPopFactor = config.GetFloat('cogdo-pop-factor', 1.5)
     CogdoRatio = 0
     SuitHoodInfo = [
-        [ToontownGlobals.ToontownCentralOld, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (30, 30, 0, 0, 20, 20),
+        [ToontownGlobals.ToontownCentralOld, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (30, 20, 0, 0, 20, 20, 10),
          (1, 2, 3, 4, 5), [], 0],
-        [ToontownGlobals.SillyStreet, 8, 20, 0, 5, 20, 3, (1, 5, 10, 40, 60, 80), (20, 20, 15, 15, 15, 15),
+        [ToontownGlobals.SillyStreet, 8, 20, 0, 5, 20, 3, (1, 5, 10, 40, 60, 80), (10, 15, 15, 15, 15, 15, 15),
          (1, 2, 3, 4, 5), [], 0],
-        [ToontownGlobals.LoopyLane, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 40, 5, 5, 10, 10), (1, 2, 3, 4, 5),
+        [ToontownGlobals.LoopyLane, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 40, 5, 5, 10, 5, 5), (1, 2, 3, 4, 5),
          [], 0],
-        [ToontownGlobals.PunchlinePlace, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (5, 5, 30, 30, 10, 20),
+        [ToontownGlobals.PunchlinePlace, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (5, 5, 30, 30, 10, 10, 10),
          (1, 2, 3, 4, 5), [], 0],
-        [ToontownGlobals.WackyWay, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 20, 5, 5, 20, 20),
+        [ToontownGlobals.WackyWay, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 20, 5, 5, 20, 10, 10),
          (1, 2, 3, 4, 5, 6), [], 0],
-        [ToontownGlobals.BarnacleBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (70, 10, 0, 0, 10, 10),
+        [ToontownGlobals.BarnacleBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (70, 10, 0, 0, 10, 10, 0),
          (2, 3, 4, 5, 6), [], 0],
-        [ToontownGlobals.SeaweedStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 10, 50, 30, 0, 10),
+        [ToontownGlobals.SeaweedStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 10, 50, 30, 0, 10, 0),
          (2, 3, 4, 5, 6), [], 0],
-        [ToontownGlobals.LighthouseLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 40, 10, 10, 30, 0),
+        [ToontownGlobals.LighthouseLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 40, 10, 10, 30, 0, 0),
          (2, 3, 4, 5, 6), [], 0],
-        [ToontownGlobals.AhoyAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 0, 0, 40, 10, 10),
+        [ToontownGlobals.AhoyAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(40, 0, 0, 30, 10, 10, 10),
          (3, 4, 5, 6, 7), [], 0],
-        [ToontownGlobals.WalrusWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (65, 5, 0, 0, 20, 10),
+        [ToontownGlobals.WalrusWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (65, 5, 0, 0, 20, 10, 0),
          (6, 7, 8, 9, 10), [], 0],
-        [ToontownGlobals.SleetStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 30, 40, 10, 20),
+        [ToontownGlobals.SleetStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 0, 30, 40, 10, 10, 10),
          (6, 7, 8, 9), [], 0],
-        [ToontownGlobals.PolarPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 75, 5, 5, 5, 5),
+        [ToontownGlobals.PolarPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 70, 5, 5, 5, 5, 5),
          (6, 7, 8, 9, 10, 11), [], 0],
-        [ToontownGlobals.ArcticAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 5, 5, 10, 60, 10),
+        [ToontownGlobals.ArcticAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 5, 5, 10, 60, 10, 0),
          (7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.AltoAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 25, 50, 20, 5),
+        [ToontownGlobals.AltoAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 25, 50, 15, 5, 5),
          (5, 6, 7, 8, 9), [], 0],
-        [ToontownGlobals.BaritoneBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 40, 10, 45, 5),
+        [ToontownGlobals.BaritoneBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 0, 40, 10, 45, 5, 0),
          (5, 6, 7, 8, 9, 10), [], 0],
-        [ToontownGlobals.TenorTerrace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 40, 0, 0, 10, 10),
+        [ToontownGlobals.TenorTerrace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 40, 0, 0, 10, 5, 5),
          (5, 6, 7, 8, 9, 10), [], 0],
-        [ToontownGlobals.SopranoStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 75, 5, 5, 5),
+        [ToontownGlobals.SopranoStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(5, 5, 70, 5, 5, 5, 5),
          (5, 6, 7, 8, 9, 10, 11), [], 0],
-        [ToontownGlobals.ElmStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 40, 10, 10, 30),
+        [ToontownGlobals.ElmStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 40, 10, 10, 30, 0),
          (3, 4, 5, 6, 7), [], 0],
-        [ToontownGlobals.MapleStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (30, 50, 0, 0, 10, 10),
+        [ToontownGlobals.MapleStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(30, 50, 0, 0, 10, 10, 0),
          (3, 4, 5, 6, 7), [], 0],
-        [ToontownGlobals.OakStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 5, 70, 5, 10),
+        [ToontownGlobals.OakStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(5, 5, 5, 70, 5, 10, 0),
          (3, 4, 5, 6, 7, 8), [], 0],
-        [ToontownGlobals.RoseValley, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 10, 20, 10, 10, 10),
+        [ToontownGlobals.RoseValley, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (40, 10, 20, 10, 10, 5, 5),
          (3, 4, 5, 6, 7), [], 0],
-        [ToontownGlobals.AcornAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 10, 10, 20, 40, 10),
+        [ToontownGlobals.AcornAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 10, 10, 20, 30, 10, 10),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.PeanutPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 20, 30, 30, 10, 10),
+        [ToontownGlobals.PeanutPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 20, 30, 30, 10, 5, 5),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.WalnutWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (75, 5, 5, 5, 5, 5),
+        [ToontownGlobals.WalnutWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),  (70, 5, 5, 5, 5, 5, 5),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.LegumeLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 40, 35, 0, 0, 5),
+        [ToontownGlobals.LegumeLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),  (20, 10, 35, 0, 0, 5, 30),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.KnightKnoll, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (75, 5, 5, 5, 5, 5),
+        [ToontownGlobals.KnightKnoll, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (65, 5, 0, 0, 20, 10, 0),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.NobleNook,8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (75, 5, 5, 5, 5, 5),
+        [ToontownGlobals.NobleNook,8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),  (10, 10, 10, 20, 30, 10, 10),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.WizardWay,8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (75, 5, 5, 5, 5, 5),
+        [ToontownGlobals.WizardWay,8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 70, 5, 5, 5, 5, 5),
          (6, 7, 8, 9, 10, 11, 12), [], 0],
-        [ToontownGlobals.LullabyLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 20, 20, 20, 15, 5),
+        [ToontownGlobals.LullabyLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 20, 20, 20, 10, 5, 5),
          (7, 8, 9, 10, 11, 12, 13, 14), [], 0],
-        [ToontownGlobals.PajamaPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 5, 5, 75, 5),
+        [ToontownGlobals.PajamaPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 5, 5, 70, 5, 5),
          (7, 8, 9, 10, 11, 12, 13, 14), [], 0],
-        [ToontownGlobals.BossbotHQ, 8, 30, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (100, 0, 0, 0, 0, 0),
+        [ToontownGlobals.BossbotHQ, 8, 30, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (100, 0, 0, 0, 0, 0, 0),
          (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
-        [ToontownGlobals.SellbotHQ, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 15, 20, 15, 15, 15),
+        [ToontownGlobals.SellbotHQ, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 15, 15, 15, 15, 15, 15),
          (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
-        [ToontownGlobals.SellbotFactoryExt, 8, 70, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 15, 20, 15, 15, 15),
+        [ToontownGlobals.SellbotFactoryExt, 8, 70, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 15, 15, 15, 15, 15, 15),
          (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
-        [ToontownGlobals.CashbotHQ, 8, 100, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 100, 0, 0, 10),
+        [ToontownGlobals.CashbotHQ, 8, 100, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 0, 100, 0, 0, 0, 0),
          (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
-        [ToontownGlobals.LawbotHQ, 8, 50, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 100, 0, 0, 0, 10),
+        [ToontownGlobals.LawbotHQ, 8, 50, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 100, 0, 0, 0, 0, 0),
          (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
-        [19000, 8, 20, 0, 0, 0, 4, (1, 5, 10, 40, 60, 80), (0, 0, 0, 0, 100, 0),
+        [19000, 8, 20, 0, 0, 0, 4, (1, 5, 10, 40, 60, 80), (0, 0, 0, 0, 100, 0, 0), # Boardbot HQ
          (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0]]
 
     SUIT_HOOD_INFO_ZONE = 0
@@ -151,6 +151,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         SuitPlannerBase.SuitPlannerBase.__init__(self)
         self.air = air
+        self.spawnMGRCogs('streetmgr_spawner')
+        taskMgr.doMethodLater(180, self.spawnMGRCogs, 'streetmgr_spawner')
         self.zoneId = zoneId
         self.canonicalZoneId = ZoneUtil.getCanonicalZoneId(zoneId)
 
@@ -264,6 +266,11 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 self.notify.debug('No front door for building %s in zone %s' % (blockNumber, self.zoneId))
             if blockNumber not in self.buildingSideDoors:
                 self.notify.debug('No side door for building %s in zone %s' % (blockNumber, self.zoneId))
+
+    def spawnMGRCogs(self, Task):
+        for manager in ToontownGlobals.streetMgrs2Zones:
+            if self.zoneId in ToontownGlobals.streetMgrs2Zones[manager]:
+                self.createNewSuit([], self.streetPointList, suitName=manager, suitLevel=ToontownGlobals.streetMgrs2Levels[manager])
 
     def countNumSuitsPerTrack(self, count):
         for suit in self.suitList:
@@ -486,7 +493,14 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if newSuit.buildingSuit:
             self.numBuildingSuits += 1
         if newSuit.attemptingTakeover:
-            self.numAttemptingTakeover += 1
+            if newSuit.dna.dept == 't':
+                self.numAttemptingTakeover = 0
+            elif newSuit.dna.dept == 'p':
+                self.numAttemptingTakeover = 0
+            elif newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
+                self.numAttemptingTakeover = 0
+            else:
+                self.numAttemptingTakeover += 1
         return newSuit
 
     def countNumNeededBuildings(self):
@@ -819,7 +833,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             'm': 0,
             's': 0,
             'g': 0,
-            't': 0
+            't': 0,
+            'p': 0
         }
         for sp in self.air.suitPlanners.values():
             sp.countNumBuildingsPerTrack(numPerTrack)
@@ -829,6 +844,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             numPerTrack['s'] += sp.pendingBuildingTracks.count('s')
             numPerTrack['g'] += sp.pendingBuildingTracks.count('g')
             numPerTrack['t'] += sp.pendingBuildingTracks.count('t')
+            numPerTrack['p'] += sp.pendingBuildingTracks.count('p')
         numPerHeight = {
             0: 0,
             1: 0,
@@ -905,6 +921,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                     totalWeightPerTrack[3] -= weight * tracks[3]
                     totalWeightPerTrack[4] -= weight * tracks[4]
                     totalWeightPerTrack[5] -= weight * tracks[5]
+                    totalWeightPerTrack[6] -= weight * tracks[6]
                     totalWeightPerHeight[0] -= weight * heights[0]
                     totalWeightPerHeight[1] -= weight * heights[1]
                     totalWeightPerHeight[2] -= weight * heights[2]
@@ -1132,7 +1149,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     def buildingListQuery(self):
         buildingDict = {}
         self.countNumBuildingsPerTrack(buildingDict)
-        buildingList = [0, 0, 0, 0, 0, 0]
+        buildingList = [0, 0, 0, 0, 0, 0, 0]
         for dept in SuitDNA.suitDepts:
             if dept in buildingDict:
                 buildingList[SuitDNA.suitDepts.index(dept)] = buildingDict[dept]

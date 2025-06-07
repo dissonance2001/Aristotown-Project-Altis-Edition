@@ -12969,7 +12969,7 @@ def doFilibuster(attack):
             sprayEffects4[i].reparentTo(suit)
             suit.headsUp(battle, toon.getPos(battle))
             sprayEffects4[i].wrtReparentTo(battle)
-            sprayTracks.append(getPartTrack(sprayEffects4[i], startDelay, durationDelay, [sprayEffects4[i], battle, 0]))
+            sprayTracks.append(getPartTrack(sprayEffects4[i], partDelay, partDuration, [sprayEffects4[i], battle, 0]))
 
     suit.setHpr(battle, origHpr)
     damageAnims = []

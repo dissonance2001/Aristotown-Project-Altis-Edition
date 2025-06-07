@@ -174,8 +174,40 @@ suitHeadTypes = ['f',
                  'dar',
                  'nhy',
                  'wrt',
-                 'auh']
-suitATypes = [
+                 'auh',
+                 'ppb',
+                 'shb',
+                 'bsd',
+                 'gms',
+                 'sbg',
+                 'hck',
+                 'fpn',
+                 'ghw',
+                 'bbr',
+                 'gzt',
+                 'wnk',
+                 'nsh',
+                 'std',
+                 'anc',
+                 'jls',
+                 'pbl',
+                 'pob',
+                 'pbs',
+                 'plb',
+                 'put',
+                 'prt',
+                 'pla',
+                 'plk',
+                 'plh',
+                 'plg',
+                 'plf',
+                 'pld',
+                 'pls']
+suitATypes = ['ghw',
+              'bbr',
+              'nsh',
+              'anc',
+              'pbl',
 'mm',
 'ds',
               'dot',
@@ -183,6 +215,19 @@ suitATypes = [
               'bkp',
               'kpn',
               'vpr',
+                 'pbl',
+                 'pob',
+                 'pbs',
+                 'plb',
+                 'put',
+                 'prt',
+                 'pla',
+                 'plk',
+                 'plh',
+                 'plg',
+                 'plf',
+                 'pld',
+                 'pls',
               'kyl',
               'sfs',
               'pyc',
@@ -276,7 +321,6 @@ suitATypes = [
               'bby',
     'gry',
     'm',
-    'shp',
               'dvk',
               'ghd',
               'cry',
@@ -291,10 +335,16 @@ suitBTypes = ['p',
               'tw',
               'nd',
               'bw',
+              'shp',
+              'ppb',
+              'fpn',
+              'wnk',
+              'jls',
               'bdb',
               'dvp',
               'mb',
               'ptr',
+              'hck',
               'kbc',
               'inw',
               'ant',
@@ -330,6 +380,10 @@ suitCTypes = ['f',
               'nar',
               'cm',
               'sdb',
+              'shb',
+              'gms',
+              'sbg',
+              'bsd',
               'bfh',
               'yuh',
               'ca',
@@ -361,20 +415,23 @@ suitCTypes = ['f',
               'cc',
               'nar',
               'fd']
-suitDepts = ['c', 'l', 'm', 's', 'g', 't']
+suitDepts = ['c', 'l', 'm', 's', 'g', 't', 'p']
 suitDeptFullnames = {'c': TTLocalizer.Bossbot,
  'l': TTLocalizer.Lawbot,
  'm': TTLocalizer.Cashbot,
  's': TTLocalizer.Sellbot,
  'g': TTLocalizer.Boardbot,
- 't': TTLocalizer.Techbot
+ 't': TTLocalizer.Techbot,
+ 'p': TTLocalizer.Pressbot
                      }
 suitDeptFullnamesP = {'c': TTLocalizer.BossbotP,
  'l': TTLocalizer.LawbotP,
  'm': TTLocalizer.CashbotP,
  's': TTLocalizer.SellbotP,
  'g': TTLocalizer.BoardbotP,
- 't': TTLocalizer.TechbotP}
+ 't': TTLocalizer.TechbotP,
+ 'p': TTLocalizer.PressbotP
+                      }
 suitDeptModelPaths = {'c': '**/CorpIcon',
  0: '**/CorpIcon',
  'l': '**/LegalIcon',
@@ -386,7 +443,9 @@ suitDeptModelPaths = {'c': '**/CorpIcon',
  'g': '**/BoardIcon',
  4: '**/BoardIcon',
  't': '**/BoardIcon',
-  5: '**/BoardIcon'
+  5: '**/BoardIcon',
+'p': '**/BoardIcon',
+ 6: '**/BoardIcon'
                       }
 corpPolyColor = VBase4(0.95, 0.75, 0.75, 1.0)
 legalPolyColor = VBase4(0.75, 0.75, 0.95, 1.0)
@@ -394,6 +453,7 @@ moneyPolyColor = VBase4(0.65, 0.95, 0.85, 1.0)
 salesPolyColor = VBase4(0.95, 0.75, 0.95, 1.0)
 boardPolyColor = VBase4(.45, 0.45, .45, 1.0)
 techPolyColor = VBase4(0.6, 0.48, 0.7, 1.0)
+pressPolyColor = VBase4(0.643, 0.51, 0.525, 1.0)
 suitsPerLevel = [1,
  1,
  1,
@@ -434,7 +494,7 @@ def getSuitBodyType(name):
     elif name in suitCTypes:
         return 'c'
     else:
-        print 'Unknown body type for suit name: ', name
+        return 'a'
 
     return
 
@@ -453,6 +513,8 @@ def getSuitDept(name):
         return suitDepts[4]
     elif index < suitsPerDept * 6:
         return suitDepts[5]
+    elif index < suitsPerDept * 7:
+        return suitDepts[6]
     else:
         print 'Unknown dept for suit name: ', name
 

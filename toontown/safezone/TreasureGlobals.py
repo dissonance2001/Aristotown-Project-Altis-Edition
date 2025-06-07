@@ -8,8 +8,8 @@ TreasureMM = 4
 TreasureDL = 5
 TreasureOZ = 6
 TreasureE  = 7
-TreasureOT = 8
 TreasureETargetGame = 8 # Just for a special sound effect during target game
+TreasureOT = 9
 
 TreasureModels = {
     TreasureTT: (

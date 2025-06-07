@@ -190,10 +190,7 @@ class TalkAssistant(DirectObject.DirectObject):
         words = text.split(' ')
         newwords = []
         for word in words:
-            if word == '' or base.whiteList.isWord(word):
-                newwords.append(word)
-            else:
-                newwords.append('\x01WLRed\x01' + word + '\x02')
+            newwords.append(word)
 
         newText = ' '.join(newwords)
         return newText

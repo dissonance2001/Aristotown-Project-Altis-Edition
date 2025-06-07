@@ -23,7 +23,7 @@ cpl - Corporate Raider Level 7-18
 kpn - The Big Cheese Level 8-25
 	
 	Operations Analysts:
-ym - Gumshoe Level 2-8
+ym - Stooge Level 2-8
 ds - Enforcer Level 3-9
 trb - The Molder Level 5-15
 
@@ -202,10 +202,10 @@ sft - Pacesetter Level 66.mgr
 prr - Videographer Level 90.mgr (broken)
 
 	Sellbot 'Litigation' Team:
-blr - Radiographer Level 28.mgr v2.0
-dvp - Liquidator (to be changed most likely) Level 32.mgr
-dsk - Union Buster Level 32.mgr v2.0
-ffm - Safe-ty Supervisor Level 38.mgr
+blr - Radiographer Level 28.mgr v2.0 (unfinished)
+dvp - Liquidator (to be changed most likely) Level 32.mgr (unfinished)
+dsk - Union Buster Level 32.mgr v2.0 (unfinished)
+ffm - Safe-ty Supervisor Level 38.mgr (unfinished)
 
 =============BOARDBOTS:===============
 	Regular Cogs:
@@ -249,17 +249,17 @@ jgd - NOTHING Level N/A.mgr
 bby - NOTHING Level N/A.mgr
 
 	Boardbot 'Litigation' Team:
-dvk - Dividend King Level 65.mgr
-otm - The Ottoman Level 75.mgr
-cry - Chainsaw Consultant Level 50.mgr
-tcm - The Chairman Level 100.mgr
+dvk - Dividend King Level 65.mgr (unfinished)
+otm - The Ottoman Level 75.mgr (unfinished)
+cry - Chainsaw Consultant Level 50.mgr (unfinished)
+tcm - The Chairman Level 100.mgr (unfinished)
 
 =============TECHBOTS:===============
 	Regular Cogs:
 skd- Script Kiddie Level 1-5
 cmk - Code Monkey Level 2-6
 vpr - Voodoo Programmer Level 3-7
-sdb - Sharp Seer Level 4-8 
+sdb - Shotgun Debugger Level 4-8 
 kbc - Keyboard Cowboy Level 5-12 
 sfs - Software Simian Level 6-15 
 inw - Installer Wizard Level 7-18 
@@ -267,11 +267,11 @@ rus - Root User Level 8-25
 
 	Operations Analysts:
 phs - Data Hoarder Level 2-8
-gry - Hackette Level 4-12
+gry - Keyboard Warrior Level 4-12
 
 	Field Specialists:
 kyl - Brainiac Level 3-9
-shp - Computer Wizard Level 5-15
+shp - Black Hat Level 5-15
 pyc - Python Charmer Level 6-15
 sys - Industry Titan Level 7-18
 
@@ -299,3 +299,36 @@ nhy - Security Supervisor Level 45.mgr (broken)
 wrt - Keylogger Level 45.mgr (broken)
 auh - Technocrat Level 50.mgr (broken)
 
+=============PRESSBOTS:===============
+ppb - Paper Boy Level 1-5
+shb - Shutterbug Level 2-6
+gms - Gumshoe Level 3-7
+hck - Hackette Level 4-8
+ghw - Ghost Writer Level 5-12
+gzt - Gazetteer Level 6-15
+nsh - News Hound Level 7-18
+anc - Anchor Man Level 8-20
+
+Operations Analysts:
+bsd - Backseat Driver Level 2-8
+fpn - Agonizing Author Level 4-12
+
+	Field Specialists:
+sbg - Sandbagger Level 3-9
+bbr - Doctor White Level 5-15
+wnk - White Knight Level 6-15
+std - Stunt Double Level 7-18
+
+	Nothing:
+pob - PLACEHOLDER Level N/A.mgr
+pbs - PLACEHOLDER Level N/A.mgr
+plb - PLACEHOLDER Level N/A.mgr
+put - PLACEHOLDER Level N/A.mgr
+prt - PLACEHOLDER Level N/A.mgr
+pla - PLACEHOLDER Level N/A.mgr
+plk - PLACEHOLDER Level N/A.mgr
+plh - PLACEHOLDER Level N/A.mgr
+plg - PLACEHOLDER Level N/A.mgr
+plf - PLACEHOLDER Level N/A.mgr
+pld - PLACEHOLDER Level N/A.mgr
+pls - PLACEHOLDER Level N/A.mgr

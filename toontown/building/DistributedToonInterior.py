@@ -37,8 +37,6 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
         self.setup()
-        DistributedObject.DistributedObject.announceGenerate(self)
-        self.setup()
 
     def disable(self):
         self.interior.removeNode()

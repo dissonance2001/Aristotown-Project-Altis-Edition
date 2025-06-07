@@ -259,6 +259,25 @@ HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, Wacky
  ToontownCentralOld: ()}
 WelcomeValleyToken = 0
 
+# Street Manager Spawns
+streetMgrs = ["mes", "dty", "dfg", "fm", "ggm", "tc", "dm", "tg"]
+streetMgrs2Zones = {"mes": [SillyStreet, LoopyLane, PunchlinePlace, WackyWay],
+                    "dty": [BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue],
+                    "dfg": [KnightKnoll, NobleNook, WizardWay],
+                    "fm": [ElmStreet, MapleStreet, OakStreet, RoseValley],
+                    "ggm": [AltoAvenue, BaritoneBoulevard, TenorTerrace, SopranoStreet],
+                    "tc": [WalrusWay, SleetStreet, PolarPlace, ArcticAvenue],
+                    "dm": [AcornAvenue, PeanutPlace, WalnutWay, LegumeLane],
+                    "tg": [LullabyLane, PajamaPlace, TwilightTerrace]}
+streetMgrs2Levels = {"mes": 16,
+                     "dty": 17,
+                     "dfg": 18,
+                     "fm": 18,
+                     "ggm": 18,
+                     "tc": 20,
+                     "dm": 17,
+                     "tg": 20}
+
 # Colors for Loading Screens / Title Text
 DEFAULTCOLOR = (1.0, 0.0, 0.0, 1.0)
 TTCOLOR = (1.0, 0.5, 0.4, 1.0)

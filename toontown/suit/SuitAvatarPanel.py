@@ -598,22 +598,22 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.interval.start()
 
     def __pulsePurple(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(0.992, 0.227, 1, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=2, colorScale=(0.992, 0.227, 1, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulsePurpleColor(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[13]),
+        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=2, colorScale=(self.healthColors[13]),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulsePurpleHead(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=1, colorScale=(0.992, 0.227, 1, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=2, colorScale=(0.992, 0.227, 1, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulsePurpleColorHead(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[13]),
+        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=2, colorScale=(self.healthColors[13]),
                                    blendType='easeInOut'))
         self.interval.start()
 

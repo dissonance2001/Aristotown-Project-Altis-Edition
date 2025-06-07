@@ -68,28 +68,38 @@ class QuestMap(DirectFrame):
         self.mapCloseButton.hide()
         gui.removeNode()
         icons = loader.loadModel('phase_3/models/gui/cog_icons')
+        icons2 = loader.loadModel('phase_3/models/gui/cog_icons')
+        icons3 = loader.loadModel('phase_3/models/gui/cog_icons')
         cIcon = icons.find('**/CorpIcon')
         lIcon = icons.find('**/LegalIcon')
         mIcon = icons.find('**/MoneyIcon')
         sIcon = icons.find('**/SalesIcon')
         gIcon = icons.find('**/BoardIcon')
-        tIcon = icons.find('**/cog')
+        tIcon = icons2.find('**/BoardIcon')
+        texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette2.png')
+        tIcon.setTexture(texture, 1)
+        pIcon = icons3.find('**/BoardIcon')
+        texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette3.png')
+        pIcon.setTexture(texture, 1)
         cogInfoTextColor = (0.2, 0.2, 0.2, 1)
         textPos = (1.2, -0.2)
         textScale = 0.8
         self.cInfo = DirectLabel(parent=self.cogInfoFrame, text='', text_fg=cogInfoTextColor, text_pos=textPos, text_scale=textScale, geom=cIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.cInfo.setPos(-2.2, 0, 0.5)
+        self.cInfo.setPos(-2.5, 0, 0.5)
         self.lInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos, text_scale=textScale, geom=lIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.lInfo.setPos(-2.2, 0, -0.5)
+        self.lInfo.setPos(-2.5, 0, -0.5)
         self.mInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos, text_scale=textScale, geom=mIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.mInfo.setPos(0.8, 0, 0.5)
+        self.mInfo.setPos(0, 0, 0.5)
         self.sInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos, text_scale=textScale, geom=sIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.sInfo.setPos(0.8, 0, -0.5)
+        self.sInfo.setPos(0, 0, -0.5)
         self.gInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos, text_scale=textScale, geom=gIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.gInfo.setPos(3.2, 0, 0.5)
+        self.gInfo.setPos(2.5, 0, 0.5)
         self.tInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos,
-                                 text_scale=textScale, geom=gIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.tInfo.setPos(3.2, 0, -0.5)
+                                 text_scale=textScale, geom=tIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
+        self.tInfo.setPos(2.5, 0, -0.5)
+        self.pInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos,
+                                 text_scale=textScale, geom=pIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
+        self.pInfo.setPos(5, 0, 0.5)
         icons.removeNode()
         return
 
@@ -103,6 +113,7 @@ class QuestMap(DirectFrame):
         self.sInfo['text'] = '%s%%' % currPercentage[3]
         self.gInfo['text'] = '%s%%' % currPercentage[4]
         self.tInfo['text'] = '%s%%' % currPercentage[5]
+        self.pInfo['text'] = '%s%%' % currPercentage[6]
         return
 
     def destroy(self):
@@ -168,6 +179,8 @@ class QuestMap(DirectFrame):
         
     def getSuitIcon(self, dept):
         icons = loader.loadModel('phase_3/models/gui/cog_icons')
+        icons2 = loader.loadModel('phase_3/models/gui/cog_icons')
+        icons3 = loader.loadModel('phase_3/models/gui/cog_icons')
         if dept == 'c':
             corpIcon = icons.find('**/CorpIcon')
         elif dept == 's':
@@ -179,7 +192,13 @@ class QuestMap(DirectFrame):
         elif dept == 'g':
             corpIcon = icons.find('**/BoardIcon')
         elif dept == 't':
-            corpIcon = icons.find('**/cog')
+            corpIcon = icons2.find('**/BoardIcon')
+            texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette2.png')
+            corpIcon.setTexture(texture, 1)
+        elif dept == 'p':
+            corpIcon = icons3.find('**/BoardIcon')
+            texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette3.png')
+            corpIcon.setTexture(texture, 1)
         else:
             corpIcon = None
         icons.removeNode()

@@ -22,6 +22,7 @@ PANEL_COLORS = (Vec4(0.8, 0.78, 0.77, 1),
  Vec4(0.75, 0.82, 0.79, 1),
  Vec4(0.825, 0.76, 0.77, 1),
  Vec4(.85, 0.85, .85, 1.0),
+                Vec4(.85, 0.85, .85, 1.0),
                 Vec4(.85, 0.85, .85, 1.0)
                 )
 PANEL_COLORS_COMPLETE1 = (Vec4(0.7, 0.725, 0.545, 1),
@@ -29,6 +30,7 @@ PANEL_COLORS_COMPLETE1 = (Vec4(0.7, 0.725, 0.545, 1),
  Vec4(0.6, 0.75, 0.525, 1),
  Vec4(0.675, 0.675, 0.55, 1),
  Vec4(0.7, 0.7, 0.7, 1),
+                          Vec4(0.7, 0.7, 0.7, 1),
                           Vec4(.85, 0.85, .85, 1.0)
                           )
 PANEL_COLORS_COMPLETE2 = (Vec4(0.9, 0.725, 0.32, 1),
@@ -36,6 +38,7 @@ PANEL_COLORS_COMPLETE2 = (Vec4(0.9, 0.725, 0.32, 1),
  Vec4(0.8, 0.75, 0.325, 1),
  Vec4(0.875, 0.675, 0.35, 1),
  Vec4(0.7375, 0.6, 0.3625, 1),
+                          Vec4(0.7375, 0.6, 0.3625, 1),
                           Vec4(.85, 0.85, .85, 1.0)
                           )
 SHADOW_SCALE_POS = ((1.225, 0, 10, -0.03),# Flunky
@@ -229,6 +232,12 @@ class SuitPage(ShtikerPage.ShtikerPage):
                                              image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.715),
                                              command=self.toggleRadar, extraArgs=[4])
         self.radarButtons.append(self.boardRadarButton)
+        icon = icons.find('**/sales_icon')
+        self.pressRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED,
+                                            image=(icon, icon, icon), image_scale=(0.03375, 1, 0.045),
+                                            image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.715),
+                                            command=self.toggleRadar, extraArgs=[4])
+        self.radarButtons.append(self.boardRadarButton)
         for radarButton in self.radarButtons:
             radarButton.building = 0
             radarButton.buildingRadarLabel = None
@@ -240,6 +249,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         del gui
         self.makePanels()
         self.radarOn = [0,
+         0,
          0,
          0,
          0,
@@ -267,6 +277,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         self.salesRadarButton.destroy()
         self.boardRadarButton.destroy()
         self.techRadarButton.destroy()
+        self.pressRadarButton.destroy()
         self.rolloverFrame.destroy()
         for panel in self.panels:
             panel.destroy()
@@ -501,11 +512,11 @@ class SuitPage(ShtikerPage.ShtikerPage):
                 panel.quotaLabel.show()
             else:
                 self.addQuotaLabel(panel)
-            if base.localAvatar.hasCogSummons(index):
-                if panel.summonButton:
-                    panel.summonButton.show()
-                else:
-                    self.addSummonButton(panel)
+            #if base.localAvatar.hasCogSummons(index):
+               # if panel.summonButton:
+                  #  panel.summonButton.show()
+               # else:
+                #    self.addSummonButton(panel)
         elif status == COG_DEFEATED:
             count = str(base.localAvatar.cogCounts[index])
             if base.localAvatar.cogs[index] < COG_COMPLETE1:

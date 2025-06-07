@@ -325,6 +325,8 @@ class DistributedBuilding(DistributedObject.DistributedObject):
                 corpIcon = cogIcons.find('**/BoardIcon').copyTo(self.cab)
             elif dept == 't':
                 corpIcon = cogIcons2.find('**/emblem_board').copyTo(self.cab)
+            elif dept == 'p':
+                corpIcon = cogIcons2.find('**/emblem_board').copyTo(self.cab)
             corpIcon.setPos(0, 6.79, 6.8)
             corpIcon.setScale(3)
             from toontown.suit import Suit
