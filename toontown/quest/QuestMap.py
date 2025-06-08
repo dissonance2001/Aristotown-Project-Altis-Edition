@@ -25,10 +25,10 @@ class QuestMap(DirectFrame):
         bg.setColor(0.5, 0.5, 0.5, 0.5)
         bg.setBin('fixed', 0)
         self.cogInfoFrame['geom'] = bg
-        self.cogInfoFrame['geom_pos'] = (1.2, 0, 0)
-        self.cogInfoFrame['geom_scale'] = (9, 1, 2)
-        self.cogInfoFrame.setScale(0.05)
-        self.cogInfoFrame.setPos(0, 0, 0.6)
+        self.cogInfoFrame['geom_pos'] = (1, 0, 0)
+        self.cogInfoFrame['geom_scale'] = (12, 1, 2)
+        self.cogInfoFrame.setScale(0.08)
+        self.cogInfoFrame.setPos(0, 0, 0.58)
         self.buildingMarkers = []
         self.suitBuildingMarkers = []
         self.questBlocks = []
@@ -85,21 +85,21 @@ class QuestMap(DirectFrame):
         textPos = (1.2, -0.2)
         textScale = 0.8
         self.cInfo = DirectLabel(parent=self.cogInfoFrame, text='', text_fg=cogInfoTextColor, text_pos=textPos, text_scale=textScale, geom=cIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.cInfo.setPos(-2.5, 0, 0.5)
+        self.cInfo.setPos(-4.2, 0, 0.5)
         self.lInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos, text_scale=textScale, geom=lIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.lInfo.setPos(-2.5, 0, -0.5)
+        self.lInfo.setPos(-4.2, 0, -0.5)
         self.mInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos, text_scale=textScale, geom=mIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.mInfo.setPos(0, 0, 0.5)
+        self.mInfo.setPos(-1.7, 0, 0.5)
         self.sInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos, text_scale=textScale, geom=sIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.sInfo.setPos(0, 0, -0.5)
+        self.sInfo.setPos(-1.7, 0, -0.5)
         self.gInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos, text_scale=textScale, geom=gIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.gInfo.setPos(2.5, 0, 0.5)
+        self.gInfo.setPos(0.8, 0, 0.5)
         self.tInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos,
                                  text_scale=textScale, geom=tIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.tInfo.setPos(2.5, 0, -0.5)
+        self.tInfo.setPos(0.8, 0, -0.5)
         self.pInfo = DirectLabel(parent=self.cogInfoFrame, text_fg=cogInfoTextColor, text='', text_pos=textPos,
                                  text_scale=textScale, geom=pIcon, geom_pos=(0, 0, 0), geom_scale=0.6, relief=None)
-        self.pInfo.setPos(5, 0, 0.5)
+        self.pInfo.setPos(3.3, 0, 0.5)
         icons.removeNode()
         return
 
