@@ -198,7 +198,7 @@ laa = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 scg = (('stomp', 'stomp', 4), ('rage', 'rage', 4), ('finger-wag', 'finger-wag', 4), ('neutral-enraged', 'neutral-enraged', 4), ('effort', 'effort', 4), ('defense', 'defense', 4))
 csm = (('throw-insurance', 'throw-insurance', 4), ('roll-o-dex', 'roll-o-dex', 4), ('pen-squirt', 'fountain-pen', 4), ('cease', 'cease', 4))
 ste = (('speak', 'speak', 4), ('cease', 'cease3', 4), ('sanction', 'sanction3', 4))
-lit = (('bellow', 'bellow', 4), ('glower', 'glower', 4))
+lit = (('snap2', 'snap2', 4), ('snap', 'snap', 4), ('bellow', 'bellow', 4), ('glower', 'glower', 4))
 # Boardbots
 ca = (('pickpocket', 'pickpocket', 4), ('rubber-stamp', 'rubber-stamp', 4), ('short-squeeze', 'short-squeeze', 4))
 cn = (('pen-squirt', 'pen-squirt', 4), ('hold-pencil', 'hold-pencil', 4), ('roll-o-dex', 'roll-o-dex', 4), ('short-squeeze', 'short-squeeze', 4))
