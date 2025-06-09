@@ -3298,1213 +3298,8 @@ class BattleCalculatorAI:
                 elif theSuit.getGovernaught():
                     result = int(result * ToontownBattleGlobals.GOVERNAUGHT_DMG_MULT)
             targetIndex = self.battle.activeToons.index(toonId)
-            if atkInfo['name'] == 'Coalescence':
-                if toon.getHp() == 1:
-                    attack[SUIT_HP_COL][targetIndex] = 1
-                else:
-                    attack[SUIT_HP_COL][targetIndex] = toon.getHp() - 1
-                theSuit.setHP(int(
-                    theSuit.currHP + ToontownBattleGlobals.HUSTLER_COALESCENCE_HEAL_BASE + attack[SUIT_HP_COL][
-                        targetIndex] * ToontownBattleGlobals.HUSTLER_COALESCENCE_HEAL_AMP))
-            elif atkInfo['suitName'] == 'hst' and atkInfo['name'] == 'ShadowWave':
-                if self.toonHasCondition(toonId, 'corruption'):
-                    attack[SUIT_HP_COL][targetIndex] = 7 + int(
-                        floor(self.getToonConditionModifier(toonId, 'corruption') / 4.0) * 7)
-            elif atkInfo['name'] == 'UH':
-                attack[SUIT_HP_COL][targetIndex] = 30
-                if self.toonHasCondition(toonId, 'corruption'):
-                    attack[SUIT_HP_COL][targetIndex] = 7 + int(floor(self.getToonConditionModifier(toonId, 'corruption') / 4.0) * 7)
-            elif atkInfo['name'] == 'Gavel': #scapegoat bite into gavel
-                result = 40
-                attack[SUIT_HP_COL][targetIndex] = result
-                for s in self.battle.suits:
-                    if s.dna.name == 'lit':
-                        currentBossHealth = s.currHP
-                        if currentBossHealth >= 1:
-                            self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'noGags', 1, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'gavelcalculator', 0, 0, 'setBoth')
-                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedLawbotBossAI):
-                        for toon in self.battle.activeToons:
-                            if toon in do.involvedToons:
-                                boss = do
-                                break
-                if len(self.battle.activeSuits) < 6:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkInfo['name'] == 'Cage':
-                result = 60
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'noGags', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')
-            elif atkInfo['name'] == 'InkDrain':
-                result = 35
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'noGags', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')
-            elif atkInfo['name'] == 'WheelSpin':
-                result = 35
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'noGags', 1, 2, 'setBoth')
-            elif atkInfo['name'] == 'BookKeeping':
-                result = 70
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'noGags', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'CourtMandate2':
-                result = 43
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakImmune', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'syphon', 1, 10, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'lureImmune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'CourtMandate3':
-                result = random.randint(15, 40)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakImmune', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'syphon', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'lureImmune', 1, 10, 'setBoth')
-                self.setToonCondition(toon.doId, 'corruption', .4, 3, 'setBoth')
-            elif atkInfo['name'] == 'CourtMandate1':
-                result = 66
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakImmune', 1, 10, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'syphon', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'lureImmune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'CourtMandate':
-                result = 78
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'shielding', 1, 10, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakImmune', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'lureImmune', 0, 0, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    self.setSuitCondition(suit.doId, 'syphon', 1, 99, 'setBoth')
-            elif atkInfo['name'] == 'Snap2':
-                result = 58.3
-                attack[SUIT_HP_COL][targetIndex] = result
-                currentBossHealth = -1
-                for s in self.battle.suits:
-                    if s.dna.name == 'ste':
-                        currentBossHealth = s.currHP
-                if currentBossHealth >= 1:
-                    self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
-                else:
-                    self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
-                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedLawbotBossAI):
-                        for toon in self.battle.activeToons:
-                            if toon in do.involvedToons:
-                                boss = do
-                                break
-                if len(self.battle.activeSuits) < 6:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkInfo['name'] == 'Snap': #soaked snap
-                result = 81.5
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'snapped', .1, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
-                # from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                # boss = None
-                # for do in simbase.air.doId2do.values():
-                # if isinstance(do, DistributedLawbotBossAI):
-                # for toon in self.battle.activeToons:
-                # if toon in do.involvedToons:
-                # boss = do
-                # break
-                # if len(self.battle.activeSuits) < 4 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                # elif len(self.battle.activeSuits) < 6 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkInfo['name'] == 'CollectCall':
-                result = 50
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .4, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'collectcallcalculator', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'Caress':
-                result = random.randint(15, 40)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .4, 3, 'setBoth')
-            elif atkInfo['name'] == 'CourtRecord1':
-                result = random.randint(15, 40)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .4, 3, 'setBoth')
-            elif atkInfo['name'] == 'CourtRecord2':
-                result = random.randint(15, 40)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .4, 3, 'setBoth')
-            elif atkInfo['name'] == 'CourtRecord3':
-                result = random.randint(15, 40)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .4, 3, 'setBoth')
-            elif atkInfo['name'] == 'CourtRecord5':
-                result = random.randint(15, 40)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'winded', 1, 6, 'setBoth')
-            elif atkInfo['name'] == 'ExplodingBill':
-                result = 66
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .25, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'explodingbillcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'papercutcalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'KickUp':
-                result = 68
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .1, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'Shakedown':
-                result = 58
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .4, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'Blast':
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'shielding', 1, 10, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakImmune', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'syphon', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'lureImmune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'LegalBindings':
-                result = 30
-                attack[SUIT_HP_COL][targetIndex] = result
-                for s in self.battle.suits:
-                    if s.dna.name == 'ste':
-                        currentBossHealth = s.currHP
-                        if currentBossHealth >= 1:
-                            self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
-                            self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
-                #for s in self.battle.activeSuits:
-                    #self.setSuitCondition(s.doId, 'insured', 1, 99, 'setBoth')
-                self.setToonCondition(toon.doId, 'corruption', .2, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'bound', 1, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'bindingscalculator', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'Quash':
-                result = 75
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'snapped', .25, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'aceInTheHole', 1, 99, 'setBoth')
-            elif atkInfo['name'] == 'FieldPromotion':
-                from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedCashbotBossAI):
-                        for toon in self.battle.activeToons:
-                            if toon in do.involvedToons:
-                                boss = do
-                                break
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 1000, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 1, 10, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
-                boss.appendSuitsToBattle(boss.battleNumber, 'crf2')
-            elif atkInfo['name'] == 'JuryNotice':
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'vulnerablecalculator', 1, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'NickelAndDime':
-                from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedCashbotBossAI):
-                        for toon in self.battle.activeToons:
-                            if toon in do.involvedToons:
-                                boss = do
-                                break
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 1000, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'vulnerablecalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 1, 10, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
-                boss.appendSuitsToBattle(boss.battleNumber, 'crf2')
-            elif atkInfo['name'] == 'FreeCruise':
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                if self.suitHasCondition(theSuit.doId, 'phase3'):
-                    self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'Conduction':
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                if self.suitHasCondition(theSuit.doId, 'phase3'):
-                    self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'LDQuake':
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.battle.activeSuits:
-                    suit.setHP(int(suit.currHP - 50))
-                    self.__removeLured(suit)
-                if self.suitHasCondition(theSuit.doId, 'phase3'):
-                    self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'LDReOrg':
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.battle.activeSuits:
-                    suit.setHP(int(suit.currHP - 250))
-                    self.__removeLured(suit)
-                if self.suitHasCondition(theSuit.doId, 'phase3'):
-                    self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'LDAfterShock':
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                if self.suitHasCondition(theSuit.doId, 'phase3'):
-                    self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'LDRedTape':
-                if self.suitHasCondition(theSuit.doId, 'phase3'):
-                    self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'LDEvictionNotice':
-                result = random.randint(25, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                if self.suitHasCondition(theSuit.doId, 'phase3'):
-                    self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'CloseTheLoop':
-                result = 27.5
-                attack[SUIT_HP_COL][targetIndex] = result
-                for s in self.battle.suits:
-                    if s.dna.name == 'ste':
-                        currentBossHealth = s.currHP
-                        if currentBossHealth >= 1:
-                            self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
-                            self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
-                #for s in self.battle.activeSuits:
-                    #self.setSuitCondition(s, 'insured', 1, 99, 'setBoth')
-                self.setToonCondition(toon.doId, 'corruption', .2, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'bound', 1, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'bindingscalculator', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'Investment':
-                result = 35
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'cannotDodge', 100, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'cannotDodge', 100, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    suit.setHP(int(suit.currHP - 100))
-                    if suit.currHP <= 0:
-                        if suit.getSkeleRevives() >= 1:
-                            suit.useSkeleRevive()
-                        self.__removeLured(suit.doId)
-                        if self.suitHasCondition(suit.doId, 'lured'):
-                            self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
-                    continue
-            elif atkInfo['name'] == 'Bar':
-                result = 40
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.battle.activeSuits:
-                    suit.setHP(int(suit.currHP - 250))
-                    continue
-            elif atkInfo['name'] == 'Synergy':
-                result = (24 + (self.TurnsElapsed * 1.3))
-                attack[SUIT_HP_COL][targetIndex] = result
-            elif atkInfo['name'] == 'CollectCallFees':
-                result = (24 + (self.TurnsElapsed * 1.3))
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'collectcallfeescalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'collectcallcalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'Sitdown':
-                result = (72 + (self.TurnsElapsed * 1.3))
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'HeavyRainfall':
-                result = (48 + (self.TurnsElapsed * 1.3))
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'zapBoost', 50, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'squirtBoost', 50, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'RadioInfrequency':
-                result = 33
-                self.setToonCondition(toon.doId, 'soundBoost', -50, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -50, 2, 'setBoth')
-            elif atkInfo['name'] == 'CourtCosts':
-                result = (24 + (self.TurnsElapsed * 1.3))
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'UnionDues':
-                result = (24 + (self.TurnsElapsed * 1.3))
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'noToonUpGags', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noZapGags', 1, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'LifeInsurance':
-                theSuit.setHP(int(theSuit.currHP + 75))
-            elif atkInfo['name'] == 'Voicemail':
-                result = 41
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'immune', 1, 4, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'ManagerialProtection':
-                result = 30
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'immune', 1, 4, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'refinementcalculator', 1, 10, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'WorkersCompensation':
-                theSuit.setHP(int(theSuit.currHP + 50))
-            elif atkInfo['name'] == 'ExtraTip':
-                result = 38
-                attack[SUIT_HP_COL][targetIndex] = result
-                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedLawbotBossAI):
-                        for toon in self.battle.activeToons:
-                            if toon in do.involvedToons:
-                                boss = do
-                                break
-                if len(self.battle.activeSuits) < 6:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'snappedcalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'CourtSanction': # jargon
-                result = 70
-                attack[SUIT_HP_COL][targetIndex] = result
-                currentBossHealth = -1
-                for s in self.battle.suits:
-                    if s.dna.name == 'lit':
-                        currentBossHealth = s.currHP
-                if currentBossHealth >= 1:
-                    self.setToonCondition(toon.doId, 'allGagBoost', -75, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'lureBoost', -75, 3, 'setBoth')
-                else:
-                    self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedLawbotBossAI):
-                        for toon in self.battle.activeToons:
-                            if toon in do.involvedToons:
-                                boss = do
-                                break
-                if len(self.battle.activeSuits) < 6:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkInfo['name'] == 'CourtRecord4': # NEW SANCTION mumbo jumbo
-                result = 59
-                attack[SUIT_HP_COL][targetIndex] = result
-                currentBossHealth = -1
-                for s in self.battle.suits:
-                    if s.dna.name == 'lit':
-                        currentBossHealth = s.currHP
-                if currentBossHealth >= 1:
-                    self.setToonCondition(toon.doId, 'allGagBoost', -75, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'lureBoost', -75, 3, 'setBoth')
-                else:
-                    self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedLawbotBossAI):
-                        for toon in self.battle.activeToons:
-                            if toon in do.involvedToons:
-                                boss = do
-                                break
-                if len(self.battle.activeSuits) < 6:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkInfo['name'] == 'CeaseAndDesist': # NEW SANCTION mumbo jumbo
-                result = 59
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'bound', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator2', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'MoneyTrip' and theSuit.dna.name == 'dvk':  # dividend king
-                result = 38
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel5s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel8s', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'PeckingOrder' and theSuit.dna.name == 'dvk':
-                result = 49
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'nolevel5s', 1, 3, 'setBoth')
-                    self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
-            elif atkInfo['name'] == 'Calculate' and theSuit.dna.name == 'dvk':
-                result = 44
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel5s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel8s', 1, 3, 'setBoth')
-                    self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
-            elif atkInfo['name'] == 'Tabulate' and theSuit.dna.name == 'dvk':
-                result = 42
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel5s', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'Audit' and theSuit.dna.name == 'dvk':
-                result = 37
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'nolevel8s', 1, 3, 'setBoth')
-                    self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel5s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
-            elif atkInfo['name'] == 'MarketCrash' and theSuit.dna.name == 'dvk':
-                result = 39
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel5s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel6s', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'FloodTheMarket' and theSuit.dna.name == 'dvk':
-                result = 35
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel7s', 1, 3, 'setBoth')
-                    self.setToonCondition(t, 'nolevel5s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
-            elif atkInfo['name'] == 'BounceCheck' and theSuit.dna.name == 'dvk':
-                result = 39
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'nolevel5s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'nolevel6s', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'FireCog':
-                result = 35
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'allGagBoost', -75, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -75, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'PaperCut':
-                result = 72
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noToonUpGags', 1, 2, 'setBoth')
-                    self.setToonCondition(t, 'noZapGags', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'papercutcalculator', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'WireCut':
-                result = 82
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noThrowGags', 1, 2, 'setBoth')
-                    self.setToonCondition(t, 'noSoundGags', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'markedcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'markedcalculator2', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'GameShow':
-                from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedCashbotBossAI):
-                        for toon in self.battle.activeToons:
-                            if toon in do.involvedToons:
-                                boss = do
-                                break
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'absorbingHR', 1, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 1, 99, 'setBoth')
-                boss.appendSuitsToBattle(boss.battleNumber, 'crf1')
-            elif atkInfo['name'] == 'QualityControl':
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.currentlyLuredSuits.keys():
-                    self.__removeLured(suit)
-            elif atkInfo['name'] == 'QualityControl1':
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.battle.activeSuits:
-                    self.setSuitCondition(suit.doId, 'syphon', 1, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'syphon', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'QualityControl2':
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noToonUpGags', 1, 2, 'setBoth')
-                    self.setToonCondition(t, 'noLureGags', 1, 2, 'setBoth')
-                    self.setToonCondition(t, 'noSoundGags', 1, 2, 'setBoth')
-                    self.setToonCondition(t, 'noSquirtGags', 1, 2, 'setBoth')
-            elif atkInfo['name'] == 'QualityControl3':
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noTrapGags', 1, 2, 'setBoth')
-                    self.setToonCondition(t, 'noThrowGags', 1, 2, 'setBoth')
-                    self.setToonCondition(t, 'noZapGags', 1, 2, 'setBoth')
-                    self.setToonCondition(t, 'noDropGags', 1, 2, 'setBoth')
-            elif atkInfo['name'] == 'ConeOfShame':
-                result = 50
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'allGagBoost', -75, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -75, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-                targetSuit = self.battle.activeSuits[attack[SUIT_ATK_COL] + 3]
-                targetSuit.setHP(1000)
-                targetSuit.setMaxHP(1000)
-                targetSuit.setManager(1)
-                continue
-            elif atkInfo['name'] == 'UnionBuster':
-                result = 35
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'snapped', .25, 3, 'setBoth')
-            elif atkInfo['name'] == 'Drowning':
-                result = 37
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
-            elif atkInfo['name'] == 'QualityLvlControl3':
-                result = 40
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
-            elif atkInfo['name'] == 'AfterShock':
-                result = 46
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    self.setSuitCondition(suit.doId, 'insured', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'OilRain':
-                result = 25
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.battle.activeSuits:
-                    self.setSuitCondition(suit.doId, 'insured', 1, 99, 'setBoth')
-            elif atkInfo['name'] == 'QualityLvlControl': #inversion
-                result = 46
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.battle.activeSuits:
-                    self.setSuitCondition(suit.doId, 'insured', 0, 0, 'setBoth')
-                theSuit.setHP(int(theSuit.currHP + 250))
-            elif atkInfo['name'] == 'QualityLvlControl1':
-                result = 35
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noSquirtGags', 1, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'shielding', 1, 99, 'setBoth')
-            elif atkInfo['name'] == 'UnionBust':
-                attack[SUIT_HP_COL][targetIndex] = 37
-                targetSuit = self.battle.activeSuits[attack[SUIT_ATK_COL] + 2]
-                theSuit.setHP(int(theSuit.currHP + targetSuit.currHP))
-                targetSuit.setHP(int(targetSuit.currHP - targetSuit.currHP))
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
-                if self.suitHasCondition(targetSuit.doId, 'lured'):
-                    self.setSuitCondition(targetSuit.doId, 'lured', 0, 0, 'setBoth')
-                self.__removeLured(targetSuit.doId)
-            elif atkInfo['name'] == 'UnionBust2':
-                attack[SUIT_HP_COL][targetIndex] = 45
-                targetSuit = self.battle.activeSuits[attack[SUIT_ATK_COL] + 2]
-                theSuit.setHP(int(theSuit.currHP + targetSuit.currHP))
-                targetSuit.setHP(int(targetSuit.currHP - targetSuit.currHP))
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
-                if self.suitHasCondition(targetSuit.doId, 'lured'):
-                    self.setSuitCondition(targetSuit.doId, 'lured', 0, 0, 'setBoth')
-                self.__removeLured(targetSuit.doId)
-            elif atkInfo['name'] == 'UnionBust3':
-                attack[SUIT_HP_COL][targetIndex] = 38
-                targetSuit = self.battle.activeSuits[attack[SUIT_ATK_COL] + 2]
-                theSuit.setHP(int(theSuit.currHP + targetSuit.currHP))
-                targetSuit.setHP(int(targetSuit.currHP - targetSuit.currHP))
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
-                if self.suitHasCondition(targetSuit.doId, 'lured'):
-                    self.setSuitCondition(targetSuit.doId, 'lured', 0, 0, 'setBoth')
-                self.__removeLured(targetSuit.doId)
-            elif atkInfo['name'] == 'FreezingRain':
-                result = 70
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noLureGags', 1, 2, 'setBoth')
-                    self.setToonCondition(t, 'noSoundGags', 1, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    self.setSuitCondition(suit.doId, 'insured', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'PoisonSpray':
-                result = 43
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'shielding', 1, 4, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'enraged', 0, 0, 'none')
-                self.setSuitCondition(theSuit.doId, 'gavelcalculator', 1, 10, 'setBoth')
-                managerTarget = None
-                for suit in self.battle.activeSuits:
-                    if suit.dna.name == 'lit':
-                        self.setSuitCondition(suit.doId, 'bellowcalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'SlushFund':
-                theSuit.setHP(int(theSuit.currHP - (theSuit.currHP / 4)))
-                managerTarget = None
-                for suit in self.battle.activeSuits:
-                    if self.battle.findSuit(suit.doId).getManager() and not suit.dna.name == 'mad':
-                        managerTarget = suit
-                        break
-                managerTarget.setHP(managerTarget.getHP() + (theSuit.currHP / 4))
-            elif atkInfo['name'] == 'MPQuake':
-                result = 25
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                managerTarget = None
-                for suit in self.battle.activeSuits:
-                    if suit.dna.name == 'tcm':
-                        managerTarget = suit
-                        break
-                    elif suit.dna.name == 'cry':
-                        managerTarget = suit
-                        break
-                    elif suit.dna.name == 'dvk':
-                        managerTarget = suit
-                        break
-                managerTarget.setHP(managerTarget.getHP() + 250)
-            elif atkInfo['name'] == 'EvilEyeWSI':
-                result = 45
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'refinementcalculator', 0, 0, 'setBoth')
-                managerTarget = None
-                for suit in self.battle.activeSuits:
-                    if suit.dna.name == 'fbd':
-                        managerTarget = suit
-                        break
-                    elif suit.dna.name == 'frs':
-                        managerTarget = suit
-                        break
-                    elif suit.dna.name == 'cp':
-                        managerTarget = suit
-                        break
-                managerTarget.setHP(managerTarget.getHP() + 250)
-            elif atkInfo['name'] == 'MPHotAir':
-                result = 37
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + 0)
-                    elif suit.currHP + 125 > (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + x)
-                    else:
-                        suit.setHP(suit.currHP + 125)
-            elif atkInfo['name'] == 'Shakedown2':
-                result = 37
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'insurancecalculator', 0, 0, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + 0)
-                    elif suit.currHP + 100 > (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + x)
-                    else:
-                        suit.setHP(suit.currHP + 100)
-            elif atkInfo['name'] == 'FireCog':
-                result = 62
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'allGagBoost', -75, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -75, 3, 'setBoth')
-            elif atkInfo['name'] == 'MPSongAndDance':
-                result = 35
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'cannotDodge', 100, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'cannotDodge', 100, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'allGagBoost', 100, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'insurancecalculator', 0, 0, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    if not suit.dna.name == 'otm':
-                        suit.setHP(int(suit.currHP - 200))
-                        if suit.currHP <= 0:
-                            if suit.getSkeleRevives() >= 1:
-                                suit.useSkeleRevive()
-                            self.__removeLured(suit.doId)
-                            if self.suitHasCondition(suit.doId, 'lured'):
-                                self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
-                        continue
-            elif atkInfo['name'] == 'ReArrange':
-                result = 34
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'phase2', 1, 99, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.5)
-            elif atkInfo['name'] == 'ChainsawRolodex':
-                result = 26
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'phase2', 1, 99, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
-            elif atkInfo['name'] == 'RevvingUp':
-                result = 30
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'phase2', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-            elif atkInfo['name'] == 'StandUpGuy':
-                result = 40
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'phase2', 1, 99, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 2)
-            elif atkInfo['name'] == 'Usury':
-                result = 60
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .25, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'ChainsawDetonate2':
-                result = 56
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .75, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'ClockChange':
-                result = random.randint(10, 25)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'allGagBoost', 150, 99, 'setBoth')
-            elif atkInfo['name'] == 'ChainsawQuake':
-                result = 48
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-                    if not suit.dna.name == 'tcm' and not suit.dna.name == 'cry' and not suit.dna.name == 'otm' and not suit.dna.name == 'dvk':
-                        suit.setHP(suit.currHP - suit.currHP)
-                        self.__removeLured(suit.doId)
-                        self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
-                        continue
-            elif atkInfo['name'] == 'ChainsawGlowerPower':
-                result = 30
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                targetSuit = self.battle.activeSuits[attack[SUIT_ATK_COL] + 2]
-                targetSuit.setHP(2000)
-                targetSuit.setMaxHP(2000)
-                targetSuit.setManager(1)
-                continue
-            elif atkInfo['name'] == 'ChainsawDetonate3':
-                result = 30
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 99, 'setBoth')
-                targetSuit = self.battle.activeSuits[attack[SUIT_ATK_COL] + 3]
-                targetSuit.setHP(1500)
-                targetSuit.setMaxHP(1500)
-                targetSuit.setManager(1)
-                self.setSuitCondition(targetSuit.doId, 'insured', 1, 99, 'setBoth')
-                continue
-            elif atkInfo['name'] == 'BombCake':
-                result = 50
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'markedcalculator', 0, 0, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noThrowGags', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'ChainsawCanned':
-                result = 60
-                attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noToonUpGags', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'Tribute2':
-                result = 60
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'trapcalculator', 0, 0, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noTrapGags', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'SlushFund2':
-                result = 62
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noSquirtGags', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'NotThrowPiano':
-                result = 40
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'dropcalculator', 0, 0, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noDropGags', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'Detonate2':
-                result = 50
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'zapcalculator', 0, 0, 'setBoth')
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'noZapGags', 1, 3, 'setBoth')
-            elif atkInfo['name'] == 'Usury2':
-                result = 26
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if not suit.dna.name == 'tcm' and not suit.dna.name == 'cry' and not suit.dna.name == 'otm' and not suit.dna.name == 'dvk':
-                        suit.setHP(suit.currHP + x)
-                    continue
-            elif atkInfo['name'] == 'ChainsawDetonate':
-                result = 52
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-                targetSuit = self.battle.activeSuits[attack[SUIT_ATK_COL] + 1]
-                targetSuit.setHP(int(targetSuit.currHP - targetSuit.currHP))
-                self.__removeLured(targetSuit.doId)
-            elif atkInfo['name'] == 'Detonate':
-                result = 28
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'shielding', 1, 99, 'setBoth')
-            elif atkInfo['name'] == 'InsurancePlan':
-                result = 38
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'insurancecalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'bindingscalculator', 1, 10, 'setBoth')
-                currentBossHealth = -1
-                for s in self.battle.suits:
-                    if s.dna.name == 'scg':
-                        currentBossHealth = s.currHP
-                if currentBossHealth >= 1:
-                    for suit in self.battle.activeSuits:
-                        if suit.currHP <= 0:
-                            continue
-                        x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                        if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                            suit.setHP(suit.currHP + 0)
-                        elif suit.currHP + 85 > (suit.maxHP * suit.hardMaxHP):
-                            suit.setHP(suit.currHP + x)
-                        else:
-                            suit.setHP(suit.currHP + 85)
-                elif currentBossHealth <= 0:
-                    for suit in self.battle.activeSuits:
-                        if suit.currHP <= 0:
-                            continue
-                        x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                        if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                            suit.setHP(suit.currHP + 0)
-                        elif suit.currHP + 50 > (suit.maxHP * suit.hardMaxHP):
-                            suit.setHP(suit.currHP + x)
-                        else:
-                            suit.setHP(suit.currHP + 50)
-                    continue
-                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedLawbotBossAI):
-                        for toon in self.battle.activeToons:
-                            if toon in do.involvedToons:
-                                boss = do
-                                break
-                if len(self.battle.activeSuits) < 6:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkInfo['name'] == 'Snow':
-                result = 42
-                attack[SUIT_HP_COL][targetIndex] = result
-                theSuit.setHP(int(theSuit.currHP + result))
-                self.setSuitCondition(theSuit.doId, 'shielding', 1, 4, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'enraged', 0, 0, 'none')
-                self.setSuitCondition(theSuit.doId, 'gavelcalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'Accusations2':
-                result = 25
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
-                theSuit.useSkeleRevive()
-                theSuit.setHP(2500)
-                theSuit.setMaxHP(2500)
-            elif atkInfo['name'] == 'Spotlight':
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + 0)
-                    elif suit.currHP + 500 > (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + x)
-                    else:
-                        suit.setHP(suit.currHP + 500)
-                    continue
-            elif atkInfo['name'] == 'Beguile':
-                result = 54
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'Refinement':
-                result = 50
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'refinementcalculator', 0, 0, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + 0)
-                    elif suit.currHP + 125 > (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + x)
-                    else:
-                        suit.setHP(suit.currHP + 125)
-                    continue
-            elif atkInfo['name'] == 'Detonate3':
-                result = 35
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
-                theSuit.setHP(1500)
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.5)
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + 0)
-                    elif suit.currHP + 125 > (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + x)
-                    else:
-                        suit.setHP(suit.currHP + 125)
-                    continue
-            elif atkInfo['name'] == 'QualityLvlControl2':
-                result = 40
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'insurancecalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 1, 10, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + 0)
-                    elif suit.currHP + 125 > (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + x)
-                    else:
-                        suit.setHP(suit.currHP + 125)
-                    continue
-            elif atkInfo['name'] == 'Bomb':
-                result = 40
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
-                theSuit.setHP(int(theSuit.currHP - (result * 4)))
-                if theSuit.currHP <= 0:
-                    if theSuit.getSkeleRevives() >= 1:
-                        theSuit.useSkeleRevive()
-                self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
-            elif atkInfo['name'] == 'WhitePowder':
-                result = 47.5
-                attack[SUIT_HP_COL][targetIndex] = result
-                currentBossHealth = -1
-                for s in self.battle.suits:
-                    if s.dna.name == 'ste':
-                        currentBossHealth = s.currHP
-                if currentBossHealth >= 1:
-                    self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
-                else:
-                    self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'bellowcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 0, 0, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    #if suit.currHP <= 0:
-                        #continue
-
-                    #x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    #if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        #suit.setHP(suit.currHP + 0)
-                    #elif suit.currHP + 100 > (suit.maxHP * suit.hardMaxHP):
-                        #suit.setHP(suit.currHP + x)
-                    #else:
-                        #suit.setHP(suit.currHP + 100)
-                    self.setSuitCondition(suit.doId, 'soaked', 0, 0, 'setBoth')
-                    self.setSuitCondition(suit.doId, 'dazed', 0, 0, 'setBoth')
-                    if self.suitHasCondition(suit.doId, 'lured'):
-                        self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
-                    continue
-                for suit in self.currentlyLuredSuits.keys():
-                    self.__removeLured(suit)
-                # from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                # boss = None
-                # for do in simbase.air.doId2do.values():
-                # if isinstance(do, DistributedLawbotBossAI):
-                # for toon in self.battle.activeToons:
-                # if toon in do.involvedToons:
-                # boss = do
-                # break
-                # if len(self.battle.activeSuits) < 4 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                # elif len(self.battle.activeSuits) < 6 and self.suitHasCondition(theSuit.doId, 'desperation'):
-                # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkInfo['name'] == 'CeaseAndDesist':
-                for suit in self.currentlyLuredSuits.keys():
-                    self.__removeLured(suit)
-            elif atkInfo['name'] == 'GoodMorningToontown':
-                result = 30
-                attack[SUIT_HP_COL][targetIndex] = result
-                theSuit.setHP(int(theSuit.currHP + (result * 4)))
-            elif atkInfo['name'] == 'FieldPromotion':
-                result = random.randint(30, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
-            elif atkInfo['name'] == 'MobMentality':
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + 0)
-                    elif suit.currHP + 100 > (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + x)
-                    else:
-                        suit.setHP(suit.currHP + 100)
-                    if self.suitHasCondition(suit.doId, 'lured'):
-                        self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
-                    continue
-                for suit in self.currentlyLuredSuits.keys():
-                    self.__removeLured(suit)
-            elif atkInfo['name'] == 'HeatWave':
-                result = (60 + (self.TurnsElapsed * 2))
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'corruption', .2, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'sanctioncalculator', 1, 10, 'setBoth')
-            elif atkInfo['name'] == 'StealSafe':
-                result = random.randint(30, 50)
-                attack[SUIT_HP_COL][targetIndex] = result
-                theSuit.setHP(int(theSuit.currHP + (result * 4)))
-            elif atkInfo['name'] == 'Wiretapped':
-                result = 41
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'vulnerable', 1, 10, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-                theSuit.setHP(int(theSuit.currHP + attack[SUIT_HP_COL][
-                    targetIndex]))
-            elif atkInfo['name'] == 'HeadRoller':
-                result = 41
-                attack[SUIT_HP_COL][targetIndex] = result
-                targetSuit = self.battle.activeSuits[attack[SUIT_ATK_COL] + 2]
-                theSuit.setHP(int(theSuit.currHP + targetSuit.currHP))
-                targetSuit.setHP(int(targetSuit.currHP - targetSuit.currHP))
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
-                self.__removeLured(targetSuit.doId)
-            elif atkInfo['name'] == 'HeadRoller2':
-                result = 38
-                attack[SUIT_HP_COL][targetIndex] = result
-                targetSuit = self.battle.activeSuits[attack[SUIT_ATK_COL] + 2]
-                theSuit.setHP(int(theSuit.currHP + targetSuit.currHP))
-                targetSuit.setHP(int(targetSuit.currHP - targetSuit.currHP))
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
-                self.__removeLured(targetSuit.doId)
-            elif atkInfo['name'] == 'HeadRoller3':
-                result = 41
-                attack[SUIT_HP_COL][targetIndex] = result
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.25)
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'allGagBoost', 100, 3, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-                    if not suit.dna.name == 'gtk' and not suit.dna.name == 'fhj':
-                        theSuit.setHP(int(theSuit.currHP + suit.currHP))
-                    if not suit.dna.name == 'gtk' and not suit.dna.name == 'fhj':
-                        suit.setHP(suit.currHP - suit.currHP)
-                    else:
-                        pass
-                    if self.suitHasCondition(suit.doId, 'lured'):
-                        self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
-                    continue
-                for suit in self.currentlyLuredSuits.keys():
-                    self.__removeLured(suit)
-            elif atkInfo['name'] == 'SwirlBath':
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-                    if not suit.dna.name == 'dsf':
-                        suit.setHP(suit.currHP - suit.currHP)
-                    else:
-                        pass
-                    if self.suitHasCondition(suit.doId, 'lured'):
-                        self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
-                    continue
-                for suit in self.currentlyLuredSuits.keys():
-                    self.__removeLured(suit)
-            elif atkInfo['name'] == 'Enraged':
-                result = 30
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'none')
-                self.setSuitCondition(theSuit.doId, 'enraged', 1, 3, 'setBoth')
-            else:
-                self.notify.debug('__calcSuitAtkHp - Target is not corrupt, not doing any bonus here')
-                attack[SUIT_HP_COL][targetIndex] = result
+            self.notify.debug('__calcSuitAtkHp - Target is not corrupt, not doing any bonus here')
+            attack[SUIT_HP_COL][targetIndex] = result
 
 
             if self.suitHasCondition(theSuit.doId, 'desperation') and self.suitHasCondition(theSuit.doId, 'enraged') and theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
@@ -4524,13 +3319,9 @@ class BattleCalculatorAI:
 
             if self.suitHasCondition(theSuit.doId, 'syphon'):
                 theSuit.setHP(int(theSuit.currHP + result * 4))
-            elif self.suitHasCondition(theSuit.doId, 'phase2') and not theSuit.dna.name == 'tcm' and not theSuit.dna.name == 'crf':
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
-            elif self.suitHasCondition(theSuit.doId, 'phase3') and not theSuit.dna.name == 'crf':
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
 
             self.notify.debug('__calcSuitAtkHp - result is %s for index %i' % (str(attack[SUIT_HP_COL][targetIndex]), targetIndex))
-    
+
     def __calcSuitAtkHpALT(self, attack):
         '''
         Professor Control: I'm sorry, but the original method is actually a pigstye and I cannot work in that.  I'm using an alternate form for now.
@@ -4595,18 +3386,17 @@ class BattleCalculatorAI:
                # if len(self.battle.activeSuits) < 4:
                    # boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'StenographerSanctionBindings':
-                    result = 25
-                    attack[SUIT_HP_COL][targetIndex] = result
-                    self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
-                    self.setSuitCondition(theSuit.doId, 'sanctioncalculator2', 0, 0, 'setBoth')
-                    self.setSuitCondition(theSuit.doId, 'sanctioncalculator4', 1, 1, 'setBoth')
+                result = 25
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'sanctioncalculator2', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'sanctioncalculator4', 1, 1, 'setBoth')
             elif atkInfo['name'] == 'StenographerCourtRecordBan':
-                for t in self.battle.activeToons:
-                    if self.toonHasCondition(t, 'banned'):
-                        result = 50
-                    else:
-                        result = 0
+                if self.toonHasCondition(toon.doId, 'banned'):
+                    result = 50
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'CaseManagerInsurancePlan':
                 result = 0
@@ -4663,26 +3453,24 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'bound', 1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'bindingscalculator', 0, 0, 'setBoth')
+                for s in self.battle.suits:
+                    if s.dna.name == 'ste':
+                        currentBossHealth = s.currHP
+                        s = s
+                        if currentBossHealth >= 1:
+                            self.setSuitCondition(s.doId, 'sanctioncalculator2', 1, 10, 'setBoth')
+                            self.setSuitCondition(s.doId, 'sanctioncalculator4', 1, 10, 'setBoth')
             elif atkInfo['name'] == 'CaseManagerLegallyBound':
-                if self.toonHasCondition(toon.doId, 'bound') and self.getToonConditionTurns(toon.doId, 'bound') < 3:
+                if self.toonHasCondition(toon.doId, 'bound'):
                     result = 20
-                    currentBossHealth = -1
-                    for s in self.battle.suits:
-                        if s.dna.name == 'ste':
-                            currentBossHealth = s.currHP
-                            s = s
-                            if currentBossHealth >= 1:
-                                self.setSuitCondition(s.doId, 'sanctioncalculator2', 1, 10, 'setBoth')
-                                self.setSuitCondition(s.doId, 'sanctioncalculator4', 1, 10, 'setBoth')
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'CaseManagerCourtRecordBan':
-                for t in self.battle.activeToons:
-                    if self.toonHasCondition(t, 'banned2'):
-                        result = 50
-                    else:
-                        result = 0
+                if self.toonHasCondition(toon.doId, 'banned2'):
+                    result = 50
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'LitigatorSnapSoak': #soaked snap
                 result = 36
@@ -4717,6 +3505,10 @@ class BattleCalculatorAI:
                     continue
                 for suit in self.currentlyLuredSuits.keys():
                     self.__removeLured(suit)
+            elif atkInfo['name'] == 'LitigatorBayouBash':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
             elif atkInfo['name'] == 'ScapegoatEnraged':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -4845,34 +3637,31 @@ class BattleCalculatorAI:
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'syphon', 1, 99, 'setBoth')
             elif atkInfo['name'] == 'PowerhouseSnipeVulnerable':
-                for t in self.battle.activeToons:
-                    if self.toonHasCondition(t, 'snapped'):
-                        if self.suitHasCondition(theSuit.doId, 'lured'):
-                            self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
-                        self.__removeLured(theSuit.doId)
-                        result = 25
-                    else:
-                        result = 0
+                if self.toonHasCondition(toon.doId, 'snapped'):
+                    if self.suitHasCondition(theSuit.doId, 'lured'):
+                        self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
+                    self.__removeLured(theSuit.doId)
+                    result = 25
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'PowerhouseSnipeMulligan':
-                for t in self.battle.activeToons:
-                    if self.toonHasCondition(t, 'noUnites'):
-                        if self.suitHasCondition(theSuit.doId, 'lured'):
-                            self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
-                        self.__removeLured(theSuit.doId)
-                        result = 25
-                    else:
-                        result = 0
+                if self.toonHasCondition(toon.doId, 'noUnites'):
+                    if self.suitHasCondition(theSuit.doId, 'lured'):
+                        self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
+                    self.__removeLured(theSuit.doId)
+                    result = 25
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'PowerhouseSnipeCollectCall':
-                for t in self.battle.activeToons:
-                    if self.toonHasCondition(t, 'bound'):
-                        if self.suitHasCondition(theSuit.doId, 'lured'):
-                            self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
-                        self.__removeLured(theSuit.doId)
-                        result = 25
-                    else:
-                        result = 0
+                if self.toonHasCondition(toon.doId, 'bound'):
+                    if self.suitHasCondition(theSuit.doId, 'lured'):
+                        self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
+                    self.__removeLured(theSuit.doId)
+                    result = 25
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'PowerhouseSnipeBookkept':
                 if self.toonHasCondition(toon.doId, 'bookkeepingtoon'):
@@ -4889,19 +3678,18 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
             elif atkInfo['name'] == 'PowerhouseSnipeGagBan':
-                for t in self.battle.activeToons:
-                    if self.toonHasCondition(t, 'banned'):
-                        if self.suitHasCondition(theSuit.doId, 'lured'):
-                            self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
-                        self.__removeLured(theSuit.doId)
-                        result = 25
-                    elif self.toonHasCondition(t, 'banned2'):
-                        if self.suitHasCondition(theSuit.doId, 'lured'):
-                            self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
-                        self.__removeLured(theSuit.doId)
-                        result = 25
-                    else:
-                        result = 0
+                if self.toonHasCondition(toon.doId, 'banned'):
+                    if self.suitHasCondition(theSuit.doId, 'lured'):
+                        self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
+                    self.__removeLured(theSuit.doId)
+                    result = 25
+                if self.toonHasCondition(toon.doId, 'banned2'):
+                    if self.suitHasCondition(theSuit.doId, 'lured'):
+                        self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
+                    self.__removeLured(theSuit.doId)
+                    result = 25
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'AmbassadorManagerialProtection':
                 result = 0
@@ -5728,8 +4516,8 @@ class BattleCalculatorAI:
 
     def __getToonHp(self, toonDoId):
         handle = self.battle.getToon(toonDoId)
-        if handle != None and toonDoId in self.toonHPAdjusts:
-            return handle.hp + self.toonHPAdjusts[toonDoId]
+        if handle != None:
+            return handle.hp
         else:
             return 0
 
@@ -5747,32 +4535,6 @@ class BattleCalculatorAI:
                 if attack[SUIT_HP_COL][position] <= 0:
                     continue
                 toonHp = self.__getToonHp(t)
-                if theSuit.dna.name == 'ssb':
-                    if attack[SUIT_ATK_COL] in [0, 2]:
-                        self.notify.debug('__applySuitAttackDamages - applying corruption on toon %s' % str(t))
-                        self.setToonCondition(t, 'corruption', 2, -2, 'refreshTurns')
-                        if attack[SUIT_ATK_COL] == 0:
-                            self.notify.debug(
-                                '__applySuitAttackDamages - applying corruption on toon %s two additional times' % str(
-                                    t))
-                            self.setToonCondition(t, 'corruption', 4, -2, 'refreshTurns')
-                    else:
-                        self.notify.debug(
-                            '__applySuitAttackDamages - We are a shadow, but we did not use corruption, not corrupting.')
-                        self.toonHPAdjusts[t] -= 0  # toons take no damage from this cheat
-                        return
-                #if theSuit.dna.name == 'gtk' and attack[SUIT_ATK_COL] == 1:
-                    #self.notify.debug('__applySuitAttackDamages - applying corruption on toon %s four times' % str(t))
-                    #self.setToonCondition(t, 'corruption', 4, 3, 'setBoth')
-                #if theSuit.dna.name == 'lit' and attack[SUIT_ATK_COL] == 1:
-                    #self.notify.debug('__applySuitAttackDamages - applying corruption on toon %s four times' % str(t))
-                    #self.setToonCondition(t, 'corruption', 4, 3, 'setBoth')
-                if theSuit.dna.name == 'trk' and attack[SUIT_ATK_COL] == 0:
-                    # FlameColumn - Burns the target, reducing damage output by 75%.
-                    self.setToonCondition(t, 'allGagBoost', -75, 3, 'setBoth')
-                #if theSuit.dna.name == 'lit' and attack[SUIT_ATK_COL] == 2:
-                    #self.notify.debug('__applySuitAttackDamages - applying corruption on toon %s four times' % str(t))
-                    #self.setToonCondition(t, 'corruption', 2, 3, 'setBoth')
                 if toonHp - attack[SUIT_HP_COL][position] <= 0:
                     if self.notify.getDebug():
                         self.notify.debug('Toon %d has died, removing' % t)
@@ -6146,7 +4908,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 24  # Court Record Retaliation
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6177,7 +4939,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 44  # Legally Bound
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6207,7 +4969,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 45  # Court Record Ban Retaliation
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6238,7 +5000,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 12  # Snipe Retaliation For Gag Bans
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6269,7 +5031,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 11  # Bookkeeping Retaliation
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6300,7 +5062,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 7  # Collect Call Fees
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6330,7 +5092,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 24  # Budget Cuts Gag Ban Retaliation
-                    attack[SUIT_TGT_COL] = self.__calcSuitTargetALT(attack)
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -6767,10 +5529,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 16  # Snipe Retaliation Collect Call
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'bound'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7019,10 +5778,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 9  # Gavel Court Record Ban Retaliation
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'banned3'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7053,10 +5809,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 11  # Snipe Retaliation Vulnerabilities
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'snapped'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7086,10 +5839,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 14  # Snipe Retaliation For Bookkeeping
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'bookkeepingtoon'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7852,10 +6602,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 15  # Snipe Retaliation For Being On Cooldown
-                    attack[SUIT_TGT_COL] = []
-                    for t in self.battle.activeToons:
-                        if self.toonHasCondition(t, 'noUnites'):
-                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(t))
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -8134,6 +6881,10 @@ class BattleCalculatorAI:
             for j in xrange(longest):
                 self.battle.toonAttacks[t][TOON_HP_COL].append(-1)
                 self.battle.toonAttacks[t][TOON_KBBONUS_COL].append(-1)
+
+        #for i in xrange(6):
+           # for j in xrange(len(self.battle.activeToons)):
+             #   self.battle.suitAttacks[i][SUIT_HP_COL].append(-1)
 
         toonsHit, cogsMiss = self.__initRound()
         for suit in self.battle.activeSuits:

@@ -147,10 +147,10 @@ def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
-    updateTrack = Parallel(Func(suit.setChatAbsolute,
+    updateTrack = Parallel(Func(suit.setChatAbsoluteTrap,
                                 '',
                                 CFSpeech | CFTimeout))
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimation))
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(walkTrack, updateTrack, moveTrack)
 	
@@ -480,7 +480,7 @@ def __zapNearby(suit, anim, suitIndex, suits, tContact, hp, battle):
         suitTrack.append(Parallel(__soakRemoval(suits[suitIndex], 1)))
         suitTrack.append(__createSuitResetPosTrack(suits[suitIndex], battle))
         suitTrack.append(Func(battle.unlureSuit, suits[suitIndex]))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationTrap))
         suitTrack.append(soakRemoval)
         suitTrack.append(__ScapegoatAbsorb1(suitIndex - 1, battle.activeSuits, hp, battle))
         suitTrack.append(__ScapegoatAbsorb1(suitIndex + 1, battle.activeSuits, hp, battle))
@@ -525,7 +525,7 @@ def __zapNearby2(suit, anim, suitIndex, suits, tContact, hp, battle):
         suitTrack.append(Parallel(__soakRemoval(suits[suitIndex], 1)))
         suitTrack.append(__createSuitResetPosTrack(suits[suitIndex], battle))
         suitTrack.append(Func(battle.unlureSuit, suits[suitIndex]))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationTrap))
         suitTrack.append(soakRemoval)
         suitTrack.append(__ScapegoatAbsorb2(suitIndex - 1, battle.activeSuits, hp, battle))
         suitTrack.append(__ScapegoatAbsorb2(suitIndex + 1, battle.activeSuits, hp, battle))
@@ -570,7 +570,7 @@ def __zapNearby3(suit, anim, suitIndex, suits, tContact, hp, battle):
         suitTrack.append(Parallel(__soakRemoval(suits[suitIndex], 1)))
         suitTrack.append(__createSuitResetPosTrack(suits[suitIndex], battle))
         suitTrack.append(Func(battle.unlureSuit, suits[suitIndex]))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationTrap))
         suitTrack.append(soakRemoval)
         suitTrack.append(__ScapegoatAbsorb2(suitIndex - 1, battle.activeSuits, hp, battle))
         suitTrack.append(__ScapegoatAbsorb2(suitIndex + 1, battle.activeSuits, hp, battle))
@@ -615,7 +615,7 @@ def __zapNearby4(suit, anim, suitIndex, suits, tContact, hp, battle):
         suitTrack.append(Parallel(__soakRemoval(suits[suitIndex], 1)))
         suitTrack.append(__createSuitResetPosTrack(suits[suitIndex], battle))
         suitTrack.append(Func(battle.unlureSuit, suits[suitIndex]))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationTrap))
         suitTrack.append(soakRemoval)
         suitTrack.append(__ScapegoatAbsorb2(suitIndex - 1, battle.activeSuits, hp, battle))
         suitTrack.append(__ScapegoatAbsorb2(suitIndex + 1, battle.activeSuits, hp, battle))

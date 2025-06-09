@@ -4478,7 +4478,7 @@ SuitAttackNames = {'Audit': 'Audit!',
  'CourtCosts': 'Calculating Costs!',
                    # litigator cheats
                    'LitigatorSnapSoak': "Snap!",
-                   'LitigatorSnap': "Snap",
+                   'LitigatorSnap': "Snap!",
                    'LitigatorBayouBash': "Bayou Bash!",
                    'LitigatorBayouBellow': "Bayou Bellow!",
                    # stenographer cheats
