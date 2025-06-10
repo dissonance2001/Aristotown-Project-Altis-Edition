@@ -1868,13 +1868,13 @@ def doRefinement(attack):
                 suitTrack.append(Func(suit.showHpTextCheat, 125))
                 suitTrack.append(Func(suit.showHpString, "REFINED!"))
                 suitTrack.append(Func(suit.setHealthForMe, 125))
-            suitTrack.append(Func(suit.updateHealthBar, 0))
-            if not suit.dna.name == 'gtk':
-                suitTrack.append(Parallel(Sequence(Wait(3)),
+        suitTrack.append(Func(suit.updateHealthBar, 0))
+        if not suit.dna.name == 'gtk':
+            suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
                                                CFSpeech | CFTimeout)))
-            suitTrack.append(
+        suitTrack.append(
                 Func(suit.setNeutralAnimation))
         suitTracks.append(suitTrack)
     posPoints = [Point3(-0.25, 0, 0), VBase3(0, 180, 0)]
@@ -1908,7 +1908,7 @@ def doRefinement(attack):
     explosionTrack = Sequence()
     explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
     name = attack['id']
-    suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
     soundTrack1 = getSoundTrack('SA_repair.ogg', delay=2.5, node=theSuit)
     soundTrack2 = getSoundTrack('SA_refinement.ogg', delay=2, node=theSuit)
     multiTrack = Parallel(soundTrack1, soundTrack2)

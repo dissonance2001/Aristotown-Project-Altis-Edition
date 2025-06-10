@@ -3321,8 +3321,8 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-                if len(self.battle.activeSuits) < 4:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+               # if len(self.battle.activeSuits) < 4:
+                  #  boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'StenographerSanctionBindings':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3355,8 +3355,8 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-                if len(self.battle.activeSuits) < 4:
-                   boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+               # if len(self.battle.activeSuits) < 4:
+                   #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'CaseManagerInsurance':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3465,8 +3465,8 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-                if len(self.battle.activeSuits) < 6:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+               # if len(self.battle.activeSuits) < 6:
+                  #  boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'ScapegoatEnraged':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3497,8 +3497,8 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-                if len(self.battle.activeSuits) < 4:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+               # if len(self.battle.activeSuits) < 4:
+                    #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'ScapegoatCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned3'):
                     self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
@@ -3788,13 +3788,13 @@ class BattleCalculatorAI:
                     theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.25)
                     theSuit.setHP(theSuit.currHP + 500)
             elif atkInfo['name'] == 'BookkeeperBookkeepingRetaliation':
-                for t in self.battle.activeToons:
-                    if self.toonHasCondition(t, 'bookkeepingtoon'):
-                        self.setToonCondition(toon.doId, 'allGagBoost', -40, 3, 'setBoth')
-                        self.setToonCondition(toon.doId, 'lureBoost', -40, 3, 'setBoth')
-                        result = 30
-                    else:
-                        result = 0
+                if self.toonHasCondition(toon.doId, 'bookkeepingtoon'):
+                    self.setToonCondition(toon.doId, 'bookkeepingtoon', 0, 0, 'setBoth')
+                    self.setToonCondition(toon.doId, 'allGagBoost', -40, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'lureBoost', -40, 3, 'setBoth')
+                    result = 30
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'BookkeeperBookkeeping':
                 result = 0
@@ -3878,11 +3878,10 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'collectcallcalculator', 0, 0, 'setBoth')
             elif atkInfo['name'] == 'WiretapperCollectCallDamage':
-                for t in self.battle.activeToons:
-                    if self.toonHasCondition(t, 'bound'):
-                        result = (24 + (self.TurnsElapsed * 1.3))
-                    else:
-                        result = 0
+                if self.toonHasCondition(toon.doId, 'bound'):
+                    result = (24 + (self.TurnsElapsed * 1.3))
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'BanLevel4':
                 result = 0
@@ -4468,8 +4467,6 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result * (
                             self.getToonConditionModifier(toonId, 'corruption') + self.getToonConditionModifier(toonId,
                                                                                                                 'snapped') + theSuit.getDamageMultiplier())
-            if self.suitHasCondition(theSuit.doId, 'lured'):
-                self.setSuitCondition(theSuit.doId, 'lured', 1, 1, 'setBoth')
             self.notify.debug('__calcSuitAtkHp - result is %s for index %i' % (str(attack[SUIT_HP_COL][targetIndex]), targetIndex))
 
     def __getToonHp(self, toonDoId):
