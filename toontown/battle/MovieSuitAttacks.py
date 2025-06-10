@@ -859,10 +859,10 @@ def doSuitAttack(attack):
         toonHprTrack.append(Sequence(Func(toon.headsUp, battle, MovieUtil.PNT3_ZERO), Func(toon.loop, 'neutral')))
 
     suit = attack['suit']
-    if suit.dna.name == 'scg' and suit.isAngry:
-        neutralIval =  Func(suit.loop, 'neutral-enraged')
-        preWalkTrack = ActorInterval(suit, 'neutral-enraged-return')
-    elif name == FREE_CRUISE:
+   # if suit.dna.name == 'scg' and suit.isAngry:
+     #   neutralIval =  Func(suit.loop, 'neutral-enraged')
+    #    preWalkTrack = ActorInterval(suit, 'neutral-enraged-return')
+    if name == FREE_CRUISE:
         neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         preWalkTrack = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
     elif name == CONDUCTION:
@@ -921,6 +921,8 @@ def doSuitAttack(attack):
     elif name == CASE_MANAGER_INSURANCE:
         resetSuitTrack = Sequence(suitTrack)
     elif name == CALCULATING_FEES:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == SCAPEGOAT_COURT_RECORD_BAN:
         resetSuitTrack = Sequence(suitTrack)
     else:
         resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
@@ -15275,7 +15277,7 @@ def doTabulate(attack):
                                  animDuration=2.5)
     toonTracks = getToonTracks(attack, 2.6, ['conked'], 1.2, ['sidestep'])
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
-    return Parallel(suitTrack, toonTracks, soundTrack, calcPropTrack, partTracks, partTracks2, partTracks3, partTracks4, partTracks5)
+    return Parallel(suitTrack, toonTracks, soundTrack, calcPropTrack, partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
 
 
 def doCrunch(attack):

@@ -738,10 +738,10 @@ def doSuitAttack(attack):
         toonHprTrack.append(Sequence(Func(toon.headsUp, battle, MovieUtil.PNT3_ZERO), Func(toon.loop, 'neutral')))
 
     suit = attack['suit']
-    if suit.dna.name == 'scg' and suit.isAngry:
-        neutralIval =  Func(suit.loop, 'neutral-enraged')
-        preWalkTrack = ActorInterval(suit, 'neutral-enraged-return')
-    elif name == FREE_CRUISE:
+   # if suit.dna.name == 'scg' and suit.isAngry:
+      #  neutralIval =  Func(suit.loop, 'neutral-enraged')
+      #  preWalkTrack = ActorInterval(suit, 'neutral-enraged-return')
+    if name == FREE_CRUISE:
         neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         preWalkTrack = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
     elif name == CONDUCTION:
@@ -787,10 +787,26 @@ def doSuitAttack(attack):
     suitPos = suit.getPos(battle)
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     resetTrack = getResetTrack(suit, battle)
+    if name == SCAPEGOAT_COURT_RECORD_BAN:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == CASE_MANAGER_COURT_RECORD_BAN:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == STENOGRAPHER_COURT_RECORD_BAN:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == CASE_MANAGER_LEGALLY_BOUND:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == CASE_MANAGER_INSURANCE:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == CALCULATING_FEES:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == SCAPEGOAT_COURT_RECORD_BAN:
+        resetSuitTrack = Sequence(suitTrack)
+    else:
+        resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
     resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
-    waitTrack = Sequence(Wait(resetTrack.getDuration()), Func(battle.unlureSuit, suit))
-    resetCamTrack = Sequence(camTrack)
-    return resetCamTrack
+    waitTrack = Sequence(Func(battle.unlureSuit, suit))
+    resetCamTrack = Sequence(waitTrack, camTrack)
+    return (resetSuitTrack, camTrack)
 
 
 def getResetTrack(suit, battle):
@@ -1854,9 +1870,9 @@ def doLegalBindings(attack):
         tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
     tubeTracks.append(Func(battle.movie.clearRestoreHips))
-    toonTrack = getToonTrackCheat(attack, 1.9, ['struggle'], 1.9, ['struggle'])
-    notifyTrack = Sequence(Wait(1.9), Func(toon.showHpTextWhite, "LEGALLY BOUND!", 10))
-    soundTrack = getSoundTrack('SA_red_tape.ogg', delay=1.9, node=suit)
+    toonTrack = getToonTrackCheat(attack, 2.4, ['struggle'], 2.4, ['struggle'])
+    notifyTrack = Sequence(Wait(2.4), Func(toon.showHpTextWhite, "LEGALLY BOUND!", 10))
+    soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.4, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, tubeTracks, notifyTrack)
 
 def doCaseInsurance(attack):
@@ -2090,7 +2106,7 @@ def doEnraged(attack):
     toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
     soundTrack = getSoundTrack('SA_rage.ogg', node=suit)
     makeEnraged = Func(suit.makeAngry)
-    suitTrack = getSuitTrack(attack)
+    suitTrack = getSuitAnimTrack(attack)
     suitTrack.append(Wait(2.0))
     headInterval = Sequence(MovieUtil.createSuitEnragedInterval(suit, 0))
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -2105,7 +2121,7 @@ def doShieldsUp(attack):
     dodgeAnims = [['jump'], ['jump', 0.01]]
     toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
     soundTrack = getSoundTrack('SA_defense.ogg', node=suit)
-    suitTrack = getSuitTrack(attack)
+    suitTrack = getSuitAnimTrack(attack)
     suitTrack.append(Wait(2.0))
     makeShielding = Func(suit.makeShielding)
     headInterval = Sequence(MovieUtil.createSuitEnragedInterval(suit, 0))

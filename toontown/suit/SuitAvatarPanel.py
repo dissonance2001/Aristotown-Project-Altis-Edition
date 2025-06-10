@@ -33,7 +33,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                     Vec4(1, 0.533, 0, 1.0),
                     Vec4(1, 0, 0, 1),
                     Vec4(1, 0, 0, 1),
-                    Vec4(0.431, 0.431, 0.431, 1),  # out
+                    Vec4(0.3, 0.3, 0.3, 1),  # out
                     Vec4(1, 0, 0, 1),
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
@@ -583,7 +583,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.interval.start()
 
     def __pulseGray(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=.25, colorScale=(0.431, 0.431, 0.431, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=.25, colorScale=(0.3, 0.3, 0.3, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 

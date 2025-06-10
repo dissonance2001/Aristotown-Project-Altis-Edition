@@ -61,7 +61,7 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
+AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('glower', 'glower'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
             ('falling-knife', 'falling-knife'), ('throw-object', 'throw-object'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),
             ('throw-paper', 'throw-paper'), ('mob-mentality', 'mob-mentality'), ('neutral', 'neutral'), ('neutral2', 'neutral'), ('magnet', 'magnet'), ('neutral2-hurt', 'neutral-hurt'),
             ('neutral-hurt', 'neutral-hurt'), ('neutral-unstable', 'neutral-unstable'), ('neutral-enraged-return', 'neutral-enraged-return'), ('ottoman-sit-loop', 'ottoman-sit-loop'),
@@ -73,7 +73,7 @@ AllSuitsMinigame = (('victory', 'victory'), ('flail', 'flailing'), ('flail-wb', 
                     ('slip-backward', 'slip-backward'), ('lose3', 'wrecked'), ('slip-forward', 'slip-forward'))
 AllSuitsTutorialBattle = (('lose', 'lose'), ('lose2', 'headless-death'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'), ('dance', 'song-and-dance'), ('pie-small-react', 'pie-small'),
                           ('squirt-small-react', 'squirt-small'))
-AllSuitsBattle = (('drop-react', 'anvil-drop'), ('flatten', 'drop'), ('headless-death', 'headless-death'), ('dance', 'song-and-dance'), ('frustrated', 'frustrated-f'),
+AllSuitsBattle = (('drop-react', 'anvil-drop'), ('flatten', 'drop'), ('glower', 'glower'), ('headless-death', 'headless-death'), ('dance', 'song-and-dance'), ('frustrated', 'frustrated-f'),
                   ('lose3', 'wrecked'), ('short-squeeze', 'short-squeeze'), ('gag-miss', 'gag-miss'), ('pie-large', 'pie-large'), ('pie-large-lured', 'pie-large-lured'), ('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
                   ('highroller-neutral-levitate-in-out', 'highroller-neutral-levitate-in-out', 4), ('wrecked', 'wrecked'), ('sidestep-left', 'sidestep-left'),
                   ('sidestep-right', 'sidestep-right'), ('squirt-large-react', 'squirt-large'), ('sound-react', 'sound-react'), ('sound-react-bow', 'sound-react-bow'),
@@ -1119,7 +1119,7 @@ class Suit(Avatar.Avatar):
                     Vec4(1, 0.533, 0, 1.0),
                     Vec4(1, 0, 0, 1),
                     Vec4(1, 0, 0, 1),
-                    Vec4(0.431, 0.431, 0.431, 1), #out
+                    Vec4(0.3, 0.3, 0.3, 1), #out
                     Vec4(1, 0, 0, 1),
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
@@ -1140,7 +1140,7 @@ class Suit(Avatar.Avatar):
                     Vec4(1, 0.533, 0, 1.0),
                     Vec4(1, 0, 0, 1),
                     Vec4(1, 0, 0, 1),
-                    Vec4(0.431, 0.431, 0.431, 1), #out
+                    Vec4(0, 0, 0, 0), #out
                     Vec4(1, 0, 0, 1),
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
@@ -5656,7 +5656,7 @@ class Suit(Avatar.Avatar):
             if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
                 thing.setColor(1, 1, 1, 1)
                 self.interval = Parallel(
-                    LerpColorScaleInterval(thing, duration=.25, colorScale=(0.431, 0.431, 0.431, 1),
+                    LerpColorScaleInterval(thing, duration=.25, colorScale=(0.3, 0.3, 0.3, 1),
                                            blendType='easeInOut'))
                 self.interval.start()
                 thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))

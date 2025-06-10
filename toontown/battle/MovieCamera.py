@@ -1090,7 +1090,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpTrack2 = pbpText.getShowInterval('Tremor!', 3.5)
         return Parallel(pbpTrack2, camTrack2)
-    elif name == THROW_BOOK:
+    elif name == LAW_BOOK:
         camTrack.append(defaultCamera(openShotDuration=1.5))
         # litigator cheats
     elif name == LITIGATOR_SNAP_SOAK:
@@ -1099,7 +1099,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == LITIGATOR_BAYOU_BASH:
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      heldRelativeShot(suit, 0.0, 6.8096, 7.77317, -180, 0.0, 0.0, attackDuration)))
+                                      heldRelativeShot(suit, 0.0, 6.8096, 8, -180, -10.0, 0.0, attackDuration)))
     elif name == LITIGATOR_BAYOU_BELLOW:
         camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5)))
         # stenographer cheats
@@ -1124,14 +1124,15 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == CASE_MANAGER_INSURANCE_PLAN:
         if not suit.isSkeleton:
             camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(2.0), moveShot(0.0, -15.0, 6.0, 0, -20, 0, 1.5), heldShot(0.0, -15.0, 6.0, 0, -20, 0, attackDuration - 4.2)))
+                                      motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(2.0), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5), heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
 
         else:
-            camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'),
-                                      moveShot(0.0, -15.0, 6.0, 0, -20, 0, 1.5),
-                                      heldShot(0.0, -15.0, 6.0, 0, -20, 0, attackDuration - 3.5)))
+            camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                     motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(2.0),
+                                     moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                     heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == CASE_MANAGER_INSURANCE:
-        camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+        camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
     elif name == CASE_MANAGER_LEGAL_BINDINGS:
         camTrack.append(defaultCamera(openShotDuration=1.5))
@@ -1164,7 +1165,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == SCAPEGOAT_ENRAGED:
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 heldRelativeShot(suit, 0.0, 8.8096, 5, -180, 0.0, 0.0, attackDuration)))
+                                 heldRelativeShot(suit, 0.0, 6.8096, 7, -180, -20.0, 0.0, attackDuration)))
     elif name == SCAPEGOAT_GAVEL:
         camTrack.append(defaultCamera(openShotDuration=2))
     elif name == SCAPEGOAT_BARNYARD_BASH:
