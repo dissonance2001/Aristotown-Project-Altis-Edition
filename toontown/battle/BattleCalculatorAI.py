@@ -3641,7 +3641,7 @@ class BattleCalculatorAI:
                         self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
                     self.__removeLured(theSuit.doId)
                     result = 25
-                if self.toonHasCondition(toon.doId, 'banned2'):
+                elif self.toonHasCondition(toon.doId, 'banned2'):
                     if self.suitHasCondition(theSuit.doId, 'lured'):
                         self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
                     self.__removeLured(theSuit.doId)

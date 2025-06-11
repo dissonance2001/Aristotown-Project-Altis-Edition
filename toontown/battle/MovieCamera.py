@@ -1074,8 +1074,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == WHITE_POWDER:
         camTrack.append(defaultCamera(openShotDuration=2.5)) #UNUSED
-    elif name == BLACK_ORB or name == WATERCOOLER:
-        camTrack.append(defaultCamera())
+    elif name == BLACK_ORB:
+        camTrack.append(defaultCamera(openShotDuration=2.5)) #UNUSED
+    elif name == WATERCOOLER:
+        camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == WITHDRAWAL:
         camTrack.append(defaultCamera(openShotDuration=1.2))
     elif name == INK_DRAIN:

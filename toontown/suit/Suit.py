@@ -2456,11 +2456,12 @@ class Suit(Avatar.Avatar):
             self.setHeight(9.31)
         elif dna.name == 'ghd':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.generateSkeletonBody()
-            self.makeExecutive()
+            self.handColor = VBase4(1, 0.486, 0, 1)
+            self.generateBody()
+            self.makeBoardbotManager()
+            self.generateHead3('clubpresident', animated=True)
             self.setTransparency(1)
-            self.setHeight(8.5)
+            self.setHeight(9.31)
         elif dna.name == 'tyh':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)

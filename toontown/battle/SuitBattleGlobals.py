@@ -4903,20 +4903,19 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (35,),
                (100,),
                (25,)))},
- 'ghd': {'name': 'Skelecog',
+ 'ghd': {'name': 'Test Dummy',
         'singularname': 'a Skelecog',
 		'pluralname': 'Skelecogs',
 		'level': 20,
-		'hp':(100,),
+		'hp':(100000,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('HighRollerAceInTheHole',
                (7,),
-               (85,),
                (100,),
-               ATK_TGT_DOUBLE),)},
+               (100,)),)},
  'tyh': {'name': 'Skelecog',
         'singularname': 'a Skelecog',
 		'pluralname': 'Skelecogs',
@@ -6972,6 +6971,34 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'AmbassadorManagerialProtection': ('snap', ATK_TGT_GROUP),
 'AmbassadorManagerialProtectionImmunity': ('cease', ATK_TGT_SINGLE),
 'AmbassadorMulligan': ('golf-club-swing', ATK_TGT_SINGLE),
+#high roller phase 1
+'HighRollerNoAttack': ('nothing', ATK_TGT_SINGLE),
+'HighRollerWheelSpin': ('wheelspin', ATK_TGT_SINGLE),
+'HighRollerCommercialBreak': ('snap', ATK_TGT_SINGLE),
+'HighRollerGameTimeSpawn': ('snap', ATK_TGT_GROUP),
+'HighRollerGameTimeCog': ('snap', ATK_TGT_SINGLE),
+'HighRollerGameTimeCog2': ('snap', ATK_TGT_SINGLE),
+'HighRollerBust': ('bust', ATK_TGT_GROUP),
+# high roller phase 2
+'HighRollerPhase3': ('nothing', ATK_TGT_GROUP),
+# high roller phase 3
+'HighRollerRolled': ('magic3', ATK_TGT_GROUP),
+'HighRollerFreeCruise': ('song-and-dance', ATK_TGT_GROUP),
+'HighRollerConduction': ('throw-object', ATK_TGT_DOUBLE),
+'HighRollerDiceRouletteCogs': ('bust', ATK_TGT_SINGLE),
+'HighRollerDiceRouletteToons': ('bust', ATK_TGT_GROUP),
+'HighRollerDiceRouletteEveryone': ('bust', ATK_TGT_GROUP),
+'HighRollerDiceRouletteNobody': ('bust', ATK_TGT_SINGLE),
+'HighRollerTrickOfTheLight': ('nothing', ATK_TGT_GROUP),
+'HighRollerAceInTheHole': ('nothing', ATK_TGT_GROUP),
+#high roller silhouette cheats
+'HighRollerDonation': ('shot5', ATK_TGT_SINGLE),
+'HighRollerSyphon': ('sanction', ATK_TGT_GROUP),
+'HighRollerBar': ('snap', ATK_TGT_GROUP),
+'HighRollerSingingBlues': ('phone', ATK_TGT_SINGLE),
+'HighRollerDamageReduction': ('glower', ATK_TGT_DOUBLE),
+'HighRollerSplashback': ('throw-object', ATK_TGT_GROUP),
+'HighRollerCheerRetaliation': ('glower', ATK_TGT_GROUP),
 #universal cheats
 'SynergyFees': ('magic3', ATK_TGT_GROUP),
 'CalculatingFees': ('calculating-costs', ATK_TGT_SINGLE),
@@ -7311,6 +7338,33 @@ AMBASSADOR_DAMAGE_UP = SuitAttacks.keys().index('AmbassadorDamageUp')
 AMBASSADOR_MANAGERIAL_PROTECTION = SuitAttacks.keys().index('AmbassadorManagerialProtection')
 AMBASSADOR_MANAGERIAL_PROTECTION_IMMUNITY = SuitAttacks.keys().index('AmbassadorManagerialProtectionImmunity')
 AMBASSADOR_MULLIGAN = SuitAttacks.keys().index('AmbassadorMulligan')
+#high roller phase 1 cheats
+HIGH_ROLLER_NO_ATTACK = SuitAttacks.keys().index('HighRollerNoAttack')
+HIGH_ROLLER_WHEEL_SPIN = SuitAttacks.keys().index('HighRollerWheelSpin')
+HIGH_ROLLER_COMMERCIAL_BREAK = SuitAttacks.keys().index('HighRollerCommercialBreak')
+HIGH_ROLLER_GAME_TIME_SPAWN = SuitAttacks.keys().index('HighRollerGameTimeSpawn')
+HIGH_ROLLER_GAME_TIME_COG = SuitAttacks.keys().index('HighRollerGameTimeCog')
+HIGH_ROLLER_GAME_TIME_COG_2 = SuitAttacks.keys().index('HighRollerGameTimeCog2')
+HIGH_ROLLER_BUST = SuitAttacks.keys().index('HighRollerBust')
+#high roller phase 2 cheats
+HIGH_ROLLER_PHASE_3 = SuitAttacks.keys().index('HighRollerPhase3')
+#high roller phase 3 cheats
+HIGH_ROLLER_FREE_CRUISE = SuitAttacks.keys().index('HighRollerFreeCruise')
+HIGH_ROLLER_CONDUCTION = SuitAttacks.keys().index('HighRollerConduction')
+HIGH_ROLLER_DICE_ROULETTE_COGS = SuitAttacks.keys().index('HighRollerDiceRouletteCogs')
+HIGH_ROLLER_DICE_ROULETTE_TOONS = SuitAttacks.keys().index('HighRollerDiceRouletteToons')
+HIGH_ROLLER_DICE_ROULETTE_EVERYONE = SuitAttacks.keys().index('HighRollerDiceRouletteEveryone')
+HIGH_ROLLER_DICE_ROULETTE_NOBODY = SuitAttacks.keys().index('HighRollerDiceRouletteNobody')
+HIGH_ROLLER_TRICK_OF_THE_LIGHT = SuitAttacks.keys().index('HighRollerTrickOfTheLight')
+HIGH_ROLLER_ACE_IN_THE_HOLE = SuitAttacks.keys().index('HighRollerAceInTheHole')
+#high roller silhouette cheats
+HIGH_ROLLER_DONATION = SuitAttacks.keys().index('HighRollerDonation')
+HIGH_ROLLER_SYPHON = SuitAttacks.keys().index('HighRollerSyphon')
+HIGH_ROLLER_BAR = SuitAttacks.keys().index('HighRollerBar')
+HIGH_ROLLER_SINGING_BLUES = SuitAttacks.keys().index('HighRollerSingingBlues')
+HIGH_ROLLER_DAMAGE_REDUCTION = SuitAttacks.keys().index('HighRollerDamageReduction')
+HIGH_ROLLER_SPLASHBACK = SuitAttacks.keys().index('HighRollerSplashback')
+HIGH_ROLLER_CHEER_RETALIATION = SuitAttacks.keys().index('HighRollerCheerRetaliation')
 #universal cheats
 SYNERGY_FEES = SuitAttacks.keys().index('SynergyFees')
 CALCULATING_FEES = SuitAttacks.keys().index('CalculatingFees')

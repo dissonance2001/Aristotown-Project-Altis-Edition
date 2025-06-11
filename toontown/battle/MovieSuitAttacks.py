@@ -1,6 +1,7 @@
 from toontown.battle import MovieCamera
 from toontown.battle import MovieLawbotLitigationCheats
 from toontown.battle import MovieBossbotLitigationCheats
+from toontown.battle import MovieHighRollerCheats
 from toontown.battle import MovieUniversalCheats
 from toontown.battle import MovieUtil
 from toontown.battle import BattleParticles
@@ -700,6 +701,56 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doManagerialProtectionImmunity(attack)
     elif name == AMBASSADOR_MULLIGAN:
         suitTrack = MovieBossbotLitigationCheats.doMulligan(attack)
+        # high roller phase 1
+    elif name == HIGH_ROLLER_NO_ATTACK:
+        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+    elif name == HIGH_ROLLER_WHEEL_SPIN:
+        suitTrack = MovieHighRollerCheats.doWheelSpin(attack)
+    elif name == HIGH_ROLLER_COMMERCIAL_BREAK:
+        suitTrack = MovieHighRollerCheats.doCommercialBreak(attack)
+    elif name == HIGH_ROLLER_GAME_TIME_SPAWN:
+        suitTrack = MovieHighRollerCheats.doGameTimeSpawn(attack)
+    elif name == HIGH_ROLLER_GAME_TIME_COG:
+        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack)
+    elif name == HIGH_ROLLER_GAME_TIME_COG_2:
+        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack)
+    elif name == HIGH_ROLLER_BUST:
+        suitTrack = MovieHighRollerCheats.doBust(attack)
+    # high roller phase 2 cheats
+    elif name == HIGH_ROLLER_PHASE_3:
+        suitTrack = MovieHighRollerCheats.doPhase3(attack)
+    # high roller phase 3 cheats
+    elif name == HIGH_ROLLER_FREE_CRUISE:
+        suitTrack = MovieHighRollerCheats.doFreeCruise(attack)
+    elif name == HIGH_ROLLER_CONDUCTION:
+        suitTrack = MovieHighRollerCheats.doConduction(attack)
+    elif name == HIGH_ROLLER_DICE_ROULETTE_COGS:
+        suitTrack = MovieHighRollerCheats.doDiceRouletteCogs(attack)
+    elif name == HIGH_ROLLER_DICE_ROULETTE_TOONS:
+        suitTrack = MovieHighRollerCheats.doDiceRouletteToons(attack)
+    elif name == HIGH_ROLLER_DICE_ROULETTE_EVERYONE:
+        suitTrack = MovieHighRollerCheats.doDiceRouletteEveryone(attack)
+    elif name == HIGH_ROLLER_DICE_ROULETTE_NOBODY:
+        suitTrack = MovieHighRollerCheats.doDiceRouletteNobody(attack)
+    elif name == HIGH_ROLLER_TRICK_OF_THE_LIGHT:
+        suitTrack = MovieHighRollerCheats.doTrickOfTheLight(attack)
+    elif name == HIGH_ROLLER_ACE_IN_THE_HOLE:
+        suitTrack = MovieHighRollerCheats.doAceInTheHole(attack)
+    # high roller silhouette cheats
+    elif name == HIGH_ROLLER_DONATION:
+        suitTrack = MovieHighRollerCheats.doDonation(attack)
+    elif name == HIGH_ROLLER_SYPHON:
+        suitTrack = MovieHighRollerCheats.doSyphon(attack)
+    elif name == HIGH_ROLLER_BAR:
+        suitTrack = MovieHighRollerCheats.doBar(attack)
+    elif name == HIGH_ROLLER_SINGING_BLUES:
+        suitTrack = MovieHighRollerCheats.doSingingBlues(attack)
+    elif name == HIGH_ROLLER_DAMAGE_REDUCTION:
+        suitTrack = MovieHighRollerCheats.doSnipeDamageReduction(attack)
+    elif name == HIGH_ROLLER_SPLASHBACK:
+        suitTrack = MovieHighRollerCheats.doSplashback(attack)
+    elif name == HIGH_ROLLER_CHEER_RETALIATION:
+        suitTrack = MovieHighRollerCheats.doSnipe(attack)
     #universal cheats
     elif name == SYNERGY_FEES:
         suitTrack = MovieUniversalCheats.doSynergy(attack)
