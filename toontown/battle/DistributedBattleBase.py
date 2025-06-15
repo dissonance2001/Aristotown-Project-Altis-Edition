@@ -667,10 +667,13 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     for headPart in suit.animatedHeadParts:
                         headPart.loop('neutral-lured')
             else:
-                suit.setNeutralAnimation()
+                if suit.style.name == 'jb':
+                    suit.setNeutralAnimationRolled()
+                elif suit.style.name == 'mad':
+                    suit.setNeutralAnimationRolled()
+                else:
+                    suit.setNeutralAnimation()
                 suit.setDizzy(0)
-                for headPart in suit.animatedHeadParts:
-                    headPart.loop('neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         return oldtoons
 
     def adjust(self, timestamp):
@@ -1029,7 +1032,6 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 if self.isSuitLured(suit) == 1:
                     spos = Point3(suitPos[0], suitPos[1] - MovieUtil.SUIT_LURE_DISTANCE, suitPos[2])
                     suit.setPosHpr(self, spos, suitHpr)
-                    suit.loop('lured')
                     suit.setDizzy(1)
                     if suit.style.name == 'crf':
                         for headPart in suit.animatedHeadParts:
@@ -1044,12 +1046,14 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                         for headPart in suit.animatedHeadParts:
                             headPart.loop('neutral-lured')
                 else:
+                    if suit.style.name == 'jb':
+                        suit.setNeutralAnimationRolled()
+                    elif suit.style.name == 'mad':
+                        suit.setNeutralAnimationRolled()
+                    else:
+                        suit.setNeutralAnimation()
                     suit.setPosHpr(self, suitPos, suitHpr)
-                    suit.setNeutralAnimation()
                     suit.setDizzy(0)
-                    for headPart in suit.animatedHeadParts:
-                            headPart.loop(
-                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
 
         for toon in toons:
             if self.joiningToons.count(toon):

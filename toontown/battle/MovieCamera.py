@@ -179,8 +179,26 @@ def cameraActorShot(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
     )
     return track
 
+def cameraActorShotHighRoller(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
+    previousParent = camera.getParent()
+    path = 'phase_3.5/models/misc/camera_actor'
+    cameraActor = Actor.Actor(path, {anim: path + '-' + anim})
+    node = cameraActor.find('**/CameraBone')
+    track = Sequence(
+        Func(cameraActor.reparentTo, parent),
+        Func(camera.reparentTo, node),
+        Func(cameraActor.setPosHpr, 0, -27.5, -25, 180, 80, 0),
+        ActorInterval(cameraActor, anim),
+        Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
+        Wait(remainTime),
+        Func(camera.reparentTo, previousParent),
+        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
+        Func(cameraActor.cleanup),
+        name=name
+    )
+    return track
+
 def cameraActorShot2(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
-    battle = parent
     numSuits = len(battle.activeSuits)
     previousParent = camera.getParent()
     path = 'phase_3.5/models/misc/camera_actor'
@@ -189,104 +207,20 @@ def cameraActorShot2(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
     track = Sequence(
         Func(cameraActor.reparentTo, parent),
         Func(camera.reparentTo, node),
-        Func(camera.setPosHpr, 0, -29, -12, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=0, endTime=1.97),
-        Wait(1.49),
-        Func(camera.setPosHpr, 0, -34.5, -3.5, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=3.46, endTime=6.25),
-        Func(camera.setPosHpr, 0, -22.5, -4, 0, 0, 0),
-        Wait(1.0),
-        ActorInterval(cameraActor, anim, startTime=7.25),
-        Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
-        Wait(remainTime),
-        Func(camera.reparentTo, previousParent),
-        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
-        Func(cameraActor.cleanup),
-        name=name
-    )
-    track3 = Sequence(
         Func(cameraActor.reparentTo, parent),
-        Func(camera.reparentTo, node),
-        Func(camera.setPosHpr, 5, -29, -12, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=0, endTime=1.97),
-        Wait(1.49),
-        Func(camera.setPosHpr, 5, -34.5, -3.5, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=3.46, endTime=6.25),
-        Func(camera.setPosHpr, 5, -22.5, -4, 0, 0, 0),
-        Wait(1.0),
-        ActorInterval(cameraActor, anim, startTime=7.25),
-        Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
-        Wait(remainTime),
-        Func(camera.reparentTo, previousParent),
-        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
-        Func(cameraActor.cleanup),
-        name=name
-    )
-    track2 = Sequence(
+        Func(camera.setPosHpr, 0, -29, -12, 180, 0, 0),
         Func(cameraActor.reparentTo, parent),
-        Func(camera.reparentTo, node),
-        Func(camera.setPosHpr, 2.5, -29, -12, 0, 0, 0),
         ActorInterval(cameraActor, anim, startTime=0, endTime=1.97),
         Wait(1.49),
-        Func(camera.setPosHpr, 2.5, -34.5, -3.5, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=3.46, endTime=6.25),
-        Func(camera.setPosHpr, 2.5, -22.5, -4, 0, 0, 0),
-        Wait(1.0),
-        ActorInterval(cameraActor, anim, startTime=7.25),
-        Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
-        Wait(remainTime),
-        Func(camera.reparentTo, previousParent),
-        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
-        Func(cameraActor.cleanup),
-        name=name
-    )
-    track4 = Sequence(
+        Func(camera.setPosHpr, 0, -34.5, -3.5, 180, 0, 0),
         Func(cameraActor.reparentTo, parent),
-        Func(camera.reparentTo, node),
-        Func(camera.setPosHpr, 7.5, -29, -12, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=0, endTime=1.97),
-        Wait(1.49),
-        Func(camera.setPosHpr, 7.5, -34.5, -3.5, 0, 0, 0),
         ActorInterval(cameraActor, anim, startTime=3.46, endTime=6.25),
-        Func(camera.setPosHpr, 7.5, -22.5, -4, 0, 0, 0),
-        Wait(1.0),
-        ActorInterval(cameraActor, anim, startTime=7.25),
-        Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
-        Wait(remainTime),
-        Func(camera.reparentTo, previousParent),
-        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
-        Func(cameraActor.cleanup),
-        name=name
-    )
-    track5 = Sequence(
         Func(cameraActor.reparentTo, parent),
-        Func(camera.reparentTo, node),
-        Func(camera.setPosHpr, 10, -29, -12, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=0, endTime=1.97),
-        Wait(1.49),
-        Func(camera.setPosHpr, 10, -34.5, -3.5, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=3.46, endTime=6.25),
-        Func(camera.setPosHpr, 10, -22.5, -4, 0, 0, 0),
+        Func(camera.setPosHpr, 0, -22.5, -4, 180, 0, 0),
         Wait(1.0),
-        ActorInterval(cameraActor, anim, startTime=7.25),
-        Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
-        Wait(remainTime),
-        Func(camera.reparentTo, previousParent),
-        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
-        Func(cameraActor.cleanup),
-        name=name
-    )
-    track6 = Sequence(
         Func(cameraActor.reparentTo, parent),
-        Func(camera.reparentTo, node),
-        Func(camera.setPosHpr, 12.5, -31, -12, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=0, endTime=1.97),
-        Wait(1.49),
-        Func(camera.setPosHpr, 12.5, -37, -3.5, 0, 0, 0),
-        ActorInterval(cameraActor, anim, startTime=3.46, endTime=6.25),
-        Func(camera.setPosHpr, 12.5, -22.5, -4, 0, 0, 0),
-        Wait(1.0),
         ActorInterval(cameraActor, anim, startTime=7.25),
+        Func(cameraActor.reparentTo, parent),
         Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
         Wait(remainTime),
         Func(camera.reparentTo, previousParent),
@@ -294,20 +228,7 @@ def cameraActorShot2(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
         Func(cameraActor.cleanup),
         name=name
     )
-    if numSuits == 1:
-        return track
-    elif numSuits == 2:
-        return track2
-    elif numSuits == 3:
-        return track3
-    elif numSuits == 4:
-        return track4
-    elif numSuits == 5:
-        return track5
-    elif numSuits == 6:
-        return track6
-    else:
-        return track2
+    return track
 
 def cameraActorShot3(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
     battle = parent
@@ -1077,7 +998,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == BLACK_ORB:
         camTrack.append(defaultCamera(openShotDuration=2.5)) #UNUSED
     elif name == WATERCOOLER:
-        camTrack.append(defaultCamera(openShotDuration=3.0))
+        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == WITHDRAWAL:
         camTrack.append(defaultCamera(openShotDuration=1.2))
     elif name == INK_DRAIN:
@@ -1329,8 +1250,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == AMBASSADOR_REFINEMENT:
         camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'),
-                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 3.5)))
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3.5)))
     elif name == AMBASSADOR_PHASE_2:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == AMBASSADOR_DAMAGE_UP:
@@ -1341,11 +1262,106 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == AMBASSADOR_MULLIGAN:
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    #high roller phase 1 cheats
+    elif name == HIGH_ROLLER_NO_ATTACK:
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
+    elif name == HIGH_ROLLER_WHEEL_SPIN:
+        camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
+                                 motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
+                                 motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(attackDuration - 5.75)))
+    elif name == HIGH_ROLLER_COMMERCIAL_BREAK:
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == HIGH_ROLLER_GAME_TIME_SPAWN:
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(attackDuration - .7)))
+    elif name == HIGH_ROLLER_GAME_TIME_COG:
+        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
+    elif name == HIGH_ROLLER_GAME_TIME_COG_2:
+        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
+    elif name == HIGH_ROLLER_BUST:
+        if attackDuration > 2:
+            camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(5.0),
+                                 moveShot(0.0, -20.0, 10.0, 0, -20, 0, 0.5),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 6.2)))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
+    # high roller phase 2 cheats
+    elif name == HIGH_ROLLER_PHASE_3:
+        camTrack2 = Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    # high roller phase 3 cheats
+    elif name == HIGH_ROLLER_FREE_CRUISE:
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3.7))
+        camTrack.append(moveShot(-21.0, 8.0, 8.0, -120, 0, 0, 0.5))
+        camTrack.append(heldShot(-21.0, 8.0, 8.0, -120, 0, 0, attackDuration - 4.2))
+    elif name == HIGH_ROLLER_CONDUCTION:
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == HIGH_ROLLER_ROLLED:
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == HIGH_ROLLER_DICE_ROULETTE_COGS:
+        camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
+                                 motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
+                                 motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
+    elif name == HIGH_ROLLER_DICE_ROULETTE_TOONS:
+        camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
+                                 motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
+                                 motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
+    elif name == HIGH_ROLLER_DICE_ROULETTE_EVERYONE:
+        camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
+                                 motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
+                                 motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
+    elif name == HIGH_ROLLER_DICE_ROULETTE_NOBODY:
+        camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
+                                 motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
+                                 motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
+    elif name == HIGH_ROLLER_TRICK_OF_THE_LIGHT:
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == HIGH_ROLLER_ACE_IN_THE_HOLE:
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(3.0),
+                                 moveShot(0, 15, 20, -180, -20, 0, 1.0),
+                                 heldShot(0, 15, 20, -180, -20, 0, attackDuration - 4.7)))
+    # high roller silhouette cheats
+    elif name == HIGH_ROLLER_DONATION:
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'), heldShot(0.0, -20.0, 10.0, 0, -20, 0, 3.875), randomActorShot(suit, battle, attackDuration - 5.375, 'suit')))
+    elif name == HIGH_ROLLER_SYPHON:
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0.5, attackDuration=2.0), randomActorShot(suit, battle, attackDuration - 2, 'suit')))
+    elif name == HIGH_ROLLER_BAR:
+        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
+    elif name == HIGH_ROLLER_SINGING_BLUES:
+        camTrack.append(defaultCamera(openShotDuration=2.5))
+    elif name == HIGH_ROLLER_DAMAGE_REDUCTION:
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == HIGH_ROLLER_SPLASHBACK:
+        if attackDuration > 1:
+            camTrack.append(defaultCamera(openShotDuration=1.5))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
+    elif name == HIGH_ROLLER_CHEER_RETALIATION:
+        if attackDuration > 1:
+            camTrack.append(defaultCamera(openShotDuration=1.5))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     #universal cheats
     elif name == SYNERGY_FEES:
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == CALCULATING_FEES:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == DEATH_CHECK:
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
+    elif name == SOAK_REMOVAL:
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
     elif name == BAN_LEVEL_4:
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
         pbpText = attack['playByPlayText']

@@ -744,6 +744,13 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             pass
 
+    def checkAbsorbHP(self, battle):
+        if self.getHP() <= 0:
+            ival = Sequence(Func(self.makeDead))
+            ival.start()
+        else:
+            pass
+
     def checkCogHPBomb(self, battle):
         if self.getHP() <= 0:
             ival = Sequence(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self))

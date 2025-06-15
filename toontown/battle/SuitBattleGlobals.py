@@ -183,7 +183,7 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'sw':
         actualLevel = relLevel + 1
     elif name == 'ghd':
-        actualLevel = relLevel + 39
+        actualLevel = relLevel + 776
     elif name == 'tyh':
         actualLevel = relLevel + 44
     elif name == 'jgd':
@@ -1053,7 +1053,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(100,),
 		'acc':(75,),
 		'attacks':
-             (('FountainPen',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FountainPen',
                (12,),
                (100,),
                (20,)),
@@ -1082,7 +1086,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-		        (('Liquidate',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('Liquidate',
 				    (32,),
 					(100,),
 					(25,)),
@@ -1107,7 +1115,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('HotAir',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('HotAir',
               (16,),
               (100,),
               (25,)),
@@ -1132,7 +1144,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('CigarSmoke',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('CigarSmoke',
               (12,),
               (100,),
               (25,)),
@@ -1157,7 +1173,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('Sacked',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('Sacked',
               (25,),
               (100,),
               (25,)),
@@ -1182,7 +1202,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('HotAir',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('HotAir',
               (16,),
               (100,),
               (25,)),
@@ -1207,7 +1231,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
                  ('Canned',
                   (26,),
                   (95,),
@@ -1235,7 +1262,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
                  ('Canned',
                   (26,),
                   (95,),
@@ -1263,7 +1293,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('PowerTrip',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('PowerTrip',
               (35,),
               (85,),
               (15,)),
@@ -1334,6 +1368,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (1,),
               (100,),
               (0,)),
+('DeathCheck', #17
+               (0,),
+               (100,),
+               (0,))
              )},
  'fbd': {'name': 'Bookkeeper',
         'singularname': 'a Bookkeeper',
@@ -1344,7 +1382,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-		        (('RestrainingOrder',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('RestrainingOrder',
 				    (40,),
 					(90,),
 					(15,)),
@@ -1368,27 +1410,27 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (35,),
 					(90,),
 					(20,)),
-                ('BookkeeperPaperCutSoaked', #6
+                ('BookkeeperPaperCutSoaked', #7
 				    (0,),
 					(100,),
 					(0,)),
- ('BookkeeperPaperCutMarked', #7
+ ('BookkeeperPaperCutMarked', #8
 				    (0,),
 					(100,),
 					(0,)),
-                 ('BookkeeperPaperCut',#8 #bookkeeper take out of
+                 ('BookkeeperPaperCut',#9 #bookkeeper take out of
                   (0,),
                   (100,),
                   (0,)),
-                 ('BookkeeperExplodingDocument',#9
+                 ('BookkeeperExplodingDocument',#10
                   (0,),
                   (100,),
                   (0,)),
-                 ('BookkeeperBookkeeping',#10
+                 ('BookkeeperBookkeeping',#11
                   (0,),
                   (100,),
                   (0,)),
-                 ('BookkeeperBookkeepingRetaliation',#11
+                 ('BookkeeperBookkeepingRetaliation',#12
                   (1,),
                   (100,),
                   (0,)),
@@ -1402,7 +1444,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('HangUp',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('HangUp',
                (45,),
                (95,),
                (20,)),
@@ -1426,79 +1472,79 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (35,),
                (80,),
                (15,)),
-('WiretapperCollectCall', #6
+('WiretapperCollectCall', #7
                (0,),
                (100,),
                (0,)),
-('WiretapperCollectCallDamage',#7
+('WiretapperCollectCallDamage',#8
                (0,),
                (100,),
                (0,)),
-('WiretapperWiretapped',#8
+('WiretapperWiretapped',#9
                (0,),
                (100,),
                (0,)),
-('WiretapperVoicemail',#9
+('WiretapperVoicemail',#10
                (0,),
                (100,),
                (0,)),
-('WiretapperBrokenConnection',#10
+('WiretapperBrokenConnection',#11
                (0,),
                (100,),
                (0,)),
-              ('BanToonup',#11
+              ('BanToonup',#12
                (0,),
                (100,),
                (0,)),
-              ('BanTrap',#12
+              ('BanTrap',#13
                (0,),
                (100,),
                (0,)),
-              ('BanLure',#13
+              ('BanLure',#14
                (0,),
                (100,),
                (0,)),
-              ('BanThrow',#14
+              ('BanThrow',#15
                (0,),
                (100,),
                (0,)),
-              ('BanSquirt',#15
+              ('BanSquirt',#16
                (0,),
                (100,),
                (0,)),
-              ('BanZap',#16
+              ('BanZap',#17
                (0,),
                (100,),
                (0,)),
-              ('BanSound',#17
+              ('BanSound',#18
                (0,),
                (100,),
                (0,)),
-              ('BanDrop',#18
+              ('BanDrop',#19
                (0,),
                (100,),
                (0,)),
-('BanLevel4',#19
+('BanLevel4',#20
 				    (0,),
 					(100,),
 					(0,)),
- ('BanLevel5',#20
+ ('BanLevel5',#21
 				    (0,),
 					(100,),
 					(0,)),
- ('BanLevel6',#21
+ ('BanLevel6',#22
 				    (0,),
 					(100,),
 					(0,)),
-                 ('BanLevel7',#22
+                 ('BanLevel7',#23
                   (0,),
                   (100,),
                   (0,)),
- ('BanLevel8',#23s
+ ('BanLevel8',#24
 				    (0,),
 					(100,),
 					(0,)),
- ('WiretapperGagBan',#24
+ ('WiretapperGagBan',#25
 				    (0,),
 					(100,),
 					(0,)),
@@ -1512,7 +1558,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('Golf',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('Golf',
               (36,),
               (80,),
               (20,)),
@@ -1536,35 +1586,35 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                 (35,),
               (95,),
               (15,)),
-('AmbassadorHeadRoller', #6
+('AmbassadorHeadRoller', #7
               (0,),
               (100,),
               (0,)),
-('AmbassadorHeadRollerGroup',#7
+('AmbassadorHeadRollerGroup',#8
               (0,),
               (100,),
               (0,)),
-('AmbassadorRefinement',#8
+('AmbassadorRefinement',#9
               (0,),
               (100,),
               (0,)),
-('AmbassadorPhase2',#9
+('AmbassadorPhase2',#10
               (0,),
               (100,),
               (0,)),
-('AmbassadorDamageUp',#10
+('AmbassadorDamageUp',#11
               (0,),
               (100,),
               (0,)),
-('AmbassadorManagerialProtection',#11
+('AmbassadorManagerialProtection',#12
               (0,),
               (100,),
               (0,)),
-('AmbassadorManagerialProtectionImmunity',#12
+('AmbassadorManagerialProtectionImmunity',#13
               (0,),
               (100,),
               (0,)),
-             ('AmbassadorMulligan',#13
+             ('AmbassadorMulligan',#14
               (0,),
               (80,),
               (0,)))},
@@ -2021,7 +2071,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
                  ('Schmooze',
                   (24,),
                   (95,),
@@ -2053,7 +2106,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(100,),
 		'attacks':
-            (
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
                 ('Schmooze',
                  (40,),
                  (95,),
@@ -2081,7 +2137,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(100,),
 		'attacks':
-		        (('Quake',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('Quake',
 				    (30,),
 					(100,),
 					(25,)),
@@ -2106,7 +2166,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'freq': (30,),
          'acc': (35,),
          'attacks':
-             (('RazzleDazzle',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('RazzleDazzle',
                (35,),
                (70,),
                (25,)),
@@ -2131,7 +2195,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		      'freq':(0,),
 		      'acc':(75,),
 		      'attacks':
-		              (('BuzzWord',
+		              (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                       ('BuzzWord',
 				          (28,),
 					      (100,),
 					      (25,)),
@@ -2156,7 +2224,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('PowerTie',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('PowerTie',
               (30,),
               (100,),
               (25,)),
@@ -2181,7 +2253,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('Caress',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('Caress',
               (1,),
               (100,),
               (0,)),
@@ -2246,7 +2322,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('RadioInfrequency',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('RadioInfrequency',
               (0,),
               (100,),
               (0,)),
@@ -2283,7 +2363,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('AfterShock',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('AfterShock',
                (0,),
                (100,),
                (0,)),
@@ -2332,7 +2416,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('UnionBust',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('UnionBust',
                (0,),
                (100,),
                (0,)),
@@ -2397,7 +2485,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('ConeOfShame',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('ConeOfShame',
                (0,),
                (100,),
                (0,)),
@@ -2450,7 +2542,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(80,),
 		'attacks':
-            (('Quake',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('Quake',
               (34,),
               (75,),
               (25,)),
@@ -2925,7 +3021,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(100,),
 		'acc':(75,),
 		'attacks':
-             (('Spin',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('Spin',
                (6,),
                (75,),
                (50,)),
@@ -2942,7 +3042,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(80,),
 		'attacks':
-		        (('Fired',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('Fired',
 				    (31,),
 					(80,),
 					(25,)),
@@ -2967,7 +3071,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-		        (('FreezeAssets',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('FreezeAssets',
 				    (33,),
 					(100,),
 					(25,)),
@@ -2992,7 +3100,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('Canned',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('Canned',
               (30,),
               (100,),
               (25,)),
@@ -3017,7 +3129,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(100,),
 		'attacks':
-            (('Bite',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('Bite',
               (26,),
               (100,),
               (25,)),
@@ -3042,7 +3158,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('BounceCheck',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('BounceCheck',
               (27,),
               (100,),
               (25,)),
@@ -3067,7 +3187,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('Demotion',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('Demotion',
                (36,),
                (100,),
                (25,)),
@@ -3092,7 +3216,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-		        (('CigarSmoke',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('CigarSmoke',
 				    (31,),
 					(100,),
 					(20,)),
@@ -3121,34 +3249,43 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('GameShow',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('HighRollerNoAttack',
                (0,),
                (100,),
                (0,)),
-        ('QualityControl',
+        ('HighRollerWheelSpin',
                (0,),
                (100,),
                (0,)),
-('QualityControl1',
+('HighRollerCommercialBreak',
                (0,),
                (100,),
                (0,)),
-('QualityControl2',
+('HighRollerGameTimeSpawn',
                (0,),
                (100,),
                (0,)),
-('QualityControl3',
+('HighRollerGameTimeCog',
                (0,),
                (100,),
                (0,)),
-('HRPowerTrip',
-               (25,),
-               (75,),
-               (100,)),
-              ('SwirlBath',
+('HighRollerGameTimeCog2',
                (0,),
                (100,),
-               (0,)))},
+               (0,)),
+              ('HighRollerBust',
+               (0,),
+               (100,),
+               (0,)),
+('DeathCheck',
+               (0,),
+               (100,),
+               (0,))
+              )},
  'msp': {'name': 'Count Erfit',
         'singularname': 'a Count Erfit',
 		'pluralname': 'Count Erfits',
@@ -3158,7 +3295,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('Quake',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('Quake',
                (30,),
                (100,),
                (25,)),
@@ -3178,40 +3319,52 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a High Roller Silhouette',
 		'pluralname': 'High Roller Silhouettes',
 		'level': 26,
-		'hp':(8000,),
+		'hp':(12000,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('Bar',
-               (0,),
-               (100,),
-               (0,)),
-              ('HRPowerTrip',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('PowerTrip',
                (25,),
                (100,),
                (0,)),
-              ('SlushFund', #SlushFund
+        ('HighRollerNoAttack',
                (0,),
                (100,),
                (0,)),
-              ('GoodMorningToontown',
+              ('HighRollerDonation',
                (0,),
                (100,),
                (0,)),
-('CourtRecord1',
+              ('HighRollerSyphon',
                (0,),
                (100,),
                (0,)),
-('CourtRecord2',
+              ('HighRollerBar',
                (0,),
                (100,),
                (0,)),
-('CourtRecord3',
+('HighRollerSingingBlues',
                (0,),
                (100,),
                (0,)),
-('CourtRecord5',
+('HighRollerDamageReduction',
+               (0,),
+               (100,),
+               (0,)),
+('HighRollerSplashback',
+               (0,),
+               (100,),
+               (0,)),
+('HighRollerCheerRetaliation',
+               (0,),
+               (100,),
+               (0,)),
+('DeathCheck',
                (0,),
                (100,),
                (0,)))},
@@ -3224,50 +3377,71 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(80,),
 		'attacks':
-		        (('Quash',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('HighRollerNoAttack',
                      (0,),
                      (100,),
                      (0,)),
-                    ('JuryNotice',
+                    ('HighRollerPhase3',
                      (0,),
                      (100,),
                      (0,)),
-                    ('NickelAndDime',
+                    ('HighRollerRolled',
 				    (0,),
 					(100,),
 					(0,)),
-                ('FreeCruise',
+                ('HighRollerFreeCruise',
 				    (0,),
 					(100,),
 					(0,)),
-                ('Conduction',
+                ('HighRollerConduction',
 				    (0,),
 					(100,),
 					(0,)),
-                ('FieldPromotion',
+                ('HighRollerDiceRouletteCogs',
 				    (0,),
 					(100,),
 					(0,)),
-                ('LDQuake',
+                ('HighRollerDiceRouletteToons',
 				    (0,),
 					(100,),
 					(0,)),
-('LDEvictionNotice',
+('HighRollerDiceRouletteEveryone',
 				    (0,),
 					(100,),
 					(0,)),
-('LDAfterShock',
+('HighRollerDiceRouletteNobody',
 				    (0,),
 					(100,),
 					(0,)),
-('LDRedTape',
+('HighRollerTrickOfTheLight',
 				    (0,),
 					(100,),
 					(0,)),
-                 ('LDReOrg',
+('HighRollerVulnerable',
+				    (0,),
+					(100,),
+					(0,)),
+                 ('HighRollerAceInTheHole',
                   (0,),
                   (100,),
-                  (0,)))},
+                  (0,)),
+                 ('HighRollerBust',
+                  (0,),
+                  (100,),
+                  (0,)),
+('HighRollerWheelSpin',
+                  (0,),
+                  (100,),
+                  (0,)),
+('DeathCheck',
+               (0,),
+               (100,),
+               (0,))
+                 )},
  'bf': {'name': 'Bottom Feeder',
         'singularname': 'a Bottom Feeder',
         'pluralname': 'Bottom Feeders',
@@ -3717,7 +3891,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(100,),
 		'acc':(75,),
 		'attacks':
-             (('Investment',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('Investment',
                (1,),
                (100,),
                (0,)),
@@ -3766,7 +3944,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(75,),
 		'attacks':
-            (('HangUp',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('HangUp',
               (65,),
               (100,),
               (25,)),
@@ -3795,7 +3977,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(100,),
 		'attacks':
-             (('PoundKey',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('PoundKey',
                (30,),
                (100,),
                (25,)),
@@ -3820,7 +4006,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('Liquidate',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('Liquidate',
               (30,),
               (100,),
               (25,)),
@@ -3845,7 +4035,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		     'freq':(0,),
 		     'acc':(75,),
 		     'attacks':
-		             (('MobMentality',
+		             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                      ('MobMentality',
 		     		    (1,),
 		     			(100,),
 		     			(0,)),
@@ -3874,7 +4068,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('Quake',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('Quake',
               (30,),
               (100,),
               (25,)),
@@ -3899,7 +4097,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-		        (('Shake',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('Shake',
 				    (39,),
 					(100,),
 					(20,)),
@@ -3940,7 +4142,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('RestrainingOrder',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('RestrainingOrder',
                (1,),
                (50,),
                (25,)),
@@ -3961,7 +4167,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(75,),
 		'attacks':
-		        (('FingerWag',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('FingerWag',
 				    (38,),
 					(90,),
 					(30,)),
@@ -3997,10 +4207,14 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (0,),
 					(100,),
 					(0,)),
-                 ('ScapegoatCourtRecordBan',  # 9
+                 ('ScapegoatCourtRecordBan',  # 10
                   (0,),
                   (100,),
                   (0,)),
+('DeathCheck', # 11
+               (0,),
+               (100,),
+               (0,))
                  )},
  'csm': {'name': 'Case Manager',
         'singularname': 'a Case Manager',
@@ -4011,7 +4225,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(75,),
 		'attacks':
-		        (('Rolodex',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('Rolodex',
 				    (36,),
 					(95,),
 					(10,)),
@@ -4039,7 +4257,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  (0,),
 					(100,),
                  (0,)),
-                 ('BanToonup', #7
+                 ('BanToonup', #8
                   (0,),
                   (100,),
                   (0,)),
@@ -4067,7 +4285,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (0,),
                   (100,),
                   (0,)),
-                 ('BanDrop', #14
+                 ('BanDrop', #15
                   (0,),
                   (100,),
                   (0,)),
@@ -4179,19 +4397,19 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (0,),
                   (100,),
                   (0,)),
-                 ('BanSoundDrop', #42
+                 ('BanSoundDrop', #43
                   (0,),
                   (100,),
                   (0,)),
-('CaseManagerInsurance', #43
+('CaseManagerInsurance', #44
                   (0,),
                   (100,),
                   (0,)),
-('CaseManagerLegallyBound', #44
+('CaseManagerLegallyBound', #45
                   (0,),
                   (100,),
                   (0,)),
-('CaseManagerCourtRecordBan', #45
+('CaseManagerCourtRecordBan', #46
                   (0,),
                   (100,),
                   (0,)),
@@ -4205,7 +4423,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(75,),
 		'attacks':
-		        (('PoundKey',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('PoundKey',
 				    (45,),
 					(85,),
 					(15,)),
@@ -4241,7 +4463,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (0,),
 					(100,),
 					(0,)),
-('BanLevel4', #9
+('BanLevel4', #10
 				    (0,),
 					(100,),
 					(0,)),
@@ -4257,7 +4479,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (0,),
                   (100,),
                   (0,)),
- ('BanLevel8', #13
+ ('BanLevel8', #14
 				    (0,),
 					(100,),
 					(0,)),
@@ -4297,11 +4519,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (0,),
                   (100,),
                   (0,)),
- ('BanLevel78', #23
+ ('BanLevel78', #24
 				    (0,),
 					(100,),
 					(0,)),
-('StenographerCourtRecordBan', #24
+('StenographerCourtRecordBan', #25
                   (0,),
                   (100,),
                   (0,)),
@@ -4315,7 +4537,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(50,),
 		'acc':(75,),
 		'attacks':
-            (('LawBook',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('LawBook',
               (40,),
               (90,),
               (15,)),
@@ -4823,7 +5049,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(100,),
 		'acc':(75,),
 		'attacks':
-             (('Watercooler',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('Watercooler',
                (7,),
                (85,),
                (100,),
@@ -4837,7 +5067,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('RedTape',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('RedTape',
                (30,),
                (100,),
                (25,)),
@@ -4862,7 +5096,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(100,),
 		'acc':(75,),
 		'attacks':
-             (('RedTape',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('RedTape',
                (30,),
                (100,),
                (25,)),
@@ -4887,7 +5125,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('RedTape',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('RedTape',
                (30,),
                (100,),
                (25,)),
@@ -4903,7 +5145,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (35,),
                (100,),
                (25,)))},
- 'ghd': {'name': 'Test Dummy',
+ 'ghd': {'name': 'Highest Roller',
         'singularname': 'a Skelecog',
 		'pluralname': 'Skelecogs',
 		'level': 20,
@@ -4912,10 +5154,14 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('HighRollerAceInTheHole',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('HighRollerGameTimeCog',
                (7,),
                (100,),
-               (100,)),)},
+               (100,),),)},
  'tyh': {'name': 'Skelecog',
         'singularname': 'a Skelecog',
 		'pluralname': 'Skelecogs',
@@ -4925,7 +5171,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FallingKnife',
                (7,),
                (85,),
                (100,),
@@ -4939,7 +5189,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FallingKnife',
                (7,),
                (85,),
                (100,),
@@ -4953,7 +5207,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FallingKnife',
                (7,),
                (85,),
                (100,),
@@ -4967,7 +5225,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('KickUp',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('KickUp',
               (0,),
               (100,),
               (0,)),
@@ -5028,7 +5290,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-		        (('MPQuake',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('MPQuake',
 				    (0,),
 					(100,),
 					(0,)),
@@ -5093,7 +5359,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('ChainsawGlowerPower',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('ChainsawGlowerPower',
                (0,),
                (100,),
                (0,)),
@@ -5158,7 +5428,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('ChainsawDetonate3',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('ChainsawDetonate3',
               (0,),
               (100,),
               (0,)),
@@ -5663,7 +5937,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(100,),
 		'acc':(75,),
 		'attacks':
-             (('Bash',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('Bash',
                (26,),
                (100,),
                (10,)),
@@ -5729,7 +6007,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FallingKnife',
                (7,),
                (85,),
                (100,),
@@ -5743,7 +6025,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FallingKnife',
                (7,),
                (85,),
                (100,),
@@ -5757,7 +6043,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FallingKnife',
                (7,),
                (85,),
                (100,),
@@ -5785,7 +6075,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FallingKnife',
                (7,),
                (85,),
                (100,),
@@ -5799,7 +6093,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FallingKnife',
                (7,),
                (85,),
                (100,),
@@ -5813,7 +6111,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FallingKnife',
                (7,),
                (85,),
                (100,),
@@ -5827,7 +6129,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('DiskScratch',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('DiskScratch',
               (46,),
               (100,),
               (20,)),
@@ -5880,7 +6186,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-		        (('Bash',
+		        (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+                 ('Bash',
 				    (1,),
 					(100,),
 					(20,)),
@@ -5945,7 +6255,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-             (('FireCog',
+             (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+              ('FireCog',
                (1,),
                (100,),
                (0,)),
@@ -6006,7 +6320,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(75,),
 		'attacks':
-            (('HeadRoller',
+            (('SoakRemoval',
+              (0,),
+              (100,),
+              (0,)),
+             ('HeadRoller',
               (1,),
               (100,),
               (0,)),
@@ -6985,23 +7303,26 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'HighRollerRolled': ('magic3', ATK_TGT_GROUP),
 'HighRollerFreeCruise': ('song-and-dance', ATK_TGT_GROUP),
 'HighRollerConduction': ('throw-object', ATK_TGT_DOUBLE),
-'HighRollerDiceRouletteCogs': ('bust', ATK_TGT_SINGLE),
-'HighRollerDiceRouletteToons': ('bust', ATK_TGT_GROUP),
-'HighRollerDiceRouletteEveryone': ('bust', ATK_TGT_GROUP),
-'HighRollerDiceRouletteNobody': ('bust', ATK_TGT_SINGLE),
+'HighRollerDiceRouletteCogs': ('nothing', ATK_TGT_SINGLE),
+'HighRollerDiceRouletteToons': ('nothing', ATK_TGT_GROUP),
+'HighRollerDiceRouletteEveryone': ('nothing', ATK_TGT_GROUP),
+'HighRollerDiceRouletteNobody': ('nothing', ATK_TGT_SINGLE),
 'HighRollerTrickOfTheLight': ('nothing', ATK_TGT_GROUP),
 'HighRollerAceInTheHole': ('nothing', ATK_TGT_GROUP),
+'HighRollerVulnerable': ('nothing', ATK_TGT_SINGLE),
 #high roller silhouette cheats
 'HighRollerDonation': ('shot5', ATK_TGT_SINGLE),
 'HighRollerSyphon': ('sanction', ATK_TGT_GROUP),
 'HighRollerBar': ('snap', ATK_TGT_GROUP),
-'HighRollerSingingBlues': ('phone', ATK_TGT_SINGLE),
-'HighRollerDamageReduction': ('glower', ATK_TGT_DOUBLE),
+'HighRollerSingingBlues': ('phone', ATK_TGT_GROUP),
+'HighRollerDamageReduction': ('snap', ATK_TGT_DOUBLE),
 'HighRollerSplashback': ('throw-object', ATK_TGT_GROUP),
 'HighRollerCheerRetaliation': ('glower', ATK_TGT_GROUP),
 #universal cheats
 'SynergyFees': ('magic3', ATK_TGT_GROUP),
 'CalculatingFees': ('calculating-costs', ATK_TGT_SINGLE),
+'SoakRemoval': ('nothing', ATK_TGT_SINGLE),
+'DeathCheck': ('nothing', ATK_TGT_SINGLE),
 'BanLevel4': ('cease', ATK_TGT_GROUP),
 'BanLevel5': ('cease', ATK_TGT_GROUP),
 'BanLevel6': ('cease', ATK_TGT_GROUP),
@@ -7351,12 +7672,14 @@ HIGH_ROLLER_PHASE_3 = SuitAttacks.keys().index('HighRollerPhase3')
 #high roller phase 3 cheats
 HIGH_ROLLER_FREE_CRUISE = SuitAttacks.keys().index('HighRollerFreeCruise')
 HIGH_ROLLER_CONDUCTION = SuitAttacks.keys().index('HighRollerConduction')
+HIGH_ROLLER_ROLLED = SuitAttacks.keys().index('HighRollerRolled')
 HIGH_ROLLER_DICE_ROULETTE_COGS = SuitAttacks.keys().index('HighRollerDiceRouletteCogs')
 HIGH_ROLLER_DICE_ROULETTE_TOONS = SuitAttacks.keys().index('HighRollerDiceRouletteToons')
 HIGH_ROLLER_DICE_ROULETTE_EVERYONE = SuitAttacks.keys().index('HighRollerDiceRouletteEveryone')
 HIGH_ROLLER_DICE_ROULETTE_NOBODY = SuitAttacks.keys().index('HighRollerDiceRouletteNobody')
 HIGH_ROLLER_TRICK_OF_THE_LIGHT = SuitAttacks.keys().index('HighRollerTrickOfTheLight')
 HIGH_ROLLER_ACE_IN_THE_HOLE = SuitAttacks.keys().index('HighRollerAceInTheHole')
+HIGH_ROLLER_VULNERABLE = SuitAttacks.keys().index('HighRollerVulnerable')
 #high roller silhouette cheats
 HIGH_ROLLER_DONATION = SuitAttacks.keys().index('HighRollerDonation')
 HIGH_ROLLER_SYPHON = SuitAttacks.keys().index('HighRollerSyphon')
@@ -7366,6 +7689,8 @@ HIGH_ROLLER_DAMAGE_REDUCTION = SuitAttacks.keys().index('HighRollerDamageReducti
 HIGH_ROLLER_SPLASHBACK = SuitAttacks.keys().index('HighRollerSplashback')
 HIGH_ROLLER_CHEER_RETALIATION = SuitAttacks.keys().index('HighRollerCheerRetaliation')
 #universal cheats
+SOAK_REMOVAL = SuitAttacks.keys().index('SoakRemoval')
+DEATH_CHECK = SuitAttacks.keys().index('DeathCheck')
 SYNERGY_FEES = SuitAttacks.keys().index('SynergyFees')
 CALCULATING_FEES = SuitAttacks.keys().index('CalculatingFees')
 BAN_LEVEL_4 = SuitAttacks.keys().index('BanLevel4')

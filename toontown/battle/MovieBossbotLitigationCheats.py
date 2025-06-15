@@ -773,10 +773,13 @@ def doSuitAttack(attack):
         neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         preWalkTrack = Func(suit.loop,
                             'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-    elif suit.isImmortal and suit.dna.name == 'dsf':
-        neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-        preWalkTrack = Func(suit.loop,
-                            'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+        # elif suit.isImmortal and suit.dna.name == 'dsf':
+        # neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+        # preWalkTrack = Func(suit.loop,
+        #      'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+        # elif suit.isImmortal:
+        # neutralIval = Func(suit.loop, 'highroller-neutral-levitate-loop')
+        # preWalkTrack = ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1)
     else:
         neutralIval =  Func(suit.setNeutralAnimation)
         preWalkTrack = Func(suit.setNeutralAnimation)
@@ -1120,21 +1123,20 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
     track.append(Func(suit.setHpr, battle, origHpr))
-    if suit.dna.name == 'scg' and suit.isAngry:
-        track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'neutral-enraged'))
-    elif suit.isImmortal and suit.dna.name == 'dsf':
-        track.append(
-            Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isVulnerable and suit.dna.name == 'crf':
-        track.append(
-            Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal:
-        track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
-    else:
-        track.append(
-            Func(suit.setNeutralAnimation))
+    # if suit.dna.name == 'scg' and suit.isAngry:
+    #     track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
+    #     track.append(Func(suit.loop, 'neutral-enraged'))
+    # elif suit.isImmortal and suit.dna.name == 'dsf':
+    #     track.append(
+    #        Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+    # elif suit.isVulnerable and suit.dna.name == 'crf':
+    #    track.append(
+    #       Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+    # elif suit.isImmortal:
+    #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
+    #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+    track.append(
+        Func(suit.setNeutralAnimation))
 
     def returnTrapToSuit(suit = suit, trapStorage = trapStorage):
         return
@@ -1159,20 +1161,19 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
-    if suit.dna.name == 'scg' and suit.isAngry:
-        track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'neutral-enraged'))
-    elif suit.isImmortal and suit.dna.name == 'dsf':
-        track.append(
-            Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isVulnerable and suit.dna.name == 'crf':
-        track.append(
-            Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal:
-        track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
-    else:
-        track.append(
+        # if suit.dna.name == 'scg' and suit.isAngry:
+        #     track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
+        #     track.append(Func(suit.loop, 'neutral-enraged'))
+        # elif suit.isImmortal and suit.dna.name == 'dsf':
+        #     track.append(
+        #        Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+        # elif suit.isVulnerable and suit.dna.name == 'crf':
+        #    track.append(
+        #       Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+        # elif suit.isImmortal:
+        #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
+        #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+    track.append(
             Func(suit.setNeutralAnimation))
     return track
 

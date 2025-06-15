@@ -192,7 +192,11 @@ Props = ((5, 'partyBall', 'partyBall'),
 (5,
           'cc_a_prp_bat_playcard',
  'cc_a_prp_bat_playcard-mod',
-          'cc_a_prp_bat_playcard-chan',),
+'cc_a_prp_bat_playcard-chan',),
+(5,
+          'cc_a_prp_bat_playcard2',
+ 'cc_a_prp_bat_playcard2-mod',
+          'cc_a_prp_bat_playcard2-chan',),
          (5,
           'cc_a_prp_bat_watercooler',
           'cc_a_prp_bat_watercooler-mod',
@@ -448,6 +452,8 @@ class PropPool:
         elif name == 'fruitpie':
             self.props[name].setScale(0.75)
         elif name == 'cc_a_prp_bat_playcard':
+            self.props[name].setTwoSided(True)
+        elif name == 'cc_a_prp_bat_playcard2':
             self.props[name].setTwoSided(True)
         elif name == 'calculator':
             self.props[name].setTwoSided(True)

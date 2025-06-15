@@ -314,7 +314,7 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'lit2':
             # generate random cashbot from lv 12 to 20
-            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't')), suitLevel, random.choice((0, 1, 2)))
+            suit = self.__genSuitObject(self.zoneId, suitKind, rrandom.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, random.choice((0, 1, 2)))
             reserveSuits.append(suit)
         if specialCode == 'ffm2':
             # generate random cashbot from lv 12 to 20
@@ -326,20 +326,18 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'crf1':
             # generate random cashbot from lv 12 to 20
-            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't')), suitLevel, random.choice((0, 1, 2)))
-            suit2 = self.__genSuitObject(self.zoneId, random.choice((15, 16)), random.choice(('c', 'm', 's', 'g', 'l', 't')), 16,
-                                        0)
-            reserveSuits.append(random.choice((suit, suit2)))
+            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, random.choice((0, 1, 2)))
+            reserveSuits.append(suit)
         if specialCode == 'crf2':
             suit = self.__genSuitObject(self.zoneId, 27, 'm', 27, 0)
             reserveSuits.append(suit)
         if specialCode == 'gtk':
             # generate random bossbot from lv 12 to 20
-            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't')), suitLevel, 1)
+            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 1)
             reserveSuits.append(suit)
         if specialCode == 'gtk2':
             # generate random bossbot from lv 12 to 20
-            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't')), suitLevel, 1)
+            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 1)
             reserveSuits.append(suit)
 
         suitHandles['reserveSuits'] = reserveSuits

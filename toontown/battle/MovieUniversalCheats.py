@@ -1997,6 +1997,62 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
 def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
     return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
 
+def __soakRemoval(suit, remove=0):
+    if remove:
+        if suit.style.name == 'jl':
+            color = Point4((0.729, 0.729, 0.729, 1))
+        elif suit.style.name == 'lbs':
+            color = Point4((0.51, 0.49, 0.467, 1))
+        elif suit.style.name == 'fb':
+            color = Point4((0.6, 0.6, 0.6, 1))
+        elif suit.style.name == 'tcc':
+            color = Point4((0.671, 0.671, 0.671, 1))
+        elif suit.style.name == 'gb':
+            color = Point4((0.62, 0.659, 0.624, 1))
+        else:
+            color = Point4(1.0, 1.0, 1.0, 1.0)
+    else:
+        color = SoakColor
+    if suit.isSkeleton:
+        suitBody = [suit]
+    else:
+        suitBody = [suit.find('**/body'), suit.find('**/hands')]
+    suitInterval = Sequence()
+    if suit.dna.name == 'lit' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeDryLitigator))
+    for bodyPart in suitBody:
+        if bodyPart:
+            suitInterval.append(Func(bodyPart.setColor, color))
+        return suitInterval
+
+def doSoakRemoval(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence()
+    suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
+    return suitTrack
+
+def doDeathCheck(attack):
+    name = attack['id']
+    suit = attack['suit']
+    battle = attack['battle']
+    currentBossHealth = -1
+    revives = suit.getSkeleRevives()
+    suitTrack = Sequence()
+    if suit.isVirtual:
+        suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
+    elif not suit.isSkeleton and revives >= 2:
+        suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
+    elif suit.isSkeleton and revives >= 2:
+        suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+    elif suit.isSkeleton and revives >= 1 and not suit.isRevive:
+        suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+    elif not suit.isSkeleton and revives >= 1:
+        suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
+    elif not suit.isVirtual:
+        suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
+    return suitTrack
+
 def doSynergy(attack):
     suit = attack['suit']
     battle = attack['battle']

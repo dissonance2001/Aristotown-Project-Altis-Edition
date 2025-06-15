@@ -61,7 +61,7 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('glower', 'glower'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
+AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
             ('falling-knife', 'falling-knife'), ('throw-object', 'throw-object'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),
             ('throw-paper', 'throw-paper'), ('mob-mentality', 'mob-mentality'), ('neutral', 'neutral'), ('neutral2', 'neutral'), ('magnet', 'magnet'), ('neutral2-hurt', 'neutral-hurt'),
             ('neutral-hurt', 'neutral-hurt'), ('neutral-unstable', 'neutral-unstable'), ('neutral-enraged-return', 'neutral-enraged-return'), ('ottoman-sit-loop', 'ottoman-sit-loop'),
@@ -73,8 +73,8 @@ AllSuitsMinigame = (('victory', 'victory'), ('flail', 'flailing'), ('flail-wb', 
                     ('slip-backward', 'slip-backward'), ('lose3', 'wrecked'), ('slip-forward', 'slip-forward'))
 AllSuitsTutorialBattle = (('lose', 'lose'), ('lose2', 'headless-death'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'), ('dance', 'song-and-dance'), ('pie-small-react', 'pie-small'),
                           ('squirt-small-react', 'squirt-small'))
-AllSuitsBattle = (('drop-react', 'anvil-drop'), ('flatten', 'drop'), ('glower', 'glower'), ('headless-death', 'headless-death'), ('dance', 'song-and-dance'), ('frustrated', 'frustrated-f'),
-                  ('lose3', 'wrecked'), ('short-squeeze', 'short-squeeze'), ('gag-miss', 'gag-miss'), ('pie-large', 'pie-large'), ('pie-large-lured', 'pie-large-lured'), ('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
+AllSuitsBattle = (('drop-react', 'anvil-drop'), ('flatten', 'drop'), ('song-and-dance', 'song-and-dance'), ('glower', 'glower'), ('headless-death', 'headless-death'), ('dance', 'song-and-dance'), ('frustrated', 'frustrated-f'),
+                  ('lose3', 'wrecked'), ('short-squeeze', 'short-squeeze'), ('gag-miss', 'gag-miss'), ('pie-large', 'pie-large'), ('rolled', 'rolled'), ('pie-large-lured', 'pie-large-lured'), ('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
                   ('highroller-neutral-levitate-in-out', 'highroller-neutral-levitate-in-out', 4), ('wrecked', 'wrecked'), ('sidestep-left', 'sidestep-left'),
                   ('sidestep-right', 'sidestep-right'), ('squirt-large-react', 'squirt-large'), ('sound-react', 'sound-react'), ('sound-react-bow', 'sound-react-bow'),
                   ('sound-react-nt', 'sound-react-nt'),
@@ -168,7 +168,7 @@ lbs = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 trk = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 dsf = (('glower', 'glower', 4), ('scabbard', 'scabbard', 4), ('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('song-and-dance', 'song-and-dance', 4), ('walk', 'awalk', 4))
 msp = ('cigar-smoke', 'cigar-smoke', 4)
-mad = (('glower', 'glower', 4), ('sanction', 'sanction', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
+mad = (('glower', 'glower', 4), ('sanction', 'sanction', 4), ('snap', 'snap', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4))
 crf = (('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
 # Lawbots
 bf = (('shredder', 'shredder', 4), ('finger-wag', 'finger-wag', 4))
@@ -220,7 +220,7 @@ dty = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 dfg = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dfr = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 bsh = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-ghd = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+ghd = (('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('shot5', 'shot5', 4), ('snap', 'snap', 4), ('sanction', 'sanction', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
 tyh = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 jgd = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 bby = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -2455,13 +2455,13 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
             self.setHeight(9.31)
         elif dna.name == 'ghd':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(1, 0.486, 0, 1)
-            self.generateBody()
-            self.makeBoardbotManager()
-            self.generateHead3('clubpresident', animated=True)
+            self.scale = 7.5 / aSize
+            self.handColor = VBase4(1, 1, 1, 1)
+            self.generateHighRollerBody()
+            self.makeHighRoller()
+            self.generateHead3('highroller', animated=True)
+            self.setHeight(10.0)
             self.setTransparency(1)
-            self.setHeight(9.31)
         elif dna.name == 'tyh':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -5304,31 +5304,31 @@ class Suit(Avatar.Avatar):
         messenger.send(self.uniqueName('suitHpUpdate'), [self.currHP, self.maxHP, hp])
         health = float(self.currHP) / float(self.maxHP)
         if self.style.name == 'mad':
-            if self.maxHP > 13000:
+            if self.maxHP == 13000:
                 self.setDisplayName(self.createNameInfoMagenta())
                 self.virtualize(20)
-            elif self.maxHP > 12000:
+            elif self.maxHP == 12900:
                 self.setDisplayName(self.createNameInfoWhite())
                 self.virtualize(19)
-            elif self.maxHP > 11000:
+            elif self.maxHP == 12800:
                 self.setDisplayName(self.createNameInfoPurple())
                 self.virtualize(13)
-            elif self.maxHP > 10000:
+            elif self.maxHP == 12700:
                 self.setDisplayName(self.createNameInfoLightBlue())
                 self.virtualize(12)
-            elif self.maxHP > 9000:
+            elif self.maxHP == 12600:
                 self.setDisplayName(self.createNameInfoPink())
                 self.virtualize(14)
-            elif self.maxHP > 8000:
+            elif self.maxHP == 12500:
                 self.setDisplayName(self.createNameInfoRed())
                 self.virtualize(8)
-            elif self.maxHP > 7000:
+            elif self.maxHP == 12400:
                 self.setDisplayName(self.createNameInfoBlue())
                 self.virtualize(15)
-            elif self.maxHP > 6000:
+            elif self.maxHP == 12275:
                 self.setDisplayName(self.createNameInfoYellow())
                 self.virtualize(3)
-            elif self.maxHP > 5000:
+            elif self.maxHP == 12100:
                 self.setDisplayName(self.createNameInfoOrange())
                 self.virtualize(7)
             else:
@@ -6893,7 +6893,7 @@ class Suit(Avatar.Avatar):
             return DOLDDialogArray
         if self.style.name == 'ghd' and not self.isSkeleton:
             loadDialog(1)
-            return WitchHunterDialogArray
+            return HighRollerDialogArray
         if self.style.name == 'tyh' and not self.isSkeleton:
             loadDialog(1)
             return StenographerDialogArray

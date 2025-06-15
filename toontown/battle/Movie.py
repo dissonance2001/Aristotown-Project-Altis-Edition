@@ -322,9 +322,14 @@ class Movie(DirectObject.DirectObject):
                 for s in battle.activeSuits:
                     pbpText = PlayByPlayText.PlayByPlayText()
                     pbpDc = PlayByPlayText.PlayByPlayText()
-                    ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
+                    if s.dna.name == 'mad' or s.dna.name == 'jb':
+                        ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
                                                                              '',
                                                                              CFSpeech | CFTimeout)))
+                    else:
+                        ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
+                                                                                       '',
+                                                                                       CFSpeech | CFTimeout)))
         ptrack.append(Func(callback))
         self._deleteTrack()
         self.track = Sequence(ptrack, name='movie-track-%d' % self.battle.doId)

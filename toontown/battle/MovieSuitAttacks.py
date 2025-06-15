@@ -711,9 +711,9 @@ def doSuitAttack(attack):
     elif name == HIGH_ROLLER_GAME_TIME_SPAWN:
         suitTrack = MovieHighRollerCheats.doGameTimeSpawn(attack)
     elif name == HIGH_ROLLER_GAME_TIME_COG:
-        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack)
+        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 1)
     elif name == HIGH_ROLLER_GAME_TIME_COG_2:
-        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack)
+        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 1)
     elif name == HIGH_ROLLER_BUST:
         suitTrack = MovieHighRollerCheats.doBust(attack)
     # high roller phase 2 cheats
@@ -722,20 +722,24 @@ def doSuitAttack(attack):
     # high roller phase 3 cheats
     elif name == HIGH_ROLLER_FREE_CRUISE:
         suitTrack = MovieHighRollerCheats.doFreeCruise(attack)
+    elif name == HIGH_ROLLER_ROLLED:
+        suitTrack = MovieHighRollerCheats.doRolled(attack)
     elif name == HIGH_ROLLER_CONDUCTION:
         suitTrack = MovieHighRollerCheats.doConduction(attack)
     elif name == HIGH_ROLLER_DICE_ROULETTE_COGS:
-        suitTrack = MovieHighRollerCheats.doDiceRouletteCogs(attack)
+        suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
     elif name == HIGH_ROLLER_DICE_ROULETTE_TOONS:
-        suitTrack = MovieHighRollerCheats.doDiceRouletteToons(attack)
+        suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
     elif name == HIGH_ROLLER_DICE_ROULETTE_EVERYONE:
-        suitTrack = MovieHighRollerCheats.doDiceRouletteEveryone(attack)
+        suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
     elif name == HIGH_ROLLER_DICE_ROULETTE_NOBODY:
-        suitTrack = MovieHighRollerCheats.doDiceRouletteNobody(attack)
+        suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
     elif name == HIGH_ROLLER_TRICK_OF_THE_LIGHT:
         suitTrack = MovieHighRollerCheats.doTrickOfTheLight(attack)
     elif name == HIGH_ROLLER_ACE_IN_THE_HOLE:
         suitTrack = MovieHighRollerCheats.doAceInTheHole(attack)
+    elif name == HIGH_ROLLER_VULNERABLE:
+        suitTrack = MovieHighRollerCheats.doVulnerable(attack)
     # high roller silhouette cheats
     elif name == HIGH_ROLLER_DONATION:
         suitTrack = MovieHighRollerCheats.doDonation(attack)
@@ -746,7 +750,7 @@ def doSuitAttack(attack):
     elif name == HIGH_ROLLER_SINGING_BLUES:
         suitTrack = MovieHighRollerCheats.doSingingBlues(attack)
     elif name == HIGH_ROLLER_DAMAGE_REDUCTION:
-        suitTrack = MovieHighRollerCheats.doSnipeDamageReduction(attack)
+        suitTrack = MovieHighRollerCheats.doDamageReduction(attack)
     elif name == HIGH_ROLLER_SPLASHBACK:
         suitTrack = MovieHighRollerCheats.doSplashback(attack)
     elif name == HIGH_ROLLER_CHEER_RETALIATION:
@@ -756,6 +760,10 @@ def doSuitAttack(attack):
         suitTrack = MovieUniversalCheats.doSynergy(attack)
     elif name == CALCULATING_FEES:
         suitTrack = MovieUniversalCheats.doCourtCalculations(attack)
+    elif name == DEATH_CHECK:
+        suitTrack = MovieUniversalCheats.doDeathCheck(attack)
+    elif name == SOAK_REMOVAL:
+        suitTrack = MovieUniversalCheats.doSoakRemoval(attack)
     elif name == BAN_LEVEL_4:
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
@@ -934,7 +942,7 @@ def doSuitAttack(attack):
     elif name == LD_RE_ORG:
         neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         preWalkTrack = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-    elif name == JURY_NOTICE:
+    elif name == HIGH_ROLLER_NO_ATTACK:
         neutralIval = Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         preWalkTrack = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
     elif name == NICKEL_AND_DIME:
@@ -944,13 +952,13 @@ def doSuitAttack(attack):
         neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         preWalkTrack = Func(suit.loop,
                             'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-    elif suit.isImmortal and suit.dna.name == 'dsf':
-        neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-        preWalkTrack = Func(suit.loop,
-                            'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-    elif suit.isImmortal:
-        neutralIval = Func(suit.loop, 'highroller-neutral-levitate-loop')
-        preWalkTrack = ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1)
+        # elif suit.isImmortal and suit.dna.name == 'dsf':
+        # neutralIval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+        # preWalkTrack = Func(suit.loop,
+        #      'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+        # elif suit.isImmortal:
+        # neutralIval = Func(suit.loop, 'highroller-neutral-levitate-loop')
+        # preWalkTrack = ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1)
     else:
         neutralIval =  Func(suit.setNeutralAnimation)
         preWalkTrack = Func(suit.setNeutralAnimation)
@@ -974,6 +982,10 @@ def doSuitAttack(attack):
     elif name == CALCULATING_FEES:
         resetSuitTrack = Sequence(suitTrack)
     elif name == SCAPEGOAT_COURT_RECORD_BAN:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == HIGH_ROLLER_NO_ATTACK:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == SOAK_REMOVAL:
         resetSuitTrack = Sequence(suitTrack)
     else:
         resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
@@ -1011,172 +1023,10 @@ def __makeCancelledNodePath():
 def doDefault(attack):
     notify.debug('building suit attack in doDefault')
     suitName = attack['suitName']
-    if suitName == 'f':
-        attack['id'] = POUND_KEY
-        attack['name'] = 'PoundKey'
-        attack['animName'] = 'phone'
-        return doPoundKey(attack)
-    elif suitName == 'p':
-        attack['id'] = FOUNTAIN_PEN
-        attack['name'] = 'FountainPen'
-        attack['animName'] = 'pen-squirt'
-        return doFountainPen(attack)
-    elif suitName == 'ym':
-        attack['id'] = RUBBER_STAMP
-        attack['name'] = 'RubberStamp'
-        attack['animName'] = 'rubber-stamp'
-        return doRubberStamp(attack)
-    elif suitName == 'mm':
-        attack['id'] = FINGER_WAG
-        attack['name'] = 'FingerWag'
-        attack['animName'] = 'finger-wag'
-        return doFingerWag(attack)
-    elif suitName == 'ds':
-        attack['id'] = DEMOTION
-        attack['name'] = 'Demotion'
-        attack['animName'] = 'magic1'
-        return doDemotion(attack)
-    elif suitName == 'hh':
-        attack['id'] = GLOWER_POWER
-        attack['name'] = 'GlowerPower'
-        attack['animName'] = 'glower'
-        return doGlowerPower(attack)
-    elif suitName == 'cr':
-        attack['id'] = PICK_POCKET
-        attack['name'] = 'PickPocket'
-        attack['animName'] = 'pickpocket'
-        return doPickPocket(attack)
-    elif suitName == 'tbc':
-        attack['id'] = GLOWER_POWER
-        attack['name'] = 'GlowerPower'
-        attack['animName'] = 'glower'
-        return doGlowerPower(attack)
-    elif suitName == 'cc':
-        attack['id'] = POUND_KEY
-        attack['name'] = 'PoundKey'
-        attack['animName'] = 'phone'
-        return doPoundKey(attack)
-    elif suitName == 'tm':
-        attack['id'] = CLIPON_TIE
-        attack['name'] = 'ClipOnTie'
-        attack['animName'] = 'throw-paper'
-        return doClipOnTie(attack)
-    elif suitName == 'nd':
-        attack['id'] = PICK_POCKET
-        attack['name'] = 'PickPocket'
-        attack['animName'] = 'pickpocket'
-        return doPickPocket(attack)
-    elif suitName == 'gh':
-        attack['id'] = FOUNTAIN_PEN
-        attack['name'] = 'FountainPen'
-        attack['animName'] = 'pen-squirt'
-        return doFountainPen(attack)
-    elif suitName == 'ms':
-        attack['id'] = BRAIN_STORM
-        attack['name'] = 'BrainStorm'
-        attack['animName'] = 'effort'
-        return doBrainStorm(attack)
-    elif suitName == 'tf':
-        attack['id'] = RED_TAPE
-        attack['name'] = 'RedTape'
-        attack['animName'] = 'throw-object'
-        return doRedTape(attack)
-    elif suitName == 'm':
-        attack['id'] = BUZZ_WORD
-        attack['name'] = 'BuzzWord'
-        attack['animName'] = 'speak'
-        return doBuzzWord(attack)
-    elif suitName == 'mh':
-        attack['id'] = RAZZLE_DAZZLE
-        attack['name'] = 'RazzleDazzle'
-        attack['animName'] = 'smile'
-        return doRazzleDazzle(attack)
-    elif suitName == 'sc':
-        attack['id'] = WATERCOOLER
-        attack['name'] = 'Watercooler'
-        attack['animName'] = 'water-cooler'
-        return doWatercooler(attack)
-    elif suitName == 'pp':
-        attack['id'] = BOUNCE_CHECK
-        attack['name'] = 'BounceCheck'
-        attack['animName'] = 'throw-paper'
-        return doBounceCheck(attack)
-    elif suitName == 'tw':
-        attack['id'] = GLOWER_POWER
-        attack['name'] = 'GlowerPower'
-        attack['animName'] = 'glower'
-        return doGlowerPower(attack)
-    elif suitName == 'bc':
-        attack['id'] = AUDIT
-        attack['name'] = 'Audit'
-        attack['animName'] = 'phone'
-        return doAudit(attack)
-    elif suitName == 'nc':
-        attack['id'] = RED_TAPE
-        attack['name'] = 'RedTape'
-        attack['animName'] = 'throw-object'
-        return doRedTape(attack)
-    elif suitName == 'mb':
-        attack['id'] = LIQUIDATE
-        attack['name'] = 'Liquidate'
-        attack['animName'] = 'magic1'
-        return doLiquidate(attack)
-    elif suitName == 'ls':
-        attack['id'] = WRITE_OFF
-        attack['name'] = 'WriteOff'
-        attack['animName'] = 'hold-pencil'
-        return doWriteOff(attack)
-    elif suitName == 'rb':
-        attack['id'] = TEE_OFF
-        attack['name'] = 'TeeOff'
-        attack['animName'] = 'golf-club-swing'
-        return doTeeOff(attack)
-    elif suitName == 'bf':
-        attack['id'] = RUBBER_STAMP
-        attack['name'] = 'RubberStamp'
-        attack['animName'] = 'rubber-stamp'
-        return doRubberStamp(attack)
-    elif suitName == 'b':
-        attack['id'] = EVICTION_NOTICE
-        attack['name'] = 'EvictionNotice'
-        attack['animName'] = 'throw-paper'
-        return doEvictionNotice(attack)
-    elif suitName == 'dt':
-        attack['id'] = RUBBER_STAMP
-        attack['name'] = 'RubberStamp'
-        attack['animName'] = 'rubber-stamp'
-        return doRubberStamp(attack)
-    elif suitName == 'ac':
-        attack['id'] = RED_TAPE
-        attack['name'] = 'RedTape'
-        attack['animName'] = 'throw-object'
-        return doRedTape(attack)
-    elif suitName == 'bs':
-        attack['id'] = FINGER_WAG
-        attack['name'] = 'FingerWag'
-        attack['animName'] = 'finger-wag'
-        return doFingerWag(attack)
-    elif suitName == 'sd':
-        attack['id'] = WRITE_OFF
-        attack['name'] = 'WriteOff'
-        attack['animName'] = 'hold-pencil'
-        return doWriteOff(attack)
-    elif suitName == 'le':
-        attack['id'] = JARGON
-        attack['name'] = 'Jargon'
-        attack['animName'] = 'speak'
-        return doJargon(attack)
-    elif suitName == 'bw':
-        attack['id'] = FINGER_WAG
-        attack['name'] = 'FingerWag'
-        attack['animName'] = 'finger-wag'
-        return doFingerWag(attack)
-    else:
-        attack['id'] = RED_TAPE
-        attack['name'] = 'RedTape'
-        attack['animName'] = 'throw-object'
-        return doRedTape(attack)
-    return None
+    attack['id'] = SOAK_REMOVAL
+    attack['name'] = 'SoakRemoval'
+    attack['animName'] = 'nothing'
+    return MovieUniversalCheats.SoakRemoval(attack)
 
 def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
@@ -1311,21 +1161,20 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
     track.append(Func(suit.setHpr, battle, origHpr))
-    if suit.dna.name == 'scg' and suit.isAngry:
-        track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'neutral-enraged'))
-    elif suit.isImmortal and suit.dna.name == 'dsf':
-        track.append(
-            Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isVulnerable and suit.dna.name == 'crf':
-        track.append(
-            Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal:
-        track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
-    else:
-        track.append(
-            Func(suit.setNeutralAnimation))
+    # if suit.dna.name == 'scg' and suit.isAngry:
+    #     track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
+    #     track.append(Func(suit.loop, 'neutral-enraged'))
+    # elif suit.isImmortal and suit.dna.name == 'dsf':
+    #     track.append(
+    #        Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+    # elif suit.isVulnerable and suit.dna.name == 'crf':
+    #    track.append(
+    #       Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+    # elif suit.isImmortal:
+    #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
+    #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+    track.append(
+        Func(suit.setNeutralAnimation))
 
     def returnTrapToSuit(suit = suit, trapStorage = trapStorage):
         return
@@ -1350,20 +1199,19 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
-    if suit.dna.name == 'scg' and suit.isAngry:
-        track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'neutral-enraged'))
-    elif suit.isImmortal and suit.dna.name == 'dsf':
-        track.append(
-            Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isVulnerable and suit.dna.name == 'crf':
-        track.append(
-            Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal:
-        track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
-    else:
-        track.append(
+        # if suit.dna.name == 'scg' and suit.isAngry:
+        #     track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
+        #     track.append(Func(suit.loop, 'neutral-enraged'))
+        # elif suit.isImmortal and suit.dna.name == 'dsf':
+        #     track.append(
+        #        Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+        # elif suit.isVulnerable and suit.dna.name == 'crf':
+        #    track.append(
+        #       Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+        # elif suit.isImmortal:
+        #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
+        #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+    track.append(
             Func(suit.setNeutralAnimation))
     return track
 

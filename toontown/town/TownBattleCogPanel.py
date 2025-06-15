@@ -492,84 +492,84 @@ class TownBattleCogPanel(DirectFrame):
             self.luredManager2.show()
             self.lureImmune4.show()
             self.overcharged2.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 13000 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 13000 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 13000:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 13000:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 12000 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12900 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 12000:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12900:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 11000 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12800 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune3.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 11000:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12800:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune3.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 10000 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12700 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.lightblue.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 10000:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12700:
             self.virtual.show()
             self.luredManager2.show()
             self.lightblue.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 9000 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12600 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.pink.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 9000:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12600:
             self.virtual.show()
             self.luredManager2.show()
             self.pink.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 8000 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12500 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.red.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 8000:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12500:
             self.virtual.show()
             self.luredManager2.show()
             self.red.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 7000 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12400 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.blue.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 7000:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12400:
             self.virtual.show()
             self.luredManager2.show()
             self.blue.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 6000 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12275 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.yellow.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 6000:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12275:
             self.virtual.show()
             self.luredManager2.show()
             self.yellow.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 5000 and self.cog.isLured:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12100 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() > 5000:
+        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12100:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()

@@ -869,8 +869,8 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.midVault.unstash()
         self.__hideResistanceToon()
         NametagGlobals.setWant2dNametags(False)
-        NametagGlobals.setWantActiveNametags(True)
-        base.localAvatar.setFriendsListButtonActive(1)
+        NametagGlobals.setWantActiveNametags(False)
+        base.localAvatar.setFriendsListButtonActive(0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -906,7 +906,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.clearInterval(intervalName)
         self.unstickToons()
         self.releaseToons()
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, ElevatorConstants.ELEVATOR_CFO)
     
     def enterBattleTwo(self):
@@ -955,7 +955,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         if self.newState == 'BattleThree':
             self.movieCrane.request('Free')
             self.movieSafe.request('Initial')
-        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWant2dNametags(False)
         ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, ElevatorConstants.ELEVATOR_CFO)
         taskMgr.remove(self.uniqueName('physics'))
 		

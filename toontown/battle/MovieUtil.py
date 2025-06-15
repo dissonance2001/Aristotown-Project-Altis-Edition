@@ -1474,7 +1474,7 @@ def createSuitCrashTrack(suit, battle):
     node = suit.getGeomNode().getChild(0)
     suitPos = suit.getPos()
     hitTime = 0.1
-    shrinkStartDelay = 2.0
+    shrinkStartDelay = 3.0
     #crashSoundEffects = []
     #for sound in crashSounds:
         #crashSoundEffects.append(globalBattleSoundCache.getSound(sound))
@@ -1484,7 +1484,7 @@ def createSuitCrashTrack(suit, battle):
     for headPart in suit.animatedHeadParts:
         headInterval = ActorInterval(headPart, 'neutral', startTime=0, endTime=0)
         hasAnimatedHead = True
-    suitTrack = Sequence(Wait(hitTime),
+    suitTrack = Sequence(Wait(hitTime), Func(suit.setZ, suit.getZ() + .1),
                          Func(node.setScale, Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
                          Func(node.setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
                          Func(suit.deleteDropShadow),
@@ -2414,9 +2414,9 @@ def createSuitLaughIntervalDice(suit):
     head.calcTightBounds(p1, p2)
     stunInterval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
     hasAnimatedHead = False
-    suitInterval = ActorInterval(suit, 'wheelspin', startTime=2.25, endTime=5.75)
+    suitInterval = ActorInterval(suit, 'wheelspin', startTime=2.25)
     for headPart in suit.animatedHeadParts:
-        headInterval = Sequence(ActorInterval(headPart, 'wheelspin', startTime=2.25, endTime=5.75),  Func(headPart.loop,
+        headInterval = Sequence(ActorInterval(headPart, 'wheelspin', startTime=2.25),  Func(headPart.loop,
                             'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
         headLoop = ActorInterval(suit, 'wheelspin', startTime=2.5)
         hasAnimatedHead = True
