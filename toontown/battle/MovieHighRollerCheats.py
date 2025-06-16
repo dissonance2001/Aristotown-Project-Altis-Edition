@@ -2459,7 +2459,9 @@ def doBust(attack):
     targets = attack['target']
     propTracks = Parallel()
     toonTracks = Parallel()
-    suitTrackDuration = Parallel()
+    suitTracks = Parallel()
+    soundTracks = Parallel()
+    talkTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -2477,7 +2479,6 @@ def doBust(attack):
                 LerpScaleInterval(gavel, .25, MovieUtil.PNT3_ZERO)
             ))
 
-        propTracks.append(propTrack)
         toonTrack = Sequence(
             Wait(6.5),
             Parallel(
@@ -2498,17 +2499,21 @@ def doBust(attack):
                 )
             )
         )
-        toonTracks.append(toonTrack)
         soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=6.5, node=suit)
         suitTrack = Sequence(MovieUtil.createSuitBustInterval(suit))
+        suitTrack.append(Func(suit.setNeutralAnimation))
         talkTrack = Sequence(getSuitAnimTrack(attack))
         soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg', delay=0.5, node=suit)
         soundTrack2 = getSoundTrack('SA_bash.ogg', delay=5.0, node=suit)
-        suitTrack.append(Func(suit.setNeutralAnimation))
         if dmg > 0:
-            return Parallel(talkTrack, suitTrack, soundTrack1, toonTracks, soundTrack, soundTrack2, propTracks)
-        else:
-            return suitTrackDuration
+            toonTracks.append(toonTrack)
+            propTracks.append(propTrack)
+            soundTracks.append(soundTrack)
+            suitTracks.append(suitTrack)
+            talkTracks.append(talkTrack)
+            soundTracks.append(soundTrack1)
+            soundTracks.append(soundTrack2)
+    return Parallel(talkTracks, suitTracks, toonTracks, soundTracks, propTracks)
 
 def doWheelSpin(attack):
     suit = attack['suit']
@@ -2723,6 +2728,7 @@ def doDiceRouletteToons(attack):
     suitTrack = Parallel(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     propTracks = Parallel()
     toonTracks = Parallel()
+    soundTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -2739,8 +2745,6 @@ def doDiceRouletteToons(attack):
             Wait(1.5),
             LerpScaleInterval(gavel, .25, MovieUtil.PNT3_ZERO)
         ))
-
-        propTracks.append(propTrack)
         toonTrack = Sequence(
         Wait(1.75),
         Parallel(
@@ -2761,9 +2765,13 @@ def doDiceRouletteToons(attack):
             )
         )
         )
-        toonTracks.append(toonTrack)
-    soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=1.5, node=suit)
-    return Parallel(suitTrack, toonTracks, soundTrack, propTracks)
+        soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=1.5, node=suit)
+        suitTrack.append(Func(suit.setNeutralAnimation))
+        if dmg > 0:
+            toonTracks.append(toonTrack)
+            soundTracks.append(soundTrack)
+            propTracks.append(propTrack)
+    return Parallel(suitTrack, toonTracks, soundTracks, propTracks)
 
 def doDamageReduction(attack):
     suit = attack['suit']
@@ -2876,7 +2884,7 @@ def doGameTimeCog2(attack, ind):
         head = headPart
     cagePropTrack = Sequence(
         getPropAppearTrack(cage, targetSuit, cagePos, 1, scaleUpPoint=Point3(1.5, 1.5, 1.5), scaleUpTime=0),
-        Wait(13), SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg'), node=targetSuit),
+        Wait(11), SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg'), node=targetSuit),
         Func(cage.find('**/spotlight').hide),
         Parallel(cagePosition, Func(cage.reparentTo, head)),
         Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn')), Wait(2),
@@ -3019,7 +3027,7 @@ def doGameTimeCog(attack, ind):
         head = headPart
     cagePropTrack = Sequence(
         getPropAppearTrack(cage, targetSuit, cagePos, 1, scaleUpPoint=Point3(1.5, 1.5, 1.5), scaleUpTime=0),
-        Wait(13), SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg'), node=targetSuit),
+        Wait(11), SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg'), node=targetSuit),
         Func(cage.find('**/spotlight').hide),
         Parallel(cagePosition, Func(cage.reparentTo, head)),
         Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn')), Wait(2),

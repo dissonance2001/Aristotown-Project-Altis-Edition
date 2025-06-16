@@ -169,6 +169,9 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                 elif suit.dna.name == 'dsf':
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
+                elif suit.dna.name == 'crf' and not suit.isPhase3:
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
                     if suit.dna.name == 'mad' or suit.dna.name == 'jb':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
@@ -275,6 +278,9 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 elif suit.dna.name == 'dsf':
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
+                elif suit.dna.name == 'crf' and not suit.isPhase3:
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
                     if suit.dna.name == 'mad' or suit.dna.name == 'jb':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
@@ -378,6 +384,9 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 elif suit.dna.name == 'dsf':
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
+                elif suit.dna.name == 'crf' and not suit.isPhase3:
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
@@ -1238,6 +1247,9 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 elif suit.dna.name == 'dsf':
+                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
+                elif suit.dna.name == 'crf' and not suit.isPhase3:
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:

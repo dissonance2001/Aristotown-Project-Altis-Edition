@@ -61,7 +61,7 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
+AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('lose3', 'wrecked'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
             ('falling-knife', 'falling-knife'), ('throw-object', 'throw-object'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),
             ('throw-paper', 'throw-paper'), ('mob-mentality', 'mob-mentality'), ('neutral', 'neutral'), ('neutral2', 'neutral'), ('magnet', 'magnet'), ('neutral2-hurt', 'neutral-hurt'),
             ('neutral-hurt', 'neutral-hurt'), ('neutral-unstable', 'neutral-unstable'), ('neutral-enraged-return', 'neutral-enraged-return'), ('ottoman-sit-loop', 'ottoman-sit-loop'),

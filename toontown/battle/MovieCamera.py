@@ -1302,22 +1302,22 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == HIGH_ROLLER_ROLLED:
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == HIGH_ROLLER_DICE_ROULETTE_COGS:
-        camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
+        camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
                                  motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
                                  heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
     elif name == HIGH_ROLLER_DICE_ROULETTE_TOONS:
-        camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
+        camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
                                  motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
                                  heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
     elif name == HIGH_ROLLER_DICE_ROULETTE_EVERYONE:
-        camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
+        camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
                                  motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
                                  heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
     elif name == HIGH_ROLLER_DICE_ROULETTE_NOBODY:
-        camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
+        camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
                                  motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
                                  heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))

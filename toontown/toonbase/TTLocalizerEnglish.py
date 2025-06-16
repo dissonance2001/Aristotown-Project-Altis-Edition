@@ -4453,7 +4453,7 @@ SuitAttackNames = {'Audit': 'Audit!',
 'AmbassadorMulligan': "Mulligan!",
 #high roller phase 1
 'HighRollerNoAttack': "nothing",
-'HighRollerWheelSpin': "Wheel Spin!",
+'HighRollerWheelSpin': "Game Time!",
 'HighRollerCommercialBreak': "Commercial Break!",
 'HighRollerGameTimeSpawn': "Game Time!",
 'HighRollerGameTimeCog': "Game Time!",

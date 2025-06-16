@@ -290,16 +290,52 @@ class SuitPlannerInteriorAI:
         reserveSuits = []
 
         def suitKindFromLevel(level):
-            if level <= 18:
-                return random.randint(7, 12)
-            elif level > 18:
-                return random.randint(12, 14)
-            elif level > 20:
-                return 14
+            if level >= 25:
+                returnval = 14
+            elif level >= 24:
+                returnval = random.randint(13, 14)
+            elif level >= 21:
+                returnval = random.randint(12, 14)
+            elif level >= 20:
+                returnval = random.randint(11, 14)
+            elif level >= 18:
+                returnval = random.randint(10, 14)
+            elif level >= 16:
+                returnval = random.randint(9, 14)
+            elif level >= 14:
+                returnval = random.randint(7, 14)
+            elif level >= 13:
+                returnval = random.randint(7, 13)
+            elif level >= 12:
+                returnval = random.randint(7, 12)
+            elif level >= 11:
+                returnval = random.choice((5, 7, 8, 9, 10, 11))
+            elif level >= 10:
+                returnval = random.randint(5, 10)
+            elif level >= 9:
+                returnval = random.choice((3, 5, 6, 7, 8, 9))
+            elif level >= 8:
+                returnval = random.randint(3, 8)
+            elif level >= 7:
+                returnval = random.randint(3, 7)
+            elif level >= 6:
+                returnval = random.randint(2, 6)
+            elif level >= 5:
+                returnval = random.randint(1, 5)
+            elif level >= 4:
+                returnval = random.randint(1, 4)
+            elif level >= 3:
+                returnval = random.randint(1, 3)
+            elif level >= 2:
+                returnval = random.randint(1, 2)
+            elif level == 1:
+                returnval = 1
             else:
-                return 8
+                returnval = 14
 
-        suitLevel = random.randint(15, 31)
+            return returnval
+
+        suitLevel = random.randint(10, 31)
         suitLevel2 = random.randint(7, 15)
         suitKind = suitKindFromLevel(suitLevel)
         if specialCode == 'crf':

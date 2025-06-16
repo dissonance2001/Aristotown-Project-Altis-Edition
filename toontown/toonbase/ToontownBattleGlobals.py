@@ -760,6 +760,7 @@ ValidStatusConditions = (
     'absorbingHR',
     'aceInTheHole',
     'zapImmune',
+    'deathcheck',
     'dropcalculator',
     'zapcalculator',
     'toonupcalculator',

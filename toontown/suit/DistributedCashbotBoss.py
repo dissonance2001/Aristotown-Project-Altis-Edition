@@ -384,7 +384,6 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                             base.camera.posHprInterval(1, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
                             Func(self.titleSeq.start),
                             Func(self.setChatAbsolute, TTL.CashbotBossDiscoverToons1, CFSpeech),
-                            LerpColorScaleInterval(render, 1, Vec4(0.75, 1.0, 0.75, 1.0)),
                             Func(self.setChatAbsolute, TTL.CashbotBossDiscoverToons2, CFSpeech),
                             Wait(4),
                             Func(self.setChatAbsolute, '', CFSpeech),
@@ -868,9 +867,9 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.evWalls.stash()
         self.midVault.unstash()
         self.__hideResistanceToon()
-        NametagGlobals.setWant2dNametags(False)
-        NametagGlobals.setWantActiveNametags(False)
-        base.localAvatar.setFriendsListButtonActive(0)
+        NametagGlobals.setWant2dNametags(True)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -888,6 +887,8 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterPrepareBattleTwo(self):
         self.controlToons()
         NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(False)
+        base.localAvatar.setFriendsListButtonActive(0)
         intervalName = 'PrepareBattleTwoMovie'
         delayDeletes = []
         seq = Sequence(self.makePrepareBattleTwoMovie(delayDeletes), Func(self.__beginBattleTwo), name=intervalName)
@@ -914,6 +915,9 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.evWalls.unstash()
         self.setPosHpr(*ToontownGlobals.CashbotBossBattleOnePosHpr)
         self.show()
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(False)
+        base.localAvatar.setFriendsListButtonActive(0)
         self.pelvis.setHpr(self.pelvisReversedHpr)
         self.doAnimate()
         self.__hideResistanceToon()
@@ -930,6 +934,8 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterPrepareBattleThree(self):
         self.controlToons()
         NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(False)
+        base.localAvatar.setFriendsListButtonActive(0)
         intervalName = 'PrepareBattleThreeMovie'
         delayDeletes = []
         self.movieCrane = self.cranes[0]
