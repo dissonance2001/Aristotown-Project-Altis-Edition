@@ -2275,8 +2275,8 @@ def doSnipe(attack):
         toonPos = toon.getPos(battle)
         suitPos, suitHpr = battle.getActorPosHpr(suit)
         gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
-        leftPosPoints = [Point3(0.5, 3.0, suit.height - 1), MovieUtil.PNT3_ZERO]
-        rightPosPoints = [Point3(-0.5, 3.0, suit.height - 1), MovieUtil.PNT3_ZERO]
+        leftPosPoints = [Point3(0.5, 3.0, suit.height - 2), MovieUtil.PNT3_ZERO]
+        rightPosPoints = [Point3(-0.5, 3.0, suit.height - 2), MovieUtil.PNT3_ZERO]
         explosionTrack = Sequence()
         explosionTrack.append(Wait(1.5))
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))

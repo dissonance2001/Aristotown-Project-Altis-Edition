@@ -10954,8 +10954,8 @@ def doGlowerPower(attack):
 
     suitTrack = getSuitTrack(attack)
     suitName = suit.getStyleName()
-    leftPosPoints = [Point3(0.5, 3.0, suit.height - 1), MovieUtil.PNT3_ZERO]
-    rightPosPoints = [Point3(-0.5, 3.0, suit.height - 1), MovieUtil.PNT3_ZERO]
+    leftPosPoints = [Point3(0.5, 3.0, suit.height - 3), MovieUtil.PNT3_ZERO]
+    rightPosPoints = [Point3(-0.5, 3.0, suit.height - 3), MovieUtil.PNT3_ZERO]
     leftKnifeTracks = Parallel()
     rightKnifeTracks = Parallel()
     for t in targets:
@@ -12231,14 +12231,7 @@ def doEvilEye(attack):
     damageDelay = 2.44
     dodgeDelay = 1.64
     suitName = suit.getStyleName()
-    if suitName == 'cr':
-        posPoints = [Point3(-0.46, 4.85, 5.28), VBase3(-155.0, -20.0, 0.0)]
-    elif suitName == 'tf':
-        posPoints = [Point3(-0.4, 3.65, 5.01), VBase3(-155.0, -20.0, 0.0)]
-    elif suitName == 'le':
-        posPoints = [Point3(-0.64, 4.45, 5.91), VBase3(-155.0, -20.0, 0.0)]
-    else:
-        posPoints = [Point3(-0.4, 6.0, 7.0), VBase3(-155.0, -20.0, 0.0)]
+    posPoints = [Point3(-0.4, 4.0, suit.height - 3), VBase3(-155.0, -20.0, 0.0)]
     appearDelay = 0.8
     suitHoldStart = 1.06
     suitHoldStop = 1.69
