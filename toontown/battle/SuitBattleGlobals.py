@@ -439,6 +439,25 @@ def calculateDefense(suitLevel, levelOffset, boost=0):
     defense += boost
     return defense
 
+def getAttackIndex(attackName, suitName):
+    '''
+    For convenience, until I find a way to use attack names instead of indexes for SUIT_ATK_COL, grab the index based on the attack name.
+    attackName: The attack (e.g. 'ClipOnTie', 'SnapWet', etc.).
+    '''
+    attacks = SuitAttributes[suitName]['attacks']
+    for i in xrange(len(attacks)):
+        attack = attacks[i]
+        if isinstance(attack, SuitAttack):
+            if attack.name == attackName:
+                return i
+        else:
+            if attack[0] == attackName:
+                return i
+
+    # No attack found.
+    notify.warning('Did not find attack %s for suitName %s' % (attackName, suitName))
+    return -1
+
 def pickSuitAttack(attacks, suitLevel):
     attackNum = None
     randNum = random.randint(0, 99)
@@ -600,6 +619,27 @@ ATK_TGT_UNKNOWN = 1
 ATK_TGT_SINGLE = 2
 ATK_TGT_DOUBLE = 3
 ATK_TGT_GROUP = 4
+
+class SuitAttack:
+    '''
+    In this manner, we can have somewhat more organized attacks and more freedom with how we handle them.
+    '''
+    
+    def __init__(self, name, hp, acc, freq, groupStatus = None):
+        '''
+        Instantiate the Cog's attack data.
+        name: The name of the Cog attack that will be used.
+        hp: A tuple of attack HPs.
+        acc: A tuple of Cog accuracies.
+        freq: A tuple of Cog frequencies.
+        groupStatus: An optional parameter that determines if there is a specific targeting that should be performed.  If nothing is given, check for the default targeting from SuitAttacks.
+        '''
+        self.name = name
+        self.hp = hp
+        self.acc = acc
+        self.freq = freq
+        self.groupStatus = groupStatus
+
 SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Flunky', # cogs singular name, for tasks
        'pluralname': 'Flunkies', # cogs plural name, for tasks

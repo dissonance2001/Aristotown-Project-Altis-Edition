@@ -5803,7 +5803,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 9  # Snap Soaked
+                    attack[SUIT_ATK_COL] = SuitBattleGlobals.getAttackIndex('LitigatorSnapSoak', 'lit')  # Snap Soaked
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
