@@ -584,13 +584,13 @@ group "outdoorZone" [
    pos [ -39.2933 -198.781 -0.32 ]
    nhpr [ 45 0 -0 ]
   ]
-  prop "animated_prop_SignDDProp_DNARoot" [
-   code [ "animated_prop_SignDDProp" ]
+ prop "SignDDProp_DNARoot" [
+   code [ "neighborhood_sign_DD" ]
    pos [ 12.9223 -141.888 0 ]
    nhpr [ 60 0 -0 ]
   ]
-  prop "animated_prop_SignDDProp_DNARoot" [
-   code [ "animated_prop_SignDDProp" ]
+  prop "SignDDProp_DNARoot" [
+   code [ "neighborhood_sign_DD" ]
    pos [ 22.9223 -124.568 0 ]
    nhpr [ -120 0 -0 ]
   ]

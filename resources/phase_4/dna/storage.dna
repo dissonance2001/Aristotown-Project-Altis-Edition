@@ -273,6 +273,9 @@ model "phase_3.5/models/modules/tunnel_modules" [
     store_node [ "street" "street_tunnel_entrance" ]
     ]
     
+model "phase_3.5/models/props/tunnel_wall" [
+    store_node [ "prop" "tunnel_wall" "" ]
+    ]
 
 model "phase_3.5/models/modules/windows" [
     store_node [ "window" "window_md_curtains_ur" ]
@@ -338,7 +341,7 @@ model "phase_4/models/props/tunnel_sign_cogHQ" [
 model "phase_3.5/models/props/neighborhood_sign_TT" [
     store_node [ "prop" "neighborhood_sign_TT" "" ]
     ]
-model "phase_4/models/props/neighborhood_sign_DD" [
+hood_model "phase_4/models/props/neighborhood_sign_DD" [
     store_node [ "prop" "neighborhood_sign_DD" "sign" ]
     ]
 model "phase_4/models/props/neighborhood_sign_AA" [
@@ -454,4 +457,20 @@ model "phase_4/models/modules/building_door_only" [
 
 model "phase_4/models/props/piers_tt" [
     store_node [ "prop" "fishing_spot" "" ]
+    ]
+
+model "phase_4/models/props/ttr_m_ara_ext_bench" [
+    store_node [ "prop" "prop_playground_bench" "" ]
+    ]
+
+model "phase_5/models/char/ttr_r_ara_cbe_cogdoSell" [
+    store_node [ "suit_landmark_cogdo" "suit_landmark_cogdo_sales" "" ]
+    ]
+
+model "phase_5/models/cogdominium/ttr_m_ara_csa_annexSign" [
+    store_node [ "prop" "prop_cogdo_sign_sales" "" ]
+    ]
+
+model "phase_5/models/cogdominium/ttr_m_ara_csa_annexSignExtended" [
+    store_node [ "prop" "prop_cogdo_sign_sales_extended" "" ]
     ]

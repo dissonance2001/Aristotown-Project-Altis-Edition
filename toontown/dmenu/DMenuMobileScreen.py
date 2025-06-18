@@ -56,7 +56,7 @@ class DMenuMobileScreen(DirectObject):
         base.transitions.getFadeInIval(1).start()
         if base.showDisclaimer:
             FeatureComingSoonDialog.FeatureComingSoonDialog(text = TTLocalizer.PopupAlphaDisclaimer)
-        self.background2d = OnscreenImage(image = 'phase_3.5/maps/loading/toon.jpg', parent = render2d)
+        self.background2d = OnscreenImage(image = 'phase_3.5/maps/loading/toon.png', parent = render2d)
         self.background2d.setScale(render2d, Vec3(1))
         self.background2d.setBin('background', 1)
         self.background2d.setTransparency(1)

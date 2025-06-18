@@ -37,3 +37,11 @@ place_model "phase_8/models/modules/clothshopDG" [
 place_model "phase_4/models/props/exteriorfish-zero" [
 	store_node [ "prop" "animated_prop_PetShopFishAnimatedProp" "exteriorfish" ]
 	]
+	
+hood_model "phase_3.5/models/props/big_planter" [
+	store_node [ "prop" "big_planter" "" ]
+        ]
+        
+place_model "phase_8/models/props/DG_flats" [
+	store_node [ "prop" "prop_DG_flat_trashcan" "g1" ]
+	]	

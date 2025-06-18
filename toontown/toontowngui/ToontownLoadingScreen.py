@@ -126,7 +126,7 @@ class ToontownLoadingScreen:
             self.gui.setPos(0, -0.1, 0)
             self.gui.reparentTo(aspect2d, NO_FADE_SORT_INDEX)
             self.tip['text'] = self.getTip(tipCategory)
-            bg = 'phase_3.5/maps/loading/' + self.zone2background.get(ZoneUtil.getBranchZone(zoneId), 'toon.jpg')
+            bg = 'phase_3.5/maps/loading/' + self.zone2background.get(ZoneUtil.getBranchZone(zoneId), 'toon.png')
             self.gui.setTexture(loader.loadTexture(bg), 1)
             self.logo.reparentTo(base.a2dpTopCenter, NO_FADE_SORT_INDEX)
         else:

@@ -1,14 +1,12 @@
 store_font [ "font" "DD_Portago"
-             "phase_3/fonts/Portago.ttf" ]
+             "phase_3/models/fonts/Portago" ]
 
-store_texture [ "texture" "street_street_OZ_tex"
-		"phase_6/maps/acorn_acres/streets/ttcc_aa_street_road.png"		]
-store_texture [ "texture" "street_street_OZ_AA_tex"
-		"phase_6/maps/acorn_acres/streets/ttcc_aa_street_road_cave.png" ]
+store_texture [ "texture" "street_street_OZ_tex"	
+		"phase_6/maps/acorn_acres_road.jpg"		]
 store_texture [ "texture" "street_sidewalk_OZ_tex"
-		"phase_6/maps/acorn_acres/streets/ttcc_aa_street_sidewalk.png"	]
+		"phase_3.5/maps/grassAA.jpg"	]
 store_texture [ "texture" "street_curb_OZ_tex"
-		"phase_6/maps/acorn_acres/streets/ttcc_aa_street_curb.png"	]
+		"phase_6/maps/outdoor_zone_board.jpg"	]
 
 place_model "phase_8/models/modules/street_modules_enhanced_DG" [
  store_node [ "street" "DG_street_interior_corner_slope" "DG_interior_corner_slope"  ]
@@ -75,26 +73,23 @@ place_model "phase_5/models/modules/street_low_fence" [
  store_node [ "prop" "fence_woodbrush_brick" "f_woodbrush_brick" ]
 ]
 
-place_model "phase_6/models/modules/OZ_A1" [
-	store_node [ "toon_landmark" "toon_landmark_TT_A1" "OZ_A1"  ]
+place_model "phase_3.5/models/modules/TT_A1" [
+	store_node [ "toon_landmark" "toon_landmark_TT_A1" "TT_A1"  ]
 	]
-place_model "phase_6/models/modules/OZ_A2" [
-	store_node [ "toon_landmark" "toon_landmark_TT_A2" "OZ_A2"  ]
+place_model "phase_5/models/modules/TT_A2" [
+	store_node [ "toon_landmark" "toon_landmark_TT_A2" "TT_A2"  ]
 	]
-place_model "phase_6/models/modules/OZ_A3" [
-	store_node [ "toon_landmark" "toon_landmark_TT_A3" "OZ_A3"  ]
+place_model "phase_5/models/modules/TT_A3" [
+	store_node [ "toon_landmark" "toon_landmark_TT_A3" "TT_A3"  ]
 	]
-place_model "phase_6/models/modules/OZ_B1" [
-	store_node [ "toon_landmark" "toon_landmark_TT_B1" "OZ_B1"  ]
+place_model "phase_5/models/modules/TT_B1" [
+	store_node [ "toon_landmark" "toon_landmark_TT_B1" "TT_B1"  ]
 	]
-place_model "phase_6/models/modules/OZ_B2" [
-	store_node [ "toon_landmark" "toon_landmark_TT_B2" "OZ_B2"  ]
+place_model "phase_5/models/modules/TT_B2" [
+	store_node [ "toon_landmark" "toon_landmark_TT_B2" "TT_B2"  ]
 	]
-place_model "phase_6/models/modules/OZ_C1" [
-	store_node [ "toon_landmark" "toon_landmark_TT_C1" "OZ_C1"  ]
-	]
-place_model "phase_6/models/modules/OZ_C2" [
-	store_node [ "toon_landmark" "toon_landmark_TT_C2" "OZ_C2"  ]
+place_model "phase_5/models/modules/TT_C1" [
+	store_node [ "toon_landmark" "toon_landmark_TT_C1" "TT_C1"  ]
 	]
 
 place_model "phase_6/models/golf/outdoor_zone_entrance" [
@@ -124,23 +119,3 @@ place_model "phase_6/models/props/AA_streetlight2" [
 place_model "phase_6/models/golf/picnic_table" [
  store_node [ "prop" "prop_picnic_table_OZ" "" ]
 ]
-
-place_model "phase_6/models/areas/ttcc_ext_chainsaw" [
- store_node [ "toon_landmark" "toon_landmark_chainsaw" "" ]
-]
-
-place_model "phase_7/models/props/logstack_yott" [
- store_node [ "prop" "prop_logstack_oz" "" ]
-	]
-
-place_model "phase_12/models/modules/ttcc_prp_bbhq_trees" [
- store_node [ "prop" "prop_bbhq_tree_1" "bbhq_tree_1" ]
- store_node [ "prop" "prop_bbhq_tree_2" "bbhq_tree_2" ]
- store_node [ "prop" "prop_bbhq_tree_3" "bbhq_tree_3" ]
- store_node [ "prop" "prop_bbhq_tree_4" "bbhq_tree_4" ]
- store_node [ "prop" "prop_bbhq_tree_5" "bbhq_tree_5" ]
- store_node [ "prop" "prop_bbhq_tree_6" "bbhq_tree_6" ]
- store_node [ "prop" "prop_bbhq_tree_7" "bbhq_tree_7" ]
- store_node [ "prop" "prop_bbhq_tree_8" "bbhq_tree_8" ]
- store_node [ "prop" "prop_bbhq_tree_9" "bbhq_tree_9" ]
-	]

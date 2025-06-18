@@ -58,7 +58,7 @@ uberdogs:
 roles:
     - type: clientagent
       bind: 0.0.0.0:7198
-      version: "AristoTown-Altis-Edition-1.6.9"
+      version: "AristoTown-Altis-Edition-1.7.0"
       client:
        relocate: true
        add_interest: enabled

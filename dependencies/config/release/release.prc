@@ -1,5 +1,5 @@
 # Server:
-server-version TTPA-Alpha-1.2.0
+server-version AristoTown-Altis-Edition-1.7.0
 min-access-level 100
 shard-low-pop 50
 shard-mid-pop 100

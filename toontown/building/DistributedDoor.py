@@ -221,7 +221,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if self.doorType in flatDoorTypes:
             self.bHasFlat = True
         else:
-            self.bHasFlat = not self.findDoorNode('door*flat', True).isEmpty()
+            self.bHasFlat = not self.findDoorNode('door*flat', True)
         self.hideDoorParts()
         self.setTriggerName()
 
@@ -284,6 +284,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         trackName = 'avatarEnterDoor-%d-%d' % (self.doId, avatar.doId)
         track = Parallel(name = trackName)
         otherNP = self.getDoorNodePath()
+        otherNP2 = self.getDoorNodePath()
         if hasattr(avatar, 'stopSmooth'):
             avatar.stopSmooth()
         if avatar.doId == base.localAvatar.doId:
@@ -468,6 +469,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             otherNP = render.find('**/door_origin')
         elif self.doorType == DoorTypes.EXT_STANDARD:
             otherNP = self.getBuilding().find('**/*door_origin')
+        elif self.doorType == DoorTypes.DAISYGARDENSCLASH:
+            otherNP= self.getBuilding().find('**/*building1_landmark3c_door_origin')
         elif self.doorType in self.specialDoorTypes:
             building = self.getBuilding()
             otherNP = building.find('**/door_origin_' + str(self.doorIndex))

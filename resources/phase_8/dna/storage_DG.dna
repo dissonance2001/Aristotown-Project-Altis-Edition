@@ -63,16 +63,16 @@ hood_model "phase_8/models/props/daisy_park_table" [
 	]
 
 
-store_texture [ "texture" "street_street_DG_tex"	
-		"phase_3.5/maps/dustroad.jpg"		]
+store_texture [ "texture" "street_street_DG_tex"
+		"phase_3.5/maps/dustroad.png"		]
 store_texture [ "texture" "street_sidewalk_DG_tex"
-		"phase_3.5/maps/grassDG.jpg"	]
+		"phase_3.5/maps/grassDG.png"	]
 store_texture [ "texture" "street_curb_DG_tex"
-		"phase_3.5/maps/grassDG.jpg"	]
+		"phase_3.5/maps/grassDG.png"	]
 
 
-store_font [ "font" "DG_Ironwork" 
-             "phase_3/models/fonts/Ironwork" ]
+store_font [ "font" "DG_Ironwork"
+             "phase_3/fonts/Ironwork.ttf" ]
 
 hood_model "phase_8/models/props/signs_DG" [
 	store_node [ "sign" "DG_sign1" ]
@@ -123,6 +123,11 @@ hood_model "phase_3.5/models/props/trees" [
 hood_model "phase_8/models/props/window_flowerbox_wood" [
 	store_node [ "prop" "prop_window_flowerbox_wood" "" ]
 	]
+	
+hood_model "phase_4/models/props/neighborhood_sign_sellBotHQ" [
+	store_node [ "prop" "neighborhood_sign_sellBotHQ" "" ]
+	]
+	
 
 hood_model "phase_8/models/modules/hqDG" [
 	store_node [ "toon_landmark" "toon_landmark_hqDG" "" ]

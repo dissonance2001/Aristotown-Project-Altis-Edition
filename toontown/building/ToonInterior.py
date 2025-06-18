@@ -107,6 +107,11 @@ class ToonInterior(Place.Place):
             self.pizzeriaMusicFile = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_standard.ogg")
             self.pizzeriaMusic = base.playMusic(self.pizzeriaMusicFile, looping=1)
 
+    def PizzeriaFreezerMusic(self, task):
+            base.musicManager.stopAllSounds()
+            self.pizzeriaMusicFile = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_cold.ogg")
+            self.pizzeriaMusic = base.playMusic(self.pizzeriaMusicFile, looping=1)
+
     def PacesetterLobbyMusic(self, task):
             base.musicManager.stopAllSounds()
             self.pacesetterLobbyMusicFile = loader.loadMusic("phase_9/audio/bgm/merc/instance_pacesetter_lobby.ogg")

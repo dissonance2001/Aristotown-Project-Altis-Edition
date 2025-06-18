@@ -20,7 +20,7 @@ class LoadingDialog:
             parent=base.a2dTopCenter, image='phase_3/maps/toontown-logo.png',
             scale=(1.0, 1, 0.5), pos=(0, 0, -0.85))
         self.logo.setTransparency(TransparencyAttrib.MAlpha)
-        self.background = OnscreenImage(image = 'phase_3.5/maps/loading/toon.jpg', parent = aspect2d)
+        self.background = OnscreenImage(image = 'phase_3.5/maps/loading/toon.png', parent = aspect2d)
         self.background.setScale(2, 1, 1)
         
     def start(self, text='Connecting...'):

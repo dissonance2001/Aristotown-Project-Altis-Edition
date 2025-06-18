@@ -69,7 +69,7 @@ class PickAToon(DirectObject):
         self.selectedToon = 0
         self.doneEvent = doneEvent
         self.jumpIn = None
-        self.background2d = OnscreenImage(image = 'phase_3.5/maps/loading/toon.jpg', parent = render2d)
+        self.background2d = OnscreenImage(image = 'phase_3.5/maps/loading/toon.png', parent = render2d)
         self.background2d.setScale(render2d, Vec3(1))
         self.background2d.setBin('background', 2)
         self.background2d.setTransparency(1)

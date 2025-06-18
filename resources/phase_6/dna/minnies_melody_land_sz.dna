@@ -1388,11 +1388,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  prop "prop_party_gate_DNARoot" [
-   code [ "prop_party_gate" ]
-   pos [ -89.4911 -67.2785 6.51 ]
-   nhpr [ 120 1.10607e-06 0 ]
-  ]
   flat_building "tb0:random_DNARoot" [
    pos [ -88.3944 -88.2447 6.51 ]
    nhpr [ 120 0 0 ]

@@ -6,7 +6,7 @@ place_model "phase_6/models/modules/neighborhood_tunnel_MM" [
 	store_node [ "prop" "prop_neighborhood_tunnel" ]
         ]
 
-place_model "phase_3.5/models/modules/cc_m_gen_prp_tunnel_st2sz" [
+place_model "phase_6/models/modules/safe_zone_entrance_tunnel_MM" [
 	store_node [ "prop" "prop_safe_zone_entrance_tunnel" ]
         ]
 
@@ -26,10 +26,3 @@ place_model "phase_6/models/props/ttcc_ext_mplayer_carpet" [
 	store_node [ "prop" "prop_mplayer_carpet" "" ]
 	]
 
-place_model "phase_3.5/models/props/ttcc_gen_divider_rope" [
-	store_node [ "prop" "prop_divider_rope" "" ]
-	]
-
-place_model "phase_3.5/models/props/ttcc_gen_divider_pole" [
-	store_node [ "prop" "prop_divider_pole" "" ]
-	]

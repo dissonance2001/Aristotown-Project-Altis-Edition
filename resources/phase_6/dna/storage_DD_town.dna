@@ -33,13 +33,17 @@ place_model "phase_5/models/props/roof_access" [
 	store_node [ "prop" "prop_roof_access" "" ]
 	]
 
-place_model "phase_6/models/props/DD_lighthouse" [
-	store_node [ "prop" "prop_DD_lighthouse" "" ]
+place_model "phase_6/models/modules/DD_lighthouse" [
+	store_node [ "toon_landmark" "toon_landmark_lighthouse" "" ]
 	]
 
 place_model "phase_6/models/props/DD_street_water" [
 	store_node [ "prop" "prop_DD_street_water" "" ]
 	]
+
+place_model "phase_6/models/props/DD_street_water" [
+	store_node [ "DCS"]
+	]	
 
 place_model "phase_6/models/modules/tt_m_ara_dod_hq" [
 	store_node [ "toon_landmark" "toon_landmark_hqDD" "" ]
@@ -48,3 +52,28 @@ place_model "phase_6/models/modules/tt_m_ara_dod_hq" [
 place_model "phase_6/models/modules/DD_pond" [
 	store_node [ "street" "street_DD_pond" "" ]
 	]
+	
+
+place_model "phase_6/models/modules/ttcc_bb_street_extension_gngIsland" [
+	store_node [ "street" "street_gng_island" "" ]
+	]
+
+store_texture [ "texture" "street_street_DD_tex"
+		"phase_3.5/maps/boardwalk_floor.png"	]
+store_texture [ "texture" "street_sidewalk_DD_tex"
+		"phase_3.5/maps/boardwalk_floor_dark.png"	]
+store_texture [ "texture" "street_curb_DD_tex"
+		"phase_3.5/maps/curb_boardwalk.png"	]
+
+place_model "phase_6/models/modules/lighthouse_extension" [
+	store_node [ "prop" "OUTSIDEPIER" "" ]
+	]
+
+place_model "phase_6/models/modules/ttcc_bb_props" [
+	store_node [ "prop" "pylon_rope" "ttcc_prp_bb_rope" ]
+	store_node [ "prop" "pylon_base" "ttcc_prp_bb_pylon_1" ] 
+	]
+
+place_model "phase_5/models/modules/ttcc_prop_sign_construction_toon" [
+	store_node [ "prop" "sign_construction_toon" "" ]
+	]	
