@@ -1027,7 +1027,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5)))
         # stenographer cheats
     elif name == STENOGRAPHER_SANCTION_BINDINGS:
-        camTrack.append(defaultCamera(openShotDuration=0.75))
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=0.75))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == STENOGRAPHER_SANCTION:
         camTrack.append(defaultCamera(openShotDuration=0.75))
     elif name == STENOGRAPHER_COURT_RECORD_BAN:
@@ -1217,7 +1221,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                "This toon is forced to pay collect call fees every turn\nuntil their dues are paid!",
+                "Toons are forced to pay collect call fees every turn\nuntil their dues are paid!",
                 attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Collect Call Dues!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
@@ -1238,7 +1242,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     elif name == WIRETAPPER_WIRETAPPED:
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=4.0), randomActorShot(suit, battle, attackDuration - 4, 'suit')))
     elif name == WIRETAPPER_VOICEMAIL:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == WIRETAPPER_BROKEN_CONNECTION:

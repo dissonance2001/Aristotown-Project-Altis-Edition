@@ -202,10 +202,10 @@ sft - Pacesetter Level 66.mgr
 prr - Videographer Level 90.mgr (broken)
 
 	Sellbot 'Litigation' Team:
-blr - Radiographer Level 28.mgr v2.0 (unfinished)
-dvp - Liquidator (to be changed most likely) Level 32.mgr (unfinished)
-dsk - Union Buster Level 32.mgr v2.0 (unfinished)
-ffm - Safe-ty Supervisor Level 38.mgr (unfinished)
+blr - Radiographer Level 28.mgr v2.0
+dvp - Racketeer Level 32.mgr
+dsk - Union Buster Level 32.mgr v2.0
+ffm - Safe-ty Supervisor Level 38.mgr
 
 =============BOARDBOTS:===============
 	Regular Cogs:

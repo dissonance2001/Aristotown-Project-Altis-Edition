@@ -682,46 +682,14 @@ class BattleCalculatorAI:
                     damage *= 1.25
                 target = self.battle.findSuit(suitId)
                 for s in self.battle.activeSuits:
-                    if s.dna.name == 'scg':
-                        target2 = s
-                        if target2.dna.name == 'scg' and self.suitHasCondition(target2.doId,
-                                                                               'shielding') and not suit.dna.name == 'scg':
-                            damage *= .7
-                            target2.setHP(target2.currHP - (int(damage * .425)))
-                            if target2.getHP() <= 0:
-                                self.__removeLured(target2.doId)
-                                if target2.getSkeleRevives() >= 1:
-                                    target2.useSkeleRevive()
-                    elif s.dna.name == 'cp':
-                        target2 = s
-                        if target2.dna.name == 'cp' and self.suitHasCondition(target2.doId,
-                                                                              'shielding') and not suit.dna.name == 'cp':
-                            damage *= .7
-                            target2.setHP(target2.currHP - (int(damage * .425)))
-                            if target2.getHP() <= 0:
-                                self.__removeLured(target2.doId)
-                                if target2.getSkeleRevives() >= 1:
-                                    target2.useSkeleRevive()
-                    elif s.dna.name == 'blr':
-                        target2 = s
-                        if target2.dna.name == 'blr' and self.suitHasCondition(target2.doId,
-                                                                              'shielding') and not suit.dna.name == 'blr':
-                            damage *= .7
-                            target2.setHP(target2.currHP - (int(damage * .425)))
-                            if target2.getHP() <= 0:
-                                self.__removeLured(target2.doId)
-                                if target2.getSkeleRevives() >= 1:
-                                    target2.useSkeleRevive()
-                    elif s.dna.name == 'cry':
-                        target2 = s
-                        if target2.dna.name == 'cry' and self.suitHasCondition(target2.doId,
-                                                                              'shielding') and not suit.dna.name == 'cry':
-                            damage *= .7
-                            target2.setHP(target2.currHP - (int(damage * .425)))
-                            if target2.getHP() <= 0:
-                                self.__removeLured(target2.doId)
-                                if target2.getSkeleRevives() >= 1:
-                                    target2.useSkeleRevive()
+                    if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(suitId,
+                                                                                                      'shielding'):
+                        damage *= .7
+                        s.setHP(s.currHP - (int(damage * .425)))
+                        if s.getHP() <= 0:
+                            self.__removeLured(s.doId)
+                            if s.getSkeleRevives() >= 1:
+                                s.useSkeleRevive()
                     elif s.dna.name == 'dsf':
                         target2 = s
                         if target2.dna.name == 'dsf' and self.suitHasCondition(target2.doId,
@@ -808,52 +776,20 @@ class BattleCalculatorAI:
                     damage *= 1.25
                 target = self.battle.findSuit(suitId)
                 for s in self.battle.activeSuits:
-                    if s.dna.name == 'scg':
-                        target2 = s
-                        if target2.dna.name == 'scg' and self.suitHasCondition(target2.doId,
-                                                                               'shielding') and not suit.dna.name == 'scg':
-                            damage *= .7
-                            target2.setHP(target2.currHP - (int(damage * .425)))
-                            if target2.getHP() <= 0:
-                                self.__removeLured(target2.doId)
-                                if target2.getSkeleRevives() >= 1:
-                                    target2.useSkeleRevive()
-                    elif s.dna.name == 'cp':
-                        target2 = s
-                        if target2.dna.name == 'cp' and self.suitHasCondition(target2.doId,
-                                                                              'shielding') and not suit.dna.name == 'cp':
-                            damage *= .7
-                            target2.setHP(target2.currHP - (int(damage * .425)))
-                            if target2.getHP() <= 0:
-                                self.__removeLured(target2.doId)
-                                if target2.getSkeleRevives() >= 1:
-                                    target2.useSkeleRevive()
-                    elif s.dna.name == 'cry':
-                        target2 = s
-                        if target2.dna.name == 'cry' and self.suitHasCondition(target2.doId,
-                                                                              'shielding') and not suit.dna.name == 'cry':
-                            damage *= .7
-                            target2.setHP(target2.currHP - (int(damage * .425)))
-                            if target2.getHP() <= 0:
-                                self.__removeLured(target2.doId)
-                                if target2.getSkeleRevives() >= 1:
-                                    target2.useSkeleRevive()
+                    if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(suitId,
+                                                                                                      'shielding'):
+                        damage *= .7
+                        s.setHP(s.currHP - (int(damage * .425)))
+                        if s.getHP() <= 0:
+                            self.__removeLured(s.doId)
+                            if s.getSkeleRevives() >= 1:
+                                s.useSkeleRevive()
                     elif s.dna.name == 'dsf':
                         target2 = s
                         if target2.dna.name == 'dsf' and self.suitHasCondition(target2.doId,
                                                                                'absorbingHR') and not suit.dna.name == 'dsf':
                             damage *= .9
                             target2.setHP(target2.currHP - (int(damage * .115)))
-                            if target2.getHP() <= 0:
-                                self.__removeLured(target2.doId)
-                                if target2.getSkeleRevives() >= 1:
-                                    target2.useSkeleRevive()
-                    elif s.dna.name == 'blr':
-                        target2 = s
-                        if target2.dna.name == 'blr' and self.suitHasCondition(target2.doId,
-                                                                              'shielding') and not suit.dna.name == 'blr':
-                            damage *= .7
-                            target2.setHP(target2.currHP - (int(damage * .425)))
                             if target2.getHP() <= 0:
                                 self.__removeLured(target2.doId)
                                 if target2.getSkeleRevives() >= 1:
@@ -939,11 +875,10 @@ class BattleCalculatorAI:
                                     lureKBValue *= 0
                                 if self.suitHasCondition(targetId, 'enraged') and self.suitHasCondition(targetId, 'desperation'):
                                     lureKBValue = 0
-                              #  elif random.randint(0, 99) <= chance and not self.suitHasCondition(targetId, 'lureImmune') and not self.suitHasCondition(targetId, 'enraged') and self.suitHasCondition(targetId, 'desperation'):
-                                  #  self.notify.debug(
-                                    #    'Toon attack rolled' + str(chance))
-                                    #lureKBValue = 0
-                                # lureKBValue = (ToontownBattleGlobals.LURE_KNOCKBACK_VALUE * 100)
+                                elif random.randint(0, 99) <= chance and not self.suitHasCondition(targetId, 'lureImmune') and not self.suitHasCondition(targetId, 'enraged') and self.suitHasCondition(targetId, 'desperation'):
+                                    self.notify.debug(
+                                        'Toon attack rolled' + str(chance))
+                                    lureKBValue = 0
                                 organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                                 theSuit = self.battle.findSuit(targetId)
                                 if organicBonus:
@@ -1157,33 +1092,14 @@ class BattleCalculatorAI:
                     activeSuits = self.battle.activeSuits
                     suitIndex = activeSuits.index(target)
                     for s in self.battle.activeSuits:
-                        if s.dna.name == 'scg':
-                            target2 = s
-                            if target2.dna.name == 'scg' and self.suitHasCondition(target2.doId, 'shielding') and not target.dna.name == 'scg':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
-                        elif s.dna.name == 'cp':
-                            target2 = s
-                            if target2.dna.name == 'cp' and self.suitHasCondition(target2.doId, 'shielding') and not target.dna.name == 'cp':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
-                        elif s.dna.name == 'cry':
-                            target2 = s
-                            if target2.dna.name == 'cry' and self.suitHasCondition(target2.doId, 'shielding') and not target.dna.name == 'cry':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
+                        if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target.doId,
+                                                                                                    'shielding'):
+                            attackDamage *= .7
+                            s.setHP(s.currHP - (int(attackDamage * .425)))
+                            if s.getHP() <= 0:
+                                self.__removeLured(s.doId)
+                                if s.getSkeleRevives() >= 1:
+                                    s.useSkeleRevive()
                         elif s.dna.name == 'dsf':
                             target2 = s
                             if target2.dna.name == 'dsf' and self.suitHasCondition(target2.doId,
@@ -1194,14 +1110,6 @@ class BattleCalculatorAI:
                                     self.__removeLured(target2.doId)
                                     if target2.getSkeleRevives() >= 1:
                                         target2.useSkeleRevive()
-                        elif s.dna.name == 'blr':
-                            target9 = s
-                            if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target.dna.name == 'blr':
-                                target9.setHP(target9.currHP - (int(attackDamage * .425)))
-                                if target9.getHP() <= 0:
-                                    self.__removeLured(target9.doId)
-                                    if target9.getSkeleRevives() >= 1:
-                                        target9.useSkeleRevive()
                     if suitIndex - 1 >= 0:
                         target2 = activeSuits[suitIndex - 1]
                         if not self.suitHasCondition(target2.doId, 'immune'):
@@ -1240,30 +1148,14 @@ class BattleCalculatorAI:
                                 attackDamageAbsorb = (int(attackDamage / 4) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage / 4) * .115)
                             for s in self.battle.activeSuits:
-                                if s.dna.name == 'scg':
-                                    target9 = s
-                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target2.dna.name == 'scg':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cp':
-                                    target9 = s
-                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target2.dna.name == 'cp':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cry':
-                                    target9 = s
-                                    if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId, 'shielding') and not target2.dna.name == 'cry':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
+                                if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target.doId,
+                                                                                                            'shielding'):
+                                    attackDamage *= .7
+                                    s.setHP(s.currHP - (int(attackDamageAbsorb)))
+                                    if s.getHP() <= 0:
+                                        self.__removeLured(s.doId)
+                                        if s.getSkeleRevives() >= 1:
+                                            s.useSkeleRevive()
                                 elif s.dna.name == 'dsf':
                                     target2 = s
                                     if target2.dna.name == 'dsf' and self.suitHasCondition(target2.doId,
@@ -1274,14 +1166,6 @@ class BattleCalculatorAI:
                                             self.__removeLured(target2.doId)
                                             if target2.getSkeleRevives() >= 1:
                                                 target2.useSkeleRevive()
-                                elif s.dna.name == 'blr':
-                                    target9 = s
-                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target2.dna.name == 'blr':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
                             if target2.getHP() <= 0:
                                 self.__removeLured(target2.doId)
                                 if target2.getSkeleRevives() >= 1:
@@ -1324,30 +1208,14 @@ class BattleCalculatorAI:
                                 attackDamageAbsorb = (int(attackDamage / 4) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage / 4) * .115)
                             for s in self.battle.activeSuits:
-                                if s.dna.name == 'scg':
-                                    target9 = s
-                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'scg':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cp':
-                                    target9 = s
-                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cp':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cry':
-                                    target9 = s
-                                    if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'cry':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
+                                if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target.doId,
+                                                                                                            'shielding'):
+                                    attackDamage *= .7
+                                    s.setHP(s.currHP - (int(attackDamageAbsorb)))
+                                    if s.getHP() <= 0:
+                                        self.__removeLured(s.doId)
+                                        if s.getSkeleRevives() >= 1:
+                                            s.useSkeleRevive()
                                 elif s.dna.name == 'dsf':
                                     target2 = s
                                     if target2.dna.name == 'dsf' and self.suitHasCondition(target2.doId,
@@ -1358,14 +1226,6 @@ class BattleCalculatorAI:
                                             self.__removeLured(target2.doId)
                                             if target2.getSkeleRevives() >= 1:
                                                 target2.useSkeleRevive()
-                                elif s.dna.name == 'blr':
-                                    target9 = s
-                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target3.dna.name == 'blr':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
                             if target3.getHP() <= 0:
                                 self.__removeLured(target3.doId)
                                 if target3.getSkeleRevives() >= 1:
@@ -1431,34 +1291,14 @@ class BattleCalculatorAI:
                         attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'throwBoost') * 0.01)
                     target = self.battle.findSuit(attack[TOON_TGT_COL])
                     for s in self.battle.activeSuits:
-                        if s.dna.name == 'scg':
-                            target2 = s
-                            if target2.dna.name == 'scg' and self.suitHasCondition(target2.doId,
-                                                                                   'shielding') and not target.dna.name == 'scg':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
-                        elif s.dna.name == 'cp':
-                            target2 = s
-                            if target2.dna.name == 'cp' and self.suitHasCondition(target2.doId, 'shielding') and not target.dna.name == 'cp':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
-                        elif s.dna.name == 'cry':
-                            target2 = s
-                            if target2.dna.name == 'cry' and self.suitHasCondition(target2.doId, 'shielding') and not target.dna.name == 'cry':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
+                        if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target.doId,
+                                                                                                    'shielding'):
+                            attackDamage *= .7
+                            s.setHP(s.currHP - (int(attackDamage * .425)))
+                            if s.getHP() <= 0:
+                                self.__removeLured(s.doId)
+                                if s.getSkeleRevives() >= 1:
+                                    s.useSkeleRevive()
                         elif s.dna.name == 'dsf':
                             target2 = s
                             if target2.dna.name == 'dsf' and self.suitHasCondition(target2.doId, 'absorbingHR') and not target.dna.name == 'dsf':
@@ -1468,15 +1308,6 @@ class BattleCalculatorAI:
                                     self.__removeLured(target2.doId)
                                     if target2.getSkeleRevives() >= 1:
                                         target2.useSkeleRevive()
-                        elif s.dna.name == 'blr':
-                            target9 = s
-                            if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target.dna.name == 'blr':
-                                attackDamage *= .7
-                                target9.setHP(target9.currHP - (int(attackDamage * .425)))
-                                if target9.getHP() <= 0:
-                                    self.__removeLured(target9.doId)
-                                    if target9.getSkeleRevives() >= 1:
-                                        target9.useSkeleRevive()
                 elif atkTrack == SOUND:
                     suit = self.battle.findSuit(targetId)
                     if self.toonHasCondition(toon.doId, 'nolevel8s') and attackLevel == 7:
@@ -1499,33 +1330,14 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'soundBoost'):
                         attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'soundBoost') * 0.01)
                     for s in self.battle.activeSuits:
-                        if s.dna.name == 'scg':
-                            target2 = s
-                            if target2.dna.name == 'scg' and self.suitHasCondition(target2.doId, 'shielding'):
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
-                        elif s.dna.name == 'cp':
-                            target2 = s
-                            if target2.dna.name == 'cp' and self.suitHasCondition(target2.doId, 'shielding'):
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
-                        elif s.dna.name == 'cry':
-                            target2 = s
-                            if target2.dna.name == 'cry' and self.suitHasCondition(target2.doId, 'shielding'):
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
+                        if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(suit.doId,
+                                                                                                    'shielding'):
+                            attackDamage *= .7
+                            s.setHP(s.currHP - (int(attackDamage * .425)))
+                            if s.getHP() <= 0:
+                                self.__removeLured(s.doId)
+                                if s.getSkeleRevives() >= 1:
+                                    s.useSkeleRevive()
                         elif s.dna.name == 'dsf':
                             target2 = s
                             if target2.dna.name == 'dsf' and self.suitHasCondition(target2.doId,
@@ -1536,15 +1348,6 @@ class BattleCalculatorAI:
                                     self.__removeLured(target2.doId)
                                     if target2.getSkeleRevives() >= 1:
                                         target2.useSkeleRevive()
-                        elif s.dna.name == 'blr':
-                            target9 = s
-                            if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding'):
-                                attackDamage *= .7
-                                target9.setHP(target9.currHP - (int(attackDamage * .425)))
-                                if target9.getHP() <= 0:
-                                    self.__removeLured(target9.doId)
-                                    if target9.getSkeleRevives() >= 1:
-                                        target9.useSkeleRevive()
                     organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                     if self.getToonConditionTurns(toonId, 'encore') == 1:
                         self.setToonCondition(toon.doId, 'winded', -50, 3, 'setBoth')
@@ -1620,34 +1423,14 @@ class BattleCalculatorAI:
                         attackDamage *= 1
                     target = self.battle.findSuit(attack[TOON_TGT_COL])
                     for s in self.battle.activeSuits:
-                        if s.dna.name == 'scg':
-                            target2 = s
-                            if target2.dna.name == 'scg' and self.suitHasCondition(target2.doId,
-                                                                                   'shielding') and not target.dna.name == 'scg':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
-                        elif s.dna.name == 'cp':
-                            target2 = s
-                            if target2.dna.name == 'cp' and self.suitHasCondition(target2.doId, 'shielding') and not target.dna.name == 'cp':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
-                        elif s.dna.name == 'cry':
-                            target2 = s
-                            if target2.dna.name == 'cry' and self.suitHasCondition(target2.doId, 'shielding') and not target.dna.name == 'cry':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
+                        if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target.doId,
+                                                                                                    'shielding'):
+                            attackDamage *= .7
+                            s.setHP(s.currHP - (int(attackDamage * .425)))
+                            if s.getHP() <= 0:
+                                self.__removeLured(s.doId)
+                                if s.getSkeleRevives() >= 1:
+                                    s.useSkeleRevive()
                         elif s.dna.name == 'dsf':
                             target2 = s
                             if target2.dna.name == 'dsf' and self.suitHasCondition(target2.doId, 'absorbingHR') and not target.dna.name == 'dsf':
@@ -1657,15 +1440,6 @@ class BattleCalculatorAI:
                                     self.__removeLured(target2.doId)
                                     if target2.getSkeleRevives() >= 1:
                                         target2.useSkeleRevive()
-                        elif s.dna.name == 'blr':
-                            target9 = s
-                            if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target.dna.name == 'blr':
-                                attackDamage *= .7
-                                target9.setHP(target9.currHP - (int(attackDamage * .425)))
-                                if target9.getHP() <= 0:
-                                    self.__removeLured(target9.doId)
-                                    if target9.getSkeleRevives() >= 1:
-                                        target9.useSkeleRevive()
                 elif atkTrack == ZAP:
                     if self.toonHasCondition(toon.doId, 'nolevel8s') and attackLevel == 7:
                         self.setToonCondition(toon.doId, 'banned', 1, 3, 'setBoth')
@@ -1701,24 +1475,14 @@ class BattleCalculatorAI:
                     if attackDamage > 0:
                         self.setSuitCondition(target.doId, 'soaked', 1, 1, 'setBoth')
                     for s in self.battle.activeSuits:
-                        if s.dna.name == 'scg':
-                            target2 = s
-                            if target2.dna.name == 'scg' and self.suitHasCondition(target2.doId, 'shielding') and not target.dna.name == 'scg':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
-                        elif s.dna.name == 'cp':
-                            target2 = s
-                            if target2.dna.name == 'cp' and self.suitHasCondition(target2.doId, 'shielding') and not target.dna.name == 'cp':
-                                attackDamage *= .7
-                                target2.setHP(target2.currHP - (int(attackDamage * .425)))
-                                if target2.getHP() <= 0:
-                                    self.__removeLured(target2.doId)
-                                    if target2.getSkeleRevives() >= 1:
-                                        target2.useSkeleRevive()
+                        if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target.doId,
+                                                                                                    'shielding'):
+                            attackDamage *= .7
+                            s.setHP(s.currHP - (int(attackDamage * .425)))
+                            if s.getHP() <= 0:
+                                self.__removeLured(s.doId)
+                                if s.getSkeleRevives() >= 1:
+                                    s.useSkeleRevive()
                         elif s.dna.name == 'dsf':
                             target2 = s
                             if target2.dna.name == 'dsf' and self.suitHasCondition(target2.doId, 'absorbingHR') and not target.dna.name == 'dsf':
@@ -1728,24 +1492,6 @@ class BattleCalculatorAI:
                                     self.__removeLured(target2.doId)
                                     if target2.getSkeleRevives() >= 1:
                                         target2.useSkeleRevive()
-                        elif s.dna.name == 'cry':
-                            target9 = s
-                            if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId, 'shielding') and not target.dna.name == 'cry':
-                                attackDamage *= .7
-                                target9.setHP(target9.currHP - (int(attackDamage * .425)))
-                                if target9.getHP() <= 0:
-                                    self.__removeLured(target9.doId)
-                                    if target9.getSkeleRevives() >= 1:
-                                        target9.useSkeleRevive()
-                        elif s.dna.name == 'blr':
-                            target9 = s
-                            if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId, 'shielding') and not target.dna.name == 'blr':
-                                attackDamage *= .7
-                                target9.setHP(target9.currHP - (int(attackDamage * .425)))
-                                if target9.getHP() <= 0:
-                                    self.__removeLured(target9.doId)
-                                    if target9.getSkeleRevives() >= 1:
-                                        target9.useSkeleRevive()
                     if suitIndex + 1 < len(activeSuits):
                         target3 = activeSuits[suitIndex + 1]
                         if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId,
@@ -1765,19 +1511,18 @@ class BattleCalculatorAI:
                                 self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
                             self.__removeLured(target3.doId)
                             for s in self.battle.activeSuits:
+                                if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target3.doId,
+                                                                                                            'shielding'):
+                                    attackDamage *= .7
+                                    s.setHP(s.currHP - (int(attackDamageAbsorb)))
+                                    if s.getHP() <= 0:
+                                        self.__removeLured(s.doId)
+                                        if s.getSkeleRevives() >= 1:
+                                            s.useSkeleRevive()
                                 if s.dna.name == 'scg':
                                     target9 = s
                                     if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId,
                                                                                            'shielding') and not target3.dna.name == 'scg':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cp':
-                                    target9 = s
-                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId,
-                                                                                          'shielding') and not target3.dna.name == 'cp':
                                         target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
                                         if target9.getHP() <= 0:
                                             self.__removeLured(target9.doId)
@@ -1788,24 +1533,6 @@ class BattleCalculatorAI:
                                     if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId,
                                                                                            'absorbingHR') and not target3.dna.name == 'dsf':
                                         target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cry':
-                                    target9 = s
-                                    if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target3.dna.name == 'cry':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'blr':
-                                    target9 = s
-                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target3.dna.name == 'blr':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
                                         if target9.getHP() <= 0:
                                             self.__removeLured(target9.doId)
                                             if target9.getSkeleRevives() >= 1:
@@ -1833,42 +1560,14 @@ class BattleCalculatorAI:
                             if target4.dna.name == 'fbd' and self.suitHasCondition(target4.doId, 'bookkeeping'):
                                 self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
                             for s in self.battle.activeSuits:
-                                if s.dna.name == 'scg':
-                                    target9 = s
-                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target4.dna.name == 'scg':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cp':
-                                    target9 = s
-                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId,
-                                                                                          'shielding') and not target4.dna.name == 'cp':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'blr':
-                                    target9 = s
-                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target4.dna.name == 'blr':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cry':
-                                    target9 = s
-                                    if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target4.dna.name == 'cry':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
+                                if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target4.doId,
+                                                                                                            'shielding'):
+                                    attackDamage *= .7
+                                    s.setHP(s.currHP - (int(attackDamageAbsorb)))
+                                    if s.getHP() <= 0:
+                                        self.__removeLured(s.doId)
+                                        if s.getSkeleRevives() >= 1:
+                                            s.useSkeleRevive()
                                 elif s.dna.name == 'dsf':
                                     target9 = s
                                     if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId,
@@ -1901,42 +1600,14 @@ class BattleCalculatorAI:
                             if target2.dna.name == 'fbd' and self.suitHasCondition(target2.doId, 'bookkeeping'):
                                 self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
                             for s in self.battle.activeSuits:
-                                if s.dna.name == 'scg':
-                                    target9 = s
-                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target2.dna.name == 'scg':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cp':
-                                    target9 = s
-                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId,
-                                                                                          'shielding') and not target2.dna.name == 'cp':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'blr':
-                                    target9 = s
-                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target2.dna.name == 'blr':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cry':
-                                    target9 = s
-                                    if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target2.dna.name == 'cry':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
+                                if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target2.doId,
+                                                                                                            'shielding'):
+                                    attackDamage *= .7
+                                    s.setHP(s.currHP - (int(attackDamageAbsorb)))
+                                    if s.getHP() <= 0:
+                                        self.__removeLured(s.doId)
+                                        if s.getSkeleRevives() >= 1:
+                                            s.useSkeleRevive()
                                 elif s.dna.name == 'dsf':
                                     target9 = s
                                     if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId,
@@ -1969,47 +1640,19 @@ class BattleCalculatorAI:
                             if target1.dna.name == 'fbd' and self.suitHasCondition(target1.doId, 'bookkeeping'):
                                 self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
                             for s in self.battle.activeSuits:
-                                if s.dna.name == 'scg':
-                                    target9 = s
-                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target1.dna.name == 'scg':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cp':
-                                    target9 = s
-                                    if target9.dna.name == 'cp' and self.suitHasCondition(target9.doId,
-                                                                                          'shielding') and not target1.dna.name == 'cp':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'blr':
-                                    target9 = s
-                                    if target9.dna.name == 'blr' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target1.dna.name == 'blr':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
+                                if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target1.doId,
+                                                                                                            'shielding'):
+                                    attackDamage *= .7
+                                    s.setHP(s.currHP - (int(attackDamageAbsorb)))
+                                    if s.getHP() <= 0:
+                                        self.__removeLured(s.doId)
+                                        if s.getSkeleRevives() >= 1:
+                                            s.useSkeleRevive()
                                 elif s.dna.name == 'dsf':
                                     target9 = s
                                     if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId,
                                                                                            'absorbingHR') and not target1.dna.name == 'dsf':
                                         target9.setHP(target9.currHP - (int(attackDamageAbsorbHR)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
-                                elif s.dna.name == 'cry':
-                                    target9 = s
-                                    if target9.dna.name == 'cry' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target1.dna.name == 'cry':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
                                         if target9.getHP() <= 0:
                                             self.__removeLured(target9.doId)
                                             if target9.getSkeleRevives() >= 1:
@@ -3286,17 +2929,19 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-               # if len(self.battle.activeSuits) < 4:
-                  #  boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if len(self.battle.activeSuits) < 4:
+                                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'StenographerSanctionBindings':
-                result = 25
+                if self.toonHasCondition(toon.doId, 'markedforsanction'):
+                    self.setToonCondition(toon.doId, 'markedforsanction', 1, 1, 'setBoth')
+                    self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
+                    result = 25
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -25, 3, 'setBoth')
-                if self.suitHasCondition(theSuit.doId, 'sanctioncalculator2'):
-                    self.setSuitCondition(theSuit.doId, 'sanctioncalculator2', 1, 1, 'setBoth')
-                if self.suitHasCondition(theSuit.doId, 'sanctioncalculator4'):
-                    self.setSuitCondition(theSuit.doId, 'sanctioncalculator4', 1, 1, 'setBoth')
             elif atkInfo['name'] == 'StenographerCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned'):
                     self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
@@ -3320,8 +2965,10 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-               # if len(self.battle.activeSuits) < 4:
-                   #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if len(self.battle.activeSuits) < 4:
+                                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'CaseManagerInsurance':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3361,19 +3008,9 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'bindingscalculator', 0, 0, 'setBoth')
             elif atkInfo['name'] == 'CaseManagerLegallyBound':
                 if self.toonHasCondition(toon.doId, 'bound'):
+                    if self.toonHasCondition(toon.doId, 'bound') and self.getToonConditionTurns(toon.doId, 'bound') <= 1:
+                        self.setToonCondition(toon.doId, 'markedforsanction', 1, 5, 'setBoth')
                     result = 20
-                    for s in self.battle.suits:
-                        if s.dna.name == 'ste':
-                            currentBossHealth = s.currHP
-                            s = s
-                            if currentBossHealth >= 1:
-                                if self.toonHasCondition(toon.doId, 'bound') and self.getToonConditionTurns(toon.doId, 'bound') <= 1:
-                                    if self.getSuitConditionTurns(s.doId,
-                                                               'sanctioncalculator4') == 9 or  self.getSuitConditionTurns(s.doId,
-                                                                   'sanctioncalculator4') == 8:
-                                        self.setSuitCondition(s.doId, 'sanctioncalculator2', 1, 10, 'setBoth')
-                                    else:
-                                        self.setSuitCondition(s.doId, 'sanctioncalculator4', 1, 10, 'setBoth')
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3411,8 +3048,8 @@ class BattleCalculatorAI:
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'soaked', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'dazed', 0, 0, 'setBoth')
-                    self.setSuitCondition(suit.doId, 'bellowattack', 1, 1, 'setBoth')
                     if self.suitHasCondition(suit.doId, 'lured'):
+                        self.setSuitCondition(suit.doId, 'bellowattack', 1, 1, 'setBoth')
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
                 for suit in self.currentlyLuredSuits.keys():
@@ -3430,8 +3067,10 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-               # if len(self.battle.activeSuits) < 6:
-                  #  boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if len(self.battle.activeSuits) < 6:
+                                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'ScapegoatEnraged':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3462,8 +3101,10 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 boss = do
                                 break
-               # if len(self.battle.activeSuits) < 4:
-                    #boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if len(self.battle.activeSuits) < 4:
+                                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkInfo['name'] == 'ScapegoatCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned3'):
                     self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
@@ -4011,8 +3652,10 @@ class BattleCalculatorAI:
                             if toon in do.involvedToons:
                                 boss = do
                                 break
-                if len(self.battle.activeSuits) < 6:
-                    boss.appendSuitsToBattle(boss.battleNumber, 'crf1')
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if len(self.battle.activeSuits) < 6:
+                                    boss.appendSuitsToBattle(boss.battleNumber, 'crf1')
             elif atkInfo['name'] == 'HighRollerGameTimeCog':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -4043,12 +3686,13 @@ class BattleCalculatorAI:
                             if toon in do.involvedToons:
                                 boss = do
                                 break
-                boss.appendSuitsToBattle(boss.battleNumber, 'crf2')
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if len(self.battle.activeSuits) < 6:
+                                    boss.appendSuitsToBattle(boss.battleNumber, 'crf2')
             elif atkInfo['name'] == 'HighRollerPhase3':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                theSuit.setHP(77777)
-                theSuit.setMaxHP(77777)
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 1, 10, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
                 self.setToonCondition(toon.doId, 'allGagBoost', 1250, 99, 'setBoth')
@@ -4951,6 +4595,8 @@ class BattleCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'csm':
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'bindingscalculator', 1, 9, 'setBoth')
+                if (x + 2) % 4 == 0:
+                    self.setSuitCondition(suitId, 'bindingscalculator', 1, 9, 'setBoth')
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'insurancecalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'lit':
@@ -5614,40 +5260,7 @@ class BattleCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             if self.battle.activeSuits[i].dna.name == 'ste':
-                if (self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 9 and self.__suitCanAttack(
-                        suitId)) or (
-                        self.getSuitConditionTurns(suitId, 'sanctioncalculator2') == 8 and self.__suitCanAttack(
-                        suitId)):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 6  # Court Sanction Legal Bindings Retaliation
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'sanctioncalculator4') and self.__suitCanAttack(suitId):
+                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 6  # Court Sanction Legal Bindings Retaliation
@@ -7584,10 +7197,10 @@ class BattleCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
-            if self.suitHasCondition(suitId, 'bellowattack') and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.battle.activeSuits[i].currHP > 0:
+            if self.suitHasCondition(suitId, 'bellowattack') and self.battle.activeSuits[i].currHP > 0:
                 attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = 0  # Random Extra Attack From Bayou Bellow
+                attack[SUIT_ATK_COL] = random.randint(1, 3)  # Random Extra Attack From Bayou Bellow
                 attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                 if attack[SUIT_TGT_COL] == []:
                     continue

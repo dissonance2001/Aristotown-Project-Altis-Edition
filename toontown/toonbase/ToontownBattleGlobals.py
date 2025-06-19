@@ -725,6 +725,7 @@ ValidStatusConditions = (
     'mulligan4',
     'ban2levels',
     'ban2tracks',
+    'markedforsanction',
     'collectcallfeescalculator',
 'collectcallcalculator',
     'wiretappedcalculator',

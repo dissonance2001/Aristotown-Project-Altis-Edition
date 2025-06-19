@@ -1,6 +1,7 @@
 from toontown.battle import MovieCamera
 from toontown.battle import MovieLawbotLitigationCheats
 from toontown.battle import MovieBossbotLitigationCheats
+from toontown.battle import MovieSellbotLitigationCheats
 from toontown.battle import MovieHighRollerCheats
 from toontown.battle import MovieUniversalCheats
 from toontown.battle import MovieUtil
@@ -220,7 +221,7 @@ def doSuitAttack(attack):
         suitTrack = doWheelSpinDiceRoulette(attack)
     elif name == SNAP_WET:
         suitTrack = doThrowBookSnap(attack)
-    elif name == BLACK_ORB or name == WATERCOOLER:
+    elif name == WATERCOOLER:
         suitTrack = doWatercooler(attack)
     elif name == CIGAR_SMOKE:
         suitTrack = doCigarSmoke(attack)
@@ -602,9 +603,9 @@ def doSuitAttack(attack):
         suitTrack = MovieLawbotLitigationCheats.doBayouBellow(attack)
     #stenographer cheats
     elif name == STENOGRAPHER_SANCTION_BINDINGS:
-        suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack, suit)
+        suitTrack = MovieLawbotLitigationCheats.doCourtSanctionBindings(attack)
     elif name == STENOGRAPHER_SANCTION:
-        suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack, suit)
+        suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack)
     elif name == STENOGRAPHER_COURT_RECORD_BAN:
         suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #case manager cheats
@@ -701,6 +702,66 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doManagerialProtectionImmunity(attack)
     elif name == AMBASSADOR_MULLIGAN:
         suitTrack = MovieBossbotLitigationCheats.doMulligan(attack)
+        # safety supervisor
+    elif name == SAFETY_HIGH_PRESSURE:
+        suitTrack = MovieSellbotLitigationCheats.doHighPressure(attack)
+    elif name == SAFETY_HEAT_WAVE:
+        suitTrack = MovieSellbotLitigationCheats.doHeatWave(attack)
+    elif name == SAFETY_HEAT_WAVE_CALCULATION:
+        suitTrack = MovieSellbotLitigationCheats.doHeatWaveCalculation(attack)
+    elif name == SAFETY_VIOLATION:
+        suitTrack = MovieSellbotLitigationCheats.doViolation(attack)
+    elif name == SAFETY_PROMOTION:
+        suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 2)
+        # union buster
+    elif name == UNION_BUSTER_UNION_DUES:
+        suitTrack = MovieUniversalCheats.doSynergy(attack)
+    elif name == UNION_BUSTER_UNION_CALCULATOR:
+        suitTrack = MovieSellbotLitigationCheats.doUnionCalculator(attack)
+    elif name == UNION_BUSTER_UNION_BUST:
+        suitTrack = MovieSellbotLitigationCheats.doUnionBust(attack)
+    elif name == UNION_BUSTER_UNION_BUSTER:
+        suitTrack = MovieSellbotLitigationCheats.doUnionBuster(attack)
+    elif name == UNION_BUSTER_UNION_BUSTER_DAMAGE:
+        suitTrack = MovieSellbotLitigationCheats.doUnionBusterDamage(attack)
+    elif name == UNION_BUSTER_UNION_WAGES:
+        suitTrack = MovieSellbotLitigationCheats.doUnionWages(attack)
+    elif name == UNION_BUSTER_BREACH_OF_CONTRACT:
+        suitTrack = MovieSellbotLitigationCheats.doBreachOfContract(attack)
+    elif name == UNION_BUSTER_BREACH_OF_CONTRACT_2:
+        suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
+    elif name == UNION_BUSTER_BREACH_OF_CONTRACT_3:
+        suitTrack = MovieSellbotLitigationCheats.doBreachOfContract(attack)
+    elif name == UNION_BUSTER_BREACH_OF_CONTRACT_4:
+        suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
+    elif name == UNION_BUSTER_CONTRACT_ENFORCEMENT:
+        suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack)
+        # racketeer
+    elif name == RACKETEER_PROFITEERING:
+        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 2)
+    elif name == RACKETEER_EXTORTION:
+        suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
+    elif name == RACKETEER_EXTORTION_2:
+        suitTrack = MovieSellbotLitigationCheats.doExtortion2(attack)
+    elif name == RACKETEER_COMPENSATION:
+        suitTrack = MovieSellbotLitigationCheats.doCompensation(attack)
+    elif name == RACKETEER_HUSTLING:
+        suitTrack = MovieSellbotLitigationCheats.doHustling(attack)
+    elif name == RACKETEER_RACKETEERING:
+        suitTrack = MovieSellbotLitigationCheats.doRacketeering(attack)
+    elif name == RACKETEER_PECKING_ORDER_RETALIATION:
+        suitTrack = MovieSellbotLitigationCheats.doPeckingOrderGroup(attack)
+    elif name == RACKETEER_PECKING_ORDER_RETALIATION_SOAK:
+        suitTrack = doPeckingOrder(attack)
+        # radiographer
+    elif name == RADIOGRAPHER_RADIO_INFREQUENCY:
+        suitTrack = MovieSellbotLitigationCheats.doRadioInfrequency(attack)
+    elif name == RADIOGRAPHER_HOT_TAKE:
+        suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
+    elif name == RADIOGRAPHER_HOT_TAKE_RETALIATION:
+        suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
+    elif name == RADIOGRAPHER_OVERMODULATED:
+        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 2)
         # high roller phase 1
     elif name == HIGH_ROLLER_NO_ATTACK:
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
@@ -987,6 +1048,10 @@ def doSuitAttack(attack):
         resetSuitTrack = Sequence(suitTrack)
     elif name == SOAK_REMOVAL:
         resetSuitTrack = Sequence(suitTrack)
+    elif name == UNION_BUSTER_UNION_BUSTER_DAMAGE:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == SAFETY_HEAT_WAVE_CALCULATION:
+        resetSuitTrack = Sequence(suitTrack)
     else:
         resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
     waitTrack = Sequence(Func(battle.unlureSuit, suit))
@@ -1011,7 +1076,7 @@ def __makeCancelledNodePath():
     tn.setAlign(TextNode.ACenter)
     tntop = hidden.attachNewNode('CancelledTop')
     tnpath = tntop.attachNewNode(tn)
-    tnpath.setPosHpr(0, 0, 0, 0, 0, 0)
+    tnpath.setPosHpr(0, 0, 0, 90, 0, 0)
     tnpath.setScale(1)
     tnpath.setColor(0.7, 0, 0, 1)
     tnpathback = tnpath.instanceUnderNode(tntop, 'backside')
@@ -10671,9 +10736,12 @@ def doReOrg(attack):
     targets = attack['target']
     damageDelay = 1.2
     attackDelay = 1.2
-    sprayEffects = [BattleParticles.createParticleEffect(file='reorgSpray') for t in targets]
+    sprayEffects = BattleParticles.createParticleEffect('DemotionSpray2')
+    BattleParticles.loadParticles()
+    BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
+                                     color=Vec4(random.random(), random.random(), random.random(), 1))
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    partTracks = getPartTracks(attack, sprayEffects, 0.5, 1.9, 0)
+    partTracks = getPartTrack(sprayEffects, 0.5, 2.5, [sprayEffects, suit, 0])
     allHeadTracks = Parallel()
     allChestTracks = Parallel()
     for t in targets:
@@ -19605,14 +19673,6 @@ def doPeckingOrder(attack):
     throwDuration = 3.03
     throwDelay = 2
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    ceaseTrack = ActorInterval(suit, 'cease')
-    ceaseSoundTrack = Parallel(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
-    ceaseSpeechTrack = Parallel(Func(suit.setChatAbsolute,
-                                     'Quality Control dictates that all Level 5 gags are now classified as defective.',
-                                     CFSpeech | CFTimeout))
-    if attack['suit'].dna.name == 'dvk':
-        suitTrack.append(Wait(1.0))
-        suitTrack.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
     numBirds = random.randint(10, 20)
     birdTracks = Parallel()
     propDelay = 1.5
@@ -19622,8 +19682,7 @@ def doPeckingOrder(attack):
         next.reparentTo(suit.getRightHand())
         next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)
         if dmg > 0:
-            #hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6, random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
-            hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)
+            hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6, random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
         else:
             hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)
         birdTrack = Sequence(Wait(throwDelay), Func(battle.movie.needRestoreRenderProp, next), Func(next.wrtReparentTo, battle), Func(next.setHpr, Point3(90, 20, 0)), LerpPosInterval(next, 0.5, hitPoint))
@@ -19686,8 +19745,7 @@ def doPeckingOrderVulnerability(attack):
         next.reparentTo(suit.getRightHand())
         next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)
         if dmg > 0:
-            # hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6, random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
-            hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)
+            hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6, random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
         else:
             hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)
         birdTrack = Sequence(Wait(throwDelay), Func(battle.movie.needRestoreRenderProp, next), Func(next.wrtReparentTo, battle), Func(next.setHpr, Point3(90, 20, 0)), LerpPosInterval(next, 0.5, hitPoint))

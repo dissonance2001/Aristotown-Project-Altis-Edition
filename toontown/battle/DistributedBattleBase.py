@@ -674,6 +674,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 else:
                     suit.setNeutralAnimation()
                 suit.setDizzy(0)
+                for headPart in suit.animatedHeadParts:
+                    headPart.loop(
+                        'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         return oldtoons
 
     def adjust(self, timestamp):
@@ -1054,6 +1057,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                         suit.setNeutralAnimation()
                     suit.setPosHpr(self, suitPos, suitHpr)
                     suit.setDizzy(0)
+                    for headPart in suit.animatedHeadParts:
+                        headPart.loop(
+                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
 
         for toon in toons:
             if self.joiningToons.count(toon):
