@@ -2392,8 +2392,8 @@ def doRadioInfrequency(attack):
     sprayEffect.setDepthTest(0)
     sprayEffect.setTwoSided(1)
     sprayTrack = Sequence(Wait(1.5))
-    sprayTrack.append(Func(setPosFromOther, sprayEffect, head, Point3(0, 1.6, -0.18)))
-    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, head, 0], softStop=-3.5))
+    sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
+    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
     suitTrack = Sequence(ActorInterval(suit, 'glower', duration=1.5), Wait(4.0),
                          ActorInterval(suit, 'glower', startTime=1.5), Func(suit.setNeutralAnimation))
     suitTrack2 = getSuitAnimTrack(attack)

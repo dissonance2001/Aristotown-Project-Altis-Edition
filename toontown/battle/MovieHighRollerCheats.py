@@ -3228,4 +3228,102 @@ def doConduction(attack):
     return Parallel(suitTrack, allDuckTracks, toonTracks, soundTrack)
 
 
+def doRaisingTheAnte(attack):
+    '''
+    A battle animation to give Toons the damage boost based on the Raising the Ante status effect in Corporate Clash.
+    author: Professor Control
+    '''
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTrack = getSuitAnimTrack(attack)
+    # suitTrack.append(doWheelSpin2(attack))
+    partTracks = Parallel()
+    explosionTracks = Parallel()  # It seems fitting this source gets to make Toons explode to have their ante raised.
+    toonTracks = getToonTracks(attack, 2.0, ['slip-backward'], 2.0, ['shrug'])
+
+    def changeColor(parts):
+        track = Parallel()
+        for partNum in xrange(0, parts.getNumPaths()):
+            nextPart = parts.getPath(partNum)
+            track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
+
+        return track
+
+    def resetColor(parts):
+        track = Parallel()
+        for partNum in xrange(0, parts.getNumPaths()):
+            nextPart = parts.getPath(partNum)
+            track.append(Func(nextPart.clearColorScale))
+
+        return track
+
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+
+        # I never got to make an actual particle effect work, so I settled for making a faux particle effect.
+        numArrows = 15  # I don't know how long we want the particle effect to go on for, but we can change that depending on how many arrows we want.
+        radius = 2.0
+        partTrack = Parallel()
+        for i in xrange(numArrows):
+            # Create the arrow.
+            arrow = loader.loadModel('phase_3.5/models/gui/matching_game_gui').find(
+                '**/minnieArrow')  # Get an arrow immediately.
+            arrow.setScale(5.0)  # Maybe could be adjusted?
+            arrow.setBillboardPointEye()  # This could increase how much of a particle effect it's intended to look like.
+            arrow.setR(270)  # Arrow points up.
+            color = random.choice([(1, 0, 0, 1),
+                                   (1, 1, 0, 1),
+                                   (0, 0, 1,
+                                    1)])  # Color the arrows according to these colors as that is what the status effect icon looks like.
+            arrow.setColor(*color)
+
+            # Now get the position of the arrow.
+            angle = random.random() * 2.0 * math.pi  # Have a random angle decided.  360-degree limit, but due to the angle being in radians, use such units.  360 degrees in radians is 2 times pi.
+            x = radius * math.cos(angle) + toon.getX(battle)
+            y = radius * math.sin(angle) + toon.getY(battle)
+
+            # Now assemble the arrow movement.
+            oneArrowTrack = Sequence(
+                Wait(0.9 + i * 0.25),  # The delay for the arrow.
+                Func(arrow.reparentTo, battle),
+                Func(arrow.setPos, Point3(x, y, 0)),
+                Track(
+                    (0.0, LerpFunctionInterval(arrow.setZ, 0.8, 0, 3, blendType='easeOut')),  # Raise the arrow.
+                    (0.6, LerpFunctionInterval(arrow.setAlphaScale, 0.2, 1, 0))
+                    # Before the arrow completes raising, make it fade.
+                ),
+                Func(MovieUtil.removeProp, arrow)
+            )
+            partTrack.append(oneArrowTrack)
+
+        partTracks.append(partTrack)
+
+        if dmg > 0:
+            headParts = toon.getHeadParts()
+            torsoParts = toon.getTorsoParts()
+            legsParts = toon.getLegsParts()
+            suitPos, suitHpr = battle.getActorPosHpr(suit)
+            gearPoint = Point3(suitPos.getX(), suitPos.getY() - 10, suitPos.getZ() + suit.height - 0.2)
+            explosionTracks.append(Sequence(
+                Wait(2.0),
+                MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3)
+            ))
+            # I guess it doesn't hurt to put the color track inside of explosionTracks.
+            explosionTracks.append(Sequence(
+                Wait(2.0),
+                changeColor(headParts),
+                changeColor(torsoParts),
+                changeColor(legsParts),
+                Wait(3.5),
+                resetColor(headParts),
+                resetColor(torsoParts),
+                resetColor(legsParts)
+            ))
+    soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.0, node=suit)
+
+    return Parallel(suitTrack, partTracks, explosionTracks, soundTrack1, toonTracks)
+
+
 

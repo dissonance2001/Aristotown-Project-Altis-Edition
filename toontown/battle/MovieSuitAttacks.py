@@ -801,6 +801,8 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doAceInTheHole(attack)
     elif name == HIGH_ROLLER_VULNERABLE:
         suitTrack = MovieHighRollerCheats.doVulnerable(attack)
+    elif name == HIGH_ROLLER_RAISING_THE_ANTE:
+        suitTrack = MovieHighRollerCheats.doRaisingTheAnte(attack)
     # high roller silhouette cheats
     elif name == HIGH_ROLLER_DONATION:
         suitTrack = MovieHighRollerCheats.doDonation(attack)

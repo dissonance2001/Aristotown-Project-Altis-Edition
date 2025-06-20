@@ -3480,7 +3480,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 ('DeathCheck',
                (0,),
                (100,),
-               (0,))
+               (0,)),
+('HighRollerRaisingTheAnte',
+                  (0,),
+                  (100,),
+                  (0,)),
                  )},
  'bf': {'name': 'Bottom Feeder',
         'singularname': 'a Bottom Feeder',
@@ -5198,7 +5202,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (0,),
               (100,),
               (0,)),
-              ('RadiographerOvermodulated',
+              ('HighRollerRaisingTheAnte',
                (7,),
                (100,),
                (100,),),)},
@@ -7276,7 +7280,7 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 #litigator cheats
                'LitigatorSnapSoak': ('throw-object', ATK_TGT_SINGLE),
 'LitigatorSnap': ('throw-object', ATK_TGT_SINGLE),
-'LitigatorBayouBash': ('none', ATK_TGT_GROUP),
+'LitigatorBayouBash': ('none', ATK_TGT_SINGLE),
 'LitigatorBayouBellow': ('bellow', ATK_TGT_SINGLE),
 #stenographer cheats
 'StenographerSanctionBindings': ('sanction', ATK_TGT_GROUP),
@@ -7326,7 +7330,7 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'AmbassadorRefinement': ('throw-object', ATK_TGT_SINGLE),
 'AmbassadorPhase2': ('pie-small-react', ATK_TGT_SINGLE),
 'AmbassadorDamageUp': ('summon', ATK_TGT_SINGLE),
-'AmbassadorManagerialProtection': ('snap', ATK_TGT_GROUP),
+'AmbassadorManagerialProtection': ('snap', ATK_TGT_SINGLE),
 'AmbassadorManagerialProtectionImmunity': ('cease', ATK_TGT_SINGLE),
 'AmbassadorMulligan': ('golf-club-swing', ATK_TGT_SINGLE),
 #safe-ty supervisor cheats
@@ -7365,7 +7369,7 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'HighRollerNoAttack': ('nothing', ATK_TGT_SINGLE),
 'HighRollerWheelSpin': ('wheelspin', ATK_TGT_SINGLE),
 'HighRollerCommercialBreak': ('snap', ATK_TGT_SINGLE),
-'HighRollerGameTimeSpawn': ('snap', ATK_TGT_GROUP),
+'HighRollerGameTimeSpawn': ('snap', ATK_TGT_SINGLE),
 'HighRollerGameTimeCog': ('snap', ATK_TGT_SINGLE),
 'HighRollerGameTimeCog2': ('snap', ATK_TGT_SINGLE),
 'HighRollerBust': ('bust', ATK_TGT_GROUP),
@@ -7379,9 +7383,10 @@ SuitAttacks = {'AcidRain': ('magic1', ATK_TGT_SINGLE),
 'HighRollerDiceRouletteToons': ('nothing', ATK_TGT_GROUP),
 'HighRollerDiceRouletteEveryone': ('nothing', ATK_TGT_GROUP),
 'HighRollerDiceRouletteNobody': ('nothing', ATK_TGT_SINGLE),
-'HighRollerTrickOfTheLight': ('nothing', ATK_TGT_GROUP),
+'HighRollerTrickOfTheLight': ('nothing', ATK_TGT_SINGLE),
 'HighRollerAceInTheHole': ('nothing', ATK_TGT_GROUP),
 'HighRollerVulnerable': ('nothing', ATK_TGT_SINGLE),
+'HighRollerRaisingTheAnte': ('magic3', ATK_TGT_GROUP),
 #high roller silhouette cheats
 'HighRollerDonation': ('shot5', ATK_TGT_SINGLE),
 'HighRollerSyphon': ('sanction', ATK_TGT_GROUP),
@@ -7784,6 +7789,7 @@ HIGH_ROLLER_DICE_ROULETTE_NOBODY = SuitAttacks.keys().index('HighRollerDiceRoule
 HIGH_ROLLER_TRICK_OF_THE_LIGHT = SuitAttacks.keys().index('HighRollerTrickOfTheLight')
 HIGH_ROLLER_ACE_IN_THE_HOLE = SuitAttacks.keys().index('HighRollerAceInTheHole')
 HIGH_ROLLER_VULNERABLE = SuitAttacks.keys().index('HighRollerVulnerable')
+HIGH_ROLLER_RAISING_THE_ANTE = SuitAttacks.keys().index('HighRollerRaisingTheAnte')
 #high roller silhouette cheats
 HIGH_ROLLER_DONATION = SuitAttacks.keys().index('HighRollerDonation')
 HIGH_ROLLER_SYPHON = SuitAttacks.keys().index('HighRollerSyphon')

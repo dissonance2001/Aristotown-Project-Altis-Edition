@@ -1305,6 +1305,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == HIGH_ROLLER_ROLLED:
         camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == HIGH_ROLLER_RAISING_THE_ANTE:
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == HIGH_ROLLER_DICE_ROULETTE_COGS:
         camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),

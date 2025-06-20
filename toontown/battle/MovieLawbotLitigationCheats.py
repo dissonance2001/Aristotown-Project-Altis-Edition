@@ -1652,8 +1652,8 @@ def doBayouBellow(attack):
     sprayEffect.setDepthTest(0)
     sprayEffect.setTwoSided(1)
     sprayTrack = Sequence()
-    sprayTrack.append(Func(setPosFromOther, sprayEffect, head, Point3(0, 1.6, -0.18)))
-    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, head, 0], softStop=-3.5))
+    sprayTrack.append(Func(setPosFromOther, sprayEffect, theSuit, Point3(0, 1.6, theSuit.height - 2)))
+    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, theSuit, 0], softStop=-3.5))
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         suitTrack.append(Wait(4.0))

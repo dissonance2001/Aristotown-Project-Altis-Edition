@@ -1519,15 +1519,6 @@ class BattleCalculatorAI:
                                         self.__removeLured(s.doId)
                                         if s.getSkeleRevives() >= 1:
                                             s.useSkeleRevive()
-                                if s.dna.name == 'scg':
-                                    target9 = s
-                                    if target9.dna.name == 'scg' and self.suitHasCondition(target9.doId,
-                                                                                           'shielding') and not target3.dna.name == 'scg':
-                                        target9.setHP(target9.currHP - (int(attackDamageAbsorb)))
-                                        if target9.getHP() <= 0:
-                                            self.__removeLured(target9.doId)
-                                            if target9.getSkeleRevives() >= 1:
-                                                target9.useSkeleRevive()
                                 elif s.dna.name == 'dsf':
                                     target9 = s
                                     if target9.dna.name == 'dsf' and self.suitHasCondition(target9.doId,
@@ -3620,6 +3611,26 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'HighRollerNoAttack':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
+                if self.suitHasCondition(theSuit.doId, 'phase3'):
+                    for t in self.battle.activeToons:
+                        self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'nolevel5s', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'nolevel4s', 1, 0, 'setBoth')
+                        self.setToonCondition(t, random.choice(('nolevel5s', 'nolevel7s', 'nolevel4s', 'nolevel6s', 'nolevel8s')), 1, 2, 'setBoth')
+                        self.setToonCondition(t, 'noSquirtGags', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'noThrowGags', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'noLureGags', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'noDropGags', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'noToonUpGags', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'noTrapGags', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'noZapGags', 1, 0, 'setBoth')
+                        self.setToonCondition(t, 'noSoundGags', 1, 0, 'setBoth')
+                        self.setToonCondition(t, random.choice(('noSquirtGags', 'noSoundGags', 'noToonUpGags', 'noLureGags')), 1, 2, 'setBoth')
+            elif atkInfo['name'] == 'HighRollerNoAttack':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
                 if theSuit.dna.name == 'crf':
                     for t in self.battle.activeToons:
                         self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
@@ -3676,7 +3687,6 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'immune', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'allGagBoost', 1250, 99, 'setBoth')
                 from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
 
                 boss = None
@@ -3694,6 +3704,10 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 1, 10, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
+            elif atkInfo['name'] == 'HighRollerRaisingTheAnte':
+                result = 25
+                attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
                 self.setToonCondition(toon.doId, 'allGagBoost', 1250, 99, 'setBoth')
             elif atkInfo['name'] == 'HighRollerConduction':
@@ -7012,6 +7026,36 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 2  # Phase 3 Movie
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 16  # Raising The Ante
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
