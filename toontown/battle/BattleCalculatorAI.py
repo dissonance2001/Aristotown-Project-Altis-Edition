@@ -3013,23 +3013,28 @@ class BattleCalculatorAI:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'LitigatorSnapSoak': #soaked snap
-                result = 36
+                if self.toonHasCondition(toon.doId, 'soakToon'):
+                    self.setToonCondition(toon.doId, 'snapped', .1, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'soakToon', 1, 1, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
+                    result = 33
+                else:
+                    result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'snapped', .1, 3, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
             elif atkInfo['name'] == 'LitigatorSnap':
-                result = 30
-                attack[SUIT_HP_COL][targetIndex] = result
                 currentBossHealth = -1
                 for s in self.battle.suits:
                     if s.dna.name == 'ste':
                         currentBossHealth = s.currHP
                 if currentBossHealth >= 1:
+                    result = 21.5
                     self.setToonCondition(toon.doId, 'snapped', .4, 3, 'setBoth')
                 else:
+                    result = 25
                     self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
+                attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'LitigatorBayouBellow':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
