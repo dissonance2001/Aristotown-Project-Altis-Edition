@@ -11,14 +11,14 @@ from toontown.hood import ZoneUtil
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
 
 
-class DistributedPaceLobbyInterior(DistributedObject.DistributedObject):
+class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInterior):
 
     def __init__(self, cr):
-        DistributedObject.DistributedObject.__init__(self, cr)
+        DistributedToonInterior.DistributedToonInterior.__init__(self, cr)
         self.dnaStore = cr.playGame.dnaStore
 
     def generate(self):
-        DistributedObject.DistributedObject.generate(self)
+        DistributedToonInterior.DistributedToonInterior.generate(self)
 
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)

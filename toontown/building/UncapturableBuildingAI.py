@@ -59,7 +59,7 @@ class UncapturableBuildingAI:
         elif self.interiorZone == ToontownGlobals.MajorPlayerLobby:
             self.interior = DistributedMajorPlayerInteriorAI(blockNumber, self.air, self.interiorZone, self)
         elif self.interiorZone == ToontownGlobals.PacesetterLobby:
-            self.interior = DistributedPacesetterLobbyInteriorAI(blockNumber, self.air, self.interiorZone, self)
+            self.interior = DistributedPaceLobbyInteriorAI(blockNumber, self.air, self.interiorZone, self)
         else:
             self.interior = DistributedToonInteriorAI(blockNumber, self.air, self.interiorZone, self)
         self.interior.generateWithRequired(self.interiorZone)

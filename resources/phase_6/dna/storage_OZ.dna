@@ -18,15 +18,18 @@ hood_model "phase_3.5/models/modules/walls_basement" [
 	store_node [ "wall" "wall_basement_rock_dl" ]
 	]
 
-hood_model "phase_8/models/modules/DG_windows" [
-	store_node [ "window" "window_sm_pointed_DG_ur" ]
-	store_node [ "window" "window_sm_pointed_DG_ul" ]
+hood_model "phase_6/models/modules/OZ_windows" [
+	store_node [ "window" "window_sm_OZ_ur" ]
+	store_node [ "window" "window_sm_OZ_ul" ]
 
-	store_node [ "window" "window_flower_porthole_ur" ]
-	store_node [ "window" "window_flower_porthole_ul" ]
+	store_node [ "window" "window_OZ_circle_ur" ]
+	store_node [ "window" "window_OZ_circle_ul" ]
 
-	store_node [ "window" "window_md_curved_DG_ur" ]
-	store_node [ "window" "window_md_curved_DG_ul" ]
+	store_node [ "window" "window_md_OZ_acorn_ur" ]
+	store_node [ "window" "window_md_OZ_acorn_ul" ]
+
+	store_node [ "window" "window_md_OZ_blinds_ur" ]
+	store_node [ "window" "window_md_OZ_blinds_ul" ]
 	]
 
 place_model "phase_3.5/models/modules/TT_A1" [

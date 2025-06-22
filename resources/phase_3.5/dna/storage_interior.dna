@@ -17,6 +17,38 @@ model "phase_3.5/models/modules/tt_m_ara_int_toonhall" [
         ]
 
 
+model "phase_3.5/models/schoolhouse/schoolhouse_interior_classroom" [
+        store_node [ "TI_schoolhouse" "TI_schoolhouse" "" ]
+        ]
+		
+model "phase_6/models/areas/ttcc_int_lighthouse" [
+        store_node [ "TI_lighthouse" "TI_lighthouse" "" ]
+        ]
+		
+model "phase_4/models/modules/derrick_entryroom.bam" [
+        store_node [ "TI_derrick" "TI_derrick" "" ]
+        ]
+		
+model "phase_7/models/modules/dungeon_interior.bam" [
+        store_node [ "TI_dungeon" "TI_dungeon" "" ]
+        ]
+		
+model "phase_6/models/areas/ttcc_int_mplayer_lobby.bam" [
+        store_node [ "TI_dave" "TI_dave" "" ]
+        ]
+		
+model "phase_6/models/areas/ttcc_int_cc_lobby.bam" [
+        store_node [ "TI_chainsaw" "TI_chainsaw" "" ]
+        ]
+			
+model "phase_8/models/areas/ttcc_int_pcrat_lobby.bam" [
+        store_node [ "TI_pizzeria" "TI_pizzeria" "" ]
+        ]
+		
+model "phase_8/models/areas/ttcc_int_psetter_lobby.bam" [
+        store_node [ "TI_pacesetter" "TI_pacesetter" "" ]
+        ]
+
 // store_texture [ "TI_wallpaper" "wall_paper_a1"
 //                 "phase_3.5/maps/wall_paper_a1.jpg" ]
 // store_texture [ "TI_wallpaper" "wall_paper_a2"

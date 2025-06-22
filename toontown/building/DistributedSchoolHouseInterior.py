@@ -1,6 +1,6 @@
 from toontown.toonbase.ToonBaseGlobal import *
 from panda3d.core import *
-from pandac.PandaModules import *
+from panda3d.toontown import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals
@@ -26,7 +26,7 @@ class DistributedSchoolHouseInterior(DistributedToonInterior):
         self.dnaStore = base.cr.playGame.dnaStore
         self.randomGenerator = random.Random()
         self.randomGenerator.seed(self.zoneId)
-        interior = self.randomDNAItem('TI_schoolhouse', self.dnaStore.findNode)
+        interior = loader.loadModel('phase_3.5/models/schoolhouse/schoolhouse_interior_classroom')
         self.interior = interior.copyTo(render)
         hoodId = ZoneUtil.getCanonicalHoodId(self.zoneId)
         self.colors = ToonInteriorColors.colors[hoodId]
@@ -72,6 +72,17 @@ class DistributedSchoolHouseInterior(DistributedToonInterior):
         GymSign.reparentTo(GymSign_origin)
         chalkboardBack.reparentTo(backboard_origin)
         self.chalkboard.loop('draw')
+        taskMgr.doMethodLater(0.1, self.doMusic, 'schoolMusic')  # gotta delay it a bit
+
+    def doMusic(self, task):
+        base.musicManager.stopAllSounds()
+        self.schoolMusicFile = loader.loadMusic("phase_3.5/audio/bgm/TC_SZ_SH.ogg")
+        self.schoolMusicFile = base.playMusic(self.schoolMusicFile, looping=1)
+        return task.done
+
+    def setZoneIdAndBlock(self, zoneId, block):
+        self.zoneId = zoneId
+        self.block = block
 
     def disable(self):
         self.enterOff()

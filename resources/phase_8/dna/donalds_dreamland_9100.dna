@@ -2755,6 +2755,7 @@ group "donaldsDreamland" [
   ]
   landmark_building "tb13:toon_landmark_psetter_DNARoot" [
    code [ "toon_landmark_psetter" ]
+   building_type [ "uncapturable" ]
    title [ "Fast Asleep - All Star Suites" ]
    pos [ -102.007 -64 -4.76751e-07 ]
    nhpr [ -90 0 -0 ]
