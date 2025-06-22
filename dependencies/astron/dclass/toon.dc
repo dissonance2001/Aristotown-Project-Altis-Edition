@@ -2701,6 +2701,9 @@ dclass DistributedBBElevator : DistributedBossElevator {
 dclass DistributedCMElevator : DistributedBossElevator {
 };
 
+dclass DistributedPaceElevator : DistributedBossElevator {
+};
+
 dclass DistributedBoardingParty : DistributedObject {
   postGroupInfo(uint32, uint32[], uint32[], uint32[]) broadcast;
   informDestinationInfo(uint8) clsend airecv;
