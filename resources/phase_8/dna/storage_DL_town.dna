@@ -104,3 +104,7 @@ place_model "phase_8/models/modules/DL_pond" [
 place_model "phase_4/models/props/construction_sign" [
 	store_node [ "prop" "prop_construction_sign" "" ]
 	]
+	
+place_model "phase_8/models/areas/ttcc_ext_psetter" [
+	store_node [ "toon_landmark" "toon_landmark_psetter" "suite" ]
+	]	
