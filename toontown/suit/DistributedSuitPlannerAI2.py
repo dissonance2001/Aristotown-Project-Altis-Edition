@@ -11,6 +11,7 @@ from otp.ai.MagicWordGlobal import *
 from toontown.battle import BattleManagerAI
 from toontown.battle import SuitBattleGlobals
 from toontown.building import HQBuildingAI
+from toontown.building import UncapturableBuildingAI
 from toontown.building import SuitBuildingGlobals
 from toontown.dna.DNAParser import DNASuitPoint
 from toontown.hood import ZoneUtil
@@ -185,7 +186,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             self.notify.debug('Creating a building manager AI in zone' + str(self.zoneId))
         self.buildingMgr = self.air.buildingManagers.get(self.zoneId)
         if self.buildingMgr:
-            (blocks, hqBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks) = self.buildingMgr.getDNABlockLists()
+            (blocks, hqBlocks, uncapturableBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks) = self.buildingMgr.getDNABlockLists()
             for currBlock in blocks:
                 bldg = self.buildingMgr.getBuilding(currBlock)
                 bldg.setSuitPlannerExt(self)
@@ -249,7 +250,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 continue
             self.buildingSideDoors[blockNumber] = [p]
         for bldg in self.buildingMgr.getBuildings():
-            if isinstance(bldg, HQBuildingAI.HQBuildingAI):
+            if isinstance(bldg, HQBuildingAI.HQBuildingAI) or isinstance(bldg, UncapturableBuildingAI.UncapturableBuildingAI):
                 continue
             blockNumber = bldg.getBlock()[0]
             if blockNumber not in self.buildingFrontDoors:

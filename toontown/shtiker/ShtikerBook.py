@@ -37,6 +37,7 @@ class ShtikerBook(DirectFrame, StateData.StateData):
          TTLocalizer.CodePageTitle,
          TTLocalizer.ShardPageTitle,
          TTLocalizer.MapPageTitle,
+         TTLocalizer.TeleportPageTitle,
          TTLocalizer.InventoryPageTitle,
          TTLocalizer.QuestPageToonTasks,
          TTLocalizer.TrackPageShortTitle,
@@ -188,6 +189,9 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         from toontown.shtiker import MapPage
         if isinstance(page, MapPage.MapPage):
             self.pageBeforeNews = page
+        from toontown.shtiker import TeleportPage
+        if isinstance(page, TeleportPage.TeleportPage):
+            self.pageBeforeNews = page
 
     def addPageTab(self, page, pageIndex, pageName = 'Page'):
         tabIndex = len(self.pageTabs)
@@ -225,6 +229,10 @@ class ShtikerBook(DirectFrame, StateData.StateData):
             iconGeom = iconModels.find('**/district')
             iconModels.detachNode()
         elif pageName == TTLocalizer.MapPageTitle:
+            iconModels = loader.loadModel('phase_3.5/models/gui/sos_textures')
+            iconGeom = iconModels.find('**/teleportIcon')
+            iconModels.detachNode()
+        elif pageName == TTLocalizer.TeleportPageTitle:
             iconModels = loader.loadModel('phase_3.5/models/gui/sos_textures')
             iconGeom = iconModels.find('**/teleportIcon')
             iconModels.detachNode()

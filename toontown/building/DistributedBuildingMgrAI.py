@@ -5,6 +5,7 @@ from toontown.building import GagshopBuildingAI
 from toontown.building import HQBuildingAI
 from toontown.building import KartShopBuildingAI
 from toontown.building import PetshopBuildingAI
+from toontown.building import UncapturableBuildingAI
 from toontown.hood import ZoneUtil
 # from toontown.building import DistributedAnimBuildingAI
 
@@ -52,6 +53,8 @@ class DistributedBuildingMgrAI:
         for blockNumber, building in self.__buildings.items():
             if isinstance(building, HQBuildingAI.HQBuildingAI):
                 continue
+            if isinstance(building, UncapturableBuildingAI.UncapturableBuildingAI):
+                continue
             if isinstance(building, GagshopBuildingAI.GagshopBuildingAI):
                 continue
             if isinstance(building, PetshopBuildingAI.PetshopBuildingAI):
@@ -84,6 +87,7 @@ class DistributedBuildingMgrAI:
     def getDNABlockLists(self):
         blocks = []
         hqBlocks = []
+        uncapturableBlocks = []
         gagshopBlocks = []
         petshopBlocks = []
         kartshopBlocks = []
@@ -93,6 +97,8 @@ class DistributedBuildingMgrAI:
             buildingType = self.dnaStore.getBlockBuildingType(blockNumber)
             if buildingType == 'hq':
                 hqBlocks.append(blockNumber)
+            elif buildingType == 'uncapturable':
+                uncapturableBlocks.append(blockNumber)
             elif buildingType == 'gagshop':
                 gagshopBlocks.append(blockNumber)
             elif buildingType == 'petshop':
@@ -104,17 +110,19 @@ class DistributedBuildingMgrAI:
                 animBldgBlocks.append(blockNumber)
             else:
                 blocks.append(blockNumber)
-        return (blocks, hqBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks)
+        return (blocks, hqBlocks, uncapturableBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks)
 
     def findAllLandmarkBuildings(self):
         backups = simbase.backups.load('block-info', (self.air.districtId, self.branchId), default={})
-        (blocks, hqBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks) = self.getDNABlockLists()
+        (blocks, hqBlocks, uncapturableBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks) = self.getDNABlockLists()
         for blockNumber in blocks:
             self.newBuilding(blockNumber, backup=backups.get(blockNumber, None))
         for blockNumber in animBldgBlocks:
             self.newAnimBuilding(blockNumber, backup=backups.get(blockNumber, None))
         for blockNumber in hqBlocks:
             self.newHQBuilding(blockNumber)
+        for block in uncapturableBlocks:
+            self.newUncapturableBuilding(block)
         for blockNumber in gagshopBlocks:
             self.newGagshopBuilding(blockNumber)
         for block in petshopBlocks:
@@ -158,6 +166,15 @@ class DistributedBuildingMgrAI:
         interiorZoneId = (self.branchId - (self.branchId%100)) + 500 + blockNumber
         building = HQBuildingAI.HQBuildingAI(
             self.air, exteriorZoneId, interiorZoneId, blockNumber)
+        self.__buildings[blockNumber] = building
+        return building
+
+    def newUncapturableBuilding(self, blockNumber):
+        dnaStore = self.air.dnaStoreMap[self.canonicalBranchId]
+        exteriorZoneId = dnaStore.getZoneFromBlockNumber(blockNumber)
+        exteriorZoneId = ZoneUtil.getTrueZoneId(exteriorZoneId, self.branchId)
+        interiorZoneId = self.branchId - self.branchId % 100 + 500 + blockNumber
+        building = UncapturableBuildingAI.UncapturableBuildingAI(self.air, exteriorZoneId, interiorZoneId, blockNumber)
         self.__buildings[blockNumber] = building
         return building
 

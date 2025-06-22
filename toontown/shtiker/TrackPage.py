@@ -26,7 +26,7 @@ class TrackPage(ShtikerPage.ShtikerPage):
         TrackYSpacing = -0.12
         ButtonXOffset = -0.28
         ButtonXSpacing = 0.26
-        self.buttonModels = loader.loadModel('phase_3.5/models/gui/inventory_gui')
+        self.buttonModels = loader.loadModel('phase_3.5/models/gui/inventory_guiTRAINING')
         self.upButton = self.buttonModels.find('**/InventoryButtonUp')
         self.downButton = self.buttonModels.find('**/InventoryButtonDown')
         self.rolloverButton = self.buttonModels.find('**/InventoryButtonRollover')

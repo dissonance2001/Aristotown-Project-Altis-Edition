@@ -36,6 +36,8 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
 
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
+        if self.zoneId == ToontownGlobals.Dungeon:
+            taskMgr.doMethodLater(0, self.DungeonMusic, 'DungeonMusic')
         self.setup()
 
     def disable(self):
@@ -187,6 +189,12 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
         namePath.setScale(0.186 / FrameScale)
         frame.setScale(FrameScale, 1.0, FrameScale)
         return frame
+
+    def DungeonMusic(self, task):
+        base.musicManager.stopAllSounds()
+        self.dungeonMusicFile = loader.loadMusic("phase_7/audio/bgm/OT_SZ_dungeon_activity.ogg")
+        self.dungeonMusic = base.playMusic(self.dungeonMusicFile, looping=1)
+        return task.done
 
     def setState(self, state, timestamp):
         self.fsm.request(state, [globalClockDelta.localElapsedTime(timestamp)])
