@@ -174,7 +174,6 @@ class Movie(DirectObject.DirectObject):
 
             if missScaleDown:
                 propTrack.append(LerpScaleInterval(prop, missScaleDown, MovieUtil.PNT3_NEARZERO))
-        name = attack['id']
         propTrack.append(Func(MovieUtil.removeProp, prop))
         propTrack.append(Func(battle.movie.clearRenderProp, prop))
         return propTrack

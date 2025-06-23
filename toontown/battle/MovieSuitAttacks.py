@@ -127,586 +127,586 @@ def __throwBouncePoint(startPoint, endPoint):
 
 def doSuitAttack(attack):
     notify.debug('building suit attack in doSuitAttack: %s' % attack['name'])
-    name = attack['id']
+    name = attack['name']
     suit = attack['suit']
-    if name == ACID_RAIN:
+    if name == 'AcidRain':
         suitTrack = doAcidRain(attack)
-    elif name == AUDIT:
+    elif name == 'Audit':
         suitTrack = doAudit(attack)
-    elif name == BASH:
+    elif name == 'Bash':
         suitTrack = doBash(attack)
-    elif name == BEGUILE:
+    elif name == 'Beguile':
         suitTrack = doTeeOffGroup(attack)
-    elif name == CLOSE_THE_LOOP:
+    elif name == 'CloseTheLoop':
         suitTrack = doFountainPenBindings(attack)
-    elif name == HOSTILE_TAKEOVER:
+    elif name == 'HostileTakeover':
         suitTrack = doHostileTakeoverNew(attack)
-    elif name == NICKEL_AND_DIME:
+    elif name == 'NickelAndDime':
         suitTrack = doRolledTrickOfTheLight(attack)
-    elif name == QUASH:
+    elif name == 'Quash':
         suitTrack = doAceInTheHoleNew(attack)
-    elif name == PENNY_PINCH:
+    elif name == 'PennyPinch':
         suitTrack = doPennyPinch(attack)
-    elif name == DISASSEMBLE:
+    elif name == 'Disassemble':
         suitTrack = doDisassemble(attack)
-    elif name == DATA_CORRUPTION:
+    elif name == 'DataCorruption':
         suitTrack = doDataCorruption(attack)
-    elif name == DATA_BREACH:
+    elif name == 'DataBreach':
         suitTrack = doDataBreach(attack)
-    elif name == VERSION_CONTROL:
+    elif name == 'VersionControl':
         suitTrack = doVersionControl(attack)
-    elif name == DENIAL_OF_SERVICE:
+    elif name == 'DenialOfService':
         suitTrack = doDenialOfService(attack)
-    elif name == OVERLOAD:
+    elif name == 'Overload':
         suitTrack = doOverload(attack)
-    elif name == BREAKTHROUGH:
+    elif name == 'Breakthrough':
         suitTrack = doBreakthrough(attack)
-    elif name == ENCRYPT:
+    elif name == 'Encrypt':
         suitTrack = doEncrypt(attack)
-    elif name == BOUNCE_RATE:
+    elif name == 'BounceRate':
         suitTrack = doBounceRate(attack)
-    elif name == REPROGRAM:
+    elif name == 'Reprogram':
         suitTrack = doReprogram(attack)
-    elif name == CLOUD_STORAGE:
+    elif name == 'CloudStorage':
         suitTrack = doCloudStorage(attack)
-    elif name == DISK_SCRATCH:
+    elif name == 'DiskScratch':
         suitTrack = doDiskScratch(attack)
-    elif name == VOODOO_MAGIC:
+    elif name == 'VoodooMagic':
         suitTrack = doVoodooMagic(attack)
-    elif name == ELECTROSTATIC_ENERGY:
+    elif name == 'ElectrostaticEnergy':
         suitTrack = doElectrostaticEnergy(attack)
-    elif name == BITE:
+    elif name == 'Bite':
         suitTrack = doBite(attack)
-    elif name == BOUNCE_CHECK:
+    elif name == 'BounceCheck':
         suitTrack = doBounceCheck(attack)
-    elif name == BRAIN_STORM:
+    elif name == 'BrainStorm':
         suitTrack = doBrainStorm(attack)
-    elif name == BUZZ_WORD:
+    elif name == 'BuzzWord':
         suitTrack = doBuzzWord(attack)
-    elif name == CALCULATE:
+    elif name == 'Calculate':
         suitTrack = doCalculate(attack)
-    elif name == CANNED:
+    elif name == 'Canned':
         suitTrack = doCanned(attack)
-    elif name == EVICTION_NOTICE:
+    elif name == 'EvictionNotice':
         suitTrack = doEvictionNotice(attack)
-    elif name == CHOMP:
+    elif name == 'Chomp':
         suitTrack = doChomp(attack)
-    elif name == WATERCOOLER:
+    elif name == 'Watercooler':
         suitTrack = doWatercooler(attack)
-    elif name == CIGAR_SMOKE:
+    elif name == 'CigarSmoke':
         suitTrack = doCigarSmoke(attack)
-    elif name == CLIPON_TIE:
+    elif name == 'ClipOnTie':
         suitTrack = doClipOnTie(attack)
-    elif name == CRUNCH:
+    elif name == 'Crunch':
         suitTrack = doCrunch(attack)
-    elif name == DEMOTION:
+    elif name == 'Demotion':
         suitTrack = doDemotion(attack)
-    elif name == DOUBLE_TALK:
+    elif name == 'DoubleTalk':
         suitTrack = doDoubleTalk(attack)
-    elif name == DOWNSIZE:
+    elif name == 'Downsize':
         suitTrack = doDownsize(attack)
-    elif name == EVICTION_NOTICE:
+    elif name == 'EvictionNotice':
         suitTrack = doEvictionNotice(attack)
-    elif name == EVIL_EYE:
+    elif name == 'EvilEye':
         suitTrack = doEvilEye(attack)
-    elif name == FIVE_O_CLOCK_SHADOW:
+    elif name == 'FiveOClockShadow':
         suitTrack = doFiveOClockShadow(attack)
-    elif name == SANDTRAP:
+    elif name == 'SandTrap':
         suitTrack = doSandTrap(attack)
-    elif name == FILIBUSTER:
+    elif name == 'Filibuster':
         suitTrack = doFilibuster(attack)
-    elif name == FILL_WITH_LEAD:
+    elif name == 'FillWithLead':
         suitTrack = doFillWithLead(attack)
-    elif name == FINGER_WAG:
+    elif name == 'FingerWag':
         suitTrack = doFingerWag(attack)
-    elif name == FIRED:
+    elif name == 'Fired':
         suitTrack = doFired(attack)
-    elif name == FOUNTAIN_PEN:
+    elif name == 'FountainPen':
         suitTrack = doFountainPen(attack)
-    elif name == FREEZE_ASSETS:
+    elif name == 'FreezeAssets':
         suitTrack = doFreezeAssets(attack)
-    elif name == GLOWER_POWER:
+    elif name == 'GlowerPower':
         suitTrack = doGlowerPower(attack)
-    elif name == REARRANGE:
+    elif name == 'ReArrange':
         suitTrack = doFilibusterPhase2(attack)
-    elif name == SHORT_SQUEEZE:
+    elif name == 'ShortSqueeze':
         suitTrack = doShortSqueeze(attack)
-    elif name == BLUE_CHIP:
+    elif name == 'BlueChip':
         suitTrack = doBlueChip(attack)
-    elif name == FALLING_KNIFE:
+    elif name == 'FallingKnife':
         suitTrack = doFallingKnife(attack)
-    elif name == GUILT_TRIP:
+    elif name == 'GuiltTrip':
         suitTrack = doGuiltTrip(attack)
-    elif name == EMBEZZLE:
+    elif name == 'Embezzle':
         suitTrack = doEmbezzle(attack)
-    elif name == FLOOD_THE_MARKET:
+    elif name == 'FloodTheMarket':
         suitTrack = doFloodTheMarket(attack)
-    elif name == MONEY_TRIP:
+    elif name == 'MoneyTrip':
         suitTrack = doSynergy(attack)
-    elif name == HALF_WINDSOR:
+    elif name == 'HalfWindsor':
         suitTrack = doHalfWindsor(attack)
-    elif name == HANG_UP:
+    elif name == 'HangUp':
         suitTrack = doHangUp(attack)
-    elif name == HEAD_SHRINK:
+    elif name == 'HeadShrink':
         suitTrack = doHeadShrink(attack)
-    elif name == HOT_AIR:
+    elif name == 'HotAir':
         suitTrack = doHotAir(attack)
-    elif name == JARGON:
+    elif name == 'Jargon':
         suitTrack = doJargon(attack)
-    elif name == LEGALESE:
+    elif name == 'Legalese':
         suitTrack = doLegalese(attack)
-    elif name == LAW_BOOK:
+    elif name == 'LawBook':
         suitTrack = doThrowBook(attack)
-    elif name == LIQUIDATE:
+    elif name == 'Liquidate':
         suitTrack = doLiquidate(attack)
-    elif name == MARKET_CRASH:
+    elif name == 'MarketCrash':
         suitTrack = doMarketCrash(attack)
-    elif name == MUMBO_JUMBO:
+    elif name == 'MumboJumbo':
         suitTrack = doMumboJumbo(attack)
-    elif name == PARADIGM_SHIFT:
+    elif name == 'ParadigmShift':
         suitTrack = doParadigmShift(attack)
-    elif name == PECKING_ORDER:
+    elif name == 'PeckingOrder':
         suitTrack = doPeckingOrder(attack)
-    elif name == PICK_POCKET:
+    elif name == 'PickPocket':
         suitTrack = doPickPocket(attack)
-    elif name == PINK_SLIP:
+    elif name == 'PinkSlip':
         suitTrack = doPinkSlip(attack)
-    elif name == PLAY_HARDBALL:
+    elif name == 'PlayHardball':
         suitTrack = doPlayHardball(attack)
-    elif name == POUND_KEY:
+    elif name == 'PoundKey':
         suitTrack = doPoundKey(attack)
-    elif name == POWER_TIE:
+    elif name == 'PowerTie':
         suitTrack = doPowerTie(attack)
-    elif name == POWER_TRIP:
+    elif name == 'PowerTrip':
         suitTrack = doPowerTrip(attack)
-    elif name == QUAKE:
+    elif name == 'Quake':
         suitTrack = doQuake(attack)
-    elif name == RAZZLE_DAZZLE:
+    elif name == 'RazzleDazzle':
         suitTrack = doRazzleDazzle(attack)
-    elif name == RED_TAPE:
+    elif name == 'RedTape':
         suitTrack = doRedTape(attack)
-    elif name == RE_ORG:
+    elif name == 'ReOrg':
         suitTrack = doReOrg(attack)
-    elif name == RESTRAINING_ORDER:
+    elif name == 'RestrainingOrder':
         suitTrack = doRestrainingOrder(attack)
-    elif name == ROLODEX:
+    elif name == 'Rolodex':
         suitTrack = doRolodex(attack)
-    elif name == RUBBER_STAMP:
+    elif name == 'RubberStamp':
         suitTrack = doRubberStamp(attack)
-    elif name == RUB_OUT:
+    elif name == 'RubOut':
         suitTrack = doRubOut(attack)
-    elif name == SACKED:
+    elif name == 'Sacked':
         suitTrack = doSacked(attack)
-    elif name == SCHMOOZE:
+    elif name == 'Schmooze':
         suitTrack = doSchmooze(attack)
-    elif name == SHAKE:
+    elif name == 'Shake':
         suitTrack = doShake(attack)
-    elif name == INJECT:
+    elif name == 'Inject':
         suitTrack = doInject(attack)
-    elif name == SHRED:
+    elif name == 'Shred':
         suitTrack = doShred(attack)
-    elif name == SONG_AND_DANCE:
+    elif name == 'SongAndDance':
         suitTrack = doSongAndDance(attack)
-    elif name == SPIN:
+    elif name == 'Spin':
         suitTrack = doSpin(attack)
-    elif name == SYNERGY:
+    elif name == 'Synergy':
         suitTrack = doInterestCalculations(attack)
-    elif name == TABULATE:
+    elif name == 'Tabulate':
         suitTrack = doTabulate(attack)
-    elif name == TEE_OFF:
+    elif name == 'Golf':
         suitTrack = doTeeOff(attack)
-    elif name == THROW_BOOK:
+    elif name == 'ThrowBook':
         suitTrack = doThrowBook(attack)
-    elif name == NOVEL:
+    elif name == 'Novel':
         suitTrack = doThrowBook(attack)
-    elif name == NEWSPAPER:
+    elif name == 'Newspaper':
         suitTrack = doMarketCrash(attack)
-    elif name == TREMOR:
+    elif name == 'Tremor':
         suitTrack = doTremor(attack)
-    elif name == WITHDRAWAL:
+    elif name == 'Withdrawal':
         suitTrack = doWithdrawal(attack)
-    elif name == WRITE_OFF:
+    elif name == 'WriteOff':
         suitTrack = doWriteOff(attack)
         # wsi cheats
-    elif name == WSI_CEASE_AND_DESIST:
+    elif name == 'WSICeaseAndDesist':
         suitTrack = MovieLawbotLitigationCheats.doCeaseAndDesist(attack)
-    elif name == WSI_JURY_NOTICE:
+    elif name == 'WSIJuryNotice':
         suitTrack = MovieLawbotLitigationCheats.doJuryNotice(attack)
     #litigator cheats
-    elif name == LITIGATOR_SNAP_SOAK:
+    elif name == 'LitigatorSnapSoak':
         suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
-    elif name == LITIGATOR_SNAP:
+    elif name == 'LitigatorSnap':
         suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
-    elif name == LITIGATOR_BAYOU_BASH:
+    elif name == 'LitigatorBayouBash':
         suitTrack = MovieLawbotLitigationCheats.doBayouBash(attack)
-    elif name == LITIGATOR_BAYOU_BELLOW:
+    elif name == 'LitigatorBayouBellow':
         suitTrack = MovieLawbotLitigationCheats.doBayouBellow(attack)
     #stenographer cheats
-    elif name == STENOGRAPHER_SANCTION_BINDINGS:
+    elif name == 'StenographerSanctionBindings':
         suitTrack = MovieLawbotLitigationCheats.doCourtSanctionBindings(attack)
-    elif name == STENOGRAPHER_SANCTION:
+    elif name == 'StenographerSanction':
         suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack)
-    elif name == STENOGRAPHER_COURT_RECORD_BAN:
+    elif name == 'StenographerCourtRecordBan':
         suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #case manager cheats
-    elif name == CASE_MANAGER_INSURANCE_PLAN:
+    elif name == 'CaseManagerInsurancePlan':
         if not suit.isSkeleton:
             suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack)
         else:
             suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanSkelecogInsurance(attack)
-    elif name == CASE_MANAGER_INSURANCE:
+    elif name == 'CaseManagerInsurance':
         suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
-    elif name == CASE_MANAGER_LEGAL_BINDINGS:
+    elif name == 'CaseManagerLegalBindings':
         suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
-    elif name == CASE_MANAGER_LEGALLY_BOUND:
+    elif name == 'CaseManagerLegallyBound':
         suitTrack = MovieLawbotLitigationCheats.doLegallyBound(attack)
-    elif name == CASE_MANAGER_COURT_RECORD_BAN:
+    elif name == 'CaseManagerCourtRecordBan':
         suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #scapegoat cheats
-    elif name == SCAPEGOAT_SHIELDS_UP:
+    elif name == 'ScapegoatShieldsUp':
         suitTrack = MovieLawbotLitigationCheats.doShieldsUp(attack)
-    elif name == SCAPEGOAT_ENRAGED:
+    elif name == 'ScapegoatEnraged':
         suitTrack = MovieLawbotLitigationCheats.doEnraged(attack)
-    elif name == SCAPEGOAT_GAVEL:
+    elif name == 'ScapegoatGavel':
         suitTrack = MovieLawbotLitigationCheats.doGavel(attack)
-    elif name == SCAPEGOAT_BARNYARD_BASH:
+    elif name == 'ScapegoatBarnyardBash':
         suitTrack = MovieLawbotLitigationCheats.doBarnyardBash(attack)
-    elif name == SCAPEGOAT_COURT_RECORD_BAN:
+    elif name == 'ScapegoatCourtRecordBan':
         suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #powerhouse cheats
-    elif name == POWERHOUSE_ABSORB:
+    elif name == 'PowerhouseAbsorb':
         suitTrack = MovieBossbotLitigationCheats.doAbsorb(attack)
-    elif name == POWERHOUSE_SOAK_IMMUNE:
+    elif name == 'PowerhouseSoakImmune':
         suitTrack = MovieBossbotLitigationCheats.doSoakImmune(attack)
-    elif name == POWERHOUSE_LURE_IMMUNE:
+    elif name == 'PowerhouseLureImmune':
         suitTrack = MovieBossbotLitigationCheats.doLureImmune(attack)
-    elif name == POWERHOUSE_SYPHON:
+    elif name == 'PowerhouseSyphon':
         suitTrack = MovieBossbotLitigationCheats.doSyphon(attack)
-    elif name == POWERHOUSE_SYPHON_DESPERATION:
+    elif name == 'PowerhouseSyphonDesperation':
         suitTrack = MovieBossbotLitigationCheats.doSyphonDesperation(attack)
-    elif name == POWERHOUSE_SNIPE_VULNERABLE:
+    elif name == 'PowerhouseSnipeVulnerable':
         suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
-    elif name == POWERHOUSE_SNIPE_GAG_BAN:
+    elif name == 'PowerhouseSnipeGagBan':
         suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
-    elif name == POWERHOUSE_SNIPE_SOAKED:
+    elif name == 'PowerhouseSnipeSoaked':
         suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
-    elif name == POWERHOUSE_SNIPE_BOOKKEPT:
+    elif name == 'PowerhouseSnipeBookkept':
         suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
-    elif name == POWERHOUSE_SNIPE_MULLIGAN:
+    elif name == 'PowerhouseSnipeMulligan':
         suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
-    elif name == POWERHOUSE_SNIPE_COLLECT_CALL:
+    elif name == 'PowerhouseSnipeCollectCall':
         suitTrack = MovieBossbotLitigationCheats.doSnipe(attack)
     #bookkeeper cheats
-    elif name == BOOKKEEPER_PAPER_CUT_SOAKED:
+    elif name == 'BookkeeperPaperCutSoaked':
         suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
-    elif name == BOOKKEEPER_PAPER_CUT_MARKED:
+    elif name == 'BookkeeperPaperCutMarked':
         suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
-    elif name == BOOKKEEPER_PAPER_CUT:
+    elif name == 'BookkeeperPaperCut':
         suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
-    elif name == BOOKKEEPER_EXPLODING_DOCUMENT:
+    elif name == 'BookkeeperExplodingDocument':
         suitTrack = MovieBossbotLitigationCheats.doExplodingDocument(attack)
-    elif name == BOOKKEEPER_BOOKKEEPING_RETALIATION:
+    elif name == 'BookkeeperBookkeepingRetaliation':
         suitTrack = MovieBossbotLitigationCheats.doBookkeepingRetaliation(attack)
-    elif name == BOOKKEEPER_BOOKKEEPING:
+    elif name == 'BookkeeperBookkeeping':
         suitTrack = MovieBossbotLitigationCheats.doBookkeeping(attack)
     #wiretapper cheats
-    elif name == WIRETAPPER_COLLECT_CALL:
+    elif name == 'WiretapperCollectCall':
         suitTrack = MovieBossbotLitigationCheats.doCollectCall(attack)
-    elif name == WIRETAPPER_COLLECT_CALL_DOT:
+    elif name == 'WiretapperCollectCallDamage':
         suitTrack = MovieBossbotLitigationCheats.doCollectCallDamage(attack)
-    elif name == WIRETAPPER_WIRETAPPED:
+    elif name == 'WiretapperWiretapped':
         suitTrack = MovieBossbotLitigationCheats.doWiretapped(attack)
-    elif name == WIRETAPPER_VOICEMAIL:
+    elif name == 'WiretapperVoicemail':
         suitTrack = MovieBossbotLitigationCheats.doVoicemail(attack)
-    elif name == WIRETAPPER_BROKEN_CONNECTION:
+    elif name == 'WiretapperBrokenConnection':
         suitTrack = MovieBossbotLitigationCheats.doBrokenConnection(attack)
-    elif name == WIRETAPPER_GAG_BAN:
+    elif name == 'WiretapperGagBan':
         suitTrack = MovieBossbotLitigationCheats.doWiretapperGagBan(attack)
     #ambassador cheats
-    elif name == AMBASSADOR_HEAD_ROLLER:
+    elif name == 'AmbassadorHeadRoller':
         suitTrack = MovieBossbotLitigationCheats.doHeadRoller(attack, 2)
-    elif name == AMBASSADOR_HEAD_ROLLER_GROUP:
+    elif name == 'AmbassadorHeadRollerGroup':
         suitTrack = MovieBossbotLitigationCheats.doHeadRollerGroup(attack)
-    elif name == AMBASSADOR_REFINEMENT:
+    elif name == 'AmbassadorRefinement':
         suitTrack = MovieBossbotLitigationCheats.doRefinement(attack)
-    elif name == AMBASSADOR_PHASE_2:
+    elif name == 'AmbassadorPhase2':
         suitTrack = MovieBossbotLitigationCheats.doAmbassadorPhase2(attack)
-    elif name == AMBASSADOR_DAMAGE_UP:
+    elif name == 'AmbassadorDamageUp':
         if suit.isDesperation:
             suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUpDesperation(attack)
         else:
             suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUp(attack)
-    elif name == AMBASSADOR_MANAGERIAL_PROTECTION:
+    elif name == 'AmbassadorManagerialProtection':
         suitTrack = MovieBossbotLitigationCheats.doManagerialProtection(attack)
-    elif name == AMBASSADOR_MANAGERIAL_PROTECTION_IMMUNITY:
+    elif name == 'AmbassadorManagerialProtectionImmunity':
         suitTrack = MovieBossbotLitigationCheats.doManagerialProtectionImmunity(attack)
-    elif name == AMBASSADOR_MULLIGAN:
+    elif name == 'AmbassadorMulligan':
         suitTrack = MovieBossbotLitigationCheats.doMulligan(attack)
         # safety supervisor
-    elif name == SAFETY_HIGH_PRESSURE:
+    elif name == 'SafetyHighPressure':
         suitTrack = MovieSellbotLitigationCheats.doHighPressure(attack)
-    elif name == SAFETY_HEAT_WAVE:
+    elif name == 'SafetyHeatWave':
         suitTrack = MovieSellbotLitigationCheats.doHeatWave(attack)
-    elif name == SAFETY_HEAT_WAVE_CALCULATION:
+    elif name == 'SafetyHeatWaveCalculation':
         suitTrack = MovieSellbotLitigationCheats.doHeatWaveCalculation(attack)
-    elif name == SAFETY_VIOLATION:
+    elif name == 'SafetyViolation':
         suitTrack = MovieSellbotLitigationCheats.doViolation(attack)
-    elif name == SAFETY_PROMOTION:
+    elif name == 'SafetyPromotion':
         suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 2)
         # union buster
-    elif name == UNION_BUSTER_UNION_DUES:
+    elif name == 'UnionBusterUnionDues':
         suitTrack = MovieUniversalCheats.doSynergy(attack)
-    elif name == UNION_BUSTER_UNION_CALCULATOR:
+    elif name == 'UnionBusterUnionCalculator':
         suitTrack = MovieSellbotLitigationCheats.doUnionCalculator(attack)
-    elif name == UNION_BUSTER_UNION_BUST:
+    elif name == 'UnionBusterUnionBust':
         suitTrack = MovieSellbotLitigationCheats.doUnionBust(attack)
-    elif name == UNION_BUSTER_UNION_BUSTER:
+    elif name == 'UnionBusterUnionBuster':
         suitTrack = MovieSellbotLitigationCheats.doUnionBuster(attack)
-    elif name == UNION_BUSTER_UNION_BUSTER_DAMAGE:
+    elif name == 'UnionBusterUnionBusterDamage':
         suitTrack = MovieSellbotLitigationCheats.doUnionBusterDamage(attack)
-    elif name == UNION_BUSTER_UNION_WAGES:
+    elif name == 'UnionBusterUnionWages':
         suitTrack = MovieSellbotLitigationCheats.doUnionWages(attack)
-    elif name == UNION_BUSTER_BREACH_OF_CONTRACT:
+    elif name == 'UnionBusterBreachOfContract':
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContract(attack)
-    elif name == UNION_BUSTER_BREACH_OF_CONTRACT_2:
+    elif name == 'UnionBusterBreachOfContract2':
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
-    elif name == UNION_BUSTER_BREACH_OF_CONTRACT_3:
+    elif name == 'UnionBusterBreachOfContract3':
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
-    elif name == UNION_BUSTER_BREACH_OF_CONTRACT_4:
+    elif name == 'UnionBusterBreachOfContract4':
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
-    elif name == UNION_BUSTER_CONTRACT_ENFORCEMENT:
+    elif name == 'UnionBusterContractEnforcement':
         suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack)
         # racketeer
-    elif name == RACKETEER_PROFITEERING:
+    elif name == 'RacketeerProfiteering':
         suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 2)
-    elif name == RACKETEER_EXTORTION:
+    elif name == 'RacketeerExtortion':
         suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
-    elif name == RACKETEER_EXTORTION_2:
+    elif name == 'RacketeerExtortion2':
         suitTrack = MovieSellbotLitigationCheats.doExtortion2(attack)
-    elif name == RACKETEER_COMPENSATION:
+    elif name == 'RacketeerCompensation':
         suitTrack = MovieSellbotLitigationCheats.doCompensation(attack)
-    elif name == RACKETEER_HUSTLING:
+    elif name == 'RacketeerHustling':
         suitTrack = MovieSellbotLitigationCheats.doHustling(attack)
-    elif name == RACKETEER_RACKETEERING:
+    elif name == 'RacketeerRacketeering':
         suitTrack = MovieSellbotLitigationCheats.doRacketeering(attack)
-    elif name == RACKETEER_PECKING_ORDER_RETALIATION:
+    elif name == 'RacketeerPeckingOrderRetaliation':
         suitTrack = MovieSellbotLitigationCheats.doPeckingOrderGroup(attack)
-    elif name == RACKETEER_PECKING_ORDER_RETALIATION_SOAK:
+    elif name == 'RacketeerPeckingOrderRetaliationSoak':
         suitTrack = doPeckingOrder(attack)
         # radiographer
-    elif name == RADIOGRAPHER_RADIO_INFREQUENCY:
+    elif name == 'RadiographerRadioInfrequency':
         suitTrack = MovieSellbotLitigationCheats.doRadioInfrequency(attack)
-    elif name == RADIOGRAPHER_HOT_TAKE:
+    elif name == 'RadiographerHotTake':
         suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
-    elif name == RADIOGRAPHER_HOT_TAKE_RETALIATION:
+    elif name == 'RadiographerHotTakeRetaliation':
         suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
-    elif name == RADIOGRAPHER_OVERMODULATED:
+    elif name == 'RadiographerOvermodulated':
         suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 2)
         # high roller phase 1
-    elif name == HIGH_ROLLER_NO_ATTACK:
+    elif name == 'HighRollerNoAttack':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-    elif name == HIGH_ROLLER_WHEEL_SPIN:
+    elif name == 'HighRollerWheelSpin':
         suitTrack = MovieHighRollerCheats.doWheelSpin(attack)
-    elif name == HIGH_ROLLER_COMMERCIAL_BREAK:
+    elif name == 'HighRollerCommercialBreak':
         suitTrack = MovieHighRollerCheats.doCommercialBreak(attack)
-    elif name == HIGH_ROLLER_GAME_TIME_SPAWN:
+    elif name == 'HighRollerGameTimeSpawn':
         suitTrack = MovieHighRollerCheats.doGameTimeSpawn(attack)
-    elif name == HIGH_ROLLER_GAME_TIME_COG:
+    elif name == 'HighRollerGameTimeCog':
         suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 1)
-    elif name == HIGH_ROLLER_GAME_TIME_COG_2:
+    elif name == 'HighRollerGameTimeCog2':
         suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 1)
-    elif name == HIGH_ROLLER_BUST:
+    elif name == 'HighRollerBust':
         suitTrack = MovieHighRollerCheats.doBust(attack)
     # high roller phase 2 cheats
-    elif name == HIGH_ROLLER_PHASE_3:
+    elif name == 'HighRollerPhase3':
         suitTrack = MovieHighRollerCheats.doPhase3(attack)
     # high roller phase 3 cheats
-    elif name == HIGH_ROLLER_FREE_CRUISE:
+    elif name == 'HighRollerFreeCruise':
         suitTrack = MovieHighRollerCheats.doFreeCruise(attack)
-    elif name == HIGH_ROLLER_ROLLED:
+    elif name == 'HighRollerRolled':
         suitTrack = MovieHighRollerCheats.doRolled(attack)
-    elif name == HIGH_ROLLER_CONDUCTION:
+    elif name == 'HighRollerConduction':
         suitTrack = MovieHighRollerCheats.doConduction(attack)
-    elif name == HIGH_ROLLER_DICE_ROULETTE_COGS:
+    elif name == 'HighRollerDiceRouletteCogs':
         suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
-    elif name == HIGH_ROLLER_DICE_ROULETTE_TOONS:
+    elif name == 'HighRollerDiceRouletteToons':
         suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
-    elif name == HIGH_ROLLER_DICE_ROULETTE_EVERYONE:
+    elif name == 'HighRollerDiceRouletteEveryone':
         suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
-    elif name == HIGH_ROLLER_DICE_ROULETTE_NOBODY:
+    elif name == 'HighRollerDiceRouletteNobody':
         suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
-    elif name == HIGH_ROLLER_TRICK_OF_THE_LIGHT:
+    elif name == 'HighRollerTrickOfTheLight':
         suitTrack = MovieHighRollerCheats.doTrickOfTheLight(attack)
-    elif name == HIGH_ROLLER_ACE_IN_THE_HOLE:
+    elif name == 'HighRollerAceInTheHole':
         suitTrack = MovieHighRollerCheats.doAceInTheHole(attack)
-    elif name == HIGH_ROLLER_VULNERABLE:
+    elif name == 'HighRollerVulnerable':
         suitTrack = MovieHighRollerCheats.doVulnerable(attack)
-    elif name == HIGH_ROLLER_RAISING_THE_ANTE:
+    elif name == 'HighRollerRaisingTheAnte':
         suitTrack = MovieHighRollerCheats.doRaisingTheAnte(attack)
     # high roller silhouette cheats
-    elif name == HIGH_ROLLER_DONATION:
+    elif name == 'HighRollerDonation':
         suitTrack = MovieHighRollerCheats.doDonation(attack)
-    elif name == HIGH_ROLLER_SYPHON:
+    elif name == 'HighRollerSyphon':
         suitTrack = MovieHighRollerCheats.doSyphon(attack)
-    elif name == HIGH_ROLLER_BAR:
+    elif name == 'HighRollerBar':
         suitTrack = MovieHighRollerCheats.doBar(attack)
-    elif name == HIGH_ROLLER_SINGING_BLUES:
+    elif name == 'HighRollerSingingBlues':
         suitTrack = MovieHighRollerCheats.doSingingBlues(attack)
-    elif name == HIGH_ROLLER_DAMAGE_REDUCTION:
+    elif name == 'HighRollerDamageReduction':
         suitTrack = MovieHighRollerCheats.doDamageReduction(attack)
-    elif name == HIGH_ROLLER_SPLASHBACK:
+    elif name == 'HighRollerSplashback':
         suitTrack = MovieHighRollerCheats.doSplashback(attack)
-    elif name == HIGH_ROLLER_CHEER_RETALIATION:
+    elif name == 'HighRollerCheerRetaliation':
         suitTrack = MovieHighRollerCheats.doSnipe(attack)
     #universal cheats
-    elif name == SYNERGY_FEES:
+    elif name == 'SynergyFees':
         suitTrack = MovieUniversalCheats.doSynergy(attack)
-    elif name == CALCULATING_FEES:
+    elif name == 'CalculatingFees':
         suitTrack = MovieUniversalCheats.doCourtCalculations(attack)
-    elif name == DEATH_CHECK:
+    elif name == 'DeathCheck':
         suitTrack = MovieUniversalCheats.doDeathCheck(attack)
-    elif name == SOAK_REMOVAL:
+    elif name == 'SoakRemoval':
         suitTrack = MovieUniversalCheats.doSoakRemoval(attack)
-    elif name == BAN_LEVEL_4:
+    elif name == 'BanLevel4':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_5:
+    elif name == 'BanLevel5':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_6:
+    elif name == 'BanLevel6':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_7:
+    elif name == 'BanLevel7':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_8:
+    elif name == 'BanLevel8':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_4_5:
+    elif name == 'BanLevel45':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_4_6:
+    elif name == 'BanLevel46':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_4_7:
+    elif name == 'BanLevel47':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_4_8:
+    elif name == 'BanLevel48':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_5_6:
+    elif name == 'BanLevel56':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_5_7:
+    elif name == 'BanLevel57':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_5_8:
+    elif name == 'BanLevel58':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_6_7:
+    elif name == 'BanLevel67':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_6_8:
+    elif name == 'BanLevel68':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LEVEL_7_8:
+    elif name == 'BanLevel78':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TOONUP:
+    elif name == 'BanToonup':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TRAP:
+    elif name == 'BanTrap':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LURE:
+    elif name == 'BanLure':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_THROW:
+    elif name == 'BanThrow':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_SQUIRT:
+    elif name == 'BanSquirt':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_ZAP:
+    elif name == 'BanZap':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_SOUND:
+    elif name == 'BanSound':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_DROP:
+    elif name == 'BanDrop':
         if suit.dna.name == 'frs':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TOONUP_TRAP:
+    elif name == 'BanToonupTrap':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TOONUP_LURE:
+    elif name == 'BanToonupLure':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TOONUP_THROW:
+    elif name == 'BanToonupThrow':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TOONUP_SQUIRT:
+    elif name == 'BanToonupSquirt':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TOONUP_ZAP:
+    elif name == 'BanToonupZap':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TOONUP_SOUND:
+    elif name == 'BanToonupSound':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TOONUP_DROP:
+    elif name == 'BanToonupDrop':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TRAP_LURE:
+    elif name == 'BanTrapLure':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TRAP_THROW:
+    elif name == 'BanTrapThrow':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TRAP_SQUIRT:
+    elif name == 'BanTrapSquirt':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TRAP_ZAP:
+    elif name == 'BanTrapZap':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TRAP_SOUND:
+    elif name == 'BanTrapSound':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_TRAP_DROP:
+    elif name == 'BanTrapDrop':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LURE_THROW:
+    elif name == 'BanLureThrow':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LURE_SQUIRT:
+    elif name == 'BanLureSquirt':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LURE_ZAP:
+    elif name == 'BanLureZap':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LURE_SOUND:
+    elif name == 'BanLureSound':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_LURE_DROP:
+    elif name == 'BanLureDrop':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_THROW_SQUIRT:
+    elif name == 'BanThrowSquirt':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_THROW_ZAP:
+    elif name == 'BanThrowZap':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_THROW_SOUND:
+    elif name == 'BanThrowSound':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_THROW_DROP:
+    elif name == 'BanThrowDrop':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_SQUIRT_ZAP:
+    elif name == 'BanSquirtZap':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_SQUIRT_SOUND:
+    elif name == 'BanSquirtSound':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_SQUIRT_DROP:
+    elif name == 'BanSquirtDrop':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_ZAP_SOUND:
+    elif name == 'BanZapSound':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_ZAP_DROP:
+    elif name == 'BanZapDrop':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name == BAN_SOUND_DROP:
+    elif name == 'BanSoundDrop':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     else:
         notify.warning('unknown attack: %d substituting Finger Wag' % name)
@@ -730,31 +730,31 @@ def doSuitAttack(attack):
     suitPos = suit.getPos(battle)
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     resetTrack = getResetTrack(suit, battle)
-    if name == SCAPEGOAT_COURT_RECORD_BAN:
+    if name == 'ScapegoatCourtRecordBan':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == CASE_MANAGER_COURT_RECORD_BAN:
+    elif name == 'CaseManagerCourtRecordBan':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == STENOGRAPHER_COURT_RECORD_BAN:
+    elif name == 'StenographerCourtRecordBan':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == CASE_MANAGER_LEGALLY_BOUND:
+    elif name == 'CaseManagerLegallyBound':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == CASE_MANAGER_INSURANCE:
+    elif name == 'CaseManagerInsurance':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == CALCULATING_FEES:
+    elif name == 'CalculatingFees':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == SCAPEGOAT_COURT_RECORD_BAN:
+    elif name == 'ScapegoatCourtRecordBan':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == HIGH_ROLLER_NO_ATTACK:
+    elif name == 'HighRollerNoAttack':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == SOAK_REMOVAL:
+    elif name == 'SoakRemoval':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == UNION_BUSTER_UNION_BUSTER_DAMAGE:
+    elif name == 'UnionBusterUnionBusterDamage':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == SAFETY_HEAT_WAVE_CALCULATION:
+    elif name == 'SafetyHeatWaveCalculation':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == SAFETY_VIOLATION:
+    elif name == 'SafetyViolation':
         resetSuitTrack = Sequence(suitTrack)
-    elif name == UNION_BUSTER_UNION_CALCULATOR:
+    elif name == 'UnionBusterUnionCalculator':
         resetSuitTrack = Sequence(suitTrack)
     else:
         resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
@@ -792,7 +792,6 @@ def __makeCancelledNodePath():
 def doDefault(attack):
     notify.debug('building suit attack in doDefault')
     suitName = attack['suitName']
-    attack['id'] = SOAK_REMOVAL
     attack['name'] = 'SoakRemoval'
     attack['animName'] = 'nothing'
     return MovieUniversalCheats.SoakRemoval(attack)
@@ -817,7 +816,6 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     tauntIndex = attack['taunt']
     target = attack['target']
     toon = target[0]['toon']
-    name = attack['id']
     targetPos = toon.getPos(battle)
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     trapStorage = {}
@@ -866,7 +864,6 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
 def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     suit = attack['suit']
     tauntIndex = attack['taunt']
-    name = attack['id']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     if attack[
@@ -934,7 +931,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    name = attack['id']
     suitPos = suit.getPos(battle)
     dmg = target['hp']
     animTrack = Sequence()
@@ -1209,7 +1205,6 @@ def getPropThrowTrack(attack, prop, hitPoints = [], missPoints = [], hitDuration
 
         if missScaleDown:
             propTrack.append(LerpScaleInterval(prop, missScaleDown, MovieUtil.PNT3_NEARZERO))
-    name = attack['id']
     propTrack.append(Func(MovieUtil.removeProp, prop))
     propTrack.append(Func(battle.movie.clearRenderProp, prop))
     return propTrack
@@ -2404,7 +2399,6 @@ def doReprogram(attack):
     tauntIndex = attack['taunt']
     target = attack['target']
     toon = target[0]['toon']
-    name = attack['id']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     battle = attack['battle']
@@ -2619,7 +2613,6 @@ def doMulliganGroup(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    name = attack['id']
     club = globalPropPool.getProp('golf-club')
     tauntIndex = attack['taunt']
     origPos, origHpr = battle.getActorPosHpr(suit)
@@ -2657,7 +2650,6 @@ def doMulligan(attack):
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
-    name = attack['id']
     club = globalPropPool.getProp('golf-club')
     ball = globalPropPool.getProp('golf-ball')
     tauntIndex = attack['taunt']
@@ -2700,7 +2692,6 @@ def doBrainStorm(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    name = attack['id']
     BattleParticles.loadParticles()
     suitType = getSuitBodyType(attack['suitName'])
     partDelay = 1.2
@@ -3958,7 +3949,6 @@ def doVoodooMagic(attack):
     tauntIndex = attack['taunt']
     target = attack['target']
     toon = target[0]['toon']
-    name = attack['id']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     battle = attack['battle']
@@ -5531,7 +5521,6 @@ def doEvictionNotice(attack):
 def doCloseTheLoopNew(attack):
     suit = attack['suit']
     battle = attack['battle']
-    name = attack['id']
     target = attack['target']
     taunt = random.choice(["Don't bring a Gag to a knife fight.",
 "Get to the point!",
@@ -5607,16 +5596,17 @@ def doCloseTheLoopNew(attack):
             )
         ))
     soundTracks.append(getSoundTrack('tt_s_ara_cmg_toonHit.ogg', delay=3.55, node=toon))
-    name = attack['id']
-    if name == DETONATE_3:
-        suitTrack.append(Wait(2))
-        suitTrack.append(doRefinement(attack))
-    if name == REFINEMENT:
-        suitTrack.append(Wait(2))
-        suitTrack.append(doRefinement(attack))
-    if name == MANAGERIAL_PROTECTION:
-        suitTrack.append(Wait(2))
-        suitTrack.append(doManagerialProtection(attack))
+    # I have no clue what to do with this.  I know we have the new method of the cheats, but it seems all of these were kept for some reason.
+    # name = attack['id']
+    # if name == DETONATE_3:
+    #     suitTrack.append(Wait(2))
+    #     suitTrack.append(doRefinement(attack))
+    # if name == REFINEMENT:
+    #     suitTrack.append(Wait(2))
+    #     suitTrack.append(doRefinement(attack))
+    # if name == MANAGERIAL_PROTECTION:
+    #     suitTrack.append(Wait(2))
+    #     suitTrack.append(doManagerialProtection(attack))
     return Parallel(suitTrack, allKnifeTracks, partTracks, toonTracks, soundTracks)
 
 

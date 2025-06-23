@@ -170,7 +170,6 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     tauntIndex = attack['taunt']
     target = attack['target']
     toon = target[0]['toon']
-    name = attack['id']
     targetPos = toon.getPos(battle)
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     trapStorage = {}
@@ -219,7 +218,6 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
 def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     suit = attack['suit']
     tauntIndex = attack['taunt']
-    name = attack['id']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     if attack[
@@ -251,7 +249,6 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
 def getSuitAnimTrackHighRoller(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     suit = attack['suit']
     tauntIndex = attack['taunt']
-    name = attack['id']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     if attack[
@@ -319,7 +316,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    name = attack['id']
     suitPos = suit.getPos(battle)
     dmg = target['hp']
     animTrack = Sequence()
@@ -351,7 +347,6 @@ def getToonTrackCheat(attack, damageDelay=1e-06, damageAnimNames=None, dodgeDela
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    name = attack['id']
     suitPos = suit.getPos(battle)
     dmg = target['hp']
     animTrack = Sequence()
@@ -501,7 +496,6 @@ def getPropThrowTrack(attack, prop, hitPoints = [], missPoints = [], hitDuration
 
         if missScaleDown:
             propTrack.append(LerpScaleInterval(prop, missScaleDown, MovieUtil.PNT3_NEARZERO))
-    name = attack['id']
     propTrack.append(Func(MovieUtil.removeProp, prop))
     propTrack.append(Func(battle.movie.clearRenderProp, prop))
     return propTrack
@@ -646,7 +640,6 @@ def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
     return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
 
 def doNoAttack(attack):
-    name = attack['id']
     suit = attack['suit']
     battle = attack['battle']
     currentBossHealth = -1
@@ -722,7 +715,6 @@ def doSplashback(attack):
     return Parallel(suitTracks, knifeTracks, toonTracks, toonDamageTrack, soundTracks, splashTracks, notifyTracks)
 
 def doVulnerable(attack):
-    name = attack['id']
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence(Func(suit.makeVulnerable))
@@ -912,7 +904,6 @@ def doSingingBlues(attack):
     return Parallel(suitTrack, propTrack, soundTrack, soundTrack1, toonTracks, explodeTracks, explosionTrack)
 
 def doGameTimeSpawn(attack):
-    name = attack['id']
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence(getSuitAnimTrack(attack))
@@ -1608,20 +1599,20 @@ def doWheelSpin(attack):
 def doDiceRoulette(attack):
     suit = attack['suit']
     battle = attack['battle']
-    name = attack['id']
+    name = attack['name']
     suitTrack = Sequence(Wait(2.25), MovieUtil.createSuitLaughIntervalDice(suit), Func(suit.setNeutralAnimation))
     suitTrack2 = Sequence(getSuitAnimTrack(attack))
     soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg', node=suit)
     soundTrack2 = getSoundTrack('cc_s_sfx_ene_hroller_reappear_after_wheel.ogg', delay=7.0, node=suit)
     soundTrack3 = getSoundTrack('cc_s_sfx_ene_hroller_sweep_before_wheel.ogg', delay=3.0, node=suit)
     soundTrack = Parallel(soundTrack2, soundTrack3)
-    if name == HIGH_ROLLER_DICE_ROULETTE_COGS:
+    if name == 'HighRollerDiceRouletteCogs':
         suitTrack.append(doDiceRouletteCogs(attack))
-    elif name == HIGH_ROLLER_DICE_ROULETTE_TOONS:
+    elif name == 'HighRollerDiceRouletteToons':
         suitTrack.append(doDiceRouletteToons(attack))
-    elif name == HIGH_ROLLER_DICE_ROULETTE_EVERYONE:
+    elif name == 'HighRollerDiceRouletteEveryone':
         suitTrack.append(doDiceRouletteAll(attack))
-    elif name == HIGH_ROLLER_DICE_ROULETTE_NOBODY:
+    elif name == 'HighRollerDiceRouletteNobody':
         suitTrack.append(doDiceRouletteNothing(attack))
     return Parallel(suitTrack, soundTrack, suitTrack2)
 

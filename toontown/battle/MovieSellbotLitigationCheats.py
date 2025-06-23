@@ -154,7 +154,6 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     tauntIndex = attack['taunt']
     target = attack['target']
     toon = target[0]['toon']
-    name = attack['id']
     targetPos = toon.getPos(battle)
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     trapStorage = {}
@@ -203,7 +202,6 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
 def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     suit = attack['suit']
     tauntIndex = attack['taunt']
-    name = attack['id']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     if attack[
@@ -271,7 +269,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    name = attack['id']
     suitPos = suit.getPos(battle)
     dmg = target['hp']
     animTrack = Sequence()
@@ -300,7 +297,6 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    name = attack['id']
     suitPos = suit.getPos(battle)
     dmg = target['hp']
     animTrack = Sequence()
@@ -447,7 +443,6 @@ def getPropThrowTrack(attack, prop, hitPoints = [], missPoints = [], hitDuration
 
         if missScaleDown:
             propTrack.append(LerpScaleInterval(prop, missScaleDown, MovieUtil.PNT3_NEARZERO))
-    name = attack['id']
     propTrack.append(Func(MovieUtil.removeProp, prop))
     propTrack.append(Func(battle.movie.clearRenderProp, prop))
     return propTrack

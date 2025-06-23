@@ -170,7 +170,6 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     tauntIndex = attack['taunt']
     target = attack['target']
     toon = target[0]['toon']
-    name = attack['id']
     targetPos = toon.getPos(battle)
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     trapStorage = {}
@@ -219,7 +218,6 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
 def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     suit = attack['suit']
     tauntIndex = attack['taunt']
-    name = attack['id']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     if attack[
@@ -287,7 +285,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    name = attack['id']
     suitPos = suit.getPos(battle)
     dmg = target['hp']
     animTrack = Sequence()
@@ -319,7 +316,6 @@ def getToonTrackCheat(attack, damageDelay=1e-06, damageAnimNames=None, dodgeDela
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    name = attack['id']
     suitPos = suit.getPos(battle)
     dmg = target['hp']
     animTrack = Sequence()
@@ -469,7 +465,6 @@ def getPropThrowTrack(attack, prop, hitPoints = [], missPoints = [], hitDuration
 
         if missScaleDown:
             propTrack.append(LerpScaleInterval(prop, missScaleDown, MovieUtil.PNT3_NEARZERO))
-    name = attack['id']
     propTrack.append(Func(MovieUtil.removeProp, prop))
     propTrack.append(Func(battle.movie.clearRenderProp, prop))
     return propTrack
@@ -1001,7 +996,6 @@ def doRefinement(attack):
     gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + theSuit.height - 0.2)
     explosionTrack = Sequence()
     explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
-    name = attack['id']
     suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
     soundTrack1 = getSoundTrack('SA_repair.ogg', delay=2.5, node=theSuit)
     soundTrack2 = getSoundTrack('SA_refinement.ogg', delay=2, node=theSuit)
@@ -1089,7 +1083,6 @@ def doMulligan(attack):
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
-    name = attack['id']
     club = globalPropPool.getProp('golf-club')
     ball = globalPropPool.getProp('golf-ball')
     tauntIndex = attack['taunt']
