@@ -1071,7 +1071,6 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
     def __suitCanJoinBattle(self, zoneId):
         battle = self.battleMgr.getBattle(zoneId)
-        battle = self.battleMgr.getBattle(zoneId)
         for suit in battle.suits:
             if suit.dna.name == 'lit':
                 if not len(battle.suits) >= 6:
@@ -1087,6 +1086,21 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                     return 1
             if suit.dna.name == 'dsf':
                 if not len(battle.suits) >= 6:
+                    return 1
+            if suit.dna.name == 'tg':
+                if not len(battle.suits) >= 5:
+                    return 1
+            if suit.dna.name == 'laa':
+                if not len(battle.suits) >= 6:
+                    return 1
+            if suit.dna.name == 'whunter':
+                if not len(battle.suits) >= 5:
+                    return 1
+            if suit.dna.name == 'th':
+                if not len(battle.suits) >= 5:
+                    return 1
+            if suit.dna.name == 'ggm':
+                if not len(battle.suits) >= 5:
                     return 1
         if len(battle.suits) >= 4:
             return 0
