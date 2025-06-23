@@ -607,6 +607,22 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
 def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
     return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
 
+def doCeaseAndDesist(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack.append(Wait(1.0))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
+    return Parallel(suitTrack, soundTrack)
+
+def doJuryNotice(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack.append(Wait(1.0))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_jury_notice.ogg'), node=suit))
+    return Parallel(suitTrack, soundTrack)
+
 def doSnap(attack, suit):
     #suit = attack['suit']
     battle = attack['battle']

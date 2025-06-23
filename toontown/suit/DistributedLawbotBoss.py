@@ -986,7 +986,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('----- enterBattleTwo')
         self.cleanupIntervals()
         NametagGlobals.setWant2dNametags(False)
-        NametagGlobals.setWantActiveNametags(True)
+        NametagGlobals.setWantActiveNametags(False)
         base.localAvatar.setFriendsListButtonActive(1)
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(2)
         localAvatar.inventory.setBattleCreditMultiplier(mult)
