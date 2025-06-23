@@ -960,6 +960,10 @@ class TownBattleCogPanel(DirectFrame):
         elif self.cog.dna.name == 'scg' and self.cog.isAngry:
             self.luredManager.show()
             self.enraged.show()
+        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isContracted and self.cog.isLured:
+            self.virtual.show()
+            self.insured.show()
+            self.luredCog3.show()
         elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isInsured and self.cog.isLured:
             self.virtual.show()
             self.insured.show()
@@ -972,6 +976,9 @@ class TownBattleCogPanel(DirectFrame):
             self.virtual.show()
             self.syphon2.show()
             self.damageUp2.show()
+        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isContracted:
+            self.virtual.show()
+            self.insured.show()
         elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isInsured:
             self.virtual.show()
             self.insured.show()
@@ -1071,6 +1078,10 @@ class TownBattleCogPanel(DirectFrame):
             self.skeleton.show()
             self.syphon2.show()
             self.luredCog3.show()
+        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isContracted and self.cog.isLured:
+            self.skeleton.show()
+            self.insured.show()
+            self.luredCog3.show()
         elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isInsured and self.cog.isLured:
             self.skeleton.show()
             self.insured.show()
@@ -1089,6 +1100,9 @@ class TownBattleCogPanel(DirectFrame):
         elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isLured:
             self.skeleton.show()
             self.luredCog2.show()
+        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isContracted:
+            self.skeleton.show()
+            self.insured.show()
         elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isInsured:
             self.skeleton.show()
             self.insured.show()
@@ -1117,6 +1131,10 @@ class TownBattleCogPanel(DirectFrame):
             self.luredManager2.show()
             self.syphon3.show()
             self.damageUpMgr.show()
+        elif self.cog.isSkeleton and self.cog.isContracted:
+            self.skeleton.show()
+            self.luredManager2.show()
+            self.insured2.show()
         elif self.cog.isSkeleton and self.cog.isInsured:
             self.skeleton.show()
             self.luredManager2.show()
@@ -1192,6 +1210,9 @@ class TownBattleCogPanel(DirectFrame):
         elif self.cog.isSkeleton:
             self.skeleton.show()
             self.luredManager2.show()
+        elif not self.cog.getManager() and self.cog.isContracted and self.cog.isLured:
+            self.insured4.show()
+            self.luredCog2.show()
         elif not self.cog.getManager() and self.cog.isInsured and self.cog.isLured:
             self.insured4.show()
             self.luredCog2.show()
@@ -1200,8 +1221,14 @@ class TownBattleCogPanel(DirectFrame):
             self.luredCog2.show()
         elif not self.cog.getManager() and self.cog.isSyphon:
             self.syphon.show()
+        elif not self.cog.getManager() and self.cog.isLured and self.cog.isDamageUp:
+            self.luredCog2.show()
+            self.luredManager.show()
+            self.damageUp2.show()
         elif not self.cog.getManager() and self.cog.isLured:
             self.luredCog.show()
+        elif not self.cog.getManager() and self.cog.isContracted:
+            self.insured4.show()
         elif not self.cog.getManager() and self.cog.isInsured:
             self.insured4.show()
         elif self.cog.isSyphon and self.cog.isLured and self.cog.isDamageUp:
@@ -1224,11 +1251,20 @@ class TownBattleCogPanel(DirectFrame):
             self.soakResist2.show()
             self.syphon3.show()
             self.damageUpMgr.show()
+        elif self.cog.isDamageUp and self.cog.isLured and self.cog.isContracted:
+            self.luredManager.show()
+            self.luredCog2.show()
+            self.damageUp2.show()
+            self.insured3.show()
         elif self.cog.isDamageUp and self.cog.isLured and self.cog.isInsured:
             self.luredManager.show()
             self.luredCog2.show()
             self.damageUp2.show()
             self.insured3.show()
+        elif self.cog.isContracted and self.cog.isLured:
+            self.luredManager.show()
+            self.insured.show()
+            self.luredCog3.show()
         elif self.cog.isInsured and self.cog.isLured:
             self.luredManager.show()
             self.insured.show()
@@ -1275,6 +1311,11 @@ class TownBattleCogPanel(DirectFrame):
         elif self.cog.isSoakImmune:
             self.luredManager.show()
             self.soakResist2.show()
+        elif self.cog.isShielding and self.cog.isContracted and self.cog.isDamageUp:
+            self.luredManager.show()
+            self.absorbing2.show()
+            self.insured2.show()
+            self.damageUpMgr.show()
         elif self.cog.isShielding and self.cog.isInsured and self.cog.isDamageUp:
             self.luredManager.show()
             self.absorbing2.show()
@@ -1294,11 +1335,20 @@ class TownBattleCogPanel(DirectFrame):
         elif self.cog.isLureImmune:
             self.luredManager.show()
             self.lureImmune2.show()
+        elif self.cog.isShielding and self.cog.isContracted and self.cog.isLured:
+            self.luredManager.show()
+            self.absorbing2.show()
+            self.insured2.show()
+            self.luredCog4.show()
         elif self.cog.isShielding and self.cog.isInsured and self.cog.isLured:
             self.luredManager.show()
             self.absorbing2.show()
             self.insured2.show()
             self.luredCog4.show()
+        elif self.cog.isShielding and self.cog.isContracted:
+            self.luredManager.show()
+            self.absorbing2.show()
+            self.insured2.show()
         elif self.cog.isShielding and self.cog.isInsured:
             self.luredManager.show()
             self.absorbing2.show()
@@ -1640,9 +1690,9 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'fm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .08, .08, .08)
         elif name == 'dsk':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .105, .105, .105)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1025, .1025, .1025)
         elif name == 'blr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0725, .0725, .0725)
         elif name == 'dfg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .055, .055, .055)
         elif name == 'yuh':

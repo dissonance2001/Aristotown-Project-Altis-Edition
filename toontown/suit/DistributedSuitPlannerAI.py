@@ -455,10 +455,10 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setSkelecog(1)
         if newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
             newSuit.setManager(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.isSkeleton:
-            newSuit.setSkeleRevives(random.choice((1, 2)))
-        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and newSuit.isSkeleton:
-            newSuit.setSkeleRevives(1)
+      #  if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.isSkeleton:
+          #  newSuit.setSkeleRevives(random.choice((1, 2)))
+        #if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and newSuit.isSkeleton:
+         #   newSuit.setSkeleRevives(1)
         if newSuit.dna.name == 'cg':
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'jdg':
@@ -1071,7 +1071,24 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
     def __suitCanJoinBattle(self, zoneId):
         battle = self.battleMgr.getBattle(zoneId)
-        if len(battle.suits) >= 6:
+        battle = self.battleMgr.getBattle(zoneId)
+        for suit in battle.suits:
+            if suit.dna.name == 'lit':
+                if not len(battle.suits) >= 6:
+                    return 1
+            if suit.dna.name == 'gtk':
+                if not len(battle.suits) >= 6:
+                    return 1
+            if suit.dna.name == 'ffm':
+                if not len(battle.suits) >= 6:
+                    return 1
+            if suit.dna.name == 'crf':
+                if not len(battle.suits) >= 6:
+                    return 1
+            if suit.dna.name == 'dsf':
+                if not len(battle.suits) >= 6:
+                    return 1
+        if len(battle.suits) >= 4:
             return 0
         if battle:
             for s in battle.suits:

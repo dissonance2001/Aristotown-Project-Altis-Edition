@@ -754,7 +754,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == SHRED:
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == SONG_AND_DANCE:
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == SPIN:
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == SYNERGY: #NOT ACTUALLY SYNERGY
@@ -773,6 +773,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera())
     elif name == LAW_BOOK:
         camTrack.append(defaultCamera(openShotDuration=1.5)) # Throw Book
+    elif name == WSI_JURY_NOTICE:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == WSI_CEASE_AND_DESIST:
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
         # litigator cheats
     elif name == LITIGATOR_SNAP_SOAK:
         camTrack.append(defaultCamera(openShotDuration=1.5))
@@ -1032,7 +1036,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == SAFETY_HEAT_WAVE_CALCULATION:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == SAFETY_VIOLATION:
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=2.0))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == SAFETY_PROMOTION:
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
@@ -1051,7 +1059,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = pbpDc.getShowIntervalDesc('Union Busted toons are forced to take damage every round!', attackDuration - 2)
+            pbpDesc = pbpDc.getShowIntervalDesc('Busted Toons are forced to take damage every round!', attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Union Buster!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1062,11 +1070,23 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == UNION_BUSTER_BREACH_OF_CONTRACT:
         camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == UNION_BUSTER_BREACH_OF_CONTRACT_2:
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=0.5))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == UNION_BUSTER_BREACH_OF_CONTRACT_3:
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=0.5))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == UNION_BUSTER_BREACH_OF_CONTRACT_4:
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=0.5))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == UNION_BUSTER_CONTRACT_ENFORCEMENT:
         camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
@@ -1075,28 +1095,34 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == RACKETEER_PROFITEERING:
         camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
     elif name == RACKETEER_EXTORTION:
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == RACKETEER_EXTORTION_2:
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        if attackDuration > 2:
+            camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == RACKETEER_COMPENSATION:
-        camTrack.append(Sequence(randomActorShot(suit, battle, 1, 'suit'),
-                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1),
-                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 2)))
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
     elif name == RACKETEER_HUSTLING:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == RACKETEER_RACKETEERING:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == RACKETEER_PECKING_ORDER_RETALIATION:
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=2.0))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == RACKETEER_PECKING_ORDER_RETALIATION_SOAK:
         camTrack.append(defaultCamera(openShotDuration=1.5))
         # radiographer
     elif name == RADIOGRAPHER_RADIO_INFREQUENCY:
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == RADIOGRAPHER_HOT_TAKE:
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0.5, attackDuration=1.5), randomActorShot(suit, battle, attackDuration - 1.5, 'suit')))
     elif name == RADIOGRAPHER_HOT_TAKE_RETALIATION:
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0.5, attackDuration=1.5), randomActorShot(suit, battle, attackDuration - 1.5, 'suit')))
     elif name == RADIOGRAPHER_OVERMODULATED:
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
@@ -1254,25 +1280,105 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_4_5:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 5 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_4_6:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 6 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_4_7:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 7 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_4_8:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 8 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_5_6:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 6 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_5_7:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 7 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_5_8:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 8 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_6_7:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 7 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_6_8:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 8 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_LEVEL_7_8:
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 7 and 8 gags are off-limits!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        if attack['suit'].dna.name == 'ffm':
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == BAN_TOONUP:
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
         pbpText = attack['playByPlayText']

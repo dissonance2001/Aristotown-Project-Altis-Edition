@@ -52,6 +52,45 @@ def showLureRounds(suit, battle, level):
     elif suit.dna.name == 'dsf' and not trapProp:
         suit.showHpTextLureInfo("LURED 1 ROUND")
         suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'tc' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'tg' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'ggm' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'th' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'whunter' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'laa' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'mes' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'dm' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'dsf' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'nar' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'fm' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'dty' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'dfg' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
     elif suit.isDesperation and not trapProp:
         suit.showHpTextLureInfo("LURED 1 ROUND")
         suit.showHpStringLureDesperation("DESPERATION!")
@@ -64,6 +103,9 @@ def showLureRounds(suit, battle, level):
     elif suit.isManager and not trapProp:
         suit.showHpTextLureInfo("LURED 2 ROUNDS")
         suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.isContracted and not trapProp:
+        suit.showHpTextLureInfo("LURED 2 ROUNDS")
+        suit.showHpStringLureManager("CONTRACTED BENEFIT!")
     elif suit.isInsured and not trapProp:
         suit.showHpTextLureInfo("LURED 2 ROUNDS")
         suit.showHpStringLureManager("INSURED BENEFIT!")

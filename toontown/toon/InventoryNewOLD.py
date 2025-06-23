@@ -350,6 +350,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if 'allGagBoost' in base.localAvatar.battleConditions:
             allGagBoost = True
 
+        groupDamageDown = False
+        if 'groupDamageDown' in base.localAvatar.battleConditions:
+            groupDamageDown = True
+
         encore= False
         if 'encore' in base.localAvatar.battleConditions:
             encore = True
@@ -465,6 +469,27 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         elif track == DROP_TRACK and 'dropBoost' in base.localAvatar.battleConditions:
             damage = math.ceil(damage * ((base.localAvatar.battleConditions['dropBoost'][0] * 0.01) + 1.0))
             damageAppendStr = labelColorize(damage, 'dropBoost')
+        elif track == SOUND_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'groupDamageDown')
+        elif track == SQUIRT_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'groupDamageDown')
+        elif track == ZAP_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'groupDamageDown')
+        elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'groupDamageDown')
+        elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 5:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'groupDamageDown')
+        elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 3:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'groupDamageDown')
+        elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1:
+            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damageAppendStr = labelColorize(damage, 'groupDamageDown')
         else:
             self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
             if allGagBoost and not track == LURE_TRACK:
@@ -1254,9 +1279,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                 self.fireButton['state'] = DGG.DISABLED
                 self.fireButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
         if 'noFires' in base.localAvatar.battleConditions:
-            self.fireButton.hide()
+            self.fireButton['state'] = DGG.DISABLED
         if 'noSOS' in base.localAvatar.battleConditions:
-            self.sosButton.hide()
+            self.sosButton['state'] = DGG.DISABLED
         if settings.get('show-cog-levels', True):
             self.levelsButton['text'] = TTLocalizer.InventoryLevelsHide
         else:
@@ -1276,8 +1301,33 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
                         if self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
                             self.makeUnpressable(button, track, level)
-                        if ('noGags' in base.localAvatar.battleConditions):
+                        if 'noGags' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
                             self.makeBannablePressable(button, track, level)
+                        if track == HEAL_TRACK and 'useToonUp' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeRushJobPressable(button, track, level)
+                        if track == TRAP_TRACK and 'useTrap' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeRushJobPressable(button, track, level)
+                        if track == LURE_TRACK and 'useLure' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeRushJobPressable(button, track, level)
+                        if track == SOUND_TRACK and 'useSound' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeRushJobPressable(button, track, level)
+                        if track == THROW_TRACK and 'useThrow' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeRushJobPressable(button, track, level)
+                        if track == SQUIRT_TRACK and 'useSquirt' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeRushJobPressable(button, track, level)
+                        if track == ZAP_TRACK and 'useZap' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeRushJobPressable(button, track, level)
+                        if track == DROP_TRACK and 'useDrop' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track,
+                                              level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeRushJobPressable(button, track, level)
                         if track == HEAL_TRACK and 'noToonUpGags' in base.localAvatar.battleConditions and not \
                                 (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
                             self.makeBannablePressable(button, track, level)
@@ -1468,11 +1518,20 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             shadowColor = self.ShadowColor
         button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
-        if self.interactivePropTrackBonus == track:
-            button.configure(image_color=(1, 0, 0, 1))
-            self.addToPropBonusIval(button)
+        button.configure(image_color=(1, 0, 0, 1))
+        self.addToPropBonusIval(button)
+
+    def makeRushJobPressable(self, button, track, level):
+        organicBonus = self.toon.checkGagBonus(track, level)
+        propBonus = self.checkPropBonus(track)
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.ShadowBuffedColor
         else:
-            button.configure(image_color=(1, 0, 0, 1))
+            shadowColor = self.ShadowColor
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
+        button.configure(image_color=(0, 1, 0.047, 1))
+        self.addToPropBonusIval(button)
 
     def makeDeletePressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)
@@ -1691,6 +1750,18 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.propBonusIval = Parallel(name='dummyPropBonusIval')
 
     def addToPropBonusIval(self, button):
+        flashObject = button
+        try:
+            flashObject = button.component('image0')
+        except:
+            pass
+
+        goDark = LerpColorScaleInterval(flashObject, 0.5, Point4(0.1, 0.1, 0.1, 1.0), Point4(1, 1, 1, 1), blendType='easeIn')
+        goBright = LerpColorScaleInterval(flashObject, 0.5, Point4(1, 1, 1, 1), Point4(0.1, 0.1, 0.1, 1.0), blendType='easeOut')
+        newSeq = Sequence(goDark, goBright, Wait(0.2))
+        self.propBonusIval.append(newSeq)
+
+    def addToPropBonusIvalRed(self, button):
         flashObject = button
         try:
             flashObject = button.component('image0')

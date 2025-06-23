@@ -90,7 +90,7 @@ ym = (('finger-wag', 'finger-wag', 4), ('pen-squirt', 'fountain-pen', 4))
 mm = (('golf-club-swing', 'golf-club-swing', 4), ('rubber-stamp', 'rubber-stamp', 4), ('smile', 'smile', 4))
 ds =  (('roll-o-dex', 'roll-o-dex', 4), ('effort', 'effort', 4), ('smile', 'smile', 4))
 hh = (('speak', 'speak', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4))
-cr = (('effort', 'effort', 4), ('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
+cr = (('cigar-smoke', 'cigar-smoke', 4), ('effort', 'effort', 4), ('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
 tbc = (('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
 trb = (('golf-club-swing', 'golf-club-swing', 4), ('effort', 'effort', 4))
 dot = (('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
@@ -136,10 +136,10 @@ jb = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-cl
 prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 jr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 prr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-blr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-dvp = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-dsk = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-ffm = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+blr = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
+dvp = (('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
+dsk = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
+ffm = (('cease', 'cease2', 4), ('snap', 'snap', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
 sft = (('quick-jump', 'jump', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4))
 # Cashbots
 sc = (('watercooler', 'watercooler', 4), ('pickpocket', 'pickpocket', 4))
@@ -194,7 +194,7 @@ th = (('effort', 'effort', 4), ('glower', 'glower', 4))
 whunter = (('mob-mentality', 'mob-mentality', 4), ('speak', 'speak', 4))
 tr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 mp = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-laa = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+laa = (('summon', 'summon', 4), ('glower', 'glower', 4), ('cease', 'cease2', 4))
 scg = (('stomp', 'stomp', 4), ('rage', 'rage', 4), ('finger-wag', 'finger-wag', 4), ('neutral-enraged', 'neutral-enraged', 4), ('effort', 'effort', 4), ('defense', 'defense', 4))
 csm = (('throw-insurance', 'throw-insurance', 4), ('roll-o-dex', 'roll-o-dex', 4), ('pen-squirt', 'fountain-pen', 4), ('cease', 'cease', 4))
 ste = (('speak', 'speak', 4), ('cease', 'cease3', 4), ('sanction', 'sanction3', 4))
@@ -1186,6 +1186,7 @@ class Suit(Avatar.Avatar):
         self.isGovernaught = 0
         self.isInsured = 0
         self.isAmbassadorPhase3 = 0
+        self.isContracted = 0
         self.isExecutive = 0
         self.isAngry = 0
         self.isRevived = 0
@@ -3303,6 +3304,7 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         dept = self.style.dept
         phase = 3.5
+        texture2 = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s.png' % self.style.dept)
         texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s.png' % self.style.dept)
         if self.isExecutive and not self.style.name == 'mdm' and not self.style.name == 'dsf' and not self.style.name == 'yuh':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_e.png' % self.style.dept)
@@ -3325,7 +3327,10 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/necktie-w').hide()
         modelRoot.find('**/bowtie').hide()
         modelRoot.find('**/necktie-s').setTexture(texture, 1)
-        modelRoot.find('**/necktie-w').setTexture(texture, 1)
+        if self.style.name == 'laa':
+            modelRoot.find('**/necktie-w').setTexture(texture2, 1)
+        else:
+            modelRoot.find('**/necktie-w').setTexture(texture, 1)
         modelRoot.find('**/bowtie').setTexture(texture, 1)
         if self.style.dept == 'l':
             modelRoot.find('**/bowtie').show()
@@ -3366,6 +3371,9 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'dvp':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'laa':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/bowtie').hide()
         else:
             modelRoot.find('**/necktie-w').show()
         modelRoot.find('**/body').setTexture(texture, 1)
@@ -3589,6 +3597,9 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/bowtie').show()
             modelRoot.setColor((0.729, 0.729, 0.729, 1))
             modelRoot.find('**/bowtie').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'laa':
+            texture2 = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
+            modelRoot.find('**/necktie-w').setTexture(texture2, 1)
         elif self.style.name == 'lbs':
             modelRoot.find('**/necktie-w').hide()
             modelRoot.find('**/necktie-s').show()
@@ -3656,6 +3667,9 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-s').hide()
         elif self.style.name == 'dty':
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').hide()
+            modelRoot.find('**/necktie-s').hide()
+        elif self.style.name == 'laa':
             modelRoot.find('**/bowtie').hide()
             modelRoot.find('**/necktie-s').hide()
         elif self.style.name == 'dar':
@@ -3765,7 +3779,7 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'dvp':
             modelRoot.find('**/necktie-w').hide()
-            modelRoot.find('**/necktie-s').show()
+            modelRoot.find('**/necktie-s').hide()
         elif self.style.name == 'msp':
             modelRoot.find('**/necktie-w').hide()
         else:
@@ -6257,6 +6271,12 @@ class Suit(Avatar.Avatar):
             if self.style.body == 'a' and self.style.name == 'blr' or self.style.name == 'dsk':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
+            if self.style.body == 'a' and self.style.name == 'laa':
+                texture2 = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
+                                             self.style.dept)
+                modelRoot.find('**/necktie-w').setTexture(texture2, 1)
+                modelRoot.find('**/necktie-w').show()
+                modelRoot.find('**/bowtie').hide()
             if self.style.body == 'a' and not self.style.name == 'ts' and not self.style.name == 'kb' and not self.style.name == 'dsk' and not self.style.name == 'blr' \
                 and not self.style.name == 'lbs' and not self.style.name == 'bg' and not self.style.name == 'cg' and not self.style.name == 'jl' and not self.style.name == 'gb' and not self.style.name == 'fb' and not self.style.name == 'tcc':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
@@ -6637,6 +6657,12 @@ class Suit(Avatar.Avatar):
 
     def removeInsured(self):
         self.isInsured = 0
+
+    def makeContracted(self):
+        self.isContracted= 1
+
+    def removeContracted(self):
+        self.isContracted = 0
 
     def makeIntoPhase3(self):
         self.isPhase3 = 1

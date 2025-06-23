@@ -327,6 +327,11 @@ def doSuitAttack(attack):
         suitTrack = doWithdrawal(attack)
     elif name == WRITE_OFF:
         suitTrack = doWriteOff(attack)
+        # wsi cheats
+    elif name == WSI_CEASE_AND_DESIST:
+        suitTrack = MovieLawbotLitigationCheats.doCeaseAndDesist(attack)
+    elif name == WSI_JURY_NOTICE:
+        suitTrack = MovieLawbotLitigationCheats.doJuryNotice(attack)
     #litigator cheats
     elif name == LITIGATOR_SNAP_SOAK:
         suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
@@ -466,7 +471,7 @@ def doSuitAttack(attack):
     elif name == UNION_BUSTER_BREACH_OF_CONTRACT_2:
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
     elif name == UNION_BUSTER_BREACH_OF_CONTRACT_3:
-        suitTrack = MovieSellbotLitigationCheats.doBreachOfContract(attack)
+        suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
     elif name == UNION_BUSTER_BREACH_OF_CONTRACT_4:
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
     elif name == UNION_BUSTER_CONTRACT_ENFORCEMENT:
@@ -746,6 +751,10 @@ def doSuitAttack(attack):
     elif name == UNION_BUSTER_UNION_BUSTER_DAMAGE:
         resetSuitTrack = Sequence(suitTrack)
     elif name == SAFETY_HEAT_WAVE_CALCULATION:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == SAFETY_VIOLATION:
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == UNION_BUSTER_UNION_CALCULATOR:
         resetSuitTrack = Sequence(suitTrack)
     else:
         resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
@@ -5017,6 +5026,85 @@ def doCrunch(attack):
     soundTrack = getSoundTrack('SA_crunch.ogg', delay=3, node=suit)
     return Parallel(suitTrack, toonTrack, soundTrack, numberSpillTrack1, numberSpillTrack2, numberTracks, numberSprayTracks)
 
+def doLiquidateGROUP(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    BattleParticles.loadParticles()
+    partDelay = 0
+    damageDelay = 1.5
+    dodgeDelay = 1
+
+    suitTrack = Sequence(Wait(0.5), getSuitTrack(attack, playRate=1.25))
+    initialCloudHeight = suit.height + 3
+    cloudPosPoints = [Point3(0, 3, initialCloudHeight), VBase3(180, 0, 0)]
+    cloudPropTracks = Parallel()
+    puddleTracks = Parallel()
+    damageAnims = [['melt'], ['jump', 1.5, 0.4]]
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
+    for t in attack['target']:
+        toon = t['toon']
+        rainEffect = BattleParticles.createParticleEffect(file='liquidate')
+        rainEffect2 = BattleParticles.createParticleEffect(file='liquidate')
+        rainEffect3 = BattleParticles.createParticleEffect(file='liquidate')
+        effectColor = Vec4(0.00, 1.00, 1.00, 1.00) #if attack['id'] == ACID_RAIN else Vec4(0.00, 0.00, 0.00, 1.00)
+        BattleParticles.setEffectTexture(rainEffect, 'raindrop', color=effectColor)
+        BattleParticles.setEffectTexture(rainEffect2, 'raindrop', color=effectColor)
+        BattleParticles.setEffectTexture(rainEffect3, 'raindrop', color=effectColor)
+        cloud = globalPropPool.getProp('stormcloud')
+        targetPoint = __toonFacePoint(toon)
+        targetPoint.setZ(targetPoint[2] + 3)
+        cloudPropTrack = Sequence(
+            Func(cloud.pose, 'stormcloud', 0),
+            getPropAppearTrack(cloud, suit, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.7),
+            Func(battle.movie.needRestoreRenderProp, cloud),
+            Func(cloud.wrtReparentTo, render),
+            Wait(0.5),
+            LerpPosInterval(cloud, .5, pos=targetPoint),
+            Wait(partDelay),
+            Parallel(
+                Sequence(
+                    ParticleInterval(rainEffect, cloud, worldRelative=0, duration=4.1, cleanup=True)
+                ),
+                Sequence(
+                    Wait(0.1),
+                    ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=4.0, cleanup=True)
+                ),
+                Sequence(
+                    Wait(0.1),
+                    ParticleInterval(rainEffect3, cloud, worldRelative=0, duration=4.0, cleanup=True)
+                ),
+                Sequence(
+                    ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1),
+                    ActorInterval(cloud, 'stormcloud', startTime=1, duration=4.3)
+                )
+            ),
+            Wait(0.4),
+            LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO),
+            Func(MovieUtil.removeProp, cloud),
+            Func(battle.movie.clearRenderProp, cloud)
+        )
+        cloudPropTracks.append(cloudPropTrack)
+        if t['hp'] != 0:
+            puddle = globalPropPool.getProp('quicksand')
+            puddle.setColor(Vec4(0.00, 0.00, 0.00, 1.00)) #if attack['id'] == ACID_RAIN else Vec4(0.0, 0.0, 0.0, 1))
+            puddle.setHpr(Point3(120, 0, 0))
+            puddle.setScale(0.01)
+            puddleTrack = Sequence(
+                Func(battle.movie.needRestoreRenderProp, puddle),
+                Wait(damageDelay - 0.7),
+                Func(puddle.reparentTo, battle),
+                Func(puddle.setPos, toon.getPos(battle)),
+                LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO),
+                Wait(3.2),
+                LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
+                Func(MovieUtil.removeProp, puddle),
+                Func(battle.movie.clearRenderProp, puddle)
+            )
+            puddleTracks.append(puddleTrack)
+    soundTrack1 = getSoundTrack('SA_liquidate.ogg', delay=2.0, node=suit)
+    soundTrack = Parallel(soundTrack1)
+    return Parallel(suitTrack, toonTracks, cloudPropTracks, soundTrack, puddleTracks)
+
 
 
 def doLiquidate(attack):
@@ -6369,38 +6457,42 @@ def doLegalese(attack):
 def doPeckingOrder(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
+    targets = attack['target']
     throwDuration = 3.03
     throwDelay = 2
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     numBirds = random.randint(10, 20)
     birdTracks = Parallel()
     propDelay = 1.5
-    for i in xrange(0, numBirds):
-        next = globalPropPool.getProp('bird')
-        next.setScale(0.01)
-        next.reparentTo(suit.getRightHand())
-        next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)
-        if dmg > 0:
-            hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6, random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
-        else:
-            hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)
-        birdTrack = Sequence(Wait(throwDelay), Func(battle.movie.needRestoreRenderProp, next), Func(next.wrtReparentTo, battle), Func(next.setHpr, Point3(90, 20, 0)), LerpPosInterval(next, 0.5, hitPoint))
-        scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(next, 0.1, Point3(9, 9, 9)))
-        birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(MovieUtil.removeProp, next)))
-
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        for i in xrange(0, numBirds):
+            next = globalPropPool.getProp('bird')
+            next.setScale(0.01)
+            next.reparentTo(suit.getRightHand())
+            next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)
+            if dmg > 0:
+                hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6,
+                                  random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
+            else:
+                hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)
+            birdTrack = Sequence(Wait(throwDelay), Func(battle.movie.needRestoreRenderProp, next),
+                                 Func(next.wrtReparentTo, battle), Func(next.setHpr, Point3(90, 20, 0)),
+                                 LerpPosInterval(next, 0.5, hitPoint))
+            scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(next, 0.1, Point3(9, 9, 9)))
+            birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(MovieUtil.removeProp, next)))
     damageAnims = []
     damageAnims.append(['cringe',
-     0.01,
-     0.14,
-     0.21])
+                        0.01,
+                        0.14,
+                        0.21])
     damageAnims.append(['cringe',
-     0.01,
-     0.14,
-     0.13])
+                        0.01,
+                        0.14,
+                        0.13])
     damageAnims.append(['cringe', 0.01, 0.43])
-    toonTrack = getToonTrack(attack, damageDelay=2.5, splicedDamageAnims=damageAnims, dodgeDelay=1.75, dodgeAnimNames=['sidestep'], showMissedExtraTime=1.1)
+    toonTrack = getToonTracks(attack, damageDelay=2.5, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
+                              dodgeAnimNames=['duck'], showMissedExtraTime=1.1)
     soundTrack = getSoundTrack('tt_s_ara_cfg_eagleCry.ogg', delay=2, node=suit)
     return Parallel(suitTrack, toonTrack, soundTrack, birdTracks)
