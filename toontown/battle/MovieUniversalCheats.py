@@ -791,7 +791,7 @@ def doCourtCalculations(attack):
     calcPropTrack = getPropTrack(calculator, suit.getRightHand(), calcPosPoints, 0, calcDuration,
                                  scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='court-costs-calculator', animStartTime=0,
                                  animDuration=2.9)
-    soundTrack = getSoundTrack('SA_calculating_costs.ogg', node=suit)
+    soundTrack = getSoundTrack('SA_calculating_costs.ogg')
     return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
 
 def doCourtRecord(attack):

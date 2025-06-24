@@ -734,7 +734,7 @@ def doBayouBellow(attack):
         suitTracks.append(Wait(4.0))
         suitTracks.append(suitTrack)
         suitTracks.append(Func(suit.setNeutralAnimation))
-    soundTrack = getSoundTrack('SA_bellow.ogg', delay=0.1, node=suit)
+    soundTrack = getSoundTrack('SA_bellow.ogg', delay=0.1)
     return Parallel(suitTracks, sprayTrack, soundTrack)
 
 def __soakRemoval(suit, remove=0):
@@ -855,7 +855,7 @@ def doGavelCourtRecord(attack):
             getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
                                scaleUpPoint=Point3(1), scaleUpTime=1.5),
             LerpHprInterval(gavel, 0.5, VBase3(0, 90, 0)),
-            Parallel(getSoundTrack('LB_gavel.ogg', node=toon), Sequence(
+            Parallel(getSoundTrack('LB_gavel.ogg'), Sequence(
                 Wait(0.1),
                 LerpHprInterval(gavel, 0.5, VBase3(0, 0, 0)),
                 LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO)
@@ -875,7 +875,7 @@ def doGavelCourtRecord(attack):
                     Func(toon.showHpText, -dmg, openEnded=0),
                     #Func(__doDamage, toon, dmg, t['died'])
                 ),
-                getSoundTrack('toon_decompress.ogg', node=toon),
+                getSoundTrack('toon_decompress.ogg'),
                 Sequence(
                     ActorInterval(toon, 'jump'),
                     Func(toon.loop, 'neutral')
@@ -968,7 +968,7 @@ def doCaseInsurance(attack):
             if s.dna.name == 'scg':
                 currentBossHealth = s.currHP
         if currentBossHealth >= 1:
-            healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit)
+            healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
             x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
             if suit.isInsured:
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
@@ -985,7 +985,7 @@ def doCaseInsurance(attack):
             suitTrack.append(Func(suit.updateHealthBar, 0))
             suitTracks.append(suitTrack)
         else:
-            healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit)
+            healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
             x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
             if suit.isInsured:
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
@@ -1031,9 +1031,16 @@ def doLegallyBound(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        BattleParticles.loadParticles()
         spinEffect1 = BattleParticles.createParticleEffect(file='spinEffect')
         spinEffect2 = BattleParticles.createParticleEffect(file='spinEffect')
         spinEffect3 = BattleParticles.createParticleEffect(file='spinEffect')
+        BattleParticles.setEffectTexture(spinEffect1, 'snow-particle',
+                                         color=Vec4(random.random(), random.random(), random.random(), 1))
+        BattleParticles.setEffectTexture(spinEffect2, 'snow-particle',
+                                         color=Vec4(random.random(), random.random(), random.random(), 1))
+        BattleParticles.setEffectTexture(spinEffect3, 'snow-particle',
+                                         color=Vec4(random.random(), random.random(), random.random(), 1))
         spinEffect1.reparentTo(toon)
         spinEffect2.reparentTo(toon)
         spinEffect3.reparentTo(toon)
@@ -1057,7 +1064,8 @@ def doLegallyBound(attack):
             spinTracks1.append(getPartTrack(spinEffect1, 1.5, 3.9, [spinEffect1, battle, 0]))
             spinTracks2.append(getPartTrack(spinEffect2, 1.5, 3.9, [spinEffect2, battle, 0]))
             spinTracks3.append(getPartTrack(spinEffect3, 1.5, 3.9, [spinEffect3, battle, 0]))
-            soundTracks.append(getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=2.0, node=suit))
+            soundTracks.append(getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=2.0))
+            soundTracks.append(getSoundTrack('LB_boss_paper_spin.ogg', delay=2.0))
             notifyTracks.append(notifyTrack)
             toonSpinTracks.append(Sequence(Wait(damageDelay + 0.9), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)), LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)), LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)), LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)), LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)), LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5)))
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=damageDelay + 0.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['neutral'], showDamageExtraTime=1.0)
@@ -1117,7 +1125,7 @@ def doCaseInsurancePlanInsurance(attack):
     soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
     multiTrack = Parallel(soundTrack1, soundTrack2)
-    healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit))
+    healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
     return Parallel(suitTrack, suitTracks, healSound, multiTrack, knifeTracks)
 
 def doCaseInsurancePlanSkelecogInsurance(attack):
@@ -1177,7 +1185,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
     #soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
     multiTrack = soundTrack2
-    healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit))
+    healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
     return Parallel(suitTrack, suitTracks, healSound, multiTrack, knifeTracks)
 
 def doEnraged(attack):
@@ -1243,7 +1251,7 @@ def doGavel(attack):
     propTrack = Sequence(
         getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0, scaleUpPoint=Point3(1), scaleUpTime=1.5),
         LerpHprInterval(gavel, 0.5, VBase3(0, 90, 0)),
-        Parallel(getSoundTrack('LB_gavel.ogg', node=toon), Sequence(
+        Parallel(getSoundTrack('LB_gavel.ogg'), Sequence(
             Wait(0.1),
             LerpHprInterval(gavel, 0.5, VBase3(0, 0, 0)),
             LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO)
@@ -1266,7 +1274,7 @@ def doGavel(attack):
                     Wait(0.5),
                     Func(toon.exitFlattened)
                 ),
-                getSoundTrack('toon_decompress.ogg', node=toon),
+                getSoundTrack('toon_decompress.ogg'),
                 Sequence(
                     ActorInterval(toon, 'jump'),
                     Func(toon.loop, 'neutral')

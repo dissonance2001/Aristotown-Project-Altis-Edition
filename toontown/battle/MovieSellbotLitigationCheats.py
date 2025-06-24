@@ -656,7 +656,7 @@ def doHighPressure(attack):
     toonTracks = getToonTracks(attack, damageDelay=4.0, splicedDamageAnims=damageAnims, dodgeDelay=3.1, dodgeAnimNames=['sidestep'])
     soundTrack = getSoundTrack('incoming_whistle.ogg', delay=2.0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=1.5, node=suit)
-    soundTrack1 = getSoundTrack('ENC_cogfall_apart.ogg', delay=4.0, node=suit)
+    soundTrack1 = getSoundTrack('ENC_cogfall_apart.ogg', delay=4.0)
     return Parallel(suitTracks, knifeTracks, sparkTracks, toonTracks, soundTrack, soundTrack1, soundTrack2, explosionTrack, explosionTrack2)
 
 def doHeatWaveCalculation(attack):
@@ -815,7 +815,7 @@ def doPromotion(attack, ind):
                                                    Func(targetSuit.updateHealthBar, 0)),
                                Func(targetSuit.setNeutralAnimation))
     soundTrack = getSoundTrack('TL_hypnotize.ogg', delay=2.5, node=suit)
-    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=5.7, node=suit)
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=5.7)
     return Parallel(suitTrack, sprayTrack, moveTrack, selfDamageTrack, soundTrack2, soundTrack, spinTrack1, spinTrack2, spinTrack3)
 
 def doViolation(attack):
@@ -893,7 +893,7 @@ def doUnionCalculator(attack):
                                  scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='court-costs-calculator',
                                  animStartTime=0,
                                  animDuration=2.9)
-    soundTrack = getSoundTrack('SA_calculating_costs.ogg', node=suit)
+    soundTrack = getSoundTrack('SA_calculating_costs.ogg')
     return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
 
 def doUnionBuster(attack):
@@ -910,7 +910,8 @@ def doUnionBuster(attack):
     cage = loader.loadModel('phase_9/models/cogHQ/square_stomper')
     cagePosition = LerpHprInterval(cage, 0, Point3(0, -90, 0))
     shaft = cage.find('**/shaft')
-    shaft.setScale(0.75, 60.0, 0.75)
+    shaft.setScale(0.75, 120.0, 0.75)
+    shaft.setPos(0, 0, 0)
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()
@@ -926,7 +927,7 @@ def doUnionBuster(attack):
             getPropAppearTrack(cage, battle, cagePos, 0, scaleUpPoint=Point3(1.75), scaleUpTime=0), Parallel(cagePosition),
             Parallel(
                 cage.posInterval(0.5, Point3(toonPos.getX(), y, 0.01), blendType='easeIn')),
-                SoundInterval(base.loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_stomper_large.ogg'), duration=1.0, node=cage)
+                SoundInterval(base.loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_stomper_large.ogg'), duration=1.0)
             ,
             LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0), cage.posInterval(3, Point3(toonPos.getX(), y, 40), blendType='easeIn'),
             Func(MovieUtil.removeProp, cage)
@@ -944,7 +945,7 @@ def doUnionBuster(attack):
                 Wait(.5),
                 Func(toon.exitFlattened)
             ),
-            getSoundTrack('toon_decompress.ogg', node=toon),
+            getSoundTrack('toon_decompress.ogg'),
             Sequence(
                 ActorInterval(toon, 'jump'),
                 Func(toon.loop, 'neutral')
@@ -967,7 +968,8 @@ def doUnionBusterDamage(attack):
         cage = loader.loadModel('phase_9/models/cogHQ/square_stomper')
         cagePosition = LerpHprInterval(cage, 0, Point3(0, -90, 0))
         shaft = cage.find('**/shaft')
-        shaft.setScale(0.75, 60.0, 0.75)
+        shaft.setScale(0.75, 120.0, 0.75)
+        shaft.setPos(0, 0, 0)
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.8, 0.7, 0.5, 1)
         smoke.setBillboardPointEye()
@@ -982,7 +984,7 @@ def doUnionBusterDamage(attack):
             getPropAppearTrack(cage, battle, cagePos, 0, scaleUpPoint=Point3(1.75), scaleUpTime=0), Parallel(cagePosition),
             Parallel(
                 cage.posInterval(0.5, Point3(toonPos.getX(), y, 0.01), blendType='easeIn')),
-                SoundInterval(base.loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_stomper_large.ogg'), duration=1.0, node=cage)
+                SoundInterval(base.loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_stomper_large.ogg'), duration=1.0)
             ,
             LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0), cage.posInterval(3, Point3(toonPos.getX(), y, 40), blendType='easeIn'),
             Func(MovieUtil.removeProp, cage)
@@ -999,7 +1001,7 @@ def doUnionBusterDamage(attack):
                 Wait(.5),
                 Func(toon.exitFlattened)
             ),
-            getSoundTrack('toon_decompress.ogg', node=toon),
+            getSoundTrack('toon_decompress.ogg'),
             Sequence(
                 ActorInterval(toon, 'jump'),
                 Func(toon.loop, 'neutral')
@@ -1037,7 +1039,8 @@ def doUnionBust(attack):
         cage = loader.loadModel('phase_9/models/cogHQ/square_stomper')
         cagePosition = LerpHprInterval(cage, 0, Point3(0, -90, 0))
         shaft = cage.find('**/shaft')
-        shaft.setScale(0.75, 60.0, 0.75)
+        shaft.setScale(0.75, 120.0, 0.75)
+        shaft.setPos(0, 0, 0)
         targetSuitPos = targetSuit.getPos(battle)
         y = targetSuitPos.getY()
         cagePos = [Point3(targetSuitPos.getX(), y, 40.0), targetSuit.getHpr(battle)]
@@ -1046,7 +1049,7 @@ def doUnionBust(attack):
         Parallel(cagePosition),
         Parallel(
             cage.posInterval(0.5, Point3(targetSuitPos.getX(), y, 0.01), blendType='easeIn')),
-            SoundInterval(base.loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_stomper_large.ogg'), duration=1.0, node=cage),
+            SoundInterval(base.loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_stomper_large.ogg'), duration=1.0),
         Wait(1.5),
         LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0), cage.posInterval(3, Point3(targetSuitPos.getX(), y, 40), blendType='easeIn'),
         Func(MovieUtil.removeProp, cage)
@@ -1068,6 +1071,7 @@ def doUnionWages(attack):
     damageDelay = 1.7
     calculator = globalPropPool.getProp('calculator')
     suitType = getSuitBodyType(attack['suitName'])
+    damageSuits = []
     if suitType == 'a':
         calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
         calcDuration = 1.3
@@ -1112,9 +1116,12 @@ def doUnionWages(attack):
     spinTrack1 = getPartTrack(spinEffect1, 1.1, 3.9, [spinEffect1, battle, 0])
     spinTrack2 = getPartTrack(spinEffect2, 1.1, 3.9, [spinEffect2, battle, 0])
     spinTrack3 = getPartTrack(spinEffect3, 1.1, 3.9, [spinEffect3, battle, 0])
+    for targetSuit in battle.activeSuits:
+        if not targetSuit.isContracted and not targetSuit.dna.name == 'dsk':
+            damageSuits.append(targetSuit)
     makeImmune = Func(suit.makeDamageUp)
-    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextCheat, + 100),
-                                Func(suit.showHpString, "1.05x DMG MULTIPLIER!"), Func(suit.setHealthForMe, + 100),
+    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextCheat, + (100 * len(damageSuits))),
+                                Func(suit.showHpString, "1.%sx DMG MULTIPLIER!" % int(1 * len(damageSuits))), Func(suit.setHealthForMe, + (100 * len(damageSuits))),
                                 Func(suit.updateHealthBar, 0))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.0, node=suit)
     return Parallel(suitTrack, calcPropTrack, sprayTrack, soundTrack, makeImmune, managerHealTrack, soundTrack2, spinTrack1, spinTrack2, spinTrack3)
@@ -1185,7 +1192,7 @@ def doContractEnforcement(attack):
     suit = attack['suit']
     theSuit = attack['suit']
     battle = attack['battle']
-    healSound = getSoundTrack('LB_toonup.ogg', node=suit)
+    healSound = getSoundTrack('LB_toonup.ogg')
     suitTracks = Parallel()
     for suit in battle.activeSuits:
         suitTrack = Sequence()
@@ -1254,7 +1261,7 @@ def doProfiteering(attack, ind):
                                                    Func(suit.setHealthForMe, +(targetSuit.currHP / 4)),
                                                    Func(suit.updateHealthBar, 0)),
                                Func(targetSuit.setNeutralAnimation))
-    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=2.0, node=suit)
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=2.0)
     return Parallel(suitTrack, selfDamageTrack, managerHealTrack, soundTrack2)
 
 def doExtortion(attack):
@@ -1363,7 +1370,7 @@ def doCompensation(attack):
     suitTracks = Parallel(getSuitAnimTrack(attack, playRate=1.25))
     suitTracks.append(Wait(3.0))
     soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
-    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=suit)
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     for suit in battle.activeSuits:
         suitTrack = Parallel()
         if suit.currHP < suit.maxHP and not suit.dna.name == 'dvp':
@@ -1513,8 +1520,8 @@ def doHotTake(attack):
     missPoint.setX(missPoint.getX() - 1.1)
     propTrack.append(getPropThrowTrack(attack, tnt, [hitPoint], [missPoint], .25, parent=battle))
     toonTrack = getToonTrackCheat(attack, 0.75, ['slip-forward'], 0.5, ['jump'])
-    soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=0.75, node=suit)
-    soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
+    soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=0.75)
+    soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5)
     notifyTrack = Sequence(Wait(0.75), Func(toon.showHpTextCheat, - int(dmg)),
                            Func(toon.showHpStringSnipe, "BOMBED!"))
     return Parallel(explodeTracks, suitTrack, toonTrack, notifyTrack, soundTrack, soundTrack2, propTrack, explosionTrack, explosionTrack2)
@@ -1543,7 +1550,7 @@ def doOvermodulated(attack, ind):
     suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
     selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + .5), Parallel(ActorInterval(targetSuit, 'slip-backward'),
                                                    Func(targetSuit.showHpString, "+ 1 ATTACK!")), Func(targetSuit.setNeutralAnimation))
-    soundTrack = getSoundTrack('SA_haymaker.ogg', delay=suit.getDuration('walk') + .5, node=suit)
+    soundTrack = getSoundTrack('SA_haymaker.ogg', delay=suit.getDuration('walk') + .5)
     soundTrack1 = getSoundTrack('SA_sanction.ogg', delay=suit.getDuration('walk'), node=suit)
     return Parallel(suitTrack, moveTrack, selfDamageTrack, soundTrack, soundTrack1)
 

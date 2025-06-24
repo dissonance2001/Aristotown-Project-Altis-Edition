@@ -299,13 +299,13 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'prr':
         actualLevel = relLevel + 89
     elif name == 'blr':
-        actualLevel = relLevel + 27
+        actualLevel = relLevel + 31
     elif name == 'dvp':
-        actualLevel = relLevel + 31
-    elif name == 'dsk':
-        actualLevel = relLevel + 31
-    elif name == 'ffm':
         actualLevel = relLevel + 37
+    elif name == 'dsk':
+        actualLevel = relLevel + 37
+    elif name == 'ffm':
+        actualLevel = relLevel + 43
     elif name == 'sft':
         actualLevel = relLevel + 65
     elif name == 'ddv':
@@ -2328,7 +2328,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Radiographer',
 		'pluralname': 'Radiographers',
 		'level': 23,
-		'hp':(3750,),
+		'hp':(4220,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(75,),
@@ -2382,7 +2382,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Racketeer',
 		'pluralname': 'Racketeers',
 		'level': 24,
-		'hp':(4250,),
+		'hp':(4000,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(75,),
@@ -2394,11 +2394,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               ('Liquidate',
                (38,),
                (85,),
-               (20,)),
+               (20,), ATK_TGT_GROUP),
               ('PeckingOrder',
                (45,),
                (85,),
-               (15,)),
+               (15,), ATK_TGT_DOUBLE),
               ('Tremor',
                (34,),
                (90,),
@@ -2452,7 +2452,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Union Buster',
 		'pluralname': 'Union Busters',
 		'level': 25,
-		'hp':(4000,),
+		'hp':(4335,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(75,),
@@ -2534,7 +2534,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Safety Supervisor',
 		'pluralname': 'Safety Supervisors',
 		'level': 26,
-		'hp':(4500,),
+		'hp':(4660,),
 		'def':(65,),
 		'freq':(0,),
 		'acc':(75,),
@@ -2546,11 +2546,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
             ('Fired',
               (38,),
               (75,),
-              (20,)),
+              (20,), ATK_TGT_GROUP),
               ('HotAir',
                (35,),
                (85,),
-               (15,)),
+               (15,), ATK_TGT_DOUBLE),
               ('RedTape',
                (36,),
                (90,),

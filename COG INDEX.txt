@@ -202,10 +202,10 @@ sft - Pacesetter Level 66.mgr
 prr - Videographer Level 90.mgr (broken)
 
 	Sellbot 'Litigation' Team:
-blr - Radiographer Level 28.mgr v2.0
-dvp - Racketeer Level 32.mgr
-dsk - Union Buster Level 32.mgr v2.0
-ffm - Safe-ty Supervisor Level 38.mgr
+blr - Radiographer Level 32.mgr
+dvp - Racketeer Level 38.mgr
+dsk - Union Buster Level 38.mgr
+ffm - Safe-ty Supervisor Level 44.mgr
 
 =============BOARDBOTS:===============
 	Regular Cogs:

@@ -2240,7 +2240,7 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'blr':
             self.scale = 6.8 / aSize
             self.handColor = VBase4(0.612, 0.376, 0.608, 1)
-            self.generateBody()
+            self.generateBodyHybrid()
             self.generateHead2('skeleskull_A')
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
             for headPart in self.headParts:
@@ -2262,7 +2262,7 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'dsk':
             self.scale = 7.2 / aSize
             self.handColor = VBase4(0.604, 0.463, 0.62, 1)
-            self.generateBody()
+            self.generateBodyHybrid()
             self.generateHead2('skeleskull_A')
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
             for headPart in self.headParts:

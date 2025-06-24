@@ -2,7 +2,7 @@
 model-path resources
 
 # Server:
-server-version AristoTown-Altis-Edition-1.7.0
+server-version AristoTown-Altis-Edition-1.8.0
 min-access-level 700
 accountdb-type local
 shard-low-pop 50

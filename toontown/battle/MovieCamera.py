@@ -773,6 +773,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera())
     elif name == 'LawBook':
         camTrack.append(defaultCamera(openShotDuration=1.5)) # Throw Book
+    elif name == 'ThrowBook':
+        camTrack.append(defaultCamera(openShotDuration=1.5))  # Throw Book
     elif name == 'WSIJuryNotice':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'WSICeaseAndDesist':

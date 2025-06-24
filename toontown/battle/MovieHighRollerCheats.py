@@ -900,7 +900,7 @@ def doSingingBlues(attack):
                          Func(MovieUtil.removeProps, [receiver, phone]))
     toonTracks = getToonTracks(attack, 2.8, ['slip-backward'], 4.7, ['jump'])
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=0.5, node=suit)
-    soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.8, node=suit)
+    soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.8)
     return Parallel(suitTrack, propTrack, soundTrack, soundTrack1, toonTracks, explodeTracks, explosionTrack)
 
 def doGameTimeSpawn(attack):
@@ -1450,7 +1450,7 @@ def doPhase3(attack):
     suitTrack = Sequence(Func(suit.loop, 'neutral2'), Wait(13.2), MovieUtil.createSuitLaughInterval2(suit), Wait(1.0))
     talkTrack = Sequence(Func(suit.setChatAbsolute, "AND NOW FOR THE FFFTAR OF OUR FFHOW!!!!!!", CFSpeech | CFTimeout), Wait(2.8), Func(suit.setChatAbsolute, "THAT'FF RIGHT EYE-FFPOT FFPOTLIGHT, thiff turnfftyleff been hot all night, let'ff ffee if you can handle the heat!", CFSpeech | CFTimeout), Wait(3.7), Func(suit.setChatAbsolute,  "This duet jufft got a hip hump bump to a five-part big band, babe!", CFSpeech | CFTimeout), Wait(3.7),
                          Func(suit.setChatAbsolute,  "I'm the hottest fftar on fftage! Ffo come on inamorata, let'ff burn a hole in those goggle boffeff!", CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute, "Better ffmile before ya burn out!", CFSpeech | CFTimeout))
-    soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg', delay=13.2, node=suit)
+    soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg', delay=13.2)
     suitTrack.append(Func(suit.makeIntoPhase3))
     suitTrack.append(Func(suit.makeImmortal))
     suitTrack.append(Func(suit.makeUnVulnerable))
@@ -1570,7 +1570,7 @@ def doBust(attack):
         suitTrack = Sequence(MovieUtil.createSuitBustInterval(suit))
         suitTrack.append(Func(suit.setNeutralAnimation))
         talkTrack = Sequence(getSuitAnimTrack(attack))
-        soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg', delay=0.5, node=suit)
+        soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg', delay=0.5)
         soundTrack2 = getSoundTrack('SA_bash.ogg', delay=5.0, node=suit)
         if dmg > 0:
             toonTracks.append(toonTrack)
@@ -1590,7 +1590,7 @@ def doWheelSpin(attack):
     if not suit.dna.name == 'crf':
         suitTrack.append(Func(suit.makeImmortal))
         suitTrack.append(Func(suit.makeShielding))
-    soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg', node=suit)
+    soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg')
     soundTrack2 = getSoundTrack('cc_s_sfx_ene_hroller_reappear_after_wheel.ogg', delay=7.0, node=suit)
     soundTrack3 = getSoundTrack('cc_s_sfx_ene_hroller_sweep_before_wheel.ogg', delay=3.0, node=suit)
     suitTrack.append(Func(suit.setNeutralAnimation))
@@ -1602,7 +1602,7 @@ def doDiceRoulette(attack):
     name = attack['name']
     suitTrack = Sequence(Wait(2.25), MovieUtil.createSuitLaughIntervalDice(suit), Func(suit.setNeutralAnimation))
     suitTrack2 = Sequence(getSuitAnimTrack(attack))
-    soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg', node=suit)
+    soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg')
     soundTrack2 = getSoundTrack('cc_s_sfx_ene_hroller_reappear_after_wheel.ogg', delay=7.0, node=suit)
     soundTrack3 = getSoundTrack('cc_s_sfx_ene_hroller_sweep_before_wheel.ogg', delay=3.0, node=suit)
     soundTrack = Parallel(soundTrack2, soundTrack3)
@@ -1622,7 +1622,7 @@ def doWheelSpin2(attack):
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=1, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'), Wait(1.8), LerpPosHprInterval(camera, duration=0.5, pos=Point3(4, -11, 2), hpr=Point3(30, 0, 0), blendType='easeInOut'), Wait(2), LerpPosHprInterval(camera, duration=0, pos=Point3(3, -5, 10), hpr=Point3(30, -15, 0), blendType='easeInOut'), Wait(3.2), LerpPosHprInterval(camera, duration=0.5, pos=Point3(0, -15, 3), hpr=Point3(0, 10, 0), blendType='easeInOut'))
     suitTrack = Sequence(MovieUtil.createSuitLaughInterval(suit), ActorInterval(suit, 'snap'), Func(suit.setNeutralAnimation))
     talkTrack = Sequence(Wait(8.0), Func(suit.setChatAbsolute, "Alright, alright, let'ff get thoffe efftraff on ffet, baby doll. Bring 'em in.", CFSpeech | CFTimeout), Wait(2.8), Func(suit.setChatAbsolute, "Peep your eyeff, we've got ffo much in fftore today for you!", CFSpeech | CFTimeout))
-    soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg', node=suit)
+    soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg')
     soundTrack2 = getSoundTrack('cc_s_sfx_ene_hroller_reappear_after_wheel.ogg', delay=7.0, node=suit)
     soundTrack3 = getSoundTrack('cc_s_sfx_ene_hroller_sweep_before_wheel.ogg', delay=3.0, node=suit)
     soundTrack4 = getSoundTrack('SA_bash.ogg', delay=8.0, node=suit)
@@ -1953,7 +1953,7 @@ def doGameTimeCog2(attack, ind):
         head = headPart
     cagePropTrack = Sequence(
         getPropAppearTrack(cage, targetSuit, cagePos, 1, scaleUpPoint=Point3(1.5, 1.5, 1.5), scaleUpTime=0),
-        Wait(13), Parallel(SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg'), node=targetSuit),
+        Wait(13), Parallel(SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg')),
         Func(cage.find('**/spotlight').hide),
         Parallel(cagePosition, Func(cage.reparentTo, head)),
         Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn'))), Wait(2),
@@ -2096,7 +2096,7 @@ def doGameTimeCog(attack, ind):
         head = headPart
     cagePropTrack = Sequence(
         getPropAppearTrack(cage, targetSuit, cagePos, 1, scaleUpPoint=Point3(1.5, 1.5, 1.5), scaleUpTime=0),
-        Wait(13), Parallel(SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg'), node=targetSuit),
+        Wait(13), Parallel(SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg')),
         Func(cage.find('**/spotlight').hide),
         Parallel(cagePosition, Func(cage.reparentTo, head)),
         Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn'))), Wait(2),
@@ -2367,7 +2367,7 @@ def doRaisingTheAnte(attack):
                 resetColor(torsoParts),
                 resetColor(legsParts)
             ))
-    soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.0, node=suit)
+    soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.0)
 
     return Parallel(suitTrack, partTracks, explosionTracks, soundTrack1, toonTracks)
 

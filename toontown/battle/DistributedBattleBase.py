@@ -1452,7 +1452,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         adjustTrack.append(Func(av.headsUp, self, destPos))
         adjustTrack.append(LerpPosInterval(av, adjustTime, destPos, other=self))
         adjustTrack.append(Func(av.setHpr, self, destHpr))
-        adjustTrack.append(Func(av.loop, 'neutral'))
+        adjustTrack.append(Func(av.setNeutralAnimation))
         return adjustTrack
 
     def __adjust(self, ts, callback):

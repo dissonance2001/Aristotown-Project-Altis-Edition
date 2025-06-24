@@ -432,10 +432,7 @@ def doSuitAttack(attack):
     elif name == 'AmbassadorPhase2':
         suitTrack = MovieBossbotLitigationCheats.doAmbassadorPhase2(attack)
     elif name == 'AmbassadorDamageUp':
-        if suit.isDesperation:
-            suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUpDesperation(attack)
-        else:
-            suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUp(attack)
+        suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUp(attack)
     elif name == 'AmbassadorManagerialProtection':
         suitTrack = MovieBossbotLitigationCheats.doManagerialProtection(attack)
     elif name == 'AmbassadorManagerialProtectionImmunity':
@@ -755,6 +752,8 @@ def doSuitAttack(attack):
     elif name == 'SafetyViolation':
         resetSuitTrack = Sequence(suitTrack)
     elif name == 'UnionBusterUnionCalculator':
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == 'WiretapperCollectCallDamage':
         resetSuitTrack = Sequence(suitTrack)
     else:
         resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
@@ -1117,29 +1116,9 @@ def getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, sho
 
 def getAllyToonsDodgeParallel(target):
     toon = target['toon']
-    leftToons = target['leftToons']
-    rightToons = target['rightToons']
-    if len(leftToons) > len(rightToons):
-        PoLR = rightToons
-        PoMR = leftToons
-    else:
-        PoLR = leftToons
-        PoMR = rightToons
-    upper = 1 + 4 * abs(len(leftToons) - len(rightToons))
-    if random.randint(0, upper) > 0:
-        toonDodgeList = PoLR
-    else:
-        toonDodgeList = PoMR
-    if toonDodgeList is leftToons:
-        sidestepAnim = 'sidestep-left'
-        soundEffect = globalBattleSoundCache.getSound('AV_side_step.ogg')
-    else:
-        sidestepAnim = 'sidestep-right'
-        soundEffect = globalBattleSoundCache.getSound('AV_jump_to_side.ogg')
+    sidestepAnim = random.choice(('sidestep-right', 'sidestep-left'))
+    soundEffect = globalBattleSoundCache.getSound(random.choice(('AV_jump_to_side.ogg', 'AV_side_step.ogg')))
     toonTracks = Parallel()
-    for t in toonDodgeList:
-        toonTracks.append(Sequence(ActorInterval(t, sidestepAnim), Func(t.loop, 'neutral')))
-
     toonTracks.append(Sequence(ActorInterval(toon, sidestepAnim), Func(toon.loop, 'neutral')))
     toonTracks.append(Sequence(Wait(0.5), SoundInterval(soundEffect, node=toon)))
     return toonTracks
@@ -5103,45 +5082,50 @@ def doLiquidate(attack):
     target = attack['target']
     dmg = target[0]['hp']
     toon = target[0]['toon']
-    BattleParticles.loadParticles()
-    rainEffect = BattleParticles.createParticleEffect(file='liquidate')
-    rainEffect2 = BattleParticles.createParticleEffect(file='liquidate')
-    rainEffect3 = BattleParticles.createParticleEffect(file='liquidate')
-    cloud = globalPropPool.getProp('stormcloud')
-    suitType = getSuitBodyType(attack['suitName'])
     partDelay = 0
     damageDelay = 1.5
     dodgeDelay = 1
+    cloudPropTracks = Parallel()
+    puddleTracks = Parallel()
     suitTrack = Sequence(Wait(0.5), getSuitTrack(attack, playRate=1.25))
-    initialCloudHeight = suit.height + 3
-    cloudPosPoints = [Point3(0, 3, initialCloudHeight), VBase3(180, 0, 0)]
-    cloudPropTrack = Sequence()
-    cloudPropTrack.append(Func(cloud.pose, 'stormcloud', 0))
-    cloudPropTrack.append(getPropAppearTrack(cloud, suit, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.25))
-    cloudPropTrack.append(Func(battle.movie.needRestoreRenderProp, cloud))
-    cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
-    targetPoint = __toonFacePoint(toon)
-    targetPoint.setZ(targetPoint[2] + 3)
-    cloudPropTrack.append(Wait(0.6))
-    cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
-    cloudPropTrack.append(Wait(partDelay))
-    cloudPropTrack.append(Parallel(Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=2.1, cleanup=True)), Sequence(Wait(0.1), ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=2.0, cleanup=True)), Sequence(Wait(0.1), ParticleInterval(rainEffect3, cloud, worldRelative=0, duration=2.0, cleanup=True)), Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=2.3))))
-    cloudPropTrack.append(Wait(0.4))
-    cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
-    cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
-    cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
     damageAnims = [['melt'], ['jump', 1.5, 0.4]]
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_liquidate.ogg', delay=1.0, node=suit)
-    if dmg > 0:
-        puddle = globalPropPool.getProp('quicksand')
-        puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
-        puddle.setHpr(Point3(120, 0, 0))
-        puddle.setScale(0.01)
-        puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Wait(damageDelay - 0.7), Func(puddle.reparentTo, battle), Func(puddle.setPos, toon.getPos(battle)), LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
-        return Parallel(suitTrack, toonTrack, cloudPropTrack, soundTrack, puddleTrack)
-    else:
-        return Parallel(suitTrack, toonTrack, cloudPropTrack, soundTrack)
+    for t in attack['target']:
+        toon = t['toon']
+        BattleParticles.loadParticles()
+        cloud = globalPropPool.getProp('stormcloud')
+        rainEffect = BattleParticles.createParticleEffect(file='liquidate')
+        rainEffect2 = BattleParticles.createParticleEffect(file='liquidate')
+        rainEffect3 = BattleParticles.createParticleEffect(file='liquidate')
+        initialCloudHeight = suit.height + 3
+        cloudPosPoints = [Point3(0, 3, initialCloudHeight), VBase3(180, 0, 0)]
+        cloudPropTrack = Sequence()
+        cloudPropTrack.append(Func(cloud.pose, 'stormcloud', 0))
+        cloudPropTrack.append(getPropAppearTrack(cloud, suit, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.25))
+        cloudPropTrack.append(Func(battle.movie.needRestoreRenderProp, cloud))
+        cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
+        targetPoint = __toonFacePoint(toon)
+        targetPoint.setZ(targetPoint[2] + 3)
+        cloudPropTrack.append(Wait(0.6))
+        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
+        cloudPropTrack.append(Wait(partDelay))
+        cloudPropTrack.append(Parallel(Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=2.1, cleanup=True)), Sequence(Wait(0.1), ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=2.0, cleanup=True)), Sequence(Wait(0.1), ParticleInterval(rainEffect3, cloud, worldRelative=0, duration=2.0, cleanup=True)), Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=2.3))))
+        cloudPropTrack.append(Wait(0.4))
+        cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
+        cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
+        cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
+        cloudPropTracks.append(cloudPropTrack)
+        if t['hp'] != 0:
+            puddle = globalPropPool.getProp('quicksand')
+            puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
+            puddle.setHpr(Point3(120, 0, 0))
+            puddle.setScale(0.01)
+            puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Wait(damageDelay - 0.7), Func(puddle.reparentTo, battle), Func(puddle.setPos, toon.getPos(battle)), LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
+            puddleTracks.append(puddleTrack)
+    soundTrack1 = getSoundTrack('SA_liquidate.ogg', delay=1.0, node=suit)
+    soundTrack = Parallel(soundTrack1)
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay,
+                             dodgeAnimNames=['sidestep'])
+    return Parallel(suitTrack, toonTracks, puddleTracks, cloudPropTracks, soundTrack)
 
 		
 def doAcidRain(attack):

@@ -417,89 +417,29 @@ class Avatar(Actor, ShadowCaster):
             ).start()
 
     def checkCogHP(self, battle):
-        from toontown.battle import MovieUtil
-        if self.getHP() <= 0:
-            Parallel(MovieUtil.createSuitDeathTrack(self, battle), Func(battle.unlureSuit, self)).start()
-        else:
-            pass
+        pass
 
     def checkCogHPBomb(self, battle):
-        from toontown.battle import MovieUtil
-        if self.getHP() <= 0:
-            Parallel(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self)).start()
-        else:
-            pass
+        pass
 
     def checkCogHPZap(self, battle):
-        from toontown.battle import MovieUtil
-        if self.getHP() <= 0:
-            Parallel(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self)).start()
-        else:
-            pass
+        pass
 
     def checkCogHPLaserRevive(self, battle):
-        from toontown.battle import MovieUtil
-        if self.getHP() <= 0:
-            Parallel(MovieUtil.createSuitReviveTrackVirtual(self, battle), Func(battle.unlureSuit, self)).start()
-        else:
-            pass
+        pass
 
     def checkCogHPLaser(self, battle):
-        from toontown.battle import MovieUtil
-        if self.getHP() <= 0:
-            Parallel(MovieUtil.createVirtualSuitDeathTrack(self, battle), Func(battle.unlureSuit, self)).start()
-        else:
-            pass
+        pass
 
     def checkCogHPRevive(self, battle):
-        from toontown.battle import MovieUtil
-        if self.getHP() <= 0:
-            Parallel(MovieUtil.createSuitReviveTrack(self, battle), Func(battle.unlureSuit, self)).start()
-        else:
-            pass
+        pass
 
 
     def setNeutralAnimation(self):
-        if self.getDizzy():
-            Sequence(Func(self.loop, 'lured')
-                     ).start()
-        elif self.isChainsawPhase2:
-            Sequence(
-                Func(self.loop, 'neutral-override%s' % ('-glitched' if self.healthCondition >= 8 and not 12 and not 13 else '',))
-                ).start()
-        elif self.isOttomanPhase2:
-            Sequence(Func(self.loop, 'pace')
-                     ).start()
-        elif self.isAngry:
-            Sequence(Func(self.loop, 'neutral-enraged')
-                     ).start()
-        elif self.isImmortal and not self.dna.name == 'dsf':
-            Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
-                     ).start()
-        elif self.isVulnerable and self.dna.name == 'crf':
-            Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
-                     ).start()
-        else:
-            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
-            ).start()
+        pass
 
     def setNeutralAnimationTrap(self):
-        if self.isAngry:
-            Sequence(Func(self.loop, 'neutral-enraged')
-                     ).start()
-        elif self.isChainsawPhase2:
-            Sequence(
-                Func(self.loop, 'neutral-ovveride%s' % ('-glitched' if self.healthCondition >= 8 and not 12 and not 13 else '',))
-                ).start()
-        elif self.isImmortal and not self.dna.name == 'dsf':
-            Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
-                     ).start()
-        elif self.isVulnerable and self.dna.name == 'crf':
-            Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
-                     ).start()
-        else:
-            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and not 12 and not 13 else '',))
-            ).start()
+        pass
 
     def setChatAbsoluteTrap(self, chatString, chatFlags, dialogue=None, interrupt=True):
         searchString = chatString.lower()
