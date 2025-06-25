@@ -3551,8 +3551,6 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[2]
-                targetSuit.setHP(1000)
-                targetSuit.setMaxHP(1000)
                 targetSuit.setManager(1)
                 self.setSuitCondition(targetSuit.doId, 'shielding', 1, 99, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'promotioncalculator', 0, 0, 'setBoth')
@@ -4984,7 +4982,7 @@ class BattleCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'ffm': #safety supervisor
                 if len(self.battle.activeSuits) >= 6 and (x + 1) % 2 == 0:
                     self.setSuitCondition(suitId, 'highpressurecalculator', 1, 10, 'setBoth')
-                if len(self.battle.activeSuits) >= 3 and (x + 2) % 5 == 0:
+                if len(self.battle.activeSuits) >= 3 and (x + 3) % 4 == 0:
                     self.setSuitCondition(suitId, 'promotioncalculator', 1, 10, 'setBoth')
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'heatwavecalculationcalculator', 1, 10, 'setBoth')
@@ -5381,36 +5379,36 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 14  # Breach Of Contract Soaked
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != NO_ATTACK:
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
+            #    if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                  #  attack = getDefaultSuitAttack()
+                   # attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                  #  attack[SUIT_ATK_COL] = 14  # Breach Of Contract Soaked
+                   # attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                 #   if attack[SUIT_TGT_COL] == []:
+                   #     continue
+                   # attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                   # self.__calcSuitAtkHpALT(attack)
+                   # if attack[SUIT_ATK_COL] != NO_ATTACK:
+                    #    if self.__suitAtkAffectsGroup(attack):
+                     #       for currTgt in self.battle.activeToons:
+                        #        self.__updateSuitAtkStat(currTgt)
 
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
+                      #  else:
+                          #  for currTgt in attack[SUIT_TGT_COL]:
+                           #     self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                  #  targets = self.__createSuitTargetList(attack)
+                  #  allTargetsDead = True
+                   # for currTgt in targets:
+                     #   if self.__getToonHp(currTgt) > 0:
+                         #   allTargetsDead = False
+                         #   break
 
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
+                    #if allTargetsDead:
+                        #attack = getDefaultSuitAttack()
+                   # if self.__attackHasHit(attack, suit=1):
+                       # self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                 #   attack[SUIT_BEFORE_TOONS_COL] = 0
+                   # self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId

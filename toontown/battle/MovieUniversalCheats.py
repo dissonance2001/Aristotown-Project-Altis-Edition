@@ -246,17 +246,17 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     return track
 
 
-def getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs):
+def getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs, softStop = 0):
     particleEffect = partExtraArgs[0]
     parent = partExtraArgs[1]
     if len(partExtraArgs) > 2:
         worldRelative = partExtraArgs[2]
     else:
         worldRelative = 1
-    return Sequence(Wait(startDelay), ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True))
+    return Sequence(Wait(startDelay), ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True, softStopT=softStop))
 
 
-def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelative = 1):
+def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelative = 1, softStop = 0):
     '''
     Author: Professor Control
     '''
@@ -272,7 +272,7 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
-        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]))
+        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]), softStop)
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
     return partTracks
@@ -756,8 +756,8 @@ def doSynergy(attack):
     particleEffect = BattleParticles.createParticleEffect('Synergy')
     waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
     suitTrack = getSuitAnimTrack(attack)
-    partTrack = getPartTrack(particleEffect, 1.0, 1.9, [particleEffect, suit, 0])
-    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 1.9, [waterfallEffect, suit, 0])
+    partTrack = getPartTrack(particleEffect, 1.0, 3.9, [particleEffect, suit, 0], softStop=-2)
+    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.9, [waterfallEffect, suit, 0], softStop=-2)
     damageAnims = [['slip-forward']]
     dodgeAnims = []
     dodgeAnims.append(['jump',

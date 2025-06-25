@@ -334,7 +334,7 @@ def floodTheMarketWaterfall(self):
     p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
     p0.renderer.setAlphaDisable(0)
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(3.5)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0)
     p0.emitter.setOffsetForce(Vec3(0.0, 0.0, 0.0))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0, 0.0, 0.0))
@@ -386,7 +386,7 @@ def floodTheMarket(self):
     p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
     p0.renderer.setAlphaDisable(0)
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(5.0697)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0)
     p0.emitter.setOffsetForce(Vec3(0.0, 0.0, 0.0))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0, 0.0, 0.0))
@@ -724,7 +724,7 @@ def shred2(self):
     p0.setPoolSize(300)
     p0.setBirthRate(0.0006)
     p0.setLitterSize(5)
-    p0.setLitterSpread(3)
+    p0.setLitterSpread(10)
     p0.setSystemLifespan(5.0000)
     p0.setLocalVelocityFlag(1)
     p0.setSystemGrowsOlderFlag(0)
@@ -755,7 +755,7 @@ def shred2(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(5.0000)
+    p0.emitter.setAmplitude(15.0000)
     p0.emitter.setAmplitudeSpread(1.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 3.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -1320,7 +1320,7 @@ def schmoozeLowerSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(5.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 11.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -1672,7 +1672,7 @@ def heatwave(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(5.0697)
+    p0.emitter.setAmplitude(10)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -2532,7 +2532,7 @@ def demotionSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(3.0000)
+    p0.emitter.setAmplitude(15.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -2609,7 +2609,7 @@ def demotionSpray2(self):
     p0.setRenderer("SpriteParticleRenderer")
     #p0.setRenderer("PointParticleRenderer")
     p0.setEmitter("SphereVolumeEmitter")
-    p0.setPoolSize(150)
+    p0.setPoolSize(200)
     p0.setBirthRate(0.0500)
     p0.setLitterSize(7)
     p0.setLitterSpread(0)
@@ -2621,7 +2621,7 @@ def demotionSpray2(self):
     p0.factory.setLifespanSpread(0.0000)
     p0.factory.setMassBase(1.0000)
     p0.factory.setMassSpread(0.0000)
-    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocityBase(500.0000)
     p0.factory.setTerminalVelocitySpread(0.0000)
     # Point factory parameters
     # Renderer parameters
@@ -2643,7 +2643,7 @@ def demotionSpray2(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(3.0000)
+    p0.emitter.setAmplitude(15.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -2698,7 +2698,7 @@ def reOrgSpray2(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(3.0000)
+    p0.emitter.setAmplitude(15.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -3089,7 +3089,7 @@ def waterfall(self):
     p0.renderer.setLifeScale(SparkleParticleRenderer.SPNOSCALE)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(3.5000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -3258,7 +3258,7 @@ def spinSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(6.0000)
+    p0.emitter.setAmplitude(15.0000)
     p0.emitter.setAmplitudeSpread(0.7000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -3512,7 +3512,7 @@ def synergyWaterfall(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(3.5000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -4187,7 +4187,7 @@ def synergy(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(5.0697)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -4657,7 +4657,7 @@ def jargonSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(5.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 4.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -4780,7 +4780,7 @@ def legaleseSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(8.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 7.0000, -1.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -5220,7 +5220,7 @@ def rollodexStream(self):
 def shiftSpray(self):
     self.reset()
     self.setPos(0.000, 5.000, 2.300)
-    self.setHpr(0.000, -55.000, 0.000)
+    self.setHpr(0.000, -10.000, 0.000)
     self.setScale(9.000, 9.000, 9.000)
     p0 = Particles.Particles('particles-1')
     # Particles parameters
@@ -5253,7 +5253,7 @@ def shiftSpray(self):
     p0.renderer.setLifeScale(SparkleParticleRenderer.SPNOSCALE)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(3.5000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.5000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -6410,7 +6410,7 @@ def raindisk(self):
 @particle
 def smoke(self):
     self.reset()
-    self.setPos(0.000, 3.500, 5.100)
+    self.setPos(0.000, 6.000, 5.000)
     self.setHpr(-180.000, 80.000, -180.000)
     self.setScale(0.0250, 0.0250, 0.0250)
     p0 = Particles.Particles('particles-1')
@@ -6418,8 +6418,8 @@ def smoke(self):
     p0.setFactory("PointParticleFactory")
     p0.setRenderer("SpriteParticleRenderer")
     p0.setEmitter("SphereVolumeEmitter")
-    p0.setPoolSize(50)
-    p0.setBirthRate(0.0300)
+    p0.setPoolSize(100)
+    p0.setBirthRate(0.0100)
     p0.setLitterSize(1)
     p0.setLitterSpread(1)
     p0.setSystemLifespan(0.0000)
@@ -6438,7 +6438,7 @@ def smoke(self):
 
     p0.renderer.setIgnoreScale(1)
     p0.renderer.addTextureFromFile('phase_6/maps/tt_t_efx_ext_smoke_a.rgb')
-    p0.renderer.setColor(Vec4(0.10, 0.10, 0.10, 0.10))
+    p0.renderer.setColor(Vec4(0.10, 0.10, 0.10, 0.50))
     p0.renderer.setXScaleFlag(1)
     p0.renderer.setYScaleFlag(1)
     p0.renderer.setAnimAngleFlag(0)

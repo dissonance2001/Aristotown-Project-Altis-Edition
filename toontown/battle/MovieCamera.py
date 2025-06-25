@@ -605,6 +605,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.5)) #UNUSED
     elif name == 'Quash':
         camTrack.append(defaultCamera(openShotDuration=2.5))  # UNUSED
+    elif name == 'Inject':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'CigarSmoke':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'ClipOnTie':
@@ -613,6 +615,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Demotion':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'Downsize':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'DoubleTalk':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvictionNotice':
@@ -1034,7 +1038,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'SafetyHighPressure':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'SafetyHeatWave':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=4.0), randomActorShot(suit, battle, attackDuration - 4, 'suit')))
     elif name == 'SafetyHeatWaveCalculation':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'SafetyViolation':

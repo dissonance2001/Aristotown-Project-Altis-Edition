@@ -278,17 +278,17 @@ def getSuitAnimTrackHighRoller(attack, delay = 0, splicedAnims = None, playRate 
     return track
 
 
-def getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs):
+def getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs, softStop = 0):
     particleEffect = partExtraArgs[0]
     parent = partExtraArgs[1]
     if len(partExtraArgs) > 2:
         worldRelative = partExtraArgs[2]
     else:
         worldRelative = 1
-    return Sequence(Wait(startDelay), ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True))
+    return Sequence(Wait(startDelay), ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True, softStopT=softStop))
 
 
-def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelative = 1):
+def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelative = 1, softStop = 0):
     '''
     Author: Professor Control
     '''
@@ -304,7 +304,7 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
-        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]))
+        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]), softStop)
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
     return partTracks
@@ -1512,9 +1512,9 @@ def doRolled(attack):
         spinEffect2.wrtReparentTo(battle)
         spinEffect3.wrtReparentTo(battle)
         if dmg > 0:
-            spinTracks1.append(getPartTrack(spinEffect1, 1.5, 3.9, [spinEffect1, battle, 0]))
-            spinTracks2.append(getPartTrack(spinEffect2, 1.5, 3.9, [spinEffect2, battle, 0]))
-            spinTracks3.append(getPartTrack(spinEffect3, 1.5, 3.9, [spinEffect3, battle, 0]))
+            spinTracks1.append(getPartTrack(spinEffect1, 1.5, 5.9, [spinEffect1, battle, 0], softStop=-2))
+            spinTracks2.append(getPartTrack(spinEffect2, 1.5, 5.9, [spinEffect2, battle, 0], softStop=-2))
+            spinTracks3.append(getPartTrack(spinEffect3, 1.5, 5.9, [spinEffect3, battle, 0], softStop=-2))
             soundTracks.append(getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=2.0, node=suit))
             toonSpinTracks.append(Sequence(Wait(damageDelay + 0.9), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)), LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)), LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)), LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)), LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)), LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5)))
 

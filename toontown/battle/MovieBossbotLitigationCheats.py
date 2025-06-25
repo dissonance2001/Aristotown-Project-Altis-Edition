@@ -247,17 +247,17 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     return track
 
 
-def getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs):
+def getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs, softStop = 0):
     particleEffect = partExtraArgs[0]
     parent = partExtraArgs[1]
     if len(partExtraArgs) > 2:
         worldRelative = partExtraArgs[2]
     else:
         worldRelative = 1
-    return Sequence(Wait(startDelay), ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True))
+    return Sequence(Wait(startDelay), ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True, softStopT=softStop))
 
 
-def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelative = 1):
+def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelative = 1, softStop = 0):
     '''
     Author: Professor Control
     '''
@@ -273,7 +273,7 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
-        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]))
+        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]), softStop)
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
     return partTracks
@@ -621,13 +621,8 @@ def doPaperCut(attack):
     targetPos = toon.getPos(battle)
     suitTrack = Sequence(getSuitTrack(attack))
     suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=1), Wait(2.0), ActorInterval(suit, 'sanction', startTime=1), Func(suit.setNeutralAnimation))
-    partTrack = getPartTrack(particleEffect, 0.5, 3.0, [particleEffect, suit, 0])
-    paperPosPoints = [Point3(0.59, -0.31, 0.81), VBase3(79.224, 32.576, -179.449)]
-    paperPropTrack = getPropTrack(paper, suit.getRightHand(), paperPosPoints, .1, 1e-05, scaleUpTime=0.1, anim=1, propName='shredder-paper', animDuration=2.0, animStartTime=0.5)
-    #shredderPosPoints = [Point3(0, -0.12, -0.34), VBase3(-90.0, -53.77, -0.0)]
-    #shredderPropTrack = getPropTrack(shredder, suit.getLeftHand(), shredderPosPoints, 1, 3, scaleUpPoint=Point3(4.81, 4.81, 4.81))
+    partTrack = getPartTrack(particleEffect, 0.5, 5.0, [particleEffect, suit, 0], softStop=-2)
     toonTrack = getToonTrackCheat(attack, 2, ['cringe'], 3.4, ['struggle'])
-   # toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2, ['cringe'])
     soundTrack = getSoundTrack('SA_shred.ogg', delay=0.5, node=suit)
     notifyTrack = Sequence(Wait(2), Func(toon.showHpTextCheat, - int(dmg)),
                            Func(toon.showHpString, "VULNERABLE!"))
@@ -1242,7 +1237,7 @@ def doWiretapperGagBan(attack):
 
         tubeTracks.append(Func(battle.movie.clearRestoreHips))
         soundTrack = getSoundTrack('SA_red_tape.ogg', delay=0, node=suit)
-        soundTrack2 = getSoundTrack('tt_s_ara_cmg_itemHitsFloor.ogg', delay=4)
+        soundTrack2 = getSoundTrack('tt_s_ara_cmg_toonHit.ogg', delay=4)
         notifyTrack = Sequence(Wait(4), Func(toon.showHpText, - int(dmg)))
         if dmg > 0:
             allTubeTracks.append(tubeTracks)
