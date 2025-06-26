@@ -2992,15 +2992,17 @@ class Suit(Avatar.Avatar):
         if base.config.GetBool('want-new-cogs', 0):
             if cogExists(filePrefix + 'zero.bam'):
                 self.loadModel('phase_3.5' + filePrefix + 'zero')
-                self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero')
+                self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero', 'skelehands')
             else:
                 self.loadModel('phase_3.5' + filePrefix + 'mod')
-                self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero')
+                self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero', 'skelehands')
         else:
             self.loadModel('phase_3.5' + filePrefix + 'mod')
-            self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero')
+            self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero', 'skelehands')
         self.loadAnims(animDict)
+        self.loadAnims(animDict, 'skelehands')
         self.setSuitClothesHybrid()
+        self.find('**/hands').hide()
         self.setBlend(frameBlend=base.wantSmoothAnims)
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
 
