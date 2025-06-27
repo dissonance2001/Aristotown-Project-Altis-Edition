@@ -348,8 +348,7 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, npcs
             suitPos, suitHpr = battle.getActorPosHpr(suit)
             dropShadow.setPos(suitPos)
             dropShadow.setHpr(suitHpr)
-            if level >= 4:
-                dropShadow.setY(dropShadow.getY() + 2)
+            dropShadow.setY(dropShadow.getY() + 2)
         else:
             dropShadow.setPos(suit.getPos(battle))
             dropShadow.setHpr(suit.getHpr(battle))

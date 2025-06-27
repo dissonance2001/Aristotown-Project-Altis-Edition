@@ -273,7 +273,7 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
-        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]), softStop)
+        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative], softStop))
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
     return partTracks
@@ -1032,15 +1032,9 @@ def doLegallyBound(attack):
         toon = t['toon']
         dmg = t['hp']
         BattleParticles.loadParticles()
-        spinEffect1 = BattleParticles.createParticleEffect(file='spinEffect')
-        spinEffect2 = BattleParticles.createParticleEffect(file='spinEffect')
-        spinEffect3 = BattleParticles.createParticleEffect(file='spinEffect')
-        BattleParticles.setEffectTexture(spinEffect1, 'snow-particle',
-                                         color=Vec4(random.random(), random.random(), random.random(), 1))
-        BattleParticles.setEffectTexture(spinEffect2, 'snow-particle',
-                                         color=Vec4(random.random(), random.random(), random.random(), 1))
-        BattleParticles.setEffectTexture(spinEffect3, 'snow-particle',
-                                         color=Vec4(random.random(), random.random(), random.random(), 1))
+        spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffectBindings')
+        spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffectBindings')
+        spinEffect3 = BattleParticles.createParticleEffect(file='organizeEffectBindings')
         spinEffect1.reparentTo(toon)
         spinEffect2.reparentTo(toon)
         spinEffect3.reparentTo(toon)

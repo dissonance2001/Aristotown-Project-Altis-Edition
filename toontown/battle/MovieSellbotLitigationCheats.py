@@ -1255,7 +1255,7 @@ def doProfiteering(attack, ind):
                                                    Func(suit.showHpString, "SYPHONED!"),
                                                    Func(suit.setHealthForMe, +(targetSuit.currHP / 4)),
                                                    Func(suit.updateHealthBar, 0)),
-                               Func(targetSuit.setNeutralAnimation))
+                               Func(suit.setNeutralAnimation))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=2.0)
     return Parallel(suitTrack, selfDamageTrack, managerHealTrack, soundTrack2)
 
@@ -1266,6 +1266,8 @@ def doExtortion(attack):
     partTracks = Parallel()
     partTracks4 = Parallel()
     toonAnimTracks = Parallel()
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    selfDamageTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -1286,6 +1288,9 @@ def doExtortion(attack):
         partTracks4.append(partTrack4)
         toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.25)
         toonAnimTracks.append(toonAnimTrack)
+        suitTrack.append(Sequence(Func(suit.setHealthForMe, + dmg), Func(suit.updateHealthBar, 0)))
+        selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, +dmg))
+        selfDamageTracks.append(selfDamageTrack)
     dodgeAnims = [['duck', 1e-06, 0.8]]
     damageAnims = []
     damageAnims.append(['cringe',
@@ -1297,10 +1302,7 @@ def doExtortion(attack):
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.6, startTime=1.2))
     damageAnims.append(['cringe', 2.6, 1.5])
     toonTrack = getToonTracks(attack, 1, ['nothing'], 0, ['neutral'])
-    suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack.append(Func(suit.setHealthForMe, + (dmg * len(battle.activeToons))))
-    selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, +(dmg * len(battle.activeToons))), Func(suit.updateHealthBar, 0))
-    multiTrackList = Parallel(suitTrack, toonTrack, toonAnimTracks, selfDamageTrack, partTracks4)
+    multiTrackList = Parallel(suitTrack, toonTrack, toonAnimTracks, selfDamageTracks, partTracks4)
     soundTrack = getSoundTrack('SA_ink_drain.ogg', delay=0, node=suit)
     multiTrackList.append(soundTrack)
     return multiTrackList
@@ -1333,7 +1335,7 @@ def doExtortion2(attack):
         unFreezeEffect.setPos(0, 0, facePoint.getZ())
         partTrack4 = getPartTrack(sprayEffect, 1, 5.0, [sprayEffect2, toon, 0], softStop=-1)
         suitTrack = Sequence(getSuitAnimTrack(attack))
-        suitTrack.append(Func(suit.setHealthForMe, + ((dmg * 2))))
+        suitTrack.append(Sequence(Func(suit.setHealthForMe, + (dmg * 2)), Func(suit.updateHealthBar, 0)))
         selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, + ((dmg * 2))),
                                    Func(suit.updateHealthBar, 0))
         notifyTrack = Sequence(Wait(1), Func(toon.showHpTextCheat, - int(dmg)))

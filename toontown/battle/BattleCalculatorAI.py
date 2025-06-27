@@ -3327,6 +3327,40 @@ class BattleCalculatorAI:
                         else:
                             suit.setHP(suit.currHP + 125)
                     continue
+            elif atkInfo['name'] == 'AmbassadorRefinementManager':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'refinemanagercalculator', 0, 0, 'setBoth')
+                currentBossHealth = -1
+                for s in self.battle.suits:
+                    if s.dna.name == 'cp':
+                        currentBossHealth = s.currHP
+                if currentBossHealth >= 1:
+                    for suit in self.battle.activeSuits:
+                        if suit.dna.name == 'frs' or suit.dna.name == 'fbd' or suit.dna.name == 'cp':
+                            if suit.currHP <= 0:
+                                continue
+                            x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
+                            if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + 0)
+                            elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + x)
+                            else:
+                                suit.setHP(suit.currHP + 350)
+                elif currentBossHealth <= 0:
+                    for suit in self.battle.activeSuits:
+                        if suit.dna.name == 'frs' or suit.dna.name == 'fbd' or suit.dna.name == 'cp':
+                            if suit.currHP <= 0:
+                                continue
+                            x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
+                            if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + 0)
+                            elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + x)
+                            else:
+                                suit.setHP(suit.currHP + 200)
+                        continue
             elif atkInfo['name'] == 'AmbassadorHeadRoller':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3428,7 +3462,7 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkInfo['name'] == 'BookkeeperBookkeepingRetaliation':
                 if self.toonHasCondition(toon.doId, 'bookkeepingtoon'):
-                    self.setToonCondition(toon.doId, 'bookkeepingtoon', 0, 0, 'setBoth')
+                    self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
                     self.setToonCondition(toon.doId, 'allGagBoost', -40, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'lureBoost', -40, 3, 'setBoth')
                     result = 30
@@ -3438,7 +3472,7 @@ class BattleCalculatorAI:
             elif atkInfo['name'] == 'BookkeeperBookkeeping':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'bookkeeping', 1, 5, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bookkeeping', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'bookkeepingcalculator', 0, 0, 'setBoth')
                 if self.suitHasCondition(theSuit.doId, 'lured'):
                     self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
@@ -3601,7 +3635,7 @@ class BattleCalculatorAI:
                         targetSuit.setHP(int(targetSuit.currHP - targetSuit.currHP))
                         self.__removeLured(targetSuit.doId)
             elif atkInfo['name'] == 'UnionBusterUnionBuster':
-                result = 40
+                result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'bound', 1, 5, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'unionbustercalculator', 0, 0, 'setBoth')
@@ -3718,8 +3752,8 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
                 for suit in self.battle.activeSuits:
                     if suit.getHP() < suit.maxHP and not suit.dna.name == 'dvp':
-                        suit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
-                        self.setSuitCondition(theSuit.doId, 'contracted', 1, 99, 'setBoth')
+                        suit.setDamageMultiplier(suit.getDamageMultiplier() * 1.05)
+                        #self.setSuitCondition(suit.doId, 'contracted', 1, 99, 'setBoth')
             elif atkInfo['name'] == 'RacketeerHustling':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -4977,6 +5011,8 @@ class BattleCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'gtk': #ambassador
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'refinementcalculator', 1, 10, 'setBoth')
+                if (x + 2) % 3 == 0 and not self.suitHasCondition(suitId, 'desperation'):
+                    self.setSuitCondition(suitId, 'refinemanagercalculator', 1, 10, 'setBoth')
                 if (x + 3) % 4 == 0 and len(self.battle.activeSuits) >= 3:
                     self.setSuitCondition(suitId, 'headroller2calculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'ffm': #safety supervisor
@@ -6183,6 +6219,36 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 9  # Refinement
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != NO_ATTACK:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'refinemanagercalculator') and not self.suitHasCondition(suitId, 'headroller2calculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 15  # Refinement Manager
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue

@@ -141,17 +141,17 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                      text_scale=0.0475, text_wordwrap=8, text_shadow=(1, 1, 1, 1))
         healthGui = loader.loadModel('phase_3.5/models/char/ttcc_ene_insignias')
         glow = healthGui.find('**/glow')
-        glow.setScale(0)
+        glow.setScale(0.1)
         glow.setPos(0, 0, 0)
         glow.hide()
         button = healthGui.find('**/emblem_hp')
-        button.setScale(0.2)
+        button.setScale(2)
         button.setH(0)
-        button.setPos(0, 0, -0.18)
+        button.setPos(0, 0, -0.15)
         base2 = healthGui.find('**/emblem_base')
-        base2.setScale(0.2)
+        base2.setScale(2)
         base2.setH(0)
-        base2.setPos(0, 0, -0.18)
+        base2.setPos(0, 0, -0.15)
         glow.reparentTo(button)
         self.button = button
         self.glow = glow
@@ -173,61 +173,129 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             HP = avatar.currHP
         else:
             HP = 0
-        corpIcon = avatar.corpMedallion.copyTo(hidden)
-        corpIcon.setPosHprScale(0, 0, 0, 0, 0, 0, 0, 0, 0)
-        #self.corpIcon = DirectLabel(parent=self.frame, geom=corpIcon, geom_scale=0.13, pos=(0, 0, -0.20), relief=None)
-        if avatar.currHP >= 9999 and revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        elif avatar.maxHP >= 9999 and revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
+        if avatar.isFired:
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=0,
+                                            frameSize=(0, 0, 0, 0), barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                            frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif revives > 2 and avatar.isVirtual and avatar.maxHP > 9999:
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif revives > 2 and avatar.isVirtual:
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(),text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif revives > 2 and avatar.isSkeleton and avatar.maxHP > 9999:
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+                                       HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif revives > 2 and avatar.isSkeleton:
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+                                       HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif revives > 1 and avatar.isVirtual:
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif revives > 1 and avatar.isSkeleton and avatar.isRevived:
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif revives > 1 and avatar.maxHP > 9999:
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+                                       HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif revives > 1 and avatar.maxHP <= 9999:
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+                                       HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif avatar.dna.name == 'dsf':
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif avatar.dna.name == 'tcm':
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
+        elif avatar.dna.name == 'crf':
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
         elif avatar.maxHP >= 9999:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
         elif avatar.currHP >= 9999:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        elif revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                       frameSize=(0, 0, 0, 0),
+                                       barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                       frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
         else:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
+            healthBar2 = DirectWaitBar(parent=self.frame, pos=(0, 0, -0.1975), relief=DGG.SUNKEN, value=100,
+                                            frameSize=(0, 0, 0, 0), barTexture='phase_3.5/maps/battlegui/healthbaravatarpanel.png', scale=0.1,
+                                            frameColor=(0.5, 0.5, 0.5, .6), barColor=(0, 0, 0, 0), barRelief=DGG.SUNKEN,
+                                       text=TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (HP, maxHP),
+                                       text_font=avatar.getFont(), text_pos=(0, 1.65), text_scale=0.5, text_wordwrap=7.5)
         dept = SuitDNA.getSuitDeptFullname(avatar.dna.name)
         self.healthNode = self.frame.attachNewNode('health')
         self.healthNode.setPos(0, 0, -0.24)
-        #self.healthBar2 = healthBar2
+        self.healthBar2 = healthBar2
         #self.healthBar2.setProp('barColor', self.healthColors[self.condition])
         #self.healthBar2.setProp('value', self.avatar.currHP)
         #self.healthBar2.setProp('range', self.avatar.getMaxHP())
-        button.reparentTo(self.hpLabel)
-        base2.reparentTo(self.hpLabel)
+        button.reparentTo(self.healthBar2)
+        base2.reparentTo(self.healthBar2)
         corpIcon = avatar.corpMedallion.copyTo(hidden)
         corpIcon.setPosHprScale(0, 0, 0, 0, 0, 0, 0, 0, 0)
         if avatar.dna.dept == 't':
             corpScale = 1.275
         else:
             corpScale = 1.175
-        self.corpIcon = DirectLabel(parent=self.hpLabel, geom=corpIcon, geom_scale=0.2, pos=(0, 0, -0.18), relief=None)
+        self.corpIcon = DirectLabel(parent=self.healthBar2, geom=corpIcon, geom_scale=2, pos=(0, 0, -0.1425), relief=None)
         #self.healthNode.hide()
         self.healthNode.setY(2)
         if avatar.isFired:
@@ -332,82 +400,98 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             level = str(self.avatar.getActualLevel()) + TTLocalizer.ManagerPostFix
         else:
             level = str(self.avatar.getActualLevel())
+        revives = avatar.getSkeleRevives() + 1
         def __updateLabel(tempHp):
-            revives = avatar.getSkeleRevives() + 1
             if avatar.isFired:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['value'] = 0
                 self.corpIcon.hide()
                 self.deptLabel['text'] = ''
             elif revives > 2 and avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 2 and avatar.isVirtual and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
             elif revives > 2 and avatar.isVirtual and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 2 and avatar.isVirtual:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
             elif revives > 2 and avatar.isSkeleton and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
+                            revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 2 and avatar.isSkeleton and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
             elif revives > 2 and avatar.isSkeleton and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 2 and avatar.isSkeleton:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
+                            revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
             elif revives > 1 and avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 1 and avatar.isVirtual and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
             elif revives > 1 and avatar.isVirtual and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 1 and avatar.isVirtual:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
             elif revives > 1 and avatar.isSkeleton and avatar.isRevived and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 1 and avatar.isSkeleton and avatar.isRevived and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
             elif revives > 1 and avatar.isSkeleton and avatar.isRevived and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 1 and avatar.isSkeleton and avatar.isRevived:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
             elif revives > 1 and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 1 and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
             elif revives > 1 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif revives > 1:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
             elif avatar.dna.name == 'dsf' and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['value'] = self.maxHp
             elif avatar.dna.name == 'dsf':
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
             elif avatar.dna.name == 'tcm' and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif avatar.dna.name == 'tcm':
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
             elif avatar.dna.name == 'crf' and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif avatar.dna.name == 'crf':
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
             elif tempHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
             elif maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+                self.healthBar2['value'] = 0
             elif maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
             elif tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+                self.healthBar2['value'] = 0
             else:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
+                self.healthBar2['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
+                #self.hpLabel['text'] = TTLocalizer.AvatarPanelCogHP % (int(tempHp), maxHp)
 
-        self.labelInterval = Parallel(
-                LerpColorScaleInterval(self.hpLabel, duration=0, startColorScale=(1, 0, 0, 1), colorScale=(1, 1, 1, 1),
-                                       blendType='easeInOut'),
-                LerpFunctionInterval(__updateLabel, duration=0, fromData=currHp + delta, toData=currHp,
-                                     blendType='easeInOut')
+        self.labelInterval = Parallel(Func(self.healthBar2.setProp, 'barColor', self.healthColors[condition]),
+                 Func(self.healthBar2.setProp, 'value', (int(currHp))),
+                LerpFunctionInterval(__updateLabel, duration=0, fromData=currHp+delta, toData=currHp, blendType='easeInOut')
             )
-        self.labelInterval.start()
 
         if condition == 10 and self.avatar.isVirtual and not self.avatar.dna.name == 'mad':
             taskMgr.remove(self.frame.uniqueName('blink-task'))
@@ -430,7 +514,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             taskMgr.remove(self.frame.uniqueName('blink-task'))
             self.button.setColor(1, 1, 1, 1)
             self.buttonInterval = Parallel(
-                LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 1, 1, 1),
+                LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 1, 1, 1),
                                        blendType='easeInOut'))
             blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray), Task.pause(0.1))
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
@@ -447,14 +531,14 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
         elif self.avatar.isVirtual and not self.avatar.dna.name == 'mad':
             self.button.setColor(1, 1, 1, 1)
-            self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(self.healthColors[condition]),
+            self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
                                    blendType='easeInOut'))
             self.changeInterval.start()
             taskMgr.remove(self.frame.uniqueName('blink-task'))
             self.blinkTask = None
         else:
             self.button.setColor(1, 1, 1, 1)
-            self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(self.healthColors[condition]),
+            self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
                                    blendType='easeInOut'))
             self.changeInterval.start()
             taskMgr.remove(self.frame.uniqueName('blink-task'))
@@ -479,37 +563,37 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
 
     def __changeColor(self):
         self.interval = Parallel(
-                LerpColorScaleInterval(self.button, duration=0, colorScale=(self.healthColors[self.condition]),
+                LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[self.condition]),
                                        blendType='easeInOut'))
         self.interval.start()
 
     def __changeColorHead(self):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(self.healthColors[self.condition]),
+        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[self.condition]),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulseRed(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=.25, colorScale=(1, 0, 0, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulseWhite(self):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 1, 1, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=.25, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulseGray(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=.25, colorScale=(0.3, 0.3, 0.3, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulseRedHead(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(1, 0, 0, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=.25, colorScale=(1, 0, 0, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulseGrayHead(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.431, 0.431, 0.431, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=.25, colorScale=(0.431, 0.431, 0.431, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 

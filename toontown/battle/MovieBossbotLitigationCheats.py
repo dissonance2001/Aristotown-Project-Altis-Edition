@@ -273,7 +273,7 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
-        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]), softStop)
+        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative], softStop))
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
     return partTracks
@@ -998,6 +998,150 @@ def doRefinement(attack):
     makeNotImmune = Func(theSuit.makeNonImmortal)
     return Parallel(suitTrackAnim, makeUnVulnerable, makeNotImmune, suitTracks, multiTrack, knifeTracks)
 
+def doRefinementManager(attack):
+    theSuit = attack['suit']
+    battle = attack['battle']
+
+    suitTracks = Parallel()
+    for suit in battle.activeSuits:
+        suitTrack = Sequence()
+        suitTrack.append(Wait(4.5))
+        currentBossHealth = -1
+        for s in battle.suits:
+            if s.dna.name == 'cp':
+                currentBossHealth = s.currHP
+        if suit.dna.name == 'frs':
+            if currentBossHealth >= 1:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 350))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 350))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 350))
+            else:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, x))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 200))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 200))
+            suitTrack.append(Func(suit.updateHealthBar, 0))
+            if not suit.dna.name == 'gtk':
+                suitTrack.append(Parallel(Sequence(Wait(3)),
+                                          Func(suit.setChatAbsolute,
+                                               random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
+                                               CFSpeech | CFTimeout)))
+        if suit.dna.name == 'fbd':
+            if currentBossHealth >= 1:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 350))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 350))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 350))
+            else:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, x))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 200))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 200))
+            suitTrack.append(Func(suit.updateHealthBar, 0))
+            if not suit.dna.name == 'gtk':
+                suitTrack.append(Parallel(Sequence(Wait(3)),
+                                          Func(suit.setChatAbsolute,
+                                               random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
+                                               CFSpeech | CFTimeout)))
+        if suit.dna.name == 'cp':
+            if currentBossHealth >= 1:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 350))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 350))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 350))
+            else:
+                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpText, 0))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
+                    suitTrack.append(Func(suit.showHpTextCheat, x))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, x))
+                else:
+                    suitTrack.append(Func(suit.showHpTextCheat, 200))
+                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.setHealthForMe, 200))
+            suitTrack.append(Func(suit.updateHealthBar, 0))
+            if not suit.dna.name == 'gtk':
+                suitTrack.append(Parallel(Sequence(Wait(3)),
+                                          Func(suit.setChatAbsolute,
+                                               random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
+                                               CFSpeech | CFTimeout)))
+        suitTrack.append(
+                Func(suit.setNeutralAnimation))
+        suitTracks.append(suitTrack)
+    posPoints = [Point3(-0.25, 0, 0), VBase3(0, 180, 0)]
+    knifeTracks = Parallel()
+    for suit in battle.activeSuits:
+        theSuit = attack['suit']
+        hitPoint = suit.getPos(battle)
+        hitPoint.setZ(suit.height + 2)
+        hitPoint.setY(hitPoint.getY() + 0.5)
+        knife = loader.loadModel('phase_12/models/bossbotHQ/canoffood')
+        can = knife.find('**/can')
+        can.setScale(.5)
+        knifeTrack = Sequence(
+            getPropAppearTrack(can, theSuit.getRightHand(), posPoints, .5, VBase3(0.5, 0.5, 0.5),
+                               scaleUpTime=0.1),
+            Wait(1.5),
+            Parallel(
+                getThrowTrack(can, hitPoint, 1.5, battle, -10.288),
+                LerpHprInterval(can, 0.8, VBase3(0, 0, 0)), LerpScaleInterval(can, 0, VBase3(1, 1, 1))),
+        Parallel(LerpPosInterval(can, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)), Sequence(Wait(0.25), LerpScaleInterval(can, 0.5, VBase3(0, 0, 0)))),
+            Func(MovieUtil.removeProp, can)
+        )
+        if suit.dna.name == 'fbd' or suit.dna.name == 'frs' or suit.dna.name == 'cp':
+            knifeTracks.append(knifeTrack)
+    makeUnVulnerable = Func(theSuit.makeUnVulnerable)
+    suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
+    soundTrack1 = getSoundTrack('SA_repair.ogg', delay=2.5)
+    soundTrack2 = getSoundTrack('SA_refinement.ogg', delay=2, node=theSuit)
+    multiTrack = Parallel(soundTrack1, soundTrack2)
+    makeNotImmune = Func(theSuit.makeNonImmortal)
+    return Parallel(suitTrackAnim, makeUnVulnerable, makeNotImmune, suitTracks, multiTrack, knifeTracks)
+
 def doHeadRoller(attack, ind):
     manager = attack['suit']
     battle = attack['battle']
@@ -1035,7 +1179,7 @@ def doHeadRollerGroup(attack):
         suitTrack = Sequence(Wait(1.0), ActorInterval(targetSuit, 'soak', duration = 2.25), Sequence(MovieUtil.spawnHeadExplosion(targetSuit, battle)), Func(targetSuit.setChatAbsolute,
                                                        "Ouch.",
                                                        CFSpeech | CFTimeout), Wait(1.0), MovieUtil.createSuitHeadlessDeathTrack(targetSuit, battle))
-        selfDamageTrack = Sequence(Wait(2), Func(targetSuit.showHpTextCheat, -targetSuit.currHP), Func(targetSuit.showHpStringSacrifice, "OFF WITH YOUR HEAD!"), Func(targetSuit.setHealthForMe, - targetSuit.currHP),
+        selfDamageTrack = Sequence(Wait(3.25), Func(targetSuit.showHpTextCheat, -targetSuit.currHP), Func(targetSuit.showHpStringSacrifice, "OFF WITH YOUR HEAD!"), Func(targetSuit.setHealthForMe, - targetSuit.currHP),
                                Func(targetSuit.updateHealthBar, 0))
         suitTrack2 = Sequence(Wait(1.0), ActorInterval(targetSuit, 'soak', duration=2.25),
                               Parallel(ActorInterval(targetSuit, 'pie-small-react', duration=2.25),
@@ -1043,15 +1187,15 @@ def doHeadRollerGroup(attack):
                                             "Nice try.",
                                             CFSpeech | CFTimeout)),
                               Wait(1.0), Func(targetSuit.checkCogHP, battle), Func(targetSuit.setNeutralAnimation))
-        selfDamageTrack2 = Sequence(Wait(2), Func(targetSuit.showHpTextCheat, -250),
+        selfDamageTrack2 = Sequence(Wait(3.25), Func(targetSuit.showHpTextCheat, -250),
                                     Func(targetSuit.showHpStringDamaged, "DAMAGED!"),
                                     Func(targetSuit.setHealthForMe, -250),
                                     Func(targetSuit.updateHealthBar, 0))
         if not targetSuit.dna.name == 'gtk':
-            if targetSuit.dna.name in SuitBattleGlobals.SpecialCogDict and not manager:
+            if targetSuit.isManager:
                 selfDamageTracks.append(selfDamageTrack2)
                 suitTracks.append(suitTrack2)
-            else:
+            if not targetSuit.isManager:
                 selfDamageTracks.append(selfDamageTrack)
                 suitTracks.append(suitTrack)
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=manager))
@@ -1173,9 +1317,9 @@ def doCollectCallDamage(attack):
         spinEffect3.wrtReparentTo(battle)
         notifyTrack = Sequence(Wait(damageDelay + 1.9), Func(toon.showHpText, - int(dmg)))
         if dmg > 0:
-            spinTracks1.append(getPartTrack(spinEffect1, 1.5, 3.9, [spinEffect1, battle, 0]))
-            spinTracks2.append(getPartTrack(spinEffect2, 1.5, 3.9, [spinEffect2, battle, 0]))
-            spinTracks3.append(getPartTrack(spinEffect3, 1.5, 3.9, [spinEffect3, battle, 0]))
+            spinTracks1.append(getPartTrack(spinEffect1, 1.5, 5.9, [spinEffect1, battle, 0], softStop=-2))
+            spinTracks2.append(getPartTrack(spinEffect2, 1.5, 5.9, [spinEffect2, battle, 0], softStop=-2))
+            spinTracks3.append(getPartTrack(spinEffect3, 1.5, 5.9, [spinEffect3, battle, 0], softStop=-2))
             soundTracks.append(getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=2.0))
             notifyTracks.append(notifyTrack)
             toonSpinTracks.append(Sequence(Wait(damageDelay + 0.9), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)), LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)), LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)), LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)), LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)), LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5)))

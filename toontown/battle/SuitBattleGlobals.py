@@ -1656,7 +1656,12 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              ('AmbassadorMulligan',#14
               (0,),
               (80,),
-              (0,)))},
+              (0,)),
+             ('AmbassadorRefinementManager',  # 15
+              (0,),
+              (100,),
+              (0,))
+             )},
  'cc': {'name': 'Cold Caller',
         'singularname': 'a Cold Caller',
         'pluralname': 'Cold Callers',
@@ -6905,7 +6910,7 @@ SuitAttacks = {
  'MumboJumbo': ('speak', ATK_TGT_SINGLE),
  'Newspaper': ('throw-object', ATK_TGT_SINGLE),
  'Novel': ('throw-object', ATK_TGT_SINGLE),
- 'NickelAndDime': ('magic3', ATK_TGT_GROUP), # broken (no movie)
+ 'NickelAndDime': ('magic2', ATK_TGT_GROUP),
  'Overload': ('speak', ATK_TGT_SINGLE),
  'ParadigmShift': ('magic2', ATK_TGT_GROUP),
  'PeckingOrder': ('throw-object', ATK_TGT_SINGLE),
@@ -6999,6 +7004,7 @@ SuitAttacks = {
  'AmbassadorHeadRoller': ('snap', ATK_TGT_SINGLE),
  'AmbassadorHeadRollerGroup': ('snap', ATK_TGT_SINGLE),
  'AmbassadorRefinement': ('throw-object', ATK_TGT_SINGLE),
+ 'AmbassadorRefinementManager': ('throw-object', ATK_TGT_SINGLE),
  'AmbassadorPhase2': ('pie-small-react', ATK_TGT_SINGLE),
  'AmbassadorDamageUp': ('summon', ATK_TGT_SINGLE),
  'AmbassadorManagerialProtection': ('snap', ATK_TGT_SINGLE),

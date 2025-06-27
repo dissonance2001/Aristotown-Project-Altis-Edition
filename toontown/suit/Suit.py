@@ -139,7 +139,7 @@ prr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 blr = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
 dvp = (('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
 dsk = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
-ffm = (('cease', 'cease2', 4), ('snap', 'snap', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
+ffm = (('cease', 'cease', 4), ('snap', 'snap', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
 sft = (('quick-jump', 'jump', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4))
 # Cashbots
 sc = (('watercooler', 'watercooler', 4), ('pickpocket', 'pickpocket', 4))
@@ -4920,13 +4920,15 @@ class Suit(Avatar.Avatar):
         elif dept == 'm':
             self.corpMedallion = icons.find('**/emblem_money').copyTo(chestNull)
         elif dept == 'g':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
+            texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette4.png')
+            self.corpMedallion.setTexture(texture, 1)
         elif dept == 't':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
             texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette2.png')
             self.corpMedallion.setTexture(texture, 1)
         elif dept == 'p':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
             texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette3.png')
             self.corpMedallion.setTexture(texture, 1)
 
@@ -4983,13 +4985,15 @@ class Suit(Avatar.Avatar):
         elif dept == 'm':
             self.corpMedallion = icons.find('**/emblem_money').copyTo(chestNull)
         elif dept == 'g':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
+            texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette4.png')
+            self.corpMedallion.setTexture(texture, 1)
         elif dept == 't':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
             texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette2.png')
             self.corpMedallion.setTexture(texture, 1)
         elif dept == 'p':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
             texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette3.png')
             self.corpMedallion.setTexture(texture, 1)
 
@@ -5076,13 +5080,15 @@ class Suit(Avatar.Avatar):
         elif dept == 'm':
             self.corpMedallion = icons.find('**/emblem_money').copyTo(chestNull)
         elif dept == 'g':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
+            texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette4.png')
+            self.corpMedallion.setTexture(texture, 1)
         elif dept == 't':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
             texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette2.png')
             self.corpMedallion.setTexture(texture, 1)
         elif dept == 'p':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
             texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette3.png')
             self.corpMedallion.setTexture(texture, 1)
         self.corpMedallion.setH(180.0)
@@ -5523,9 +5529,9 @@ class Suit(Avatar.Avatar):
 
     def __pulseRed(self, task):
         if not self.virtual:
-            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=.25, colorScale=(1, 0, 0, 1),
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=0, colorScale=(1, 0, 0, 1),
                                    blendType='easeInOut'))
-            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=.25, colorScale=(1, 0, 0, 1),
+            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=0, colorScale=(1, 0, 0, 1),
                                    blendType='easeInOut'))
             self.interval.start()
             self.glowInterval.start()
@@ -5536,9 +5542,9 @@ class Suit(Avatar.Avatar):
 
     def __pulseWhite(self):
         if not self.virtual:
-            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=.25, colorScale=(1, 1, 1, 1),
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=0, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
-            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=.25, colorScale=(1, 1, 1, 1),
+            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=0, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
             self.interval.start()
             self.glowInterval.start()
@@ -5549,9 +5555,9 @@ class Suit(Avatar.Avatar):
 
     def __pulseGray(self, task):
         if not self.virtual:
-            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=.25, colorScale=(0.431, 0.431, 0.431, 1),
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
                                    blendType='easeInOut'))
-            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=.25, colorScale=(0, 0, 0, 0),
+            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=0, colorScale=(0, 0, 0, 0),
                                    blendType='easeInOut'))
             self.interval.start()
             self.glowInterval.start()
@@ -5575,9 +5581,9 @@ class Suit(Avatar.Avatar):
 
     def __changeColor(self):
         if not self.virtual:
-            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(self.healthColors[self.condition]),
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=0, colorScale=(self.healthColors[self.condition]),
                                    blendType='easeInOut'))
-            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(self.healthColors[self.condition]),
+            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=0, colorScale=(self.healthColors[self.condition]),
                                    blendType='easeInOut'))
             self.interval.start()
             self.glowInterval.start()

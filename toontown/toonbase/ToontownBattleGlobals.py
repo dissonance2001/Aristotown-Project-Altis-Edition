@@ -495,6 +495,7 @@ ValidStatusConditions = (
     'snipecalculator',
     'snipecalculator2',
     'refinementcalculator',
+    'refinemanagercalculator',
     'headrollercalculator',
     'headroller2calculator',
     'calculatingcalculator',

@@ -142,7 +142,7 @@ def doSuitAttack(attack):
     elif name == 'HostileTakeover':
         suitTrack = doHostileTakeoverNew(attack)
     elif name == 'NickelAndDime':
-        suitTrack = doRolledTrickOfTheLight(attack)
+        suitTrack = doNickelAndDime(attack)
     elif name == 'Quash':
         suitTrack = doAceInTheHoleNew(attack)
     elif name == 'PennyPinch':
@@ -429,6 +429,8 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doHeadRollerGroup(attack)
     elif name == 'AmbassadorRefinement':
         suitTrack = MovieBossbotLitigationCheats.doRefinement(attack)
+    elif name == 'AmbassadorRefinementManager':
+        suitTrack = MovieBossbotLitigationCheats.doRefinementManager(attack)
     elif name == 'AmbassadorPhase2':
         suitTrack = MovieBossbotLitigationCheats.doAmbassadorPhase2(attack)
     elif name == 'AmbassadorDamageUp':
@@ -755,6 +757,20 @@ def doSuitAttack(attack):
         resetSuitTrack = Sequence(suitTrack)
     elif name == 'WiretapperCollectCallDamage':
         resetSuitTrack = Sequence(suitTrack)
+    elif name == 'WiretapperGagBan':
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == 'PowerhouseSnipeVulnerable':
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == 'PowerhouseSnipeGagBan':
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == 'PowerhouseSnipeBookkept':
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == 'PowerhouseSnipeSoaked':
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == 'PowerhouseSnipeCollectCall':
+        resetSuitTrack = Sequence(suitTrack)
+    elif name == 'PowerhouseSnipeMulligan':
+        resetSuitTrack = Sequence(suitTrack)
     else:
         resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
     waitTrack = Sequence(Func(battle.unlureSuit, suit))
@@ -821,7 +837,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
     if attack[
-        'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
+        'suitName'] == 'nothing':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
     else:
@@ -866,7 +882,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     if attack[
-        'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
+        'suitName'] == 'nothing':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
     else:
@@ -1800,12 +1816,12 @@ def doNickelAndDime(attack):
     battle = attack['battle']
     targets = attack['target']
     damageDelay = 1.7
-    hitAtleastOneToon = 0
+    hitAtleastOneToon = False
     for t in targets:
         if t['hp'] > 0:
-            hitAtleastOneToon = 1
+            hitAtleastOneToon = True
 
-    particleEffect = BattleParticles.createParticleEffect('NickelAndDime')
+    particleEffect = BattleParticles.createParticleEffect(file='nickelDime')
     waterfallEffect = BattleParticles.createParticleEffect(file='nickelDimeWaterfall')
     suitTrack = getSuitAnimTrack(attack)
     partTrack = getPartTrack(particleEffect, 1.0, 1.9, [particleEffect, suit, 0])
@@ -1819,12 +1835,8 @@ def doNickelAndDime(attack):
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['slip-forward'], dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
-    soundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_nickelAndDime.ogg'), node=suit))
-    soundMissTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_nickelAndDimeMiss.ogg'), node=suit))
-    if hitAtleastOneToon > 0:
-        return Parallel(suitTrack, partTrack, waterfallTrack, soundTrack, toonTracks)
-    else:
-        return Parallel(suitTrack, partTrack, waterfallTrack, soundMissTrack, toonTracks)
+    soundTrack = getSoundTrack('ttr_s_ene_bat_nickelAndDime%s.ogg' % ('' if hitAtleastOneToon else ''), node=suit)
+    return Parallel(suitTrack, partTrack, waterfallTrack, soundTrack, toonTracks)
 
 def doQuash(attack):
     suit = attack['suit']
@@ -2440,7 +2452,7 @@ def doHostileTakeoverNew(attack):
      ['slip-forward', 0.01, 1.0]]
     dodgeAnims = [['duck', 1e-06, 0.8]]
     toonTracks = getToonTracks(attack, damageDelay=knifeDelay + 0.11, splicedDamageAnims=damageAnims, dodgeDelay=knifeDelay - 0.1, splicedDodgeAnims=dodgeAnims)
-    soundTrack = getSoundTrack('SA_hostile_takeover.ogg', delay=knifeDelay, node=suit)
+    soundTrack = Func(base.playSfx, globalBattleSoundCache.getSound('SA_hostile_takeover.ogg'), volume=0.75, node=suit),
     return Parallel(suitTrack, knifeTracks, soundTrack, toonTracks)
 
 
@@ -4088,8 +4100,8 @@ def doSchmooze(attack):
     upperPartTracks = Parallel()
     lowerPartTracks = Parallel()
     for i in xrange(0, 4):
-        upperPartTracks.append(getPartTrack(upperEffects[i], partDelay + i * 0.65, 1.8, [upperEffects[i], suit, 0], softStop=-1))
-        lowerPartTracks.append(getPartTrack(lowerEffects[i], partDelay + i * 0.65 + 0.7, 2.0, [lowerEffects[i], suit, 0], softStop=-1))
+        upperPartTracks.append(getPartTrack(upperEffects[i], partDelay + i * 0.65, 0.8, [upperEffects[i], suit, 0]))
+        lowerPartTracks.append(getPartTrack(lowerEffects[i], partDelay + i * 0.65 + 0.7, 1.0, [lowerEffects[i], suit, 0]))
 
     damageAnims = []
     for i in xrange(0, 3):
@@ -4374,15 +4386,7 @@ def doParadigmShift(attack):
      0.6])
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.0, startTime=0.6))
     dodgeAnims.append(['jump', 0, 0.91])
-    ceaseTrack = ActorInterval(suit, 'cease')
-    ceaseSoundTrack = Parallel(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
-    ceaseSpeechTrack = Parallel(Func(suit.setChatAbsolute,
-                                     'Quality Control dictates that all Level 5 Gags are now classified as defective.',
-                                     CFSpeech | CFTimeout))
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.7)
-    if attack['suit'].dna.name == 'frs':
-        suitTrack.append(Wait(1.0))
-        suitTrack.append(Parallel(ceaseTrack, ceaseSoundTrack, ceaseSpeechTrack))
     if hitAtleastOneToon:
         soundTrack = getSoundTrack('SA_paradigm_shift.ogg', delay=1.5, node=suit)
         return Parallel(suitTrack, sprayTrack, soundTrack, liftTracks, toonTracks, toonRiseTracks)

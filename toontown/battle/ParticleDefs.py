@@ -177,7 +177,7 @@ def hostileTakeover(self):
     self.addParticles(p0)
 
 @particle
-def nickelDime(self):
+def nickelDimeno(self):
     self.reset()
     self.setPos(0, 7.8, 0.4)
     self.setHpr(90.000, 0.000, 0.000)
@@ -236,7 +236,7 @@ def nickelDime(self):
     f0.addForce(force0)
     self.addForceGroup(f0)
 
-def nickelDimeWaterfall(self):
+def nickelDimeWaterfallno(self):
     self.reset()
     self.setPos(0.000, 5.000, 2.300)
     self.setHpr(0.000, -45.000, 0.000)
@@ -1948,6 +1948,67 @@ def organizeEffect(self):
     p0.renderer.setIgnoreScale(1)
     p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/dollar-sign")
     p0.renderer.setColor(Vec4(0.00, 1.00, 0.00, 1.00))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.75)
+    p0.renderer.setFinalXScale(0.75)
+    p0.renderer.setInitialYScale(0.75)
+    p0.renderer.setFinalYScale(0.75)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(4.000 * 1.2)
+    p0.emitter.setAmplitudeSpread(1.000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, -4.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(0.300)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    # Force parameters
+    force0 = LinearSinkForce(Point3(0.0000, 1.2000, 0.0000), LinearDistanceForce.FTONEOVERRSQUARED, 1.0000, 20, 1)
+    force0.setActive(1)
+    f0.addForce(force0)
+    force1 = LinearJitterForce(5.0000, 0)
+    force1.setActive(1)
+    f0.addForce(force1)
+    self.addForceGroup(f0)
+
+@particle
+def organizeEffectBindings(self):
+    self.reset()
+    self.setScale(1, 1, 1)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(100)
+    p0.setBirthRate(0.1000)
+    p0.setLitterSize(6)
+    p0.setLitterSpread(2)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(1.3000)
+    p0.factory.setLifespanSpread(0.3000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.addTextureFromFile('phase_11/maps/paper_rain.png')
+    #p0.renderer.setColor(Vec4(1.00, 1.00, 0.00, 1.00))
     p0.renderer.setXScaleFlag(1)
     p0.renderer.setYScaleFlag(1)
     p0.renderer.setAnimAngleFlag(0)

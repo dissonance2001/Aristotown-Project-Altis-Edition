@@ -480,6 +480,9 @@ def __lureOneDollar(lure, npcs = []):
 
 def __lureSmallMagnet(lure, npcs = []):
     magnet = globalPropPool.getProp('small-magnet')
+    magnet.find('**/lightning').hide()
+    lightningTrack = Sequence(Wait(2.6), Func(magnet.find('**/lightning').show), Wait(3.7), Func(magnet.find('**/lightning').hide))
+    lightningTrack.start()
     pos = Point3(-0.27, 0.19, 0.29)
     hpr = Point3(-90.0, 84.17, -180.0)
     scale = Point3(0.85, 0.85, 0.85)
@@ -493,6 +496,9 @@ def __lureFiveDollar(lure, npcs = []):
 
 def __lureLargeMagnet(lure, npcs = []):
     magnet = globalPropPool.getProp('big-magnet')
+    magnet.find('**/lightning').hide()
+    lightningTrack = Sequence(Wait(2.6), Func(magnet.find('**/lightning').show), Wait(3.7), Func(magnet.find('**/lightning').hide))
+    lightningTrack.start()
     pos = Point3(-0.27, 0.08, 0.29)
     hpr = Point3(-90.0, 84.17, -180)
     scale = Point3(1.32, 1.32, 1.32)
