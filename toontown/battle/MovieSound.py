@@ -131,7 +131,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
                 elif suit.style.name == 'dsf':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
-                elif suit.style.name == 'jl':
+                elif suit.style.name == 'hydra':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
                 elif suit.style.name == 'fm':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
@@ -177,7 +177,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 elif suit.style.name == 'dsf':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
                                               MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
-                elif suit.style.name == 'jl':
+                elif suit.style.name == 'hydra':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-bow'),
                                               MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
                 elif suit.style.name == 'fm':

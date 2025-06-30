@@ -260,12 +260,12 @@ HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, Wacky
 WelcomeValleyToken = 0
 
 # Street Manager Spawns
-streetMgrs = ["mes", "dty", "dfg", "fm", "ggm", "tc", "dm", "tg"]
+streetMgrs = ["mes", "dty", "dfg", "fm", 'mouthp', "tc", "dm", "tg"]
 streetMgrs2Zones = {"mes": [SillyStreet, LoopyLane, PunchlinePlace, WackyWay],
                     "dty": [BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue],
                     "dfg": [KnightKnoll, NobleNook, WizardWay],
                     "fm": [ElmStreet, MapleStreet, OakStreet, RoseValley],
-                    "ggm": [AltoAvenue, BaritoneBoulevard, TenorTerrace, SopranoStreet],
+                    'mouthp': [AltoAvenue, BaritoneBoulevard, TenorTerrace, SopranoStreet],
                     "tc": [WalrusWay, SleetStreet, PolarPlace, ArcticAvenue],
                     "dm": [AcornAvenue, PeanutPlace, WalnutWay, LegumeLane],
                     "tg": [LullabyLane, PajamaPlace, TwilightTerrace]}
@@ -273,7 +273,7 @@ streetMgrs2Levels = {"mes": 16,
                      "dty": 17,
                      "dfg": 18,
                      "fm": 18,
-                     "ggm": 18,
+                     'mouthp': 18,
                      "tc": 20,
                      "dm": 17,
                      "tg": 20}

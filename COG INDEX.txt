@@ -95,7 +95,7 @@ mp - Redd "Heir" Wing Level 20.mgr
 laa - The Witness Stand-In Level 50.mgr (broken)
 
 	Street Manager:
-ggm - Mouthpiece Level 16.mgr
+mouthp - Mouthpiece Level 16.mgr
 
 	Kudos Managers:
 th - Rainmaker Level 16.mgr
@@ -139,11 +139,11 @@ mes - Duck Shuffler Level 5.mgr
 dm - Treekiller Level 24.mgr
 
 	Satellite Investors:
-tcc - Styx Level 20.mgr
-fb - Nix Level 21.mgr
-jl - Hydra Level 22.mgr
-gb - Kerberos Level 23.mgr
-lbs - Charon Level 25.mgr
+styx - Styx Level 20.mgr
+nix - Nix Level 21.mgr
+hydra - Hydra Level 22.mgr
+kerberos - Kerberos Level 23.mgr
+charon - Charon Level 25.mgr
 
 	Kudos Manager:
 trk - Plutocrat Level 38.mgr

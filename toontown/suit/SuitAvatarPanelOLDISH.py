@@ -43,38 +43,38 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel):
         d = p2 - p1
         biggest = max(d[0], d[1], d[2])
         if avatar.isSkeleton and avatar.dna.body == 'a' and not self.avatar.dna.dept == 'l' and not self.avatar.dna.dept == 'g' and not self.avatar.dna.name == 'cg' and not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'ts' and not self.avatar.dna.name == 'jur' \
-                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'tcc' \
-                and not self.avatar.dna.name == 'fb' and not self.avatar.dna.name == 'jl' and not self.avatar.dna.name == 'gb' and not self.avatar.dna.name == 'lbs' \
+                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'styx' \
+                and not self.avatar.dna.name == 'nix' and not self.avatar.dna.name == 'hydra' and not self.avatar.dna.name == 'kerberos' and not self.avatar.dna.name == 'charon' \
                 and not self.avatar.dna.name == 'fas' and not self.avatar.dna.name == 'mdr' and not self.avatar.dna.name == 'nar' and not self.avatar.dna.name == 'fd' \
                 and not self.avatar.dna.name == 'gkp' and not self.avatar.dna.name == 'ddv' and not self.avatar.dna.name == 'sya' and not self.avatar.dna.name == 'ant' and not self.avatar.dna.name == 'cm':
             s = 0.4 / biggest
         elif avatar.isSkeleton and avatar.dna.body == 'a' and not self.avatar.dna.name == 'cg' and not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'ts' and not self.avatar.dna.name == 'jur' \
-                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'tcc' \
-                and not self.avatar.dna.name == 'fb' and not self.avatar.dna.name == 'jl' and not self.avatar.dna.name == 'gb' and not self.avatar.dna.name == 'lbs' \
+                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'styx' \
+                and not self.avatar.dna.name == 'nix' and not self.avatar.dna.name == 'hydra' and not self.avatar.dna.name == 'kerberos' and not self.avatar.dna.name == 'charon' \
                 and not self.avatar.dna.name == 'fas' and not self.avatar.dna.name == 'mdr' and not self.avatar.dna.name == 'nar' and not self.avatar.dna.name == 'fd' \
                 and not self.avatar.dna.name == 'gkp' and not self.avatar.dna.name == 'ddv' and not self.avatar.dna.name == 'sya' and not self.avatar.dna.name == 'ant' and not self.avatar.dna.name == 'cm':
             s = 0.45 / biggest
         elif avatar.isSkeleton and avatar.dna.body == 'b' and not self.avatar.dna.dept == 'l' and not self.avatar.dna.dept == 'g' and not self.avatar.dna.name == 'cg' and not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'ts' and not self.avatar.dna.name == 'jur' \
-                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'tcc' \
-                and not self.avatar.dna.name == 'fb' and not self.avatar.dna.name == 'jl' and not self.avatar.dna.name == 'gb' and not self.avatar.dna.name == 'lbs' \
+                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'styx' \
+                and not self.avatar.dna.name == 'nix' and not self.avatar.dna.name == 'hydra' and not self.avatar.dna.name == 'kerberos' and not self.avatar.dna.name == 'charon' \
                 and not self.avatar.dna.name == 'fas' and not self.avatar.dna.name == 'mdr' and not self.avatar.dna.name == 'nar' and not self.avatar.dna.name == 'fd' \
                 and not self.avatar.dna.name == 'gkp' and not self.avatar.dna.name == 'ddv' and not self.avatar.dna.name == 'sya' and not self.avatar.dna.name == 'ant' and not self.avatar.dna.name == 'cm':
             s = 0.6 / biggest
         elif avatar.isSkeleton and avatar.dna.body == 'c' and not self.avatar.dna.dept == 'l' and not self.avatar.dna.dept == 'g' and not self.avatar.dna.name == 'cg' and not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'ts' and not self.avatar.dna.name == 'jur' \
-                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'tcc' \
-                and not self.avatar.dna.name == 'fb' and not self.avatar.dna.name == 'jl' and not self.avatar.dna.name == 'gb' and not self.avatar.dna.name == 'lbs' \
+                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'styx' \
+                and not self.avatar.dna.name == 'nix' and not self.avatar.dna.name == 'hydra' and not self.avatar.dna.name == 'kerberos' and not self.avatar.dna.name == 'charon' \
                 and not self.avatar.dna.name == 'fas' and not self.avatar.dna.name == 'mdr' and not self.avatar.dna.name == 'nar' and not self.avatar.dna.name == 'fd' \
                 and not self.avatar.dna.name == 'gkp' and not self.avatar.dna.name == 'ddv' and not self.avatar.dna.name == 'sya' and not self.avatar.dna.name == 'ant' and not self.avatar.dna.name == 'cm':
             s = 0.6 / biggest
         elif avatar.isSkeleton and avatar.dna.body == 'b' and not self.avatar.dna.name == 'cg' and not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'ts' and not self.avatar.dna.name == 'jur' \
-                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'tcc' \
-                and not self.avatar.dna.name == 'fb' and not self.avatar.dna.name == 'jl' and not self.avatar.dna.name == 'gb' and not self.avatar.dna.name == 'lbs' \
+                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'styx' \
+                and not self.avatar.dna.name == 'nix' and not self.avatar.dna.name == 'hydra' and not self.avatar.dna.name == 'kerberos' and not self.avatar.dna.name == 'charon' \
                 and not self.avatar.dna.name == 'fas' and not self.avatar.dna.name == 'mdr' and not self.avatar.dna.name == 'nar' and not self.avatar.dna.name == 'fd' \
                 and not self.avatar.dna.name == 'gkp' and not self.avatar.dna.name == 'ddv' and not self.avatar.dna.name == 'sya' and not self.avatar.dna.name == 'ant' and not self.avatar.dna.name == 'cm':
             s = 0.5 / biggest
         elif avatar.isSkeleton and avatar.dna.body == 'c' and not self.avatar.dna.name == 'cg' and not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'ts' and not self.avatar.dna.name == 'jur' \
-                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'tcc' \
-                and not self.avatar.dna.name == 'fb' and not self.avatar.dna.name == 'jl' and not self.avatar.dna.name == 'gb' and not self.avatar.dna.name == 'lbs' \
+                and not self.avatar.dna.name == 'laa' and not self.avatar.dna.name == 'csh' and not self.avatar.dna.name == 'bgr' and not self.avatar.dna.name == 'styx' \
+                and not self.avatar.dna.name == 'nix' and not self.avatar.dna.name == 'hydra' and not self.avatar.dna.name == 'kerberos' and not self.avatar.dna.name == 'charon' \
                 and not self.avatar.dna.name == 'fas' and not self.avatar.dna.name == 'mdr' and not self.avatar.dna.name == 'nar' and not self.avatar.dna.name == 'fd' \
                 and not self.avatar.dna.name == 'gkp' and not self.avatar.dna.name == 'ddv' and not self.avatar.dna.name == 'sya' and not self.avatar.dna.name == 'ant' and not self.avatar.dna.name == 'cm':
             s = 0.5 / biggest

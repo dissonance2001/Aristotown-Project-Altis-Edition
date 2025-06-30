@@ -159,15 +159,15 @@ def createSuitResetPosTrack(suit, battle):
 
 def __soakRemoval(suit, remove=0):
     if remove:
-        if suit.style.name == 'jl':
+        if suit.style.name == 'hydra':
             color = Point4((0.729, 0.729, 0.729, 1))
-        elif suit.style.name == 'lbs':
+        elif suit.style.name == 'charon':
             color = Point4((0.51, 0.49, 0.467, 1))
-        elif suit.style.name == 'fb':
+        elif suit.style.name == 'nix':
             color = Point4((0.6, 0.6, 0.6, 1))
-        elif suit.style.name == 'tcc':
+        elif suit.style.name == 'styx':
             color = Point4((0.671, 0.671, 0.671, 1))
-        elif suit.style.name == 'gb':
+        elif suit.style.name == 'kerberos':
             color = Point4((0.62, 0.659, 0.624, 1))
         else:
             color = Point4(1.0, 1.0, 1.0, 1.0)

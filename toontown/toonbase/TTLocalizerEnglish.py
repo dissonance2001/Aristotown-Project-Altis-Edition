@@ -3694,10 +3694,10 @@ SuitFaceoffTaunts = {
         "If you fail to cooperate, I will take further action.",
         "I have no choice but to take litigation.",
         "This motion is approved."],
-'ggm': ["Come to chat?",
-        "I was hoping you'd come visit me.",
-        "Don't mouth off to me, young Toon!",
-        "You should have called ahead, I could have made you some cookies!"],
+ 'mouthp': ["Come to chat?",
+            "I was hoping you'd come visit me.",
+            "Don't mouth off to me, young Toon!",
+            "You should have called ahead, I could have made you some cookies!"],
 'scg': ["Goat ready for a fight!",
         "You won't like me maa-d!",
         "I'll take you all on!",
@@ -3763,26 +3763,16 @@ SuitFaceoffTaunts = {
 'cvy': [
 		"Let's diversify, Toon.",
 	],
-'tcc': [
-		"We'll launch ya out of town.",
-"Stick around and we'll put ya on ice, Toon."
-	],
-'fb': [
-		"We'll launch ya out of town.",
-"Stick around and we'll put ya on ice, Toon."
-	],
-'jl': [
-		"We'll launch ya out of town.",
-"Stick around and we'll put ya on ice, Toon."
-	],
-'gb': [
-		"We'll launch ya out of town.",
-"Stick around and we'll put ya on ice, Toon."
-	],
-'lbs': [
-		"We'll launch ya out of town.",
-"Stick around and we'll put ya on ice, Toon."
-	],
+ 'styx': ["We'll launch ya out of town.",
+          "Stick around and we'll put ya on ice, Toon."],
+ 'nix': ["We'll launch ya out of town.",
+         "Stick around and we'll put ya on ice, Toon."],
+ 'hydra': ["We'll launch ya out of town.",
+           "Stick around and we'll put ya on ice, Toon."],
+ 'kerberos': ["We'll launch ya out of town.",
+              "Stick around and we'll put ya on ice, Toon."],
+ 'charon': ["We'll launch ya out of town.",
+            "Stick around and we'll put ya on ice, Toon."],
 'mes': [
 		"Deal me IN!",
         "Watch it, the cardth are THTACKED againtht ya!",
@@ -4909,10 +4899,10 @@ SuitAttackTaunts = {
                 "I hate to be blunt, but...",
                 "I hope this leaves a mark on you."],
  'FingerWag': {
-     'ggm': ["Now, now, there's no reason to raise a fuss.",
-             'Honestly, so ill-tempered!',
-             'You could use a lesson in respect!',
-             "I've met children less rowdy than you!"],
+     'mouthp': ["Now, now, there's no reason to raise a fuss.",
+                'Honestly, so ill-tempered!',
+                'You could use a lesson in respect!',
+                "I've met children less rowdy than you!"],
      'scg': ["Don't you dare make me come over there!!!",
              "I'll teach you to respect me!!!",
              "Hey! That's no way to treat a Suit like me!!!",
@@ -5069,10 +5059,10 @@ SuitAttackTaunts = {
             "You're knot ready for a tie like this."]
  },
  'HangUp': {
-     'ggm': ['Maybe you should change your tone before ringing me again.',
-             "This old lady's not ready to hang up her hat just yet!",
-             'If you decide to dial back, perhaps you could dial down as well.',
-             'Oh dear, it appears I have the wrong number! Toodle-oo!'],
+     'mouthp': ['Maybe you should change your tone before ringing me again.',
+                "This old lady's not ready to hang up her hat just yet!",
+                'If you decide to dial back, perhaps you could dial down as well.',
+                'Oh dear, it appears I have the wrong number! Toodle-oo!'],
      None: ["You've been disconnected.",
             'Good bye!',
             "It's time I end our connection.",
@@ -5384,10 +5374,10 @@ SuitAttackTaunts = {
                   "Here's an interesting story about my life.",
                   'I hope this story finds you well.'],
  'PoundKey': {
-     'ggm': ["These buttons just don't have the same feel as a rotary dial.",
-             "Retirement just can't compare to the excitement of a 9 to 5. Don't you agree?",
-             'My cookie recipe? Well, start with crude oil. A few pounds.',
-             "I don't enjoy fighting, but I'm afraid I'm not one to press for more options."],
+     'mouthp': ["These buttons just don't have the same feel as a rotary dial.",
+                "Retirement just can't compare to the excitement of a 9 to 5. Don't you agree?",
+                'My cookie recipe? Well, start with crude oil. A few pounds.',
+                "I don't enjoy fighting, but I'm afraid I'm not one to press for more options."],
      'ste': ["Hold on, I'm getting a call. Oh! It's for you!",
              "Now THIS is something I'll have to tell Belle about!",
              'Just a moment, I have to take this.',
@@ -5539,10 +5529,10 @@ SuitAttackTaunts = {
             "Why don't we start with basic restraining?"]
  },
  'Rolodex': {
-     'ggm': ["Oh, that's Cassie's number! I'd best not lose that card!",
-             "I think you'll find I'm quite dexterous for my age!",
-             'As the kids say, I\'m, "on a roll!"',
-             'I really should sort through this thing one of these days...'],
+     'mouthp': ["Oh, that's Cassie's number! I'd best not lose that card!",
+                "I think you'll find I'm quite dexterous for my age!",
+                'As the kids say, I\'m, "on a roll!"',
+                'I really should sort through this thing one of these days...'],
      'csm': ['Hmm, hmm...',
              'This your card...?',
              'Watch for papercuts.',

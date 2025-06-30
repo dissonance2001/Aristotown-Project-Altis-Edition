@@ -160,11 +160,11 @@ csh = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 bgr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 mes = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 dm = (('shredder', 'shredder', 4), ('pen-squirt', 'fountain-pen', 4))
-tcc = (('watercooler', 'watercooler', 4), ('glower', 'glower', 4))
-fb = (('hold-eraser', 'hold-eraser', 4), ('pen-squirt', 'fountain-pen', 4))
-jl = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-gb = (('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
-lbs = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+styx = (('watercooler', 'watercooler', 4), ('glower', 'glower', 4))
+nix = (('hold-eraser', 'hold-eraser', 4), ('pen-squirt', 'fountain-pen', 4))
+hydra = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+kerberos = (('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
+charon = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 trk = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 dsf = (('glower', 'glower', 4), ('scabbard', 'scabbard', 4), ('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('song-and-dance', 'song-and-dance', 4), ('walk', 'awalk', 4))
 msp = ('cigar-smoke', 'cigar-smoke', 4)
@@ -189,7 +189,7 @@ jdg = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
 jur = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 tlr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 cm = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-ggm = (('roll-o-dex', 'roll-o-dex', 4), ('finger-wag', 'finger-wag', 4))
+mouthp = (('roll-o-dex', 'roll-o-dex', 4), ('finger-wag', 'finger-wag', 4))
 th = (('effort', 'effort', 4), ('glower', 'glower', 4))
 whunter = (('mob-mentality', 'mob-mentality', 4), ('speak', 'speak', 4))
 tr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -1734,7 +1734,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.5)
-        elif dna.name == 'ggm':
+        elif dna.name == 'mouthp':
             self.scale = 5.0 / bSize
             self.handColor = VBase4(0.42, 0.502, 0.62, 1)
             self.generateFemaleBody()
@@ -1971,27 +1971,27 @@ class Suit(Avatar.Avatar):
             self.makeTreekiller()
             self.generateHead3('treekiller', animated=True)
             self.setHeight(7.5)
-        elif dna.name == 'tcc':
+        elif dna.name == 'styx':
             self.scale = 5.5 / cSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.makeSkeletonManager()
             self.setHeight(6.97)
-        elif dna.name == 'fb':
+        elif dna.name == 'nix':
             self.scale = 6.25 / bSize
             self.handColor = VBase4(0.529, 0.455, 0.369, 1)
             self.makeSkeletonManager()
             self.setHeight(7.5)
-        elif dna.name == 'jl':
+        elif dna.name == 'hydra':
             self.scale = 6.75 / cSize
             self.handColor = VBase4(0.5, 1, 0, 1.0)
             self.makeSkeletonManager()
             self.setHeight(8.23)
-        elif dna.name == 'gb':
+        elif dna.name == 'kerberos':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.makeSkeletonManager()
             self.setHeight(8.95)
-        elif dna.name == 'lbs':
+        elif dna.name == 'charon':
             self.scale = 5.45 / aSize
             self.handColor = VBase4(0.286, 0.29, 0.286, 1)
             self.makeSkeletonManager()
@@ -3575,8 +3575,8 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
         elif self.isExecutive and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.isManager and not self.style.name == 'lbs' and not self.style.name == 'jl'\
-                and not self.style.name == 'blr' and not self.style.name == 'dsk' and not self.style.name == 'gb' and not self.style.name == 'fb' and not self.style.name == 'tcc' and not self.isWaiter:
+        elif self.isManager and not self.style.name == 'charon' and not self.style.name == 'hydra'\
+                and not self.style.name == 'blr' and not self.style.name == 'dsk' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'styx' and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.isGovernaught and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
@@ -3595,27 +3595,27 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'laa':
             modelRoot.find('**/bowtie').hide()
             modelRoot.find('**/necktie-w').show()
-        elif self.style.name == 'jl':
+        elif self.style.name == 'hydra':
             modelRoot.find('**/bowtie').show()
             modelRoot.setColor((0.729, 0.729, 0.729, 1))
             modelRoot.find('**/bowtie').setColor((0.741, 0.82, 0.769, 1))
         elif self.style.name == 'laa':
             texture2 = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
             modelRoot.find('**/necktie-w').setTexture(texture2, 1)
-        elif self.style.name == 'lbs':
+        elif self.style.name == 'charon':
             modelRoot.find('**/necktie-w').hide()
             modelRoot.find('**/necktie-s').show()
             modelRoot.setColor((0.51, 0.49, 0.467, 1))
             modelRoot.find('**/necktie-s').setColor((0.741, 0.82, 0.769, 1))
-        elif self.style.name == 'fb':
+        elif self.style.name == 'nix':
             modelRoot.find('**/necktie-w').show()
             modelRoot.setColor((0.6, 0.6, 0.6, 1))
             modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
-        elif self.style.name == 'tcc':
+        elif self.style.name == 'styx':
             modelRoot.find('**/necktie-w').show()
             modelRoot.setColor((0.671, 0.671, 0.671, 1))
             modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
-        elif self.style.name == 'gb':
+        elif self.style.name == 'kerberos':
             modelRoot.find('**/necktie-w').show()
             modelRoot.setColor((0.62, 0.659, 0.624, 1))
             modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
@@ -4962,7 +4962,7 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'cfp':
             self.corpMedallion.setZ(.2)
-        elif self.style.name == 'ggm':
+        elif self.style.name == 'mouthp':
             self.corpMedallion.setZ(.2)
         icons.removeNode()
 
@@ -5029,7 +5029,7 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'dfh':
             self.corpMedallion.setZ(.2)
-        elif self.style.name == 'ggm':
+        elif self.style.name == 'mouthp':
             self.corpMedallion.setZ(.2)
         icons.removeNode()
 
@@ -5130,7 +5130,7 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setZ(.2)
         elif self.style.name == 'dfh':
             self.corpMedallion.setZ(.2)
-        elif self.style.name == 'ggm':
+        elif self.style.name == 'mouthp':
             self.corpMedallion.setZ(.2)
         icons.removeNode()
         icons2.removeNode()
@@ -5185,7 +5185,7 @@ class Suit(Avatar.Avatar):
             self.hpBase.setZ(.2)
         elif self.style.name == 'phs':
             self.hpBase.setZ(.2)
-        elif self.style.name == 'ggm':
+        elif self.style.name == 'mouthp':
             self.hpBase.setZ(.2)
         elif self.style.name == 'bdb':
             self.hpBase.setZ(.2)
@@ -5267,7 +5267,7 @@ class Suit(Avatar.Avatar):
             self.healthBar.setZ(.2)
         elif self.style.name == 'bdb':
             self.healthBar.setZ(.2)
-        elif self.style.name == 'ggm':
+        elif self.style.name == 'mouthp':
             self.healthBar.setZ(.2)
 
     def generateSkeletonHealthBar(self, modelRoot=None):
@@ -6286,7 +6286,7 @@ class Suit(Avatar.Avatar):
                 modelRoot.find('**/necktie-w').show()
                 modelRoot.find('**/bowtie').hide()
             if self.style.body == 'a' and not self.style.name == 'ts' and not self.style.name == 'kb' and not self.style.name == 'dsk' and not self.style.name == 'blr' \
-                and not self.style.name == 'lbs' and not self.style.name == 'bg' and not self.style.name == 'cg' and not self.style.name == 'jl' and not self.style.name == 'gb' and not self.style.name == 'fb' and not self.style.name == 'tcc':
+                and not self.style.name == 'charon' and not self.style.name == 'bg' and not self.style.name == 'cg' and not self.style.name == 'hydra' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'styx':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
@@ -6295,7 +6295,7 @@ class Suit(Avatar.Avatar):
                 modelRoot.find('**/necktie-s').setTexture(texture, 1)
                 modelRoot.find('**/necktie-w').setTexture(texture, 1)
                 modelRoot.find('**/bowtie').setTexture(texture, 1)
-            if self.style.body == 'b' and not self.style.name == 'lbs' and not self.style.name == 'jl' and not self.style.name == 'gb' and not self.style.name == 'fb' and not self.style.name == 'tcc':
+            if self.style.body == 'b' and not self.style.name == 'charon' and not self.style.name == 'hydra' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'styx':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
@@ -6311,7 +6311,7 @@ class Suit(Avatar.Avatar):
                 modelRoot.find('**/necktie-s').setTexture(texture, 1)
                 modelRoot.find('**/necktie-w').setTexture(texture, 1)
                 modelRoot.find('**/bowtie').setTexture(texture, 1)
-            if self.style.body == 'c' and not self.style.name == 'fd' and not self.style.name == 'nar' and not self.style.name == 'lbs' and not self.style.name == 'jl' and not self.style.name == 'gb' and not self.style.name == 'fb' and not self.style.name == 'tcc':
+            if self.style.body == 'c' and not self.style.name == 'fd' and not self.style.name == 'nar' and not self.style.name == 'charon' and not self.style.name == 'hydra' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'styx':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
                 for headPart in self.headParts:
@@ -6782,7 +6782,7 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'cfp' and not self.isSkeleton:
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'ggm' and not self.isSkeleton:
+        if self.style.name == 'mouthp' and not self.isSkeleton:
             loadDialog(1)
             return MouthpieceDialogArray
         if self.style.name == 'whunter' and not self.isSkeleton:
@@ -7000,7 +7000,7 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'ste' and self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogFemaleArray
-        if self.style.name == 'ggm' and self.isSkeleton:
+        if self.style.name == 'mouthp' and self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogFemaleArray
         if self.style.name == 'rb' and self.isSkeleton:

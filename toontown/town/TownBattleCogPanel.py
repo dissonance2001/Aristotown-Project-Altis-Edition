@@ -1603,7 +1603,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .1, .1, .1)
         elif name == 'gtk':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
-        elif name == 'ggm':
+        elif name == 'mouthp':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
         elif name == 'bf':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
@@ -1711,13 +1711,13 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
         elif name == 'jr' or name == 'prr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .065, .065, .065)
-        elif name == 'laa' or name == 'csh' or name == 'gb' or name == 'lbs' or name == 'ddv' or name == 'sya' or name == 'pbl' or name == 'mdr' or name == 'fas' or name == 'gkp':
+        elif name == 'laa' or name == 'csh' or name == 'kerberos' or name == 'charon' or name == 'ddv' or name == 'sya' or name == 'pbl' or name == 'mdr' or name == 'fas' or name == 'gkp':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .12, .12, .12)
         elif name == 'cg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .125, .125, .125)
-        elif name == 'jl' or name == 'tcc' or name == 'bgr':
+        elif name == 'hydra' or name == 'styx' or name == 'bgr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .3, .3, .3)
-        elif name == 'jur' or name == 'ant' or name == 'fb' or name == 'jls' :
+        elif name == 'jur' or name == 'ant' or name == 'nix' or name == 'jls' :
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .2, .2, .2)
         elif name == 'cm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)

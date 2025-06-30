@@ -1099,7 +1099,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             if suit.dna.name == 'th':
                 if not len(battle.suits) >= 5:
                     return 1
-            if suit.dna.name == 'ggm':
+            if suit.dna.name == 'mouthp':
                 if not len(battle.suits) >= 5:
                     return 1
         if len(battle.suits) >= 4:
@@ -1251,7 +1251,7 @@ def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
         return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
     elif name == 'mad' and revives > 0:
         return "Unable to spawn %s with revives."  % suitFullName
-    elif (name == 'cg' or name == 'jur' or name == 'laa' or name == 'csh' or name == 'bgr' or name == 'tcc' or name == 'fb' or name == 'jl' or name == 'gb' or name == 'lbs' \
+    elif (name == 'cg' or name == 'jur' or name == 'laa' or name == 'csh' or name == 'bgr' or name == 'styx' or name == 'nix' or name == 'hydra' or name == 'kerberos' or name == 'charon' \
         or name == 'fas' or name == 'mdr' or name == 'gkp' or name == 'ddv' or name == 'ant' or name == 'sya') and revives > 1:
         return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
     elif name == 'kb':

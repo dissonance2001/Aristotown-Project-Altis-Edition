@@ -58,7 +58,7 @@ def showLureRounds(suit, battle, level):
     elif suit.dna.name == 'tg' and not trapProp:
         suit.showHpTextLureInfo("LURED 1 ROUND")
         suit.showHpStringLureManager("MANAGER BENEFIT!")
-    elif suit.dna.name == 'ggm' and not trapProp:
+    elif suit.dna.name == 'mouthp' and not trapProp:
         suit.showHpTextLureInfo("LURED 1 ROUND")
         suit.showHpStringLureManager("MANAGER BENEFIT!")
     elif suit.dna.name == 'th' and not trapProp:
