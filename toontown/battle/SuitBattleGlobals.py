@@ -614,8 +614,6 @@ SuitLevel = {
 
 SpecialCogDict = ('ddv', 'sya', 'fhj', 'dty', 'dar', 'dsf', 'nhy', 'wrt', 'auh', 'dfg', 'msp', 'dfr', 'bsh', 'ghd', 'tyh', 'jgd', 'dsf', 'bby', 'dvk', 'otm', 'cry', 'tcm', 'bg', 'msr', 'kb', 'ts', 'tc', 'tg', 'tb', 'adc', 'drm', 'cp', 'fbd', 'frs', 'gtk', 'jur', 'tlr', 'cm', 'mouthp', 'th', 'whunter', 'tr', 'mp', 'laa', 'scg', 'csm', 'ste', 'lit', 'bgr', 'mes', 'dm', 'styx', 'nix', 'hydra', 'kerberos', 'charon', 'trk', 'mad', 'crf', 'mdr', 'nar', 'fd', 'fm', 'prethink', 'jr', 'prr', 'blr', 'dvp', 'dsk', 'ffm', 'sft')
 LitigationManagers = ('lit', 'ste', 'csm', 'scg', 'ffm', 'dsk', 'blr', 'dvp', 'gtk', 'frs', 'fbd', 'cp')
-SpecialCogDict = ('ddv', 'sya', 'fhj', 'dty', 'dar', 'dsf', 'nhy', 'wrt', 'auh', 'dfg', 'msp', 'dfr', 'bsh', 'ghd', 'tyh', 'jgd', 'dsf', 'bby', 'dvk', 'otm', 'cry', 'tcm', 'bg', 'msr', 'kb', 'ts', 'tc', 'tg', 'tb', 'adc', 'drm', 'cp', 'fbd', 'frs', 'gtk', 'jur', 'tlr', 'cm', 'ggm', 'th', 'whunter', 'tr', 'mp', 'laa', 'scg', 'csm', 'ste', 'lit', 'bgr', 'mes', 'dm', 'tcc', 'fb', 'jl', 'gb', 'lbs', 'trk', 'mad', 'crf', 'mdr', 'nar', 'fd', 'fm', 'prethink', 'jr', 'prr', 'blr', 'dvp', 'dsk', 'ffm', 'sft')
-
 
 ATK_TGT_UNKNOWN = 1
 ATK_TGT_SINGLE = 2
