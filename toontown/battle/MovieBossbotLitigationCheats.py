@@ -286,16 +286,29 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     suitPos = suit.getPos(battle)
+    toonPos = toon.getPos(battle)
+    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+    indicator.setHpr(0, -90, 0)
+    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
+    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
+                               Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
 
 
 def getToonTracks(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 1e-06, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
@@ -308,26 +321,35 @@ def getToonTracks(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDela
     return toonTracks
 
 
-def getToonTrackCheat(attack, damageDelay=1e-06, damageAnimNames=None, dodgeDelay=0.0001, dodgeAnimNames=None,
-                      splicedDamageAnims=None, splicedDodgeAnims=None, target=None, showDamageExtraTime=0.01,
-                      showMissedExtraTime=0.5):
+def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 0.0001, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, target = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
     if not target:
         target = attack['target'][0]
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
     suitPos = suit.getPos(battle)
+    toonPos = toon.getPos(battle)
+    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+    indicator.setHpr(0, -90, 0)
+    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
+    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
+                               Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
-        animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames,
-                                                     splicedDamageAnims, showDamageExtraTime))
-        return animTrack
+        animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
+        return Parallel(animTrack, indicatorTracks)
     else:
-        animTrack.append(
-            getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
-        # indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
+        animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
+        #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return animTrack
 
 
@@ -619,8 +641,9 @@ def doPaperCut(attack):
     dmg = target[0]['hp']
     battle = attack['battle']
     targetPos = toon.getPos(battle)
-    suitTrack = Sequence(getSuitTrack(attack))
-    suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=1), Wait(2.0), ActorInterval(suit, 'sanction', startTime=1), Func(suit.setNeutralAnimation))
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    suitTrack = Sequence(getSuitTrack(attack), Func(suit.headsUp, battle, targetPos))
+    suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=1), Wait(2.0), ActorInterval(suit, 'sanction', startTime=1), Func(suit.setHpr, battle, origHpr), Func(suit.setNeutralAnimation))
     partTrack = getPartTrack(particleEffect, 0.5, 5.0, [particleEffect, suit, 0], softStop=-2)
     toonTrack = getToonTrackCheat(attack, 2, ['cringe'], 3.4, ['struggle'])
     soundTrack = getSoundTrack('SA_shred.ogg', delay=0.5, node=suit)
@@ -1201,10 +1224,48 @@ def doHeadRollerGroup(attack):
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=manager))
     return Parallel(managerTrack, suitTracks, soundTrack, selfDamageTracks)
 
+def doGhostMentality(attack):
+    manager = attack['suit']
+    battle = attack['battle']
+    suitTracks = Parallel()
+    managerTracks = Parallel()
+    moveTracks = Parallel()
+
+    for targetSuit in battle.activeSuits:
+        targetPos = targetSuit.getPos(battle)
+        headsUp = Func(manager.headsUp, battle, targetPos)
+        sinkPos = manager.getPos(battle)
+        dropPos = manager.getPos(battle)
+        sinkPos2 = manager.getPos(battle)
+        dropPos2 = manager.getPos(battle)
+        target = attack['target']
+        toon = target[0]['toon']
+        sinkPos.setY(sinkPos.getY() + 12.5)
+        sinkPos.setZ(sinkPos.getZ() - 4.5)
+        sinkPos2.setY(sinkPos.getY() - 22.5)
+        battle = attack['battle']
+        targetPos2 = toon.getPos(battle)
+        headsUp2 = Func(manager.headsUp, battle, targetPos2)
+        moveTrack = Sequence(LerpPosInterval(manager, manager.getDuration('walk'), sinkPos2, other=battle),
+                             Wait(manager.getDuration('deadwood')),
+                             LerpPosInterval(manager, manager.getDuration('walk'), dropPos, other=battle),
+                             Func(manager.setPos, battle, dropPos))
+        managerTrack = Sequence(ActorInterval(manager, 'walk'), headsUp, getSuitAnimTrack(attack),
+                             ActorInterval(manager, 'walk'), headsUp2, Func(manager.setNeutralAnimation))
+        managerTracks.append(managerTrack)
+        moveTracks.append(moveTrack)
+        suitTrack = Sequence(Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5), MovieUtil.createGhostMentalityTrack(targetSuit, battle))
+        if not targetSuit.dna.name == 'gtk':
+            if targetSuit.isManager:
+                pass
+            if not targetSuit.isManager and not targetSuit.isVirtual:
+                suitTracks.append(suitTrack)
+    soundTrack = Sequence(Wait(manager.getDuration('walk')), SoundInterval(globalBattleSoundCache.getSound('SA_deadwood.ogg'), node=manager))
+    return Parallel(managerTracks, moveTracks, suitTracks, soundTrack)
+
 def doAmbassadorPhase2(attack):
     theSuit = attack['suit']
     battle = attack['battle']
-    ambassadorPhase3 = Func(theSuit.makeAmbassadorPhase3)
     suitTrackAnim = Sequence()
     soundTrack3 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     suitTrackAnim.append(MovieUtil.createAmbassadorReviveTrack(theSuit, battle))
@@ -1212,8 +1273,8 @@ def doAmbassadorPhase2(attack):
     suitTrackAnim.append(Func(theSuit.setNeutralAnimation))
     suitTrackAnim.append(Wait(2))
     suitTrackAnim.append(Parallel(Func(theSuit.updateHealthBar, 0), ActorInterval(theSuit, 'frustrated'),
-                                  Func(theSuit.showHpString, "1.5x DMG MULTIPLIER!"),
-                                  Func(theSuit.setChatAbsolute, "You toons have me so overworked, you made me blow through my suit! Now it's time to bring out the big guns.", CFSpeech | CFTimeout),
+                                  Func(theSuit.showHpString, "ENRAGED!"),
+                                  Func(theSuit.setChatAbsolute, "You toons have me so overworked, you made me blow right through my suit! Now it's time to bring out the big guns.", CFSpeech | CFTimeout),
                                   Func(theSuit.setNeutralAnimation)))
     suitTrackAnim.append(Wait(3))
     return Parallel(suitTrackAnim, soundTrack3)
@@ -1258,13 +1319,17 @@ def doAmbassadorDamageUp(attack):
     theSuit = attack['suit']
     battle = attack['battle']
     destroyedSuits = []
+    syphonedManagerSuit = []
     for suit in battle.activeSuits:
         if not suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             destroyedSuits.append(suit)
+        else:
+            if not suit.dna.name == 'gtk':
+                syphonedManagerSuit.append(suit)
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0)
     makeImmune = Func(theSuit.makeDamageUp)
-    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextCheat, + (100 * len(destroyedSuits))), Func(theSuit.showHpString, "1.%sx DMG MULTIPLIER!" % int(1 * len(destroyedSuits))), Func(theSuit.setHealthForMe, + (100 * len(destroyedSuits))), Func(theSuit.updateHealthBar, 0))
+    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextCheat, + ((100 * len(destroyedSuits)) + (250 * len(syphonedManagerSuit)))), Func(theSuit.showHpString, "1.%sx DMG MULTIPLIER!" % int(0.5 * len(destroyedSuits))), Func(theSuit.setHealthForMe, + ((100 * len(destroyedSuits)) + (250 * len(syphonedManagerSuit)))), Func(theSuit.updateHealthBar, 0))
     return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doCollectCallDamage(attack):

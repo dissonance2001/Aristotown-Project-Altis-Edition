@@ -1256,5 +1256,9 @@ def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
         return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
     elif name == 'kb':
         revives = 1
+    elif name == 'laa':
+        revives = 1
+    elif name == 'mp':
+        revives = 1
     sp.createNewSuit([], pointmap, suitName=name, suitLevel=level, skelecog=skelecog, revives=revives, waiter=waiter)
     return "Spawned %s in current zone." % suitFullName

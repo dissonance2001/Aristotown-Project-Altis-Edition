@@ -70,6 +70,9 @@ def showLureRounds(suit, battle, level):
     elif suit.dna.name == 'laa' and not trapProp:
         suit.showHpTextLureInfo("LURED 1 ROUND")
         suit.showHpStringLureManager("MANAGER BENEFIT!")
+    elif suit.dna.name == 'mp' and not trapProp:
+        suit.showHpTextLureInfo("LURED 1 ROUND")
+        suit.showHpStringLureManager("MANAGER BENEFIT!")
     elif suit.dna.name == 'mes' and not trapProp:
         suit.showHpTextLureInfo("LURED 1 ROUND")
         suit.showHpStringLureManager("MANAGER BENEFIT!")
@@ -672,22 +675,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
-            if suit.style.name == 'csm':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
-            elif suit.style.name == 'scg':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
-            elif suit.style.name == 'lit':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
-            elif suit.style.name == 'ste':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -735,22 +722,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
-            if suit.style.name == 'csm':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
-            elif suit.style.name == 'scg':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
-            elif suit.style.name == 'lit':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
-            elif suit.style.name == 'ste':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -792,22 +763,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
-            if suit.style.name == 'csm':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
-            elif suit.style.name == 'scg':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
-            elif suit.style.name == 'lit':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
-            elif suit.style.name == 'ste':
-                for s in battle.activeSuits:
-                    if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                        animTrack.append(MovieUtil.createDesperationTrack(s))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
@@ -1003,13 +958,15 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         result.append(Func(suit.setChatAbsolute,
                               '',
                               CFSpeech | CFTimeout))
+        if suit.dna.name == 'mp' and revived != 0:
+            result.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:
             result.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        elif revived != 0 and not suit.isSkeleton:
+        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'mp':
             result.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual:
+        if died != 0 and suit.isVirtual:
             result.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and not suitGone:
+        if died != 0 and not suit.isVirtual and not suitGone:
             result.append(MovieUtil.createSuitDeathTrack(suit, battle))
     return result
 

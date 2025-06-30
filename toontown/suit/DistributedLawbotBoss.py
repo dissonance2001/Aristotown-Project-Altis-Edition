@@ -308,7 +308,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         bossTrack = Sequence()
         self.notify.debug('calling setPosHpr')
         myInterval = base.camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), startPos=Point3(-22, -90, 35), startHpr=Point3(-10, -13, 0), blendType='easeInOut')
-        chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempJury1, CFSpeech), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1))
+        chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempJury1, CFSpeech), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1), Func(self.setChatAbsolute, '', CFSpeech))
         bossTrack.append(Func(self.getGeomNode().setH, 180))
         chatTrack.append(Func(self.setChatAbsolute, '', CFSpeech))
         track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
@@ -325,7 +325,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         battleHpr = VBase3(ToontownGlobals.LawbotBossBattleThreePosHpr[3], ToontownGlobals.LawbotBossBattleThreePosHpr[4], ToontownGlobals.LawbotBossBattleThreePosHpr[5])
         bossTrack = Sequence()
         myInterval = base.camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), startPos=Point3(-22, -90, 35), startHpr=Point3(-10, -13, 0), blendType='easeInOut')
-        chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTrialChat1, CFSpeech), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1))
+        chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTrialChat1, CFSpeech), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1), Func(self.setChatAbsolute, '', CFSpeech))
         bossTrack.append(Func(self.setChatAbsolute, '', CFSpeech))
         bossTrack.append(Func(self.getGeomNode().setH, 180))
         bossTrack.append(Func(self.loop, 'Ff_neutral_f'))
@@ -986,7 +986,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('----- enterBattleTwo')
         self.cleanupIntervals()
         NametagGlobals.setWant2dNametags(False)
-        NametagGlobals.setWantActiveNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(2)
         localAvatar.inventory.setBattleCreditMultiplier(mult)
@@ -1555,7 +1555,8 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             # ramps retract.
             (24, Sequence(self.toonNormalEyes(self.involvedToons),
                           Func(self.loop, 'Ff_neutral'),
-                          Func(self.setChatAbsolute, attackToons, CFSpeech)
+                          Func(self.setChatAbsolute, attackToons, CFSpeech), Func(self.setChatAbsolute, '', CFSpeech)
+
                           )),
         )
         track.append(dialogTrack)
@@ -1878,7 +1879,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('done with positionToons')
 
     def __makePrepareBattleTwoMovie(self):
-        chatString = TTLocalizer.WitnessToonPrepareBattleTwo
+        chatString = 'You know what to do.'
         movie = Sequence(Func(base.camera.reparentTo, self.witnessToon), Func(base.camera.setPos, 0, 8, 2), Func(base.camera.setHpr, 180, 10, 0), Func(self.witnessToon.setLocalPageChat, chatString, 0))
         return movie
 

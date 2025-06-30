@@ -451,9 +451,11 @@ def __throwPie(throw, delay, hitCount, npcs):
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=THROW_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
+        if suit.dna.name == 'mp' and revived != 0:
+            suitResponseTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:
             suitResponseTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton:
+        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'mp':
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         if died != 0 and suit.isVirtual:
             suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))

@@ -238,8 +238,10 @@ class SuitPlannerInteriorAI:
             miniboss3 = self.__genSuitObject(self.zoneId, 18, 'c', 26, 1)
             activeSuits.append(random.choice((miniboss, miniboss2, miniboss3)))
         elif specialCode == 'lit2':
-            miniboss = self.__genSuitObject(self.zoneId, 24, 'l', 24, 0)
+            miniboss = self.__genSuitObject(self.zoneId, 24, 'l', 24, 1)
+            miniboss2 = self.__genSuitObject(self.zoneId, 23, 'l', 23, 1)
             activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
         elif specialCode == 'oclo1':
             miniboss = self.__genSuitObject(self.zoneId, 14, 'l', 22, 0)
             miniboss3 = self.__genSuitObject(self.zoneId, 12, 'l', 22, 0)
@@ -340,12 +342,12 @@ class SuitPlannerInteriorAI:
             suit3 = self.__genSuitObject(self.zoneId, 27, 'm', 27, 0)
             reserveSuits.append(random.choice((suit, suit2, suit3)))
         if specialCode == 'lit':
-            # generate random cashbot from lv 12 to 20
+            # litigation
             suit = self.__genSuitObject(self.zoneId, suitKind, 'l', suitLevel, 0)
             reserveSuits.append(suit)
         if specialCode == 'lit2':
-            # generate random cashbot from lv 12 to 20
-            suit = self.__genSuitObject(self.zoneId, suitKind, 'l', suitLevel, 0)
+            # witness stand-in
+            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0)
             reserveSuits.append(suit)
         if specialCode == 'ffm2':
             # generate random cashbot from lv 12 to 20

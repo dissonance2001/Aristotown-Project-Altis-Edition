@@ -285,147 +285,29 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     suitPos = suit.getPos(battle)
+    toonPos = toon.getPos(battle)
+    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+    indicator.setHpr(0, -90, 0)
+    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
-    currentBossHealth = -1
-    currentBossHealth2 = -1
-    if suit.style.name == 'csm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'scg':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm':
-                currentBossHealth2 = s.currHP
-            if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'csm':
-                currentBossHealth = s.currHP
-        if currentBossHealth2 == -1:
-            animTrack.append(Func(suit.removeInsured))
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'lit':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm':
-                currentBossHealth2 = s.currHP
-            if s.dna.name == 'ste' or s.dna.name == 'scg' or s.dna.name == 'csm':
-                currentBossHealth = s.currHP
-        if currentBossHealth2 == -1:
-            animTrack.append(Func(suit.removeInsured))
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'ste':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm':
-                currentBossHealth2 = s.currHP
-            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'csm':
-                currentBossHealth = s.currHP
-        if currentBossHealth2 == -1:
-            animTrack.append(Func(suit.removeInsured))
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'gtk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'frs':
-        for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'fbd':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'cp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'ffm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'dsk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'blr' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'dvp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'ffm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'blr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'ffm' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'cry':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvk' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'tcm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvk' or s.dna.name == 'cry' or s.dna.name == 'otm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'otm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvk' or s.dna.name == 'tcm' or s.dna.name == 'cry':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'dvk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    for s in battle.activeSuits:
-        if s.dna.name == 'csm':
-            currentBossHealth = s.currHP
-    if currentBossHealth == -1:
-        animTrack.append(Func(suit.removeInsured))
+    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
+                               Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
-        indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
-        return Parallel(animTrack, indicatorTrack)
+        #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
+        return Parallel(animTrack, indicatorTracks)
 
 
 def getToonTracks(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 1e-06, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
@@ -714,6 +596,178 @@ def __soakRemoval(suit, remove=0):
         if bodyPart:
             suitInterval.append(Func(bodyPart.setColor, color))
         return suitInterval
+
+
+def doDesperation(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    notifyTracks = Sequence(Wait(0.5))
+    cameraTracks = Sequence()
+    makeDesperates = Parallel()
+    makeDamageUps = Parallel()
+    theSuit = None
+    for s in battle.activeSuits:
+        if s.dna.name == 'gtk' and not suit.dna.name == 'gtk':
+            theSuit = s
+            notifyTrack = Sequence(Wait(2.0), Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'frs' and not suit.dna.name == 'frs':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'fbd' and not suit.dna.name == 'fbd':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'cp' and not suit.dna.name == 'cp':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'blr' and not suit.dna.name == 'blr':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'dvp' and not suit.dna.name == 'dvp':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'dsk' and not suit.dna.name == 'dsk':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'ffm' and not suit.dna.name == 'ffm':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'ste' and not suit.dna.name == 'ste':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'lit' and not suit.dna.name == 'lit':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'scg' and not suit.dna.name == 'scg':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+        if s.dna.name == 'csm' and not suit.dna.name == 'csm':
+            theSuit = s
+            notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                                   'DESPERATION!',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
+                                                                                         '+1 Round Lure Resistance'))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+            makeDesperate = Func(theSuit.makeDesperation)
+            makeDamageUp = Func(theSuit.makeDamageUp)
+            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+            makeDesperates.append(makeDesperate)
+            makeDamageUps.append(makeDamageUp)
+    if theSuit == None:
+        print('Error finding manager... using self...')
+        theSuit = suit
+
+    return Sequence(notifyTracks, makeDamageUps, makeDesperates)
 
 def doSoakRemoval(attack):
     suit = attack['suit']

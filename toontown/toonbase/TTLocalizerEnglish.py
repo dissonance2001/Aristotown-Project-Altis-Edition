@@ -3985,7 +3985,8 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseLureImm
                   'PowerhouseSnipeCollectCall', 'BookkeeperPaperCutSoaked', 'BookkeeperPaperCutMarked', 'BookkeeperPaperCut', 'BookkeeperExplodingDocument',
                   'BookkeeperBookkeepingRetaliation', 'BookkeeperBookkeeping', 'WiretapperCollectCall', 'WiretapperCollectCallDamage', 'WiretapperWiretapped', 'WiretapperVoicemail',
                   'WiretapperBrokenConnection', 'AmbassadorHeadRoller', 'AmbassadorHeadRollerGroup', 'AmbassadorRefinement', 'AmbassadorRefinementManager',  'AmbassadorPhase2', 'AmbassadorDamageUp',
-                  'AmbassadorManagerialProtection', 'AmbassadorManagerialProtectionImmunity', 'AmbassadorMulligan','HighRollerNoAttack','HighRollerWheelSpin','HighRollerCommercialBreak',
+                  'AmbassadorManagerialProtection', 'AmbassadorManagerialProtectionImmunity',
+                  'AmbassadorGhostMentality', 'AmbassadorMulligan','HighRollerNoAttack','HighRollerWheelSpin','HighRollerCommercialBreak',
 'HighRollerGameTimeSpawn','HighRollerGameTimeCog','HighRollerVulnerable',
 'HighRollerGameTimeCog2','HighRollerBust','HighRollerPhase3','HighRollerDiceRouletteCogs', 'HighRollerAceInTheHole',
 'SafetyHighPressure',
@@ -4016,9 +4017,12 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseLureImm
 'RadiographerHotTake',
 'RadiographerHotTakeRetaliation',
 'RadiographerOvermodulated',
+'ReddAutoRepair',
+'ReddLiquidationSale',
+'ReddPeckingOrder',
                   'HighRollerRaisingTheAnte',
                   'HighRollerDiceRouletteToons','HighRollerDiceRouletteEveryone','HighRollerDiceRouletteNobody','HighRollerTrickOfTheLight','HighRollerDonation','HighRollerSyphon','HighRollerBar','HighRollerSingingBlues','HighRollerDamageReduction','HighRollerSplashback','HighRollerCheerRetaliation',
-                  'LitigatorSnapSoak', 'LitigatorSnap', 'LitigatorBayouBash', 'LitigatorBayouBellow',
+                  'LitigatorSnapSoak', 'LitigatorSnap', 'LitigatorBayouBash', 'LitigatorBayouBellow', 'Desperation',
                   'StenographerSanctionBindings', 'StenographerSanction', 'SynergyFees', 'CalculatingFees',
                   'CaseManagerLegalBindings', 'CaseManagerInsurancePlan', 'CaseManagerLegallyBound', 'ScapegoatGavel', 'ScapegoatShieldsUp', 'ScapegoatEnraged', 'ScapegoatBarnyardBash',
                   'BanLevel4', 'BanLevel5', 'BanLevel6', 'BanLevel7', 'BanLevel8', 'BanLevel45', 'BanLevel46', 'BanLevel47', 'BanLevel48', 'BanLevel56', 'BanLevel57',
@@ -4028,6 +4032,10 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseLureImm
                   'BanThrowSquirt', 'BanThrowZap', 'BanThrowSound', 'BanThrowDrop', 'BanSquirtZap', 'BanSquirtSound', 'BanSquirtDrop', 'BanZapSound',
                   'BanZapDrop', 'BanSoundDrop')
 SuitCheatDescription = {
+    # Redd Heir-Wing Cheats
+'ReddAutoRepair': "The Redd 'Heir' Wing heals all cogs for 125 HP!",
+'ReddLiquidationSale': "The Redd 'Heir' Wing gains an extra attack when\nsoaked!",
+'ReddPeckingOrder': "The Redd 'Heir' Wing applies a damage vulnerability to\na random Toon!",
     # Witness Stand-In Cheats
 'WSIJuryNotice': "The Witness Stand-In calls cogs to his side!",
 'WSICeaseAndDesist': "All toon attacks will be ineffective for 1 turn!",
@@ -4078,6 +4086,7 @@ SuitCheatDescription = {
 'AmbassadorHeadRollerGroup': "The Ambassador sacrifices all cogs!",
 'AmbassadorRefinement': "The Ambassador heals all cogs!",
 'AmbassadorRefinementManager': "The Ambassador heals his partner!",
+'AmbassadorGhostMentality': "The Ambassador makes all cogs virtual and gives\nthem a damage boost!",
 'AmbassadorPhase2': "The Ambassador has lost his outer shell and has become\nstronger!",
 'AmbassadorDamageUp': "The Ambassador becomes stronger for every cog he\nsacrifices!",
 'AmbassadorManagerialProtection': "The Ambassador calls cogs to his side!",
@@ -4145,6 +4154,8 @@ SuitCheatDescription = {
     # Court Costs and Calculator Mirrors
 'SynergyFees': "The fees are racking up!",
 'CalculatingFees': "An audit is approaching!",
+    # Desperation for Litigation Managers
+'Desperation': "!",
     # Single Level Bans
  'BanLevel4': "Level 4 gags are now off-limits!",
 'BanLevel5': "Level 5 gags are now off-limits!",
@@ -4301,6 +4312,10 @@ SuitAttackNames = {
     'Watercooler': "Watercooler!",
     'Withdrawal': "Withdrawal!",
     'WriteOff': "Write Off!",
+    # Redd Heir-Wing Cheats
+    'ReddAutoRepair': "Auto-Repair!",
+    'ReddLiquidationSale': "Liquidation Sale!",
+    'ReddPeckingOrder': "Pecking Order!",
     # Witness Stand-In Cheats
     'WSIJuryNotice': "Jury Notice!",
     'WSICeaseAndDesist': "Cease And Desist!",
@@ -4323,7 +4338,7 @@ SuitAttackNames = {
     'ScapegoatShieldsUp': "Shield's Up!",
     'ScapegoatEnraged': "Enraged!",
     'ScapegoatBarnyardBash': "Barnyard Bash!",
-    'ScapegoatGavel': "Court Record!",
+    'ScapegoatGavel': "Gavel!",
     'ScapegoatCourtRecordBan': "Court Record!",
     # Powerhouse Cheats
     'PowerhouseAbsorb': "Tank Mentality!",
@@ -4354,6 +4369,7 @@ SuitAttackNames = {
     # Ambassador Cheats
     'AmbassadorHeadRoller': "Off With Your Head!",
     'AmbassadorHeadRollerGroup': "Off With Your Head!",
+    'AmbassadorGhostMentality': "Ghost Mentality!",
     'AmbassadorRefinement': "Refinement!",
     'AmbassadorRefinementManager': "Refinement!",
     'AmbassadorPhase2': "Enraged!",
@@ -4430,6 +4446,8 @@ SuitAttackNames = {
     'SoakRemoval': "!",
     # Death Check Movie for Absorbing Managers
     'DeathCheck': "!",
+    # Desperation for Litigation Managers
+    'Desperation': "!",
     # Universal Ban Single Levels
     'BanLevel4': "Court Record!",
     'BanLevel5': "Court Record!",
@@ -5763,6 +5781,15 @@ SuitAttackTaunts = {
               "I'll shuffle your accounts around.",
               "You're about to suffer some losses.",
               'This is going to hurt your bottom line.'],
+            # redd heir-wing cheats
+'ReddAutoRepair': ["Think I would go down that easy?",
+                    "How are those strategies, Toon?"],
+'ReddPeckingOrder': ["Why don't you 'peck' on someone your own size?",
+                        "A real pecking order is now in action!",
+                        "If you weren't at the bottom of the pecking order before, this one will put you there.",
+                        "Birds of a feather strike together, again!",
+                        "Do not provoke the birds, if you don't want to get pecked."],
+'ReddLiquidationSale': ["This is a liquidation sale! All Toons must go!"],
                 # witness stand-in cheats
 'WSICeaseAndDesist': ["I'm going to have to stop you right there, Toon.",
                         "Not so fast!",
@@ -5884,6 +5911,11 @@ SuitAttackTaunts = {
 'AmbassadorDamageUp': ["You hit me, I hit you back even harder.",
                        "Do you have any idea how much it costs to manufacture those suits?!",
                         "You didn't think I'd make it easier for you to defeat me did you?"
+                                 ],
+'AmbassadorGhostMentality': ["I've grown tired of you worthless grunts, here's a little motivation to get you working.",
+                            "You shall not slack off in my presence!",
+                            "I'm sick of working with a bunch of weaklings! Take this, and destroy those Toons!",
+                             "I'll show you what happens when you don't do your part."
                                  ],
 'AmbassadorManagerialProtection': ["In just a snap.",
                                    "How many suits is it going to take to get rid of these Toons?!",

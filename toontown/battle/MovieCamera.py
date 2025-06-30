@@ -600,7 +600,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Quash':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'PennyPinch':
-        camTrack.append(allGroupLowShot(suit, 2.7))
+        camTrack.append(allGroupLowShot(suit, attackDuration))
     elif name == 'Disassemble':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'DataCorruption':
@@ -636,7 +636,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'BrainStorm':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'BuzzWord':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Calculate':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Canned':
@@ -692,11 +692,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'GuiltTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Embezzle':
-        camTrack.append(allGroupLowShot(suit, 2.7))
+        camTrack.append(allGroupLowShot(suit, attackDuration))
     elif name == 'FloodTheMarket':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'MoneyTrip':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HalfWindsor':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'HangUp':
@@ -716,13 +716,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'MarketCrash':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'MumboJumbo':
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'ParadigmShift':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'PeckingOrder':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PickPocket':
-        camTrack.append(allGroupLowShot(suit, 2.7))
+        camTrack.append(allGroupLowShot(suit, attackDuration))
     elif name == 'PinkSlip':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PlayHardball':
@@ -760,11 +760,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Shred':
         camTrack.append(defaultCamera(openShotDuration=3.5))
     elif name == 'SongAndDance':
-        camTrack.append(defaultCamera(openShotDuration=5.0))
+        camTrack.append(defaultCamera(openShotDuration=4.0))
     elif name == 'Spin':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Synergy':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Tabulate':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'Golf':
@@ -781,6 +781,14 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'WriteOff':
         camTrack.append(defaultCamera(openShotDuration=2.0))
+        # redd heir wing cheats
+    elif name == 'ReddLiquidationSale':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ReddPeckingOrder':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'ReddAutoRepair':
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        # witness stand-in cheats
     elif name == 'WSIJuryNotice':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'WSICeaseAndDesist':
@@ -1030,6 +1038,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3.5)))
+    elif name == 'AmbassadorGhostMentality':
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'AmbassadorPhase2':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AmbassadorDamageUp':
@@ -1044,7 +1054,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'SafetyHighPressure':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'SafetyHeatWave':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=4.0), randomActorShot(suit, battle, attackDuration - 4, 'suit')))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=4.0), randomActorShot(suit, battle, attackDuration - 4, 'suit')))
     elif name == 'SafetyHeatWaveCalculation':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'SafetyViolation':
@@ -1059,7 +1069,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
     # union buster cheats
     elif name == 'UnionBusterUnionDues':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'UnionBusterUnionCalculator':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'UnionBusterUnionBust':
@@ -1177,9 +1187,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HighRollerConduction':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'HighRollerRolled':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HighRollerRaisingTheAnte':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HighRollerDiceRouletteCogs':
         camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
@@ -1231,8 +1241,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     #universal cheats
+    elif name == 'Desperation':
+        camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
     elif name == 'SynergyFees':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'CalculatingFees':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'DeathCheck':

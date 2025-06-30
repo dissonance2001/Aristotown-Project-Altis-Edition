@@ -270,16 +270,29 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     suitPos = suit.getPos(battle)
+    toonPos = toon.getPos(battle)
+    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+    indicator.setHpr(0, -90, 0)
+    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
+    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
+                               Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
 
 
 def getToonTracks(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 1e-06, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
@@ -298,16 +311,30 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     battle = attack['battle']
     suit = attack['suit']
     suitPos = suit.getPos(battle)
+    toonPos = toon.getPos(battle)
+    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+    indicator.setHpr(0, -90, 0)
+    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
+    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
+                               Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return animTrack
+
 
 def getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime):
     toon = target['toon']
@@ -917,7 +944,7 @@ def doUnionBuster(attack):
     cagePos = [Point3(toonPos.getX(), y, 40.0), toon.getHpr(battle)]
     smokeTrack = Sequence(Wait(0.6), Func(smoke.reparentTo, toon), Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                    LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
-                          Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale))
+                          Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(MovieUtil.removeProp, smoke))
     cagePropTrack = Sequence(
             getPropAppearTrack(cage, battle, cagePos, 0, scaleUpPoint=Point3(1.75), scaleUpTime=0), Parallel(cagePosition),
             Parallel(
@@ -974,7 +1001,7 @@ def doUnionBusterDamage(attack):
         cagePos = [Point3(toonPos.getX(), y, 40.0), toon.getHpr(battle)]
         smokeTrack = Sequence(Wait(0.6), Func(smoke.reparentTo, toon), Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                    LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
-                          Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale))
+                          Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(MovieUtil.removeProp, smoke))
         cagePropTrack = Sequence(
             getPropAppearTrack(cage, battle, cagePos, 0, scaleUpPoint=Point3(1.75), scaleUpTime=0), Parallel(cagePosition),
             Parallel(
@@ -1030,7 +1057,7 @@ def doUnionBust(attack):
         smokeTrack = Sequence(Wait(2.0), Func(smoke.reparentTo, targetSuit),
                               Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                        LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
-                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale))
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(MovieUtil.removeProp, smoke))
         cage = loader.loadModel('phase_9/models/cogHQ/square_stomper')
         cagePosition = LerpHprInterval(cage, 0, Point3(0, -90, 0))
         shaft = cage.find('**/shaft')

@@ -612,7 +612,6 @@ class Avatar(Actor, ShadowCaster):
             dialogue = dialogueList[0]
         else:
             dialogue = None
-        self.clearChat()
         self.setChatAbsolute(message, self.__chatFlags, dialogue)
         self.setPageNumber(None, 0)
 

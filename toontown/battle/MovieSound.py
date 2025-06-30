@@ -253,16 +253,18 @@ def __getSuitDeathTracks(sound):
         suit = target['suit']
         died = target['died']
         revived = target['revived']
+        if suit.dna.name == 'mp' and revived != 0:
+            deathTracks.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:
             deathTracks.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton:
+        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'mp':
             deathTracks.append(MovieUtil.createSuitReviveTrack(suit, battle))
         if died != 0 and suit.isVirtual:
             deathTracks.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died and not suit.isVirtual:
+        if died and not suit.isVirtual:
             if sound['level'] >= 7:
                 deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
-            else:
+            if sound['level'] < 7:
                 deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
 
     return deathTracks

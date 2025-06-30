@@ -686,7 +686,7 @@ def shred(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(5.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(1.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 3.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -2085,7 +2085,7 @@ def organizeSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(6.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.7000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -2410,7 +2410,7 @@ def fillWithLeadSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(5.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(1.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 5.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -2593,7 +2593,7 @@ def demotionSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(15.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -2704,7 +2704,7 @@ def demotionSpray2(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(15.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -2759,7 +2759,7 @@ def reOrgSpray2(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(15.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -3319,7 +3319,7 @@ def spinSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(15.0000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.7000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))

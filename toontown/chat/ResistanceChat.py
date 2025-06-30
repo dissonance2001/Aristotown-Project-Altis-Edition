@@ -6,8 +6,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 
 
-if process == 'client':
-    from toontown.battle import BattleParticles
+from toontown.battle import BattleParticles
 
 
 try:
@@ -35,7 +34,7 @@ resistanceDict = {
         'menuName': TTLocalizer.ResistanceToonupMenu,
         'itemText': TTLocalizer.ResistanceToonupItem,
         'chatText': TTLocalizer.ResistanceToonupChat,
-        'values': [10, 15, 30, 45, 60],
+        'values': [15, 30, 45, 60, 200],
         'items': [0, 1, 2, 3, 4]
     },
     RESISTANCE_MONEY: {

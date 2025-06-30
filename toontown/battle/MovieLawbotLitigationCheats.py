@@ -286,16 +286,29 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     suitPos = suit.getPos(battle)
+    toonPos = toon.getPos(battle)
+    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+    indicator.setHpr(0, -90, 0)
+    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
+    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
+                               Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
 
 
 def getToonTracks(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 1e-06, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
@@ -314,12 +327,25 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     battle = attack['battle']
     suit = attack['suit']
     suitPos = suit.getPos(battle)
+    toonPos = toon.getPos(battle)
+    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+    indicator.setHpr(0, -90, 0)
+    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
+    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
+                               Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
@@ -602,6 +628,85 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
 def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
     return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
 
+def doPeckingOrder(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    throwDuration = 3.03
+    throwDelay = 2
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+    numBirds = random.randint(10, 20)
+    birdTracks = Parallel()
+    notifyTracks = Parallel()
+    propDelay = 1.5
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        for i in xrange(0, numBirds):
+            next = globalPropPool.getProp('bird')
+            #next.setScale(0.01)
+            #next.reparentTo(suit.getRightHand())
+          #  next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)
+            if dmg > 0:
+                notifyTrack = Sequence(Wait(2.5), Func(toon.showHpTextCheat, - int(dmg)),
+                                       Func(toon.showHpString, "VULNERABLE!"))
+                notifyTracks.append(notifyTrack)
+                hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6,
+                                  random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
+            else:
+                hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)
+            birdTrack = Sequence(Wait(throwDelay), Func(next.setScale, 0.01), Func(next.reparentTo, suit.getRightHand()),
+                                 Func(next.setPos, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3), Func(battle.movie.needRestoreRenderProp, next),
+                                 Func(next.wrtReparentTo, battle), Func(next.setHpr, Point3(90, 20, 0)),
+                                 LerpPosInterval(next, 0.5, hitPoint))
+            scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(next, 0.5, Point3(9, 9, 9)), LerpScaleInterval(next, .5, Point3(0, 0, 0)))
+            birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(MovieUtil.removeProp, next)))
+    damageAnims = []
+    damageAnims.append(['cringe',
+                        0.01,
+                        0.14,
+                        0.21])
+    damageAnims.append(['cringe',
+                        0.01,
+                        0.14,
+                        0.13])
+    damageAnims.append(['cringe', 0.01, 0.43])
+    toonTrack = getToonTracksCheat(attack, damageDelay=2.5, splicedDamageAnims=damageAnims, dodgeDelay=0.75,
+                              dodgeAnimNames=['duck'], showMissedExtraTime=1.1)
+    soundTrack = getSoundTrack('tt_s_ara_cfg_eagleCry.ogg', delay=2, node=suit)
+    return Parallel(suitTrack, toonTrack, notifyTracks, soundTrack, birdTracks)
+
+def doAutoRepair(attack):
+    suit = attack['suit']
+    theSuit = attack['suit']
+    battle = attack['battle']
+    tauntIndex = attack['taunt']
+    toon = attack['target'][0]['toon']
+
+    suitTracks = Parallel()
+    suitTracks.append(getSuitAnimTrack(attack, playRate=1.5))
+    healSounds = Parallel()
+    for suit in battle.activeSuits:
+        suitTrack = Sequence(Wait(2.0))
+        healSound = getSoundTrack('SA_repair.ogg')
+        x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+        if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+            suitTrack.append(Func(suit.showHpText, 0))
+            suitTrack.append(Func(suit.showHpString, "REPAIRED!"))
+        elif suit.currHP + 125 > (suit.maxHP * suit.hardMaxHP):
+            suitTrack.append(Func(suit.showHpTextCheat, x))
+            suitTrack.append(Func(suit.showHpString, "REPAIRED!"))
+            suitTrack.append(Func(suit.setHealthForMe, x))
+        else:
+            suitTrack.append(Func(suit.showHpTextCheat, 125))
+            suitTrack.append(Func(suit.showHpString, "REPAIRED!"))
+            suitTrack.append(Func(suit.setHealthForMe, 125))
+        suitTrack.append(Func(suit.updateHealthBar, 0))
+        suitTracks.append(suitTrack)
+        healSounds.append(healSound)
+    return Parallel(suitTracks, healSounds)
+
+
 def doCeaseAndDesist(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -850,11 +955,11 @@ def doGavelCourtRecord(attack):
         gavel = globalPropPool.getProp('LB_gavel')
         dmg = t['hp']
         toonPos = toon.getPos(battle)
-        gavelPos = Point3(toonPos.getX(), 2, 0)
+        gavelPos = Point3(toonPos.getX(), -17.5, 0)
         propTrack = Sequence(
             getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
                                scaleUpPoint=Point3(1), scaleUpTime=1.5),
-            LerpHprInterval(gavel, 0.5, VBase3(0, 90, 0)),
+            LerpHprInterval(gavel, 0.5, VBase3(0, -90, 0)),
             Parallel(getSoundTrack('LB_gavel.ogg'), Sequence(
                 Wait(0.1),
                 LerpHprInterval(gavel, 0.5, VBase3(0, 0, 0)),
@@ -982,8 +1087,9 @@ def doCaseInsurance(attack):
                     suitTrack.append(Func(suit.showHpTextCheat, 85))
                     suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
                     suitTrack.append(Func(suit.setHealthForMe, 85))
-            suitTrack.append(Func(suit.updateHealthBar, 0))
-            suitTracks.append(suitTrack)
+                suitTrack.append(Func(suit.updateHealthBar, 0))
+                suitTracks.append(suitTrack)
+                healSounds.append(healSound)
         else:
             healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
             x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
@@ -1241,7 +1347,7 @@ def doGavel(attack):
     gavel = globalPropPool.getProp('LB_gavel')
     toonPos = toon.getPos(battle)
     initialScale = toon.getScale()
-    gavelPos = Point3(toonPos.getX(), 2, 0)
+    gavelPos = Point3(toonPos.getX(), 0, 0)
     propTrack = Sequence(
         getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0, scaleUpPoint=Point3(1), scaleUpTime=1.5),
         LerpHprInterval(gavel, 0.5, VBase3(0, 90, 0)),

@@ -219,6 +219,8 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=ZAP_TRACK))
             bonusTrack.append(updateHealthBar)
+        if suit.dna.name == 'mp' and revived != 0:
+            suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if died != 0 and suit.isVirtual:
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
@@ -229,7 +231,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             #suitTrack.append(__soakRemoval(suit))
         if revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton:
+        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'mp':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         suitTrack.append(Parallel(__soakRemoval(suit, 1)))
         suitTrack.append(soakRemoval)

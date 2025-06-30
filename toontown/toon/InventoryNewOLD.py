@@ -1278,10 +1278,18 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             else:
                 self.fireButton['state'] = DGG.DISABLED
                 self.fireButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
+        if not 'noFires' in base.localAvatar.battleConditions:
+            self.fireButton['state'] = DGG.NORMAL
+            self.fireButton['image_color'] = Vec4(0, 0.6, 1, 1)
+        if not 'noSOS' in base.localAvatar.battleConditions:
+            self.sosButton['state'] = DGG.NORMAL
+            self.sosButton['image_color'] = Vec4(0, 0.6, 1, 1)
         if 'noFires' in base.localAvatar.battleConditions:
             self.fireButton['state'] = DGG.DISABLED
+            self.fireButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
         if 'noSOS' in base.localAvatar.battleConditions:
             self.sosButton['state'] = DGG.DISABLED
+            self.sosButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
         if settings.get('show-cog-levels', True):
             self.levelsButton['text'] = TTLocalizer.InventoryLevelsHide
         else:
@@ -1300,6 +1308,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                             self.makeNoncreditPressable(button, track, level)
 
                         if self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
+                            self.makeUnpressable(button, track, level)
+                        if 'noDamage' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
                             self.makeUnpressable(button, track, level)
                         if 'noGags' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
                             self.makeBannablePressable(button, track, level)

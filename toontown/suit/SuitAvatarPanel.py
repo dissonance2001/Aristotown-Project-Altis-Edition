@@ -72,6 +72,35 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.frame = DirectFrame(geom=gui.find('**/avatar_panel'), geom_scale=0.21, geom_color=(0.69, 0.706, 0.718, 1), geom_pos=(0, 0, 0.02), relief=None, pos=(-0.23, 0, -0.46), parent=base.a2dTopRight)
         self.head = self.frame.attachNewNode('head')
         health = float(avatar.currHP) / float(avatar.maxHP)
+        for part in avatar.headParts:
+            copyPart = part.copyTo(self.head)
+            copyPart.setDepthTest(1)
+            copyPart.setDepthWrite(1)
+
+        p1 = Point3()
+        p2 = Point3()
+        self.head.calcTightBounds(p1, p2)
+        d = p2 - p1
+        biggest = max(d[0], d[1], d[2])
+        s = 0.3 / biggest
+        if self.avatar.dna.name == 'ptr' and not avatar.isSkeleton:
+            self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
+        elif self.avatar.dna.name == 'dfh' and not avatar.isSkeleton:
+            self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
+        elif self.avatar.dna.name == 'dvp' and not avatar.isSkeleton:
+            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
+        elif self.avatar.dna.name == 'mp' and not avatar.isSkeleton:
+            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
+        elif self.avatar.dna.name == 'th' and not avatar.isSkeleton:
+            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
+        elif self.avatar.dna.name == 'dvk' and not avatar.isSkeleton:
+            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
+        elif avatar.isSkeleton and self.avatar.dna.name == 'gtk':
+            self.head.setPosHprScale(0, 0, 0.08, 180, 0, 0, s, s, s)
+        elif avatar.isSkeleton and not self.avatar.dna.name == 'gtk':
+            self.head.setPosHprScale(0, 0, 0.03, 180, 0, 0, s, s, s)
+        else:
+            self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
         if health > 1.5:
             self.condition = 13
         elif health > 1.25:
@@ -110,31 +139,6 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
               #  copyPart = part.copyTo(self.head)
                # copyPart.setDepthTest(1)
                # copyPart.setDepthWrite(1)
-        for part in avatar.headParts:
-            copyPart = part.copyTo(self.head)
-            copyPart.setDepthTest(1)
-            copyPart.setDepthWrite(1)
-
-        p1 = Point3()
-        p2 = Point3()
-        self.head.calcTightBounds(p1, p2)
-        d = p2 - p1
-        biggest = max(d[0], d[1], d[2])
-        s = 0.3 / biggest
-        if self.avatar.dna.name == 'ptr' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'dfh' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'dvp' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'th' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'dvk' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif avatar.isSkeleton and self.avatar.dna.name == 'gtk':
-            self.head.setPosHprScale(0, 0, 0.08, 180, 0, 0, s, s, s)
-        else:
-            self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
         self.nameLabel = DirectLabel(parent=self.frame, pos=(0, 0, 0.36), relief=None,
                                      text=SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name'],
                                      text_font=avatar.getFont(), text_pos=(0, 0),
@@ -176,39 +180,8 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         corpIcon = avatar.corpMedallion.copyTo(hidden)
         corpIcon.setPosHprScale(0, 0, 0, 0, 0, 0, 0, 0, 0)
         #self.corpIcon = DirectLabel(parent=self.frame, geom=corpIcon, geom_scale=0.13, pos=(0, 0, -0.20), relief=None)
-        if avatar.currHP >= 9999 and revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        elif avatar.maxHP >= 9999 and revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        elif avatar.maxHP >= 9999:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        elif avatar.currHP >= 9999:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth2 % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        elif revives > 1:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth % (health, maxHP),
-                                       text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
-                                       textMayChange=1,
-                                       text_scale=0.05, text_wordwrap=7.5)
-        else:
-            self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
-                                       text=TTLocalizer.AvatarPanelCogHealth % (health, maxHP),
+        self.hpLabel = DirectLabel(parent=self.frame, pos=(0, 0, -0.035), relief=None,
+                                       text='',
                                        text_font=avatar.getFont(), text_fg=Vec4(0, 0, 0, 1), text_pos=(0, 0),
                                        textMayChange=1,
                                        text_scale=0.05, text_wordwrap=7.5)
@@ -271,6 +244,36 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.currentInterval = self.__getOpenSequence()
         self.currentInterval.start()
 
+        self.headTask = None
+       # hasAnimatedHead = False
+        #for part in avatar.animatedHeadParts:
+        #    hasAnimatedHead = True
+       # if self.avatar.isSkeleton:
+         #   hasAnimatedHead = True
+       # headTask = Task.loop(Task(self.__headAnim))
+       # if hasAnimatedHead:
+        #    taskMgr.add(headTask, self.frame.uniqueName('head-task'))
+       # elif not hasAnimatedHead and not self.avatar.isSkeleton and not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'bdb' and not self.avatar.dna.name == 'bs':
+           # for part in avatar.headParts:
+             #   hasAnimatedHead = False
+             #   if not hasAnimatedHead and not self.avatar.isSkeleton:
+             #       copyPart = part.copyTo(self.head)
+               #     copyPart.setDepthTest(1)
+                   # copyPart.setDepthWrite(1)
+
+          #  p1 = Point3()
+          #  p2 = Point3()
+          #  self.head.calcTightBounds(p1, p2)
+          #  d = p2 - p1
+          #  biggest = max(d[0], d[1], d[2])
+           # s = 0.3 / biggest
+          #  if self.avatar.dna.name == 'ptr' and not avatar.isSkeleton and not hasAnimatedHead:
+            #  #  self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
+           # elif self.avatar.dna.name == 'dfh' and not avatar.isSkeleton and not hasAnimatedHead:
+             #   self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
+           # elif not hasAnimatedHead and not self.avatar.isSkeleton:
+               # self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
+
         self.labelInterval = None
 
         self.healthBarInterval = None
@@ -287,6 +290,124 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
 
         self.accept(avatar.uniqueName('suitHpUpdate'), self.__updateHp)
         return
+
+    def __updateLabel(self, tempHp, level, maxHp):
+        revives = self.avatar.getSkeleRevives() + 1
+        if self.avatar.isFired:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            0, maxHp)
+            self.corpIcon.hide()
+            self.deptLabel['text'] = ''
+        elif revives > 2 and self.avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            0, maxHp)
+        elif revives > 2 and self.avatar.isVirtual and maxHp > 9999:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif revives > 2 and self.avatar.isVirtual and tempHp <= 0:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            0, maxHp)
+        elif revives > 2 and self.avatar.isVirtual:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            int(tempHp), maxHp)
+        elif revives > 2 and self.avatar.isSkeleton and maxHp > 9999 and tempHp <= 0:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
+                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
+        elif revives > 2 and self.avatar.isSkeleton and maxHp > 9999:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
+                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
+        elif revives > 2 and self.avatar.isSkeleton and tempHp <= 0:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
+                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+        elif revives > 2 and self.avatar.isSkeleton:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
+                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), self.maxHp)
+        elif revives > 1 and self.avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            0, maxHp)
+        elif revives > 1 and self.avatar.isVirtual and maxHp > 9999:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif revives > 1 and self.avatar.isVirtual and tempHp <= 0:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            0, maxHp)
+        elif revives > 1 and self.avatar.isVirtual:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            int(tempHp), maxHp)
+        elif revives > 1 and self.avatar.isSkeleton and self.avatar.isRevived and maxHp > 9999 and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            0, maxHp)
+        elif revives > 1 and self.avatar.isSkeleton and self.avatar.isRevived and maxHp > 9999:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif revives > 1 and self.avatar.isSkeleton and self.avatar.isRevived and tempHp <= 0:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            0, maxHp)
+        elif revives > 1 and self.avatar.isSkeleton and self.avatar.isRevived:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            int(tempHp), self.maxHp)
+        elif revives > 1 and self.maxHp > 9999 and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            0, maxHp)
+        elif revives > 1 and self.maxHp > 9999:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif revives > 1 and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            0, maxHp)
+        elif revives > 1:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            int(tempHp), maxHp)
+        elif self.avatar.dna.name == 'dsf' and tempHp <= 0:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            0, maxHp)
+        elif self.avatar.dna.name == 'dsf':
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            int(tempHp), maxHp)
+        elif self.avatar.dna.name == 'tcm' and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            0, maxHp)
+        elif self.avatar.dna.name == 'tcm':
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif self.avatar.dna.name == 'crf' and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            0, maxHp)
+        elif self.avatar.dna.name == 'crf':
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif tempHp > 9999:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif self.maxHp > 9999 and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            0, maxHp)
+        elif self.maxHp > 9999:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif tempHp <= 0:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            0, maxHp)
+        else:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            int(tempHp), maxHp)
 
 
     def __updateHp(self, currHp, maxHp, delta):
@@ -332,82 +453,10 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             level = str(self.avatar.getActualLevel()) + TTLocalizer.ManagerPostFix
         else:
             level = str(self.avatar.getActualLevel())
-        def __updateLabel(tempHp):
-            revives = avatar.getSkeleRevives() + 1
-            if avatar.isFired:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
-                self.corpIcon.hide()
-                self.deptLabel['text'] = ''
-            elif revives > 2 and avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
-            elif revives > 2 and avatar.isVirtual and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-            elif revives > 2 and avatar.isVirtual and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
-            elif revives > 2 and avatar.isVirtual:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
-            elif revives > 2 and avatar.isSkeleton and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
-            elif revives > 2 and avatar.isSkeleton and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-            elif revives > 2 and avatar.isSkeleton and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
-            elif revives > 2 and avatar.isSkeleton:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
-            elif revives > 1 and avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
-            elif revives > 1 and avatar.isVirtual and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-            elif revives > 1 and avatar.isVirtual and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
-            elif revives > 1 and avatar.isVirtual:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
-            elif revives > 1 and avatar.isSkeleton and avatar.isRevived and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
-            elif revives > 1 and avatar.isSkeleton and avatar.isRevived and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-            elif revives > 1 and avatar.isSkeleton and avatar.isRevived and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
-            elif revives > 1 and avatar.isSkeleton and avatar.isRevived:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
-            elif revives > 1 and maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
-            elif revives > 1 and maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-            elif revives > 1 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
-            elif revives > 1:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
-            elif avatar.dna.name == 'dsf' and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
-            elif avatar.dna.name == 'dsf':
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
-            elif avatar.dna.name == 'tcm' and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
-            elif avatar.dna.name == 'tcm':
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-            elif avatar.dna.name == 'crf' and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
-            elif avatar.dna.name == 'crf':
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-            elif tempHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-            elif maxHp > 9999 and tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
-            elif maxHp > 9999:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-            elif tempHp <= 0:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
-            else:
-                self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
+        self.__updateLabel(currHp, level, maxHp)
 
-        self.labelInterval = Parallel(
-                LerpColorScaleInterval(self.hpLabel, duration=0, startColorScale=(1, 0, 0, 1), colorScale=(1, 1, 1, 1),
-                                       blendType='easeInOut'),
-                LerpFunctionInterval(__updateLabel, duration=0, fromData=currHp + delta, toData=currHp,
-                                     blendType='easeInOut')
-            )
-        self.labelInterval.start()
+        #self.labelInterval = Parallel(Func(__updateLabel, currHp))
+        #self.labelInterval.start()
 
         if condition == 10 and self.avatar.isVirtual and not self.avatar.dna.name == 'mad':
             taskMgr.remove(self.frame.uniqueName('blink-task'))
@@ -459,7 +508,6 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             self.changeInterval.start()
             taskMgr.remove(self.frame.uniqueName('blink-task'))
             self.blinkTask = None
-        self.labelInterval.start()
         #self.buttonInterval.start()
         #self.hideCorpIcon.start()
 
@@ -528,10 +576,105 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                    blendType='easeInOut'))
         self.interval.start()
 
-    def __pulsePurpleColorHead(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=2, colorScale=(self.healthColors[13]),
-                                   blendType='easeInOut'))
-        self.interval.start()
+    def __headAnim(self, task):
+        hasAnimatedHead = False
+        for part in self.avatar.animatedHeadParts:
+            if not self.avatar.isSkeleton and self.avatar.dna.name == 'blr' or not self.avatar.isSkeleton and self.avatar.dna.name == 'dsk' or not self.avatar.isSkeleton and self.avatar.dna.name == 'bdb' or not self.avatar.isSkeleton and self.avatar.dna.name == 'bs':
+                hasAnimatedHead = True
+                copyPart = part.copyTo(self.head)
+                p1 = Point3()
+                p2 = Point3()
+                copyPart.calcTightBounds(p1, p2)
+                d = p2 - p1
+                biggest = max(d[0], d[1], d[2])
+                if self.avatar.dna.name == 'dsk' and not self.avatar.isSkeleton:
+                    s = 0.4 / biggest
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.04, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+                elif self.avatar.dna.name == 'blr' and not self.avatar.isSkeleton:
+                    s = 0.4 / biggest
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.04, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+                else:
+                    s = 0.3 / biggest
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(self.head.setPosHprScale, 0, 0, 0.05, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+        for part in self.avatar.headParts:
+            if self.avatar.isSkeleton and self.avatar.dna.name == 'blr' or self.avatar.isSkeleton and self.avatar.dna.name == 'dsk' or self.avatar.isSkeleton and self.avatar.dna.name == 'bdb' or self.avatar.isSkeleton and self.avatar.dna.name == 'bs':
+                hasAnimatedHead = True
+                copyPart = part.copyTo(self.head)
+                p1 = Point3()
+                p2 = Point3()
+                copyPart.calcTightBounds(p1, p2)
+                d = p2 - p1
+                biggest = max(d[0], d[1], d[2])
+                s = 0.3 / biggest
+                headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(self.head.setPosHprScale, 0, 0, 0.03, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                headInterval.start()
+        for part in self.avatar.headParts:
+            if not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'bdb' and not self.avatar.dna.name == 'bs':
+                hasAnimatedHead = True
+                copyPart = part.copyTo(self.head)
+                p1 = Point3()
+                p2 = Point3()
+                copyPart.calcTightBounds(p1, p2)
+                d = p2 - p1
+                biggest = max(d[0], d[1], d[2])
+                s = 0.3 / biggest
+                if self.avatar.dna.name == 'dvp' and not self.avatar.isSkeleton:
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+
+                elif self.avatar.dna.name == 'th' and not self.avatar.isSkeleton:
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+                elif self.avatar.dna.name == 'dvk' and not self.avatar.isSkeleton:
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+                elif self.avatar.dna.name == 'mp' and not self.avatar.isSkeleton:
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+                elif self.avatar.dna.name == 'blr' and not self.avatar.isSkeleton:
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.04, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+                elif self.avatar.dna.name == 'dsk' and not self.avatar.isSkeleton:
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.04, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+                elif self.avatar.isSkeleton and self.avatar.dna.name == 'gtk':
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.08, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+                elif self.avatar.isSkeleton and not self.avatar.dna.name == 'gtk':
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(copyPart.setPosHprScale, 0, 0, 0.03, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
+                else:
+                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
+                                                     Func(self.head.setPosHprScale, 0, 0, 0.05, 180, 0, 0, s, s, s)),
+                                            Wait(0.05), Func(copyPart.removeNode))
+                    headInterval.start()
 
 
     def __getOpenSequence(self):
@@ -555,9 +698,19 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         taskMgr.remove('bosshealthbar-blink-task')
         self.blinkTask = None
 
+    def startHeadTask(self):
+        self.headTask = Task.loop(Task(self.__headAnim))
+        taskMgr.add(self.blinkTask, 'head-task')
+
+    def stopHeadTask(self):
+        taskMgr.remove('head-task')
+        self.headTask = None
+
     def __cleanupSequence(self):
         self.blinkTask = None
         taskMgr.remove(self.frame.uniqueName('blink-task'))
+        self.headTask = None
+        taskMgr.remove(self.frame.uniqueName('head-task'))
         if self.labelInterval:
             self.labelInterval.finish()
             self.labelInterval = None
@@ -577,6 +730,10 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         if self.blinkTask:
             self.blinkTask.finish()
             self.blinkTask = None
+
+        if self.headTask:
+            self.headTask.finish()
+            self.headTask = None
 
     def cleanup(self):
         self.ignoreAll()

@@ -469,6 +469,12 @@ def createSuitReviveTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'cvy' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+    elif suit.style.name == 'dvp' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+    elif suit.style.name == 'dvk' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+    elif suit.style.name == 'mp' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'cvy' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'isw' and not deathSuit.isSkeleton:
@@ -558,11 +564,142 @@ def createAmbassadorReviveTrack(suit, battle):
     suitTrack.append(Func(suit.setSkelecog2, True))
     suitTrack.append(Func(suit.show))
     suitTrack.append(Func(suit.setMaxHP, 4880))
-    suitTrack.append(Func(suit.setHP, 1500))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
     suitTrack.append(Func(suit.makeRevive))
     suitTrack.append(ActorInterval(suit, 'pie-small-react'))
+    suitTrack.append(Func(suit.setNeutralAnimation))
+    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
+    BattleParticles.loadParticles()
+    smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
+    singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
+    smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
+    bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
+    gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
+    smallGears.setPos(gearPoint)
+    singleGear.setPos(gearPoint)
+    smallGears.setDepthWrite(False)
+    singleGear.setDepthWrite(False)
+    smallGearExplosion.setPos(gearPoint)
+    bigGearExplosion.setPos(gearPoint)
+    smallGearExplosion.setDepthWrite(False)
+    bigGearExplosion.setDepthWrite(False)
+    explosionTrack = Sequence()
+    explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
+    returnval = Parallel(suitTrack, deathSoundTrack, explosionTrack)
+    return returnval
+
+def createSuitReviveRedd(suit, battle):
+    suitTrack = Sequence()
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    removeTrainTrack(suit, battle, suitTrack)
+    deathSuit = suit
+    deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
+    hasAnimatedHead = False
+    for headPart in suit.animatedHeadParts:
+        headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
+        headInterval2 = Func(headPart.loop, 'neutral')
+        hasAnimatedHead = True
+    suitTrack.append(
+        ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
+    suitTrack.append(Func(suit.hide))
+    #suitTrack.append(Func(suit.setSkelecog2, True))
+    suitTrack.append(Func(suit.setVirtual, True, True))
+    suitTrack.append(Func(suit.setCog, True))
+    suitTrack.append(Func(suit.setName, suit.createNameInfoVirtual()))
+    suitTrack.append(Func(suit.show))
+    suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
+    suitTrack.append(Func(suit.setHealthForMe, 0))
+    suitTrack.append(Func(suit.updateHealthBar, 0))
+    suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.makeLaserRevive))
+    suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
+    suitTrack.append(Sequence(Func(suit.showHpText2,
+                                           '0.5x HP MULTIPLIER',
+                                           2), Func(suit.showHpStringLureManager2,
+                                           '1.5x Dmg Multiplier'), Func(suit.showHpString,
+                                           '-1 Virtual Revive')))
+    suitTrack.append(Func(suit.loop, 'neutral-unstable'))
+    if suit.style.name == 'mp' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+    else:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
+    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
+    BattleParticles.loadParticles()
+    smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
+    singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
+    smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
+    bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
+    gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
+    smallGears.setPos(gearPoint)
+    singleGear.setPos(gearPoint)
+    smallGears.setDepthWrite(False)
+    singleGear.setDepthWrite(False)
+    smallGearExplosion.setPos(gearPoint)
+    bigGearExplosion.setPos(gearPoint)
+    smallGearExplosion.setDepthWrite(False)
+    bigGearExplosion.setDepthWrite(False)
+    explosionTrack = Sequence()
+    explosionTrack.append(Wait(5.4))
+    explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
+    gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+    gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+    toonMTrack = Parallel(name='toonMTrack')
+    if suit.style.name == 'mp':
+        from toontown.battle import MovieCamera
+        suitTrack.append(MovieCamera.motionShot(0.0, 10.0, 8.0, -180, -10.0, 0.0, 0, suit))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "Your persistence awes me. You come back, again and again, to make sure I stay down.",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(ActorInterval(suit, 'rage'))
+        suitTrack.append(Func(suit.setNeutralAnimation))
+        suitTrack.append(Wait(2.0))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "Unfortunately for you, I too will not budge. My motivation runs stronger than your puerility.",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(Wait(4.0))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "Corrosion is vile, Toon, Once a Cog's functions grow corrupt, they are never the same.",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(Wait(4.0))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "I will not let this hinder him further! I will not let him suffer in silence!",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(Wait(4.0))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "EN GARDE!",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(ActorInterval(suit, 'come-on'))
+        suitTrack.append(Func(suit.showHpText2, '+ 1 ATTACK!', 2))
+        suitTrack.append(Func(suit.setNeutralAnimation))
+        suitTrack.append(Wait(2.0))
+    for mtoon in battle.toons:
+        toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
+
+    returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
+    if hasAnimatedHead:
+        returnval.append(headInterval)
+    return returnval
+
+def createGhostMentalityTrack(suit, battle):
+    suitTrack = Sequence()
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    removeTrainTrack(suit, battle, suitTrack)
+    deathSuit = suit
+    deathSuit.setBlend(frameBlend=base.wantSmoothAnims)
+    suitTrack.append(Func(suit.hide))
+    #suitTrack.append(Func(suit.setSkelecog2, True))
+    suitTrack.append(Func(suit.setVirtual, True, True))
+    suitTrack.append(Func(suit.setCog, True))
+    suitTrack.append(Func(suit.show))
+    suitTrack.append(Func(suit.showHpText2, '1.5x Dmg Multiplier', 2))
+    suitTrack.append(Func(suit.updateHealthBar, 0))
+    suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.makeLaserRevive))
+    suitTrack.append(ActorInterval(suit, 'slip-backward'))
+    suitTrack.append(Func(suit.setNeutralAnimation))
     deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
@@ -653,6 +790,12 @@ def createSuitReviveTrackVirtual(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'mad' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+    elif suit.style.name == 'dvp' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+    elif suit.style.name == 'dvk' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+    elif suit.style.name == 'mp' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'adc' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'drm' and not deathSuit.isSkeleton:
@@ -823,6 +966,34 @@ def createSuitReviveTrackVirtual(suit, battle):
     gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
     gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
     toonMTrack = Parallel(name='toonMTrack')
+    if suit.style.name == 'laa':
+        from toontown.battle import MovieCamera
+        suitTrack.append(MovieCamera.motionShot(0.0, 10.0, 8.0, -180, -10.0, 0.0, 0, suit))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              'If you believe this is the end for me, think again.',
+                              CFSpeech | CFTimeout))
+        suitTrack.append(ActorInterval(suit, 'frustrated'))
+        suitTrack.append(Func(suit.setNeutralAnimation))
+        suitTrack.append(Wait(2.0))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              'I have worked tirelessly, day and night, to get this department in order.',
+                              CFSpeech | CFTimeout))
+        suitTrack.append(Wait(4.0))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "I'm tired of your antics, Toons...",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(Wait(4.0))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "You have not only made a mockery of C.O.G.S Incorporated, but my family as well.",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(Wait(4.0))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "En garde, Toons! Show me this 'power' you claim to have.",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(ActorInterval(suit, 'taunt'))
+        suitTrack.append(Func(suit.showHpText2, '+ 1 ATTACK!', 2))
+        suitTrack.append(Func(suit.setNeutralAnimation))
+        suitTrack.append(Wait(2.0))
     for mtoon in battle.toons:
         toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
 
@@ -837,6 +1008,19 @@ def createVirtualSuitDeathTrack(suit, battle):
     deathSuit = suit
     headInterval = Parallel()
     hasAnimatedHead = False
+    if suit.style.name == 'laa':
+        from toontown.battle import MovieCamera
+        suitTrack.append(MovieCamera.motionShot(0.0, 10.0, 8.0, -180, -10.0, 0.0, 0, suit))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "Ugh... I don't get paid enough for this...",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(ActorInterval(suit, 'chainsaw-cutscene-hurt-neutral'))
+        suitTrack.append(ActorInterval(suit, 'chainsaw-cutscene-hurt-neutral'))
+        suitTrack.append(ActorInterval(suit, 'chainsaw-cutscene-hurt-neutral'))
+        suitTrack.append(Func(suit.setChatAbsolute,
+                              "My requital will be gained one way or another. This isn't over.",
+                              CFSpeech | CFTimeout))
+        suitTrack.append(Wait(4.0))
     for headPart in suit.animatedHeadParts:
         headInterval.append(ActorInterval(headPart, 'death', duration=2))
         hasAnimatedHead = True
@@ -852,90 +1036,11 @@ def createVirtualSuitDeathTrack(suit, battle):
     suitTrack.append(Func(removeDeathSuit, suit, deathSuit, name='remove-death-suit'))
     suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
     suitTrack.append(Func(suit.makeDead))
-    if suit.style.name == 'csm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'scg':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'lit':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ste':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ffm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'ffm' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'blr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'ffm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'crf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'crf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'prr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'crf' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tb':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'gtk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'frs':
-        for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'fbd':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tcm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cry':
-        for s in battle.activeSuits:
-            if s.dna.name == 'tcm' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'otm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'tcm':
-                suitTrack.append(createDesperationTrack(s))
     returnval = Parallel()
     multiTrack = Parallel(suitTrack, returnval)
     if hasAnimatedHead:
-        returnval.append(headInterval)
+        if not suit.style.name == 'laa':
+            returnval.append(headInterval)
     return multiTrack
 
 
@@ -1022,6 +1127,12 @@ def createSuitDeathTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'th' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
+    elif suit.style.name == 'dvp' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+    elif suit.style.name == 'dvk' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+    elif suit.style.name == 'mp' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'th' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'tb' and not deathSuit.isSkeleton:
@@ -1186,87 +1297,6 @@ def createSuitDeathTrack(suit, battle):
     toonMTrack = Parallel(name='toonMTrack')
     for mtoon in battle.toons:
         toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
-    if suit.style.name == 'csm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'scg':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'lit':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ste':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ffm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'ffm' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'blr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'ffm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'crf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'crf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'prr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'crf' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tb':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'gtk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'frs':
-        for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'fbd':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tcm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cry':
-        for s in battle.activeSuits:
-            if s.dna.name == 'tcm' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'otm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'tcm':
-                suitTrack.append(createDesperationTrack(s))
-
     returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
     if hasAnimatedHead:
         returnval.append(headInterval)
@@ -1287,87 +1317,6 @@ def createSuitHeadlessDeathTrack(suit, battle):
     suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
     deathSound = base.loadSfx('phase_5/audio/sfx/COG_headless_death.ogg')
     deathSoundTrack = Sequence(Wait(0), SoundInterval(deathSound, volume=0.6))
-    if suit.style.name == 'csm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'scg':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'lit':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ste':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ffm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'ffm' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'blr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'ffm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'crf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'crf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'prr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'crf' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tb':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'gtk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'frs':
-        for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'fbd':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tcm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cry':
-        for s in battle.activeSuits:
-            if s.dna.name == 'tcm' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'otm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'tcm':
-                suitTrack.append(createDesperationTrack(s))
-
     returnval = Parallel(suitTrack, deathSoundTrack)
     return returnval
 
@@ -1386,86 +1335,6 @@ def createSuitWreckingDeathTrack(suit, battle):
     suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
     deathSound = base.loadSfx('phase_5/audio/sfx/AA_trap_wreckingball_%s.ogg' % random.randint(1, 3))
     deathSoundTrack = Sequence(Wait(0), SoundInterval(deathSound, volume=0.6))
-    if suit.style.name == 'csm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'scg':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'lit':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ste':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ffm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'ffm' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'blr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'ffm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'crf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'crf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'prr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'crf' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tb':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'gtk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'frs':
-        for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'fbd':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tcm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cry':
-        for s in battle.activeSuits:
-            if s.dna.name == 'tcm' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'otm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'tcm':
-                suitTrack.append(createDesperationTrack(s))
     returnval = Parallel(suitTrack, deathSoundTrack)
     return returnval
 
@@ -1491,86 +1360,6 @@ def createSuitCrashTrack(suit, battle):
                          Wait(shrinkStartDelay),
                          LerpScaleInterval(suit, 0.8, Point3(0.0001, 0.0001, 0.0001), blendType='easeIn'),
                          Func(suit.hide))
-    if suit.style.name == 'csm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'scg':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'lit':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ste':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ffm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'ffm' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'blr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'ffm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'crf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'crf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'prr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'crf' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tb':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'gtk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'frs':
-        for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'fbd':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tcm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cry':
-        for s in battle.activeSuits:
-            if s.dna.name == 'tcm' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'otm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'tcm':
-                suitTrack.append(createDesperationTrack(s))
     if hasAnimatedHead:
         return Parallel(suitTrack, deathSoundTrack, headInterval)
     else:
@@ -1606,90 +1395,10 @@ def midairSuitExplodeTrack(suit, battle):
         (0.5, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=0.5, cleanup=True)),
         (0.9, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=2.0, cleanup=True)), name='gears2MTrack'
     )
-    if suit.style.name == 'csm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'scg':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'lit':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ste':
-        for s in battle.activeSuits:
-            if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'ffm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'ffm' or s.dna.name == 'blr':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'blr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'ffm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'crf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dsf':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'crf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'prr':
-        for s in battle.activeSuits:
-            if s.dna.name == 'crf' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tb':
-        for s in battle.activeSuits:
-            if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'gtk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'frs':
-        for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'fbd':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cp':
-        for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'tcm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'cry':
-        for s in battle.activeSuits:
-            if s.dna.name == 'tcm' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'dvk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                suitTrack.append(createDesperationTrack(s))
-    elif suit.style.name == 'otm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'tcm':
-                suitTrack.append(createDesperationTrack(s))
-
     return Parallel(suitTrack, explosionTrack, deathSoundTrack, gears1Track, gears2MTrack, Wait(4.5))
 
 def createDesperationTrack(suit):
+    from toontown.battle import MovieCamera
     theSuit = suit
     makeDesperate = Func(suit.makeDesperation)
     makeDamageUp = Func(suit.makeDamageUp)
@@ -1698,9 +1407,7 @@ def createDesperationTrack(suit):
                                            2), Func(theSuit.showHpStringLureManager2,
                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
                                            '+1 Round Lure Resistance'))
-    cameraTrack = Sequence(
-        LerpPosHprInterval(camera, duration=1.5, pos=Point3(0, -10, 5), hpr=Point3(0, 0, 0),
-                           blendType='easeInOut'))
+    cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(2.0))
     talkTrack = Sequence(Wait(2.0), Func(theSuit.setChatAbsolute,
                               "Hmmm.",
                               CFSpeech | CFTimeout), Wait(4.0),
@@ -1743,86 +1450,6 @@ def shortCircuitTrackOLD(suit, battle):
             (0.5, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=0.5, cleanup=True)),
             (0.9, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=2.0, cleanup=True)), name='gears2MTrack'
         )
-        if suit.style.name == 'csm':
-            for s in battle.activeSuits:
-                if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'scg':
-            for s in battle.activeSuits:
-                if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'lit':
-            for s in battle.activeSuits:
-                if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'ste':
-            for s in battle.activeSuits:
-                if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'ffm':
-            for s in battle.activeSuits:
-                if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'dvp':
-            for s in battle.activeSuits:
-                if s.dna.name == 'ffm' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'dsk':
-            for s in battle.activeSuits:
-                if s.dna.name == 'dvp' or s.dna.name == 'ffm' or s.dna.name == 'blr':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'blr':
-            for s in battle.activeSuits:
-                if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'ffm':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'crf':
-            for s in battle.activeSuits:
-                if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'dsf':
-            for s in battle.activeSuits:
-                if s.dna.name == 'prr' or s.dna.name == 'crf' or s.dna.name == 'tb':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'prr':
-            for s in battle.activeSuits:
-                if s.dna.name == 'crf' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'tb':
-            for s in battle.activeSuits:
-                if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'gtk':
-            for s in battle.activeSuits:
-                if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'frs':
-            for s in battle.activeSuits:
-                if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'fbd':
-            for s in battle.activeSuits:
-                if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'cp':
-            for s in battle.activeSuits:
-                if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'tcm':
-            for s in battle.activeSuits:
-                if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'cry':
-            for s in battle.activeSuits:
-                if s.dna.name == 'tcm' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'dvk':
-            for s in battle.activeSuits:
-                if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'otm':
-            for s in battle.activeSuits:
-                if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'tcm':
-                    suitTrack.append(createDesperationTrack(s))
 
         return Parallel(suitTrack, explosionTrack, deathSoundTrack, gears1Track, gears2MTrack)
 
@@ -1859,87 +1486,6 @@ def shortCircuitTrack(suit, battle):
         explodeTrack.append(
         getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
         explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-        if suit.style.name == 'csm':
-            for s in battle.activeSuits:
-                if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'scg':
-            for s in battle.activeSuits:
-                if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'ste':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'lit':
-            for s in battle.activeSuits:
-                if s.dna.name == 'csm' or s.dna.name == 'scg' or s.dna.name == 'ste':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'ste':
-            for s in battle.activeSuits:
-                if s.dna.name == 'csm' or s.dna.name == 'lit' or s.dna.name == 'scg':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'ffm':
-            for s in battle.activeSuits:
-                if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'dvp':
-            for s in battle.activeSuits:
-                if s.dna.name == 'ffm' or s.dna.name == 'dsk' or s.dna.name == 'blr':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'dsk':
-            for s in battle.activeSuits:
-                if s.dna.name == 'dvp' or s.dna.name == 'ffm' or s.dna.name == 'blr':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'blr':
-            for s in battle.activeSuits:
-                if s.dna.name == 'dvp' or s.dna.name == 'dsk' or s.dna.name == 'ffm':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'crf':
-            for s in battle.activeSuits:
-                if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'dsf':
-            for s in battle.activeSuits:
-                if s.dna.name == 'prr' or s.dna.name == 'crf' or s.dna.name == 'tb':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'prr':
-            for s in battle.activeSuits:
-                if s.dna.name == 'crf' or s.dna.name == 'dsf' or s.dna.name == 'tb':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'tb':
-            for s in battle.activeSuits:
-                if s.dna.name == 'prr' or s.dna.name == 'dsf' or s.dna.name == 'crf':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'gtk':
-            for s in battle.activeSuits:
-                if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'frs':
-            for s in battle.activeSuits:
-                if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'fbd':
-            for s in battle.activeSuits:
-                if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'cp':
-            for s in battle.activeSuits:
-                if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'tcm':
-            for s in battle.activeSuits:
-                if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'cry':
-            for s in battle.activeSuits:
-                if s.dna.name == 'tcm' or s.dna.name == 'dvk' or s.dna.name == 'otm':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'dvk':
-            for s in battle.activeSuits:
-                if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                    suitTrack.append(createDesperationTrack(s))
-        elif suit.style.name == 'otm':
-            for s in battle.activeSuits:
-                if s.dna.name == 'cry' or s.dna.name == 'dvk' or s.dna.name == 'tcm':
-                    suitTrack.append(createDesperationTrack(s))
-
         return Parallel(suitTrack, explodeTrack)
 
 

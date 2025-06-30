@@ -111,7 +111,7 @@ drm = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 
 cp = (('speak', 'speak', 4), ('scabbard', 'scabbard', 4),('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
 fbd = (('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
 frs = (('speak', 'speak', 4), ('snap', 'snap', 4), ('cease', 'nothing', 4), ('roll-o-dex', 'roll-o-dex', 4))
-gtk = (('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('cease', 'cease', 4), ('snap', 'snap', 4))
+gtk = (('deadwood', 'deadwood', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('cease', 'cease', 4), ('snap', 'snap', 4))
 # Sellbots
 cc = (('speak', 'speak', 4), ('glower', 'glower', 4))
 tm = (('speak', 'speak', 4), ('pickpocket', 'pickpocket', 4), ('roll-o-dex', 'roll-o-dex', 4), ('finger-wag', 'finger-wag', 4))
@@ -193,8 +193,8 @@ mouthp = (('roll-o-dex', 'roll-o-dex', 4), ('finger-wag', 'finger-wag', 4))
 th = (('effort', 'effort', 4), ('glower', 'glower', 4))
 whunter = (('mob-mentality', 'mob-mentality', 4), ('speak', 'speak', 4))
 tr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-mp = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-laa = (('summon', 'summon', 4), ('glower', 'glower', 4), ('cease', 'cease2', 4))
+mp = (('rage', 'rage', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('hold-pencil', 'hold-pencil', 4), ('effort', 'effort', 4))
+laa = (('chainsaw-cutscene-hurt-neutral', 'chainsaw-cutscene-hurt-neutral', 4), ('taunt', 'taunt-alt', 4), ('taunt', 'taunt', 4), ('summon', 'summon', 4), ('glower', 'glower', 4), ('cease', 'cease2', 4))
 scg = (('stomp', 'stomp', 4), ('rage', 'rage', 4), ('finger-wag', 'finger-wag', 4), ('neutral-enraged', 'neutral-enraged', 4), ('effort', 'effort', 4), ('defense', 'defense', 4))
 csm = (('throw-insurance', 'throw-insurance', 4), ('roll-o-dex', 'roll-o-dex', 4), ('pen-squirt', 'fountain-pen', 4), ('cease', 'cease', 4))
 ste = (('speak', 'speak', 4), ('cease', 'cease3', 4), ('sanction', 'sanction3', 4))
@@ -2940,10 +2940,14 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.0)
         self.setName(SuitBattleGlobals.SuitAttributes[dna.name]['name'])
         self.getGeomNode().setScale(self.scale)
-        if not self.isSkeleton:
+        if not self.isSkeleton and not self.isVirtual:
             self.generateHealthBar()
             self.generateCorporateMedallion()
-            self.generateCorporateMedallion2()
+            #self.generateCorporateMedallion3()
+            self.generateHPBase()
+        elif self.isVirtual:
+            self.generateHealthBar()
+            self.generateCorporateMedallion3()
             self.generateHPBase()
         else:
             #self.generateSkeletonHealthBar()
@@ -5329,37 +5333,203 @@ class Suit(Avatar.Avatar):
         self.currHP -= hp
         messenger.send(self.uniqueName('suitHpUpdate'), [self.currHP, self.maxHP, hp])
         health = float(self.currHP) / float(self.maxHP)
+        if self.isVirtual and not self.isSkeleton:
+            self.healthBar.hide()
+            self.healthBarGlow.hide()
+            self.hpBase.hide()
+            self.corpMedallion.hide()
+        if health > 1.5:
+            condition = 13
+        elif health > 1.25:
+            condition = 12
+        elif health > 1.0:
+            condition = 12
+        elif health > 0.95:
+            condition = 0
+        elif health > 0.9:
+            condition = 1
+        elif health > 0.8:
+            condition = 2
+        elif health > 0.7:
+            condition = 3
+        elif health > 0.6:
+            condition = 4
+        elif health > 0.5:
+            condition = 5
+        elif health > 0.4:
+            condition = 6
+        elif health > 0.25:
+            condition = 7
+        elif health > 0.2:
+            condition = 8
+        elif health > 0.1:
+            condition = 9
+        elif health > 0.0:
+            condition = 10
+        else:
+            condition = 11
+        self.condition = condition
         if self.style.name == 'mad':
             if self.maxHP == 13000:
                 self.setDisplayName(self.createNameInfoMagenta())
-                self.virtualize(20)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(20)
             elif self.maxHP == 12900:
                 self.setDisplayName(self.createNameInfoWhite())
-                self.virtualize(19)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(19)
             elif self.maxHP == 12800:
                 self.setDisplayName(self.createNameInfoPurple())
-                self.virtualize(13)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(13)
             elif self.maxHP == 12700:
                 self.setDisplayName(self.createNameInfoLightBlue())
-                self.virtualize(12)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(12)
             elif self.maxHP == 12600:
                 self.setDisplayName(self.createNameInfoPink())
-                self.virtualize(14)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(14)
             elif self.maxHP == 12500:
                 self.setDisplayName(self.createNameInfoRed())
-                self.virtualize(8)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(8)
             elif self.maxHP == 12400:
                 self.setDisplayName(self.createNameInfoBlue())
-                self.virtualize(15)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(15)
             elif self.maxHP == 12275:
                 self.setDisplayName(self.createNameInfoYellow())
-                self.virtualize(3)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(3)
             elif self.maxHP == 12100:
                 self.setDisplayName(self.createNameInfoOrange())
-                self.virtualize(7)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(7)
             else:
                 self.setDisplayName(self.createNameInfoGreen())
-                self.virtualize(0)
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(0)
         if self.style.name == 'bg':
             if self.getActualLevel() == 20:
                 self.setDisplayName(self.createNameInfoHighStakes())
@@ -5420,37 +5590,6 @@ class Suit(Avatar.Avatar):
                 self.setDisplayName(self.createNameInfoSniper())
             else:
                 pass
-        if health > 1.5:
-            condition = 13
-        elif health > 1.25:
-            condition = 12
-        elif health > 1.0:
-            condition = 12
-        elif health > 0.95:
-            condition = 0
-        elif health > 0.9:
-            condition = 1
-        elif health > 0.8:
-            condition = 2
-        elif health > 0.7:
-            condition = 3
-        elif health > 0.6:
-            condition = 4
-        elif health > 0.5:
-            condition = 5
-        elif health > 0.4:
-            condition = 6
-        elif health > 0.25:
-            condition = 7
-        elif health > 0.2:
-            condition = 8
-        elif health > 0.1:
-            condition = 9
-        elif health > 0.0:
-            condition = 10
-        else:
-            condition = 11
-        self.condition = condition
         #self.healthCondition = condition
         #print('UpdateHealthBar - condition is %i' % condition)
 
@@ -5537,7 +5676,28 @@ class Suit(Avatar.Avatar):
             self.glowInterval.start()
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
-            if not self.style.name == 'mad':
+            if self.style.name == 'mad':
+                if self.maxHP == 13000:
+                    self.virtualize(20)
+                elif self.maxHP == 12900:
+                    self.virtualize(19)
+                elif self.maxHP == 12800:
+                    self.virtualize(13)
+                elif self.maxHP == 12700:
+                    self.virtualize(12)
+                elif self.maxHP == 12600:
+                    self.virtualize(14)
+                elif self.maxHP == 12500:
+                    self.virtualize(8)
+                elif self.maxHP == 12400:
+                    self.virtualize(15)
+                elif self.maxHP == 12275:
+                    self.virtualize(3)
+                elif self.maxHP == 12100:
+                    self.virtualize(7)
+                else:
+                    self.virtualize(0)
+            else:
                 self.virtualizeRed(9)
 
     def __pulseWhite(self):
@@ -5563,8 +5723,7 @@ class Suit(Avatar.Avatar):
             self.glowInterval.start()
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
-            if not self.style.name == 'mad':
-                self.virtualizeGray(10)
+            self.virtualizeGray(10)
 
     def __pulsePurple(self, task):
         if not self.virtual:
@@ -5603,7 +5762,7 @@ class Suit(Avatar.Avatar):
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
             if not self.style.name == 'mad':
-                self.virtualize(13)
+                self.virtualizePurpleColor(13)
 
     def removeHealthBar(self):
         if self.healthBar:
@@ -5632,7 +5791,7 @@ class Suit(Avatar.Avatar):
             if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
                 thing.setColor(1, 1, 1, 1)
                 self.interval = Parallel(
-                    LerpColorScaleInterval(thing, duration=1, colorScale=(self.healthColors[condition]),
+                    LerpColorScaleInterval(thing, duration=0, colorScale=(self.healthColors[condition]),
                                            blendType='easeInOut'))
                 self.interval.start()
                 thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
@@ -5649,7 +5808,7 @@ class Suit(Avatar.Avatar):
             if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
                 thing.setColor(1, 1, 1, 1)
                 self.interval = Parallel(
-                    LerpColorScaleInterval(thing, duration=.25, colorScale=(self.healthColors[condition]),
+                    LerpColorScaleInterval(thing, duration=0, colorScale=(self.healthColors[condition]),
                                            blendType='easeInOut'))
                 self.interval.start()
                 thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
@@ -5666,7 +5825,24 @@ class Suit(Avatar.Avatar):
             if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
                 thing.setColor(1, 1, 1, 1)
                 self.interval = Parallel(
-                    LerpColorScaleInterval(thing, duration=1, colorScale=(0.702, 0, 1, 1),
+                    LerpColorScaleInterval(thing, duration=2, colorScale=(0.702, 0, 1, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+                thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+                thing.setDepthWrite(False)
+                thing.setBin('fixed', 1)
+
+    def virtualizePurpleColor(self, condition):
+        self.healthCondition = 0
+        actorNode = self.find('**/__Actor_modelRoot')
+        actorCollection = actorNode.findAllMatches('*')
+        parts = ()
+        for thingIndex in range(0, actorCollection.getNumPaths()):
+            thing = actorCollection[thingIndex]
+            if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
+                thing.setColor(1, 1, 1, 1)
+                self.interval = Parallel(
+                    LerpColorScaleInterval(thing, duration=2, colorScale=(self.healthColors[13]),
                                            blendType='easeInOut'))
                 self.interval.start()
                 thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
@@ -5683,7 +5859,7 @@ class Suit(Avatar.Avatar):
             if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
                 thing.setColor(1, 1, 1, 1)
                 self.interval = Parallel(
-                    LerpColorScaleInterval(thing, duration=.25, colorScale=(0.3, 0.3, 0.3, 1),
+                    LerpColorScaleInterval(thing, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
                                            blendType='easeInOut'))
                 self.interval.start()
                 thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
@@ -5700,7 +5876,7 @@ class Suit(Avatar.Avatar):
             if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
                 thing.setColor(1, 1, 1, 1)
                 self.interval = Parallel(
-                    LerpColorScaleInterval(thing, duration=.25, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(thing, duration=0, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'))
                 self.interval.start()
                 thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))

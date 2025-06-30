@@ -327,6 +327,13 @@ def doSuitAttack(attack):
         suitTrack = doWithdrawal(attack)
     elif name == 'WriteOff':
         suitTrack = doWriteOff(attack)
+        #redd heir-wing cheats
+    elif name == 'ReddAutoRepair':
+        suitTrack = MovieLawbotLitigationCheats.doAutoRepair(attack)
+    elif name == 'ReddLiquidationSale':
+        suitTrack = doLiquidate(attack)
+    elif name == 'ReddPeckingOrder':
+        suitTrack = MovieLawbotLitigationCheats.doPeckingOrder(attack)
         # wsi cheats
     elif name == 'WSICeaseAndDesist':
         suitTrack = MovieLawbotLitigationCheats.doCeaseAndDesist(attack)
@@ -441,6 +448,8 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doManagerialProtectionImmunity(attack)
     elif name == 'AmbassadorMulligan':
         suitTrack = MovieBossbotLitigationCheats.doMulligan(attack)
+    elif name == 'AmbassadorGhostMentality':
+        suitTrack = MovieBossbotLitigationCheats.doGhostMentality(attack)
         # safety supervisor
     elif name == 'SafetyHighPressure':
         suitTrack = MovieSellbotLitigationCheats.doHighPressure(attack)
@@ -558,6 +567,8 @@ def doSuitAttack(attack):
     elif name == 'HighRollerCheerRetaliation':
         suitTrack = MovieHighRollerCheats.doSnipe(attack)
     #universal cheats
+    elif name == 'Desperation':
+        suitTrack = MovieUniversalCheats.doDesperation(attack)
     elif name == 'SynergyFees':
         suitTrack = MovieUniversalCheats.doSynergy(attack)
     elif name == 'CalculatingFees':
@@ -947,9 +958,19 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     suitPos = suit.getPos(battle)
+    toonPos = toon.getPos(battle)
+    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+    indicator.setHpr(0, -90, 0)
+    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
     animTrack.append(Func(toon.headsUp, battle, suitPos))
+    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
+                                   LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)), LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                                 LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
+                                 LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                                 LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)), LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                          Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale), Func(MovieUtil.removeProp, indicator))
     currentBossHealth = -1
     currentBossHealth2 = -1
     if suit.style.name == 'csm':
@@ -1093,14 +1114,14 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     if dmg > 0 and suit.isSyphon:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         animTrack.append(syphonSuitTrack)
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
     elif dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-        return animTrack
+        return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
-        return Parallel(animTrack, indicatorTrack)
+        return Parallel(animTrack, indicatorTrack, indicatorTracks)
 
 
 def getToonTracks(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 1e-06, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
@@ -1251,13 +1272,13 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
-   # if died:
-       # suit = attack['suit']
-       # toonTrack.append(Wait(3.0))
-        #if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-           # suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-        #else:
-            #suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+  #  if died:
+     #   suit = attack['suit']
+      #  toonTrack.append(Wait(3.0))
+      #  if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+     #   else:
+           # suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -2280,6 +2301,7 @@ def doEmbezzle(attack):
     glow.setPos(0,0,0)
     glow.setColorScale(Vec4(1, 0.9, 0, 0.3))
     suitTrack = getSuitTrack(attack)
+    suitTrack.append(Wait(1.0))
     billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
     billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(5.0, 5.0, 5.0))
     toonTrack = getToonTrack(attack, 0.6, ['cringe'], 0.01, ['sidestep'])
@@ -2452,7 +2474,7 @@ def doHostileTakeoverNew(attack):
      ['slip-forward', 0.01, 1.0]]
     dodgeAnims = [['duck', 1e-06, 0.8]]
     toonTracks = getToonTracks(attack, damageDelay=knifeDelay + 0.11, splicedDamageAnims=damageAnims, dodgeDelay=knifeDelay - 0.1, splicedDodgeAnims=dodgeAnims)
-    soundTrack = Func(base.playSfx, globalBattleSoundCache.getSound('SA_hostile_takeover.ogg'), volume=0.75, node=suit),
+    soundTrack = Sequence(Wait(4.0), SoundInterval(globalBattleSoundCache.getSound('SA_hostile_takeover.ogg'), node=suit))
     return Parallel(suitTrack, knifeTracks, soundTrack, toonTracks)
 
 
@@ -3547,7 +3569,7 @@ def doEvilEye(attack):
     damageDelay = 2.44
     dodgeDelay = 1.64
     suitName = suit.getStyleName()
-    posPoints = [Point3(-0.4, 4.5, suit.height - 2), VBase3(-155.0, -20.0, 0.0)]
+    posPoints = [Point3(-0.4, 5.5, suit.height - 2), VBase3(-155.0, -20.0, 0.0)]
     appearDelay = 0.8
     suitHoldStart = 1.06
     suitHoldStop = 1.69
@@ -3885,6 +3907,7 @@ def doPickPocket(attack):
     dmg = target[0]['hp']
     bill = globalPropPool.getProp('1dollar')
     suitTrack = getSuitTrack(attack)
+    suitTrack.append(Wait(1.0))
     billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
     billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(1.41, 1.41, 1.41))
     toonTrack = getToonTrack(attack, 0.6, ['cringe'], 0.01, ['sidestep'])
@@ -3937,6 +3960,7 @@ def doVoodooMagic(attack):
     headsUp2 = Func(suit.setHpr, battle, origHpr)
     moveTrack = Sequence(LerpPosInterval(suit, 0, sinkPos2, other=battle), headsUp, Wait(3.0), suitReset, Func(suit.setPos, battle, dropPos))
     suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack.append(Wait(1.0))
     dmg = target[0]['hp']
     bill = globalPropPool.getProp('1dollar')
     billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
@@ -4729,7 +4753,7 @@ def doFired(attack):
             colorTrack.append(changeColor(headParts))
             colorTrack.append(changeColor(torsoParts))
             colorTrack.append(changeColor(legsParts))
-            colorTrack.append(Wait(3.5))
+            colorTrack.append(Wait(2.5))
             colorTrack.append(resetColor(headParts))
             colorTrack.append(resetColor(torsoParts))
             colorTrack.append(resetColor(legsParts))
