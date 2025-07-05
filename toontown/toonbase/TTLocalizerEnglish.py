@@ -5959,7 +5959,7 @@ SuitAttackTaunts = {
            'Easy come, easy go.',
            "Isn't this your last shred of hope?"],
  'Spin': {
-'psetter': ["Whaddaya thay we go for a little THPIN??",
+'duckshfl': ["Whaddaya thay we go for a little THPIN??",
             "What a thpin you're in!!",
             "How do ya like to 'THPIN' your time? GET IT??",
             "I'll make your head THPIN!",
