@@ -24,248 +24,151 @@ def pickFromFreqList(freqList):
 
 def getActualFromRelativeLevel(name, relLevel):
     data = SuitAttributes[name]
-    if name == 'ste':
-        actualLevel = relLevel + 34
-    elif name == 'csm':
-        actualLevel = relLevel + 34
-    elif name == 'fm':
-        actualLevel = relLevel + 12
-    elif name == 'scg':
-        actualLevel = relLevel + 29
-    elif name == 'lit':
-        actualLevel = relLevel + 39
-    elif name == 'p':
+    # Bossbots
+    if name == 'p':
+        actualLevel = relLevel + 1
+    elif name == 'stg':
         actualLevel = relLevel + 1
     elif name == 'ym':
-        actualLevel = relLevel + 1
+        actualLevel = relLevel + 2
+    elif name == 'enf':
+        actualLevel = relLevel + 2
     elif name == 'mm':
-        actualLevel = relLevel + 2
+        actualLevel = relLevel + 3
+    elif name == 'blh':
+        actualLevel = relLevel + 3
     elif name == 'ds':
-        actualLevel = relLevel + 2
+        actualLevel = relLevel + 4
+    elif name == 'mldr':
+        actualLevel = relLevel + 4
     elif name == 'hh':
-        actualLevel = relLevel + 3
+        actualLevel = relLevel + 5
+    elif name == 'bsht':
+        actualLevel = relLevel + 5
     elif name == 'cr':
-        actualLevel = relLevel + 3
+        actualLevel = relLevel + 6
+    elif name == 'txl':
+        actualLevel = relLevel + 6
     elif name == 'tbc':
-        actualLevel = relLevel + 4
-    elif name == 'trb':
-        actualLevel = relLevel + 4
-    elif name == 'dot':
-        actualLevel = relLevel + 5
-    elif name == 'dvg':
-        actualLevel = relLevel + 5
-    elif name == 'cpl':
-        actualLevel = relLevel + 6
-    elif name == 'bkp':
-        actualLevel = relLevel + 6
-    elif name == 'kpn':
         actualLevel = relLevel + 7
-    elif name == 'cmk':
-        actualLevel = relLevel + 1
-    elif name == 'phs':
-        actualLevel = relLevel + 1
-    elif name == 'vpr':
-        actualLevel = relLevel + 2
-    elif name == 'kyl':
-        actualLevel = relLevel + 2
-    elif name == 'sdb':
-        actualLevel = relLevel + 3
-    elif name == 'gry':
-        actualLevel = relLevel + 3
-    elif name == 'kbc':
-        actualLevel = relLevel + 4
-    elif name == 'shp':
-        actualLevel = relLevel + 4
-    elif name == 'sfs':
-        actualLevel = relLevel + 5
-    elif name == 'pyc':
-        actualLevel = relLevel + 5
-    elif name == 'ant':
-        actualLevel = relLevel + 14
-    elif name == 'sya':
+    elif name == 'autocad':
+        actualLevel = relLevel + 13
+    elif name == 'clubpres':
         actualLevel = relLevel + 19
-    elif name == 'jls':
-        actualLevel = relLevel + 14
-    elif name == 'pbl':
+    elif name == 'derrman':
+        actualLevel = relLevel + 4
+    elif name == 'derrhand':
+        actualLevel = relLevel + 24
+    elif name == 'mplayer':
+        actualLevel = relLevel + 27
+    elif name == 'fires':
         actualLevel = relLevel + 19
-    elif name == 'inw':
-        actualLevel = relLevel + 6
-    elif name == 'sys':
-        actualLevel = relLevel + 6
-    elif name == 'rus':
-        actualLevel = relLevel + 7
+    elif name == 'fbed':
+        actualLevel = relLevel + 29
+    elif name == 'mplayer2':
+        actualLevel = relLevel + 27
+    elif name == 'chainsaw':
+        actualLevel = relLevel + 49
+    elif name == 'chainsaw2':
+        actualLevel = relLevel + 49
+    elif name == 'phouse':
+        actualLevel = relLevel + 37
+    elif name == 'bkeeper':
+        actualLevel = relLevel + 43
+    elif name == 'wtapper':
+        actualLevel = relLevel + 43
+    elif name == 'ambass':
+        actualLevel = relLevel + 47
+    # Lawbots
     elif name == 'b':
         actualLevel = relLevel + 1
+    elif name == 'pf':
+        actualLevel = relLevel + 1
     elif name == 'dt':
-        actualLevel = relLevel + 1
+        actualLevel = relLevel + 2
+    elif name == 'cv':
+        actualLevel = relLevel + 2
     elif name == 'ac':
-        actualLevel = relLevel + 2
+        actualLevel = relLevel + 3
+    elif name == 'nn':
+        actualLevel = relLevel + 3
     elif name == 'bs':
-        actualLevel = relLevel + 2
-    elif name == 'sd':
-        actualLevel = relLevel + 3
-    elif name == 'le':
-        actualLevel = relLevel + 3
-    elif name == 'bw':
-        actualLevel = relLevel + 4
-    elif name == 'brv':
-        actualLevel = relLevel + 4
-    elif name == 'sb':
-        actualLevel = relLevel + 5
-    elif name == 'cfp':
-        actualLevel = relLevel + 5
-    elif name == 'arb':
-        actualLevel = relLevel + 6
-    elif name == 'sjg':
-        actualLevel = relLevel + 6
-    elif name == 'lsc':
-        actualLevel = relLevel + 7
-    elif name == 'pp':
-        actualLevel = relLevel + 1
-    elif name == 'tw':
-        actualLevel = relLevel + 1
-    elif name == 'bc':
-        actualLevel = relLevel + 2
-    elif name == 'nc':
-        actualLevel = relLevel + 2
-    elif name == 'mb':
-        actualLevel = relLevel + 3
-    elif name == 'ls':
-        actualLevel = relLevel + 3
-    elif name == 'rb':
-        actualLevel = relLevel + 4
-    elif name == 'tc':
-        actualLevel = relLevel + 19
-    elif name == 'gm':
         actualLevel = relLevel + 4
     elif name == 'ad':
+        actualLevel = relLevel + 4
+    elif name == 'sd':
         actualLevel = relLevel + 5
-    elif name == 'cvy':
+    elif name == 'sh':
         actualLevel = relLevel + 5
-    elif name == 'ptr':
+    elif name == 'le':
         actualLevel = relLevel + 6
-    elif name == 'mld':
+    elif name == 'br':
         actualLevel = relLevel + 6
-    elif name == 'pht':
+    elif name == 'bw':
         actualLevel = relLevel + 7
-    elif name == 'tm':
-        actualLevel = relLevel + 1
-    elif name == 'nd':
-        actualLevel = relLevel + 1
-    elif name == 'gh':
-        actualLevel = relLevel + 2
-    elif name == 'ms':
-        actualLevel = relLevel + 2
-    elif name == 'tf':
-        actualLevel = relLevel + 3
-    elif name == 'm':
-        actualLevel = relLevel + 3
-    elif name == 'mh':
-        actualLevel = relLevel + 4
-    elif name == 'ka':
-        actualLevel = relLevel + 4
-    elif name == 'mka':
-        actualLevel = relLevel + 5
-    elif name == 'trm':
-        actualLevel = relLevel + 5
-    elif name == 'fhj':
-        actualLevel = relLevel + 68
-    elif name == 'ssm':
-        actualLevel = relLevel + 6
-    elif name == 'isw':
-        actualLevel = relLevel + 6
-    elif name == 'ssr':
-        actualLevel = relLevel + 7
-    elif name == 'cn':
-        actualLevel = relLevel + 1
-    elif name == 'yuh':
-        actualLevel = relLevel + 2
-    elif name == 'sw':
-        actualLevel = relLevel + 1
-    elif name == 'ghd':
-        actualLevel = relLevel + 776
-    elif name == 'tyh':
-        actualLevel = relLevel + 44
-    elif name == 'jgd':
-        actualLevel = relLevel + 44
-    elif name == 'bby':
-        actualLevel = relLevel + 49
-    elif name == 'laa':
-        actualLevel = relLevel + 49
-    elif name == 'mdm':
-        actualLevel = relLevel + 2
-    elif name == 'txm':
-        actualLevel = relLevel + 2
-    elif name == 'mg':
-        actualLevel = relLevel + 3
-    elif name == 'bfh':
-        actualLevel = relLevel + 3
-    elif name == 'hho':
-        actualLevel = relLevel + 4
-    elif name == 'bdb':
-        actualLevel = relLevel + 4
-    elif name == 'bgh':
-        actualLevel = relLevel + 5
-    elif name == 'dfh':
-        actualLevel = relLevel + 5
-    elif name == 'rng':
-        actualLevel = relLevel + 6
-    elif name == 'cps':
-        actualLevel = relLevel + 6
-    elif name == 'tld':
-        actualLevel = relLevel + 7
-    elif name == 'cg':
+    elif name == 'whistleb':
         actualLevel = relLevel + 13
-    elif name == 'bg':
+    elif name == 'clerk':
         actualLevel = relLevel + 19
-    elif name == 'msr':
-        actualLevel = relLevel + 4
-    elif name == 'tg':
-        actualLevel = relLevel + 29
-    elif name == 'adc':
+    elif name == 'arbit':
         actualLevel = relLevel + 49
-    elif name == 'kb':
-        actualLevel = relLevel + 24
-    elif name == 'ts':
-        actualLevel = relLevel + 27
-    elif name == 'tb':
-        actualLevel = relLevel + 87
-    elif name == 'drm':
-        actualLevel = relLevel + 49
-    elif name == 'cp':
-        actualLevel = relLevel + 37
-    elif name == 'fbd':
-        actualLevel = relLevel + 43
-    elif name == 'frs':
-        actualLevel = relLevel + 43
-    elif name == 'gtk':
-        actualLevel = relLevel + 47
-    elif name == 'jdg':
-        actualLevel = relLevel + 14
-    elif name == 'jur':
+    elif name == 'judy':
         actualLevel = relLevel + 19
-    elif name == 'tlr':
-        actualLevel = relLevel + 49
     elif name == 'mouthp':
         actualLevel = relLevel + 15
-    elif name == 'th':
+    elif name == 'rainmake':
         actualLevel = relLevel + 15
     elif name == 'whunter':
         actualLevel = relLevel + 19
-    elif name == 'tr':
+    elif name == 'erclaim':
+        actualLevel = relLevel + 27
+    elif name == 'redd':
         actualLevel = relLevel + 19
-    elif name == 'mp':
-        actualLevel = relLevel + 19
-    elif name == 'cm':
-        actualLevel = relLevel + 19
-    elif name == 'csh':
-        actualLevel = relLevel + 9
-    elif name == 'bgr':
-        actualLevel = relLevel + 19
-    elif name == 'mes':
+    elif name == 'wsi':
+        actualLevel = relLevel + 49
+    elif name == 'sgoat':
+        actualLevel = relLevel + 29
+    elif name == 'caseman':
+        actualLevel = relLevel + 34
+    elif name == 'stenog':
+        actualLevel = relLevel + 34
+    elif name == 'lgator':
+        actualLevel = relLevel + 39
+    # Cashbots
+    elif name == 'pp':
+        actualLevel = relLevel + 1
+    elif name == 'shy':
+        actualLevel = relLevel + 1
+    elif name == 'tw':
+        actualLevel = relLevel + 2
+    elif name == 'sw':
+        actualLevel = relLevel + 2
+    elif name == 'bc':
+        actualLevel = relLevel + 3
+    elif name == 'fct':
+        actualLevel = relLevel + 3
+    elif name == 'nc':
         actualLevel = relLevel + 4
-    elif name == 'dm':
-        actualLevel = relLevel + 23
+    elif name == 'ovt':
+        actualLevel = relLevel + 4
+    elif name == 'mb':
+        actualLevel = relLevel + 5
+    elif name == 'trs':
+        actualLevel = relLevel + 5
+    elif name == 'ls':
+        actualLevel = relLevel + 6
+    elif name == 'bfh':
+        actualLevel = relLevel + 6
+    elif name == 'rb':
+        actualLevel = relLevel + 7
+    elif name == 'maudit':
+        actualLevel = relLevel + 13
+    elif name == 'supervis':
+        actualLevel = relLevel + 19
+    elif name == 'duckshfl':
+        actualLevel = relLevel + 4
+    elif name == 'treek':
+        actualLevel = relLevel + 19
     elif name == 'styx':
         actualLevel = relLevel + 19
     elif name == 'nix':
@@ -276,72 +179,156 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 22
     elif name == 'charon':
         actualLevel = relLevel + 24
-    elif name == 'trk':
+    elif name == 'pcrat':
         actualLevel = relLevel + 37
-    elif name == 'crf':
+    elif name == 'hroller':
         actualLevel = relLevel + 99
-    elif name == 'mad':
+    elif name == 'erfit':
+        actualLevel = relLevel + 34
+    elif name == 'hrollers':
         actualLevel = relLevel + 24
-    elif name == 'fas':
+    elif name == 'hroller2':
+        actualLevel = relLevel + 99
+    # Sellbots
+    elif name == 'tm':
+        actualLevel = relLevel + 1
+    elif name == 'cn':
+        actualLevel = relLevel + 1
+    elif name == 'nd':
+        actualLevel = relLevel + 2
+    elif name == 'dc':
+        actualLevel = relLevel + 2
+    elif name == 'gh':
+        actualLevel = relLevel + 3
+    elif name == 'fcs':
+        actualLevel = relLevel + 3
+    elif name == 'ms':
+        actualLevel = relLevel + 4
+    elif name == 'cnd':
+        actualLevel = relLevel + 4
+    elif name == 'tf':
+        actualLevel = relLevel + 5
+    elif name == 'ppl':
+        actualLevel = relLevel + 5
+    elif name == 'm':
+        actualLevel = relLevel + 6
+    elif name == 'ksp':
+        actualLevel = relLevel + 6
+    elif name == 'mh':
         actualLevel = relLevel + 7
-    elif name == 'mdr':
+    elif name == 'watchm':
+        actualLevel = relLevel + 13
+    elif name == 'foreman':
         actualLevel = relLevel + 19
-    elif name == 'mdr':
+    elif name == 'dopr':
+        actualLevel = relLevel + 9
+    elif name == 'dopa':
+        actualLevel = relLevel + 29
+    elif name == 'bellring':
         actualLevel = relLevel + 12
+    elif name == 'mh2':
+        actualLevel = relLevel + 24
     elif name == 'prethink':
         actualLevel = relLevel + 11
-    elif name == 'jr':
+    elif name == 'mslacker':
         actualLevel = relLevel + 23
-    elif name == 'nar':
-        actualLevel = relLevel + 9
-    elif name == 'fd':
-        actualLevel = relLevel + 29
-    elif name == 'prr':
-        actualLevel = relLevel + 89
-    elif name == 'blr':
+    elif name == 'videog':
+        actualLevel = relLevel + 24
+    elif name == 'radiog':
         actualLevel = relLevel + 31
-    elif name == 'dvp':
+    elif name == 'racket':
         actualLevel = relLevel + 37
-    elif name == 'dsk':
+    elif name == 'ubuster':
         actualLevel = relLevel + 37
-    elif name == 'ffm':
+    elif name == 'safesupervis':
         actualLevel = relLevel + 43
-    elif name == 'sft':
+    elif name == 'psetter':
         actualLevel = relLevel + 65
-    elif name == 'ddv':
+    # Boardbots
+    elif name == 'pph':
+        actualLevel = relLevel + 1
+    elif name == 'ca':
+        actualLevel = relLevel + 1
+    elif name == 'ins':
+        actualLevel = relLevel + 2
+    elif name == 'mdm':
+        actualLevel = relLevel + 2
+    elif name == 'cbr':
+        actualLevel = relLevel + 3
+    elif name == 'txm':
+        actualLevel = relLevel + 3
+    elif name == 'dl':
+        actualLevel = relLevel + 4
+    elif name == 'ang':
+        actualLevel = relLevel + 4
+    elif name == 'shw':
+        actualLevel = relLevel + 5
+    elif name == 'bfh2':
+        actualLevel = relLevel + 5
+    elif name == 'mg':
+        actualLevel = relLevel + 6
+    elif name == 'chw':
+        actualLevel = relLevel + 6
+    elif name == 'hho':
+        actualLevel = relLevel + 7
+    elif name == 'chairp':
+        actualLevel = relLevel + 13
+    elif name == 'bdirector':
         actualLevel = relLevel + 19
-    elif name == 'dty':
-        actualLevel = relLevel + 6
-    elif name == 'dfr':
-        actualLevel = relLevel + 6
-    elif name == 'dfg':
+    elif name == 'ddiver':
         actualLevel = relLevel + 9
-    elif name == 'jb':
+    elif name == 'gatekeep':
+        actualLevel = relLevel + 29
+    elif name == 'dola':
+        actualLevel = relLevel + 12
+    elif name == 'dold':
         actualLevel = relLevel + 24
-    elif name == 'gkp':
-        actualLevel = relLevel + 14
-    elif name == 'bsh':
-        actualLevel = relLevel + 24
-    elif name == 'dvk':
+    elif name == 'ghd':
+        actualLevel = relLevel + 776
+    elif name == 'dking':
         actualLevel = relLevel + 64
-    elif name == 'otm':
+    elif name == 'ottoman':
+        actualLevel = relLevel + 69
+    elif name == 'crystal':
         actualLevel = relLevel + 76
-    elif name == 'cry':
-        actualLevel = relLevel + 49
-    elif name == 'tcm':
+    elif name == 'chairman':
         actualLevel = relLevel + 99
-    elif name == 'msp':
+    # Techbots
+    elif name == 'cmk':
+        actualLevel = relLevel + 1
+    elif name == 'dhr':
+        actualLevel = relLevel + 1
+    elif name == 'vpr':
+        actualLevel = relLevel + 2
+    elif name == 'brn':
+        actualLevel = relLevel + 2
+    elif name == 'sdb':
+        actualLevel = relLevel + 3
+    elif name == 'key':
+        actualLevel = relLevel + 3
+    elif name == 'kbc':
+        actualLevel = relLevel + 4
+    elif name == 'blk':
+        actualLevel = relLevel + 4
+    elif name == 'sfs':
+        actualLevel = relLevel + 5
+    elif name == 'pyc':
+        actualLevel = relLevel + 5
+    elif name == 'inw':
+        actualLevel = relLevel + 6
+    elif name == 'itn':
+        actualLevel = relLevel + 6
+    elif name == 'rus':
+        actualLevel = relLevel + 7
+    elif name == 'ant':
+        actualLevel = relLevel + 13
+    elif name == 'sya':
         actualLevel = relLevel + 19
-    elif name == 'dsf':
-        actualLevel = relLevel + 99
-    elif name == 'dar':
-        actualLevel = relLevel + 39
-    elif name == 'nhy':
-        actualLevel = relLevel + 44
-    elif name == 'wrt':
-        actualLevel = relLevel + 44
-    elif name == 'auh':
-        actualLevel = relLevel + 49
+    elif name == 'djockey':
+        actualLevel = relLevel + 9
+    elif name == 'ptjockey':
+        actualLevel = relLevel + 29
+    # Pressbots
     elif name == 'shb':
         actualLevel = relLevel + 1
     elif name == 'bsd':
@@ -352,11 +339,11 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 2
     elif name == 'hck':
         actualLevel = relLevel + 3
-    elif name == 'fpn':
+    elif name == 'ath':
         actualLevel = relLevel + 3
     elif name == 'ghw':
         actualLevel = relLevel + 4
-    elif name == 'bbr':
+    elif name == 'dcw':
         actualLevel = relLevel + 4
     elif name == 'gzt':
         actualLevel = relLevel + 5
@@ -368,6 +355,10 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 6
     elif name == 'anc':
         actualLevel = relLevel + 7
+    elif name == 'jls':
+        actualLevel = relLevel + 13
+    elif name == 'pbl':
+        actualLevel = relLevel + 19
     else:
         actualLevel = relLevel
     return actualLevel
@@ -456,6 +447,25 @@ def getAttackIndex(attackName, suitName):
 
     # No attack found.
     notify.warning('Did not find attack %s for suitName %s' % (attackName, suitName))
+    return -1
+
+def getAttackIndexSoak(attackName):
+    '''
+    For convenience, until I find a way to use attack names instead of indexes for SUIT_ATK_COL, grab the index based on the attack name.
+    attackName: The attack (e.g. 'ClipOnTie', 'SnapWet', etc.).
+    '''
+    attacks = SuitAttributes['pob']['attacks']
+    for i in xrange(len(attacks)):
+        attack = attacks[i]
+        if isinstance(attack, SuitAttack):
+            if attack.name == attackName:
+                return i
+        else:
+            if attack[0] == attackName:
+                return i
+
+    # No attack found.
+    #notify.warning('Did not find attack %s for suitName %s' % (attackName, suitName))
     return -1
 
 def pickSuitAttack(attacks, suitLevel):
@@ -612,8 +622,12 @@ SuitLevel = {
     'hho': 7.0,
 }
 
-SpecialCogDict = ('ddv', 'sya', 'fhj', 'dty', 'dar', 'dsf', 'nhy', 'wrt', 'auh', 'dfg', 'msp', 'dfr', 'bsh', 'ghd', 'tyh', 'jgd', 'dsf', 'bby', 'dvk', 'otm', 'cry', 'tcm', 'bg', 'msr', 'kb', 'ts', 'tc', 'tg', 'tb', 'adc', 'drm', 'cp', 'fbd', 'frs', 'gtk', 'jur', 'tlr', 'cm', 'mouthp', 'th', 'whunter', 'tr', 'mp', 'laa', 'scg', 'csm', 'ste', 'lit', 'bgr', 'mes', 'dm', 'styx', 'nix', 'hydra', 'kerberos', 'charon', 'trk', 'mad', 'crf', 'mdr', 'nar', 'fd', 'fm', 'prethink', 'jr', 'prr', 'blr', 'dvp', 'dsk', 'ffm', 'sft')
-LitigationManagers = ('lit', 'ste', 'csm', 'scg', 'ffm', 'dsk', 'blr', 'dvp', 'gtk', 'frs', 'fbd', 'cp')
+SpecialCogDict = ('clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'foreman', 'dopr', 'dopa',
+                  'bellring', 'prethink', 'mslacker', 'videog', 'radiog', 'ubuster', 'racket', 'safesupervis', 'psetter', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra',
+                  'kerberos', 'charon', 'pcrat', 'hroller', 'erfit', 'hroller2', 'hrollers', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi',
+                  'sgoat', 'caseman', 'stenog', 'lgator', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'ghd', 'dking', 'ottoman', 'crystal', 'chairman',
+                  'sya', 'pbl')
+LitigationManagers = ('lgator', 'stenog', 'caseman', 'sgoat', 'safesupervis', 'ubuster', 'radiog', 'racket', 'ambass', 'wtapper', 'bkeeper', 'phouse')
 
 ATK_TGT_UNKNOWN = 1
 ATK_TGT_SINGLE = 2
@@ -694,7 +708,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 4, 6, 9, 12),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20,)))},
- 'ym': {'name': 'Stooge',
+ 'stg': {'name': 'Stooge',
         'singularname': 'a Stooge',
         'pluralname': 'Stooges',
         'level': 2,
@@ -719,7 +733,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  (1, 2, 3, 4, 5, 6, 7),
                  (75, 75, 75, 75, 75, 75, 75),
                  (25, 25, 25, 25, 25, 25, 25)))},
- 'mm': {'name': 'Yesman',
+ 'ym': {'name': 'Yesman',
         'singularname': 'a Yesman',
         'pluralname': 'Yesmen',
         'level': 3,
@@ -748,7 +762,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 4, 6, 9, 12),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20)))},
- 'ds': {'name': 'Enforcer',
+ 'enf': {'name': 'Enforcer',
         'singularname': 'a Enforcer',
         'pluralname': 'Enforcers',
         'level': 4,
@@ -773,7 +787,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (1, 2, 2, 3, 3, 4, 4),
               (70, 70, 70, 70, 70, 70, 70),
               (25, 25, 25, 25, 25, 25, 25)))},
- 'hh': {'name': 'Micromanager',
+ 'mm': {'name': 'Micromanager',
         'singularname': 'a Micromanager',
         'pluralname': 'Micromanagers',
         'level': 5,
@@ -802,7 +816,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (3, 4, 5, 6, 7),
               (85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20)))},
- 'cr': {'name': 'Blowhard',
+ 'blh': {'name': 'Blowhard',
         'singularname': 'a Blowhard',
 		'pluralname': 'Blowhards',
         'level': 6,
@@ -827,7 +841,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (6, 9, 12, 15, 18, 21, 24, 27, 30),
               (80, 80, 80, 80, 80, 80, 80, 80, 80),
               (25, 25, 25, 25, 25, 25, 25, 25, 25)))},
- 'tbc': {'name': 'Downsizer',
+ 'ds': {'name': 'Downsizer',
          'singularname': 'a Downsizer',
          'pluralname': 'Downsizers',
          'level': 7,
@@ -852,7 +866,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 12, 15, 18, 20, 22, 24, 26),
                (70, 70, 70, 70, 70, 70, 70, 70),
                (25, 25, 25, 25, 25, 25, 25, 25)))},
- 'trb': {'name': 'The Molder',
+ 'mldr': {'name': 'The Molder',
         'singularname': 'a The Molder',
 		'pluralname': 'The Molders',
 		'level': 8,
@@ -877,7 +891,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'dot': {'name': 'Head Hunter',
+ 'hh': {'name': 'Head Hunter',
         'singularname': 'a Head Hunter',
 		'pluralname': 'Head Hunters',
 		'level': 9,
@@ -906,7 +920,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'dvg': {'name': 'Big Shot',
+'bsht': {'name': 'Big Shot',
         'singularname': 'a Big Shot',
 		'pluralname': 'Big Shots',
 		'level': 10,
@@ -931,7 +945,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 11, 12, 14, 16, 18, 20, 22, 24, 26),
                (80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'cpl': {'name': 'Corporate\nRaider',
+'cr': {'name': 'Corporate\nRaider',
         'singularname': 'a Corporate Raider',
 		'pluralname': 'Corporate Raiders',
 		'level': 11,
@@ -948,10 +962,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (7, 9, 11, 13, 15, 17, 19, 21, 22, 23, 24, 25),
               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-('HostileTakeover',
- (7, 9, 11, 13, 15, 17, 19, 21, 22, 23, 24, 25),
- (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
- (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            ('HostileTakeover',
+             (7, 9, 11, 13, 15, 17, 19, 21, 22, 23, 24, 25),
+             (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+            (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
              ('Canned',
               (11, 12, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31),
               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -960,7 +974,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (12, 15, 18, 20, 22, 24, 27, 29, 32, 34, 36, 38),
               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75,),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'bkp': {'name': 'Toxic Leader',
+'txl': {'name': 'Toxic Leader',
         'singularname': 'a Toxic Leader',
 		'pluralname': 'Toxic Leaders',
 		'level': 12,
@@ -989,7 +1003,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'kpn': {'name': 'The Big Cheese',
+'tbc': {'name': 'The Big Cheese',
         'singularname': 'a The Big Cheese',
 		'pluralname': 'The Big Cheeses',
 		'level': 13,
@@ -1018,7 +1032,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27),
               (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'cg': {'name': 'Autocaddie',
+ 'autocad': {'name': 'Autocaddie',
         'singularname': 'a Autocaddie',
 		'pluralname': 'Autocaddies',
 		'level': 14,
@@ -1051,7 +1065,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (30, 30,),
               (75, 75,),
               (20, 20,)))},
- 'bg': {'name': 'Club\nPresident',
+ 'clubpres': {'name': 'Club\nPresident',
         'singularname': 'a Club President',
 		'pluralname': 'Club Presidents',
 		'level': 15,
@@ -1084,7 +1098,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  (38, 38, 38, 38, 38, 38, 38, 38,),
                  (100, 100, 100, 100, 100, 100, 100, 100,),
                  (15, 15, 15, 15, 15, 15, 15, 15,)))},
- 'msr': {'name': 'Derrick Man',
+ 'derrman': {'name': 'Derrick Man',
         'singularname': 'a Derrick Man',
 		'pluralname': 'Derrick Men',
 		'level': 16,
@@ -1117,7 +1131,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (4,),
                (100,),
                (20,)))},
- 'kb': {'name': 'Derrick Hand',
+ 'derrhand': {'name': 'Derrick Hand',
         'singularname': 'a Derrick Hand',
 		'pluralname': 'Derrick Hand',
 		'level': 17,
@@ -1146,7 +1160,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (48,),
 					(100,),
 					(25,)))},
- 'ts': {'name': 'Major Player',
+ 'mplayer': {'name': 'Major Player',
         'singularname': 'a Major Player',
 		'pluralname': 'Major Players',
 		'level': 18,
@@ -1175,7 +1189,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (15,),
               (100,),
               (25,)))},
- 'tc': {'name': 'Firestarter',
+ 'fires': {'name': 'Firestarter',
         'singularname': 'a Firestarter',
 		'pluralname': 'Firestarters',
 		'level': 19,
@@ -1204,7 +1218,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (13,),
               (100,),
               (25,)))},
- 'tg': {'name': 'Featherbedder',
+ 'fbed': {'name': 'Featherbedder',
         'singularname': 'a Featherbedder',
 		'pluralname': 'Featherbedders',
 		'level': 20,
@@ -1233,7 +1247,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (25,),
               (100,),
               (25,)))},
- 'tb': {'name': 'Major Player',
+ 'mplayer2': {'name': 'Major Player',
         'singularname': 'a Major Player',
 		'pluralname': 'Major Players',
 		'level': 21,
@@ -1262,7 +1276,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (15,),
               (100,),
               (25,)))},
- 'adc': {'name': 'Chainsaw Consultant',
+ 'chainsaw': {'name': 'Chainsaw Consultant',
         'singularname': 'a Chainsaw Consultant',
 		'pluralname': 'Chainsaw Consultants',
 		'level': 22,
@@ -1293,7 +1307,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (25,)),
              )
          },
- 'drm': {'name': 'Chainsaw Consultant',
+ 'chainsaw2': {'name': 'Chainsaw Consultant',
         'singularname': 'a Chainsaw Consultant',
 		'pluralname': 'Chainsaw Consultants',
 		'level': 23,
@@ -1324,7 +1338,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (25,)),
              )
          },
- 'cp': {'name': 'Powerhouse',
+ 'phouse': {'name': 'Powerhouse',
         'singularname': 'a Powerhouse',
 		'pluralname': 'Powerhouse',
 		'level': 24,
@@ -1345,30 +1359,30 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (35,),
               (85,),
               (15,)),
-('Fired',
+        ('Fired',
               (42,),
               (90,),
               (20,),
- ATK_TGT_DOUBLE),
-('GlowerPower',
+         ATK_TGT_DOUBLE),
+        ('GlowerPower',
               (40,),
               (85,),
               (15,),
- ATK_TGT_DOUBLE),
-('FallingKnife',
+         ATK_TGT_DOUBLE),
+        ('FallingKnife',
               (45,),
               (95,),
               (15,),
- ATK_TGT_DOUBLE),
-('HotAir',
+         ATK_TGT_DOUBLE),
+        ('HotAir',
               (32,),
               (95,),
               (15,), ATK_TGT_DOUBLE),
-('FloodTheMarket',
+        ('FloodTheMarket',
               (38,),
               (95,),
               (20,)),
-('PowerhouseAbsorb', #6
+        ('PowerhouseAbsorb', #6
               (0,),
               (100,),
               (0,)),
@@ -1392,32 +1406,32 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (0,),
               (100,),
               (0,)),
-('PowerhouseSnipeGagBan', #12
+            ('PowerhouseSnipeGagBan', #12
               (0,),
               (100,),
               (0,)),
-('PowerhouseSnipeSoaked', #13
+            ('PowerhouseSnipeSoaked', #13
               (0,),
               (100,),
               (0,)),
-('PowerhouseSnipeBookkept', #14
+            ('PowerhouseSnipeBookkept', #14
               (0,),
               (100,),
               (0,)),
-('PowerhouseSnipeMulligan', #15
+            ('PowerhouseSnipeMulligan', #15
               (0,),
               (100,),
               (0,)),
-('PowerhouseSnipeCollectCall', #16
+            ('PowerhouseSnipeCollectCall', #16
               (1,),
               (100,),
               (0,)),
-('DeathCheck', #17
+            ('DeathCheck', #17
                (0,),
                (100,),
                (0,))
              )},
- 'fbd': {'name': 'Bookkeeper',
+ 'bkeeper': {'name': 'Bookkeeper',
         'singularname': 'a Bookkeeper',
 		'pluralname': 'Bookkeepers',
 		'level': 25,
@@ -1479,7 +1493,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (100,),
                   (0,)),
                  )},
- 'frs': {'name': 'Wiretapper',
+ 'wtapper': {'name': 'Wiretapper',
         'singularname': 'a Wiretapper',
 		'pluralname': 'Wiretappers',
 		'level': 26,
@@ -1597,7 +1611,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 					(100,),
 					(0,)),
               )},
- 'gtk': {'name': 'Ambassador',
+ 'ambass': {'name': 'Ambassador',
         'singularname': 'a Ambassador',
 		'pluralname': 'Ambassador',
 		'level': 27,
@@ -1737,7 +1751,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (3, 4, 6, 9, 12),
               (70, 70, 70, 70, 70),
               (20, 20, 20, 20, 20,)))},
- 'nd': {'name': 'Connoisseur',
+ 'cn': {'name': 'Connoisseur',
         'singularname': 'a Connoisseur',
         'pluralname': 'Connoisseur',
         'level': 2,
@@ -1766,7 +1780,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (5, 6, 9, 13, 18, 21, 24),
               (70, 70, 70, 70, 70, 70, 70),
               (25, 25, 25, 25, 25, 25, 25)))},
- 'gh': {'name': 'Name Dropper',
+ 'nd': {'name': 'Name Dropper',
         'singularname': 'a Name Dropper',
         'pluralname': 'Name Droppers',
         'level': 3,
@@ -1795,7 +1809,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 4, 6, 9, 12),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20)))},
- 'ms': {'name': 'Double Crosser',
+ 'dc': {'name': 'Double Crosser',
         'singularname': 'a Double Crosser',
         'pluralname': 'Double Crossers',
         'level': 4,
@@ -1820,7 +1834,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (1, 2, 2, 3, 3, 4, 4),
               (70, 70, 70, 70, 70, 70, 70),
               (25, 25, 25, 25, 25, 25, 25)))},
- 'tf': {'name': 'Glad Hander',
+ 'gh': {'name': 'Glad Hander',
         'singularname': 'a Glad Hander',
         'pluralname': 'Glad Handers',
         'level': 5,
@@ -1849,7 +1863,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (3, 4, 5, 6, 7),
               (85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20)))},
- 'm': {'name': 'Forecaster',
+ 'fcs': {'name': 'Forecaster',
        'singularname': 'a Forecaster',
        'pluralname': 'Forecasters',
        'level': 6,
@@ -1874,7 +1888,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16),
              (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
              (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'mh': {'name': 'Mover & Shaker',
+ 'ms': {'name': 'Mover & Shaker',
         'singularname': 'a Mover & Shaker',
         'pluralname': 'Mover & Shakers',
         'level': 7,
@@ -1903,7 +1917,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (5, 6, 7, 8, 9, 10, 11, 12),
               (70, 70, 70, 70, 70, 70, 70, 70),
               (20, 20, 20, 20, 20, 20, 20, 20)))},
- 'ka': {'name': 'Candidate',
+ 'cnd': {'name': 'Candidate',
         'singularname': 'a Candidate',
 		'pluralname': 'Candidates',
 		'level': 8,
@@ -1928,7 +1942,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (6, 9, 12, 15, 18, 21, 24, 27, 30, 32, 33, 34, 35, 36, 37, 38),
               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'mka': {'name': 'Two-Face',
+ 'tf': {'name': 'Two-Face',
         'singularname': 'a Two-Face',
 		'pluralname': 'Two-Face',
 		'level': 9,
@@ -1957,7 +1971,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'trm': {'name': 'People Pleaser',
+ 'ppl': {'name': 'People Pleaser',
         'singularname': 'a People Pleaser',
 		'pluralname': 'People Pleasers',
 		'level': 10,
@@ -1982,7 +1996,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 11, 12, 14, 16, 18, 20, 22, 24, 26),
                (80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'ssm': {'name': 'The Mingler',
+ 'm': {'name': 'The Mingler',
         'singularname': 'a The Mingler',
 		'pluralname': 'The Minglers',
 		'level': 11,
@@ -2011,7 +2025,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (12, 15, 18, 20, 22, 24, 27, 29, 32, 34, 36, 38),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75,),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'isw': {'name': 'Kiss-Up',
+ 'ksp': {'name': 'Kiss-Up',
         'singularname': 'a Kiss-Up',
 		'pluralname': 'Kiss-Ups',
 		'level': 12,
@@ -2036,7 +2050,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
- 'ssr': {'name': 'Mr. Hollywood',
+ 'mh': {'name': 'Mr. Hollywood',
         'singularname': 'a Mr. Hollywood',
 		'pluralname': 'Mr. Hollywoods',
 		'level': 13,
@@ -2061,7 +2075,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27),
                (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                (30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
- 'fas': {'name': 'Watchman',
+ 'watchm': {'name': 'Watchman',
         'singularname': 'a Watchman',
 		'pluralname': 'Watchmen',
 		'level': 14,
@@ -2086,7 +2100,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (16, 17, 18),
                (75, 75, 75),
                (30, 30, 30)))},
- 'mdr': {'name': 'Factory\nForeman',
+ 'foreman': {'name': 'Factory\nForeman',
         'singularname': 'a Factory Foreman',
 		'pluralname': 'Factory Foremen',
 		'level': 15,
@@ -2123,7 +2137,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (19, 19, 19, 19, 19, 19),
                (75, 75, 75, 75, 75, 75),
                (10, 10, 10, 10, 10, 10)))},
- 'nar': {'name': 'Director Of\nPublic\nRelations',
+ 'dopr': {'name': 'Director Of\nPublic\nRelations',
         'singularname': 'a Director Of Public Relations',
 		'pluralname': 'Directors Of Public Relations',
 		'level': 16,
@@ -2158,7 +2172,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (0,))
              )
          },
- 'fd': {'name': 'Director Of\nPublic\nAffairs',
+ 'dopa': {'name': 'Director Of\nPublic\nAffairs',
         'singularname': 'a Director',
 		'pluralname': 'Directors',
 		'level': 17,
@@ -2189,7 +2203,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  (25,)),
             )
         },
- 'fm': {'name': 'Bellringer',
+ 'bellring': {'name': 'Bellringer',
         'singularname': 'a Bellringer',
 		'pluralname': 'Bellringers',
 		'level': 18,
@@ -2218,7 +2232,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (35,),
 					(100,),
 					(25,)))},
- 'jb': {'name': 'Mr. Hollywood', # Major Player / High Roller Hollywoods
+ 'mh2': {'name': 'Mr. Hollywood', # Major Player / High Roller Hollywoods
         'singularname': 'a Mr. Hollywood',
 		'pluralname': 'Mr. Hollywoods',
 		'level': 19,
@@ -2276,7 +2290,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				          (29,),
 					      (100,),
 					      (25,)))},
- 'jr': {'name': 'Multislacker',
+ 'mslacker': {'name': 'Multislacker',
         'singularname': 'a Multislacker',
 		'pluralname': 'Multislackers',
 		'level': 21,
@@ -2305,11 +2319,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (35,),
               (100,),
               (25,)))},
- 'prr': {'name': 'Videographer',
+ 'videog': {'name': 'Videographer',
         'singularname': 'a Videographer',
 		'pluralname': 'Videographers',
 		'level': 22,
-		'hp':(40000,),
+		'hp':(100,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(75,),
@@ -2321,32 +2335,20 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              ('FallingKnife',
               (41,),
               (100,),
-              (10,)),
-             ('Bomb',
-              (1,),
-              (100,),
-              (0,)),
-             ('Synergy',
-              (1,),
-              (100,),
-              (0,)),
-             ('Accusations',
-              (1,),
-              (100,),
-              (0,)),
+              (25,)),
              ('BlueChip',
               (31,),
               (100,),
-              (15,)),
+              (25,)),
              ('ElectrostaticEnergy',
               (45,),
               (100,),
-              (15,)),
+              (25,)),
              ('GlowerPower',
               (38,),
               (75,),
-              (20,)))},
- 'blr': {'name': 'Radiographer',
+              (25,)))},
+ 'radiog': {'name': 'Radiographer',
         'singularname': 'a Radiographer',
 		'pluralname': 'Radiographers',
 		'level': 23,
@@ -2404,7 +2406,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (100,),
                (0,)),
               )},
- 'dvp': {'name': 'Racketeer',
+ 'racket': {'name': 'Racketeer',
         'singularname': 'a Racketeer',
 		'pluralname': 'Racketeers',
 		'level': 24,
@@ -2478,7 +2480,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (100,),
                (0,)),
               )},
- 'dsk': {'name': 'Union Buster',
+ 'ubuster': {'name': 'Union Buster',
         'singularname': 'a Union Buster',
 		'pluralname': 'Union Busters',
 		'level': 25,
@@ -2564,7 +2566,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (100,),
                (0,)),
               )},
- 'ffm': {'name': 'Safety Supervisor',
+ 'safesupervis': {'name': 'Safety Supervisor',
         'singularname': 'a Safety Supervisor',
 		'pluralname': 'Safety Supervisors',
 		'level': 26,
@@ -2666,7 +2668,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 					(100,),
 					(0,)),
               )},
- 'sft': {'name': 'Pacesetter',
+ 'psetter': {'name': 'Pacesetter',
         'singularname': 'a Pacesetter',
 		'pluralname': 'Pacesetter',
 		'level': 27,
@@ -2750,7 +2752,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (3, 4, 6, 9, 12),
               (70, 70, 70, 70, 70),
               (20, 20, 20, 20, 20,)))},
- 'tw': {'name': 'Shylock',
+ 'shy': {'name': 'Shylock',
         'singularname': 'a Shylock',
         'pluralname': 'Shylocks',
         'level': 2,
@@ -2779,7 +2781,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (5, 6, 9, 13, 18, 21, 24),
               (70, 70, 70, 70, 70, 70, 70),
               (25, 25, 25, 25, 25, 25, 25)))},
- 'bc': {'name': 'Tightwad',
+ 'tw': {'name': 'Tightwad',
         'singularname': 'a Tightwad',
         'pluralname': 'Tightwads',
         'level': 3,
@@ -2808,7 +2810,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (3, 4, 6, 9, 12),
               (70, 70, 70, 70, 70),
               (20, 20, 20, 20, 20)))},
- 'nc': {'name': 'The Swindler',
+ 'sw': {'name': 'The Swindler',
         'singularname': 'a The Swindler',
         'pluralname': 'The Swindlers',
         'level': 4,
@@ -2833,7 +2835,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (5, 9, 13, 17, 21, 25, 28),
               (70, 70, 70, 70, 70, 70, 70),
               (25, 25, 25, 25, 25, 25, 25)))},
- 'mb': {'name': 'Bean Counter',
+ 'bc': {'name': 'Bean Counter',
         'singularname': 'a Bean Counter',
         'pluralname': 'Bean Counters',
           'level': 5,
@@ -2862,7 +2864,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (3, 4, 5, 6, 7),
               (85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20)))},
- 'ls': {'name': 'Fat Cat',
+ 'fct': {'name': 'Fat Cat',
         'singularname': 'a Fat Cat',
         'pluralname': 'Fat Cats',
         'level': 6,
@@ -2887,7 +2889,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16),
               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'rb': {'name': 'Number\nCruncher',
+ 'nc': {'name': 'Number\nCruncher',
         'singularname': 'a Number Cruncher',
         'pluralname': 'Number Crunchers',
         'level': 7,
@@ -2912,7 +2914,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (5, 6, 7, 8, 9, 10, 11, 12),
               (70, 70, 70, 70, 70, 70, 70, 70),
               (25, 25, 25, 25, 25, 25, 25, 25)))},
- 'gm': {'name': 'Overtimer',
+ 'ovt': {'name': 'Overtimer',
         'singularname': 'a Overtimer',
 		'pluralname': 'Overtimers',
 		'level': 8,
@@ -2941,7 +2943,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (6, 9, 12, 15, 18, 21, 24, 27, 30, 32, 33, 34, 35, 36, 37, 38),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'ad': {'name': 'Money Bags',
+ 'mb': {'name': 'Money Bags',
         'singularname': 'a Money Bags',
 		'pluralname': 'Money Bags',
         'level': 9,
@@ -2966,7 +2968,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (9, 10, 13, 16, 17, 18, 20, 22, 24, 26),
               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
               (25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
- 'cvy': {'name': 'Treasurer',
+ 'trs': {'name': 'Treasurer',
         'singularname': 'a Treasurer',
 		'pluralname': 'Treasurers',
 		'level': 10,
@@ -2995,7 +2997,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 11, 12, 14, 16, 18, 20, 22, 24, 26),
                (80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'ptr': {'name': 'Loan Shark',
+ 'ls': {'name': 'Loan Shark',
         'singularname': 'a Loan Shark',
 		'pluralname': 'Loan Sharks',
 		'level': 11,
@@ -3020,7 +3022,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (12, 15, 18, 20, 22, 24, 27, 29, 32, 34, 36, 38),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75,),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'mld': {'name': 'Big Fish',
+ 'bfh': {'name': 'Big Fish',
         'singularname': 'a Big Fish',
 		'pluralname': 'Big Fish',
 		'level': 12,
@@ -3046,7 +3048,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29),
               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
               (30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
- 'pht': {'name': 'Robber Baron',
+ 'rb': {'name': 'Robber Baron',
         'singularname': 'a Robber Baron',
 		'pluralname': 'Robber Barons',
 		'level': 13,
@@ -3071,7 +3073,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27),
                (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                (30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
- 'csh': {'name': 'Mint Auditor',
+ 'maudit': {'name': 'Mint Auditor',
         'singularname': 'a Mint Auditor',
 		'pluralname': 'Mint Auditors',
 		'level': 14,
@@ -3108,7 +3110,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (28, 29, 30),
                (75, 75, 75),
                (20, 20, 20)))},
- 'bgr': {'name': 'Mint\nSupervisor',
+ 'supervis': {'name': 'Mint\nSupervisor',
         'singularname': 'a Mint Supervisor',
 		'pluralname': 'Mint Supervisors',
 		'level': 15,
@@ -3145,7 +3147,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (28, 28, 28, 28, 28, 28),
                (75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20)))},
- 'mes': {'name': 'Duck Shuffler',
+ 'duckshfl': {'name': 'Duck Shuffler',
         'singularname': 'a Duck Shuffler',
 		'pluralname': 'Duck Shufflers',
 		'level': 16,
@@ -3166,7 +3168,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (6,),
                (75,),
                (50,)))},
- 'dm': {'name': 'Treekiller',
+ 'treek': {'name': 'Treekiller',
         'singularname': 'a Treekiller',
 		'pluralname': 'Treekiller',
 		'level': 17,
@@ -3340,7 +3342,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                    (32,),
                    (100,),
                    (25,)))},
- 'trk': {'name': 'Plutocrat',
+ 'pcrat': {'name': 'Plutocrat',
         'singularname': 'a Plutocrat',
 		'pluralname': 'Plutocrats',
 		'level': 23,
@@ -3373,7 +3375,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (27,),
 					(100,),
 					(20,)))},
- 'dsf': {'name': 'High Roller',
+ 'hroller': {'name': 'High Roller',
         'singularname': 'a High Roller',
 		'pluralname': 'High Rollers',
 		'level': 24,
@@ -3419,7 +3421,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (100,),
                (0,))
               )},
- 'msp': {'name': 'Count Erfit',
+ 'erfit': {'name': 'Count Erfit',
         'singularname': 'a Count Erfit',
 		'pluralname': 'Count Erfits',
 		'level': 25,
@@ -3448,7 +3450,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (35,),
                (100,),
                (25,)))},
- 'mad': {'name': 'High Roller Silhouette',
+ 'hrollers': {'name': 'High Roller Silhouette',
         'singularname': 'a High Roller Silhouette',
 		'pluralname': 'High Roller Silhouettes',
 		'level': 26,
@@ -3501,7 +3503,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (0,),
                (100,),
                (0,)))},
- 'crf': {'name': 'High Roller',
+ 'hroller2': {'name': 'High Roller',
         'singularname': 'a High Roller',
 		'pluralname': 'High Roller',
 		'level': 27,
@@ -3633,7 +3635,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 4, 6, 9, 12),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20,)))},
- 'dt': {'name': 'Pettifogger',
+ 'pf': {'name': 'Pettifogger',
         'singularname': 'a Pettifogger',
         'pluralname': 'Pettifoggers',
         'level': 2,
@@ -3658,7 +3660,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  (1, 2, 3, 4, 5, 6, 7),
                   (75, 75, 75, 75, 75, 75, 75),
                   (25, 25, 25, 25, 25, 25, 25)))},
- 'ac': {'name': 'Double Talker',
+ 'dt': {'name': 'Double Talker',
         'singularname': 'a Double Talker',
         'pluralname': 'Double Talkers',
         'level': 3,
@@ -3687,7 +3689,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 4, 6, 9, 12),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20)))},
- 'bs': {'name': 'Conveyancer',
+ 'cv': {'name': 'Conveyancer',
         'singularname': 'a Conveyancer',
         'pluralname': 'Conveyancers',
         'level': 4,
@@ -3712,7 +3714,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (1, 2, 2, 3, 3, 4, 4),
               (70, 70, 70, 70, 70, 70, 70),
               (25, 25, 25, 25, 25, 25, 25)))},
- 'sd': {'name': 'Ambulance Chaser',
+ 'ac': {'name': 'Ambulance Chaser',
         'singularname': 'a Ambulance Chaser',
         'pluralname': 'Ambulance Chasers',
         'level': 5,
@@ -3741,7 +3743,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (3, 4, 5, 6, 7),
               (85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20)))},
- 'le': {'name': 'Needlenose',
+ 'nn': {'name': 'Needlenose',
         'singularname': 'a Needlenose',
         'pluralname': 'Needlenoses',
         'level': 6,
@@ -3766,7 +3768,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (6, 9, 12, 15, 18, 21, 24, 27, 30),
               (80, 80, 80, 80, 80, 80, 80, 80, 80),
               (25, 25, 25, 25, 25, 25, 25, 25, 25)))},
- 'bw': {'name': 'Back Stabber',
+ 'bs': {'name': 'Back Stabber',
         'singularname': 'a Back Stabber',
         'pluralname': 'Back Stabbers',
         'level': 7,
@@ -3795,7 +3797,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (5, 6, 7, 8, 9, 10, 11, 12),
               (70, 70, 70, 70, 70, 70, 70, 70),
               (20, 20, 20, 20, 20, 20, 20, 20)))},
- 'brv': {'name': 'Advocate',
+ 'ad': {'name': 'Advocate',
         'singularname': 'a Advocate',
 		'pluralname': 'Advocates',
 		'level': 8,
@@ -3820,7 +3822,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'sb': {'name': 'Spin Doctor',
+ 'sd': {'name': 'Spin Doctor',
         'singularname': 'a Spin Doctor',
 		'pluralname': 'Spin Doctors',
 		'level': 9,
@@ -3849,7 +3851,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'cfp': {'name': 'Shyster',
+ 'sh': {'name': 'Shyster',
         'singularname': 'a Shyster',
 		'pluralname': 'Shysters',
 		'level': 10,
@@ -3874,7 +3876,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 11, 12, 14, 16, 18, 20, 22, 24, 26),
                (80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'arb': {'name': 'Legal Eagle',
+ 'le': {'name': 'Legal Eagle',
         'singularname': 'a Legal Eagle',
 		'pluralname': 'Legal Eagles',
 		'level': 11,
@@ -3899,7 +3901,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (12, 15, 18, 20, 22, 24, 27, 29, 32, 34, 36, 38),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75,),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'sjg': {'name': 'Barrister',
+ 'br': {'name': 'Barrister',
         'singularname': 'a Barrister',
 		'pluralname': 'Barristers',
 		'level': 12,
@@ -3924,7 +3926,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
- 'lsc': {'name': 'Big Wig',
+ 'bw': {'name': 'Big Wig',
         'singularname': 'a Big Wig',
 		'pluralname': 'Big Wigs',
 		'level': 13,
@@ -3949,7 +3951,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27),
                (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                (30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
- 'jdg': {'name': 'Whistleblower',
+ 'whistleb': {'name': 'Whistleblower',
         'singularname': 'a Whistleblower',
 		'pluralname': 'Whistleblowers',
 		'level': 14,
@@ -3986,7 +3988,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (31, 32, 33, 34, 35, 36),
 					(75, 75, 75, 75, 75, 75),
 					(10, 10, 10, 10, 10, 10)))},
- 'jur': {'name': 'Head Attorney',
+ 'clerk': {'name': 'Head Attorney',
         'singularname': 'a Head Attorney',
 		'pluralname': 'Head Attorneys',
 		'level': 15,
@@ -4019,7 +4021,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (37, 37, 37, 37, 37, 37),
                  (100, 100, 100, 100, 100, 100),
                  (20, 20, 20, 20, 20, 20)))},
- 'tlr': {'name': 'Arbitrator',
+ 'arbit': {'name': 'Arbitrator',
         'singularname': 'a Arbitrator',
 		'pluralname': 'Arbitrators',
 		'level': 16,
@@ -4064,7 +4066,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (37,),
                (100,),
                (10,)))},
- 'cm': {'name': 'Judy',
+ 'judy': {'name': 'Judy',
         'singularname': 'a Judy',
 		'pluralname': 'Judies',
 		'level': 17,
@@ -4122,7 +4124,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                    (35,),
                    (100,),
                    (25,)))},
- 'th': {'name': 'Rainmaker',
+ 'rainmake': {'name': 'Rainmaker',
         'singularname': 'a Rainmaker',
 		'pluralname': 'Rainmakers',
 		'level': 19,
@@ -4180,7 +4182,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		     		    (21,),
 		     			(100,),
 		     			(25,)))},
- 'tr': {'name': 'Count Erclaim',
+ 'erclaim': {'name': 'Count Erclaim',
         'singularname': 'a Count Erclaim',
 		'pluralname': 'Count Erclaims',
 		'level': 21,
@@ -4209,7 +4211,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (35,),
               (100,),
               (25,)))},
- 'mp': {'name': "Redd 'Heir'\nWing",
+ 'redd': {'name': "Redd 'Heir'\nWing",
         'singularname': 'a Redd "Heir" Wing',
 		'pluralname': 'Redd "Heir" Wings',
 		'level': 22,
@@ -4255,7 +4257,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (85,),
               (0,))
              )},
- 'laa': {'name': 'The Witness Stand-In',
+ 'wsi': {'name': 'The Witness Stand-In',
         'singularname': 'a The Witness Stand-In',
 		'pluralname': 'The Witness Stand-In',
 		'level': 23,
@@ -4297,7 +4299,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (100,),
                (0,))
               )},
- 'scg': {'name': 'Scapegoat',
+ 'sgoat': {'name': 'Scapegoat',
         'singularname': 'a Scapegoat',
 		'pluralname': 'Scapegoats',
 		'level': 24,
@@ -4359,7 +4361,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (100,),
                (0,))
                  )},
- 'csm': {'name': 'Case Manager',
+ 'caseman': {'name': 'Case Manager',
         'singularname': 'a Case Manager',
 		'pluralname': 'Case Managers',
 		'level': 25,
@@ -4561,11 +4563,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (100,),
                   (0,)),
                  )},
- 'ste': {'name': 'Stenographer',
+ 'stenog': {'name': 'Stenographer',
         'singularname': 'Stenographer',
 		'pluralname': 'Stenographers',
 		'level': 26,
-		'hp':(4500,),
+		'hp':(45,),
 		'def':(65,),
 		'freq':(50,),
 		'acc':(75,),
@@ -4679,7 +4681,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (100,),
                   (0,)),
                  )},
- 'lit': {'name': 'Litigator',
+ 'lgator': {'name': 'Litigator',
         'singularname': 'a Litigator',
 		'pluralname': 'Litigators',
 		'level': 27,
@@ -4733,7 +4735,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (100,),
                   (0,))
                  )},
-'ca': {'name': 'Bagholder', # cog name
+'bgh': {'name': 'Bagholder', # cog name
        'singularname': 'a Bagholder', # cogs singular name, for tasks
        'pluralname': 'Bagholders', # cogs plural name, for tasks
        'level': 0, # level the cog starts at (level - 1)
@@ -4758,7 +4760,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  (2, 3, 5, 6, 11),
                  (75, 75, 75, 75, 75),  # attack accuracy
                  (25, 25, 25, 25, 25)))},
- 'cn': {'name': 'Paper Hands',
+ 'pph': {'name': 'Paper Hands',
        'singularname': 'a Paper Hands',
        'pluralname': 'Paper Hands',
        'level': 1,
@@ -4787,7 +4789,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 5, 7, 9, 11),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20,)))},
- 'sw': {'name': 'Con Artist',
+ 'ca': {'name': 'Con Artist',
         'singularname': 'a Con Artist',
         'pluralname': 'Con Artists',
         'level': 2,
@@ -4816,7 +4818,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  (3, 4, 5, 6, 8, 10, 12),
                  (75, 75, 75, 75, 75, 75, 75),
                  (20, 20, 20, 20, 20, 20, 20)))},
- 'mdm': {'name': 'The Insider',
+ 'ins': {'name': 'The Insider',
         'singularname': 'a The Insider',
         'pluralname': 'The Insiders',
         'level': 3,
@@ -4841,7 +4843,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 6, 7, 11, 13),
              (70, 70, 70, 70, 70),
              (25, 25, 25, 25, 25)))},
- 'txm': {'name': 'Middleman',
+ 'mdm': {'name': 'Middleman',
         'singularname': 'a Middleman',
         'pluralname': 'Middlemen',
         'level': 4,
@@ -4866,7 +4868,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (5, 9, 13, 17, 21, 25, 28),
                (70, 70, 70, 70, 70, 70, 70),
                (25, 25, 25, 25, 25, 25, 25)))},
- 'mg': {'name': 'Circuit\nBreaker',
+ 'cbr': {'name': 'Circuit\nBreaker',
         'singularname': 'a Circuit Breaker',
         'pluralname': 'Circuit Breakers',
         'level': 5,
@@ -4891,7 +4893,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (7, 9, 10, 12, 13),
               (85, 85, 85, 85, 85),
               (25, 25, 25, 25, 25)))},
- 'bfh': {'name': 'Toxic Manager',
+ 'txm': {'name': 'Toxic Manager',
         'singularname': 'a Toxic Manager',
         'pluralname': 'Toxic Managers',
         'level': 6,
@@ -4920,7 +4922,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16),
               (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'hho': {'name': 'Deadlock',
+ 'dl': {'name': 'Deadlock',
          'singularname': 'a Deadlock',
          'pluralname': 'Deadlocks',
          'level': 7,
@@ -4949,7 +4951,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (8, 10, 12, 14, 16, 19, 20, 21),
               (70, 70, 70, 70, 70, 70, 70, 70),
               (20, 20, 20, 20, 20, 20, 20, 20)))},
- 'bdb': {'name': 'Angel Investor',
+ 'ang': {'name': 'Angel Investor',
         'singularname': 'a Angel Investor',
 		'pluralname': 'Angel Investors',
 		'level': 8,
@@ -4978,7 +4980,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'bgh': {'name': 'Shark Watcher',
+ 'shw': {'name': 'Shark Watcher',
         'singularname': 'a Shark Watcher',
 		'pluralname': 'Shark Watchers',
 		'level': 9,
@@ -5008,7 +5010,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (10, 12, 14, 16, 18, 20, 22, 24, 26, 28),
                (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'dfh': {'name': 'Big Fish',
+'bfh2': {'name': 'Big Fish',
         'singularname': 'a Big Fish',
 		'pluralname': 'Big Fish',
 		'level': 10,
@@ -5038,7 +5040,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20),
                ATK_TGT_GROUP))},
-'rng': {'name': 'Magnate',
+'mg': {'name': 'Magnate',
         'singularname': 'a Magnate',
 		'pluralname': 'Magnates',
 		'level': 11,
@@ -5067,7 +5069,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75,),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'cps': {'name': 'Chairwarmer',
+'chw': {'name': 'Chairwarmer',
         'singularname': 'a Chairwarmer',
 		'pluralname': 'Chairwarmers',
 		'level': 12,
@@ -5092,7 +5094,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
-'tld': {'name': 'Head Honcho',
+'hho': {'name': 'Head Honcho',
         'singularname': 'a Head Honcho',
 		'pluralname': 'Head Honchos',
 		'level': 13,
@@ -5121,7 +5123,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 34, 35, 36, 37, 38, 39, 40, 40),
                (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'gkp': {'name': 'Chairperson',
+ 'chairp': {'name': 'Chairperson',
         'singularname': 'a Chairperson',
 		'pluralname': 'Chairpersons',
 		'level': 14,
@@ -5158,7 +5160,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (24, 27, 30, 33),
               (75, 75, 75, 75),
               (20, 20, 20, 20)))},
- 'ddv': {'name': 'Board\nDirector',
+ 'bdirector': {'name': 'Board\nDirector',
         'singularname': 'a Board Director',
 		'pluralname': 'Board Directors',
 		'level': 15,
@@ -5191,7 +5193,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  (1,),
                  (100,),
                  (15,)))},
- 'dty': {'name': 'Deep Diver',
+ 'ddiver': {'name': 'Deep Diver',
         'singularname': 'a Deep Diver',
 		'pluralname': 'Deep Diver',
 		'level': 16,
@@ -5209,7 +5211,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (85,),
                (100,),
                ATK_TGT_DOUBLE),)},
- 'dfg': {'name': 'Gatekeeper',
+ 'gatekeep': {'name': 'Gatekeeper',
         'singularname': 'a Gatekeeper',
 		'pluralname': 'Gatekeepers',
 		'level': 17,
@@ -5238,7 +5240,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (35,),
                (100,),
                (25,)))},
- 'dfr': {'name': 'Director Of\nLand\nAcquisition',
+ 'dola': {'name': 'Director Of\nLand\nAcquisition',
         'singularname': 'a L.A.A.',
 		'pluralname': 'L.A.A.s',
 		'level': 18,
@@ -5267,7 +5269,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (35,),
                (100,),
                (25,)))},
- 'bsh': {'name': 'Director Of\nLand\nDevelopment',
+ 'dold': {'name': 'Director Of\nLand\nDevelopment',
         'singularname': 'a Director',
 		'pluralname': 'Directors',
 		'level': 19,
@@ -5367,7 +5369,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (85,),
                (100,),
                ATK_TGT_DOUBLE),)},
- 'dvk': {'name': 'Dividend King',
+ 'dking': {'name': 'Dividend King',
         'singularname': 'a Dividend King',
 		'pluralname': 'Dividend Kings',
 		'level': 24,
@@ -5412,7 +5414,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (39,),
               (75,),
               (15,)))},
- 'otm': {'name': 'The Ottoman',
+ 'ottoman': {'name': 'The Ottoman',
         'singularname': 'a The Ottoman',
 		'pluralname': 'The Ottomen',
 		'level': 25,
@@ -5457,7 +5459,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 				    (34,),
 					(75,),
 					(20,)))},
- 'cry': {'name': 'Chainsaw Consultant',
+ 'crystal': {'name': 'Chainsaw Consultant',
         'singularname': 'a Chainsaw Consultant',
 		'pluralname': 'Chainsaw Consultants',
 		'level': 26,
@@ -5486,7 +5488,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (24,),
                (75,),
                (25,)))},
- 'tcm': {'name': 'The Chairman',
+ 'chairman': {'name': 'The Chairman',
         'singularname': 'a The Chairman',
 		'pluralname': 'The Chairmen',
 		'level': 27,
@@ -5570,7 +5572,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 4, 6, 9, 12),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20,)))},
- 'phs': {'name': 'Data Hoarder',
+ 'dhr': {'name': 'Data Hoarder',
         'singularname': 'a Data Hoarder',
         'pluralname': 'Data Hoarders',
         'level': 2,
@@ -5624,7 +5626,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 4, 6, 9, 12),
              (70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20)))},
- 'kyl': {'name': 'Brainiac',
+ 'brn': {'name': 'Brainiac',
         'singularname': 'a Brainiac',
         'pluralname': 'Brainiacs',
         'level': 4,
@@ -5678,7 +5680,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (3, 4, 5, 6, 7),
               (85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20)))},
- 'gry': {'name': 'Keyboard Warrior',
+ 'key': {'name': 'Keyboard Warrior',
         'singularname': 'a Keyboard Warrior',
         'pluralname': 'Keyboard Warriors',
         'level': 6,
@@ -5736,7 +5738,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (5, 6, 7, 8, 9, 10, 11, 12),
               (70, 70, 70, 70, 70, 70, 70, 70),
               (20, 20, 20, 20, 20, 20, 20, 20)))},
- 'shp': {'name': 'Black Hat',
+ 'blk': {'name': 'Black Hat',
         'singularname': 'a Black Hat',
 		'pluralname': 'Black Hats',
 		'level': 8,
@@ -5848,7 +5850,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (12, 15, 18, 20, 22, 24, 27, 29, 32, 34, 36, 38),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75,),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'sys': {'name': 'Industry Titan',
+'itn': {'name': 'Industry Titan',
         'singularname': 'a Industry Titan',
 		'pluralname': 'Industry Titan',
 		'level': 12,
@@ -5869,7 +5871,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-('Bash',
+            ('Bash',
                (11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
@@ -5898,9 +5900,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
                (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-('DataCorruption',
- (14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
- (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+            ('DataCorruption',
+            (14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
+            (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
               ('Reprogram',
                (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27),
@@ -5980,7 +5982,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (1,),
                (100,),
                (20,)))},
- 'yuh': {'name': 'Desk Jockey',
+ 'djockey': {'name': 'Desk Jockey',
         'singularname': 'a Desk Jockey',
 		'pluralname': 'Desk Jockies',
 		'level': 16,
@@ -6009,7 +6011,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              (3, 4, 6, 9, 12, 15, 18, 21),
              (70, 70, 70, 70, 70, 70, 70, 70),
              (20, 20, 20, 20, 20, 20, 20, 20)))},
- 'yhi':  {'name': 'Skelecog',
+ 'ptjockey':  {'name': 'Skelecog',
         'singularname': 'a Skelecog',
 		'pluralname': 'Skelecogs',
 		'level': 20,
@@ -6438,7 +6440,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (3, 4, 5, 6, 7),
               (85, 85, 85, 85, 85),
               (20, 20, 20, 20, 20)))},
- 'fpn': {'name': 'Agonizing Author',
+ 'ath': {'name': 'Agonizing Author',
         'singularname': 'a Agonizing Author',
         'pluralname': 'Agonizing Authors',
         'level': 6,
@@ -6496,7 +6498,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (5, 6, 7, 8, 9, 10, 11, 12),
               (70, 70, 70, 70, 70, 70, 70, 70),
               (20, 20, 20, 20, 20, 20, 20, 20)))},
- 'bbr': {'name': 'Doctor White',
+ 'dcw': {'name': 'Doctor White',
         'singularname': 'a Doctor White',
 		'pluralname': 'Doctor Whites',
 		'level': 8,
@@ -6749,7 +6751,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
+             (('SoakRemoval',
                (7,),
                (85,),
                (100,),

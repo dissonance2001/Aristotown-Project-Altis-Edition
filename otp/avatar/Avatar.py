@@ -10,6 +10,7 @@ from direct.interval.IntervalGlobal import *
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 from otp.otpbase import OTPRender
+from toontown.suit import SuitDNA
 from toontown.chat.ChatGlobals import *
 from toontown.nametag import NametagGlobals
 from toontown.nametag.NametagGroup import NametagGroup
@@ -433,7 +434,6 @@ class Avatar(Actor, ShadowCaster):
 
     def checkCogHPRevive(self, battle):
         pass
-
 
     def setNeutralAnimation(self):
         pass

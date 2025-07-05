@@ -477,13 +477,14 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
         toonTrack.append(splicedAnims)
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
-    # if died:
-    # suit = attack['suit']
-    # toonTrack.append(Wait(3.0))
-    # if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-    # suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-    # else:
-    # suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    toonTrack.append(Func(toon.loop, 'neutral'))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -503,13 +504,13 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
-   # if died:
-       # suit = attack['suit']
-      #  toonTrack.append(Wait(3.0))
-       # if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-          #  suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-       # else:
-           # suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -590,7 +591,7 @@ def __soakRemoval(suit, remove=0):
     else:
         suitBody = [suit.find('**/body'), suit.find('**/hands')]
     suitInterval = Sequence()
-    if suit.dna.name == 'lit' and not suit.isSkeleton:
+    if suit.dna.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryLitigator))
     for bodyPart in suitBody:
         if bodyPart:
@@ -607,7 +608,7 @@ def doDesperation(attack):
     makeDamageUps = Parallel()
     theSuit = None
     for s in battle.activeSuits:
-        if s.dna.name == 'gtk' and not suit.dna.name == 'gtk':
+        if s.dna.name == 'ambass' and not suit.dna.name == 'ambass':
             theSuit = s
             notifyTrack = Sequence(Wait(2.0), Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -620,7 +621,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'frs' and not suit.dna.name == 'frs':
+        if s.dna.name == 'wtapper' and not suit.dna.name == 'wtapper':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -633,7 +634,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'fbd' and not suit.dna.name == 'fbd':
+        if s.dna.name == 'bkeeper' and not suit.dna.name == 'bkeeper':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -646,7 +647,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'cp' and not suit.dna.name == 'cp':
+        if s.dna.name == 'phouse' and not suit.dna.name == 'phouse':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -659,7 +660,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'blr' and not suit.dna.name == 'blr':
+        if s.dna.name == 'radiog' and not suit.dna.name == 'radiog':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -672,7 +673,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'dvp' and not suit.dna.name == 'dvp':
+        if s.dna.name == 'racket' and not suit.dna.name == 'racket':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -685,7 +686,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'dsk' and not suit.dna.name == 'dsk':
+        if s.dna.name == 'ubuster' and not suit.dna.name == 'ubuster':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -698,7 +699,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'ffm' and not suit.dna.name == 'ffm':
+        if s.dna.name == 'safesupervis' and not suit.dna.name == 'safesupervis':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -711,7 +712,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'ste' and not suit.dna.name == 'ste':
+        if s.dna.name == 'stenog' and not suit.dna.name == 'stenog':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -724,7 +725,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'lit' and not suit.dna.name == 'lit':
+        if s.dna.name == 'lgator' and not suit.dna.name == 'lgator':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -737,7 +738,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'scg' and not suit.dna.name == 'scg':
+        if s.dna.name == 'sgoat' and not suit.dna.name == 'sgoat':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',
@@ -750,7 +751,7 @@ def doDesperation(attack):
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
             makeDesperates.append(makeDesperate)
             makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'csm' and not suit.dna.name == 'csm':
+        if s.dna.name == 'caseman' and not suit.dna.name == 'caseman':
             theSuit = s
             notifyTrack = Sequence(Func(theSuit.showHpText2,
                                                    'DESPERATION!',

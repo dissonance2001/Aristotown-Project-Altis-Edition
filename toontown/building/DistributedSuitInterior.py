@@ -334,12 +334,15 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
         self.activeIntervals[name] = track
 
     def enterBattle(self, ts = 0):
+        messenger.send('toonEnteredBattle', ['changemusic'])
+        base.localAvatar.isInBattle = True
         if self.elevatorOutOpen == 1:
             self.__playCloseElevatorOut(self.uniqueName('close-out-elevator'))
             camera.setPos(0, -15, 6)
             camera.headsUp(self.elevatorModelOut)
 
     def exitBattle(self):
+        base.localAvatar.isInBattle = False
         if self.elevatorOutOpen == 1:
             self.__finishInterval(self.uniqueName('close-out-elevator'))
             self.elevatorOutOpen = 0

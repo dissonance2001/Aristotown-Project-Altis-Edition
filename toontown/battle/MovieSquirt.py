@@ -271,20 +271,17 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=SQUIRT_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
-        if suit.dna.name == 'mp' and revived != 0:
+        if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'mp':
+        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         if died != 0 and suit.isVirtual:
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         suitTrack.append(Func(suit.setNeutralAnimation))
-        suitTrack.append(Func(suit.setChatAbsolute,
-                 '',
-                 CFSpeech | CFTimeout))
         suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
         suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
         suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
@@ -306,7 +303,7 @@ def say(statement):
     print statement
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
-    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'dsf':
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'hroller':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
@@ -317,7 +314,7 @@ def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
         return suitTrack
-    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'dsf':
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'hroller':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
@@ -333,7 +330,7 @@ def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
         return Sequence()
 
 def __ScapegoatAbsorbSplash(suitIndex, suits, hp, battle):
-    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'dsf':
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'hroller':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
@@ -344,7 +341,7 @@ def __ScapegoatAbsorbSplash(suitIndex, suits, hp, battle):
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
         return suitTrack
-    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'dsf':
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'hroller':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
@@ -557,7 +554,7 @@ def __soakSuit(suit, tContact, remove=0):
     else:
         suitBody = [suit.find('**/body'), suit.find('**/hands')]
     suitInterval = Sequence()
-    if suit.style.name == 'lit' and not suit.isSkeleton:
+    if suit.style.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetLitigator))
     for bodyPart in suitBody:
         if bodyPart:

@@ -425,11 +425,11 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         suitTrack.append(suitGettingHit)
         if hpbonus > 0:
             bonusTrack = Sequence(Wait(delay + tObjectAppears + 1), Func(suit.showHpText, -hpbonus, 1), Func(suit.updateHealthBar, hpbonus))
-        if suit.dna.name == 'mp' and revived != 0:
+        if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'mp':
+        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         if died != 0 and suit.isVirtual:
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
@@ -461,7 +461,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
     return suitTrack
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
-    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'dsf':
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'hroller':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
@@ -472,7 +472,7 @@ def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
         return suitTrack
-    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'dsf':
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'hroller':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))

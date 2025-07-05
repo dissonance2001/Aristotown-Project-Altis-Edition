@@ -176,7 +176,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
     if attack[
-        'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
+        'suitName'] == 'bkeeper':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
     else:
@@ -221,7 +221,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     if attack[
-        'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
+        'suitName'] == 'bkeeper':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
     else:
@@ -538,13 +538,13 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
- #   if died:
-      #  suit = attack['suit']
-      #  toonTrack.append(Wait(3.0))
-      ##  if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-       #     suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-      #  else:
-         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -564,13 +564,13 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
-   # if died:
-      #  suit = attack['suit']
-      # # toonTrack.append(Wait(3.0))
-       # if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-       # else:
-        #    suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -947,7 +947,7 @@ def doRefinement(attack):
         suitTrack.append(Wait(4.5))
         currentBossHealth = -1
         for s in battle.suits:
-            if s.dna.name == 'cp':
+            if s.dna.name == 'phouse':
                 currentBossHealth = s.currHP
         if currentBossHealth >= 1:
             x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
@@ -976,7 +976,7 @@ def doRefinement(attack):
                 suitTrack.append(Func(suit.showHpString, "REFINED!"))
                 suitTrack.append(Func(suit.setHealthForMe, 125))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'gtk':
+        if not suit.dna.name == 'ambass':
             suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
@@ -1031,9 +1031,9 @@ def doRefinementManager(attack):
         suitTrack.append(Wait(4.5))
         currentBossHealth = -1
         for s in battle.suits:
-            if s.dna.name == 'cp':
+            if s.dna.name == 'phouse':
                 currentBossHealth = s.currHP
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             if currentBossHealth >= 1:
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
@@ -1061,12 +1061,12 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpString, "REFINED!"))
                     suitTrack.append(Func(suit.setHealthForMe, 200))
             suitTrack.append(Func(suit.updateHealthBar, 0))
-            if not suit.dna.name == 'gtk':
+            if not suit.dna.name == 'ambass':
                 suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
                                                CFSpeech | CFTimeout)))
-        if suit.dna.name == 'fbd':
+        if suit.dna.name == 'bkeeper':
             if currentBossHealth >= 1:
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
@@ -1094,12 +1094,12 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpString, "REFINED!"))
                     suitTrack.append(Func(suit.setHealthForMe, 200))
             suitTrack.append(Func(suit.updateHealthBar, 0))
-            if not suit.dna.name == 'gtk':
+            if not suit.dna.name == 'ambass':
                 suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
                                                CFSpeech | CFTimeout)))
-        if suit.dna.name == 'cp':
+        if suit.dna.name == 'phouse':
             if currentBossHealth >= 1:
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
@@ -1127,7 +1127,7 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpString, "REFINED!"))
                     suitTrack.append(Func(suit.setHealthForMe, 200))
             suitTrack.append(Func(suit.updateHealthBar, 0))
-            if not suit.dna.name == 'gtk':
+            if not suit.dna.name == 'ambass':
                 suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
@@ -1155,7 +1155,7 @@ def doRefinementManager(attack):
         Parallel(LerpPosInterval(can, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)), Sequence(Wait(0.25), LerpScaleInterval(can, 0.5, VBase3(0, 0, 0)))),
             Func(MovieUtil.removeProp, can)
         )
-        if suit.dna.name == 'fbd' or suit.dna.name == 'frs' or suit.dna.name == 'cp':
+        if suit.dna.name == 'bkeeper' or suit.dna.name == 'wtapper' or suit.dna.name == 'phouse':
             knifeTracks.append(knifeTrack)
     makeUnVulnerable = Func(theSuit.makeUnVulnerable)
     suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
@@ -1214,7 +1214,7 @@ def doHeadRollerGroup(attack):
                                     Func(targetSuit.showHpStringDamaged, "DAMAGED!"),
                                     Func(targetSuit.setHealthForMe, -250),
                                     Func(targetSuit.updateHealthBar, 0))
-        if not targetSuit.dna.name == 'gtk':
+        if not targetSuit.dna.name == 'ambass':
             if targetSuit.isManager:
                 selfDamageTracks.append(selfDamageTrack2)
                 suitTracks.append(suitTrack2)
@@ -1255,7 +1255,7 @@ def doGhostMentality(attack):
         managerTracks.append(managerTrack)
         moveTracks.append(moveTrack)
         suitTrack = Sequence(Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5), MovieUtil.createGhostMentalityTrack(targetSuit, battle))
-        if not targetSuit.dna.name == 'gtk':
+        if not targetSuit.dna.name == 'ambass':
             if targetSuit.isManager:
                 pass
             if not targetSuit.isManager and not targetSuit.isVirtual:
@@ -1324,7 +1324,7 @@ def doAmbassadorDamageUp(attack):
         if not suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             destroyedSuits.append(suit)
         else:
-            if not suit.dna.name == 'gtk':
+            if not suit.dna.name == 'ambass':
                 syphonedManagerSuit.append(suit)
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0)
@@ -1505,7 +1505,7 @@ def doSyphonDesperation(attack):
         makeSyphon = Func(suit.makeSyphon)
         suitTrack = Sequence()
         suitTrack.append(Wait(3))
-        if not suit.dna.name == 'cp':
+        if not suit.dna.name == 'phouse':
             suitTrack.append(Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout))
         suitTrack.append(makeSyphon)
         suitTrack.append(Func(suit.setNeutralAnimation))

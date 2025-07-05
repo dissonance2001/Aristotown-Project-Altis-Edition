@@ -459,25 +459,25 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
           #  newSuit.setSkeleRevives(random.choice((1, 2)))
         #if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and newSuit.isSkeleton:
          #   newSuit.setSkeleRevives(1)
-        if newSuit.dna.name == 'cg':
+        if newSuit.dna.name == 'autocad':
             newSuit.setExecutive(1)
-        if newSuit.dna.name == 'jdg':
+        if newSuit.dna.name == 'whistleb':
             newSuit.setExecutive(1)
-        if newSuit.dna.name == 'gkp':
+        if newSuit.dna.name == 'chairp':
             newSuit.setExecutive(1)
-        if newSuit.dna.name == 'fas':
+        if newSuit.dna.name == 'watchm':
             newSuit.setExecutive(1)
-        if newSuit.dna.name == 'csh':
+        if newSuit.dna.name == 'maudit':
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'ant':
             newSuit.setExecutive(1)
-        if newSuit.dna.name == 'jb':
+        if newSuit.dna.name == 'mh2':
             newSuit.setExecutive(1)
         if executive and not newSuit.getManager():
             newSuit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'whistleb' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'maudit' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
             newSuit.setExecutive(1)
-        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant'  and not newSuit.dna.name == 'cg' and not newSuit.dna.name == 'jdg' and not newSuit.dna.name == 'gkp' and not newSuit.dna.name == 'yuh' and not newSuit.dna.name == 'csh' and not newSuit.dna.name == 'fas' and not newSuit.dna.name == 'jb':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'whistleb' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'djockey' and not newSuit.dna.name == 'maudit' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
             newSuit.setGovernaught(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         if revives is not None:
@@ -1072,31 +1072,31 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     def __suitCanJoinBattle(self, zoneId):
         battle = self.battleMgr.getBattle(zoneId)
         for suit in battle.suits:
-            if suit.dna.name == 'lit':
+            if suit.dna.name == 'lgator':
                 if not len(battle.suits) >= 6:
                     return 1
-            if suit.dna.name == 'gtk':
+            if suit.dna.name == 'ambass':
                 if not len(battle.suits) >= 6:
                     return 1
-            if suit.dna.name == 'ffm':
+            if suit.dna.name == 'safesupervis':
                 if not len(battle.suits) >= 6:
                     return 1
-            if suit.dna.name == 'crf':
+            if suit.dna.name == 'hroller2':
                 if not len(battle.suits) >= 6:
                     return 1
-            if suit.dna.name == 'dsf':
+            if suit.dna.name == 'hroller':
                 if not len(battle.suits) >= 6:
                     return 1
-            if suit.dna.name == 'tg':
+            if suit.dna.name == 'fbed':
                 if not len(battle.suits) >= 5:
                     return 1
-            if suit.dna.name == 'laa':
+            if suit.dna.name == 'wsi':
                 if not len(battle.suits) >= 6:
                     return 1
             if suit.dna.name == 'whunter':
                 if not len(battle.suits) >= 5:
                     return 1
-            if suit.dna.name == 'th':
+            if suit.dna.name == 'rainmake':
                 if not len(battle.suits) >= 5:
                     return 1
             if suit.dna.name == 'mouthp':
@@ -1107,7 +1107,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if battle:
             for s in battle.suits:
                 if s.dna.name in SuitBattleGlobals.SpecialCogDict:
-                    return 1
+                    if not s.dna.name == 'hrollers':
+                        return 1
             if simbase.config.GetBool('suits-always-join', 0):
                 return 1
             jChanceList = self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_JCHANCE]
@@ -1249,16 +1250,16 @@ def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
         return "Unable to spawn %s with more than 2 revives."  % suitFullName
     elif revives > 1 and skelecog >= 1:
         return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
-    elif name == 'mad' and revives > 0:
+    elif name == 'hrollers' and revives > 0:
         return "Unable to spawn %s with revives."  % suitFullName
-    elif (name == 'cg' or name == 'jur' or name == 'laa' or name == 'csh' or name == 'bgr' or name == 'styx' or name == 'nix' or name == 'hydra' or name == 'kerberos' or name == 'charon' \
-        or name == 'fas' or name == 'mdr' or name == 'gkp' or name == 'ddv' or name == 'ant' or name == 'sya') and revives > 1:
+    elif (name == 'autocad' or name == 'clerk' or name == 'wsi' or name == 'maudit' or name == 'supervis' or name == 'styx' or name == 'nix' or name == 'hydra' or name == 'kerberos' or name == 'charon' \
+        or name == 'watchm' or name == 'foreman' or name == 'chairp' or name == 'bdirector' or name == 'ant' or name == 'sya') and revives > 1:
         return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
-    elif name == 'kb':
+    elif name == 'derrhand':
         revives = 1
-    elif name == 'laa':
+    elif name == 'wsi':
         revives = 1
-    elif name == 'mp':
+    elif name == 'redd':
         revives = 1
     sp.createNewSuit([], pointmap, suitName=name, suitLevel=level, skelecog=skelecog, revives=revives, waiter=waiter)
     return "Spawned %s in current zone." % suitFullName

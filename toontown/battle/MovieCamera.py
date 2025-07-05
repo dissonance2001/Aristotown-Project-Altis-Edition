@@ -1260,7 +1260,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 4 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1270,7 +1270,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 5 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1280,7 +1280,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 6 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1290,7 +1290,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 7 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1300,7 +1300,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 8 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1310,7 +1310,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 5 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1320,7 +1320,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 6 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1330,7 +1330,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 7 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1340,7 +1340,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 8 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1350,7 +1350,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 6 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1360,7 +1360,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 7 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1370,7 +1370,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 8 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1380,7 +1380,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 7 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1390,7 +1390,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 8 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1400,7 +1400,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 7 and 8 gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
-        if attack['suit'].dna.name == 'ffm':
+        if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1410,7 +1410,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Toon-Up gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1420,7 +1420,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Trap gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1430,7 +1430,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Lure gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1440,7 +1440,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Throw gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1450,7 +1450,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Squirt gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1460,7 +1460,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Zap gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1470,7 +1470,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Sound gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1480,7 +1480,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Drop gags are off-limits!', 3.5)
         pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
-        if attack['suit'].dna.name == 'frs':
+        if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))

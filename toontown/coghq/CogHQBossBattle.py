@@ -125,6 +125,8 @@ class CogHQBossBattle(BattlePlace.BattlePlace):
         BattlePlace.BattlePlace.exit(self)
 
     def enterBattle(self, event):
+        messenger.send('toonEnteredBattle', ['changemusic'])
+        base.localAvatar.isInBattle = True
         mult = 1
         if self.bossCog:
             mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(self.bossCog.battleNumber)
@@ -134,6 +136,7 @@ class CogHQBossBattle(BattlePlace.BattlePlace):
         base.localAvatar.cantLeaveGame = 1
 
     def exitBattle(self):
+        base.localAvatar.isInBattle = False
         self.townBattle.exit()
 
     def enterFinalBattle(self):

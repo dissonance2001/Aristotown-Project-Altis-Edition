@@ -191,7 +191,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
     track.append(Func(suit.setHpr, battle, origHpr))
-    if suit.dna.name == 'scg' and suit.isAngry:
+    if suit.dna.name == 'sgoat' and suit.isAngry:
         track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
         track.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.isImmortal and suit.dna.name == 'dsf':
@@ -229,7 +229,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
-    if suit.dna.name == 'scg' and suit.isAngry:
+    if suit.dna.name == 'sgoat' and suit.isAngry:
         track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
         track.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.isImmortal and suit.dna.name == 'dsf':
@@ -536,13 +536,13 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
- #   if died:
-      #  suit = attack['suit']
-      #  toonTrack.append(Wait(3.0))
-      ##  if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-       #     suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-      #  else:
-         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -562,13 +562,13 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
-   # if died:
-      #  suit = attack['suit']
-      # # toonTrack.append(Wait(3.0))
-       # if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-       # else:
-        #    suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -863,7 +863,7 @@ def __soakRemoval(suit, remove=0):
     else:
         suitBody = [suit.find('**/body'), suit.find('**/hands')]
     suitInterval = Sequence()
-    if suit.style.name == 'lit' and not suit.isSkeleton:
+    if suit.style.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryLitigator))
     for bodyPart in suitBody:
         if bodyPart:
@@ -1070,7 +1070,7 @@ def doCaseInsurance(attack):
         suitTrack = Sequence()
         currentBossHealth = -1
         for s in battle.suits:
-            if s.dna.name == 'scg':
+            if s.dna.name == 'sgoat':
                 currentBossHealth = s.currHP
         if currentBossHealth >= 1:
             healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
@@ -1177,7 +1177,7 @@ def doCaseInsurancePlanInsurance(attack):
     battle = attack['battle']
     tauntIndex = attack['taunt']
     toon = attack['target'][0]['toon']
-    if attack['suitName'] == 'csm':
+    if attack['suitName'] == 'caseman':
         taunt = 'Hrm...'
     elif attack['suitName'] == 'fbd':
         taunt = 'Hrm...'
@@ -1191,7 +1191,7 @@ def doCaseInsurancePlanInsurance(attack):
         suitTrack.append(Wait(4.5))
         suitTrack.append(Func(suit.showHpTextWhite, "INSURANCE!", 0))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'csm':
+        if not suit.dna.name == 'caseman':
             suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
         suitTrack.append(Func(suit.setNeutralAnimation))
         suitTrack.append(Func(suit.makeInsured))
@@ -1234,7 +1234,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
     battle = attack['battle']
     tauntIndex = attack['taunt']
     toon = attack['target'][0]['toon']
-    if attack['suitName'] == 'csm':
+    if attack['suitName'] == 'caseman':
         taunt = random.choice(
             ["Hmph...", "Hrnhmpf...",
              "Hrm...",
@@ -1251,7 +1251,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
         suitTrack.append(Wait(4.5))
         suitTrack.append(Func(suit.showHpTextWhite, "INSURANCE!", 0))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'csm':
+        if not suit.dna.name == 'caseman':
             suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
         suitTrack.append(Func(suit.setNeutralAnimation))
         suitTrack.append(Func(suit.makeInsured))

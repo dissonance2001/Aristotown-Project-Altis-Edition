@@ -569,13 +569,13 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
- #   if died:
-      #  suit = attack['suit']
-      #  toonTrack.append(Wait(3.0))
-      ##  if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-       #     suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-      #  else:
-         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -595,13 +595,13 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
-   # if died:
-      #  suit = attack['suit']
-      # # toonTrack.append(Wait(3.0))
-       # if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-       # else:
-        #    suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -960,7 +960,7 @@ def doDonation(attack):
     theSuit = None
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     for s in battle.activeSuits:
-        if s.dna.name == 'crf':
+        if s.dna.name == 'hroller2':
             print('Found manager... using it...')
             theSuit = s
 
@@ -1609,7 +1609,7 @@ def doWheelSpin(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence(MovieUtil.createSuitLaughInterval(suit))
-    if not suit.dna.name == 'crf':
+    if not suit.dna.name == 'hroller2':
         suitTrack.append(Func(suit.makeImmortal))
         suitTrack.append(Func(suit.makeShielding))
     soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg')
@@ -1799,7 +1799,7 @@ def doCommercialBreak(attack):
     soundTrack = getSoundTrack('SA_bash.ogg')
     for suit in battle.activeSuits:
         suitTrack = Sequence()
-        if not suit.dna.name == 'dsf':
+        if not suit.dna.name == 'hroller':
             suitTrack.append(Wait(1.0))
             suitTrack.append(Parallel(ActorInterval(suit, 'soak'), MovieUtil.shortCircuitTrack(suit, battle)))
         suitTracks.append(suitTrack)

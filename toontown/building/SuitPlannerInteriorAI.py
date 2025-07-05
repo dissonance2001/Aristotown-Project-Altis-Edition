@@ -148,23 +148,23 @@ class SuitPlannerInteriorAI:
           #  suit.setSkeleRevives(random.choice((1, 2)))
         #if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and suit.isSkeleton:
            # suit.setSkeleRevives(1)
-        if suit.dna.name == 'cg':
+        if suit.dna.name == 'autocad':
             suit.setExecutive(1)
-        if suit.dna.name == 'jdg':
+        if suit.dna.name == 'whistleb':
             suit.setExecutive(1)
-        if suit.dna.name == 'gkp':
+        if suit.dna.name == 'chairp':
             suit.setExecutive(1)
-        if suit.dna.name == 'fas':
+        if suit.dna.name == 'watchm':
             suit.setExecutive(1)
-        if suit.dna.name == 'csh':
+        if suit.dna.name == 'maudit':
             suit.setExecutive(1)
         if suit.dna.name == 'ant':
             suit.setExecutive(1)
-        if suit.dna.name == 'jb':
+        if suit.dna.name == 'mh2':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.dna.name == 'ant' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'autocad' and not suit.dna.name == 'ant' and not suit.dna.name == 'whistleb' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'maudit' and not suit.dna.name == 'watchm':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'yuh' and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
+        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'djockey' and not suit.dna.name == 'autocad' and not suit.dna.name == 'whistleb' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'maudit' and not suit.dna.name == 'watchm':
             suit.setGovernaught(1)
         return flags
 

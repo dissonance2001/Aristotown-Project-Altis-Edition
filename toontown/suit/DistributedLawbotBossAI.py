@@ -801,14 +801,14 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
                         'sd',
                         'le',
                         'bw',
-                         'brv',
-                         'jur',
-                         'jdg',
-                         'cfp',
-                         'sjg',
-                         'arb',
-                         'sb',
-                         'lsc']
+                         'sh',
+                         'ad',
+                         'nn',
+                         'cv',
+                         'pf',
+                         'br',
+                         'whistleb',
+                         'clerk']
         for i in xrange(self.numLawyers):
             suit = DistributedLawbotBossSuitAI.DistributedLawbotBossSuitAI(self.air, None)
             suit.dna = SuitDNA.SuitDNA()

@@ -20,6 +20,7 @@ class BattlePlace(Place.Place):
             self.notify.warning("fsm.request('%s') returned 0 (zone id %s, avatar pos %s)." % (state, self.zoneId, base.localAvatar.getPos(render)))
 
     def enterWalk(self, flag = 0):
+        base.localAvatar.isInBattle = False
         Place.Place.enterWalk(self, flag)
         self.accept('enterBattle', self.handleBattleEntry)
 
@@ -28,12 +29,16 @@ class BattlePlace(Place.Place):
         self.ignore('enterBattle')
 
     def enterWaitForBattle(self):
+        messenger.send('toonEnteredBattle', ['changemusic'])
+        base.localAvatar.isInBattle = True
         base.localAvatar.b_setAnimState('neutral', 1)
 
     def exitWaitForBattle(self):
         pass
 
     def enterBattle(self, event):
+        messenger.send('toonEnteredBattle', ['changemusic'])
+        base.localAvatar.isInBattle = True
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: COGBATTLE: Enter Battle')
         self.loader.music.stop()
@@ -49,6 +54,7 @@ class BattlePlace(Place.Place):
         self.loader.townBattle.enter(event, self.fsm.getStateNamed('battle'))
 
     def exitBattle(self):
+        base.localAvatar.isInBattle = False
         self.loader.townBattle.exit()
         self.loader.battleMusic.stop()
         base.playMusic(self.loader.music, looping=1, volume=0.8)
@@ -57,6 +63,8 @@ class BattlePlace(Place.Place):
         self.ignore('teleportQuery')
 
     def handleBattleEntry(self):
+        messenger.send('toonEnteredBattle', ['changemusic'])
+        base.localAvatar.isInBattle = True
         self.fsm.request('battle')
 
     def enterFallDown(self, extraArgs = []):

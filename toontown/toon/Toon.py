@@ -5012,7 +5012,7 @@ class Toon(Avatar.Avatar, ToonHead):
             elif SuitDNA.suitDepts[deptIndex] == 'c':
                 suitType = 'f'
             elif SuitDNA.suitDepts[deptIndex] == 'g':
-                suitType = 'ca'
+                suitType = 'bgh'
             else:
                 self.notify.warning('Suspicious: Incorrect rental suit department requested')
                 suitType = 'cc'
@@ -5081,7 +5081,7 @@ class Toon(Avatar.Avatar, ToonHead):
             else:
                 self.nametag.setText(TTLocalizer.SuitBaseNameWithLevel % {'name': name,
                  'dept': suitName,
-                 'level': str(self.cogReviveLevels[suitDept] + 1) + TTLocalizer.SkeleRevivePostFix})
+                 'level': self.cogLevels[suitDept] + 1})
             self.nametag.setWordWrap(9.0)
 
     def takeOffSuit(self):

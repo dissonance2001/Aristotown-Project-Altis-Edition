@@ -260,23 +260,75 @@ HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, Wacky
 WelcomeValleyToken = 0
 
 # Street Manager Spawns
-streetMgrs = ["mes", "dty", "dfg", "fm", 'mouthp', "tc", "dm", "tg"]
-streetMgrs2Zones = {"mes": [SillyStreet, LoopyLane, PunchlinePlace, WackyWay],
-                    "dty": [BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue],
-                    "dfg": [KnightKnoll, NobleNook, WizardWay],
-                    "fm": [ElmStreet, MapleStreet, OakStreet, RoseValley],
+streetMgrs = ["duckshfl", "ddiver", "gatekeep", "bellring", 'mouthp', "fires", "treek", "fbed"]
+streetMgrs2Zones = {"duckshfl": [SillyStreet, LoopyLane, PunchlinePlace, WackyWay],
+                    "ddiver": [BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue],
+                    "gatekeep": [KnightKnoll, NobleNook, WizardWay],
+                    "bellring": [ElmStreet, MapleStreet, OakStreet, RoseValley],
                     'mouthp': [AltoAvenue, BaritoneBoulevard, TenorTerrace, SopranoStreet],
-                    "tc": [WalrusWay, SleetStreet, PolarPlace, ArcticAvenue],
-                    "dm": [AcornAvenue, PeanutPlace, WalnutWay, LegumeLane],
-                    "tg": [LullabyLane, PajamaPlace, TwilightTerrace]}
-streetMgrs2Levels = {"mes": 16,
-                     "dty": 17,
-                     "dfg": 18,
-                     "fm": 18,
+                    "fires": [WalrusWay, SleetStreet, PolarPlace, ArcticAvenue],
+                    "treek": [AcornAvenue, PeanutPlace, WalnutWay, LegumeLane],
+                    "fbed": [LullabyLane, PajamaPlace, TwilightTerrace]}
+streetMgrs2Levels = {"duckshfl": 16,
+                     "ddiver": 17,
+                     "gatekeep": 18,
+                     "bellring": 18,
                      'mouthp': 18,
-                     "tc": 20,
-                     "dm": 17,
-                     "tg": 20}
+                     "fires": 20,
+                     "treek": 17,
+                     "fbed": 20}
+
+# Manager Music
+noCustomMusicManagers = ["bdirector", "ghd", "sya", "radiog", "ubuster", "racket", "safesupervis", "redd", "wsi", "erfit", "ambass", "wtapper", "bkeeper", "phouse", "arbit", "videog"]
+managerMusic = {"djockey": "phase_3.5/audio/bgm/TC_SZ_SH_encntr.ogg",
+                "ptjockey": "phase_3.5/audio/bgm/TC_SZ_SH_encntr.ogg",
+                "derrman": "phase_4/audio/bgm/derrick/encntr_derrick.ogg",
+                "derrhand": "phase_12/audio/bgm/directors_encntr.ogg",
+                "dopa": "phase_12/audio/bgm/directors_encntr.ogg",
+                "duckshfl": "phase_10/audio/bgm/merc/street_duckshuffler.ogg",
+                "bellring": "phase_9/audio/bgm/merc/street_bellringer.ogg",
+                "treek": "phase_10/audio/bgm/merc/street_treekiller.ogg",
+                "fbed": "phase_12/audio/bgm/merc/street_featherbedder.ogg",
+                "prethink": "phase_9/audio/bgm/merc/instance_prethinker_battle.ogg",
+                "mslacker": "phase_9/audio/bgm/merc/instance_multislacker_battle.ogg",
+                "mplayer": "phase_12/audio/bgm/merc/instance_majorplayer_battle_2.ogg",
+                "mplayer2": "phase_12/audio/bgm/merc/instance_majorplayer_battle_2.ogg",
+                "pcrat": "phase_10/audio/bgm/merc/instance_plutocrat_battle.ogg",
+                "psetter": "phase_9/audio/bgm/merc/instance_pacesetter_battle.ogg",
+                "chainsaw": "phase_12/audio/bgm/merc/instance_chainsaw_battle_2.ogg",
+                "chainsaw2": "phase_12/audio/bgm/merc/instance_chainsaw_battle_3.ogg",
+                "rainmake": "phase_11/audio/bgm/merc/instance_rainmaker_battle_empty.ogg",
+                "ddiver": "phase_14/audio/bgm/merc/street_deepdiver.ogg",
+                "fires": "phase_12/audio/bgm/merc/street_firestarter.ogg",
+                "dola": "phase_6/audio/bgm/dola_encntr.ogg",
+                "gatekeep": "phase_14/audio/bgm/merc/street_gatekeeper.ogg",
+                "whunter": "phase_11/audio/bgm/merc/instance_witchhunter_battle.ogg",
+                "dopr": "phase_7/audio/bgm/dopr_encntr.ogg",
+                "mouthp": "phase_11/audio/bgm/merc/street_mouthpiece.ogg",
+                "dold": "phase_12/audio/bgm/directors_encntr.ogg",
+                "erclaim": "phase_13/audio/bgm/halloween/encntr_countErclaim.ogg",
+                "lgator": "phase_11/audio/bgm/LB_litigation_litigator.ogg",
+                "caseman": "phase_11/audio/bgm/LB_litigation_casemgr.ogg",
+                "stenog": "phase_11/audio/bgm/LB_litigation_stenograph.ogg",
+                "sgoat": "phase_11/audio/bgm/LB_litigation_scapegoat.ogg",
+                "hroller": "phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle_2.ogg",
+                "hrollers": "phase_13/audio/bgm/april_toons/highroller/BONUSROUND.ogg",
+                "hroller2": "phase_13/audio/bgm/april_toons/highroller/BONUSROUND.ogg",
+                "judy": "phase_11/audio/bgm/LB_courtyard_encntr.ogg",
+                "charon": "phase_10/audio/bgm/merc/instance_plutocrat_investors.ogg",
+                "nix": "phase_10/audio/bgm/merc/instance_plutocrat_investors.ogg",
+                "hydra": "phase_10/audio/bgm/merc/instance_plutocrat_investors.ogg",
+                "styx": "phase_10/audio/bgm/merc/instance_plutocrat_investors.ogg",
+                "kerberos": "phase_10/audio/bgm/merc/instance_plutocrat_investors.ogg",
+                "ottoman": "phase_7/audio/bgm/building/boardbot/building_g_final.ogg",
+                "chairman": "phase_7/audio/bgm/building/boardbot/building_g_final.ogg",
+                "crystal": "phase_7/audio/bgm/building/boardbot/building_g_final.ogg",
+                "dvking": "phase_7/audio/bgm/building/boardbot/building_g_final.ogg",
+                "foreman": "phase_9/audio/bgm/SB_factory_boss.ogg",
+                "supervis": "phase_10/audio/bgm/CB_mint_encntr_boss.ogg",
+                "clerk": "phase_11/audio/bgm/LB_office_encntr_boss.ogg",
+                "clubpres": "phase_12/audio/bgm/BB_club_encntr_boss.ogg"}
+
 
 # Colors for Loading Screens / Title Text
 DEFAULTCOLOR = (1.0, 0.0, 0.0, 1.0)

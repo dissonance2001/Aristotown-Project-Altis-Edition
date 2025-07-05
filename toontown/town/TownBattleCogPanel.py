@@ -467,118 +467,118 @@ class TownBattleCogPanel(DirectFrame):
                 t += TTLocalizer.GovernaughtPostFix
         if self.cog.getSkeleRevives() > 0:
             t += TTLocalizer.SkeleRevivePostFix % (self.cog.getSkeleRevives() + 1)
-        if self.cog.isImmortal and self.cog.dna.name == 'dsf':
+        if self.cog.isImmortal and self.cog.dna.name == 'hroller':
             self.luredManager.show()
             self.insured.show()
             self.absorbing3.show()
-        elif self.cog.dna.name == 'dsf':
+        elif self.cog.dna.name == 'hroller':
             self.luredManager.show()
             self.insured.show()
-        elif self.cog.dna.name == 'crf' and self.cog.isVulnerable:
+        elif self.cog.dna.name == 'hroller2' and self.cog.isVulnerable:
             self.luredManager.show()
-        elif self.cog.dna.name == 'crf' and self.cog.isPhase3:
+        elif self.cog.dna.name == 'hroller2' and self.cog.isPhase3:
             self.luredManager.show()
             self.rainbow.show()
-        elif self.cog.dna.name == 'crf':
+        elif self.cog.dna.name == 'hroller2':
             self.luredManager.show()
             self.hollywoods.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 13 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.healthCondition == 13 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune4.show()
             self.overcharged2.show()
-        elif self.cog.dna.name == 'mad' and self.cog.healthCondition == 13:
+        elif self.cog.dna.name == 'hrollers' and self.cog.healthCondition == 13:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune4.show()
             self.overcharged2.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 13000 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 13000 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 13000:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 13000:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12900 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12900 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12900:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12900:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12800 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12800 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune3.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12800:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12800:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune3.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12700 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12700 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.lightblue.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12700:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12700:
             self.virtual.show()
             self.luredManager2.show()
             self.lightblue.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12600 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12600 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.pink.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12600:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12600:
             self.virtual.show()
             self.luredManager2.show()
             self.pink.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12500 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12500 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.red.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12500:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12500:
             self.virtual.show()
             self.luredManager2.show()
             self.red.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12400 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12400 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.blue.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12400:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12400:
             self.virtual.show()
             self.luredManager2.show()
             self.blue.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12275 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12275 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.yellow.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12275:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12275:
             self.virtual.show()
             self.luredManager2.show()
             self.yellow.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12100 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12100 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad' and self.cog.getMaxHP() == 12100:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12100:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
-        elif self.cog.dna.name == 'mad' and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.green.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'mad':
+        elif self.cog.dna.name == 'hrollers':
             self.virtual.show()
             self.luredManager2.show()
             self.green.show()
@@ -597,22 +597,22 @@ class TownBattleCogPanel(DirectFrame):
             self.immortal.show()
             self.immortal2.show()
             self.immortal4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.dna.name == 'scg' and self.cog.isAngry:
+        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isAngry:
             self.virtual.show()
             self.luredManager2.show()
             self.overcharged2.show()
             self.enraged3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.dna.name == 'scg' and self.cog.isAngry:
+        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isAngry:
             self.skeleton.show()
             self.luredManager2.show()
             self.overcharged2.show()
             self.enraged3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.dna.name == 'scg' and self.cog.isShielding:
+        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isShielding:
             self.virtual.show()
             self.luredManager2.show()
             self.overcharged2.show()
             self.shielding3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.dna.name == 'scg' and self.cog.isShielding:
+        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding:
             self.skeleton.show()
             self.luredManager2.show()
             self.overcharged2.show()
@@ -876,88 +876,88 @@ class TownBattleCogPanel(DirectFrame):
         elif self.cog.healthCondition == 13:
             self.luredManager.show()
             self.overcharged.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'scg' and self.cog.isAngry and self.cog.isDamageUp:
+        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isDamageUp:
             self.virtual.show()
             self.luredManager2.show()
             self.enraged2.show()
             self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'scg' and self.cog.isAngry and self.cog.isInsured:
+        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isInsured:
             self.virtual.show()
             self.luredManager2.show()
             self.enraged2.show()
             self.insured3.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'scg' and self.cog.isAngry and self.cog.isDamageUp:
+        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isDamageUp:
             self.skeleton.show()
             self.luredManager2.show()
             self.enraged2.show()
             self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'scg' and self.cog.isAngry:
+        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isAngry:
             self.skeleton.show()
             self.luredManager2.show()
             self.enraged2.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'scg' and self.cog.isShielding and self.cog.isLured:
+        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.shielding2.show()
             self.luredCog4.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'scg' and self.cog.isShielding and self.cog.isDamageUp:
+        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isDamageUp:
             self.virtual.show()
             self.luredManager2.show()
             self.shielding2.show()
             self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'scg' and self.cog.isShielding:
+        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isShielding:
             self.virtual.show()
             self.luredManager2.show()
             self.shielding2.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'scg' and self.cog.isShielding and self.cog.isLured:
+        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isLured:
             self.skeleton.show()
             self.luredManager2.show()
             self.shielding2.show()
             self.luredCog4.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'scg' and self.cog.isShielding and self.cog.isDamageUp:
+        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isDamageUp:
             self.skeleton.show()
             self.luredManager2.show()
             self.shielding2.show()
             self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'scg' and self.cog.isShielding and self.cog.isInsured:
+        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isInsured:
             self.skeleton.show()
             self.luredManager2.show()
             self.shielding2.show()
             self.insured4.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'scg' and self.cog.isShielding:
+        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding:
             self.skeleton.show()
             self.luredManager2.show()
             self.shielding2.show()
-        elif self.cog.dna.name == 'scg' and self.cog.isShielding and self.cog.isDamageUp and self.cog.isInsured:
+        elif self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isDamageUp and self.cog.isInsured:
             self.luredManager.show()
             self.shielding.show()
             self.damageUp2.show()
             self.insured3.show()
-        elif self.cog.dna.name == 'scg' and self.cog.isShielding and self.cog.isLured:
+        elif self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isLured:
             self.luredManager.show()
             self.shielding.show()
             self.luredCog3.show()
-        elif self.cog.dna.name == 'scg' and self.cog.isShielding and self.cog.isInsured:
+        elif self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isInsured:
             self.luredManager.show()
             self.shielding.show()
             self.insured2.show()
-        elif self.cog.dna.name == 'scg' and self.cog.isShielding:
+        elif self.cog.dna.name == 'sgoat' and self.cog.isShielding:
             self.luredManager.show()
             self.shielding.show()
-        elif self.cog.dna.name == 'scg' and self.cog.isAngry and self.cog.isDamageUp and self.cog.isInsured:
+        elif self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isDamageUp and self.cog.isInsured:
             self.luredManager.show()
             self.enraged.show()
             self.damageUp2.show()
             self.insured3.show()
-        elif self.cog.dna.name == 'scg' and self.cog.isAngry and self.cog.isDamageUp:
+        elif self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isDamageUp:
             self.luredManager.show()
             self.enraged.show()
             self.damageUp2.show()
-        elif self.cog.dna.name == 'scg' and self.cog.isAngry and self.cog.isInsured:
+        elif self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isInsured:
             self.luredManager.show()
             self.enraged.show()
             self.insured2.show()
-        elif self.cog.dna.name == 'scg' and self.cog.isAngry:
+        elif self.cog.dna.name == 'sgoat' and self.cog.isAngry:
             self.luredManager.show()
             self.enraged.show()
         elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isContracted and self.cog.isLured:
@@ -1442,7 +1442,7 @@ class TownBattleCogPanel(DirectFrame):
 
     def updateHealthBar(self):
         self.setLevelText()
-        if self.cog.dna.name == 'bgh':
+        if self.cog.dna.name == 'shw':
             self.sharkwatcher.show()
         else:
             self.sharkwatcher.hide()
@@ -1541,219 +1541,215 @@ class TownBattleCogPanel(DirectFrame):
         self.suitHead = Suit.attachSuitHead(self, name)
         self.suitHead.setScale(0.1)
         AnimList = 'neutral'
-        if name == 'dfh':
+        if name == 'bfh2':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -90, 0, 0, .105, .105, .105)
-        elif name == 'ptr':
+        elif name == 'ls':
             self.suitHead.setPosHprScale(-0.26, 0.5, 0.12, -90, 0, 0, .085, .085, .085)
-        elif name == 'rng':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .115, .115, .115)
-        elif name == 'jdg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'isw':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'dvg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .1, .1, .1)
-        elif name == 'trm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'bgh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .001, .001, .001)
-        elif name == 'ste' or name == 'wrt':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0725, .0725, .0725)
-        elif name == 'bg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
-        elif name == 'gry':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .065, .065, .065)
-        elif name == 'scg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .1, .1, .1)
-        elif name == 'kpn':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'crf' or name == 'mad':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'tld':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .07, .07, .07)
-        elif name == 'sjg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
-        elif name == 'cn':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.09, -180, 0, 0, .1, .1, .1)
-        elif name == 'fbd':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .09, .09, .09)
         elif name == 'mg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .06, .06, .06)
-        elif name == 'arb':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .115, .115, .115)
-        elif name == 'ca':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .115, .115, .115)
+        elif name == 'whistleb':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
+        elif name == 'ksp':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
+        elif name == 'bsht':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .1, .1, .1)
+        elif name == 'ppl':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
+        elif name == 'stenog':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0725, .0725, .0725)
+        elif name == 'clubpres':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
+        elif name == 'key':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .065, .065, .065)
+        elif name == 'sgoat':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .1, .1, .1)
+        elif name == 'tbc':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
+        elif name == 'hroller2' or name == 'hrollers' or name == 'hroller' or name == 'ghd':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
+        elif name == 'hho':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .07, .07, .07)
+        elif name == 'br':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
-        elif name == 'bs':
+        elif name == 'pph':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.085, -180, 0, 0, .1, .1, .1)
+        elif name == 'bkeeper':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .09, .09, .09)
+        elif name == 'cbr':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .06, .06, .06)
+        elif name == 'le':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .115, .115, .115)
+        elif name == 'bgh':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
+        elif name == 'cv':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .075, .075, .075)
-        elif name == 'ssm' or name == 'cvy' or name == 'mka' or name == 'txm':
+        elif name == 'm' or name == 'trs' or name == 'tf' or name == 'mdm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .089, .089, .089)
-        elif name == 'pp' or name == 'nc':
+        elif name == 'pp' or name == 'sw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .06, .06, .06)
         elif name == 'p':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .07, .07, .07)
-        elif name == 'mb' or name == 'kbc':
+        elif name == 'bc' or name == 'kbc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
-        elif name == 'bfh':
+        elif name == 'txm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
         elif name == 'b':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .09, .09, .09)
-        elif name == 'frs':
+        elif name == 'wtapper':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
         elif name == 'prethink':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .1, .1, .1)
-        elif name == 'gtk':
+        elif name == 'ambass':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
         elif name == 'mouthp':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
         elif name == 'bf':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
-        elif name == 'cps':
+        elif name == 'chw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .16, .16, .16)
-        elif name == 'trb':
+        elif name == 'mldr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'ssr' or name == 'mm' or name == 'ds' or name == 'pht' or name == 'jb' or name == 'ka' or name == 'vpr':
+        elif name == 'mh' or name == 'ym' or name == 'enf' or name == 'rb' or name == 'mh2' or name == 'cnd' or name == 'vpr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
-        elif name == 'ms':
+        elif name == 'dc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .11, .11, .11)
         elif name == 'pyc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .13, .13, .13)
         elif name == 'gms':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'mh' or name == 'inw':
+        elif name == 'ms' or name == 'inw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .085, .085, .085)
-        elif name == 'ls':
+        elif name == 'fct':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .12, .12, .12)
-        elif name == 'm':
+        elif name == 'fcs':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .09, .09, .09)
-        elif name == 'sb':
+        elif name == 'sd':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .075, .075, .075)
-        elif name == 'cfp':
+        elif name == 'sh':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'bdb':
+        elif name == 'ang':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .07, .07, .07)
-        elif name == 'hh':
+        elif name == 'mm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
-        elif name == 'lsc':
+        elif name == 'bw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .09, .09, .09)
-        elif name == 'brv':
+        elif name == 'ad':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
         elif name == 'rus' or name == 'tm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .085, .085, .085)
         elif name == 'sdb':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0675, .0675, .0675)
-        elif name == 'tbc':
+        elif name == 'ds':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'nd':
+        elif name == 'cn':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'bw':
+        elif name == 'bs':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .06, .06, .06)
-        elif name == 'le':
+        elif name == 'nn':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .09, .09, .09)
-        elif name == 'sd':
+        elif name == 'ac':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.09, -180, 0, 0, .08, .08, .08)
         elif name == 'cc' or name == 'sc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
-        elif name == 'cr':
+        elif name == 'blh':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .17, .177, .177)
-        elif name == 'bdb':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .12, .12, .12)
-        elif name == 'dot':
+        elif name == 'hh':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .175, .175, .175)
-        elif name == 'f' or name == 'cpl' or name == 'trm' or name == 'sw' or name == 'skd' or name == 'bc':
+        elif name == 'f' or name == 'cr' or name == 'ca' or name == 'skd' or name == 'tw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .175, .175, .175)
-        elif name == 'rb' or name == 'gh' or name == 'sfs':
+        elif name == 'nc' or name == 'nd' or name == 'sfs':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .08, .08, .08)
-        elif name == 'bkp':
+        elif name == 'txl':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .085, .085, .085)
-        elif name == 'msr':
+        elif name == 'derrman':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .09, .09, .09)
-        elif name == 'dsf':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'dm':
+        elif name == 'treek':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .075, .075, .075)
-        elif name == 'trk':
+        elif name == 'pcrat':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .085, .085, .085)
-        elif name == 'fd':
+        elif name == 'dopa':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
-        elif name == 'nar':
+        elif name == 'dopr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .175, .175, .175)
-        elif name == 'tc':
+        elif name == 'fires':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .07, .07, .07)
-        elif name == 'gm':
+        elif name == 'ovt':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
-        elif name == 'tb' or name == 'ts':
+        elif name == 'mplayer' or name == 'mplayer2':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'adc' or name == 'drm' or name == 'cry':
+        elif name == 'chainsaw' or name == 'chainsaw2':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0875, .0875, .0875)
-        elif name == 'mes':
+        elif name == 'duckshfl':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .075, .075, .075)
-        elif name == 'fm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .08, .08, .08)
-        elif name == 'dsk':
+        elif name == 'bellring':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.095, -180, 0, 0, .08, .08, .08)
+        elif name == 'ubuster':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1025, .1025, .1025)
-        elif name == 'blr':
+        elif name == 'radiog':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0725, .0725, .0725)
-        elif name == 'dfg':
+        elif name == 'gatekeep':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .055, .055, .055)
-        elif name == 'yuh':
+        elif name == 'djockey' or name == 'ptjockey':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .055, .055, .055)
-        elif name == 'dfr':
+        elif name == 'dola':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .09, .09, .09)
-        elif name == 'cp':
+        elif name == 'phouse':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .0875, .0875, .0875)
-        elif name == 'dvk':
+        elif name == 'dking':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.145, -180, 0, 0, .08, .08, .08)
-        elif name == 'dvp':
+        elif name == 'racket':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.145, -180, 0, 0, .08, .08, .08)
-        elif name == 'mp':
+        elif name == 'redd':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.145, -180, 0, 0, .08, .08, .08)
-        elif name == 'tcm':
+        elif name == 'chairman':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .095, .095, .095)
-        elif name == 'ffm' or name == 'nhy' or name == 'bsh':
+        elif name == 'safesupervis' or name == 'dold':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
-        elif name == 'jr' or name == 'prr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .065, .065, .065)
-        elif name == 'laa' or name == 'csh' or name == 'kerberos' or name == 'charon' or name == 'ddv' or name == 'sya' or name == 'pbl' or name == 'mdr' or name == 'fas' or name == 'gkp':
+        elif name == 'mslacker' or name == 'videog':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .06, .06, .06)
+        elif name == 'wsi' or name == 'maudit' or name == 'kerberos' or name == 'charon' or name == 'bdirector' or name == 'sya' or name == 'pbl' or name == 'foreman' or name == 'watchm' or name == 'chairp':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .12, .12, .12)
-        elif name == 'cg':
+        elif name == 'shw':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .00001, .00001, .00001)
+        elif name == 'autocad':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .125, .125, .125)
-        elif name == 'hydra' or name == 'styx' or name == 'bgr':
+        elif name == 'hydra' or name == 'styx' or name == 'supervis':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .3, .3, .3)
-        elif name == 'jur' or name == 'ant' or name == 'nix' or name == 'jls' :
+        elif name == 'clerk' or name == 'ant' or name == 'nix' or name == 'jls':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .2, .2, .2)
-        elif name == 'cm':
+        elif name == 'judy':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
         elif name == 'bf':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .11, .11, .11)
         elif name == 'whunter':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0575, .0575, .0575)
-        elif name == 'th':
+        elif name == 'rainmake':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.155, -180, 0, 0, .07, .07, .07)
-        elif name == 'tr' or name == 'msp':
+        elif name == 'erfit' or name == 'erclaim':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .075, .075, .075)
-        elif name == 'kb':
+        elif name == 'derrhand':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .09, .09, .09)
-        elif name == 'csm':
+        elif name == 'caseman':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.15, -180, 0, 0, .09, .09, .09)
-        elif name == 'hho':
+        elif name == 'dl':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .11, .11, .11)
-        elif name == 'mld':
+        elif name == 'bfh':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .08, .08, .08)
-        elif name == 'ac':
+        elif name == 'dt':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .08, .08, .08)
         elif name == 'sys':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .115, .115, .115)
-        elif name == 'kyl':
+        elif name == 'brn':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .085, .085, .085)
         elif name == 'cmk':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .155, .155, .155)
-        elif name == 'phs':
+        elif name == 'dhr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .115, .115, .115)
-        elif name == 'mdm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
-        elif name == 'tg':
+        elif name == 'ins':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
+        elif name == 'fbed':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .14, .14, .14)
-        elif name == 'tw':
+        elif name == 'shy':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1225, -180, 0, 0, .14, .14, .14)
         elif name == 'ppb':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .105, .105, .105)
@@ -1765,11 +1761,11 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
         elif name == 'hck':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0875, .0875, .0875)
-        elif name == 'fpn':
+        elif name == 'ath':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .08, .08, .08)
         elif name == 'ghw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .07, .07, .07)
-        elif name == 'bbr':
+        elif name == 'dcw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .065, .065, .065)
         elif name == 'std':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .1, .1, .1)
@@ -1781,9 +1777,9 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .08, .08, .08)
         elif name == 'anc':
             self.suitHead.setPosHprScale(-0.28, 0.5, 0.11, -180, 0, 0, .0725, .0725, .0725)
-        elif name == 'ym':
+        elif name == 'stg':
             self.suitHead.setPosHprScale(-0.28, 0.5, 0.12, -180, 0, 0, .14, .14, .14)
-        elif name == 'shp':
+        elif name == 'blk':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .095, .095, .095)
         else:
             self.suitHead.setPos(-0.27, 0.5, 0.13)

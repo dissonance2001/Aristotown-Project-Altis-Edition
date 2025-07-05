@@ -521,13 +521,13 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
- #   if died:
-      #  suit = attack['suit']
-      #  toonTrack.append(Wait(3.0))
-      ##  if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-       #     suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-      #  else:
-         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -547,13 +547,13 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
-   # if died:
-      #  suit = attack['suit']
-      # # toonTrack.append(Wait(3.0))
-       # if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-       # else:
-        #    suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+    if toon.hp - dmg <= 0:
+        suit = attack['suit']
+        toonTrack.append(Wait(3.0))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+        else:
+            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -625,7 +625,7 @@ def doHighPressure(attack):
         suitTrack.append(Func(suit.showHpString, "BOMBED!"))
         suitTrack.append(Func(suit.setHealthForMe, - (100 * len(battle.activeToons))))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        suitTrack.append(Parallel(Func(suit.checkCogHPBomb, battle), ActorInterval(suit, 'slip-backward'), Func(suit.setChatAbsolute, 'Ouch.', CFSpeech | CFTimeout)))
+        suitTrack.append(Parallel(Func(suit.checkCogHPBomb, battle), ActorInterval(suit, 'slip-backward')))
         suitTracks.append(suitTrack)
         revives = suit.getMaxSkeleRevives() + 1
         suitTrack.append(Func(suit.setNeutralAnimation))
@@ -1076,7 +1076,7 @@ def doUnionBust(attack):
         LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0), cage.posInterval(3, Point3(targetSuitPos.getX(), y, 40), blendType='easeIn'),
         Func(MovieUtil.removeProp, cage)
     )
-        if not targetSuit.isContracted and not targetSuit.dna.name == 'dsk':
+        if not targetSuit.isContracted and not targetSuit.dna.name == 'ubuster':
             cagePropTracks.append(cagePropTrack)
             suitTracks.append(suitTrack)
             selfDamageTracks.append(selfDamageTrack)
@@ -1139,7 +1139,7 @@ def doUnionWages(attack):
     spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, battle, 0], softStop=-2)
     spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, battle, 0], softStop=-2)
     for targetSuit in battle.activeSuits:
-        if not targetSuit.isContracted and not targetSuit.dna.name == 'dsk':
+        if not targetSuit.isContracted and not targetSuit.dna.name == 'ubuster':
             damageSuits.append(targetSuit)
     makeImmune = Func(suit.makeDamageUp)
     managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextCheat, + (100 * len(damageSuits))),
@@ -1234,7 +1234,7 @@ def doContractEnforcement(attack):
             suitTrack.append(Func(suit.setHealthForMe, 125))
             suitTrack.append(Func(suit.makeContracted))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'dsk':
+        if not suit.dna.name == 'ubuster':
             suitTrack.append(Parallel(healSound, Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
                                            CFSpeech | CFTimeout)))
         suitTrack.append(Func(suit.setNeutralAnimation))
@@ -1402,7 +1402,7 @@ def doCompensation(attack):
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     for suit in battle.activeSuits:
         suitTrack = Parallel()
-        if suit.currHP < suit.maxHP and not suit.dna.name == 'dvp':
+        if suit.currHP < suit.maxHP and not suit.dna.name == 'racket':
             suitTrack.append(Sequence(Parallel(ActorInterval(suit, 'mob-mentality'), Func(suit.showHpString, "1.05x Dmg Multiplier!"), healSound), Func(suit.setNeutralAnimation)))
             suitTrack.append(Func(suit.makeDamageUp))
             suitTracks.append(suitTrack)

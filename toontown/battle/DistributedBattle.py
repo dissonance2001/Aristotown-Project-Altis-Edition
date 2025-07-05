@@ -126,6 +126,7 @@ class DistributedBattle(DistributedBattleBase.DistributedBattleBase):
         toonTrack.append(Wait(delay))
         suitTrack.append(Func(suit.headsUp, self, suitPos))
         suitTrack.append(Func(suit.clearChat))
+        suitTrack.append(Func(suit.setChatAbsolute, '', CFSpeech | CFTimeout))
         toonTrack.append(Func(toon.headsUp, self, toonPos))
         suitTrack.append(Func(suit.loop, 'walk'))
         suitTrack.append(LerpPosInterval(suit, faceoffTime, suitPos, other=self))

@@ -83,21 +83,21 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         d = p2 - p1
         biggest = max(d[0], d[1], d[2])
         s = 0.3 / biggest
-        if self.avatar.dna.name == 'ptr' and not avatar.isSkeleton:
+        if self.avatar.dna.name == 'ls' and not avatar.isSkeleton:
             self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'dfh' and not avatar.isSkeleton:
+        elif self.avatar.dna.name == 'bfh2' and not avatar.isSkeleton:
             self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'dvp' and not avatar.isSkeleton:
+        elif self.avatar.dna.name == 'racket' and not avatar.isSkeleton:
             self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'mp' and not avatar.isSkeleton:
+        elif self.avatar.dna.name == 'redd' and not avatar.isSkeleton:
             self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'th' and not avatar.isSkeleton:
+        elif self.avatar.dna.name == 'rainmake' and not avatar.isSkeleton:
             self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'dvk' and not avatar.isSkeleton:
+        elif self.avatar.dna.name == 'dking' and not avatar.isSkeleton:
             self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif avatar.isSkeleton and self.avatar.dna.name == 'gtk':
+        elif avatar.isSkeleton and self.avatar.dna.name == 'ambass':
             self.head.setPosHprScale(0, 0, 0.08, 180, 0, 0, s, s, s)
-        elif avatar.isSkeleton and not self.avatar.dna.name == 'gtk':
+        elif avatar.isSkeleton and not self.avatar.dna.name == 'ambass':
             self.head.setPosHprScale(0, 0, 0.03, 180, 0, 0, s, s, s)
         else:
             self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
@@ -368,25 +368,25 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (
             int(tempHp), maxHp)
-        elif self.avatar.dna.name == 'dsf' and tempHp <= 0:
+        elif self.avatar.dna.name == 'hroller' and tempHp <= 0:
             self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
             0, maxHp)
-        elif self.avatar.dna.name == 'dsf':
+        elif self.avatar.dna.name == 'hroller':
             self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
             int(tempHp), maxHp)
-        elif self.avatar.dna.name == 'tcm' and tempHp <= 0:
+        elif self.avatar.dna.name == 'chairman' and tempHp <= 0:
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
             0, maxHp)
-        elif self.avatar.dna.name == 'tcm':
+        elif self.avatar.dna.name == 'chairman':
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
             int(tempHp), maxHp)
-        elif self.avatar.dna.name == 'crf' and tempHp <= 0:
+        elif self.avatar.dna.name == 'hroller2' and tempHp <= 0:
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
             0, maxHp)
-        elif self.avatar.dna.name == 'crf':
+        elif self.avatar.dna.name == 'hroller2':
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
             int(tempHp), maxHp)
@@ -458,19 +458,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         #self.labelInterval = Parallel(Func(__updateLabel, currHp))
         #self.labelInterval.start()
 
-        if condition == 10 and self.avatar.isVirtual and not self.avatar.dna.name == 'mad':
-            taskMgr.remove(self.frame.uniqueName('blink-task'))
-            self.button.setColor(1, 1, 1, 1)
-            self.head.setColor(1, 1, 1, 1)
-            blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray), Task.pause(0.1))
-            taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
-        elif condition == 11 and self.avatar.isVirtual and not self.avatar.dna.name == 'mad':
-            taskMgr.remove(self.frame.uniqueName('blink-task'))
-            self.button.setColor(1, 1, 1, 1)
-            self.head.setColor(1, 1, 1, 1)
-            blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray), Task.pause(0.1))
-            taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
-        elif condition == 10:
+        if condition == 10:
             taskMgr.remove(self.frame.uniqueName('blink-task'))
             self.button.setColor(1, 1, 1, 1)
             blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray), Task.pause(0.1))
@@ -483,24 +471,11 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                        blendType='easeInOut'))
             blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray), Task.pause(0.1))
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
-        elif condition == 13 and avatar.isVirtual and not self.avatar.dna.name == 'mad':
-            self.head.setColor(1, 1, 1, 1)
-            self.button.setColor(1, 1, 1, 1)
-            blinkTask = Task.loop(Task(self.__pulsePurple), Task.pause(1.5), Task(self.__pulsePurpleColor),
-                                  Task.pause(1.5))
-            taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
         elif condition == 13:
             self.button.setColor(1, 1, 1, 1)
             blinkTask = Task.loop(Task(self.__pulsePurple), Task.pause(1.5), Task(self.__pulsePurpleColor),
                                   Task.pause(1.5))
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
-        elif self.avatar.isVirtual and not self.avatar.dna.name == 'mad':
-            self.button.setColor(1, 1, 1, 1)
-            self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(self.healthColors[condition]),
-                                   blendType='easeInOut'))
-            self.changeInterval.start()
-            taskMgr.remove(self.frame.uniqueName('blink-task'))
-            self.blinkTask = None
         else:
             self.button.setColor(1, 1, 1, 1)
             self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(self.healthColors[condition]),

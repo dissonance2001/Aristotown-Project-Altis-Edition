@@ -148,6 +148,8 @@ class SuitInterior(Place.Place):
             self.notify.error('Unknown mode: ' + +' in handleElevatorDone')
 
     def enterBattle(self, event):
+        messenger.send('toonEnteredBattle', ['changemusic'])
+        base.localAvatar.isInBattle = True
         mult = ToontownBattleGlobals.getCreditMultiplier(self.currentFloor)
         self.townBattle.enter(event, self.fsm.getStateNamed('battle'), bldg=1, creditMultiplier=mult)
         self.enterFLM()
@@ -155,10 +157,12 @@ class SuitInterior(Place.Place):
         base.localAvatar.cantLeaveGame = 1
 
     def exitBattle(self):
+        base.localAvatar.isInBattle = False
         self.townBattle.exit()
         base.localAvatar.cantLeaveGame = 0
 
     def enterWalk(self, teleportIn = 0):
+        base.localAvatar.isInBattle = False
         Place.Place.enterWalk(self, teleportIn)
         self.ignore('teleportQuery')
         base.localAvatar.setTeleportAvailable(0)
