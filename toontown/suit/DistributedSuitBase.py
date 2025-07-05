@@ -868,39 +868,39 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), 0)
 
     def enterBattle(self):
-        def changeMusic(Task):
-            if self.dna.name in SuitBattleGlobals.SpecialCogDict and self.dna.name not in ToontownGlobals.noCustomMusicManagers:
-                if base.localAvatar.isInBattle:
-                    if self.dna.name == 'stenog':
-                        base.musicManager.stopAllSounds()
-                        music = base.loader.loadMusic(ToontownGlobals.managerMusic[self.dna.name])
-                        music2 = base.loader.loadMusic("phase_11/audio/bgm/LB_litigation_base.ogg")
-                        base.playMusic(music, looping=1, volume=0.9)
-                        base.playMusic(music2, looping=1, volume=0.9)
-                    elif self.dna.name == 'sgoat':
-                        base.musicManager.stopAllSounds()
-                        music = base.loader.loadMusic(ToontownGlobals.managerMusic[self.dna.name])
-                        music2 = base.loader.loadMusic("phase_11/audio/bgm/LB_litigation_base.ogg")
-                        base.playMusic(music, looping=1, volume=0.9)
-                        base.playMusic(music2, looping=1, volume=0.9)
-                    elif self.dna.name == 'lgator':
-                        base.musicManager.stopAllSounds()
-                        music = base.loader.loadMusic(ToontownGlobals.managerMusic[self.dna.name])
-                        music2 = base.loader.loadMusic("phase_11/audio/bgm/LB_litigation_base.ogg")
-                        base.playMusic(music, looping=1, volume=0.9)
-                        base.playMusic(music2, looping=1, volume=0.9)
-                    elif self.dna.name == 'caseman':
-                        base.musicManager.stopAllSounds()
-                        music = base.loader.loadMusic(ToontownGlobals.managerMusic[self.dna.name])
-                        music2 = base.loader.loadMusic("phase_11/audio/bgm/LB_litigation_base.ogg")
-                        base.playMusic(music, looping=1, volume=0.9)
-                        base.playMusic(music2, looping=1, volume=0.9)
+      #  def changeMusic(Task):
+           # if self.dna.name in SuitBattleGlobals.SpecialCogDict and self.dna.name not in ToontownGlobals.noCustomMusicManagers:
+            #    if base.localAvatar.isInBattle:
+                 #   if self.dna.name == 'stenog':
+                   #     base.musicManager.stopAllSounds()
+                   #     music = base.loader.loadMusic(ToontownGlobals.managerMusic[self.dna.name])
+                    #    music2 = base.loader.loadMusic("phase_11/audio/bgm/LB_litigation_base.ogg")
+                    #    base.playMusic(music, looping=1, volume=0.9)
+                    #    base.playMusic(music2, looping=1, volume=0.9)
+                   # elif self.dna.name == 'sgoat':
+                       # base.musicManager.stopAllSounds()
+                      #  music = base.loader.loadMusic(ToontownGlobals.managerMusic[self.dna.name])
+                      #  music2 = base.loader.loadMusic("phase_11/audio/bgm/LB_litigation_base.ogg")
+                     #   base.playMusic(music, looping=1, volume=0.9)
+                   #     base.playMusic(music2, looping=1, volume=0.9)
+                   # e#lif self.dna.name == 'lgator':
+                     #   base.musicManager.stopAllSounds()
+                     #   music = base.loader.loadMusic(ToontownGlobals.managerMusic[self.dna.name])
+                      #  music2 = base.loader.loadMusic("phase_11/audio/bgm/LB_litigation_base.ogg")
+                     #   base.playMusic(music, looping=1, volume=0.9)
+                     #   base.playMusic(music2, looping=1, volume=0.9)
+                   # elif self.dna.name == 'caseman':
+                      #  base.musicManager.stopAllSounds()
+                      #  music = base.loader.loadMusic(ToontownGlobals.managerMusic[self.dna.name])
+                      #  music2 = base.loader.loadMusic("phase_11/audio/bgm/LB_litigation_base.ogg")
+                     #   base.playMusic(music, looping=1, volume=0.9)
+                      #  base.playMusic(music2, looping=1, volume=0.9)
 
-        def changeMusicLater(Task):
-            taskMgr.doMethodLater(0.2, changeMusic, 'changemusic')
+        #def changeMusicLater(Task):
+          #  taskMgr.doMethodLater(0.2, changeMusic, 'changemusic')
 
-        changeMusicLater('changeMusic')
-        self.accept('toonEnteredBattle', changeMusicLater)
+       # changeMusicLater('changeMusic')
+       # self.accept('toonEnteredBattle', changeMusicLater)
         self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',), 0)
         self.disableBattleDetect()
         self.healthBar.show()

@@ -349,9 +349,10 @@ class Movie(DirectObject.DirectObject):
         self.setTrackPlayRate(self.track, playRate)
         self.track.start(ts, playRate=playRate)
         for s in self.battle.suits:
-            if s.dna.name == 'laa':
+            if s.dna.name == 'psetter':
                 theSuit = s
-                self.track.setPlayRate(theSuit.getPlayRate())
+                self.setTrackPlayRate(self.track, theSuit.getPlayRate())
+                self.track.start(ts, playRate=theSuit.getPlayRate())
             else:
                 pass
         return None

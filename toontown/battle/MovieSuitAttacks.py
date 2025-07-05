@@ -847,6 +847,10 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     trapStorage = {}
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
+    for s in battle.activeSuits:
+        if s.dna.name == 'psetter':
+            theSuit = s
+            track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
     if attack[
         'suitName'] == 'nothing':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
@@ -890,8 +894,13 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
 def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     suit = attack['suit']
     tauntIndex = attack['taunt']
+    battle = attack['battle']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
+    for s in battle.activeSuits:
+        if s.dna.name == 'psetter':
+            theSuit = s
+            track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
     if attack[
         'suitName'] == 'nothing':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
@@ -2304,7 +2313,7 @@ def doEmbezzle(attack):
     suitTrack.append(Wait(1.0))
     billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
     billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(5.0, 5.0, 5.0))
-    toonTrack = getToonTrack(attack, 0.6, ['cringe'], 0.01, ['sidestep'])
+    toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     glowTrack = Sequence()
     glowTrack.append(Wait(4.0))
     glowTrack.append(Func(glow.hide))
@@ -3910,7 +3919,7 @@ def doPickPocket(attack):
     suitTrack.append(Wait(1.0))
     billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
     billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(1.41, 1.41, 1.41))
-    toonTrack = getToonTrack(attack, 0.6, ['cringe'], 0.01, ['sidestep'])
+    toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
     if dmg > 0:
         soundTrack = getSoundTrack('SA_pick_pocket.ogg', delay=0.2, node=suit)
@@ -3928,7 +3937,7 @@ def doPennyPinch(attack):
     suitTrack = getSuitTrack(attack)
     billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
     billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(1.41, 1.41, 1.41))
-    toonTrack = getToonTrack(attack, 0.6, ['cringe'], 0.01, ['sidestep'])
+    toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
     if dmg > 0:
         soundTrack = getSoundTrack('SA_pick_pocket.ogg', delay=0.2, node=suit)

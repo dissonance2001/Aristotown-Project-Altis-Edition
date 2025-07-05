@@ -3,16 +3,21 @@ title Project Altis CLI Launcher
 
 :menu
 cls
-echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-echo What do you want to do!
-echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+SET TT_GAMESERVER=127.0.0.1
+set TT_PLAYCOOKIE=5
+set TT_USERNAME=5
+set TT_PASSWORD=5
 echo.
-echo #1 - Run Aristotown
-echo #2 - Exit
-echo. 
-choice /C:123 /n /m "Selection: "%1
-if errorlevel ==2 EXIT /B
-if errorlevel ==1 goto run
+cls
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo Welcome to Aristotown, 5!
+echo The Tooniverse Awaits You!
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+:startgame
+title Project Altis Client
+"dependencies/panda/python/python.exe" -m toontown.toonbase.ClientStart
+PAUSE
+goto startgame
 
 :run
 cls
