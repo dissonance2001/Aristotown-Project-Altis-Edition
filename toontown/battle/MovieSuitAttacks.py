@@ -578,27 +578,27 @@ def doSuitAttack(attack):
     elif name == 'SoakRemoval':
         suitTrack = MovieUniversalCheats.doSoakRemoval(attack)
     elif name == 'BanLevel4':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel5':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel6':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel7':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel8':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
@@ -623,42 +623,42 @@ def doSuitAttack(attack):
     elif name == 'BanLevel78':
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanToonup':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanTrap':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLure':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanThrow':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanSquirt':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanZap':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanSound':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanDrop':
-        if suit.dna.name == 'frs':
+        if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
@@ -982,126 +982,98 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                           Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale), Func(MovieUtil.removeProp, indicator))
     currentBossHealth = -1
     currentBossHealth2 = -1
-    if suit.style.name == 'csm':
+    if suit.style.name == 'caseman':
         for s in battle.activeSuits:
-            if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'scg':
+            if s.dna.name == 'sgoat' or s.dna.name == 'lgator' or s.dna.name == 'stenog':
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'scg':
+    elif suit.style.name == 'sgoat':
         for s in battle.activeSuits:
-            if s.dna.name == 'csm':
+            if s.dna.name == 'caseman':
                 currentBossHealth2 = s.currHP
-            if s.dna.name == 'ste' or s.dna.name == 'lit' or s.dna.name == 'csm':
+            if s.dna.name == 'stenog' or s.dna.name == 'lgator' or s.dna.name == 'caseman':
                 currentBossHealth = s.currHP
         if currentBossHealth2 == -1:
             animTrack.append(Func(suit.removeInsured))
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'lit':
+    elif suit.style.name == 'lgator':
         for s in battle.activeSuits:
-            if s.dna.name == 'csm':
+            if s.dna.name == 'caseman':
                 currentBossHealth2 = s.currHP
-            if s.dna.name == 'ste' or s.dna.name == 'scg' or s.dna.name == 'csm':
+            if s.dna.name == 'sgoat' or s.dna.name == 'stenog' or s.dna.name == 'caseman':
                 currentBossHealth = s.currHP
         if currentBossHealth2 == -1:
             animTrack.append(Func(suit.removeInsured))
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'ste':
+    elif suit.style.name == 'stenog':
         for s in battle.activeSuits:
-            if s.dna.name == 'csm':
+            if s.dna.name == 'caseman':
                 currentBossHealth2 = s.currHP
-            if s.dna.name == 'scg' or s.dna.name == 'lit' or s.dna.name == 'csm':
+            if s.dna.name == 'sgoat' or s.dna.name == 'lgator' or s.dna.name == 'caseman':
                 currentBossHealth = s.currHP
         if currentBossHealth2 == -1:
             animTrack.append(Func(suit.removeInsured))
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'gtk':
+    elif suit.style.name == 'ambass':
         for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'cp':
+            if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'phouse':
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'frs':
+    elif suit.style.name == 'wtapper':
         for s in battle.activeSuits:
-            if s.dna.name == 'gtk' or s.dna.name == 'fbd' or s.dna.name == 'cp':
+            if s.dna.name == 'phouse' or s.dna.name == 'bkeeper' or s.dna.name == 'ambass':
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'fbd':
+    elif suit.style.name == 'bkeeper':
         for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'gtk' or s.dna.name == 'cp':
+            if s.dna.name == 'wtapper' or s.dna.name == 'phouse' or s.dna.name == 'ambass':
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'cp':
+    elif suit.style.name == 'phouse':
         for s in battle.activeSuits:
-            if s.dna.name == 'frs' or s.dna.name == 'fbd' or s.dna.name == 'gtk':
+            if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'ambass':
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'ffm':
+    elif suit.style.name == 'safesupervis':
         for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'dvp':
+            if s.dna.name == 'ubuster' or s.dna.name == 'radiog' or s.dna.name == 'racket':
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'dsk':
+    elif suit.style.name == 'ubuster':
         for s in battle.activeSuits:
-            if s.dna.name == 'ffm' or s.dna.name == 'blr' or s.dna.name == 'dvp':
+            if s.dna.name == 'radiog' or s.dna.name == 'safesupervis' or s.dna.name == 'racket':
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'dvp':
+    elif suit.style.name == 'racket':
         for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'blr' or s.dna.name == 'ffm':
+            if s.dna.name == 'ubuster' or s.dna.name == 'safesupervis' or s.dna.name == 'radiog':
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))
             animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'blr':
+    elif suit.style.name == 'radiog':
         for s in battle.activeSuits:
-            if s.dna.name == 'dsk' or s.dna.name == 'ffm' or s.dna.name == 'dvp':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'cry':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvk' or s.dna.name == 'tcm' or s.dna.name == 'otm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'tcm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvk' or s.dna.name == 'cry' or s.dna.name == 'otm':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'otm':
-        for s in battle.activeSuits:
-            if s.dna.name == 'dvk' or s.dna.name == 'tcm' or s.dna.name == 'cry':
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.makeDesperation))
-            animTrack.append(Func(suit.makeDamageUp))
-    elif suit.style.name == 'dvk':
-        for s in battle.activeSuits:
-            if s.dna.name == 'cry' or s.dna.name == 'tcm' or s.dna.name == 'otm':
+            if s.dna.name == 'ubuster' or s.dna.name == 'safesupervis' or s.dna.name == 'racket':
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.makeDesperation))

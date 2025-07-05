@@ -4298,7 +4298,7 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(.5)
             elif headType == 'paperhands' and self.style.name == 'cn' :
                 headModel.setScale(.6)
-            elif headType == 'paperhands' and self.style.name == 'fbd' :
+            elif headType == 'paperhands' and self.style.name == 'bkeeper' :
                 headModel.setScale(.7)
                 headModel.setY(-.2)
                 headModel.setZ(-.1)
@@ -6886,7 +6886,7 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'phouse' and not self.isSkeleton:
             loadDialog(1)
             return DOLADialogArray
-        if self.style.name == 'caseman' and not self.isSkeleton:
+        if self.style.name == 'bkeeper' and not self.isSkeleton:
             loadDialog(1)
             return CaseManagerDialogArray
         if self.style.name == 'wtapper' and not self.isSkeleton:
