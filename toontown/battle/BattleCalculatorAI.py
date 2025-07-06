@@ -62,6 +62,7 @@ class BattleCalculatorAI:
         self.traps = {}
         self.npcTraps = {}
         self.suitAtkStats = {}
+        self.deadSuits = 0
         self.roundsToonsHit = 0
         self.roundsCogsMiss = 0
         self.__clearBonuses(hp=1)
@@ -1969,6 +1970,7 @@ class BattleCalculatorAI:
         else:
             suit = self.battle.findSuit(avId)
             if suit.getHP() <= 0:
+                self.deadSuits += 1
                 self.__removeLured(suit.doId)
                 self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                 return 1
@@ -8997,6 +8999,7 @@ class BattleCalculatorAI:
 
     def getLuredSuits(self):
         self.TurnsElapsed += 1
+        self.deadSuits -= self.deadSuits
         self.notify.debug('Current Elapsed Turns: ' + str(self.TurnsElapsed))
         luredSuits = self.currentlyLuredSuits.keys()
         #self.notify.debug('Lured suits reported to battle: ' + repr(luredSuits))

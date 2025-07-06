@@ -525,6 +525,7 @@ ValidStatusConditions = (
     'radioinfrequencycalculator',
     'hottakecalculator',
     'overmodulatedcalculator',
+    'dead',
 
     # Cog Status Effects
     'bookkeeping',
