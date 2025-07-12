@@ -137,7 +137,7 @@ bellring = (('roll-o-dex', 'roll-o-dex', 4), ('quick-jump', 'jump', 4))
 mh2 = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4))
 prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-videog = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+videog = (('neutral', 'rolled', 4), ('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
 racket = (('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
 ubuster = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
@@ -1198,6 +1198,7 @@ class Suit(Avatar.Avatar):
         self.isAngry = 0
         self.isRevived = 0
         self.isLaserRevived = 0
+        self.isDanceSession = 0
         self.isImmortal = 0
         self.isSoakImmune = 0
         self.isShielding = 0
@@ -1806,6 +1807,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.8)
+            self.makeShielding()
         elif dna.name == 'caseman':
             self.scale = 6.9 / aSize
             self.handColor = VBase4(0.294, 0.208, 0.149, 1)
@@ -2018,6 +2020,8 @@ class Suit(Avatar.Avatar):
             self.generateHead3('highroller', animated=True)
             self.setHeight(10.0)
             self.setTransparency(1)
+            self.makeImmortal()
+            self.makeShielding()
         elif dna.name == 'erfit':
             self.scale = 7.2 / aSize
             self.handColor = VBase4(1, 1, 1, 1.0)
@@ -5467,6 +5471,7 @@ class Suit(Avatar.Avatar):
                 else:
                     self.virtualize(7)
             else:
+                self.makeLureImmune()
                 self.setDisplayName(self.createNameInfoGreen())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5555,7 +5560,7 @@ class Suit(Avatar.Avatar):
                 else:
                     self.healthBarGlow.setColor(0, 0, 0, 0)
                     taskMgr.remove(self.uniqueName('blink-task'))
-                    if not self.style.name == 'mad':
+                    if not self.style.name == 'hrollers':
                         self.virtualize(condition)
                 self.__changeColor()
             elif condition == 10:
@@ -6165,17 +6170,17 @@ class Suit(Avatar.Avatar):
         self.isSoaked = 0
 
     def makeImmortal(self, elite=False):
-        self.healthBar.setColor(1, 1, 1, 1)
-        self.healthBarGlow.setColor(1, 1, 1, 1)
-        taskMgr.remove(self.uniqueName('blink-task'))
-        self.__pulseWhite()
+        #self.healthBar.setColor(1, 1, 1, 1)
+       # self.healthBarGlow.setColor(1, 1, 1, 1)
+        #taskMgr.remove(self.uniqueName('blink-task'))
+        #self.__pulseWhite()
         self.isImmortal = 1
 
     def makeNonImmortal(self, elite=False):
-        self.healthBar.setColor(1, 1, 1, 1)
-        self.healthBarGlow.setColor(1, 1, 1, 1)
-        taskMgr.remove(self.uniqueName('blink-task'))
-        self.__changeColor()
+      #  self.healthBar.setColor(1, 1, 1, 1)
+       # self.healthBarGlow.setColor(1, 1, 1, 1)
+       # taskMgr.remove(self.uniqueName('blink-task'))
+       # self.__changeColor()
         self.isImmortal = 0
 
     def makeLured(self, elite=False):
@@ -6793,6 +6798,12 @@ class Suit(Avatar.Avatar):
 
     def removeInsured(self):
         self.isInsured = 0
+
+    def makeDanceSession(self):
+        self.isDanceSession = 1
+
+    def removeDanceSession(self):
+        self.isDanceSession = 0
 
     def makeContracted(self):
         self.isContracted= 1

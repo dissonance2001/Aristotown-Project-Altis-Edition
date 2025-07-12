@@ -233,7 +233,7 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'mslacker':
         actualLevel = relLevel + 23
     elif name == 'videog':
-        actualLevel = relLevel + 24
+        actualLevel = relLevel + 76
     elif name == 'radiog':
         actualLevel = relLevel + 31
     elif name == 'racket':
@@ -2327,7 +2327,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Videographer',
 		'pluralname': 'Videographers',
 		'level': 22,
-		'hp':(100,),
+		'hp':(7777,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(75,),
@@ -2377,7 +2377,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (34,),
                (85,),
                (15,)),
-              ('Quake',
+              ('ParadigmShift',
                (32,),
                (90,),
                (15,)),
@@ -2406,6 +2406,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (100,),
                (0,)),
               ('RadiographerOvermodulated',
+               (0,),
+               (100,),
+               (0,)),
+            ('RadiographerDanceSession',
                (0,),
                (100,),
                (0,)),
@@ -7112,9 +7116,10 @@ SuitAttacks = {
  'RacketeerPeckingOrderRetaliationSoak': ('throw-object', ATK_TGT_SINGLE),
     # Radiographer Cheats
  'RadiographerRadioInfrequency': ('nothing', ATK_TGT_GROUP),
- 'RadiographerHotTake': ('sanction', ATK_TGT_SINGLE),
- 'RadiographerHotTakeRetaliation': ('sanction', ATK_TGT_SINGLE),
+ 'RadiographerHotTake': ('throw-object', ATK_TGT_SINGLE),
+ 'RadiographerHotTakeRetaliation': ('throw-object', ATK_TGT_SINGLE),
  'RadiographerOvermodulated': ('sanction', ATK_TGT_SINGLE),
+ 'RadiographerDanceSession': ('song-and-dance', ATK_TGT_GROUP),
     # High Roller Phase 1
  'HighRollerNoAttack': ('nothing', ATK_TGT_SINGLE),
  'HighRollerWheelSpin': ('wheelspin', ATK_TGT_SINGLE),

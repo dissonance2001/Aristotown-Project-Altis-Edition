@@ -654,22 +654,24 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             if self.isSuitLured(suit):
                 suit.loop('lured')
                 suit.setDizzy(1)
-                if suit.style.name == 'crf':
+                if suit.style.name == 'hroller2':
                     for headPart in suit.animatedHeadParts:
                         headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
-                elif suit.style.name == 'mad':
+                elif suit.style.name == 'hrollers':
                     for headPart in suit.animatedHeadParts:
                         headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
-                elif suit.style.name == 'dsf':
+                elif suit.style.name == 'hroller':
                     for headPart in suit.animatedHeadParts:
                         headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
                 else:
                     for headPart in suit.animatedHeadParts:
                         headPart.loop('neutral-lured')
             else:
-                if suit.style.name == 'jb':
+                if suit.style.name == 'mh2':
                     suit.setNeutralAnimationRolled()
-                elif suit.style.name == 'mad':
+                elif suit.style.name == 'hrollers':
+                    suit.setNeutralAnimationRolled()
+                elif suit.style.name == 'videog':
                     suit.setNeutralAnimationRolled()
                 else:
                     suit.setNeutralAnimation()
@@ -1036,30 +1038,29 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     spos = Point3(suitPos[0], suitPos[1] - MovieUtil.SUIT_LURE_DISTANCE, suitPos[2])
                     suit.setPosHpr(self, spos, suitHpr)
                     suit.setDizzy(1)
-                    if suit.style.name == 'crf':
+                    if suit.style.name == 'hrollers':
                         for headPart in suit.animatedHeadParts:
                             headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
-                    elif suit.style.name == 'mad':
+                    elif suit.style.name == 'hroller2':
                         for headPart in suit.animatedHeadParts:
                             headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
-                    elif suit.style.name == 'dsf':
+                    elif suit.style.name == 'hroller':
                         for headPart in suit.animatedHeadParts:
                             headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
                     else:
                         for headPart in suit.animatedHeadParts:
                             headPart.loop('neutral-lured')
                 else:
-                    if suit.style.name == 'jb':
+                    if suit.style.name == 'mh2':
                         suit.setNeutralAnimationRolled()
-                    elif suit.style.name == 'mad':
+                    elif suit.style.name == 'hrollers':
+                        suit.setNeutralAnimationRolled()
+                    elif suit.style.name == 'videog':
                         suit.setNeutralAnimationRolled()
                     else:
                         suit.setNeutralAnimation()
                     suit.setPosHpr(self, suitPos, suitHpr)
                     suit.setDizzy(0)
-                    for headPart in suit.animatedHeadParts:
-                        headPart.loop(
-                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
 
         for toon in toons:
             if self.joiningToons.count(toon):

@@ -525,7 +525,9 @@ ValidStatusConditions = (
     'radioinfrequencycalculator',
     'hottakecalculator',
     'overmodulatedcalculator',
+    'dancesessioncalculator',
     'dead',
+    'dancesession',
 
     # Cog Status Effects
     'bookkeeping',
@@ -577,6 +579,7 @@ ValidStatusConditions = (
 
     # Toon Status Effects
     'noUnites',
+    'confused',
     'encore2',
     'snappedtarget2',
     'snappedtarget3',

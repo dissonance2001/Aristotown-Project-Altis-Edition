@@ -3964,6 +3964,7 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseLureImm
 'ReddAutoRepair',
 'ReddLiquidationSale',
 'ReddPeckingOrder',
+                  'RadiographerDanceSession',
                   'HighRollerRaisingTheAnte',
                   'HighRollerDiceRouletteToons','HighRollerDiceRouletteEveryone','HighRollerDiceRouletteNobody','HighRollerTrickOfTheLight','HighRollerDonation','HighRollerSyphon','HighRollerBar','HighRollerSingingBlues','HighRollerDamageReduction','HighRollerSplashback','HighRollerCheerRetaliation',
                   'LitigatorSnapSoak', 'LitigatorSnap', 'LitigatorBayouBash', 'LitigatorBayouBellow', 'Desperation',
@@ -4068,6 +4069,7 @@ SuitCheatDescription = {
 'RadiographerHotTake': "The Radiographer applies a dangerous vulnerability to a\nrandom Toon!",
 'RadiographerHotTakeRetaliation': "The Radiographer retaliates when soaked!",
 'RadiographerOvermodulated': "The Radiographer gives a cog an extra attack!",
+'RadiographerDanceSession': "The Radiographer is now taking and dealing less\ndamage while in dancing mode!",
     # High Roller Phase 1 Cheats
 'HighRollerNoAttack': "nothing",
 'HighRollerWheelSpin': "The High Roller bans gags at random!",
@@ -4353,6 +4355,7 @@ SuitAttackNames = {
     'RadiographerHotTake': "Hot Take!",
     'RadiographerHotTakeRetaliation': "Hot Take!",
     'RadiographerOvermodulated': "Overmodulated!",
+    'RadiographerDanceSession': "Dance Session!",
     # High Roller Phase 1
     'HighRollerNoAttack': "!",
     'HighRollerWheelSpin': "Game Time!",
@@ -6344,6 +6347,10 @@ SuitAttackTaunts = {
 'RadiographerOvermodulated': ["Are you trying to insult me? Wake up and pay attention!",
                     "You won't be slacking in my presence!",
                     "It looks like you'll be working overtime today."],
+'RadiographerDanceSession': ["Immbadoodadeeda Imbaddadaskidddiiddooodidadoooo!",
+                                "Skibidididoooodadahradadooh!",
+                                "Lalalabodadeeda-deebadaaaa!",
+                                "Beep-badayadadeep!"],
 #high roller phase 1
 'HighRollerNoAttack': ["nothing"],
 'HighRollerWheelSpin': "Wheel Spin!",

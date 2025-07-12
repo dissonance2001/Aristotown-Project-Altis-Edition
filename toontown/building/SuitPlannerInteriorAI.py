@@ -262,10 +262,13 @@ class SuitPlannerInteriorAI:
             activeSuits.append(miniboss)
         elif specialCode == 'crf2':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'm', 28, 0)
-            miniboss2 = self.__genSuitObject(self.zoneId, 20, 's', 20, random.choice((0, 1, 2)))
-            miniboss3 = self.__genSuitObject(self.zoneId, 20, 's', 20, random.choice((0, 1, 2)))
-            miniboss4 = self.__genSuitObject(self.zoneId, 20, 's', 20, random.choice((0, 1, 2)))
-            miniboss5 = self.__genSuitObject(self.zoneId, 20, 's', 20, random.choice((0, 1, 2)))
+            activeSuits.append(miniboss)
+        elif specialCode == 'videog':
+            miniboss = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
+            miniboss2 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
+            miniboss3 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
+            miniboss4 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
+            miniboss5 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
             activeSuits.append(miniboss3)
@@ -363,6 +366,9 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'crf2':
             suit = self.__genSuitObject(self.zoneId, 27, 'm', 27, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'videog':
+            suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             reserveSuits.append(suit)
         if specialCode == 'gtk':
             # generate random bossbot from lv 12 to 20

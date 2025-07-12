@@ -366,15 +366,16 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             winded = True
 
         def labelColorize(damage, param):
+            button = self.buttons[track][level]
             if allGagBoost:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['allGagBoost'][0]
             else:
                 val = base.localAvatar.battleConditions[param][0]
             if base.localAvatar.battleConditions[param][0] > 0.0:
-                self.detailDataLabel['text_fg'] = (0.7, 0.3, 0.7, 1.0)
+                self.detailDataLabel['text_fg'] = (0, 1, 0.949, 1.0)
                 return " (+{}%)".format(val)
             elif base.localAvatar.battleConditions[param][0] < 0.0:
-                self.detailDataLabel['text_fg'] = (7.0, 0.0, 0.0, 1.0)
+                self.detailDataLabel['text_fg'] = (1, 0.984, 0, 1.0)
                 return " ({}%)".format(val)
             else:
                 self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
@@ -382,10 +383,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
         def labelColorizeJustAll(damage, param):
             if base.localAvatar.battleConditions[param][0] > 0.0:
-                self.detailDataLabel['text_fg'] = (0.7, 0.3, 0.7, 1.0)
+                self.detailDataLabel['text_fg'] = (0, 1, 0.949, 1.0)
                 return " (+{}%)".format(base.localAvatar.battleConditions[param][0])
             elif base.localAvatar.battleConditions[param][0] < 0.0:
-                self.detailDataLabel['text_fg'] = (7.0, 0.0, 0.0, 1.0)
+                self.detailDataLabel['text_fg'] = (1, 0.984, 0, 1.0)
                 return " ({}%)".format(base.localAvatar.battleConditions[param][0])
             else:
                 self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
@@ -1318,8 +1319,126 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         else:
                             self.makeNoncreditPressable(button, track, level)
 
-                        if self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
-                            self.makeUnpressable(button, track, level)
+                        if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['allGagBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['allGagBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'lureBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0 and track == LURE_TRACK:
+                            if base.localAvatar.battleConditions['lureBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'lureBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['lureBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0 and track == LURE_TRACK:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'healBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['healBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0 and track == HEAL_TRACK:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'healBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['healBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0 and track == HEAL_TRACK:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'trapBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['trapBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0 and track == TRAP_TRACK:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'trapBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['trapBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0 and track == TRAP_TRACK:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'throwBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['throwBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0 and track == THROW_TRACK:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'throwBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['throwBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0 and track == THROW_TRACK:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'squirtBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['squirtBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0 and track == SQUIRT_TRACK:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'squirtBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['squirtBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0 and track == SQUIRT_TRACK:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'dropBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['dropBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0 and track == DROP_TRACK:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'dropBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['dropBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0 and track == DROP_TRACK:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'soundBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['soundBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0 and track == SOUND_TRACK:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'soundBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['soundBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0 and track == SOUND_TRACK:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'zapBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['zapBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0 and track == ZAP_TRACK:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'zapBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['zapBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0 and track == ZAP_TRACK:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'encore2' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageUpPressable(button, track, level)
+                        if 'encore' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageUpPressable(button, track, level)
+                        if track == SOUND_TRACK and 'winded' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == SOUND_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == SQUIRT_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == ZAP_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 5 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 3 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
                         if 'noDamage' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
                             self.makeUnpressable(button, track, level)
                         if 'noGags' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
@@ -1389,6 +1508,35 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                 (self.numItem(track,
                                               level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
                             self.makeBannablePressable(button, track, level)
+                        if track == SOUND_TRACK and 'confused' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'confused' in base.localAvatar.battleConditions and level == 7 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'confused' in base.localAvatar.battleConditions and level == 5 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'confused' in base.localAvatar.battleConditions and level == 3 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'confused' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'confused' in base.localAvatar.battleConditions and level == 7 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'confused' in base.localAvatar.battleConditions and level == 5 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'confused' in base.localAvatar.battleConditions and level == 3 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'confused' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
+                            self.makeUnpressable(button, track, level)
 
                     else:
                         button.hide()
@@ -1552,6 +1700,30 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             shadowColor = self.ShadowColor
         button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
         button.configure(image_color=(0, 1, 0.047, 1))
+        self.addToPropBonusIval(button)
+
+    def makeDamageUpPressable(self, button, track, level):
+        organicBonus = self.toon.checkGagBonus(track, level)
+        propBonus = self.checkPropBonus(track)
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.ShadowBuffedColor
+        else:
+            shadowColor = self.ShadowColor
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
+        button.configure(image_color=(0, 1, 0.949, 1))
+        self.addToPropBonusIval(button)
+
+    def makeDamageDownPressable(self, button, track, level):
+        organicBonus = self.toon.checkGagBonus(track, level)
+        propBonus = self.checkPropBonus(track)
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.ShadowBuffedColor
+        else:
+            shadowColor = self.ShadowColor
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
+        button.configure(image_color=(1, 0.984, 0, 1))
         self.addToPropBonusIval(button)
 
     def makeDeletePressable(self, button, track, level):

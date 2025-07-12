@@ -870,7 +870,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ScapegoatEnraged':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 heldRelativeShot(suit, 0.0, 6.8096, 7, -180, -20.0, 0.0, attackDuration)))
+                                 heldRelativeShot(suit, 0.0, 7, 6, -180, -20.0, 0.0, attackDuration)))
     elif name == 'ScapegoatGavel':
         camTrack.append(defaultCamera(openShotDuration=2))
     elif name == 'ScapegoatBarnyardBash':
@@ -1142,13 +1142,15 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RadiographerRadioInfrequency':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RadiographerHotTake':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0.5, attackDuration=1.5), randomActorShot(suit, battle, attackDuration - 1.5, 'suit')))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=3.0), randomActorShot(suit, battle, attackDuration - 3, 'suit')))
     elif name == 'RadiographerHotTakeRetaliation':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0.5, attackDuration=1.5), randomActorShot(suit, battle, attackDuration - 1.5, 'suit')))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=3.0), randomActorShot(suit, battle, attackDuration - 3, 'suit')))
     elif name == 'RadiographerOvermodulated':
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'RadiographerDanceSession':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     #high roller phase 1 cheats
     elif name == 'HighRollerNoAttack':
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')

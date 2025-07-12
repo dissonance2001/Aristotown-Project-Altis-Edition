@@ -435,7 +435,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
-        suitTrack.append(Func(suit.setNeutralAnimation))
+        suitTrack.append(Func(suit.setNeutralAnimationDrop))
         suitIndex = battle.activeSuits.index(suit)
         suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
         suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))

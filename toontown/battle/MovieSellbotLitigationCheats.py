@@ -622,14 +622,14 @@ def doHighPressure(attack):
         suitTrack = getSuitAnimTrack(attack, playRate=2.0)
         suitTrack.append(Wait(1.75))
         suitTrack.append(Func(suit.showHpTextCheat, - int(100 * len(battle.activeToons))))
-        suitTrack.append(Func(suit.showHpString, "BOMBED!"))
+        suitTrack.append(Func(suit.showHpString, "OVERWORKED!"))
         suitTrack.append(Func(suit.setHealthForMe, - (100 * len(battle.activeToons))))
         suitTrack.append(Func(suit.updateHealthBar, 0))
         suitTrack.append(Parallel(Func(suit.checkCogHPBomb, battle), ActorInterval(suit, 'slip-backward')))
         suitTracks.append(suitTrack)
         revives = suit.getMaxSkeleRevives() + 1
         suitTrack.append(Func(suit.setNeutralAnimation))
-    posPoints = [Point3(-0.4, 0, -.5), VBase3(0, 0, 90)]
+    posPoints = [Point3(-0.65, 0, -0.35), VBase3(0, 0, 90)]
     knifeTracks = Parallel()
     sparkTracks = Parallel()
     suitPos, suitHpr = battle.getActorPosHpr(theSuit)
@@ -645,8 +645,12 @@ def doHighPressure(attack):
     for t in targets:
         toon = t['toon']
         knife = globalPropPool.getProp('tnt')
+        tip = knife.find('**/joint_attachEmitter')
+        sparks = BattleParticles.createParticleEffect(file='tnt')
+        knife.sparksEffect = sparks
         knifeTrack = Sequence(
             getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 0.25, scaleUpPoint=Point3(.9), scaleUpTime=0.1),
+            Func(sparks.start, tip),
             Wait(1.3),
             Parallel(
                 getThrowTrack(knife, toon.getPos(battle), 2.35, battle, -64.288),
@@ -825,6 +829,21 @@ def doPromotion(attack, ind):
     battle = attack['battle']
     targetPos2 = toon.getPos(battle)
     headsUp2 = Func(suit.headsUp, battle, targetPos2)
+    cage = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
+    toonPos = toon.getPos(battle)
+    suitPos = targetSuit.getPos(battle)
+    y = suitPos.getY()
+    cagePos = [Point3(suitPos.getX(), y, 0), VBase3(0, 0, 0)]
+    cagePropTrack = Sequence(Wait(suit.getDuration('walk')),
+                             getPropAppearTrack(cage, battle, cagePos, .5, scaleUpPoint=Point3(1), scaleUpTime=0.1),
+                             Parallel(
+                                 cage.posInterval(0.5, Point3(suitPos.getX(), y, 0.1), blendType='easeIn'),
+                             ),
+                             Wait(4.8),
+                             LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
+                             LerpScaleInterval(cage, .25, MovieUtil.PNT3_ZERO),
+                             Func(MovieUtil.removeProp, cage)
+                             )
     moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('mob-mentality')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, dropPos))
     suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
     sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
@@ -838,7 +857,7 @@ def doPromotion(attack, ind):
                                Func(targetSuit.setNeutralAnimation))
     soundTrack = getSoundTrack('TL_hypnotize.ogg', delay=2.5, node=suit)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=5.7)
-    return Parallel(suitTrack, sprayTrack, moveTrack, selfDamageTrack, soundTrack2, soundTrack, spinTrack1, spinTrack2, spinTrack3)
+    return Parallel(suitTrack, cagePropTrack, sprayTrack, moveTrack, selfDamageTrack, soundTrack2, soundTrack, spinTrack1, spinTrack2, spinTrack3)
 
 def doViolation(attack):
     suit = attack['suit']
@@ -1313,7 +1332,7 @@ def doExtortion(attack):
         unFreezeEffect.setPos(0, 0, facePoint.getZ())
         partTrack4 = getPartTrack(sprayEffect, 1, 5.0, [sprayEffect2, toon, 0], softStop=-1)
         partTracks4.append(partTrack4)
-        toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.25)
+        toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.5)
         toonAnimTracks.append(toonAnimTrack)
         suitTrack.append(Sequence(Func(suit.setHealthForMe, + dmg), Func(suit.updateHealthBar, 0)))
         selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, +dmg))
@@ -1367,7 +1386,7 @@ def doExtortion2(attack):
                                    Func(suit.updateHealthBar, 0))
         notifyTrack = Sequence(Wait(1), Func(toon.showHpTextCheat, - int(dmg)))
         soundTrack = getSoundTrack('SA_ink_drain.ogg', delay=0, node=suit)
-        toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.25)
+        toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.5)
         if dmg > 0:
             partTracks4.append(partTrack4)
             suitTracks.append(suitTrack)
@@ -1485,13 +1504,24 @@ def doRadioInfrequency(attack):
     sprayEffect.setDepthTest(0)
     sprayEffect.setTwoSided(1)
     sprayTrack = Sequence(Wait(1.5))
+    makeDanceSession = Func(suit.removeDanceSession)
     sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
     sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
     suitTrack = Sequence(ActorInterval(suit, 'glower', duration=1.5), Wait(4.0),
                          ActorInterval(suit, 'glower', startTime=1.5), Func(suit.setNeutralAnimation))
     suitTrack2 = getSuitAnimTrack(attack)
     soundTrack = getSoundTrack('mus_dialup_0.ogg', delay=1.5)
-    return Parallel(suitTrack, soundTrack, suitTrack2, sprayTrack)
+    return Parallel(suitTrack, soundTrack, makeDanceSession, suitTrack2, sprayTrack)
+
+def doDanceSession(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    tauntIndex = attack['taunt']
+    makeDanceSession = Func(suit.makeDanceSession)
+    suitTrack = getSuitAnimTrack(attack)
+    toonTracks = getToonTracks(attack, 4.1, ['victory'], 4.1, ['victory'])
+    soundTrack = getSoundTrack('AA_heal_happydance.ogg', delay=.01, node=suit)
+    return Parallel(suitTrack, soundTrack, toonTracks, makeDanceSession)
 
 def doHotTake(attack):
     suit = attack['suit']
@@ -1502,12 +1532,12 @@ def doHotTake(attack):
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
     explosionTrack = Sequence()
-    explosionTrack.append(Wait(0.8))
+    explosionTrack.append(Wait(2.25))
     explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     gearPoint2 = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
     explosionTrack2 = Sequence()
-    explosionTrack2.append(Wait(1.5))
+    explosionTrack2.append(Wait(suit.getDuration('throw-object') - 1.5))
     explosionTrack2.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint2, scale=3))
     explode = []
     for i in xrange(0, 3):
@@ -1519,7 +1549,7 @@ def doHotTake(attack):
     explodeTracks = Parallel()
     for i in xrange(0, 3):
         explodeTrack = Sequence()
-        explodeTrack.append(Wait(0.8))
+        explodeTrack.append(Wait(2.25))
         explodeTrack.append(
             getPropAppearTrack(explode[i], suit, explodePosPoints, 1e-06, Point3(1.7, 1.7, 1.7), scaleUpTime=0.1))
         explodeTrack.append(
@@ -1531,7 +1561,10 @@ def doHotTake(attack):
         explodeTracks.append(explodeTrack)
     dmg = target[0]['hp']
     tnt = globalPropPool.getProp('tnt')
-    suitTrack = Sequence(getSuitAnimTrack(attack), Func(suit.showHpTextCheat, - (dmg * 4)), Func(suit.showHpString, "BOMBED!"), Func(suit.setHealthForMe, - (dmg * 4)), Func(suit.updateHealthBar, 0), ActorInterval(suit, 'slip-backward'), Func(suit.setNeutralAnimation))
+    tip = tnt.find('**/joint_attachEmitter')
+    sparks = BattleParticles.createParticleEffect(file='tnt')
+    tnt.sparksEffect = sparks
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5), Func(suit.showHpTextCheat, - (dmg * 4)), Func(suit.showHpString, "BOMBED!"), Func(suit.setHealthForMe, - (dmg * 4)), Func(suit.updateHealthBar, 0), ActorInterval(suit, 'slip-backward'), Func(suit.setNeutralAnimation))
     suitTrack.append(Func(suit.setNeutralAnimation))
     revives = suit.getMaxSkeleRevives() + 1
     if suit.isVirtual and revives > 2:
@@ -1544,19 +1577,19 @@ def doHotTake(attack):
         suitTrack.append(Func(suit.checkCogHPLaser, battle))
     elif not suit.isVirtual:
         suitTrack.append(Func(suit.checkCogHPBomb, battle))
-    posPoints = [Point3(-0.04, -0.15, -0.78), VBase3(10.584, -11.945, 18.316)]
-    propTrack = Sequence(Wait(0.5),
-        getPropAppearTrack(tnt, suit.getLeftHand(), posPoints, 0, MovieUtil.PNT3_ONE, scaleUpTime=0))
-    propTrack.append(Wait(0.1))
+    posPoints = [Point3(-0.65, 0, -0.35), VBase3(0, 0, 90)]
+    propTrack = Sequence(getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+    propTrack.append(Func(sparks.start, tip))
+    propTrack.append(Wait(1.5))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)
     missPoint = __toonGroundPoint(attack, toon, 0.1, parent=battle)
     missPoint.setX(missPoint.getX() - 1.1)
     propTrack.append(getPropThrowTrack(attack, tnt, [hitPoint], [missPoint], .25, parent=battle))
-    toonTrack = getToonTrackCheat(attack, 0.75, ['slip-forward'], 0.5, ['jump'])
-    soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=0.75)
-    soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5)
-    notifyTrack = Sequence(Wait(0.75), Func(toon.showHpTextCheat, - int(dmg)),
+    toonTrack = getToonTrackCheat(attack, 2.25, ['slip-forward'], 0.5, ['jump'])
+    soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
+    soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=suit.getDuration('throw-object') - 1.5)
+    notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextCheat, - int(dmg)),
                            Func(toon.showHpStringSnipe, "BOMBED!"))
     return Parallel(explodeTracks, suitTrack, toonTrack, notifyTrack, soundTrack, soundTrack2, propTrack, explosionTrack, explosionTrack2)
 

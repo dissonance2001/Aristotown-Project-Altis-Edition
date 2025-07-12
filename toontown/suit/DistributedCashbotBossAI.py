@@ -84,6 +84,20 @@ class DistributedCashbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
+            cogs = self.invokeEmptyPlanner(11, 'videog')
+            activeSuits = cogs['activeSuits']
+            reserveSuits = cogs['reserveSuits']
+            while len(activeSuits) >= 6:
+                suit = activeSuits.pop()
+                reserveSuits.append((suit, 100))
+
+            def compareJoinChance(a, b):
+                return cmp(a[1], b[1])
+
+            reserveSuits.sort(compareJoinChance)
+            return {'activeSuits': activeSuits,
+                    'reserveSuits': reserveSuits}
+        if battleNumber == 3:
             cogs = self.invokeEmptyPlanner(11, 'crf2')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
@@ -104,6 +118,10 @@ class DistributedCashbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
             reserveSuits = cogs['reserveSuits']
             return {'reserveSuits': reserveSuits}
         elif battleNumber == 2:
+            cogs = self.invokeReservesPlanner(11, 'videog')
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
+        elif battleNumber == 3:
             cogs = self.invokeReservesPlanner(11, 'crf2')
             reserveSuits = cogs['reserveSuits']
             return {'reserveSuits': reserveSuits}
@@ -506,7 +524,7 @@ class DistributedCashbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
 
     def exitRollToBattleTwo(self):
         self.ignoreBarrier(self.barrier)
-        
+
     def enterBattleTwo(self):
         if self.battle:
             self.battle.startBattle(self.toons, self.suits)
@@ -514,30 +532,65 @@ class DistributedCashbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
     def exitBattleTwo(self):
         self.resetBattles()
 
+    def makeBattleThreeBattles(self):
+        self.postBattleState = 'PrepareBattleFour'
+        self.initializeBattles(3, ToontownGlobals.CashbotBossBattleOnePosHpr)
+
     def enterPrepareBattleThree(self):
-        self.resetBattles()
+        self.barrier = self.beginBarrier('PrepareBattleThree', self.involvedToons, 45, self.__donePrepareBattleThree)
+        self.divideToons()
+        self.makeBattleThreeBattles()
         self.__makeBattleThreeObjects()
         self.__resetBattleThreeObjects()
         self.calcAndSetBattleDifficulty()
-        self.barrier = self.beginBarrier('PrepareBattleThree', self.involvedToons, 55, self.__donePrepareBattleThree)
 
     def __donePrepareBattleThree(self, avIds):
         self.b_setState('BattleThree')
 
     def exitPrepareBattleThree(self):
+        self.ignoreBarrier(self.barrier)
+        self.__deleteBattleThreeObjects()
+
+    def enterRollToBattleThree(self):
+        self.barrier = self.beginBarrier('RollToBattleThree', self.involvedToons, 1, self.__doneRollToBattleThree)
+
+    def __doneRollToBattleThree(self, avIds):
+        self.b_setState('PrepareBattleThree')
+
+    def exitRollToBattleThree(self):
+        self.ignoreBarrier(self.barrier)
+        
+    def enterBattleThree(self):
+        if self.battle:
+            self.battle.startBattle(self.toons, self.suits)
+
+    def exitBattleThree(self):
+        self.resetBattles()
+
+    def enterPrepareBattleFour(self):
+        self.resetBattles()
+        self.__makeBattleFourObjects()
+        self.__resetBattleFourObjects()
+        self.calcAndSetBattleDifficulty()
+        self.barrier = self.beginBarrier('PrepareBattleThree', self.involvedToons, 55, self.__donePrepareBattleFour)
+
+    def __donePrepareBattleFour(self, avIds):
+        self.b_setState('BattleThree')
+
+    def exitPrepareBattleFour(self):
         if self.newState != 'BattleThree':
-            self.__deleteBattleThreeObjects()
+            self.__deleteBattleFourObjects()
         self.ignoreBarrier(self.barrier)
 
-    def enterBattleThree(self):
+    def enterBattleFour(self):
         self.setPosHpr(*ToontownGlobals.CashbotBossBattleThreePosHpr)
-        self.__makeBattleThreeObjects()
-        self.__resetBattleThreeObjects()
+        self.__makeBattleFourObjects()
+        self.__resetBattleFourObjects()
         self.reportToonHealth()
         self.toonsToAttack = self.involvedToons[:]
         random.shuffle(self.toonsToAttack)
         self.b_setBossDamage(0)
-        self.battleThreeStart = globalClock.getFrameTime()
+        self.battleFourStart = globalClock.getFrameTime()
         self.resetBattles()
         self.waitForNextAttack(15)
         self.waitForNextHelmet()
@@ -678,8 +731,8 @@ def restartCraneRound():
     if not boss:
         return "You aren't in a CFO!"
     boss.exitIntroduction()
-    boss.b_setState('PrepareBattleThree')
-    boss.b_setState('BattleThree')
+    boss.b_setState('PrepareBattleFour')
+    boss.b_setState('BattleFour')
     return 'Restarting the crane round...'
 
 
@@ -697,10 +750,10 @@ def skipCFO():
                 break
     if not boss:
         return "You aren't in a CFO!"
-    if boss.state in ('PrepareBattleThree', 'BattleThree'):
+    if boss.state in ('PrepareBattleFour', 'BattleFour'):
         return "You can't skip this round."
     boss.exitIntroduction()
-    boss.b_setState('PrepareBattleThree')
+    boss.b_setState('PrepareBattleFour')
     return 'Skipping the first round...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
@@ -720,6 +773,24 @@ def cfo2():
     boss.exitIntroduction()
     boss.b_setState('PrepareBattleTwo')
     return 'Skipping the first round...'
+
+@magicWord(category=CATEGORY_PROGRAMMER)
+def cfo3():
+    """
+    Skips to the next round of the CFO.
+    """
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedCashbotBossAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+    if not boss:
+        return "You aren't in a CFO!"
+    boss.exitIntroduction()
+    boss.b_setState('PrepareBattleThree')
+    return 'Skipping the second round...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
 def killCFO():

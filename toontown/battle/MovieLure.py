@@ -215,7 +215,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
-                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2':
+                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'videog':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
@@ -324,7 +324,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
-                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2':
+                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'videog':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
@@ -432,7 +432,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
-                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2':
+                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'videog':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
@@ -1228,7 +1228,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
-                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2':
+                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'videog':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))

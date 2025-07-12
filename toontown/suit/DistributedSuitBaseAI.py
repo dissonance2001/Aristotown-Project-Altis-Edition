@@ -228,7 +228,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         if executive == None:
             executive = 0
         self.executive = executive
-        if self.dna.name == 'jb':
+        if self.dna.name == 'mh2':
             self.maxHP = int(((self.maxHP * random.choice((.5, .51,
                                                            .52, .53, .54, .55, .56, .57, .58, .59, .6, .61, .62,
                                                            .63, .64, .65, .66, .67, .68, .69,
@@ -244,12 +244,12 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
                                                            , 1.41, 1.42, 1.43, 1.44, 1.45, 1.46, 1.47, 1.48, 1.49,
                                                            1.5)))))
             self.currHP = self.maxHP
-        if self.dna.name == 'cg' or self.dna.name == 'csh' or self.dna.name == 'fas' or self.dna.name == 'gkp' \
+        if self.dna.name == 'autocad' or self.dna.name == 'maudit' or self.dna.name == 'chairp' or self.dna.name == 'watchm' \
                 or self.dna.name == 'ant':
             self.maxHP = int((((self.maxHP * random.choice((.90, .91, .92, .93,
                                            .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1))) * ToontownBattleGlobals.EXECUTIVE_HP_MULT)))
             self.currHP = self.maxHP
-        if self.executive and not self.dna.name == 'jb' and not self.dna.name == 'cg' and not self.dna.name == 'csh' and not self.dna.name == 'fas' and not self.dna.name == 'gkp' \
+        if self.executive and not self.dna.name == 'mh2' and not self.dna.name == 'autocad' and not self.dna.name == 'maudit' and not self.dna.name == 'watchm' and not self.dna.name == 'chairp' \
                 and not self.dna.name == 'ant':
             self.maxHP = int(self.maxHP * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
             self.currHP = self.maxHP
@@ -310,7 +310,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         if manager == None:
             manager = 0
         self.manager = manager
-        if self.dna.name == 'mad':
+        if self.dna.name == 'hrollers':
             self.maxHP = random.choice((12000, 12100, 12275, 12400, 12500, 12600, 12700, 12800, 12900, 13000))
             self.currHP = self.maxHP
 

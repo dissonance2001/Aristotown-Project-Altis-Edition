@@ -510,6 +510,8 @@ def doSuitAttack(attack):
         suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
     elif name == 'RadiographerOvermodulated':
         suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 2)
+    elif name == 'RadiographerDanceSession':
+        suitTrack = MovieSellbotLitigationCheats.doDanceSession(attack)
         # high roller phase 1
     elif name == 'HighRollerNoAttack':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
@@ -736,7 +738,7 @@ def doSuitAttack(attack):
     unlureSuit = Parallel(Func(suit.makeUnLured), Func(battle.unlureSuit, suit))
     checkLuredCog = Func(suit.checkCogLured, battle)
     unlureSuit = Func(suit.makeUnLured)
-    suitTrack = Sequence(unlureSuit, preWalkTrack, suitTrack, neutralIval, toonHprTrack)
+    suitTrack = Sequence(preWalkTrack, suitTrack, neutralIval, toonHprTrack)
     suitPos = suit.getPos(battle)
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     resetTrack = getResetTrack(suit, battle)
@@ -850,7 +852,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     for s in battle.activeSuits:
         if s.dna.name == 'psetter':
             theSuit = s
-            track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
+            track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .25))
     if attack[
         'suitName'] == 'nothing':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
@@ -2103,7 +2105,7 @@ def doFingerWag(attack):
     damageDelay = 2.7
     dodgeDelay = 1.7
     suitTrack = getSuitTrack(attack)
-    partTracks = getPartTracks(attack, particleEffects, partDelay, 5.0, 0, softStop=-3.0)
+    partTracks = getPartTracks(attack, particleEffects, partDelay, 4.0, 0, softStop=-2.0)
     toonTracks = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['sidestep'])
     soundTrack = getSoundTrack('SA_finger_wag.ogg', delay=1.3, node=suit)
     return Parallel(suitTrack, toonTracks, partTracks, soundTrack)
@@ -2732,7 +2734,7 @@ def doBuzzWord(attack):
 
     suitType = getSuitBodyType(attack['suitName'])
     partDelay = 2.25
-    partDuration = 3
+    partDuration = 2.5
     damageDelay = 2.5
     dodgeDelay = 2.0
     suitName = suit.getStyleName()
@@ -3121,7 +3123,7 @@ def doReOrg(attack):
     BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
                                      color=Vec4(1, 0, 0, 1))
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    partTracks = getPartTrack(sprayEffects, 0.5, 3.5, [sprayEffects, suit, 0], softStop=-1)
+    partTracks = getPartTrack(sprayEffects, 0.5, 3.0, [sprayEffects, suit, 0], softStop=-1)
     allHeadTracks = Parallel()
     allChestTracks = Parallel()
     for t in targets:
@@ -3200,7 +3202,7 @@ def doSacked(attack):
     else:
         hitPoint.setZ(hitPoint.getZ() - 0.2)
     sackAppearTrack.append(Func(battle.movie.needRestoreRenderProp, sack))
-    sackAppearTrack.append(getThrowTrack(sack, hitPoint, duration=throwDuration, parent=battle))
+    sackAppearTrack.append(getThrowTrack(sack, hitPoint, duration=throwDuration, parent=battle, gravity=-200))
     explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
     if dmg > 0:
         sack2 = MovieUtil.copyProp(sack)
@@ -3963,9 +3965,9 @@ def doCigarSmoke(attack):
     dmg = target[0]['hp']
     tauntIndex = attack['taunt']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    if suit.dna.name == 'tld' and not suit.isSkeleton:
+    if suit.dna.name == 'hho' and not suit.isSkeleton:
         return doHeadHonchoCigarSmoke(attack)
-    elif suit.dna.name == 'ffm':
+    elif suit.dna.name == 'fires' and not suit.isSkeleton:
         return doFirestarterCigarSmoke(attack)
     else:
         pass
@@ -3982,7 +3984,7 @@ def doCigarSmoke(attack):
     cigarPropTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0, 2.6, scaleUpPoint=Point3(7.0, 7.0, 7.0))
     toonTrack = getToonTrack(attack, 2.55, ['cringe'], 2.0, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
-    smokeTrack = getPartTrack(smoke, 2.45, 3.5, [smoke, suit, 0], softStop=-2)
+    smokeTrack = getPartTrack(smoke, 2.45, 3.0, [smoke, suit, 0], softStop=-2)
     multiTrackList.append(cigarPropTrack)
     multiTrackList.append(smokeTrack)
 
@@ -4155,7 +4157,7 @@ def doShake(attack):
     suitTrack = getSuitAnimTrack(attack)
     damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
     dodgeAnims = [['jump'], ['jump', 0.01]]
-    soundTrack = getSoundTrack('SA_tremor.ogg', delay=0.9, node=suit)
+    soundTrack = getSoundTrack('SA_shake.ogg', delay=0.9, node=suit)
     toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
     return Parallel(suitTrack, toonTracks, soundTrack)
 
@@ -5608,7 +5610,7 @@ def doHeadHonchoCigarSmoke(attack):
     #cigarPropTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.6, 3.6,
                                   #scaleUpPoint=Point3(6.0, 6.0, 6.0))
     toonTrack = getToonTrack(attack, 2.55, ['cringe'], 2.0, ['sidestep'])
-    smokeTrack = getPartTrack(smoke, 2.45, 2.5, [smoke, suit, 0], softStop=-1)
+    smokeTrack = getPartTrack(smoke, 2.45, 3.0, [smoke, suit, 0], softStop=-2)
     suitTracks = Parallel()
     multiTrackList = Parallel(suitTracks, toonTrack)
     multiTrackList.append(smokeTrack)

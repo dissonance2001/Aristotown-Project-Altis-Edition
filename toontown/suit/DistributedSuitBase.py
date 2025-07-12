@@ -911,7 +911,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.updateHealthBar(0, 1)
 
     def exitBattle(self):
-        base.musicManager.stopAllSounds()
+      #  base.musicManager.stopAllSounds()
         if not self.virtual:
             self.healthBar.hide()
             self.corpMedallion.show()

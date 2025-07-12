@@ -768,14 +768,7 @@ def doSnap(attack, suit):
             hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.2), LerpHprInterval(teeth, 0.4, Point3(180, -35, 0), startHpr=Point3(180, 0, 0)), Wait(0.1), LerpHprInterval(teeth, 0.1, Point3(180, -75, 0), startHpr=Point3(180, -35, 0)))
             animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'litigator-teeth', duration=throwDuration), ActorInterval(teeth, 'litigator-teeth', duration=0.3), Func(teeth.pose, 'litigator-teeth', 1), Wait(0.7), ActorInterval(teeth, 'litigator-teeth', duration=0.9))
             propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(MovieUtil.removeProp, teeth), Func(battle.movie.clearRenderProp, teeth))
-        else:
-            flyPoint = __toonFacePoint(toon, parent=battle)
-            flyPoint.setY(flyPoint.getY() - 7.1)
-            teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
-            teethAppearTrack.append(Func(MovieUtil.removeProp, teeth))
-            teethAppearTrack.append(Func(battle.movie.clearRenderProp, teeth))
-            propTrack = teethAppearTrack
-        propTracks.append(propTrack)
+            propTracks.append(propTrack)
 
     damageAnims = [['cringe',
       0.01,

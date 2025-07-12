@@ -199,7 +199,7 @@ mslacker - Multislacker Level 24.mgr
 psetter - Pacesetter Level 66.mgr
 
 	High Roller Manager:
-videog - Videographer Level 90.mgr (broken)
+videog - Videographer Level 77.mgr
 
 	Sellbot 'Litigation' Team:
 radiog - Radiographer Level 32.mgr

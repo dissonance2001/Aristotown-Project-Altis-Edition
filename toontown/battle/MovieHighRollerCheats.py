@@ -665,13 +665,13 @@ def doNoAttack(attack):
     suit = attack['suit']
     battle = attack['battle']
     currentBossHealth = -1
-    if suit.isImmortal and not suit.dna.name == 'dsf':
+    if suit.isImmortal and not suit.dna.name == 'hroller':
         suitTrack = Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0), Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',)))
         suitTrack.append(Func(suit.makeNonImmortal))
     else:
         suitTrack = Sequence()
     for s in battle.suits:
-        if s.dna.name == 'mad' and s.maxHP == 12000:
+        if s.dna.name == 'hrollers' and s.maxHP == 12000:
             currentBossHealth = s.currHP
     if currentBossHealth >= 1:
         for s in battle.activeSuits:
@@ -1970,6 +1970,18 @@ def doGameTimeCog2(attack, ind):
     cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
     suitPos = targetSuit.getPos(battle)
     y = suitPos.getY()
+    cage2 = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
+    cagePos2 = [Point3(suitPos.getX(), y, 0), VBase3(0, 0, 0)]
+    cagePropTrack2 = Sequence(
+                             getPropAppearTrack(cage2, battle, cagePos2, .5, scaleUpPoint=Point3(1), scaleUpTime=0.1),
+                             Parallel(
+                                 cage2.posInterval(0.5, Point3(suitPos.getX(), y, 0.1), blendType='easeIn'),
+                             ),
+                             Wait(13),
+                             LerpFunctionInterval(cage2.setAlphaScale, fromData=1, toData=0, duration=1.0),
+                             LerpScaleInterval(cage2, .25, MovieUtil.PNT3_ZERO),
+                             Func(MovieUtil.removeProp, cage2)
+                             )
     cagePos = [Point3(0, 0, targetSuit.height + 15), targetSuit.getHpr(battle)]
     for headPart in targetSuit.headParts:
         head = headPart
@@ -2091,7 +2103,7 @@ def doGameTimeCog2(attack, ind):
                                , Parallel(managerTrackQuestion5, suitTrackQuestion5), Parallel(managerTrackQuestion6, suitTrackQuestion6), Parallel(managerTrackQuestion4, suitTrackQuestion4)))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=manager))
     soundTrack2 = getSoundTrack('LB_camera_shutter_2.ogg', delay=1, node=manager)
-    return Parallel(managerTrack, suitTrack, soundTrack, soundTrack2, cagePropTrack, selfDamageTrack)
+    return Parallel(managerTrack, suitTrack, soundTrack, cagePropTrack2, soundTrack2, cagePropTrack, selfDamageTrack)
 
 def doGameTimeCog(attack, ind):
     manager = attack['suit']
@@ -2114,6 +2126,18 @@ def doGameTimeCog(attack, ind):
     suitPos = targetSuit.getPos(battle)
     y = suitPos.getY()
     cagePos = [Point3(0, 0, targetSuit.height + 15), targetSuit.getHpr(battle)]
+    cage2 = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
+    cagePos2 = [Point3(suitPos.getX(), y, 0), VBase3(0, 0, 0)]
+    cagePropTrack2 = Sequence(
+        getPropAppearTrack(cage2, battle, cagePos2, .5, scaleUpPoint=Point3(1), scaleUpTime=0.1),
+        Parallel(
+            cage2.posInterval(0.5, Point3(suitPos.getX(), y, 0.1), blendType='easeIn'),
+        ),
+        Wait(13),
+        LerpFunctionInterval(cage2.setAlphaScale, fromData=1, toData=0, duration=1.0),
+        LerpScaleInterval(cage2, .25, MovieUtil.PNT3_ZERO),
+        Func(MovieUtil.removeProp, cage2)
+    )
     for headPart in targetSuit.headParts:
         head = headPart
     cagePropTrack = Sequence(
@@ -2241,7 +2265,7 @@ def doGameTimeCog(attack, ind):
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=manager))
     soundTrack2 = getSoundTrack('LB_camera_shutter_2.ogg', delay=1, node=manager)
     soundTrack5 = getSoundTrack('LB_toonup.ogg', delay=16, node=manager)
-    return Parallel(managerTrack, suitTrack, soundTrack, soundTrack2, cagePropTrack, soundTrack5, selfDamageTrack)
+    return Parallel(managerTrack, suitTrack, soundTrack, soundTrack2, cagePropTrack2, cagePropTrack, soundTrack5, selfDamageTrack)
 
 def doConduction(attack):
     suit = attack['suit']

@@ -816,11 +816,9 @@ def __doWaterBalloon(squirt, delay, fShowStun):
         balloonTrack.append(Func(battle.movie.clearRenderProp, balloons[0]))
 
     else:
-        missDict = {}
-        suitPoint = MovieThrow.__suitMissPoint(suit, other=battle)
-        balloonTrack.append(Func(MovieThrow.__piePreMiss, missDict, balloon, suitPoint, battle))
-        balloonTrack.append(LerpFunctionInterval(__pieMissLerpCallback, extraArgs=[missDict],
-                                                 duration=(tContact - tLaunch) * ratioMissToHit))
+        balloonTrack.append(LerpPosInterval(balloon, tContact - tLaunch,
+                                            pos=MovieUtil.avatarFacePoint(suit, other=battle),
+                                            name=pieFlyTaskName, other=battle))
         balloonTrack.append(Func(MovieUtil.removeProps, balloons))
         balloonTrack.append(Func(battle.movie.clearRenderProp, balloons[0]))
     tracks.append(balloonTrack)
