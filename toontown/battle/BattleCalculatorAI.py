@@ -870,7 +870,9 @@ class BattleCalculatorAI:
             else:
                 targetId = targetList[currTarget].getDoId()
             if atkTrack == SUE:
-                self.setSuitCondition(targetId, 'sued', 1, 4, 'setBoth')
+                suit = self.battle.findSuit(targetId)
+                if not suit.getManager() and suit.currHP <= (suit.maxHP * 1.5) and not self.suitHasCondition(targetId, 'insured'):
+                    self.setSuitCondition(targetId, 'sued', 1, 4, 'setBoth')
             elif atkTrack == LURE:
                 self.currentlyImmuneSuits = self.getImmuneSuits()
                 if targetId not in self.currentlyImmuneSuits:
@@ -1079,7 +1081,6 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
-                    bonus = 0
                 elif atkTrack == HEAL:
                     if self.toonHasCondition(toon.doId, 'nolevel8s') and attackLevel == 7:
                         self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')

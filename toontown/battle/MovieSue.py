@@ -68,7 +68,7 @@ def doSues(sues):
     totalHitDict = {}
     singleHitDict = {}
     groupHitDict = {}
-    
+
     i = 0
     for sue in sues:
         if doAdd:

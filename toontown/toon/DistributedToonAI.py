@@ -5169,6 +5169,17 @@ def fires(count):
         return 'Your fire count must be in range (0-255).'
     invoker.b_setPinkSlips(count)
     return 'You were given %d fires.' % count
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def sues(count):
+    """
+    Modifies the invoker's sue count.
+    """
+    invoker = spellbook.getInvoker()
+    if not 0 <= count <= 255:
+        return 'Your sue count must be in range (0-255).'
+    invoker.b_setCeaseAndDesists(count)
+    return 'You were given %d sues.' % count
 	
 @magicWord(category=CATEGORY_MODERATOR, types=[int])
 def warn(banWorthy):

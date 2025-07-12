@@ -23,7 +23,8 @@ from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.toonbase import TTLocalizer
 from toontown.pets import PetConstants
 from direct.gui.DirectGui import DGG
-from toontown.battle import FireCogPanel, SueCogPanel
+from toontown.battle import FireCogPanel
+from toontown.battle import SueCogPanel
 
 class TownBattle(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('TownBattle')

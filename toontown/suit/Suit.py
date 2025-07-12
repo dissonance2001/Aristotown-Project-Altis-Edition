@@ -1195,6 +1195,7 @@ class Suit(Avatar.Avatar):
         self.isAmbassadorPhase3 = 0
         self.isContracted = 0
         self.isExecutive = 0
+        self.isSued = 0
         self.isAngry = 0
         self.isRevived = 0
         self.isLaserRevived = 0
@@ -6804,6 +6805,12 @@ class Suit(Avatar.Avatar):
 
     def removeDanceSession(self):
         self.isDanceSession = 0
+
+    def makeSued(self):
+        self.isSued = 1
+
+    def removeSued(self):
+        self.isSued = 0
 
     def makeContracted(self):
         self.isContracted= 1

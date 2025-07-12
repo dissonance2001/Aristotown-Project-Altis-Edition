@@ -52,6 +52,11 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.stars.loop('stun')
         self.stars.setBlend(frameBlend=base.wantSmoothAnims)
         self.stars.adjustAllPriorities(100)
+        self.suedstars = BattleProps.globalPropPool.getProp('stun')
+        self.suedstars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+        self.suedstars.loop('stun')
+        self.suedstars.setBlend(frameBlend=base.wantSmoothAnims)
+        self.suedstars.adjustAllPriorities(100)
         self.cRay = None
         self.cRayNode = None
         self.cRayNodePath = None
@@ -73,6 +78,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.executive = 0
         self.manager = 0
         self.dizzy = 0
+        self.sued = 0
         self.playRate = 1
         self.actualLevel = 0
         self.governaught = 0
@@ -118,6 +124,19 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def getDizzy(self):
         return self.dizzy
+
+    def setSued(self, sued):
+        head = self.find('**/to_head')
+        # head = self.getHeadParts()[0]
+
+        self.sued = sued
+        if sued:
+            self.suedstars.reparentTo(head)
+        else:
+            self.suedstars.detachNode()
+
+    def getSued(self):
+        return self.sued
 
     def setSoaked(self, soaked):
         head = self.find('**/to_head')
