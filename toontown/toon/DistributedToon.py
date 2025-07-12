@@ -2257,6 +2257,15 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setPinkSlips(self, pinkSlips):
         self.pinkSlips = pinkSlips
+    
+    def getCeaseAndDesists(self):
+        if hasattr(self, 'ceaseAndDesists'):
+            return self.ceaseAndDesists
+        else:
+            return 0
+    
+    def setCeaseAndDesists(self, ceaseAndDesists):
+        self.ceaseAndDesists = ceaseAndDesists
 
     def setAccess(self, access):
         self.setGameAccess(access)

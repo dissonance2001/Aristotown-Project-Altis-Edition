@@ -573,6 +573,7 @@ ValidStatusConditions = (
     'marked',
     'immune',
     'dazed',
+    'sued',
 
     # Toon Status Effects
     'noUnites',

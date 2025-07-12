@@ -294,6 +294,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
     def __handleFire(self):
         messenger.send('inventory-fire')
+    
+    def __handleSue(self):
+        messenger.send('inventory-sue')
 
     def __handleSOS(self):
         messenger.send('inventory-sos')
@@ -1271,6 +1274,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.sosButton.show()
             self.passButton.show()
             self.fireButton.show()
+            self.sueButton.show()
             self.levelsButton.show()
             if localAvatar.getPinkSlips() > 0:
                 self.fireButton['state'] = DGG.NORMAL
@@ -1278,6 +1282,13 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             else:
                 self.fireButton['state'] = DGG.DISABLED
                 self.fireButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
+            if localAvatar.getCeaseAndDesists() > 0:
+                self.sueButton['state'] = DGG.NORMAL
+                self.sueButton['image_color'] = Vec4(0, 0.6, 1, 1)
+            else:
+                self.sueButton['state'] = DGG.DISABLED
+                self.sueButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
+        # NOTE: At the time of sue implementation, there are no status conditions that prevent Cease & Desist usage.
         if not 'noFires' in base.localAvatar.battleConditions:
             self.fireButton['state'] = DGG.NORMAL
             self.fireButton['image_color'] = Vec4(0, 0.6, 1, 1)
@@ -1719,6 +1730,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.sosButton = DirectButton(parent=self.battleFrame, relief=None, pos=(0.96, 0, -0.398), text=TTLocalizer.InventorySOS, text_scale=0.05, text_pos=(0, -0.02), text_fg=Vec4(1, 1, 1, 1), textMayChange=0, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=1.2, image_color=(0, 0.6, 1, 1), command=self.__handleSOS)
         self.passButton = DirectButton(parent=self.battleFrame, relief=None, pos=(0.96, 0, -0.242), text=TTLocalizer.InventoryPass, text_scale=TTLocalizer.INpassButton, text_pos=(0, -0.02), text_fg=Vec4(1, 1, 1, 1), textMayChange=1, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=1.2, image_color=(0, 0.6, 1, 1), command=self.__handlePass)
         self.fireButton = DirectButton(parent=self.battleFrame, relief=None, pos=(0.73, 0, -0.242), text=TTLocalizer.InventoryFire, text_scale=TTLocalizer.INfireButton, text_pos=(0, -0.02), text_fg=Vec4(1, 1, 1, 1), textMayChange=0, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=1.2, image_color=(0, 0.6, 1, 1), command=self.__handleFire)
+        self.sueButton = DirectButton(parent=self.battleFrame, relief=None, pos=(0.73, 0, -0.554), text=TTLocalizer.InventorySue, text_scale=TTLocalizer.INsueButton, text_pos=(0, -0.02), text_fg=Vec4(1, 1, 1, 1), textMayChange=0, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=1.2, image_color=(0, 0.6, 1, 1), command=self.__handleSue)
         self.tutText = DirectFrame(parent=self.battleFrame, relief=None, pos=(0.05, 0, -0.1133), scale=0.143, image=DGG.getDefaultDialogGeom(), image_scale=5.125, image_pos=(0, 0, -0.65), image_color=ToontownGlobals.GlobalDialogColor, text_scale=TTLocalizer.INclickToAttack, text=TTLocalizer.InventoryClickToAttack, textMayChange=0)
         self.tutText.hide()
         self.tutArrows = BlinkingArrows.BlinkingArrows(parent=self.battleFrame)

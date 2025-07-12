@@ -3985,6 +3985,29 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             amount = 0
         pinkSlips = max(self.pinkSlips - amount, 0)
         self.b_setPinkSlips(pinkSlips)
+    
+    def b_setCeaseAndDesists(self, ceaseAndDesists):
+        self.d_setCeaseAndDesists(ceaseAndDesists)
+        self.setCeaseAndDesists(ceaseAndDesists)
+    
+    def d_setCeaseAndDesists(self, ceaseAndDesists):
+        self.sendUpdate('setCeaseAndDesists', [ceaseAndDesists])
+    
+    def setCeaseAndDesists(self, ceaseAndDesists):
+        self.ceaseAndDesists = ceaseAndDesists
+    
+    def getCeaseAndDesists(self):
+        return self.ceaseAndDesists
+    
+    def addCeaseAndDesists(self, amountToAdd):
+        ceaseAndDesists = min(self.ceaseAndDesists + amountToAdd, 255)
+        self.b_setCeaseAndDesists(ceaseAndDesists)
+    
+    def removeCeaseAndDesists(self, amount):
+        if hasattr(self, 'autoRestockCeaseAndDesists') and self.autoRestockCeaseAndDesists:
+            amount = 0
+        ceaseAndDesists = max(self.ceaseAndDesists - amount, 0)
+        self.b_setCeaseAndDesists(ceaseAndDesists)
 
     def setPreviousAccess(self, access):
         self.previousAccess = access

@@ -35,6 +35,7 @@ class TownBattleAttackPanel(StateData.StateData):
         self.accept('inventory-sos', self.__handleSOS)
         self.accept('inventory-pass', self.__handlePass)
         self.accept('inventory-fire', self.__handleFire)
+        self.accept('inventory-sue', self.__handleSue)
         self.accept('hide-attack-panel', self.__handleHide)
 
     def exit(self):
@@ -44,6 +45,7 @@ class TownBattleAttackPanel(StateData.StateData):
         self.ignore('inventory-sos')
         self.ignore('inventory-pass')
         self.ignore('inventory-fire')
+        self.ignore('inventory-sue')
         self.ignore('hide-attack-panel')
         base.localAvatar.inventory.hide()
         if self._teaserPanel:
@@ -64,6 +66,10 @@ class TownBattleAttackPanel(StateData.StateData):
 
     def __handleFire(self):
         doneStatus = {'mode': 'Fire'}
+        messenger.send(self.doneEvent, [doneStatus])
+    
+    def __handleSue(self):
+        doneStatus = {'mode': 'Sue'}
         messenger.send(self.doneEvent, [doneStatus])
 
     def __handleInventory(self, track, level, viaKeyboard = False):

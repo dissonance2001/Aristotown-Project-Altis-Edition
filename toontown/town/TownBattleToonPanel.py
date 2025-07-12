@@ -39,6 +39,8 @@ class TownBattleToonPanel(DirectFrame):
         self.sosText.hide()
         self.fireText = DirectLabel(parent=self, relief=None, pos=(0.22, 0, 0.03), text=TTLocalizer.TownBattleToonFire, text_fg=(1, 0, 0, 1), text_scale=0.1, text_font=getSignFont())
         self.fireText.hide()
+        self.sueText = DirectLabel(parent=self, relief=None, pos=(0.22, 0, 0.03), text=TTLocalizer.TownBattleToonSue, text_fg=(0.75, 0.75, 0.95, 1), text_scale=0.1, text_font=getSignFont())
+        self.sueText.hide()
         self.roundsText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(0.176, 1, 0, 1), text_font=getSignFont())
         self.roundsText.hide()
         self.damageText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(1, 0, 0, 1), text_font=getSignFont())
@@ -117,6 +119,7 @@ class TownBattleToonPanel(DirectFrame):
         self.undecidedText.hide()
         self.sosText.hide()
         self.fireText.hide()
+        self.sueText.hide()
         self.roundsText.hide()
         self.damageText.hide()
         self.exeDamageText.hide()
@@ -141,6 +144,10 @@ class TownBattleToonPanel(DirectFrame):
             self.passText['text'] = 'PASS'
         elif track == BattleBase.FIRE:
             self.fireText.show()
+            self.whichText.show()
+            self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
+        elif track == BattleBase.SUE:
+            self.sueText.show()
             self.whichText.show()
             self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
         elif track == BattleBase.SOS or track == BattleBase.NPCSOS or track == BattleBase.PETSOS:

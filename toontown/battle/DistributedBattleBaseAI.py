@@ -1127,6 +1127,8 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.toonAttacks[toonId] = getToonAttack(toonId, track=PASS)
         elif track == FIRE:
             self.toonAttacks[toonId] = getToonAttack(toonId, track=FIRE, target=av)
+        elif track == SUE:
+            self.toonAttacks[toonId] = getToonAttack(toonId, track=SUE, target=av)
         else:
             if not self.validate(toonId, track >= 0 and track <= MAX_TRACK_INDEX, 'requestAttack: invalid track %s' % track):
                 return
@@ -1464,6 +1466,8 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                     elif track == PETSOS:
                         pass
                     elif track == FIRE:
+                        pass
+                    elif track == SUE:
                         pass
                     elif track != SOS:
                         toon = self.getToon(toonId)

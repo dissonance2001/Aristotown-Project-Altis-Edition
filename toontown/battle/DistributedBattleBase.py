@@ -1313,6 +1313,10 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             target = response['target']
             targetId = self.activeSuits[target].doId
             self.d_requestAttack(base.localAvatar.doId, FIRE, -1, targetId)
+        elif mode == 'Sue':
+            target = response['target']
+            targetId = self.activeSuits[target].doId
+            self.d_requestAttack(base.localAvatar.doId, SUE, -1, targetId)
         else:
             self.notify.warning('unknown battle response')
             return

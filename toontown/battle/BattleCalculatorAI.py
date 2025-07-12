@@ -369,6 +369,8 @@ class BattleCalculatorAI:
             return (1, 95)
         if atkTrack == FIRE:
             return (1, 95)
+        if atkTrack == SUE:
+            return (1, 95)
         if atkTrack == TRAP:
             if debug:
                 self.notify.debug('Attack is a trap, so it hits regardless')
@@ -863,7 +865,9 @@ class BattleCalculatorAI:
                 toonTarget = 1
             else:
                 targetId = targetList[currTarget].getDoId()
-            if atkTrack == LURE:
+            if atkTrack == SUE:
+                self.setSuitCondition(targetId, 'sued', 1, 4, 'setBoth')
+            elif atkTrack == LURE:
                 self.currentlyImmuneSuits = self.getImmuneSuits()
                 if targetId not in self.currentlyImmuneSuits:
                     if self.getSuitTrapType(targetId) == NO_TRAP:
@@ -1050,6 +1054,24 @@ class BattleCalculatorAI:
                                 attackDamage = suit.getHP()
                     else:
                         attackDamage = 0
+                    self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
+                    bonus = 0
+                elif atkTrack == SUE:
+                    suit = self.battle.findSuit(targetId)
+                    attackDamage = 0
+                    if suit:
+                        if not suit.getManager() and suit.currHP <= (suit.maxHP * 1.5) and not self.suitHasCondition(targetId, 'insured'):
+                            costToSue = 1 # TODO: Implement the actual formula.
+                            abilityToSue = toon.getCeaseAndDesists()
+                            toon.removeCeaseAndDesists(costToSue)
+                            if costToSue > abilityToSue:
+                                commentStr = 'Toon attempting to sue a %s cost cog with %s C&Ds' % (costToSue, abilityToSue)
+                                simbase.air.writeServerEvent('suspicious', toonId, commentStr)
+                                dislId = toon.DISLid
+                                simbase.air.banManager.ban(toonId, dislId, commentStr)
+                                print 'Not enough Cease & Desists to sue cog - print a warning here'
                     self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
@@ -4634,7 +4656,7 @@ class BattleCalculatorAI:
                 self.toonHPAdjusts[t] -= attack[SUIT_HP_COL][position]
 
     def __suitCanAttack(self, suitId):
-        if self.__combatantDead(suitId, toon=0) or self.__suitIsLured(suitId):
+        if self.__combatantDead(suitId, toon=0) or self.__suitIsLured(suitId) or self.suitHasCondition(suitId, 'sued'):
             return 0
         return 1
 
@@ -8840,6 +8862,10 @@ class BattleCalculatorAI:
             self.toonAtkOrder.append(atk[TOON_ID_COL])
 
         attacks = findToonAttack(self.battle.activeToons, self.battle.toonAttacks, FIRE)
+        for atk in attacks:
+            self.toonAtkOrder.append(atk[TOON_ID_COL])
+        
+        attacks = findToonAttack(self.battle.activeToons, self.battle.toonAttacks, SUE)
         for atk in attacks:
             self.toonAtkOrder.append(atk[TOON_ID_COL])
 

@@ -38,7 +38,7 @@ def doSues(sues):
     if len(sues) == 0:
         return (None, None)
 
-    suitFiresDict = {}
+    suitSuesDict = {}
     i = 0
     try:
         attempt = sues[0]['target'][i]['suit']
@@ -51,10 +51,10 @@ def doSues(sues):
             i = i + 1
         else:
             suitId = sue['target']['suit'].doId
-        if suitId in suitFiresDict:
-            suitFiresDict[suitId].append(sue)
+        if suitId in suitSuesDict:
+            suitSuesDict[suitId].append(sue)
         else:
-            suitFiresDict[suitId] = [sue]
+            suitSuesDict[suitId] = [sue]
 
     suitSues = suitSuesDict.values()
     def compFunc(a, b):
@@ -113,10 +113,10 @@ def doSues(sues):
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
     camDuration = retTrack.getDuration()
-    camTrack = MovieCamera.chooseFireShot(fires, suitFiresDict, camDuration, enterDuration, exitDuration)
+    camTrack = MovieCamera.chooseSueShot(sues, suitSuesDict, camDuration, enterDuration, exitDuration)
     return (retTrack, camTrack)
 
-def __doSuitSues(fires):
+def __doSuitSues(sues):
     toonTracks = Parallel()
     delay = 0.0
     hitCount = 0

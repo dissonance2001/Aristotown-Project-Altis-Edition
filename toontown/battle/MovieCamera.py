@@ -2133,3 +2133,10 @@ def avatarCloseUpFireShot(avatar, duration):
 
 def avatarCloseUpThreeQuarterLeftFireShot(avatar, duration):
     return heldRelativeShot(avatar, -8.2, 8.45, avatar.getHeight() * 0.66, -131.5, 3.6, 0, duration, 'avatarCloseUpThreeQuarterLeftShot')
+
+
+def chooseSueShot(throws, suitThrowsDict, attackDuration, enterDuration = 0.0, exitDuration = 0.0):
+    '''
+    Honestly, this should not be different from the Throw camera considering the animation for suing a Cog is the same as pie-throwing, but with the lawbook prop.
+    '''
+    return chooseThrowShot(throws, suitThrowsDict, attackDuration, enterDuration=enterDuration, exitDuration=exitDuration)

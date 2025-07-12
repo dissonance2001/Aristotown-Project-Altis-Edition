@@ -23,7 +23,7 @@ from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.toonbase import TTLocalizer
 from toontown.pets import PetConstants
 from direct.gui.DirectGui import DGG
-from toontown.battle import FireCogPanel
+from toontown.battle import FireCogPanel, SueCogPanel
 
 class TownBattle(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('TownBattle')
@@ -55,6 +55,7 @@ class TownBattle(StateData.StateData):
           'AttackWait',
           'Run',
           'Fire',
+          'Sue',
           'SOS']),
          State.State('ChooseCog', self.enterChooseCog, self.exitChooseCog, ['AttackWait', 'Attack']),
          State.State('AttackWait', self.enterAttackWait, self.exitAttackWait, ['ChooseCog', 'ChooseToon', 'Attack']),
@@ -66,7 +67,8 @@ class TownBattle(StateData.StateData):
           'SOSPetInfo']),
          State.State('SOSPetSearch', self.enterSOSPetSearch, self.exitSOSPetSearch, ['SOS', 'SOSPetInfo']),
          State.State('SOSPetInfo', self.enterSOSPetInfo, self.exitSOSPetInfo, ['SOS', 'AttackWait']),
-         State.State('Fire', self.enterFire, self.exitFire, ['Attack', 'AttackWait'])], 'Off', 'Off')
+         State.State('Fire', self.enterFire, self.exitFire, ['Attack', 'AttackWait']),
+         State.State('Sue', self.enterSue, self.exitSue, ['Attack', 'AttackWait'])], 'Off', 'Off')
         self.runPanel = TTDialog.TTDialog(dialogName='TownBattleRunPanel', text=TTLocalizer.TownBattleRun, style=TTDialog.TwoChoice, command=self.__handleRunPanelDone)
         self.runPanel.hide()
         self.attackPanelDoneEvent = 'attack-panel-done'
@@ -85,12 +87,20 @@ class TownBattle(StateData.StateData):
         self.SOSPetInfoPanel = TownBattleSOSPetInfoPanel.TownBattleSOSPetInfoPanel(self.SOSPetInfoPanelDoneEvent)
         self.fireCogPanelDoneEvent = 'fire-cog-panel-done'
         self.FireCogPanel = FireCogPanel.FireCogPanel(self.fireCogPanelDoneEvent)
+        self.sueCogPanelDoneEvent = 'sue-cog-panel-done'
+        self.SueCogPanel = SueCogPanel.SueCogPanel(self.sueCogPanelDoneEvent)
         self.cogFireCosts = [None,
          None,
          None,
          None,
         None,
         None]
+        self.cogSueCosts = [None,
+         None,
+         None,
+         None,
+         None,
+         None]
         self.toonPanels = [TownBattleToonPanel.TownBattleToonPanel(0),
                            TownBattleToonPanel.TownBattleToonPanel(1),
                            TownBattleToonPanel.TownBattleToonPanel(2),
@@ -116,6 +126,7 @@ class TownBattle(StateData.StateData):
         del self.chooseToonPanel
         del self.SOSPanel
         del self.FireCogPanel
+        del self.SueCogPanel
         del self.SOSPetSearchPanel
         del self.SOSPetInfoPanel
         for toonPanel in self.toonPanels:
@@ -180,6 +191,7 @@ class TownBattle(StateData.StateData):
         self.chooseCogPanel.unload()
         self.chooseToonPanel.unload()
         self.FireCogPanel.unload()
+        self.SueCogPanel.unload()
         self.SOSPanel.unload()
         if hasattr(base, 'wantPets') and base.wantPets:
             self.SOSPetSearchPanel.unload()
@@ -377,6 +389,8 @@ class TownBattle(StateData.StateData):
             self.fsm.request('SOS')
         elif mode == 'Fire':
             self.fsm.request('Fire')
+        elif mode == 'Sue':
+            self.fsm.request('Sue')
         elif mode == 'Pass':
             response = {}
             response['mode'] = 'Pass'
@@ -548,6 +562,15 @@ class TownBattle(StateData.StateData):
     def exitFire(self):
         self.ignore(self.fireCogPanelDoneEvent)
         self.FireCogPanel.exit()
+    
+    def enterSue(self):
+        canHeal, canTrap, canLure = self.checkHealTrapLure()
+        self.SueCogPanel.enter(self.numCogs, luredIndices=self.luredIndices, trappedIndices=self.trappedIndices, track=self.track, sueCosts=self.cogSueCosts)
+        self.accept(self.sueCogPanelDoneEvent, self.__handleCogSueDone)
+    
+    def exitSue(self):
+        self.ignore(self.sueCogPanelDoneEvent)
+        self.SueCogPanel.exit()
 
     def __handleCogFireDone(self, doneStatus):
         mode = doneStatus['mode']
@@ -559,6 +582,21 @@ class TownBattle(StateData.StateData):
             self.fsm.request('AttackWait')
             response = {}
             response['mode'] = 'Fire'
+            response['target'] = self.cog
+            messenger.send(self.battleEvent, [response])
+        else:
+            self.notify.warning('unknown mode: %s' % mode)
+    
+    def __handleCogSueDone(self, doneStatus):
+        mode = doneStatus['mode']
+        if mode == 'Back':
+            self.fsm.request('Attack')
+        elif mode == 'Avatar':
+            self.cog = doneStatus['avatar']
+            self.target = self.cog
+            self.fsm.request('AttackWait')
+            response = {}
+            response['mode'] = 'Sue'
             response['target'] = self.cog
             messenger.send(self.battleEvent, [response])
         else:

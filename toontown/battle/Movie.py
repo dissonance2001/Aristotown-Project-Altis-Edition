@@ -9,6 +9,7 @@ from toontown.battle import BattleParticles
 from toontown.battle import MovieDrop
 from toontown.battle import BattleProps
 from toontown.battle import MovieFire
+from toontown.battle import MovieSue
 import PlayByPlayText
 from otp.otpbase import OTPLocalizerEnglish
 from toontown.battle.BattleSounds import *
@@ -510,6 +511,10 @@ class Movie(DirectObject.DirectObject):
             track = Sequence(name='toon-attacks')
             camTrack = Sequence(name='toon-attacks-cam')
             ival, camIval = MovieFire.doFires(self.__findToonAttack(FIRE))
+            if ival:
+                track.append(ival)
+                camTrack.append(camIval)
+            ival, camIval = MovieSue.doSues(self.__findToonAttack(SUE))
             if ival:
                 track.append(ival)
                 camTrack.append(camIval)

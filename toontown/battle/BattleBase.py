@@ -34,6 +34,7 @@ SOS = 99
 NPCSOS = 97
 PETSOS = 96
 FIRE = 100
+SUE = 101
 HEAL = HEAL_TRACK
 TRAP = TRAP_TRACK
 LURE = LURE_TRACK
@@ -166,6 +167,14 @@ def findToonAttack(toons, attacks, track):
                             canFire = 0
 
                     if canFire:
+                        foundAttacks.append(attack)
+                elif local_track == SUE:
+                    canSue = True
+                    for attackCheck in foundAttacks:
+                        if attackCheck[TOON_TGT_COL] == attack[TOON_TGT_COL]:
+                            canSue = False
+                    
+                    if canSue:
                         foundAttacks.append(attack)
                 else:
                     foundAttacks.append(attack)
