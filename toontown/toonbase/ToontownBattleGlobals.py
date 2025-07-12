@@ -576,6 +576,7 @@ ValidStatusConditions = (
     'immune',
     'dazed',
     'sued',
+    'contracted',
 
     # Toon Status Effects
     'noUnites',
@@ -641,7 +642,6 @@ ValidStatusConditions = (
     'dropBoost',
     'noDropGags',
     'noFires',
-'contracted',
     'noSOS',
     'encore',
     'winded',

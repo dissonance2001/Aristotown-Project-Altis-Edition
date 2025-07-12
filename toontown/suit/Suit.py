@@ -170,7 +170,7 @@ kerberos = (('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
 charon = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 pcrat = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 hroller = (('glower', 'glower', 4), ('scabbard', 'scabbard', 4), ('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('song-and-dance', 'song-and-dance', 4), ('walk', 'awalk', 4))
-erfit = ('cigar-smoke', 'cigar-smoke', 4)
+erfit = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 hrollers = (('glower', 'glower', 4), ('sanction', 'sanction', 4), ('snap', 'snap', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4))
 hroller2 = (('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
 
@@ -2027,7 +2027,7 @@ class Suit(Avatar.Avatar):
             self.scale = 7.2 / aSize
             self.handColor = VBase4(1, 1, 1, 1.0)
             self.generateBody()
-            self.makeCountErclaim()
+            self.makeCountErfit()
             self.generateHead3('counterclaim', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_counterclaim.png')
             for headPart in self.headParts:

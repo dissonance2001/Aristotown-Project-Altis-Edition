@@ -1700,7 +1700,7 @@ class BattleCalculatorAI:
                     attackDamage *= 1.1
                 if self.suitHasCondition(targetId, 'enraged') and self.suitHasCondition(targetId, 'desperation'):
                     attackDamage *= 1
-                if self.suitHasCondition(targetId, 'enraged') and atkTrack is not ZAP and atkTrack is not SQUIRT:
+                if self.suitHasCondition(targetId, 'enraged') and not self.suitHasCondition(targetId, 'desperation') and atkTrack is not ZAP and atkTrack is not SQUIRT:
                     attackDamage *= 0.7
                 if self.suitHasCondition(targetId, 'soakImmune') and self.suitHasCondition(targetId, 'soaked'):
                     attackDamage *= 0.4
@@ -6885,7 +6885,7 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'sgoat':
-                if self.TurnsElapsed % 99 == 0 and self.__suitCanAttack(suitId):
+                if self.TurnsElapsed % 99 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 9  # First Turn Enraged
@@ -8962,8 +8962,8 @@ class BattleCalculatorAI:
                 if suit.dna.name == 'hroller':
                     self.setSuitCondition(suit.doId, 'immune', 1, 99, 'setBoth')
                     self.setSuitCondition(suit.doId, 'absorbingHR', 1, 99, 'setBoth')
-                if suit.dna.name == 'sgoat':
-                    self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')
+                if suit.dna.name == 'sgoat' and self.TurnsElapsed == 0:
+                    self.setSuitCondition(suit.doId, 'shielding', 1, 5, 'setBoth')
                 suit.b_setHP(suit.getHP())
 
         for suit in self.battle.activeSuits:
@@ -9197,8 +9197,8 @@ class BattleCalculatorAI:
     def __incLuredCurrRound(self, suitId):
         theSuit = self.battle.findSuit(suitId)
         x = self.TurnsElapsed
-        if x % 99 == 0 and theSuit.dna.name == 'sgoat':
-            self.currentlyLuredSuits[suitId][0] = self.currentlyLuredSuits[suitId][1] - 1
+       # if x % 99 == 0 and theSuit.dna.name == 'sgoat':
+           # self.currentlyLuredSuits[suitId][0] = self.currentlyLuredSuits[suitId][1] - 1
         if theSuit.dna.name == 'hroller':
             self.currentlyLuredSuits[suitId][0] = self.currentlyLuredSuits[suitId][1] - 1
         if theSuit.dna.name == 'hroller2':
