@@ -380,30 +380,51 @@ def getSuitVitals(name, level = -1):
     clist = []
     for a in attacks:
         adict = {}
-        name = a[0]
-        adict['name'] = name
-        adict['animName'] = SuitAttacks[name][0]
-        # Try and get the attack data from the appropriate index.
-        try:
-            adict['hp'] = a[1][level]
-        except IndexError:
-            # Chances are we went over.  Let's do overleveling logic!
-            adict['hp'] = a[1][len(a[1]) - 1] + (level - (len(a[1]) - 1))
-        # Same thing for the below, except we're just using the final index rather than adding anything to the final index.
-        try:
-            adict['acc'] = a[2][level]
-        except IndexError:
-            adict['acc'] = a[2][len(a[2]) - 1]
-        try:
-            adict['freq'] = a[3][level]
-        except:
-            adict['freq'] = a[3][len(a[3]) - 1]
-        # Attack tuples have four indices.  This will check to see if there is a fifth one, which I would like to use to make single-target attacks able to be used as group, provided we have a method for its use.
-        if len(a) > 4:
-            adict['group'] = a[4]
+        if isinstance(a, SuitAttack):
+            name = a.name
+            adict['name'] = name
+            adict['animName'] = SuitAttacks[name][0]
+            # Try and get the attack data from the appropriate index.
+            try:
+                adict['hp'] = a.hp[level]
+            except IndexError:
+                # Chances are we went over.  Let's do overleveling logic!
+                adict['hp'] = a.hp[len(a.hp) - 1] + (level - (len(a.hp) - 1))
+            # Same thing for the below, except we're just using the final index rather than adding anything to the final index.
+            try:
+                adict['acc'] = a.acc[level]
+            except IndexError:
+                adict['acc'] = a.acc[len(a.acc) - 1]
+            try:
+                adict['freq'] = a.freq[level]
+            except IndexError:
+                adict['freq'] = a.freq[len(a.freq) - 1]
+            adict['group'] = a.groupStatus
         else:
-            # Use the default targeting in SuitAttacks.
-            adict['group'] = SuitAttacks[name][1]
+            name = a[0]
+            adict['name'] = name
+            adict['animName'] = SuitAttacks[name][0]
+            # Try and get the attack data from the appropriate index.
+            try:
+                adict['hp'] = a[1][level]
+            except IndexError:
+                # Chances are we went over.  Let's do overleveling logic!
+                adict['hp'] = a[1][len(a[1]) - 1] + (level - (len(a[1]) - 1))
+            # Same thing for the below, except we're just using the final index rather than adding anything to the final index.
+            try:
+                adict['acc'] = a[2][level]
+            except IndexError:
+                adict['acc'] = a[2][len(a[2]) - 1]
+            try:
+                adict['freq'] = a[3][level]
+            except IndexError:
+                adict['freq'] = a[3][len(a[3]) - 1]
+            # Attack tuples have four indices.  This will check to see if there is a fifth one, which I would like to use to make single-target attacks able to be used as group, provided we have a method for its use.
+            if len(a) > 4:
+                adict['group'] = a[4]
+            else:
+                # Use the default targeting in SuitAttacks.
+                adict['group'] = SuitAttacks[name][1]
         alist.append(adict)
     for c in cheats:
         cdict = {}
@@ -476,10 +497,16 @@ def pickSuitAttack(attacks, suitLevel):
     index = 0
     total = 0
     for c in attacks:
-        total = total + c[3][suitLevel]
+        if isinstance(c, SuitAttack):
+            total = total + c.freq[suitLevel]
+        else:
+            total = total + c[3][suitLevel]
 
     for c in attacks:
-        count = count + c[3][suitLevel]
+        if isinstance(c, SuitAttack):
+            count = count + c.freq[suitLevel]
+        else:
+            count = count + c[3][suitLevel]
         if randNum < count:
             attackNum = index
             notify.debug('picking attack %d' % attackNum)
@@ -567,16 +594,45 @@ def getSuitAttack(suitName, suitLevel, attackNum = -1):
     attack = attackChoices[attackNum]
     adict = {}
     adict['suitName'] = suitName
-    name = attack[0]
-    adict['name'] = name
-    adict['animName'] = SuitAttacks[name][0]
-    adict['hp'] = attack[1][suitLevel]
-    adict['acc'] = attack[2][suitLevel]
-    adict['freq'] = attack[3][suitLevel]
-    if len(attack) > 4:
-        adict['group'] = attack[4]
+    if isinstance(attack, SuitAttack):
+        name = attack.name
+        adict['name'] = name
+        adict['animName'] = SuitAttacks[name][0]
+        try:
+            adict['hp'] = attack.hp[suitLevel]
+        except IndexError:
+            adict['hp'] = attack.hp[len(attack.hp) - 1] + (suitLevel - (len(attack.hp) - 1))
+        try:
+            adict['acc'] = attack.acc[suitLevel]
+        except IndexError:
+            adict['acc'] = attack.acc[len(attack.acc) - 1]
+        try:
+            adict['freq'] = attack.freq[suitLevel]
+        except IndexError:
+            adict['freq'] = attack.freq[len(attack.freq) - 1]
+        if attack.groupStatus is None:
+            attack.groupStatus = SuitAttacks[name][1]
+        adict['group'] = attack.groupStatus
     else:
-        adict['group'] = SuitAttacks[name][1]
+        name = attack[0]
+        adict['name'] = name
+        adict['animName'] = SuitAttacks[name][0]
+        try:
+            adict['hp'] = attack[1][suitLevel]
+        except IndexError:
+            adict['hp'] = attack[1][len(attack[1]) - 1] + (suitLevel - (len(attack[1]) - 1))
+        try:
+            adict['acc'] = attack[2][suitLevel]
+        except IndexError:
+            adict['acc'] = attack[2][len(attack[2]) - 1]
+        try:
+            adict['freq'] = attack[3][suitLevel]
+        except IndexError:
+            adict['freq'] = attack[3][len(attack[3]) - 1]
+        if len(attack) > 4:
+            adict['group'] = attack[4]
+        else:
+            adict['group'] = SuitAttacks[name][1]
     return adict
 
 SuitLevel = {
@@ -658,27 +714,27 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Flunky', # cogs singular name, for tasks
        'pluralname': 'Flunkies', # cogs plural name, for tasks
        'level': 0, # level the cog starts at (level - 1)
-        'hp': (6, 12, 20, 30, 42), # cogs hp (more numbers, more levels)
+       'hp': (6, 12, 20, 30, 42), # cogs hp (more numbers, more levels)
        'def':(5,5,5,5,5), # cogs defence (more numbers, more levels)
        'freq':(50,30,10,5,5), # cogs level frequency
        'acc':(35,40,45,50,55), # cogs accuracy (more numbers, more levels)
        'attacks':
-                (('PoundKey',
-                  (2, 3, 4, 5, 6),
-                  (75, 75, 75, 75, 75),  # attack accuracy
-                  (25, 25, 25, 25, 25)), # move frequency (all move frequency of each attack must add up to 100, for example 30,10,60 from level 1 of each attack)
-                ('HangUp',
-                 (2, 3, 4, 5, 6),
-                 (75, 75, 75, 75, 75),  # attack accuracy
-                 (25, 25, 25, 25, 25)),
-                ('Shred',
-                 (2, 3, 4, 5, 6),
-                 (75, 75, 75, 75, 75),  # attack accuracy
-                 (25, 25, 25, 25, 25)),
-                ('ClipOnTie',
-                 (1, 2, 3, 4, 5),
-                 (75, 75, 75, 75, 75),  # attack accuracy
-                 (25, 25, 25, 25, 25)))},
+                (SuitAttack('PoundKey',
+                            hp=(2, 3, 4, 5, 6),
+                            acc=(75, 75, 75, 75, 75),  # attack accuracy
+                            freq=(25, 25, 25, 25, 25)), # move frequency (all move frequency of each attack must add up to 100, for example 30,10,60 from level 1 of each attack)
+                 SuitAttack('HangUp',
+                            hp=(2, 3, 4, 5, 6),
+                            acc=(75, 75, 75, 75, 75),  # attack accuracy
+                            freq=(25, 25, 25, 25, 25)),
+                 SuitAttack('Shred',
+                            hp=(2, 3, 4, 5, 6),
+                            acc=(75, 75, 75, 75, 75),  # attack accuracy
+                            freq=(25, 25, 25, 25, 25)),
+                 SuitAttack('ClipOnTie',
+                            hp=(1, 2, 3, 4, 5),
+                            acc=(75, 75, 75, 75, 75),  # attack accuracy
+                            freq=(25, 25, 25, 25, 25)))},
  'p': {'name': 'Pencil Pusher',
        'singularname': 'a Pencil Pusher',
        'pluralname': 'Pencil Pushers',
@@ -1003,35 +1059,35 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29),
                (75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
-'tbc': {'name': 'The Big Cheese',
-        'singularname': 'a The Big Cheese',
-		'pluralname': 'The Big Cheeses',
-		'level': 13,
-        'hp': (90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702),
-        'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
-        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
-        'attacks':
-            (('PowerTrip',
-              (11, 14, 16, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
-              (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-             ('GlowerPower',
-              (13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
-              (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-             ('CigarSmoke',
-              (14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
-              (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            ('FloodTheMarket',
-             (14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
-             (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-             ('Golf',
-              (10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27),
-              (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
+ 'tbc': {'name': 'The Big Cheese',
+         'singularname': 'a The Big Cheese',
+         'pluralname': 'The Big Cheeses',
+         'level': 13,
+         'hp': (90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702),
+         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
+         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+         'attacks':
+             (SuitAttack('PowerTrip',
+                         hp=(11, 14, 16, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                         acc=(35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('GlowerPower',
+                         hp=(13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                         acc=(35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('CigarSmoke',
+                         hp=(14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
+                         acc=(35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('FloodTheMarket',
+                         hp=(14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
+                         acc=(35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('Golf',
+                         hp=(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27),
+                         acc=(35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
  'autocad': {'name': 'Autocaddie',
         'singularname': 'a Autocaddie',
 		'pluralname': 'Autocaddies',
@@ -1219,34 +1275,34 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (100,),
               (25,)))},
  'fbed': {'name': 'Featherbedder',
-        'singularname': 'a Featherbedder',
-		'pluralname': 'Featherbedders',
-		'level': 20,
-		'hp':(3800,),
-		'def':(60,),
-		'freq':(0,),
-		'acc':(75,),
-		'attacks':
-            (('SoakRemoval',
-              (0,),
-              (100,),
-              (0,)),
-             ('Sacked',
-              (25,),
-              (100,),
-              (25,)),
-             ('PeckingOrder',
-              (31,),
-              (100,),
-              (25,)),
-             ('Liquidate',
-              (30,),
-              (100,),
-              (25,)),
-             ('GuiltTrip',
-              (25,),
-              (100,),
-              (25,)))},
+          'singularname': 'a Featherbedder',
+          'pluralname': 'Featherbedders',
+          'level': 20,
+          'hp':(3800,),
+          'def':(60,),
+          'freq':(0,),
+          'acc':(75,),
+          'attacks':
+              (('SoakRemoval',
+                (0,),
+                (100,),
+                (0,)),
+               ('Sacked',
+                (25,),
+                (100,),
+                (25,)),
+               ('PeckingOrder',
+                (31,),
+                (100,),
+                (25,)),
+               ('Liquidate',
+                (30,),
+                (100,),
+                (25,)),
+               ('GuiltTrip',
+                (25,),
+                (100,),
+                (25,)))},
  'mplayer2': {'name': 'Major Player',
         'singularname': 'a Major Player',
 		'pluralname': 'Major Players',
@@ -1901,26 +1957,26 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'freq': (30, 35, 40, 45, 50, 50, 50, 50),
          'acc': (35, 40, 45, 50, 55, 60, 60, 60),
         'attacks':
-            (('Quake',
-              (8, 11, 13, 15, 18, 21, 24, 27),
-              (70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20)),
-             ('Shake',
-              (10, 12, 15, 18, 20, 22, 24, 26),
-              (70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20)),
-             ('HalfWindsor',
-              (6, 7, 9, 11, 13, 15, 17, 19),
-              (70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20)),
-             ('Tremor',
-              (10, 12, 15, 18, 20, 22, 24, 26),
-              (70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20)),
-             ('BrainStorm',
-              (5, 6, 7, 8, 9, 10, 11, 12),
-              (70, 70, 70, 70, 70, 70, 70, 70),
-              (20, 20, 20, 20, 20, 20, 20, 20)))},
+            (SuitAttack('Quake',
+                        hp=(8, 11, 13, 15, 18, 21, 24, 27),
+                        acc=(70, 70, 70, 70, 70, 70, 70, 70),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20)),
+             SuitAttack('Shake',
+                        hp=(10, 12, 15, 18, 20, 22, 24, 26),
+                        acc=(70, 70, 70, 70, 70, 70, 70, 70),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20)),
+             SuitAttack('HalfWindsor',
+                        hp=(6, 7, 9, 11, 13, 15, 17, 19),
+                        acc=(70, 70, 70, 70, 70, 70, 70, 70),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20)),
+             SuitAttack('Tremor',
+                        hp=(10, 12, 15, 18, 20, 22, 24, 26),
+                        acc=(70, 70, 70, 70, 70, 70, 70, 70),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20)),
+             SuitAttack('BrainStorm',
+                        hp=(5, 6, 7, 8, 9, 10, 11, 12),
+                        acc=(70, 70, 70, 70, 70, 70, 70, 70),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20)))},
  'cnd': {'name': 'Candidate',
         'singularname': 'a Candidate',
 		'pluralname': 'Candidates',
@@ -4722,27 +4778,26 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (43,),
               (85,),
               (40,)),
-            ('EvilEye',
+             ('EvilEye',
               (36,),
               (95,),
               (10,)),
- ('LitigatorBayouBellow',
-				    (0,),
-					(100,),
-					(0,)),
- ('LitigatorBayouBash',
-				    (0,),
-					(100,),
-					(0,)),
- ('LitigatorSnap',
-				    (0,),
-					(100,),
-					(0,)),
-                 ('LitigatorSnapSoak',
-                  (0,),
-                  (100,),
-                  (0,))
-                 )},
+             SuitAttack('LitigatorBayouBellow',
+                        (0,),
+                        (100,),
+                        (0,)),
+             SuitAttack('LitigatorBayouBash',
+                        hp=(0,),
+                        acc=(100,),
+                        freq=(0,)),
+             SuitAttack('LitigatorSnap',
+                        hp=(0,),
+                        acc=(100,),
+                        freq=(0,)),
+             ('LitigatorSnapSoak',
+              (0,),
+              (100,),
+              (0,)))},
 'bgh': {'name': 'Bagholder', # cog name
        'singularname': 'a Bagholder', # cogs singular name, for tasks
        'pluralname': 'Bagholders', # cogs plural name, for tasks
@@ -4997,27 +5052,27 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
 		'freq':(30,35,40,45,50,50,50,50,50,50),
 		'acc':(60,65,70,75,75,75,75,75,75,75),
          'attacks':
-             (('Liquidate',
-               (8, 10, 12, 15, 17, 19, 22, 24, 26, 27),
-               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
-               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-              ('FallingKnife',
-               (12, 14, 17, 19, 22, 24, 27, 28, 29, 30),
-               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
-               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-              ('Bite',
-               (10, 12, 15, 17, 20, 22, 25, 26, 27, 28),
-               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
-               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-              ('Watercooler',
-               (8, 9, 11, 13, 15, 17, 19, 20, 21, 22),
-               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
-               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20),
-               ATK_TGT_GROUP),
-              ('GlowerPower',
-               (10, 12, 14, 16, 18, 20, 22, 24, 26, 28),
-               (85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
-               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
+             (SuitAttack('Liquidate',
+                         hp=(8, 10, 12, 15, 17, 19, 22, 24, 26, 27),
+                         acc=(85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('FallingKnife',
+                         hp=(12, 14, 17, 19, 22, 24, 27, 28, 29, 30),
+                         acc=(85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('Bite',
+                         hp=(10, 12, 15, 17, 20, 22, 25, 26, 27, 28),
+                         acc=(85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('Watercooler',
+                         hp=(8, 9, 11, 13, 15, 17, 19, 20, 21, 22),
+                         acc=(85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20),
+                         groupStatus=ATK_TGT_GROUP),
+              SuitAttack('GlowerPower',
+                         hp=(10, 12, 14, 16, 18, 20, 22, 24, 26, 28),
+                         acc=(85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
+                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
 'bfh2': {'name': 'Big Fish',
         'singularname': 'a Big Fish',
 		'pluralname': 'Big Fish',
