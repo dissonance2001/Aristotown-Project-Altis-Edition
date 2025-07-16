@@ -316,14 +316,16 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    suitPos = suit.getPos(battle)
+    if suit:
+        suitPos = suit.getPos(battle)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
     indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
-    animTrack.append(Func(toon.headsUp, battle, suitPos))
+    if suit:
+        animTrack.append(Func(toon.headsUp, battle, suitPos))
     indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
                                LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
@@ -358,14 +360,16 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    suitPos = suit.getPos(battle)
+    if suit:
+        suitPos = suit.getPos(battle)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
     indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
-    animTrack.append(Func(toon.headsUp, battle, suitPos))
+    if suit:
+        animTrack.append(Func(toon.headsUp, battle, suitPos))
     indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
                                LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),

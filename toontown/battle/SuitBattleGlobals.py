@@ -1,4 +1,5 @@
 import random
+import StatusEffects
 from toontown.battle.BattleBase import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
@@ -490,6 +491,28 @@ def getAttackIndexSoak(attackName):
     return -1
 
 def pickSuitAttack(attacks, suitLevel):
+    configAttackName = simbase.config.GetString('attack-type', 'random')
+    if configAttackName == 'random':
+        pass # Proceed downward to calculate and return attackNum
+    elif configAttackName == 'sequence':
+        for i in xrange(len(attacks)):
+            if  attacks[i] not in debugAttackSequence:
+                debugAttackSequence[attacks[i]] = 1
+                if isinstance(attacks[i], SuitAttack):
+                    return attacks[i].name
+                else:
+                    return attacks[i][0]
+
+    else:
+        # Feasibly, one could just do a "return configAttackName", but with the new system, this will not account for whether or not the Cog has the attack.
+        for i in xrange(len(attacks)):
+            if isinstance(attacks[i], SuitAttack):
+                if attacks[i].name == configAttackName:
+                    return attacks[i].name
+            else:
+                if attacks[i][0] == configAttackName:
+                    return attacks[i][0]
+
     attackNum = None
     randNum = random.randint(0, 99)
     notify.debug('pickSuitAttack: rolled %d' % randNum)
@@ -512,24 +535,12 @@ def pickSuitAttack(attacks, suitLevel):
             notify.debug('picking attack %d' % attackNum)
             break
         index = index + 1
-
-    configAttackName = simbase.config.GetString('attack-type', 'random')
-    if configAttackName == 'random':
-        return attackNum
-    elif configAttackName == 'sequence':
-        for i in xrange(len(attacks)):
-            if  attacks[i] not in debugAttackSequence:
-                debugAttackSequence[attacks[i]] = 1
-                return i
-
-        return attackNum
+    attack = attacks[attackNum]
+    if isinstance(attack, SuitAttack):
+        return attacks[attackNum].name
     else:
-        for i in xrange(len(attacks)):
-            if attacks[i][0] == configAttackName:
-                return i
+        return attacks[attackNum][0]
 
-        return attackNum
-    return
 
 def pickSuitCheat(cheats, suitLevel):
     cheatNum = None
@@ -567,6 +578,19 @@ def pickSuitCheat(cheats, suitLevel):
         return cheatNum
     return
 
+
+def findAttack(suitName, attackName):
+    for attack in SuitAttributes[suitName]['attacks']:
+        if isinstance(attack, SuitAttack):
+            if attack.name == attackName:
+                return attack
+        else:
+            if attack[0] == attackName:
+                return attack
+
+    notify.error('We ran into an issue finding the %(attackName)s attack for %(suitName)s. Does %(suitName)s have %(attackName)s?' % {'attackName': attackName,
+                                                                                                                                      'suitName': suitName})
+
 def getSuitCheat(suitName, suitLevel, cheatNum = -1):
     cheatChoices = SuitAttributes[suitName]['cheats']
     if cheatNum == -1:
@@ -586,12 +610,12 @@ def getSuitCheat(suitName, suitLevel, cheatNum = -1):
     return cdict
 
 
-def getSuitAttack(suitName, suitLevel, attackNum = -1):
+def getSuitAttack(suitName, suitLevel, attackName = ''):
     attackChoices = SuitAttributes[suitName]['attacks']
-    if attackNum == -1:
+    if attackName == '':
         notify.debug('getSuitAttack: picking attacking for %s' % suitName)
-        attackNum = pickSuitAttack(attackChoices, suitLevel)
-    attack = attackChoices[attackNum]
+        attackName = pickSuitAttack(attackChoices, suitLevel)
+    attack = findAttack(suitName, attackName)
     adict = {}
     adict['suitName'] = suitName
     if isinstance(attack, SuitAttack):

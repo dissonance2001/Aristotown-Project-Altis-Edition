@@ -1506,7 +1506,7 @@ struct ToonAttack {
 
 struct SuitAttack {
   int8 index;
-  int8 attack;
+  string attack;
   int8[] target;
   int16[] damage;
   int8 toonDied;

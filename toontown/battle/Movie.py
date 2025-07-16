@@ -948,14 +948,19 @@ class Movie(DirectObject.DirectObject):
         for sa in suitAttacks:
             targetGone = 0
             attack = sa[SUIT_ATK_COL]
-            if attack != NO_ATTACK:
+            if attack != '':
                 suitIndex = sa[SUIT_ID_COL]
                 suitId = suits[suitIndex]
                 suit = self.battle.findSuit(suitId)
-                if suit == None:
-                    self.notify.warning('suit: %d not in battle!' % suitId)
-                    return
-                adict = getSuitAttack(suit.getStyleName(), suit.getLevel(), attack)
+                # if suit == None:
+                #     self.notify.warning('suit: %d not in battle!' % suitId)
+                #     return
+                # NOTE: Maybe there's a better way to handle this?  ~Professor Control
+                try:
+                    adict = getSuitAttack(suit.getStyleName(), suit.getLevel(), attack)
+                except:
+                    # Everything else is cut out, and adict is only used for the group status.
+                    adict = {'group': ATK_TGT_GROUP}
                 adict['suit'] = suit
                 adict['battle'] = self.battle
                 adict['playByPlayText'] = self.playByPlayText
