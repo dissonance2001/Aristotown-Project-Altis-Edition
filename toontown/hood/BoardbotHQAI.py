@@ -14,7 +14,11 @@ class BoardbotHQAI(CogHQAI.CogHQAI):
             self, air, ToontownGlobals.BoardbotHQ, ToontownGlobals.BoardbotLobby,
             FADoorCodes.BD_DISGUISE_INCOMPLETE,
             DistributedCMElevatorAI.DistributedCMElevatorAI,
-            DistributedBoardbotBossAI.DistributedBoardbotBossAI)
+            DistributedBoardbotBossAI.DistributedBoardbotBossAI,
+            FADoorCodes.BD_DISGUISE_INCOMPLETE,
+            DistributedCMElevatorAI.DistributedCMElevatorAI,
+            DistributedBoardbotBossAI.DistributedBoardbotBossAI
+        )
 
         self.boardofficeElevators = []
         self.boardofficeBoardingParty = None

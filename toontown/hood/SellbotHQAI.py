@@ -1,9 +1,11 @@
 from toontown.building import DistributedVPElevatorAI
+from toontown.building import DistributedMultislackerElevatorAI
 from toontown.building import FADoorCodes
 from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPartyAI
 from toontown.coghq.DistributedFactoryElevatorExtAI import DistributedFactoryElevatorExtAI
 from toontown.hood import CogHQAI
 from toontown.suit import DistributedSellbotBossAI
+from toontown.suit import DistributedSellbotBossMiniAI
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.toonbase import ToontownGlobals
 
@@ -14,7 +16,11 @@ class SellbotHQAI(CogHQAI.CogHQAI):
             self, air, ToontownGlobals.SellbotHQ, ToontownGlobals.SellbotLobby,
             FADoorCodes.SB_DISGUISE_INCOMPLETE,
             DistributedVPElevatorAI.DistributedVPElevatorAI,
-            DistributedSellbotBossAI.DistributedSellbotBossAI)
+            DistributedSellbotBossAI.DistributedSellbotBossAI,
+            FADoorCodes.SB_DISGUISE_INCOMPLETE,
+            DistributedMultislackerElevatorAI.DistributedMultislackerElevatorAI,
+            DistributedSellbotBossMiniAI.DistributedSellbotBossMiniAI
+        )
 
         self.factoryElevators = []
         self.factoryBoardingParty = None

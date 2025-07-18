@@ -303,13 +303,13 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
 
-    def generateNewReserves(self, battleNumber):
+    def generateNewReserves(self, battleNumber, specialCode):
         if battleNumber == 1:
-            cogs = self.invokeReservesPlanner(11, 'lit2')
+            cogs = self.invokeReservesPlanner(11, specialCode)
             reserveSuits = cogs['reserveSuits']
             return {'reserveSuits': reserveSuits}
         elif battleNumber == 2:
-            cogs = self.invokeReservesPlanner(11, 'lit')
+            cogs = self.invokeReservesPlanner(11, specialCode)
             reserveSuits = cogs['reserveSuits']
             return {'reserveSuits': reserveSuits}
 

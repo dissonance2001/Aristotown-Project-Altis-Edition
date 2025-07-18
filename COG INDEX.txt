@@ -92,7 +92,7 @@ arbit - Arbitrator Level 50.mgr
 judy - Judy Level 20.mgr
 erclaim - Count Erclaim Level 20.mgr
 redd - Redd "Heir" Wing Level 20.mgr
-wsi - The Witness Stand-In Level 50.mgr (broken)
+wsi - The Witness Stand-In Level 50.mgr
 
 	Street Manager:
 mouthp - Mouthpiece Level 16.mgr
@@ -242,9 +242,11 @@ gatekeep - Gatekeeper Level 10.mgr
 dola - Director Of Land Acquisition Level 7.mgr
 dold - Director Of Land Development Level 25.mgr
 
+	Videographer Manager:
+fmaker - Filmmaker Level 28.mgr
+
 	Nothing:
 ghd - NOTHING Level N/A.mgr
-tyh - NOTHING Level N/A.mgr 
 jgd - NOTHING Level N/A.mgr
 bby - NOTHING Level N/A.mgr
 
@@ -319,8 +321,10 @@ dcw - Doctor White Level 5-15
 wnk - White Knight Level 6-15
 std - Stunt Double Level 7-18
 
+	Videographer Manager:
+director - Director Level 26.mgr
+
 	Nothing:
-pob - PLACEHOLDER Level N/A.mgr
 pbs - PLACEHOLDER Level N/A.mgr
 plb - PLACEHOLDER Level N/A.mgr
 put - PLACEHOLDER Level N/A.mgr

@@ -10,7 +10,6 @@ ELEVATOR_OFFICE = 5
 ELEVATOR_STAGE = 6
 ELEVATOR_BB = 7
 ELEVATOR_COUNTRY_CLUB = 8
-ELEVATOR_DIRECTORS = 33
 ELEVATOR_BOARD_OFFICE = 9
 ELEVATOR_CM = 10
 ELEVATOR_CBM = 11
@@ -90,12 +89,6 @@ ELEVATOR_VP_2: {'openTime': 4.0,
                'countdown': bboard.get('elevatorCountdown', 5.0),
                'sfxVolume': 0.7,
                'collRadius': 7.5},
-ELEVATOR_DIRECTORS: {'openTime': 4.0,
-                              'closeTime': 4.0,
-                              'width': 6.3,
-                              'countdown': bboard.get('elevatorCountdown', 5.0),
-                              'sfxVolume': 0.7,
-                              'collRadius': 7.5},
 ELEVATOR_PACE: {'openTime': 4.0,
                'closeTime': 4.0,
                'width': 6.3,

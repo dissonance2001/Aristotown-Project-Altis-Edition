@@ -701,6 +701,27 @@ def createGhostMentalityTrack(suit, battle):
     returnval = Parallel(suitTrack, deathSoundTrack, explosionTrack)
     return returnval
 
+def createRisingStars(suit, battle):
+    suitTrack = Sequence()
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    removeTrainTrack(suit, battle, suitTrack)
+    deathSuit = suit
+    deathSuit.setBlend(frameBlend=base.wantSmoothAnims)
+    suitTrack.append(Func(suit.hide))
+    #suitTrack.append(Func(suit.setSkelecog2, True))
+    suitTrack.append(Func(suit.setVirtual, True, True))
+    suitTrack.append(Func(suit.setCog, True))
+    suitTrack.append(Func(suit.show))
+    suitTrack.append(Func(suit.showHpText2, '1.5x Dmg Multiplier', 2))
+    suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
+    suitTrack.append(Func(suit.updateHealthBar, 0))
+    suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.makeLaserRevive))
+    suitTrack.append(LerpColorScaleInterval(suit, 0, (0, 0, 0, 0)))
+    suitTrack.append(Func(suit.setNeutralAnimation))
+    returnval = Parallel(suitTrack)
+    return returnval
+
 def createSuitReviveTrackVirtual(suit, battle):
     suitTrack = Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -1486,7 +1507,7 @@ def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
         suitTrack.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.dna.name == 'hroller2' and suit.isVulnerable:
         suitTrack.append(Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal and not suit.dna.name == 'dsf':
+    elif suit.isImmortal and not suit.dna.name == 'hroller':
         suitTrack.append(Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1),
                                   Func(suit.loop, 'highroller-neutral-levitate-loop')))
     else:

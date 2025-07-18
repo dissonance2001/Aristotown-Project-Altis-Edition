@@ -1242,6 +1242,39 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
+        #videographer cheats
+    elif name == 'VideographerRisingStars':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerRisingStars2':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerRisingStarsSacrifice':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerVideoStatic':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerElectricShock':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerAttackRewind':
+        camTrack.append(defaultCamera(openShotDuration=1.0))
+    elif name == 'VideographerDirectorCuts':
+        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(4.0), heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 4.7)))
+    #filmmaker cheats
+    elif name == 'FilmmakerCameraFlash':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'FilmmakerCameraRewind':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3.5)))
+    elif name == 'FilmmakerBudgetCuts':
+        camTrack.append(Sequence(heldShot(10, 0, 10, 115, -30, 0, 3), defaultCamera(openShotDuration=1.5, attackDuration=attackDuration - 3)))
+    #director cheats
+    elif name == 'DirectorCut':
+        camTrack.append(defaultCamera(openShotDuration=4.0))
+    elif name == 'DirectorAction':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DirectorActionRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'DirectorBackToOnes':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     #universal cheats
     elif name == 'Desperation':
         camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)

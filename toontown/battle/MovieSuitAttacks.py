@@ -568,6 +568,37 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doSplashback(attack)
     elif name == 'HighRollerCheerRetaliation':
         suitTrack = MovieHighRollerCheats.doSnipe(attack)
+    #videographer cheats
+    elif name == 'VideographerRisingStars':
+        suitTrack = MovieHighRollerCheats.doRisingStars(attack)
+    elif name == 'VideographerRisingStars2':
+        suitTrack = MovieHighRollerCheats.doRisingStars(attack)
+    elif name == 'VideographerRisingStarsSacrifice':
+        suitTrack = MovieHighRollerCheats.doRisingStarsSacrifice(attack)
+    elif name == 'VideographerVideoStatic':
+        suitTrack = MovieHighRollerCheats.doVideoStatic(attack)
+    elif name == 'VideographerElectricShock':
+        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 2)
+    elif name == 'VideographerAttackRewind':
+        suitTrack = MovieHighRollerCheats.doAttackRewind(attack)
+    elif name == 'VideographerDirectorCuts':
+        suitTrack = MovieHighRollerCheats.doDirectorCuts(attack)
+    #filmmaker cheats
+    elif name == 'FilmmakerCameraFlash':
+        suitTrack = MovieHighRollerCheats.doCameraFlash(attack)
+    elif name == 'FilmmakerCameraRewind':
+        suitTrack = MovieHighRollerCheats.doCameraRewind(attack)
+    elif name == 'FilmmakerBudgetCuts':
+        suitTrack = MovieHighRollerCheats.doBudgetCuts(attack)
+    #director cheats
+    elif name == 'DirectorCut':
+        suitTrack = MovieHighRollerCheats.doCut(attack)
+    elif name == 'DirectorAction':
+        suitTrack = MovieHighRollerCheats.doAction(attack)
+    elif name == 'DirectorActionRetaliation':
+        suitTrack = MovieHighRollerCheats.doSnipe(attack)
+    elif name == 'DirectorBackToOnes':
+        suitTrack = MovieHighRollerCheats.doBackToOnes(attack)
     #universal cheats
     elif name == 'Desperation':
         suitTrack = MovieUniversalCheats.doDesperation(attack)
@@ -4171,7 +4202,7 @@ def doShake(attack):
     suitTrack = getSuitAnimTrack(attack)
     damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
     dodgeAnims = [['jump'], ['jump', 0.01]]
-    soundTrack = getSoundTrack('SA_shake.ogg', delay=0.9, node=suit)
+    soundTrack = getSoundTrack('SA_shake.ogg', delay=0, node=suit)
     toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
     return Parallel(suitTrack, toonTracks, soundTrack)
 

@@ -16,7 +16,11 @@ class CashbotHQAI(CogHQAI.CogHQAI):
             self, air, ToontownGlobals.CashbotHQ, ToontownGlobals.CashbotLobby,
             FADoorCodes.CB_DISGUISE_INCOMPLETE,
             DistributedCFOElevatorAI.DistributedCFOElevatorAI,
-            DistributedCashbotBossAI.DistributedCashbotBossAI)
+            DistributedCashbotBossAI.DistributedCashbotBossAI,
+            FADoorCodes.CB_DISGUISE_INCOMPLETE,
+            DistributedCFOElevatorAI.DistributedCFOElevatorAI,
+            DistributedCashbotBossAI.DistributedCashbotBossAI
+        )
 
         self.mintElevators = []
         self.mintBoardingParty = None

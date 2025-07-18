@@ -356,7 +356,7 @@ class Avatar(Actor, ShadowCaster):
         elif type == 'exclamation':
             sfxIndex = 4
         elif type == 'special':
-            sfxIndex = 5
+            sfxIndex = 1
         else:
             notify.error('unrecognized dialogue type: ', type)
         if sfxIndex != None and sfxIndex < len(dialogueArray) and dialogueArray[sfxIndex] != None:

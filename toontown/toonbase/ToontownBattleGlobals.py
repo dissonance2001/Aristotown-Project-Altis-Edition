@@ -649,4 +649,6 @@ ValidStatusConditions = (
     'corruption',
     'groupDamageDown',
     'noDamage',
+    'busted',
+    'collectcalled',
 )

@@ -673,6 +673,10 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     suit.setNeutralAnimationRolled()
                 elif suit.style.name == 'videog':
                     suit.setNeutralAnimationRolled()
+                elif suit.style.name == 'director':
+                    suit.setNeutralAnimationRolled()
+                elif suit.style.name == 'fmaker':
+                    suit.setNeutralAnimationRolled()
                 else:
                     suit.setNeutralAnimation()
                 suit.setDizzy(0)
@@ -1056,6 +1060,10 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     elif suit.style.name == 'hrollers':
                         suit.setNeutralAnimationRolled()
                     elif suit.style.name == 'videog':
+                        suit.setNeutralAnimationRolled()
+                    elif suit.style.name == 'director':
+                        suit.setNeutralAnimationRolled()
+                    elif suit.style.name == 'fmaker':
                         suit.setNeutralAnimationRolled()
                     else:
                         suit.setNeutralAnimation()

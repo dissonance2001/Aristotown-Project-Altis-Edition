@@ -2512,25 +2512,25 @@ class BattleCalculatorAI:
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
-        if theSuit.dna.name == 'hroller':
-            x = self.TurnsElapsed
-            return 1
-        if theSuit.dna.name == 'hroller2':
-            x = self.TurnsElapsed
-            if x % 99 == 0:
-                return 14
-            else:
-                return 1
-        if theSuit.dna.name == 'hrollers':
-            x = self.TurnsElapsed
-            if theSuit.maxHP <= 12275:
-                return random.randint(1, 2)
-            if theSuit.maxHP <= 12100:
-                return random.randint(1, 2)
-            if theSuit.maxHP <= 12000:
-                return random.randint(1, 2)
-            else:
-                return 2
+     #   if theSuit.dna.name == 'hroller':
+           # x = self.TurnsElapsed
+           # return 'HighRollerWheelSpin'
+     #   if theSuit.dna.name == 'hroller2':
+         #   x = self.TurnsElapsed
+          #  if x % 99 == 0:
+           #     return 14
+           # else:
+              #  return 1
+       # if theSuit.dna.name == 'hrollers':
+           # x = self.TurnsElapsed
+           # if theSuit.maxHP <= 12275:
+              #  return random.randint(1, 2)
+           # if theSuit.maxHP <= 12100:
+                #return random.randint(1, 2)
+            #if theSuit.maxHP <= 12000:
+                #return random.randint(1, 2)
+        #    else:
+              #  return 2
         if theSuit.dna.name == 'radiog':
             x = self.TurnsElapsed
             currentBossHealth = -1
@@ -3502,11 +3502,11 @@ class BattleCalculatorAI:
             elif atkType == 'WiretapperCollectCall':
                 result = (24 + (self.TurnsElapsed * 1.3))
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'bound', 1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'collectcalled', 1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'collectcallcalculator', 0, 0, 'setBoth')
             elif atkType == 'WiretapperCollectCallDamage':
-                if self.toonHasCondition(toon.doId, 'bound'):
+                if self.toonHasCondition(toon.doId, 'collectcalled'):
                     result = (24 + (self.TurnsElapsed * 1.3))
                 else:
                     result = 0
@@ -3594,10 +3594,10 @@ class BattleCalculatorAI:
             elif atkType == 'UnionBusterUnionBuster':
                 result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'bound', 1, 5, 'setBoth')
+                self.setToonCondition(toon.doId, 'busted', 1, 5, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'unionbustercalculator', 0, 0, 'setBoth')
             elif atkType == 'UnionBusterUnionBusterDamage':
-                if self.toonHasCondition(toon.doId, 'bound'):
+                if self.toonHasCondition(toon.doId, 'busted'):
                     result = 25
                 else:
                     result = 0
@@ -3941,7 +3941,7 @@ class BattleCalculatorAI:
             elif atkType == 'HighRollerNoAttack':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                if self.suitHasCondition(theSuit.doId, 'phase3'):
+                if theSuit.dna.name == 'hroller2':
                     for t in self.battle.activeToons:
                         self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
                         self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
@@ -3958,29 +3958,6 @@ class BattleCalculatorAI:
                         self.setToonCondition(t, 'noZapGags', 1, 0, 'setBoth')
                         self.setToonCondition(t, 'noSoundGags', 1, 0, 'setBoth')
                         self.setToonCondition(t, random.choice(('noSquirtGags', 'noSoundGags', 'noToonUpGags', 'noLureGags')), 1, 2, 'setBoth')
-            elif atkType == 'HighRollerNoAttack':
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                if theSuit.dna.name == 'hroller2':
-                    for t in self.battle.activeToons:
-                        self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'nolevel5s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'nolevel4s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, random.choice(
-                        ('nolevel5s', 'nolevel7s', 'nolevel4s', 'nolevel6s', 'nolevel8s')), 1, 2, 'setBoth')
-                        self.setToonCondition(t, 'noSquirtGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noThrowGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noLureGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noDropGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noToonUpGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noTrapGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noZapGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noSoundGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t,
-                                          random.choice(('noSquirtGags', 'noSoundGags', 'noToonUpGags', 'noLureGags')),
-                                          1, 2, 'setBoth')
             elif atkType == 'HighRollerGameTimeSpawn':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -5300,7 +5277,7 @@ class BattleCalculatorAI:
                     attack[SUIT_ATK_COL] = 'UnionBusterUnionBusterDamage'  # DOT Union Buster
                     attack[SUIT_TGT_COL] = []
                     for toonId in self.battle.activeToons:
-                        if self.toonHasCondition(toonId, 'bound'):
+                        if self.toonHasCondition(toonId, 'busted'):
                             attack[SUIT_TGT_COL].append(self.battle.activeToons.index(toonId))
 
                     if attack[SUIT_TGT_COL] == []:
@@ -5450,6 +5427,36 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'hroller2':
+                if self.TurnsElapsed % 99 == 0 and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 'HighRollerWheelSpin'  # Wheel Spin
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != '':
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
@@ -5735,7 +5742,7 @@ class BattleCalculatorAI:
                     attack[SUIT_ATK_COL] = 'WiretapperCollectCallDamage'  # Collect Call Fees
                     attack[SUIT_TGT_COL] = []
                     for toonId in self.battle.activeToons:
-                        if self.toonHasCondition(toonId, 'bound'):
+                        if self.toonHasCondition(toonId, 'collectcalled'):
                             attack[SUIT_TGT_COL].append(self.battle.activeToons.index(toonId))
 
                     if attack[SUIT_TGT_COL] == []:

@@ -8,13 +8,21 @@ from pandac.PandaModules import *
 import random
 from direct.gui.DirectGui import *
 
+from toontown.battle import BattleProps
+from direct.showutil import Effects
 from toontown.suit import DistributedBossCog
+from direct.directnotify import DirectNotifyGlobal
+from direct.interval.IntervalGlobal import *
+from direct.particles import ParticleEffect
 from toontown.suit import DistributedCashbotBossGoon
 from toontown.suit import SuitDNA
+from toontown.battle.BattleProps import *
 from otp.otpbase import OTPGlobals
 from toontown.battle import MovieToonVictory
 from toontown.friends import FriendsListManager
 from toontown.battle import RewardPanel
+from toontown.suit import DistributedSuitBase
+from toontown.suit import Suit
 from toontown.battle import SuitBattleGlobals
 from toontown.building import ElevatorConstants
 from toontown.building import ElevatorUtils
@@ -55,6 +63,296 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         base.boss = self
         self.currHP = 0
         self.maxHP = self.bossMaxDamage
+
+        self.highroller = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('hroller')
+        self.highroller.setDNA(suitDNA)
+        self.highroller.setPickable(0)
+        self.highroller.setDisplayName('High Roller\nCashbot\nLevel 100.mgr')
+        self.highroller.doId = 0
+        self.highroller.loop('neutral')
+
+        self.stenographer = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('stenog')
+        self.stenographer.setDNA(suitDNA)
+        self.stenographer.setPickable(0)
+        self.stenographer.hideName()
+        self.stenographer.doId = 0
+        self.stenographer.loop('neutral')
+        self.litigator = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('lgator')
+        self.litigator.setDNA(suitDNA)
+        self.litigator.setPickable(0)
+        self.litigator.hideName()
+        self.litigator.doId = 0
+        self.litigator.loop('neutral')
+        self.casemanager = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('caseman')
+        self.casemanager.setDNA(suitDNA)
+        self.casemanager.setPickable(0)
+        self.casemanager.hideName()
+        self.casemanager.doId = 0
+        self.casemanager.loop('neutral')
+        self.scapegoat = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('sgoat')
+        self.scapegoat.setDNA(suitDNA)
+        self.scapegoat.setPickable(0)
+        self.scapegoat.hideName()
+        self.scapegoat.doId = 0
+        self.scapegoat.loop('neutral')
+        self.wsi = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('redd')
+        self.wsi.setDNA(suitDNA)
+        self.wsi.setPickable(0)
+        self.wsi.hideName()
+        self.wsi.doId = 0
+        self.wsi.loop('neutral')
+        self.chainsaw = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('chainsaw')
+        self.chainsaw.setDNA(suitDNA)
+        self.chainsaw.setPickable(0)
+        self.chainsaw.hideName()
+        self.chainsaw.doId = 0
+        self.chainsaw.loop('neutral')
+        self.firestarter = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('fires')
+        self.firestarter.setDNA(suitDNA)
+        self.firestarter.setPickable(0)
+        self.firestarter.hideName()
+        self.firestarter.doId = 0
+        self.firestarter.loop('neutral')
+        self.pacesetter = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('psetter')
+        self.pacesetter.setDNA(suitDNA)
+        self.pacesetter.setPickable(0)
+        self.pacesetter.hideName()
+        self.pacesetter.doId = 0
+        self.pacesetter.loop('neutral2')
+        self.treekiller = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('treek')
+        self.treekiller.setDNA(suitDNA)
+        self.treekiller.setPickable(0)
+        self.treekiller.hideName()
+        self.treekiller.doId = 0
+        self.treekiller.loop('neutral')
+        self.majorplayer = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('mplayer')
+        self.majorplayer.setDNA(suitDNA)
+        self.majorplayer.setPickable(0)
+        self.majorplayer.hideName()
+        self.majorplayer.doId = 0
+        self.majorplayer.loop('neutral')
+        self.dopa = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('dopa')
+        self.dopa.setDNA(suitDNA)
+        self.dopa.setPickable(0)
+        self.dopa.hideName()
+        self.dopa.doId = 0
+        self.dopa.loop('neutral')
+        self.dold = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('dold')
+        self.dold.setDNA(suitDNA)
+        self.dold.setPickable(0)
+        self.dold.hideName()
+        self.dold.doId = 0
+        self.dold.loop('neutral')
+        self.dola = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('dola')
+        self.dola.setDNA(suitDNA)
+        self.dola.setPickable(0)
+        self.dola.hideName()
+        self.dola.doId = 0
+        self.dola.loop('neutral')
+        self.derrman = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('derrman')
+        self.derrman.setDNA(suitDNA)
+        self.derrman.setPickable(0)
+        self.derrman.hideName()
+        self.derrman.doId = 0
+        self.derrman.loop('neutral')
+        self.dopr = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('dopr')
+        self.dopr.setDNA(suitDNA)
+        self.dopr.setPickable(0)
+        self.dopr.hideName()
+        self.dopr.doId = 0
+        self.dopr.loop('neutral')
+        self.derrhand = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('derrhand')
+        self.derrhand.setDNA(suitDNA)
+        self.derrhand.setPickable(0)
+        self.derrhand.hideName()
+        self.derrhand.doId = 0
+        self.derrhand.loop('neutral')
+        self.duckshuffler = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('duckshfl')
+        self.duckshuffler.setDNA(suitDNA)
+        self.duckshuffler.setPickable(0)
+        self.duckshuffler.hideName()
+        self.duckshuffler.doId = 0
+        self.duckshuffler.loop('sit-dock')
+        self.rainmaker = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('rainmake')
+        self.rainmaker.setDNA(suitDNA)
+        self.rainmaker.setPickable(0)
+        self.rainmaker.hideName()
+        self.rainmaker.doId = 0
+        self.rainmaker.loop('sit-dock')
+        self.ambassador = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('ambass')
+        self.ambassador.setDNA(suitDNA)
+        self.ambassador.setPickable(0)
+        self.ambassador.hideName()
+        self.ambassador.doId = 0
+        self.ambassador.loop('neutral')
+        self.wiretapper = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('wtapper')
+        self.wiretapper.setDNA(suitDNA)
+        self.wiretapper.setPickable(0)
+        self.wiretapper.hideName()
+        self.wiretapper.doId = 0
+        self.wiretapper.loop('neutral')
+        self.bookkeeper = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('bkeeper')
+        self.bookkeeper.setDNA(suitDNA)
+        self.bookkeeper.setPickable(0)
+        self.bookkeeper.hideName()
+        self.bookkeeper.doId = 0
+        self.bookkeeper.loop('neutral')
+        self.powerhouse = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('phouse')
+        self.powerhouse.setDNA(suitDNA)
+        self.powerhouse.setPickable(0)
+        self.powerhouse.hideName()
+        self.powerhouse.doId = 0
+        self.powerhouse.loop('neutral')
+        self.radiographer = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('radiog')
+        self.radiographer.setDNA(suitDNA)
+        self.radiographer.setPickable(0)
+        self.radiographer.hideName()
+        self.radiographer.doId = 0
+        self.radiographer.loop('neutral')
+        self.unionbuster = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('ubuster')
+        self.unionbuster.setDNA(suitDNA)
+        self.unionbuster.setPickable(0)
+        self.unionbuster.hideName()
+        self.unionbuster.doId = 0
+        self.unionbuster.loop('neutral')
+        self.racketeer = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('racket')
+        self.racketeer.setDNA(suitDNA)
+        self.racketeer.setPickable(0)
+        self.racketeer.hideName()
+        self.racketeer.doId = 0
+        self.racketeer.loop('neutral')
+        self.safesupervisor = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('safesupervis')
+        self.safesupervisor.setDNA(suitDNA)
+        self.safesupervisor.setPickable(0)
+        self.safesupervisor.hideName()
+        self.safesupervisor.doId = 0
+        self.safesupervisor.loop('neutral')
+        self.featherbedder = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('clubpres')
+        self.featherbedder.setDNA(suitDNA)
+        self.featherbedder.setPickable(0)
+        self.featherbedder.hideName()
+        self.featherbedder.doId = 0
+        self.featherbedder.loop('neutral')
+        self.witchhunter = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('ottoman')
+        self.witchhunter.setDNA(suitDNA)
+        self.witchhunter.setPickable(0)
+        self.witchhunter.hideName()
+        self.witchhunter.doId = 0
+        self.witchhunter.loop('neutral')
+        self.plutocrat = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('chairman')
+        self.plutocrat.setDNA(suitDNA)
+        self.plutocrat.setPickable(0)
+        self.plutocrat.hideName()
+        self.plutocrat.doId = 0
+        self.plutocrat.loop('neutral')
+        self.mrhollywood = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('mh2')
+        self.mrhollywood.setDNA(suitDNA)
+        self.mrhollywood.setPickable(0)
+        self.mrhollywood.setDisplayName('Mr. Hollywood\nSellbot\nLevel 25.exe')
+        self.mrhollywood.doId = 0
+        self.mrhollywood.loop('neutral')
+        self.videographer = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('videog')
+        self.videographer.setDNA(suitDNA)
+        self.videographer.setPickable(0)
+        self.videographer.setDisplayName('Videographer\nSellbot\nLevel 77.mgr')
+        self.videographer.doId = 0
+        self.videographer.loop('neutral')
+        self.director = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('director')
+        self.director.setDNA(suitDNA)
+        self.director.setPickable(0)
+        self.director.setDisplayName('Director\nPressbot\nLevel 20.mgr')
+        self.director.doId = 0
+        self.director.loop('neutral')
+        self.filmmaker = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('fmaker')
+        self.filmmaker.setDNA(suitDNA)
+        self.filmmaker.setPickable(0)
+        self.filmmaker.setDisplayName('Filmmaker\nBoardbot\nLevel 22.mgr')
+        self.filmmaker.doId = 0
+        self.filmmaker.loop('neutral')
+        self.majorplayer2 = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('mplayer')
+        self.majorplayer2.setDNA(suitDNA)
+        self.majorplayer2.setPickable(0)
+        self.majorplayer2.setDisplayName('Major Player\nBossbot\nLevel 28.mgr')
+        self.majorplayer2.doId = 0
+        self.majorplayer2.loop('neutral')
+        self.duckshuffler2 = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('duckshfl')
+        self.duckshuffler2.setDNA(suitDNA)
+        self.duckshuffler2.setPickable(0)
+        self.duckshuffler2.setDisplayName('Duck Shuffler\nCashbot\nLevel 5.mgr')
+        self.duckshuffler2.doId = 0
+        self.duckshuffler2.loop('neutral')
         return
 
     def announceGenerate(self):
@@ -89,7 +387,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         fn.addForce(gravity)
         self.physicsMgr.addLinearForce(gravity)
         base.localAvatar.chatMgr.chatInputSpeedChat.addCFOMenu()
-        self.titleText = OnscreenText('Cashbot Vault\nThe C.F.O.', fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1), font=ToontownGlobals.getSuitFont(), pos=(0, -0.5), scale=0.16, drawOrder=0, mayChange=1)
+        self.titleText = OnscreenText('Cashbot Vault\nThe High Roller', fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1), font=ToontownGlobals.getSuitFont(), pos=(0, -0.5), scale=0.16, drawOrder=0, mayChange=1)
         self.titleText.hide()
         global OneBossCog
         if OneBossCog != None:
@@ -190,6 +488,11 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def loadEnvironment(self):
         DistributedBossCog.DistributedBossCog.loadEnvironment(self)
+        self.highRollerArena = loader.loadModel('phase_13/models/events/apriltoons/highroller/cc_m_ara_int_highroller.bam')
+        self.highRollerTV = loader.loadModel('phase_13/models/events/apriltoons/highroller/cc_m_ara_hr_prp_tv_base.bam')
+        self.highRollerWheel = globalPropPool.getProp('wheel')
+        self.highRollerWheel.loop('wheel')
+        self.highRollerWheel.setScale(6)
         self.midVault = loader.loadModel('phase_10/models/cogHQ/MidVault.bam')
         self.endVault = loader.loadModel('phase_10/models/cogHQ/EndVault.bam')
         self.lightning = loader.loadModel('phase_10/models/cogHQ/CBLightning.bam')
@@ -210,11 +513,95 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             self.safe2.reparentTo(headPart)
         self.eyes.hide()
         self.safe2.hide()
-        self.midVault.setPos(0, -222, -70.7)
+        self.midVault.setPos(10, -222, -70.7)
+        self.highRollerArena.setPos(0, -222, -3.95)
         self.endVault.setPos(84, -201, -6)
         self.geom = NodePath('geom')
         self.midVault.reparentTo(self.geom)
+        self.highRollerArena.reparentTo(self.geom)
         self.endVault.reparentTo(self.geom)
+        self.ambassador.reparentTo(self.geom)
+        self.ambassador.setPosHpr(-37.5, -252.5, 11.75, -20, 0, 0)
+        self.wiretapper.reparentTo(self.geom)
+        self.wiretapper.setPosHpr(-32.5, -254.5, 11.75, -20, 0, 0)
+        self.bookkeeper.reparentTo(self.geom)
+        self.bookkeeper.setPosHpr(-27.5, -256.5, 11.75, -20, 0, 0)
+        self.powerhouse.reparentTo(self.geom)
+        self.powerhouse.setPosHpr(-22.5, -258.5, 11.75, -20, 0, 0)
+        self.safesupervisor.reparentTo(self.geom)
+        self.safesupervisor.setPosHpr(-37.5, -240.5, 4.75, -20, 0, 0)
+        self.unionbuster.reparentTo(self.geom)
+        self.unionbuster.setPosHpr(-32.5, -242.5, 4.75, -20, 0, 0)
+        self.radiographer.reparentTo(self.geom)
+        self.radiographer.setPosHpr(-27.5, -244.5, 4.75, -20, 0, 0)
+        self.racketeer.reparentTo(self.geom)
+        self.racketeer.setPosHpr(-22.5, -246.5, 4.75, -20, 0, 0)
+        self.stenographer.reparentTo(self.geom)
+        self.stenographer.setPosHpr(-25, -252.5, 7.75, -20, 0, 0)
+        self.litigator.reparentTo(self.geom)
+        self.litigator.setPosHpr(-30, -250.5, 7.75, -20, 0, 0)
+        self.duckshuffler.reparentTo(self.geom)
+        self.duckshuffler.setPosHpr(-4, -247.5, 15.75, -180, 0, 0)
+        self.rainmaker.reparentTo(self.geom)
+        self.rainmaker.setPosHpr(4, -247.5, 15.75, -180, 0, 0)
+        self.scapegoat.reparentTo(self.geom)
+        self.scapegoat.setPosHpr(-35, -248.5, 7.75, -20, 0, 0)
+        self.wsi.reparentTo(self.geom)
+        self.wsi.setPosHpr(-40, -246.5, 7.75, -20, 0, 0)
+        self.casemanager.reparentTo(self.geom)
+        self.casemanager.setPosHpr(-20, -254.5, 7.75, -20, 0, 0)
+        self.derrman.reparentTo(self.geom)
+        self.derrman.setPosHpr(17.5, -256.5, 7.75, 20, 0, 0)
+        self.derrhand.reparentTo(self.geom)
+        self.derrhand.setPosHpr(25, -252.5, 7.75, 20, 0, 0)
+        self.dold.reparentTo(self.geom)
+        self.dold.setPosHpr(30, -250.5, 7.75, 20, 0, 0)
+        self.dopa.reparentTo(self.geom)
+        self.dopa.setPosHpr(35, -248.5, 7.75, 20, 0, 0)
+        self.dopr.reparentTo(self.geom)
+        self.dopr.setPosHpr(40, -246.5, 7.75, 20, 0, 0)
+        self.dola.reparentTo(self.geom)
+        self.highroller.reparentTo(self.geom)
+        self.highroller.setPosHpr(0, -200, 0, 180, 0, 0)
+        self.highroller.hide()
+        self.mrhollywood.reparentTo(self.geom)
+        self.mrhollywood.setPosHpr(5, -200, 0, 180, 0, 0)
+        self.mrhollywood.hide()
+        self.videographer.reparentTo(self.geom)
+        self.videographer.setPosHpr(-5, -200, 0, 180, 0, 0)
+        self.videographer.hide()
+        self.majorplayer2.reparentTo(self.geom)
+        self.majorplayer2.setPosHpr(5, -200, 0, 180, 0, 0)
+        self.duckshuffler2.reparentTo(self.geom)
+        self.duckshuffler2.setPosHpr(-5, -200, 0, 180, 0, 0)
+        self.duckshuffler2.hide()
+        self.director.reparentTo(self.geom)
+        self.director.setPosHpr(-10, -200, 0, 180, 0, 0)
+        self.director.hide()
+        self.filmmaker.reparentTo(self.geom)
+        self.filmmaker.setPosHpr(10, -200, 0, 180, 0, 0)
+        self.filmmaker.hide()
+        self.dola.setPosHpr(20, -254.5, 7.75, 20, 0, 0)
+        self.featherbedder.reparentTo(self.geom)
+        self.featherbedder.setPosHpr(20, -246.5, 4.75, 20, 0, 0)
+        self.witchhunter.reparentTo(self.geom)
+        self.witchhunter.setPosHpr(35, -240.5, 4.75, 20, 0, 0)
+        self.plutocrat.reparentTo(self.geom)
+        self.plutocrat.setPosHpr(30, -242.5, 1.75, 20, 0, 0)
+        self.majorplayer.reparentTo(self.geom)
+        self.majorplayer.setPosHpr(-42.5, -250.5, 11.75, -20, 0, 0)
+        self.chainsaw.reparentTo(self.geom)
+        self.chainsaw.setPosHpr(42.5, -250.5, 11.75, 20, 0, 0)
+        self.treekiller.reparentTo(self.geom)
+        self.treekiller.setPosHpr(37.5, -252.5, 11.75, 20, 0, 0)
+        self.firestarter.reparentTo(self.geom)
+        self.firestarter.setPosHpr(27.5, -256.5, 11.75, 20, 0, 0)
+        self.pacesetter.reparentTo(self.geom)
+        self.pacesetter.setPosHpr(22.5, -258.5, 11.75, 20, 0, 0)
+        self.highRollerWheel.reparentTo(self.geom)
+        self.highRollerWheel.setPosHpr(0, -170, 0, 180, 0, 0)
+        self.highRollerTV.reparentTo(self.geom)
+        self.highRollerTV.setPosHpr(-25, -185, 21.75, -10, 0, 0)
         self.endVault.findAllMatches('**/MagnetArms').detach()
         self.endVault.findAllMatches('**/Safes').detach()
         self.endVault.findAllMatches('**/MagnetControlsAll').detach()
@@ -338,7 +725,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         bossTrack.append(Func(self.getGeomNode().setH, 180))
         bossTrack.append(Func(self.pelvis.setHpr, self.pelvisForwardHpr))
         bossTrack.append(Func(self.loop, 'Ff_neutral'))
-        track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
+        track, hpr = self.rollBossToPoint(battlePos, None, battlePos, None, 0)
         bossTrack.append(track)
         track, hpr = self.rollBossToPoint(battlePos, hpr, battlePos, battleHpr, 0)
         bossTrack.append(track)
@@ -353,65 +740,65 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         rToon.setPosHpr(*ToontownGlobals.CashbotRTBattleOneStartPosHpr)
         track = Sequence(
             #Func(base.camera.setPosHpr, 82, -219, 5, 267, 0, 0),
-            base.camera.posHprInterval(1, Point3(82, -219, 5), VBase3(267, 0, 0)),
-            Func(rToon.setChatAbsolute, TTL.ResistanceToonWelcome, CFSpeech),
-            Wait(3),
-            Sequence(goonTrack, duration=0),
-            Parallel(
-                base.camera.posHprInterval(4, Point3(108, -244, 4), VBase3(211.5, 0, 0), blendType = 'easeInOut'),
-                Sequence(
-                    Func(rToon.suit.setPlayRate, 1.4, 'walk'),
-                    Func(rToon.suit.loop, 'walk'),
-                    Parallel(
-                        rToon.hprInterval(1, VBase3(180, 0, 0)),
-                        rToon.posInterval(3, VBase3(120, -255, 0)),
-                        Sequence(
-                            Wait(2),
-                            Func(rToon.clearChat))),
-                        Func(rToon.suit.loop, 'neutral'),
-                        self.door2.posInterval(3, VBase3(0, 0, 30)))),
-                        Func(rToon.setHpr, 0, 0, 0),
-                        Func(rToon.setChatAbsolute, TTL.ResistanceToonTooLate, CFSpeech),
                         Func(base.camera.reparentTo, render),
-                        Func(base.camera.setPosHpr, 61.1, -228.8, 10.2, 270, 0, 0),
-                        self.door1.posInterval(2, VBase3(0, 0, 30)),
+                        Func(base.camera.setPosHpr, 0, - 240, 10, 0, 0, 0),
                         Parallel(
                             bossTrack,
-                            Sequence(
-                                Wait(3),
+                            Sequence(Func(self.majorplayer2.setChatAbsolute, "How's the hoop skip out there toe-taps, can't thank ya enough for these claps!", CFSpeech),
+                             Wait(4),
+                                     Func(self.majorplayer2.setChatAbsolute,
+                                          "Takes two to tango, babe, and I am proud and poppin' to introduce today's special guest!",
+                                          CFSpeech),
+                                     Wait(3),
+                                     Func(self.duckshuffler2.show), ActorInterval(self.duckshuffler2, 'slip-forward'), Func(self.duckshuffler2.loop, 'neutral'),
+                                     Func(self.majorplayer2.setChatAbsolute,
+                                          "Buck Ruffler: The Duck Shuffler!",
+                                          CFSpeech), Func(self.duckshuffler2.setChatAbsolute,
+                                          "Oh my Cogth thath me",
+                                          CFSpeech), Wait(1.5), Func(self.duckshuffler2.setChatAbsolute,
+                                                          "Waith I needth to thay it too",
+                                          CFSpeech), Wait(1.5), Func(self.duckshuffler2.setChatAbsolute,
+                                                          "Buck Ruffler: The Duck Thuffler!",
+                                          CFSpeech),
+                                     Wait(3),
+                                    Func(self.majorplayer2.setChatAbsolute,
+                                          "Baby Blue, ya knew my words were true-I told ya we'd meet again!",
+                                          CFSpeech),
+                                     Wait(3),
+                                     Func(self.duckshuffler2.setChatAbsolute,
+                                          "I gueth we'll have to give em tha thpecial thow though! Come on mic thpam!",
+                                          CFSpeech),
+                                     Wait(2),
+                                     Func(self.majorplayer2.setChatAbsolute,
+                                          "Hachahoo hooi-didibadoo! Here's a special shabaadoopdaa-show from we to you!",
+                                          CFSpeech),
+                                     Wait(3),
+                                     Func(self.majorplayer2.removeNode), Func(self.duckshuffler2.removeNode),
                                 Func(rToon.clearChat),
-                                self.door1.posInterval(3, VBase3(0, 0, 0)))),
-                            base.camera.posHprInterval(1, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
+                            #base.camera.posHprInterval(1, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
                             Func(self.titleSeq.start),
-                            Func(self.setChatAbsolute, TTL.CashbotBossDiscoverToons1, CFSpeech),
-                            Func(self.setChatAbsolute, TTL.CashbotBossDiscoverToons2, CFSpeech),
+                                Func(self.highroller.show),
+                            Func(self.highroller.setChatAbsolute, "Welcome back to the Tooniverffe'ff favorite ffhow!", CFSpeech),
+                             Wait(4),
+                            Func(self.highroller.setChatAbsolute, "What'ya waitin' for, babe? Hop on fftage! let'ff get hoppin' and boppin', jumpin' and jinglin', ffingin' and ffwingin'!", CFSpeech),
                             Wait(4),
-                            Func(self.setChatAbsolute, '', CFSpeech),
+                            Func(self.highroller.setChatAbsolute, "Ohoho-no-no, takeff a party to partiffipate and play, and I ffay play!!", CFSpeech),
                             self.loseCogSuits(self.toonsA + self.toonsB, render, (113, -228, 10, 90, 0, 0)),
                             Wait(1),
                             Func(rToon.setHpr, 0, 0, 0),
                             self.loseCogSuits([rToon], render, (133, -243, 5, 143, 0, 0), True),
-                            Func(rToon.setChatAbsolute, TTL.ResistanceToonKeepHimBusy, CFSpeech),
                             Wait(1),
-                            Func(self.__showResistanceToon, False),
-                            Sequence(
-                                Func(rToon.animFSM.request, 'run'),
-                                rToon.hprInterval(1, VBase3(180, 0, 0)),
-                                Parallel(
-                                    Sequence(
-                                        rToon.posInterval(1.5, VBase3(109, -294, 0)),
-                                        Parallel(Func(rToon.animFSM.request, 'jump')),
-                                        rToon.posInterval(1.5, VBase3(93.935, -341.065, 2))),
-                                    self.door2.posInterval(3, VBase3(0, 0, 0))),
-                                    Func(rToon.animFSM.request, 'neutral')),
                                     self.toonNormalEyes(self.involvedToons),
                                     self.toonNormalEyes([self.resistanceToon], True),
                                     Func(rToon.clearChat),
+            Func(base.camera.reparentTo, render),
+            Func(base.camera.setPosHpr, 0, - 240, 10, 0, 0, 0),
                                     #Func(base.camera.setPosHpr, 93.3, -230, 0.7, -92.9, 39.7, 8.3),
-                                    base.camera.posHprInterval(2, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
-                                    Func(self.setChatAbsolute, attackToons, CFSpeech),
-                                    Wait(2),
-                                    Func(self.setChatAbsolute, '', CFSpeech))
+                                   # base.camera.posHprInterval(2, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
+            Func(self.highroller.setChatAbsolute,
+                 "Here'ff a ffpinnin wheel I know ya can get behaHAHAHA-hind!", CFSpeech),
+            Wait(4), Func(self.highroller.hide),
+            Func(self.highroller.setChatAbsolute, '', CFSpeech))))
         return Sequence(Func(base.camera.reparentTo, render), track)
 
     def makePrepareBattleTwoMovie(self, delayDeletes):
@@ -426,9 +813,9 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         bossTrack.append(Func(self.getGeomNode().setH, 180))
         bossTrack.append(Func(self.pelvis.setHpr, self.pelvisForwardHpr))
         bossTrack.append(Func(self.loop, 'Ff_neutral'))
-        track, hpr = self.rollBossToPoint(startPos, startHpr, startPos, battleHpr, 0)
+        track, hpr = self.rollBossToPoint(battlePos, startHpr, battlePos, battleHpr, 0)
         bossTrack.append(track)
-        track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
+        track, hpr = self.rollBossToPoint(battlePos, None, battlePos, None, 0)
         bossTrack.append(track)
         track, hpr = self.rollBossToPoint(battlePos, battleHpr, battlePos, finalHpr, 0)
         bossTrack.append(track)
@@ -437,113 +824,47 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.__arrangeToonsAroundResistanceToon()
         base.playMusic(self.midCutsceneMusic, looping=1, volume=0.9)
         track = Sequence(
-            Parallel(
-                self.door2.posInterval(4.5, VBase3(0, 0, 30)),
-                self.door3.posInterval(4.5, VBase3(0, 0, 30)),
-                bossTrack),
-            Func(self.__showResistanceToon, False),
-            Func(self.__showToons),
-            Wait(1),
-            Func(base.camera.wrtReparentTo, render),
-            Func(base.camera.setPos, Point3(120, -280, 1)),
-            Func(base.camera.setHpr, Point3(0, 0, 0)),
-            Func(rToon.setChatAbsolute, TTL.ResistanceToonFollowHim, CFSpeech),
-            Wait(2),
-            Func(rToon.setHpr, Point3(180,0,0)),
-            Func(rToon.animFSM.request, 'run'),
-            rToon.posInterval(2, Point3(toonPosHpr[0], toonPosHpr[1], toonPosHpr[2])),
-            Func(rToon.animFSM.request, 'neutral'),
-            self.createWalkInInterval(),
-            Wait(1),
-            Func(rToon.clearChat),
-            Func(base.camera.wrtReparentTo, self.geom),
-            base.camera.posHprInterval(1, Point3(105, -326, 20), VBase3(-45.3, 15, 0), blendType='easeInOut'),
-            Parallel(
-                self.door2.posInterval(4.5, VBase3(0, 0, 0)),
-                self.door3.posInterval(4.5, VBase3(0, 0, 0)),
-            Sequence(
-            Func(self.setChatAbsolute, TTL.CashbotBossTrapped, CFSpeech),
-            Wait(4),
-            Func(self.clearChat),
-            Func(self.setChatAbsolute, TTL.CashbotBossCogAttack, CFSpeech),
-            Wait(2),
-            Func(self.setChatAbsolute, TTL.CashbotBossCogAgain, CFSpeech),
-            Wait(2),
-            Func(self.setChatAbsolute, '', CFSpeech),
-            Func(self.getGeomNode().setH, 0),
-            Func(self.midCutsceneMusic.stop))))
+            # Func(base.camera.setPosHpr, 82, -219, 5, 267, 0, 0),
+            Func(base.camera.reparentTo, render),
+            Func(base.camera.setPosHpr, 0, - 240, 10, 0, 0, 0),
+            Parallel(Func(self.highroller.show),
+                bossTrack,
+                Sequence(
+                    Wait(3),
+                    Func(rToon.clearChat),
+            # base.camera.posHprInterval(1, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
+            Func(self.highroller.setChatAbsolute, "WhAHAHAHAt a ffhow!", CFSpeech),
+            Wait(5),
+            Func(self.highroller.setChatAbsolute,
+                 "Oooo-hooo-hooo, ratingff are ffkyrocketing! Line goeff up, head turner! Keep thoffe cameraff rollin'!", CFSpeech),
+            Wait(5),
+            Func(self.highroller.setChatAbsolute,
+                 "Let'ff ffee the nefft big play for today!", CFSpeech),
+            Wait(5),
+            Func(base.camera.reparentTo, render),
+            Func(base.camera.setPosHpr, 0, - 240, 10, 0, 0, 0),
+            # Func(base.camera.setPosHpr, 93.3, -230, 0.7, -92.9, 39.7, 8.3),
+            # base.camera.posHprInterval(2, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
+            Func(self.highroller.setChatAbsolute,
+                 "WHAT A TWIFFT, BUTTERCUP BLUE!", CFSpeech),
+            Wait(5),
+            Func(self.highroller.loop, 'rolled'), Func(self.mrhollywood.loop, 'rolled'), Func(self.director.loop, 'rolled'), Func(self.filmmaker.loop, 'rolled'), Func(self.videographer.loop, 'rolled'),
+                    Func(self.mrhollywood.show),  Func(self.filmmaker.show),  Func(self.director.show), Func(self.videographer.show),
+            Func(self.highroller.setChatAbsolute,
+                 "Give a warm, hot on the oven, flaff fire, round of applauffe for my ffecond favorite ffet of...", CFSpeech),
+            Wait(5),
+            Func(self.highroller.setChatAbsolute,
+                 "Ffcallywagff, clownff, quipffterff, harlequinff, buffoonff, wiffecrackerff, raffcalff, ne'er-do-wellff, Lollyggaggerff, tomfoolerff, jokerff, hoaxerff, trickffterff, jokeffmithff, humoriftfth, Rabbelroufferff, ffhenaiganifferff, goofffterff, merrymakerff, ruffianff, ffkylarkff, gooberff,", CFSpeech),
+            Wait(5),
+            Func(self.highroller.setChatAbsolute,
+                 "Have fun with thiff one, ffweetie pie!",
+                 CFSpeech),
+            Wait(5),
+            Func(self.highroller.setChatAbsolute, '', CFSpeech),
+                    Func(self.__showToons),
+        Func(self.mrhollywood.removeNode), Func(self.highroller.removeNode),  Func(self.videographer.removeNode), Func(self.director.removeNode),  Func(self.filmmaker.removeNode))))
         return Sequence(Func(base.camera.reparentTo, self), base.camera.posHprInterval(1, Point3(0, -27, 25), VBase3(0, -18, 0), blendType='easeInOut'), track, Func(base.camera.reparentTo, render))
-
-    def makePrepareBattleThreeMovie(self, delayDeletes):
-            startPos = Point3(ToontownGlobals.CashbotBossBattleOnePosHpr[0],
-                              ToontownGlobals.CashbotBossBattleOnePosHpr[1],
-                              ToontownGlobals.CashbotBossBattleOnePosHpr[2])
-            battlePos = Point3(ToontownGlobals.CashbotBossBattleThreePosHpr[0],
-                               ToontownGlobals.CashbotBossBattleThreePosHpr[1],
-                               ToontownGlobals.CashbotBossBattleThreePosHpr[2])
-            startHpr = Point3(ToontownGlobals.CashbotBossBattleOnePosHpr[3],
-                              ToontownGlobals.CashbotBossBattleOnePosHpr[4],
-                              ToontownGlobals.CashbotBossBattleOnePosHpr[5])
-            battleHpr = VBase3(ToontownGlobals.CashbotBossBattleThreePosHpr[3],
-                               ToontownGlobals.CashbotBossBattleThreePosHpr[4],
-                               ToontownGlobals.CashbotBossBattleThreePosHpr[5])
-            finalHpr = VBase3(135, 0, 0)
-            toonPosHpr = ToontownGlobals.CashbotRTBattleTwoEndPosHpr
-            bossTrack = Sequence()
-            bossTrack.append(Func(self.reparentTo, render))
-            bossTrack.append(Func(self.getGeomNode().setH, 180))
-            bossTrack.append(Func(self.pelvis.setHpr, self.pelvisForwardHpr))
-            bossTrack.append(Func(self.loop, 'Ff_neutral'))
-            track, hpr = self.rollBossToPoint(startPos, startHpr, startPos, battleHpr, 0)
-            bossTrack.append(track)
-            track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
-            bossTrack.append(track)
-            track, hpr = self.rollBossToPoint(battlePos, battleHpr, battlePos, finalHpr, 0)
-            bossTrack.append(track)
-            rToon = self.resistanceToon
-            rToon.setPosHpr(*ToontownGlobals.CashbotRTBattleTwoStartPosHpr)
-            self.__arrangeToonsAroundResistanceToon()
-            base.playMusic(self.midCutsceneMusic, looping=1, volume=0.9)
-            track = Sequence(
-                Parallel(
-                    self.door2.posInterval(4.5, VBase3(0, 0, 30)),
-                    self.door3.posInterval(4.5, VBase3(0, 0, 30)),
-                    bossTrack),
-                Func(self.__showResistanceToon, False),
-                Func(self.__showToons),
-                Wait(1),
-                Func(base.camera.wrtReparentTo, render),
-                Func(base.camera.setPos, Point3(120, -280, 1)),
-                Func(base.camera.setHpr, Point3(0, 0, 0)),
-                Func(rToon.setChatAbsolute, TTL.ResistanceToonFollowHim, CFSpeech),
-                Wait(2),
-                Func(rToon.setHpr, Point3(180, 0, 0)),
-                Func(rToon.animFSM.request, 'run'),
-                rToon.posInterval(2, Point3(toonPosHpr[0], toonPosHpr[1], toonPosHpr[2])),
-                Func(rToon.animFSM.request, 'neutral'),
-                self.createWalkInInterval(),
-                Wait(1),
-                Func(rToon.clearChat),
-                Func(base.camera.wrtReparentTo, self.geom),
-                base.camera.posHprInterval(1, Point3(105, -326, 20), VBase3(-45.3, 15, 0), blendType='easeInOut'),
-                Parallel(
-                    self.door2.posInterval(4.5, VBase3(0, 0, 0)),
-                    self.door3.posInterval(4.5, VBase3(0, 0, 0)),
-                    Sequence(
-                        Func(self.setChatAbsolute, TTL.CashbotBossTrapped, CFSpeech),
-                        Wait(4),
-                        Func(self.clearChat),
-                        Func(self.setChatAbsolute, TTL.CashbotBossCogAttack, CFSpeech),
-                        Wait(2),
-                        Func(self.setChatAbsolute, TTL.CashbotBossCogAgain, CFSpeech),
-                        Wait(2),
-                        Func(self.setChatAbsolute, '', CFSpeech),
-                        Func(self.getGeomNode().setH, 0),
-                        Func(self.midCutsceneMusic.stop))))
-            return Sequence(Func(base.camera.reparentTo, self),
-                            base.camera.posHprInterval(1, Point3(0, -27, 25), VBase3(0, -18, 0), blendType='easeInOut'),
-                            track, Func(base.camera.reparentTo, render))
-
+		
     def createWalkInInterval(self):
         retval = Parallel()
         delay = 0
@@ -567,7 +888,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
         return retval
 
-    def __makeGoonMovieForBattleFour(self):
+    def __makeGoonMovieForBattleThree(self):
         goonPosHprs = [[Point3(111, -287, 0),
           VBase3(165, 0, 0),
           Point3(101, -323, 0),
@@ -587,7 +908,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         goonTrack = Sequence(Func(self.__showFakeGoons, 'Walk'), Func(mainGoon.request, 'Stunned'), Func(goonLoop.loop), Wait(20))
         return goonTrack
 
-    def makePrepareBattleFourMovie(self, delayDeletes, crane, safe):
+    def makePrepareBattleThreeMovie(self, delayDeletes, crane, safe):
         for toonId in self.involvedToons:
             toon = self.cr.doId2do.get(toonId)
             if toon:
@@ -650,13 +971,13 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             Func(self.__hideFakeGoons),
             Func(crane.request, 'Free'),
             Func(self.getGeomNode().setH, 0),
-            self.moveToonsToBattleFourPos(self.involvedToons),
+            self.moveToonsToBattleThreePos(self.involvedToons),
             Func(self.midCutsceneMusic.stop),
             Func(self.__showToons),
             Wait(2))
         return Sequence(Func(base.camera.reparentTo, self), base.camera.posHprInterval(1, Point3(0, -27, 25), VBase3(0, -18, 0), blendType='easeInOut'), track) #Func(base.camera.setPosHpr, 0, -27, 25, 0, -18, 0)
 
-    def moveToonsToBattleFourPos(self, toons):
+    def moveToonsToBattleThreePos(self, toons):
         track = Parallel()
         for i in xrange(len(toons)):
             toon = base.cr.doId2do.get(toons[i])
@@ -956,6 +1277,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 		
     def enterPrepareBattleTwo(self):
         self.controlToons()
+        self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
         NametagGlobals.setWant2dNametags(True)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
@@ -977,7 +1299,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.clearInterval(intervalName)
         self.unstickToons()
         self.releaseToons()
-        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWant2dNametags(True)
         ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, ElevatorConstants.ELEVATOR_CFO)
     
     def enterBattleTwo(self):
@@ -1001,60 +1323,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.clearInterval(intervalName)
         self.doneBarrier('PrepareBattleTwo')
 
-    def enterRollToBattleThree(self):
-        pass
-
-    def exitRollToBattleThree(self):
-        self.battleOneMusic.stop()
-
     def enterPrepareBattleThree(self):
-        self.controlToons()
-        NametagGlobals.setWant2dNametags(True)
-        NametagGlobals.setWantActiveNametags(True)
-        base.localAvatar.setFriendsListButtonActive(1)
-        intervalName = 'PrepareBattleThreeMovie'
-        delayDeletes = []
-        seq = Sequence(self.makePrepareBattleThreeMovie(delayDeletes), Func(self.__beginBattleThree), name=intervalName)
-        seq.delayDeletes = delayDeletes
-        seq.start()
-        self.storeInterval(seq, intervalName)
-        self.endVault.unstash()
-        self.evWalls.stash()
-        self.midVault.unstash()
-        self.__hideToons()
-        self.__hideResistanceToon()
-        taskMgr.add(self.__doPhysics, self.uniqueName('physics'), priority=25)
-
-    def exitPrepareBattleThree(self):
-        intervalName = 'PrepareBattleThreeMovie'
-        self.clearInterval(intervalName)
-        self.unstickToons()
-        self.releaseToons()
-        NametagGlobals.setWant2dNametags(False)
-        ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, ElevatorConstants.ELEVATOR_CFO)
-
-    def enterBattleThree(self):
-        self.reparentTo(render)
-        self.evWalls.unstash()
-        self.setPosHpr(*ToontownGlobals.CashbotBossBattleOnePosHpr)
-        self.show()
-        NametagGlobals.setWant2dNametags(True)
-        NametagGlobals.setWantActiveNametags(True)
-        base.localAvatar.setFriendsListButtonActive(1)
-        self.pelvis.setHpr(self.pelvisReversedHpr)
-        self.doAnimate()
-        self.__hideResistanceToon()
-        base.playMusic(self.battleTwoMusic, looping=1, volume=0.9)
-
-    def exitBattleThree(self):
-        self.battleTwoMusic.stop()
-
-    def __beginBattleThree(self):
-        intervalName = 'PrepareBattleThreeMovie'
-        self.clearInterval(intervalName)
-        self.doneBarrier('PrepareBattleThree')
-
-    def enterPrepareBattleFour(self):
         self.controlToons()
         NametagGlobals.setWant2dNametags(True)
         NametagGlobals.setWantActiveNametags(True)
@@ -1064,19 +1333,19 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.movieCrane = self.cranes[0]
         self.movieSafe = self.safes[1]
         self.movieCrane.request('Movie')
-        seq = Sequence(self.makePrepareBattleFourMovie(delayDeletes, self.movieCrane, self.movieSafe), Func(self.__beginBattleFour), name=intervalName)
+        seq = Sequence(self.makePrepareBattleThreeMovie(delayDeletes, self.movieCrane, self.movieSafe), Func(self.__beginBattleThree), name=intervalName)
         seq.delayDeletes = delayDeletes
         seq.start()
         self.storeInterval(seq, intervalName)
         self.__showResistanceToon(False)
         taskMgr.add(self.__doPhysics, self.uniqueName('physics'), priority=50)
 
-    def __beginBattleFour(self):
-        intervalName = 'PrepareBattleFourMovie'
+    def __beginBattleThree(self):
+        intervalName = 'PrepareBattleThreeMovie'
         self.clearInterval(intervalName)
-        self.doneBarrier('PrepareBattleFour')
+        self.doneBarrier('PrepareBattleThree')
 
-    def exitPrepareBattleFour(self):
+    def exitPrepareBattleThree(self):
         intervalName = 'PrepareBattleThreeMovie'
         self.clearInterval(intervalName)
         self.unstickToons()
@@ -1084,7 +1353,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         if self.newState == 'BattleThree':
             self.movieCrane.request('Free')
             self.movieSafe.request('Initial')
-        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWant2dNametags(True)
         ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, ElevatorConstants.ELEVATOR_CFO)
         taskMgr.remove(self.uniqueName('physics'))
 		
@@ -1092,8 +1361,8 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('battleDifficulty = %d' % diff)
         self.battleDifficulty = diff
 
-    def enterBattleFour(self):
-        DistributedBossCog.DistributedBossCog.enterBattleFour(self)
+    def enterBattleThree(self):
+        DistributedBossCog.DistributedBossCog.enterBattleThree(self)
         self.clearChat()
         self.resistanceToon.clearChat()
         self.reparentTo(render)
@@ -1112,8 +1381,8 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         base.playMusic(self.battleThreeMusic, looping=1, volume=0.9)
         taskMgr.add(self.__doPhysics, self.uniqueName('physics'), priority=25)
 
-    def exitBattleFour(self):
-        DistributedBossCog.DistributedBossCog.exitBattleFour(self)
+    def exitBattleThree(self):
+        DistributedBossCog.DistributedBossCog.exitBattleThree(self)
         bossDoneEventName = self.uniqueName('DestroyedBoss')
         self.ignore(bossDoneEventName)
         self.stopAnimate()

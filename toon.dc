@@ -541,11 +541,13 @@ from toontown.suit import DistributedMintSuit/AI
 from toontown.suit import DistributedBoardOfficeSuit/AI
 from toontown.suit import DistributedStageSuit/AI
 from toontown.suit import DistributedSellbotBoss/AI
+from toontown.suit import DistributedSellbotBossMini/AI
 from toontown.suit import DistributedCashbotBoss/AI
 from toontown.suit import DistributedCashbotBossMini/AI
 from toontown.coghq import DistributedCashbotBossSafe/AI
 from toontown.coghq import DistributedCashbotBossCrane/AI
 from toontown.suit import DistributedCashbotBossGoon/AI
+from toontown.suit import DistributedDirectors/AI
 from toontown.suit import DistributedBoardbotBoss/AI
 from toontown.battle import DistributedBattleBase/AI
 from toontown.battle import DistributedBattle/AI
@@ -639,10 +641,12 @@ from toontown.coghq import DistributedLawOfficeElevatorInt/AI
 from toontown.building import DistributedElevatorFloor/AI
 from toontown.building import DistributedBossElevator/AI
 from toontown.building import DistributedVPElevator/AI
+from toontown.building import DistributedDirectorsElevator/AI
 from toontown.building import DistributedCFOElevator/AI
 from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
 from toontown.building import DistributedBBElevator/AI
+from toontown.building import DistributedMultislackerElevator/AI
 from toontown.building import DistributedCMElevator/AI
 from toontown.building import DistributedMajorPlayerElevator/AI
 from toontown.building import DistributedBoardingParty/AI
@@ -1361,6 +1365,22 @@ dclass DistributedBossCog : DistributedNode {
 };
 
 dclass DistributedSellbotBoss : DistributedBossCog {
+  setCagedToonNpcId(uint32) required broadcast ram;
+  setDooberIds(uint32[]) broadcast ram;
+  setBossDamage(uint16, uint8, int16) broadcast ram;
+  setState(string) broadcast ram;
+  setBattleDifficulty(uint8) broadcast ram;
+  hitBoss(uint8) airecv clsend;
+  hitBossInsides() airecv clsend;
+  hitToon(uint32) airecv clsend;
+  finalPieSplat() airecv clsend;
+  touchCage() airecv clsend;
+  doStrafe(uint8, uint8) broadcast;
+  cagedToonBattleThree(uint16, uint32) broadcast;
+  toonPromoted(uint8(0-1));
+};
+
+dclass DistributedSellbotBossMini : DistributedBossCog {
   setCagedToonNpcId(uint32) required broadcast ram;
   setDooberIds(uint32[]) broadcast ram;
   setBossDamage(uint16, uint8, int16) broadcast ram;
@@ -2669,6 +2689,9 @@ dclass DistributedBossElevator : DistributedElevatorExt {
 dclass DistributedVPElevator : DistributedBossElevator {
 };
 
+dclass DistributedMultislackerElevator : DistributedBossElevator {
+};
+
 dclass DistributedCFOElevator : DistributedBossElevator {
 };
 
@@ -2682,6 +2705,9 @@ dclass DistributedBBElevator : DistributedBossElevator {
 };
 
 dclass DistributedCMElevator : DistributedBossElevator {
+};
+
+dclass DistributedDirectorsElevator : DistributedBossElevator {
 };
 
 dclass DistributedBoardingParty : DistributedObject {
@@ -3636,6 +3662,27 @@ dclass DistributedGameTable : DistributedObject {
 };
 
 dclass DistributedBossbotBoss : DistributedBossCog {
+  setState(string) broadcast ram;
+  setBattleDifficulty(uint8) broadcast ram;
+  requestGetFood(int8, int8, uint32) airecv clsend;
+  toonGotFood(uint32, int8, int8, uint32) broadcast;
+  requestServeFood(int8, int8) airecv clsend;
+  toonServeFood(uint32, int8, int8) broadcast;
+  hitBoss(uint8) airecv clsend;
+  hitToon(uint32) airecv clsend;
+  ballHitBoss(uint8) airecv clsend;
+  setMaxHp(uint16) broadcast ram;
+  setBossDamage(uint16, uint8, int16) broadcast ram;
+  setSpeedDamage(uint16, uint8, int16) broadcast ram;
+  reachedTable(uint8) airecv clsend;
+  hitTable(uint8) airecv clsend;
+  awayFromTable(uint8) airecv clsend;
+  toonGotHealed(uint32) broadcast;
+  requestGetToonup(int8, int8, uint32) airecv clsend;
+  toonGotToonup(uint32, int8, int8, uint32) broadcast;
+};
+
+dclass DistributedDirectors : DistributedBossCog {
   setState(string) broadcast ram;
   setBattleDifficulty(uint8) broadcast ram;
   requestGetFood(int8, int8, uint32) airecv clsend;

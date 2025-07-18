@@ -426,9 +426,9 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
         self.sendBattleIds()
         return
 
-    def appendSuitsToBattle(self, battleNumber, command):
+    def appendSuitsToBattle(self, battleNumber, specialCode):
         self.battleNumber = battleNumber
-        suitHandles = self.generateNewReserves(battleNumber)
+        suitHandles = self.generateNewReserves(battleNumber, specialCode)
         self.reserveSuits.append(suitHandles['reserveSuits'][0])
         return
 

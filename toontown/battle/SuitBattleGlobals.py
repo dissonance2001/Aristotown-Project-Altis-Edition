@@ -1,5 +1,4 @@
 import random
-import StatusEffects
 from toontown.battle.BattleBase import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
@@ -286,6 +285,8 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 24
     elif name == 'ghd':
         actualLevel = relLevel + 776
+    elif name == 'fmaker':
+        actualLevel = relLevel + 27
     elif name == 'dking':
         actualLevel = relLevel + 64
     elif name == 'ottoman':
@@ -360,6 +361,8 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 13
     elif name == 'pbl':
         actualLevel = relLevel + 19
+    elif name == 'director':
+        actualLevel = relLevel + 25
     else:
         actualLevel = relLevel
     return actualLevel
@@ -706,7 +709,7 @@ SpecialCogDict = ('clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed',
                   'bellring', 'prethink', 'mslacker', 'videog', 'radiog', 'ubuster', 'racket', 'safesupervis', 'psetter', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra',
                   'kerberos', 'charon', 'pcrat', 'hroller', 'erfit', 'hroller2', 'hrollers', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi',
                   'sgoat', 'caseman', 'stenog', 'lgator', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'ghd', 'dking', 'ottoman', 'crystal', 'chairman',
-                  'sya', 'pbl')
+                  'sya', 'pbl', 'fmaker', 'director')
 LitigationManagers = ('lgator', 'stenog', 'caseman', 'sgoat', 'safesupervis', 'ubuster', 'radiog', 'racket', 'ambass', 'wtapper', 'bkeeper', 'phouse')
 
 ATK_TGT_UNKNOWN = 1
@@ -2416,22 +2419,22 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (0,),
               (100,),
               (0,)),
-             ('FallingKnife',
-              (41,),
-              (100,),
-              (25,)),
+             ('VideographerAttackRewind',
+              (1,),
+              (50,),
+              (100,)),
              ('BlueChip',
               (31,),
               (100,),
-              (25,)),
+              (0,)),
              ('ElectrostaticEnergy',
               (45,),
               (100,),
-              (25,)),
+              (0,)),
              ('GlowerPower',
               (38,),
               (75,),
-              (25,)))},
+              (0,)))},
  'radiog': {'name': 'Radiographer',
         'singularname': 'a Radiographer',
 		'pluralname': 'Radiographers',
@@ -3553,12 +3556,12 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (0,)),
               ('PowerTrip',
                (25,),
-               (100,),
-               (0,)),
+               (75,),
+               (25,)),
         ('HighRollerNoAttack',
                (0,),
                (100,),
-               (0,)),
+               (75,)),
               ('HighRollerDonation',
                (0,),
                (100,),
@@ -3607,7 +3610,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                  ('HighRollerNoAttack',
                      (0,),
                      (100,),
-                     (0,)),
+                     (100,)),
                     ('HighRollerPhase3',
                      (0,),
                      (100,),
@@ -5402,11 +5405,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (1,),
                (100,),
                (50,),),)},
- 'tyh': {'name': 'Skelecog',
-        'singularname': 'a Skelecog',
-		'pluralname': 'Skelecogs',
-		'level': 20,
-		'hp':(100,),
+ 'fmaker': {'name': 'Filmmaker',
+        'singularname': 'a Filmmaker',
+		'pluralname': 'Filmmakers',
+		'level': 21,
+		'hp':(1525,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(50,),
@@ -5415,11 +5418,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               (0,),
               (100,),
               (0,)),
-              ('FallingKnife',
-               (7,),
-               (85,),
+              ('FilmmakerBudgetCuts',
+               (1,),
                (100,),
-               ATK_TGT_DOUBLE),)},
+               (100,)))},
  'jgd':  {'name': 'Skelecog',
         'singularname': 'a Skelecog',
 		'pluralname': 'Skelecogs',
@@ -6829,20 +6831,23 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (1,),
                (100,),
                (20,)))},
- 'pob':  {'name': 'Skelecog',
-        'singularname': 'a Skelecog',
-		'pluralname': 'Skelecogs',
-		'level': 20,
-		'hp':(100,),
+ 'director':  {'name': 'Director',
+        'singularname': 'a Director',
+		'pluralname': 'Directors',
+		'level': 16,
+		'hp':(1250,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('SoakRemoval',
-               (7,),
-               (85,),
-               (100,),
-               ATK_TGT_DOUBLE),)},
+                   (('SoakRemoval',
+                     (0,),
+                     (100,),
+                     (0,)),
+                    ('DirectorBackToOnes',
+                     (1,),
+                     (100,),
+                     (100,)))},
  'pbs': {'name': 'Skelecog',
         'singularname': 'a Skelecog',
 		'pluralname': 'Skelecogs',
@@ -7229,6 +7234,23 @@ SuitAttacks = {
  'HighRollerDamageReduction': ('snap', ATK_TGT_DOUBLE),
  'HighRollerSplashback': ('throw-object', ATK_TGT_GROUP),
  'HighRollerCheerRetaliation': ('glower', ATK_TGT_GROUP),
+    # Videographer Cheats
+ 'VideographerRisingStars': ('shot5', ATK_TGT_SINGLE),
+ 'VideographerRisingStars2': ('shot5', ATK_TGT_SINGLE),
+ 'VideographerRisingStarsSacrifice': ('snap', ATK_TGT_SINGLE),
+ 'VideographerVideoStatic': ('glower', ATK_TGT_SINGLE),
+ 'VideographerElectricShock': ('glower', ATK_TGT_SINGLE),
+ 'VideographerAttackRewind': ('snap', ATK_TGT_DOUBLE),
+ 'VideographerDirectorCuts': ('song-and-dance', ATK_TGT_SINGLE),
+    # Filmmaker Cheats
+ 'FilmmakerCameraFlash': ('glower', ATK_TGT_SINGLE),
+ 'FilmmakerCameraRewind': ('throw-object', ATK_TGT_SINGLE),
+ 'FilmmakerBudgetCuts': ('glower', ATK_TGT_DOUBLE),
+    # Director Cheats
+ 'DirectorCut': ('nothing', ATK_TGT_SINGLE),
+ 'DirectorAction': ('nothing', ATK_TGT_SINGLE),
+ 'DirectorActionRetaliation': ('glower', ATK_TGT_GROUP),
+ 'DirectorBackToOnes': ('nothing', ATK_TGT_SINGLE),
     # Court Fees and Calculation Mirrors
  'SynergyFees': ('magic3', ATK_TGT_GROUP),
  'CalculatingFees': ('calculating-costs', ATK_TGT_SINGLE),
