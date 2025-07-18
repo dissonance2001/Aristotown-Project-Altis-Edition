@@ -3482,7 +3482,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               ('HighRollerNoAttack',
                (0,),
                (100,),
-               (0,)),
+               (100,)),
         ('HighRollerWheelSpin',
                (0,),
                (100,),
