@@ -74,6 +74,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
         self.skeleRevives = 0
         self.dmgMult = 1.0
+        self.vulnerabilityMult = 1.0
         self.maxSkeleRevives = 0
         self.executive = 0
         self.manager = 0
@@ -110,6 +111,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def getDamageMultiplier(self):
         return self.dmgMult
+
+    def setVulnerabilityMultiplier(self, vulnerability):
+        self.vulnerabilityMult = vulnerability
+
+    def getVulnerabilityMultiplier(self):
+        return self.vulnerabilityMult
 
     def setDizzy(self, dizzy):
         head = self.find('**/to_head')

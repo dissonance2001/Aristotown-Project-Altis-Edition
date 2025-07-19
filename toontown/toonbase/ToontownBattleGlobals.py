@@ -526,8 +526,12 @@ ValidStatusConditions = (
     'hottakecalculator',
     'overmodulatedcalculator',
     'dancesessioncalculator',
+    'filmmakercalculator',
+    'directorcalculator',
     'dead',
     'dancesession',
+    'directorscutscalculator',
+    'trickofthelight',
 
     # Cog Status Effects
     'bookkeeping',

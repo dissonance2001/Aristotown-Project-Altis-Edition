@@ -18,7 +18,7 @@ class CashbotHQAI(CogHQAI.CogHQAI):
             DistributedCFOElevatorAI.DistributedCFOElevatorAI,
             DistributedCashbotBossAI.DistributedCashbotBossAI,
             FADoorCodes.CB_DISGUISE_INCOMPLETE,
-            DistributedCFOElevatorAI.DistributedCFOElevatorAI,
+            DistributedCBMElevatorAI.DistributedCBMElevatorAI,
             DistributedCashbotBossAI.DistributedCashbotBossAI
         )
 

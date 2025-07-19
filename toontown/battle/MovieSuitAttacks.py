@@ -525,6 +525,10 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 1)
     elif name == 'HighRollerGameTimeCog2':
         suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 1)
+    elif name == 'HighRollerGameTimeCog3':
+        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 2)
+    elif name == 'HighRollerGameTimeCog4':
+        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 2)
     elif name == 'HighRollerBust':
         suitTrack = MovieHighRollerCheats.doBust(attack)
     # high roller phase 2 cheats

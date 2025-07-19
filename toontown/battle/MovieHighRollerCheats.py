@@ -829,19 +829,11 @@ def doCameraRewind(attack):
         for s in battle.suits:
             if suit.currHP < suit.maxHP:
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
-                if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                    suitTrack.append(Func(suit.showHpText, 0))
-                    suitTrack.append(Func(suit.showHpString, "REWINDED!"))
-                elif suit.currHP + 125 > (suit.maxHP * suit.hardMaxHP):
-                    suitTrack.append(Func(suit.showHpTextCheat, x))
-                    suitTrack.append(Func(suit.showHpString, "REWINDED!"))
-                    suitTrack.append(Func(suit.setHealthForMe, x))
-                else:
-                    suitTrack.append(Func(suit.showHpTextCheat, 125))
-                    suitTrack.append(Func(suit.showHpString, "REWINDED!"))
-                    suitTrack.append(Func(suit.setHealthForMe, 125))
+                suitTrack.append(Func(suit.showHpTextCheat, 125))
+                suitTrack.append(Func(suit.showHpString, "REWINDED!"))
+                suitTrack.append(Func(suit.setHealthForMe, 125))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not theSuit:
+        if not suit.dna.name == 'fmaker':
             suitTrack.append(Parallel(Sequence(Wait(3)),
                                       Func(suit.setChatAbsolute,
                                            random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
@@ -960,9 +952,49 @@ def doDirectorCuts(attack):
     battle = attack['battle']
     target = attack['target']
     dmg = target[0]['hp']
+    hollywoods = []
+    puddleTracks = Parallel()
+    moveTracks = Parallel()
+    managerHealTracks = Parallel()
+    animTracks = Parallel()
+    for s in battle.activeSuits:
+        if not s.dna.name == 'director' and not s.dna.name == 'fmaker' and not s.dna.name == 'videog' and not s.dna.name == 'hroller2':
+            puddle = globalPropPool.getProp('quicksand')
+            puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
+            puddle.setHpr(Point3(120, 0, 0))
+            puddle.setScale(0.01)
+            puddleTrack = Sequence(Wait(suit.getDuration('song-and-dance')), Func(battle.movie.needRestoreRenderProp, puddle),
+                                   Func(puddle.reparentTo, battle), Func(puddle.setPos, s.getPos(battle)),
+                                   LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7),
+                                                     startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2),
+                                   LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
+                                   Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
+            sinkPos1 = s.getPos(battle)
+            sinkPos2 = s.getPos(battle)
+            dropPos = s.getPos(battle)
+            landPos = s.getPos(battle)
+            sinkPos1.setZ(sinkPos1.getZ() - 3.1)
+            sinkPos2.setZ(sinkPos2.getZ() - 9.1)
+            dropPos.setZ(dropPos.getZ())
+            landPos.setY(dropPos.getY())
+            moveTrack = Sequence(Wait(suit.getDuration('song-and-dance') + 1.8), LerpPosInterval(s, 0.9, sinkPos1, other=battle),
+                                 LerpPosInterval(s, 0.4, sinkPos2, other=battle), Func(s.hide), Wait(1.1))
+            animTrack = Sequence(Wait(suit.getDuration('song-and-dance')+ 0.9), ActorInterval(s, 'flail-qs', endTime=1.75),
+                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
+                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25))
+            managerHealTrack = Sequence(Wait(suit.getDuration('song-and-dance') + 3), Func(suit.showHpTextCheat, + (s.maxHP)),
+                                        Func(suit.setHealthForMe, + (s.maxHP)),
+                                        Func(suit.updateHealthBar, 0))
+            managerHealTracks.append(managerHealTrack)
+            animTracks.append(animTrack)
+            moveTracks.append(moveTrack)
+            puddleTracks.append(puddleTrack)
+            hollywoods.append(s)
+    soundTrack = getSoundTrack('SA_bash.ogg', delay=suit.getDuration('song-and-dance') + .25, node=suit)
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3 + suit.getDuration('song-and-dance'), node=suit)
 
-    suitTrack = Sequence(Wait(0.7), getSuitAnimTrack(attack), doRisingStars2(attack))
-    return Parallel(suitTrack)
+    suitTrack = Sequence(getSuitAnimTrack(attack), ActorInterval(suit, 'snap'), Wait(3.0), doRisingStars2(attack))
+    return Parallel(suitTrack, soundTrack, soundTrack2, puddleTracks, managerHealTracks, animTracks, moveTracks)
 
 def doRisingStars2(attack):
     suit = attack['suit']
@@ -1159,15 +1191,6 @@ def doNoAttack(attack):
         suitTrack.append(Func(suit.makeNonImmortal))
     else:
         suitTrack = Sequence()
-    for s in battle.suits:
-        if s.dna.name == 'hrollers' and s.maxHP == 12000:
-            currentBossHealth = s.currHP
-    if currentBossHealth >= 1:
-        for s in battle.activeSuits:
-            suitTrack.append(Func(s.makeLureImmune))
-    if currentBossHealth <= 0:
-        for s in battle.activeSuits:
-            suitTrack.append(Func(s.makeUnLureImmune))
     return suitTrack
 
 def playSplashEffect(render, x, y, z):
@@ -2546,7 +2569,7 @@ def doGameTimeCog2(attack, ind):
         Wait(13), Parallel(SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg')),
         Func(cage.find('**/spotlight').hide),
         Parallel(cagePosition, Func(cage.reparentTo, head)),
-        Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn'))), Wait(2),
+        Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn'))), Wait(1),
         LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
         Func(MovieUtil.removeProp, cage)
         )
@@ -2701,7 +2724,7 @@ def doGameTimeCog(attack, ind):
         Wait(13), Parallel(SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg')),
         Func(cage.find('**/spotlight').hide),
         Parallel(cagePosition, Func(cage.reparentTo, head)),
-        Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn'))), Wait(2),
+        Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn'))), Wait(1),
         LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
         Func(MovieUtil.removeProp, cage)
     )

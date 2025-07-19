@@ -16,9 +16,13 @@ class DistributedCBMElevator(DistributedBossElevator.DistributedBossElevator):
         self.leftDoor = self.elevatorModel.find('**/left_door')
         self.rightDoor = self.elevatorModel.find('**/right_door')
         geom = base.cr.playGame.hood.loader.geom
-        locator = geom.find('**/miniboss_elevator')
+        locator = geom.find('**/elevator_locator')
         self.elevatorModel.reparentTo(locator)
+        self.elevatorModel.setH(90)
+        self.elevatorModel.setY(100)
+        self.elevatorModel.setZ(-27.5)
+        self.elevatorModel.setX(30)
         DistributedElevator.DistributedElevator.setupElevator(self)
 
     def getDestName(self):
-        return TTLocalizer.ElevatorCashBotBossMiniBoss
+        return TTLocalizer.ElevatorCashBotBoss

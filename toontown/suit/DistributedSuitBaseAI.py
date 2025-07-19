@@ -32,6 +32,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         self.manager = 0
         self.governaught = 0
         self.dmgMult = 1.0
+        self.vulnerabilityMult = 1.0
         self.skeleRevives = 0
         self.maxSkeleRevives = 0
         self.reviveFlag = 0
@@ -229,20 +230,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
             executive = 0
         self.executive = executive
         if self.dna.name == 'mh2':
-            self.maxHP = int(((self.maxHP * random.choice((.5, .51,
-                                                           .52, .53, .54, .55, .56, .57, .58, .59, .6, .61, .62,
-                                                           .63, .64, .65, .66, .67, .68, .69,
-                                                           .7, .71, .72, .73, .74, .75, .76, .77, .78, .79, .8, .81,
-                                                           .82, .83, .84, .85, .86, .87, .88, .89, .90, .91, .92,
-                                                           .93,
-                                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04,
-                                                           1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13,
-                                                           1.14, 1.15, 1.16,
-                                                           1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25,
-                                                           1.26, 1.27, 1.28, 1.29, 1.3, 1.31, 1.32, 1.33, 1.34,
-                                                           1.35, 1.36, 1.37, 1.38, 1.39, 1.4
-                                                           , 1.41, 1.42, 1.43, 1.44, 1.45, 1.46, 1.47, 1.48, 1.49,
-                                                           1.5)))))
+            self.maxHP = random.randint(200, 800)
             self.currHP = self.maxHP
         if self.dna.name == 'autocad' or self.dna.name == 'maudit' or self.dna.name == 'chairp' or self.dna.name == 'watchm' \
                 or self.dna.name == 'ant':
@@ -386,6 +374,12 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
 		
     def getDamageMultiplier(self):
         return self.dmgMult
+
+    def setVulnerabilityMultiplier(self, vulnerability):
+        self.vulnerabilityMult = vulnerability
+
+    def getVulnerabilityMultiplier(self):
+        return self.vulnerabilityMult
 
     def releaseControl(self):
         pass

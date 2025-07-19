@@ -514,7 +514,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.eyes.hide()
         self.safe2.hide()
         self.midVault.setPos(10, -222, -70.7)
-        self.highRollerArena.setPos(0, -222, -3.95)
+        self.highRollerArena.setPos(0, -222, -4.05)
         self.endVault.setPos(84, -201, -6)
         self.geom = NodePath('geom')
         self.midVault.reparentTo(self.geom)
@@ -762,7 +762,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                                           CFSpeech),
                                      Wait(3),
                                     Func(self.majorplayer2.setChatAbsolute,
-                                          "Baby Blue, ya knew my words were true-I told ya we'd meet again!",
+                                          "Oooh, but that's no high class brass, looks like we got some surprise guests! Baby Blue, ya knew my words were true-I told ya we'd meet again!",
                                           CFSpeech),
                                      Wait(3),
                                      Func(self.duckshuffler2.setChatAbsolute,

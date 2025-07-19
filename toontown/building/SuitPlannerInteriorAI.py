@@ -263,14 +263,8 @@ class SuitPlannerInteriorAI:
         elif specialCode == 'crf2':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'm', 28, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
-            suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            suit2 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            suit3 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
-            activeSuits.append(suit)
-            activeSuits.append(suit2)
-            activeSuits.append(suit3)
         elif specialCode == 'videog':
             miniboss = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
@@ -380,10 +374,14 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'videog2':
             suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
+            suit8 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
+            suit5 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
+            suit6 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
+            suit7 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             suit4 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             suit2 = self.__genSuitObject(self.zoneId, 17, 'p', 17, 0)
             suit3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)
-            reserveSuits.append(random.choice((suit, suit2, suit3, suit4)))
+            reserveSuits.append(random.choice((suit, suit2, suit3, suit4, suit5, suit6, suit7, suit8)))
         if specialCode == 'videog3':
             suit2 = self.__genSuitObject(self.zoneId, 17, 'p', 17, 0)
             suit3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)
