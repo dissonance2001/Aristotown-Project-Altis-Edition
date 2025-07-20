@@ -666,6 +666,11 @@ class TownBattleCogPanel(DirectFrame):
             self.luredManager2.show()
             self.overcharged2.show()
             self.luredCog4.show()
+        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isLured:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.overcharged2.show()
+            self.luredCog4.show()
         elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isVulnerable:
             self.virtual.show()
             self.luredManager2.show()
@@ -876,6 +881,15 @@ class TownBattleCogPanel(DirectFrame):
         elif self.cog.healthCondition == 13:
             self.luredManager.show()
             self.overcharged.show()
+        elif self.cog.isVirtual and self.cog.dna.name == 'bcaster' and self.cog.isLured:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.vulnerable3.show()
+            self.luredCog4.show()
+        elif self.cog.isVirtual and self.cog.dna.name == 'bcaster':
+            self.virtual.show()
+            self.luredManager2.show()
+            self.vulnerable3.show()
         elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isDamageUp:
             self.virtual.show()
             self.luredManager2.show()
@@ -997,6 +1011,15 @@ class TownBattleCogPanel(DirectFrame):
             self.damageUp.show()
         elif self.cog.isVirtual and not self.cog.getManager():
             self.virtual.show()
+        elif self.cog.isVirtual and self.cog.isSyphon and self.cog.isLured and self.cog.isVulnerable:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.vulnerable3.show()
+            self.luredCog4.show()
+        elif self.cog.isVirtual and self.cog.isSyphon and self.cog.isVulnerable:
+            self.virtual.show()
+            self.luredManager2.show()
+            self.vulnerable3.show()
         elif self.cog.isVirtual and self.cog.isSyphon and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
@@ -1709,7 +1732,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .095, .095, .095)
         elif name == 'safesupervis' or name == 'dold':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
-        elif name == 'mslacker' or name == 'videog':
+        elif name == 'mslacker' or name == 'videog' or name == 'bcaster':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .06, .06, .06)
         elif name == 'wsi' or name == 'maudit' or name == 'kerberos' or name == 'charon' or name == 'bdirector' or name == 'sya' or name == 'pbl' or name == 'foreman' or name == 'watchm' or name == 'chairp':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .12, .12, .12)

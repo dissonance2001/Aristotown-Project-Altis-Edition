@@ -47,7 +47,7 @@ fires - Firestarter Level 20.mgr
 fbed - Featherbedder Level 30.mgr
 
 	High Roller Manager:
-mplayer2 - Major Player (HR) Level 88.mgr (broken)
+mplayer2 - Major Player (HR) Level 88.mgr (unused)
 
 	Kudos Managers:
 mplayer - Major Player Level 28.mgr
@@ -152,9 +152,9 @@ pcrat - Plutocrat Level 38.mgr
 erfit - Count Erfit Level 20.mgr
 
 	High Roller Managers:
-hroller - High Roller (999 HP) Level 100.mgr
+hroller - High Roller (Phase 1) Level 100.mgr
 hrollers - High Roller Silhouette Level 25.mgr
-hroller2 - High Roller (77777 HP) Level 100.mgr
+hroller2 - High Roller (Phase 2/3) Level 100.mgr
 
 =============SELLBOTS:===============
 	Regular Cogs:
@@ -191,7 +191,7 @@ dopa - Director Of Public Affairs Level 30.mgr
 bellring - Bellringer Level 13.mgr
 
 	Major Player Hollywoods:
-mh2 - Mr. Hollywood (MP) Level 25.exe
+mh2 - Mr. Hollywood Level 25.exe
 
 	Kudos Managers:
 prethink - Prethinker Level 12.mgr
@@ -199,7 +199,7 @@ mslacker - Multislacker Level 24.mgr
 psetter - Pacesetter Level 66.mgr
 
 	High Roller Manager:
-videog - Videographer Level 77.mgr
+videog - Videographer Level 99.mgr
 
 	Sellbot 'Litigation' Team:
 radiog - Radiographer Level 32.mgr
@@ -243,10 +243,10 @@ dola - Director Of Land Acquisition Level 7.mgr
 dold - Director Of Land Development Level 25.mgr
 
 	Videographer Manager:
-fmaker - Filmmaker Level 28.mgr
+fmaker - Filmmaker Level 26.mgr
 
 	Nothing:
-ghd - NOTHING Level N/A.mgr
+pbs - NOTHING Level N/A.mgr
 jgd - NOTHING Level N/A.mgr
 bby - NOTHING Level N/A.mgr
 
@@ -322,10 +322,10 @@ wnk - White Knight Level 6-15
 std - Stunt Double Level 7-18
 
 	Videographer Manager:
-director - Director Level 26.mgr
+director - Director Level 28.mgr
+bcaster - Broadcaster Level 33.mgr
 
 	Nothing:
-pbs - PLACEHOLDER Level N/A.mgr
 plb - PLACEHOLDER Level N/A.mgr
 put - PLACEHOLDER Level N/A.mgr
 prt - PLACEHOLDER Level N/A.mgr

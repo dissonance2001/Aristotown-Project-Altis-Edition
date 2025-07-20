@@ -318,23 +318,23 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         suitDNA.newSuit('videog')
         self.videographer.setDNA(suitDNA)
         self.videographer.setPickable(0)
-        self.videographer.setDisplayName('Videographer\nSellbot\nLevel 77.mgr')
+        self.videographer.setDisplayName('Videographer\nSellbot\nLevel 99.mgr')
         self.videographer.doId = 0
         self.videographer.loop('neutral')
         self.director = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('director')
+        suitDNA.newSuit('mh2')
         self.director.setDNA(suitDNA)
         self.director.setPickable(0)
-        self.director.setDisplayName('Director\nPressbot\nLevel 20.mgr')
+        self.director.setDisplayName('Mr. Hollywood\nSellbot\nLevel 25.exe')
         self.director.doId = 0
         self.director.loop('neutral')
         self.filmmaker = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('fmaker')
+        suitDNA.newSuit('mh2')
         self.filmmaker.setDNA(suitDNA)
         self.filmmaker.setPickable(0)
-        self.filmmaker.setDisplayName('Filmmaker\nBoardbot\nLevel 22.mgr')
+        self.filmmaker.setDisplayName('Mr. Hollywood\nSellbot\nLevel 25.exe')
         self.filmmaker.doId = 0
         self.filmmaker.loop('neutral')
         self.majorplayer2 = DistributedSuitBase.DistributedSuitBase(cr)
@@ -854,7 +854,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                  "Give a warm, hot on the oven, flaff fire, round of applauffe for my ffecond favorite ffet of...", CFSpeech),
             Wait(5),
             Func(self.highroller.setChatAbsolute,
-                 "Ffcallywagff, clownff, quipffterff, harlequinff, buffoonff, wiffecrackerff, raffcalff, ne'er-do-wellff, Lollyggaggerff, tomfoolerff, jokerff, hoaxerff, trickffterff, jokeffmithff, humoriftfth, Rabbelroufferff, ffhenaiganifferff, goofffterff, merrymakerff, ruffianff, ffkylarkff, gooberff,", CFSpeech),
+                 "Ffcallywagff, clownff, quipffterff, harlequinff, buffoonff, wiffecrackerff, raffcalff, ne'er-do-wellff, lollyggaggerff, tomfoolerff, jokerff, hoaxerff, trickffterff, jokeffmithff, humoriftfth, rabbelroufferff, ffhenaiganifferff, goofffterff, merrymakerff, ruffianff, ffkylarkff, gooberff,", CFSpeech),
             Wait(5),
             Func(self.highroller.setChatAbsolute,
                  "Have fun with thiff one, ffweetie pie!",

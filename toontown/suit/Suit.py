@@ -225,7 +225,7 @@ ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dola = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-ghd = (('pickpocket', 'pickpocket', 4), ('sanction', 'sanction', 4), ('quick-jump', 'jump', 4), ('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('magic3-alt', 'magic3-alt', 4), ('shot5', 'shot5', 4), ('snap', 'snap', 4), ('sanction', 'sanction', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
+pbs = (('snap', 'snap', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 fmaker = (('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 jgd = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 bby = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -282,7 +282,7 @@ anc = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swi
 jls = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 pbl = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 director = (('golf-club-swing', 'golf-club-swing', 4), ('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
-pbs = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
+bcaster = (('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 plb = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 put = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 prt = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
@@ -2474,14 +2474,13 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setTransparency(1)
             self.setHeight(9.31)
-        elif dna.name == 'ghd':
-            self.scale = 7.5 / aSize
-            self.handColor = VBase4(1, 1, 1, 1)
-            self.generateHighRollerBody()
-            self.makeHighRoller()
-            self.generateHead3('highroller', animated=True)
-            self.setHeight(10.0)
+        elif dna.name == 'pbs':
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
+            self.generateSkeletonBody()
+            self.makeExecutive()
             self.setTransparency(1)
+            self.setHeight(8.5)
         elif dna.name == 'fmaker':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.835, 0.843, 0.847, 1)
@@ -2913,11 +2912,19 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
             self.setHeight(8.5)
-        elif dna.name == 'pbs':
-            self.scale = 7.0 / bSize
-            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.makeSkeletonManager()
-            self.setHeight(8.0)
+        elif dna.name == 'bcaster':
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(0.835, 0.843, 0.847, 1)
+            self.generateBody()
+            self.makeVideographer2()
+            self.generateHead3('multislacker', animated=True)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.makeVirtual()
+            self.makeVulnerable()
+            self.setHeight(9.5)
+            self.setTransparency(1)
         elif dna.name == 'plb':
             self.scale = 7.0 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -3375,6 +3382,10 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-w').setTexture(texture3, 1)
             modelRoot.find('**/necktie-s').setTexture(texture3, 1)
             modelRoot.find('**/necktie-s').show()
+        elif self.style.name == 'bcaster':
+            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
+            modelRoot.find('**/necktie-s').setTexture(texture3, 1)
+            modelRoot.find('**/necktie-s').show()
         elif self.style.name == 'fmaker':
             modelRoot.find('**/necktie-w').setTexture(texture3, 1)
             modelRoot.find('**/necktie-s').setTexture(texture3, 1)
@@ -3493,6 +3504,9 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'videog':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'bcaster':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'hroller':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
@@ -3537,6 +3551,9 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'videog':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'bcaster':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'hroller':
@@ -3973,6 +3990,8 @@ class Suit(Avatar.Avatar):
                 headModel.setH(90)
                 headModel.setScale(.4)
             elif self.style.name == 'videog':
+                headModel.setY(-.2)
+            elif self.style.name == 'bcaster':
                 headModel.setY(-.2)
             elif headType == 'clubpresident' and not self.style.name == 'fmaker' and not self.style.name == 'director':
                 headModel.setZ(-.1)
@@ -4947,6 +4966,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hrollers':
             self.corpMedallion.setScale(0)
+        elif self.style.name == 'bcaster':
+            self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
@@ -5013,6 +5034,8 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'fhj':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hrollers':
+            self.corpMedallion.setScale(0)
+        elif self.style.name == 'bcaster':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
@@ -5123,6 +5146,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hrollers':
             self.corpMedallion.setScale(0)
+        elif self.style.name == 'bcaster':
+            self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
@@ -5186,6 +5211,8 @@ class Suit(Avatar.Avatar):
             self.hpBase.setScale(0)
         elif self.style.name == 'hrollers':
             self.hpBase.setScale(0)
+        elif self.style.name == 'bcaster':
+            self.hpBase.setScale(0)
         else:
             self.hpBase.setScale(1.175)
         if self.style.name == 'nn':
@@ -5226,6 +5253,8 @@ class Suit(Avatar.Avatar):
             button.setScale(0)
         elif self.style.name == 'hrollers':
             button.setScale(0)
+        elif self.style.name == 'bcaster':
+            button.setScale(0)
         elif self.style.name == 'hroller':
             button.setScale(0)
         elif self.style.name == 'hroller2':
@@ -5242,6 +5271,8 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'fhj':
             glow.setScale(0)
         elif self.style.name == 'hrollers':
+            glow.setScale(0)
+        elif self.style.name == 'bcaster':
             glow.setScale(0)
         elif self.style.name == 'hroller':
             glow.setScale(0)
@@ -7122,6 +7153,9 @@ class Suit(Avatar.Avatar):
             loadDialog(1)
             return MultislackerDialogArray
         if self.style.name == 'videog' and not self.isSkeleton:
+            loadDialog(1)
+            return PacesetterDialogArray
+        if self.style.name == 'bcaster' and not self.isSkeleton:
             loadDialog(1)
             return PacesetterDialogArray
         if self.style.name == 'radiog':

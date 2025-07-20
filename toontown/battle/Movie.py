@@ -322,7 +322,7 @@ class Movie(DirectObject.DirectObject):
                 for s in battle.activeSuits:
                     pbpText = PlayByPlayText.PlayByPlayText()
                     pbpDc = PlayByPlayText.PlayByPlayText()
-                    if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'videog' or s.dna.name == 'director' or s.dna.name == 'fmaker':
+                    if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'director' or s.dna.name == 'fmaker':
                         ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
                                                                              '',
                                                                              CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))

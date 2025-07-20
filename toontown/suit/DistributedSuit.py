@@ -844,6 +844,11 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                     if float(self.currHP) / float(self.maxHP) <= 0.25:
                         texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer3.png')
                         Sequence(Func(headPart.setTexture, texture, 1)).start()
+            if self.dna.name == 'bcaster':
+                for headPart in self.animatedHeadParts:
+                    if float(self.currHP) / float(self.maxHP) <= 0.25:
+                        texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer3.png')
+                        Sequence(Func(headPart.setTexture, texture, 1)).start()
             for headPart in self.animatedHeadParts: Sequence(
                 Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
@@ -939,6 +944,11 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                      ).start()
         else:
             if self.dna.name == 'videog':
+                for headPart in self.animatedHeadParts:
+                    if float(self.currHP) / float(self.maxHP) <= 0.25:
+                        texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer3.png')
+                        Sequence(Func(headPart.setTexture, texture, 1)).start()
+            if self.dna.name == 'bcaster':
                 for headPart in self.animatedHeadParts:
                     if float(self.currHP) / float(self.maxHP) <= 0.25:
                         texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer3.png')
@@ -1126,8 +1136,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
                     ).start()
+            elif self.dna.name == 'bcaster':
+                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'stun')
+                    ).start()
             else:
-                for headPart in self.animatedHeadParts: Sequence( ActorInterval(headPart, self.animHead),
+                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                     ).start()
 

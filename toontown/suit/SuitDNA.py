@@ -21,13 +21,13 @@ suitHeadTypes = [
 'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'videog',
 'radiog', 'racket', 'ubuster', 'safesupervis', 'psetter',
     # Boardbots
-'bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'ghd', 'fmaker',
+'bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'pbs', 'fmaker',
 'jgd', 'bby', 'dking', 'ottoman', 'crystal', 'chairman',
     # Techbots
 'skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'ant', 'sya', 'djockey', 'ptjockey', 'jas', 'tas', 'fhu', 'fsh', 'fhj',
 'kdh', 'dar', 'nhy', 'wrt', 'auh',
     # Pressbots
-'ppb', 'shb', 'bsd', 'gms', 'sbg', 'hck', 'ath', 'ghw', 'dcw', 'gzt', 'wnk', 'nsh', 'std', 'anc', 'jls', 'pbl', 'director', 'pbs', 'plb', 'put', 'prt', 'pla', 'plk', 'plh',
+'ppb', 'shb', 'bsd', 'gms', 'sbg', 'hck', 'ath', 'ghw', 'dcw', 'gzt', 'wnk', 'nsh', 'std', 'anc', 'jls', 'pbl', 'director', 'bcaster', 'plb', 'put', 'prt', 'pla', 'plk', 'plh',
 'plg', 'plf', 'pld', 'pls'
 ]
 suitATypes = [
@@ -45,7 +45,7 @@ suitATypes = [
     # Techbots
 'vpr', 'brn', 'key', 'sfs', 'pyc', 'itn', 'rus', 'sya',
     # Pressbots
-'ghw', 'dcw', 'gzt', 'nsh', 'std', 'anc', 'pbl', 'director'
+'ghw', 'dcw', 'gzt', 'nsh', 'std', 'anc', 'pbl', 'director', 'bcaster'
 ]
 suitBTypes = [
     # Bossbots

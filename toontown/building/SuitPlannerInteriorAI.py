@@ -372,6 +372,9 @@ class SuitPlannerInteriorAI:
         if specialCode == 'videog':
             suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             reserveSuits.append(suit)
+        if specialCode == 'videog4':
+            suit = self.__genSuitObject(self.zoneId, 18, 'p', 18, 0)
+            reserveSuits.append(suit)
         if specialCode == 'videog2':
             suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             suit8 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)

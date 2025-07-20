@@ -69,7 +69,16 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             if suit.dna.name == 'videog':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingVideographer(suits, ts, name, callback)
+            if suit.dna.name == 'bcaster':
+                suit.setPos(0, 0, 50)
+                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
             if suit.dna.name == 'hroller':
+                suit.setPos(0, 0, 50)
+                return self.showSuitsFallingHighRoller(suits, ts, name, callback)
+            if suit.dna.name == 'director':
+                suit.setPos(0, 0, 50)
+                return self.showSuitsFallingHighRoller(suits, ts, name, callback)
+            if suit.dna.name == 'fmaker':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingHighRoller(suits, ts, name, callback)
             suit.setState('Battle')

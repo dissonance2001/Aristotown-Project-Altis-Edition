@@ -581,6 +581,14 @@ ValidStatusConditions = (
     'dazed',
     'sued',
     'contracted',
+    'killedbyvideo',
+    'noKB',
+    'firsttrick',
+    'secondtrick',
+    'thirdtrick',
+    'fourthtrick',
+    'silhouettespawn',
+    'vulnerablebroadcaster',
 
     # Toon Status Effects
     'noUnites',

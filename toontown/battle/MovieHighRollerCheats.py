@@ -242,7 +242,8 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
    # elif suit.isImmortal:
     #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
       #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
-    track.append(
+    if not attack['name'] == 'BroadcasterDonation':
+        track.append(
             Func(suit.setNeutralAnimation))
     return track
 
@@ -665,6 +666,119 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
 def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
     return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
 
+def doDonation2(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    notifyTracks = Parallel()
+    cameraTracks = Sequence()
+    makeDesperates = Parallel()
+    makeDamageUps = Parallel()
+    headTracks = Parallel()
+    theSuit = None
+    for headPart in suit.animatedHeadParts:
+        headTrack = Sequence()
+        headTrack.append(Wait(1))
+        headTrack.append(Func(headPart.loop, 'stun'))
+        texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer5.png')
+        texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+        headTrack.append(Func(headPart.setTexture, texture2, 1))
+        headTrack.append(Wait(5.0))
+        headTrack.append(Func(headPart.setTexture, texture, 1))
+        headTrack.append(Func(headPart.loop, 'neutral'))
+        headTracks.append(headTrack)
+    soundTrack = getSoundTrack('mus_dialup_0.ogg')
+    notifyTrack = Sequence(Parallel(ActorInterval(suit, 'mob-mentality', endTime=1), getSuitAnimTrack(attack)), Wait(4.0),
+                           Func(suit.setHealthForMe, - 1111), Func(suit.showHpText, - 1111),
+                           Func(suit.updateHealthBar, 0), Func(suit.setNeutralAnimation), Wait(2.0))
+    if (suit.currHP - 1111) <= 0:
+        notifyTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
+    notifyTracks.append(notifyTrack)
+    for s in battle.activeSuits:
+        if s.dna.name == 'videog' and not suit.dna.name == 'videog':
+            theSuit = s
+            texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer5.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+            headTrack = Sequence()
+            for headPart in s.animatedHeadParts:
+                headTrack.append(Wait(1))
+                headTrack.append(Func(headPart.loop, 'stun'))
+                texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer5.png')
+                texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+                headTrack.append(Func(headPart.setTexture, texture2, 1))
+                headTrack.append(Wait(5.0))
+                headTrack.append(Func(headPart.setTexture, texture, 1))
+                headTrack.append(Func(headPart.loop, 'neutral'))
+            notifyTrack = Sequence(ActorInterval(theSuit, 'mob-mentality', endTime=1), Wait(4.0), Func(theSuit.setHealthForMe, + (1111)),  Func(theSuit.showHpText, (1111)),
+                                Func(theSuit.updateHealthBar, 0), Func(theSuit.setNeutralAnimation), Wait(2.0))
+            headTracks.append(headTrack)
+            notifyTracks.append(Parallel(notifyTrack))
+    if theSuit == None:
+        theSuit = suit
+
+    return Parallel(notifyTracks, makeDamageUps, headTracks, soundTrack, makeDesperates)
+
+def doVideographerDeath(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTracks = Parallel()
+    for s in battle.activeSuits:
+        if s.dna.name == 'hroller2':
+            theSuit = s
+            taunt = random.choice(
+                ["Ooo-well, ya know what they ffay: don't hate the Major Player, change the game!",
+                        "I can jufft hear the crowd going wild for thiff intermiffion!",
+                        "Let'ff get the hip hop ffhop right on top, a-one a-two-let'ff play true!",
+                        "We'll be back after a ffhort break, but I'm ffure you'll fftay occupied in the meantime."])
+            tauntInterval = Sequence(Func(theSuit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+            suitTrack = Sequence(Parallel(ActorInterval(theSuit, 'snap'), tauntInterval), Func(theSuit.setNeutralAnimation))
+            suitTracks.append(suitTrack)
+    propTracks = Parallel()
+    toonTracks = Parallel()
+    selfDamageTracks = Parallel()
+    smokeTracks = Parallel()
+    suitDeathTracks = Parallel()
+    for suit in battle.activeSuits:
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        suitTrack2 = Sequence(Wait(2), Parallel(ActorInterval(suit, 'flatten', duration=1.25),
+                                               MovieUtil.createSuitCrashTrack(suit, battle)))
+        selfDamageTrack = Sequence(Wait(2),
+                Func(suit.showHpText, - suit.currHP),
+                                   Func(suit.setHealthForMe, - suit.currHP),
+                                   Func(suit.updateHealthBar, 0))
+        smokeTrack = Sequence(Wait(2.0), Func(smoke.reparentTo, suit),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
+        texture = loader.loadTexture('phase_9/maps/ttcc_ene_tv.png')
+        gavel = loader.loadModel('phase_14/models/char/ttcc_ene_multislacker-zero')
+        gavel.setTexture(texture, 1)
+        gavel.setP(-90)
+        gavel.setH(180)
+        toonPos = suit.getPos(battle)
+        y = toonPos.getY()
+        gavelPos = Point3(toonPos.getX(), y + 2, 30)
+        propTrack = Sequence(
+            getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(180, -90, 0)], appearDelay=0.0,
+                               scaleUpPoint=Point3(2.5), scaleUpTime=2.0),
+            LerpPosInterval(gavel, 0.25, Point3(toonPos.getX(), y + 2, 1)),
+            LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y + 2, 2)),
+            LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y + 2, 1)), Sequence(
+                Wait(1.5),
+                LerpScaleInterval(gavel, .25, MovieUtil.PNT3_ZERO)
+            ))
+        if not suit.dna.name == 'hroller2' and not suit.dna.name == 'videog':
+            selfDamageTracks.append(selfDamageTrack)
+            smokeTracks.append(smokeTrack)
+            propTracks.append(propTrack)
+            suitDeathTracks.append(suitTrack2)
+    soundTrack = getSoundTrack('SA_TV_crash.ogg', delay=2.0, node=suit)
+    soundTrack2 = getSoundTrack('SA_bash.ogg', node=suit)
+    return Parallel(suitTracks, smokeTracks, suitDeathTracks, selfDamageTracks, soundTrack2, toonTracks, propTracks, soundTrack)
+
 def doBudgetCuts(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -678,6 +792,7 @@ def doBudgetCuts(attack):
         toon = t['toon']
         dmg = t['hp']
         tape = globalPropPool.getProp('redtape')
+        tape.setColor(0, 0, 0, 1)
         tubes = []
         for i in xrange(0, 3):
             tubes.append(globalPropPool.getProp('redtape-tube'))
@@ -825,15 +940,13 @@ def doCameraRewind(attack):
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         suitTrack.append(Wait(4.5))
-        currentBossHealth = -1
-        for s in battle.suits:
-            if suit.currHP < suit.maxHP:
-                x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
-                suitTrack.append(Func(suit.showHpTextCheat, 125))
-                suitTrack.append(Func(suit.showHpString, "REWINDED!"))
-                suitTrack.append(Func(suit.setHealthForMe, 125))
+        if suit.currHP < suit.maxHP:
+            x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
+            suitTrack.append(Func(suit.showHpTextCheat, 125))
+            suitTrack.append(Func(suit.showHpString, "REWINDED!"))
+            suitTrack.append(Func(suit.setHealthForMe, 125))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'fmaker':
+        if suit.currHP < suit.maxHP and not theSuit:
             suitTrack.append(Parallel(Sequence(Wait(3)),
                                       Func(suit.setChatAbsolute,
                                            random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
@@ -958,7 +1071,7 @@ def doDirectorCuts(attack):
     managerHealTracks = Parallel()
     animTracks = Parallel()
     for s in battle.activeSuits:
-        if not s.dna.name == 'director' and not s.dna.name == 'fmaker' and not s.dna.name == 'videog' and not s.dna.name == 'hroller2':
+        if not s.dna.name == 'director' and not s.dna.name == 'fmaker' and not s.dna.name == 'videog' and not s.dna.name == 'bcaster' and not s.dna.name == 'hroller2':
             puddle = globalPropPool.getProp('quicksand')
             puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
             puddle.setHpr(Point3(120, 0, 0))
@@ -994,7 +1107,7 @@ def doDirectorCuts(attack):
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3 + suit.getDuration('song-and-dance'), node=suit)
 
     suitTrack = Sequence(getSuitAnimTrack(attack), ActorInterval(suit, 'snap'), Wait(3.0), doRisingStars2(attack))
-    return Parallel(suitTrack, soundTrack, soundTrack2, puddleTracks, managerHealTracks, animTracks, moveTracks)
+    return Parallel(suitTrack, soundTrack, animTracks, moveTracks)
 
 def doRisingStars2(attack):
     suit = attack['suit']
@@ -1143,7 +1256,7 @@ def doRisingStarsSacrifice(attack):
     managerHealTracks = Parallel()
     animTracks = Parallel()
     for s in battle.activeSuits:
-        if not s.dna.name == 'director' and not s.dna.name == 'fmaker' and not s.dna.name == 'videog' and not s.dna.name == 'hroller2':
+        if not s.dna.name == 'director' and not s.dna.name == 'fmaker' and not s.dna.name == 'videog' and not s.dna.name == 'bcaster' and not s.dna.name == 'hroller2':
             puddle = globalPropPool.getProp('quicksand')
             puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
             puddle.setHpr(Point3(120, 0, 0))
@@ -1164,7 +1277,8 @@ def doRisingStarsSacrifice(attack):
             landPos.setY(dropPos.getY())
             moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, sinkPos1, other=battle),
                                  LerpPosInterval(s, 0.4, sinkPos2, other=battle), MovieUtil.createRisingStars(s, battle), Func(s.setPos, battle, dropPos),
-                                 Func(s.wrtReparentTo, battle), LerpPosInterval(s, 0, landPos, other=battle), Wait(2), LerpColorScaleInterval(s, 2, (1, 1, 1, 1)), Wait(1.1))
+                                 Func(s.wrtReparentTo, battle), LerpPosInterval(s, 0, landPos, other=battle), Wait(2), LerpColorScaleInterval(s, 2, (1, 1, 1, 1)), Wait(1.1),
+                                 Func(s.showHpText2, '1.5x Dmg Multiplier', 2))
             animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75),
                                  ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
                                  ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25), Func(s.setNeutralAnimation))
@@ -1179,8 +1293,7 @@ def doRisingStarsSacrifice(attack):
 
     suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
-    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3, node=suit)
-    return Parallel(suitTrack, moveTracks, managerHealTracks, animTracks, soundTrack2, soundTrack, puddleTracks)
+    return Parallel(suitTrack, moveTracks, animTracks, soundTrack, puddleTracks)
 
 def doNoAttack(attack):
     suit = attack['suit']

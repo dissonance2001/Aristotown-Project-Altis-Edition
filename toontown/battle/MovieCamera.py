@@ -1255,14 +1255,21 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerRisingStarsSacrifice':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerRisingStarsSilhouette':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerVideoStatic':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerElectricShock':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerDeath':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerAttackRewind':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'VideographerDirectorCuts':
         camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(4.0), heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 4.7)))
+        # broadcaster cheats
+    elif name == 'BroadcasterDonation':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     #filmmaker cheats
     elif name == 'FilmmakerCameraFlash':
         camTrack.append(defaultCamera(openShotDuration=1.5))

@@ -886,6 +886,8 @@ class BattleCalculatorAI:
                                 rounds = self.NumRoundsLured[atkLevel]
                                 chance = ToontownBattleGlobals.LureMissChance[atkLevel]
                                 lureKBValue = (ToontownBattleGlobals.AvLureKnockback[atkLevel] * 100)
+                                if self.suitHasCondition(targetId, 'noKB'):
+                                    lureKBValue *= 0
                                 if self.suitHasCondition(targetId, 'immune'):
                                     lureKBValue *= 0
                                 if self.suitHasCondition(targetId, 'lureImmune'):
@@ -1706,6 +1708,8 @@ class BattleCalculatorAI:
                     attackDamage *= 0.7
                 if self.suitHasCondition(targetId, 'dancesession'):
                     attackDamage *= .7
+                if self.suitHasCondition(targetId, 'vulnerablebroadcaster'):
+                    attackDamage *= 2
                 if self.suitHasCondition(targetId, 'marked') and atkTrack is not THROW:
                     attackDamage *= 1.1
                 if self.suitHasCondition(targetId, 'enraged') and self.suitHasCondition(targetId, 'desperation'):
@@ -2009,10 +2013,12 @@ class BattleCalculatorAI:
         else:
             suit = self.battle.findSuit(avId)
             if suit.getHP() <= 0:
-                self.deadSuits += 1
                 self.__removeLured(suit.doId)
                 self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
-                self.setSuitCondition(suit.doId, 'dead', 1, 2, 'setBoth')
+                if not self.suitHasCondition(suit.doId, 'dead'):
+                    self.deadSuits += 1
+                    self.notify.debug('Current Dead Suits: ' + str(self.deadSuits))
+                    self.setSuitCondition(suit.doId, 'dead', 1, 2, 'setBoth')
                 return 1
         return 0
 
@@ -2522,6 +2528,14 @@ class BattleCalculatorAI:
                     currentBossHealth = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'videog':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'bcaster':
+                    currentBossHealth = s.currHP
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'silhouettespawn'):
+                self.setSuitCondition(theSuit.doId, 'silhouettespawn', 1, 1, 'setBoth')
      #   if theSuit.dna.name == 'hroller':
            # x = self.TurnsElapsed
            # return 'HighRollerWheelSpin'
@@ -2581,7 +2595,16 @@ class BattleCalculatorAI:
         atkType = attack[SUIT_ATK_COL]
         theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
         atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
-        if self.__suitAtkAffectsGroup(attack):
+        if atkType == 'VideographerAttackRewind':
+            if self.deadSuits > 3:
+                toonCount = len(self.battle.activeToons)
+            elif self.deadSuits > 2:
+                toonCount = 3
+            elif self.deadSuits > 1:
+                toonCount = 2
+            elif self.deadSuits > 0:
+                toonCount = 1
+        elif self.__suitAtkAffectsGroup(attack):
             toonCount = len(self.battle.activeToons)
         else:
             toonCount = min(len(self.battle.activeToons),
@@ -3822,6 +3845,7 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
+                self.__removeLured(theSuit.doId)
             elif atkType == 'HighRollerSingingBlues':
                 result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3842,7 +3866,8 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
                 for suit in self.currentlyLuredSuits.keys():
-                    self.__removeLured(suit)
+                    if suit.getHP() <= 0:
+                        self.__removeLured(suit)
             elif atkType == 'HighRollerDiceRouletteEveryone':
                 result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3856,7 +3881,8 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
                 for suit in self.currentlyLuredSuits.keys():
-                    self.__removeLured(suit)
+                    if suit.getHP() <= 0:
+                        self.__removeLured(suit)
             elif atkType == 'HighRollerDiceRouletteCogs':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3870,7 +3896,8 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
                 for suit in self.currentlyLuredSuits.keys():
-                    self.__removeLured(suit)
+                    if suit.getHP() <= 0:
+                        self.__removeLured(suit)
             elif atkType == 'HighRollerDiceRouletteNobody':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3897,6 +3924,7 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
+                self.__removeLured(theSuit.doId)
             elif atkType == 'HighRollerBust':
                 if self.toonHasCondition(toon.doId, 'banned') or self.toonHasCondition(toon.doId, 'banned2'):
                     self.setToonCondition(toon.doId, 'banned2', 1, 1, 'setBoth')
@@ -4051,7 +4079,7 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'trickofthelight', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'trickofthelight', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'immune', 1, 2, 'setBoth')
                 from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
 
@@ -4155,6 +4183,37 @@ class BattleCalculatorAI:
                         for t in self.battle.activeToons:
                             if t in do.involvedToons:
                                 boss.appendSuitsToBattle(boss.battleNumber, 'videog3')
+            elif atkType == 'VideographerRisingStarsSilhouette':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                if self.TurnsElapsed == 0:
+                    self.setToonCondition(toon.doId, 'silhouettespawn', 1, 99, 'setBoth')
+                from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
+
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedCashbotBossAI):
+                        for toon in self.battle.activeToons:
+                            if toon in do.involvedToons:
+                                boss = do
+                                break
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if self.toonHasCondition(t, 'silhouettespawn'):
+                                    boss.appendSuitsToBattle(boss.battleNumber, 'videog4')
+            elif atkType == 'VideographerDeath':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                for suit in self.battle.activeSuits:
+                    if not suit.dna.name == 'hroller2' and not suit.dna.name == 'videog':
+                        managerTarget = suit
+                        if managerTarget.currHP <= 0:
+                            continue
+                        if managerTarget == None:
+                            continue
+                        self.setSuitCondition(managerTarget.doId, 'killedbyvideo', 1, 2, 'setBoth')
+                        managerTarget.setHP(0)
+                        self.__removeLured(managerTarget.doId)
             elif atkType == 'VideographerVideoStatic':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -4165,8 +4224,14 @@ class BattleCalculatorAI:
                     if managerTarget == None:
                         managerTarget = theSuit
                     self.setSuitCondition(managerTarget.doId, 'vulnerable', 1, 99, 'setBoth')
-                    managerTarget.setVulnerabilityMultiplier(managerTarget.getVulnerabilityMultiplier() * 1.05)
-                    managerTarget.setDamageMultiplier(managerTarget.getDamageMultiplier() * 1.05)
+                    if len(self.battle.activeSuits) < 6:
+                        self.setSuitCondition(managerTarget.doId, 'silhouettespawn', 1, 2, 'setBoth')
+                    if theSuit.dna.name == 'bcaster':
+                        managerTarget.setVulnerabilityMultiplier(managerTarget.getVulnerabilityMultiplier() * 1.25)
+                        managerTarget.setDamageMultiplier(managerTarget.getDamageMultiplier() * 1.05)
+                    else:
+                        managerTarget.setVulnerabilityMultiplier(managerTarget.getVulnerabilityMultiplier() * 1.05)
+                        managerTarget.setDamageMultiplier(managerTarget.getDamageMultiplier() * 1.05)
             elif atkType == 'VideographerRisingStarsSacrifice':
                 managerTarget = None
                 for suit in self.battle.activeSuits:
@@ -4180,10 +4245,22 @@ class BattleCalculatorAI:
                         managerTarget.setHP(managerTarget.maxHP / 2)
                         managerTarget.setMaxHP(managerTarget.maxHP / 2)
                         managerTarget.setDamageMultiplier(managerTarget.getDamageMultiplier() * 1.5)
+            elif atkType == 'BroadcasterDonation':
+                managerTarget = None
+                for suit in self.battle.activeSuits:
+                    if suit.dna.name == 'videog':
+                        managerTarget = suit
+                        if managerTarget.currHP <= 0:
+                            continue
+                        if managerTarget == None:
+                            continue
+                        theSuit.setHP(int(theSuit.currHP - 1111))
+                        managerTarget.setHP(managerTarget.currHP + 1111)
+                self.__removeLured(theSuit.doId)
             elif atkType == 'VideographerElectricShock':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                targetSuit = self.battle.activeSuits[2]
+                targetSuit = self.battle.activeSuits[3]
                 if targetSuit.currHP <= 0:
                     continue
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
@@ -4207,11 +4284,11 @@ class BattleCalculatorAI:
             elif atkType == 'FilmmakerCameraFlash':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'confused', 1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'confused', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'filmmakercalculator', 0, 0, 'setBoth')
             elif atkType == 'DirectorCut':
-                self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
-                self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'allGagBoost', -50, 2, 'setBoth')
+                self.setToonCondition(toon.doId, 'lureBoost', -50, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'directorcalculator', 0, 0, 'setBoth')
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -5097,18 +5174,110 @@ class BattleCalculatorAI:
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'hottakecalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'fmaker':  # filmmaker
-                if (x + 1) % 3 == 0:
+                if x % 2 == 0:
                     self.setSuitCondition(suitId, 'filmmakercalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'director':  # director
-                if (x + 2) % 3 == 0:
+                if (x + 1) % 2 == 0:
                     self.setSuitCondition(suitId, 'directorcalculator', 1, 10, 'setBoth')
         
         # The cheaters who act after all above attacks have played.
         for i in xrange(len(self.battle.activeSuits)): # Gag Banning Retaliation & Initial Cheats
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
-            if self.battle.activeSuits[i].dna.name == 'fmaker': #filmmaker
+            if self.battle.activeSuits[i].dna.name == 'videog': #videographer
                 if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 'VideographerDeath'  # Videographer Death to Sacrifice All Cogs
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != '':
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'bcaster': #broadcaster
+                if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'killedbyvideo') and not self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 'VideographerVideoStatic'  # Video Static Upon Death
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != '':
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 'BroadcasterDonation'  # Donation
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != '':
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'fmaker': #filmmaker
+                if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'killedbyvideo') and not self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 'VideographerVideoStatic'  # Video Static Upon Death
@@ -5199,7 +5368,7 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'director': #director
-                if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId):
+                if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'killedbyvideo') and not self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 'VideographerVideoStatic'  # Video Static Upon Death
@@ -6092,7 +6261,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'PowerhouseSnipeVulnerable'  # Bookkeeping Retaliation
+                    attack[SUIT_ATK_COL] = 'BookkeeperBookkeepingRetaliation'  # Bookkeeping Retaliation
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
@@ -6191,7 +6360,7 @@ class BattleCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             if self.battle.activeSuits[i].dna.name == 'videog':
-                if (self.TurnsElapsed + 2) % 3 == 0 and self.__suitCanAttack(suitId):
+                if (self.TurnsElapsed + 1) % 3 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 'VideographerRisingStarsSacrifice'  # Rising Stars Sacrifice
@@ -6221,7 +6390,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if (self.TurnsElapsed + 2) % 4 == 0 and self.__suitCanAttack(suitId):
+                if (self.TurnsElapsed + 2) % 4 == 0 and len(self.battle.activeSuits) > 3 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 'VideographerElectricShock'  # Electric Shock
@@ -6251,7 +6420,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if not self.suitHasCondition(suitId, 'phase3') and self.battle.activeSuits[i].currHP <= 5555:
+                if not self.suitHasCondition(suitId, 'phase3') and self.battle.activeSuits[i].currHP <= 7777:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 'VideographerDirectorCuts'  # Director Cuts
@@ -6281,7 +6450,37 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'directorscutscalculator') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'silhouettespawn') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = 'VideographerRisingStarsSilhouette'  # Rising Stars Silhouette
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL] != '':
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'directorscutscalculator') and not self.suitHasCondition(suitId, 'silhouettespawn') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 'VideographerRisingStars2'  # Rising Stars w/ Managers
@@ -6311,7 +6510,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if not self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'directorscuts') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
+                if not self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'silhouettespawn') and not self.suitHasCondition(suitId, 'directorscuts') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 'VideographerRisingStars'  # Rising Stars Hollywoods
@@ -9161,126 +9360,6 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.deadSuits > 1 and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerAttackRewind'  # Attack Rewind for Dead Suits
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
-                if self.deadSuits > 2 and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerAttackRewind'  # Attack Rewind for Dead Suits
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
-                if self.deadSuits > 3 and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerAttackRewind'  # Attack Rewind for Dead Suits
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
-                if self.deadSuits > 4 and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerAttackRewind'  # Attack Rewind for Dead Suits
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
 
 
         for i in xrange(len(self.battle.activeSuits)):
@@ -9665,6 +9744,8 @@ class BattleCalculatorAI:
         toonsHit, cogsMiss = self.__initRound()
         for suit in self.battle.activeSuits:
             if suit.isGenerated():
+                if suit.dna.name == 'bcaster':
+                    self.setSuitCondition(suit.doId, 'vulnerablebroadcaster', 1, 99, 'setBoth')
                 if suit.dna.name == 'hrollers' and suit.maxHP == 12600:
                     for s in self.battle.activeSuits:
                         self.setSuitCondition(s.doId, 'soakImmune', 1, 2, 'setBoth')
@@ -9676,6 +9757,8 @@ class BattleCalculatorAI:
                         self.setSuitCondition(s.doId, 'kbImmune', 1, 2, 'setBoth')
                 if suit.dna.name == 'hrollers' and suit.maxHP == 12000:
                     self.setSuitCondition(suit.doId, 'lureImmune', 1, 99, 'setBoth')
+                    for s in self.battle.activeSuits:
+                        self.setSuitCondition(s.doId, 'noKB', 1, 2, 'setBoth')
                 if suit.dna.name == 'hroller':
                     self.setSuitCondition(suit.doId, 'immune', 1, 99, 'setBoth')
                     self.setSuitCondition(suit.doId, 'absorbingHR', 1, 99, 'setBoth')

@@ -718,7 +718,6 @@ def createRisingStars(suit, battle):
     suitTrack.append(Func(suit.setVirtual, True, True))
     suitTrack.append(Func(suit.setCog, True))
     suitTrack.append(Func(suit.show))
-    suitTrack.append(Func(suit.showHpText2, '1.5x Dmg Multiplier', 2))
     suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))

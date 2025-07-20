@@ -233,7 +233,7 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'mslacker':
         actualLevel = relLevel + 23
     elif name == 'videog':
-        actualLevel = relLevel + 76
+        actualLevel = relLevel + 98
     elif name == 'radiog':
         actualLevel = relLevel + 31
     elif name == 'racket':
@@ -283,10 +283,8 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 12
     elif name == 'dold':
         actualLevel = relLevel + 24
-    elif name == 'ghd':
-        actualLevel = relLevel + 776
     elif name == 'fmaker':
-        actualLevel = relLevel + 27
+        actualLevel = relLevel + 25
     elif name == 'dking':
         actualLevel = relLevel + 64
     elif name == 'ottoman':
@@ -362,7 +360,9 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'pbl':
         actualLevel = relLevel + 19
     elif name == 'director':
-        actualLevel = relLevel + 25
+        actualLevel = relLevel + 27
+    elif name == 'bcaster':
+        actualLevel = relLevel + 32
     else:
         actualLevel = relLevel
     return actualLevel
@@ -708,7 +708,7 @@ SuitLevel = {
 SpecialCogDict = ('clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'foreman', 'dopr', 'dopa',
                   'bellring', 'prethink', 'mslacker', 'videog', 'radiog', 'ubuster', 'racket', 'safesupervis', 'psetter', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra',
                   'kerberos', 'charon', 'pcrat', 'hroller', 'erfit', 'hroller2', 'hrollers', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi',
-                  'sgoat', 'caseman', 'stenog', 'lgator', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'ghd', 'dking', 'ottoman', 'crystal', 'chairman',
+                  'sgoat', 'caseman', 'stenog', 'lgator', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'bcaster', 'dking', 'ottoman', 'crystal', 'chairman',
                   'sya', 'pbl', 'fmaker', 'director')
 LitigationManagers = ('lgator', 'stenog', 'caseman', 'sgoat', 'safesupervis', 'ubuster', 'radiog', 'racket', 'ambass', 'wtapper', 'bkeeper', 'phouse')
 
@@ -2410,7 +2410,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Videographer',
 		'pluralname': 'Videographers',
 		'level': 22,
-		'hp':(7777,),
+		'hp':(9999,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(75,),
@@ -2461,7 +2461,15 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                   (0,)),
                  ('VideographerAttackRewind',
                   (25,),
-                  (75,),
+                  (85,),
+                  (0,)),
+                 ('VideographerDeath',
+                  (0,),
+                  (100,),
+                  (0,)),
+                ('VideographerRisingStarsSilhouette',
+                  (0,),
+                  (100,),
                   (0,)),
                  ('VideographerDirectorCuts',
                   (0,),
@@ -5429,11 +5437,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                (35,),
                (100,),
                (25,)))},
- 'ghd': {'name': 'Highest Roller',
+ 'pbs': {'name': 'Skelecog',
         'singularname': 'a Skelecog',
 		'pluralname': 'Skelecogs',
 		'level': 20,
-		'hp':(100000,),
+		'hp':(3333,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(50,),
@@ -5450,7 +5458,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Filmmaker',
 		'pluralname': 'Filmmakers',
 		'level': 21,
-		'hp':(1280,),
+		'hp':(1125,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(50,),
@@ -6892,7 +6900,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Director',
 		'pluralname': 'Directors',
 		'level': 16,
-		'hp':(1000,),
+		'hp':(1385,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(50,),
@@ -6925,20 +6933,31 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                      (0,),
                      (100,),
                      (0,)))},
- 'pbs': {'name': 'Skelecog',
-        'singularname': 'a Skelecog',
-		'pluralname': 'Skelecogs',
-		'level': 20,
-		'hp':(100,),
+ 'bcaster': {'name': 'Broadcaster',
+        'singularname': 'a Broadcaster',
+		'pluralname': 'Broadcasters',
+		'level': 17,
+		'hp':(3333,),
 		'def':(60,),
 		'freq':(0,),
 		'acc':(50,),
 		'attacks':
-             (('FallingKnife',
-               (7,),
-               (85,),
+             (('SoakRemoval',
+                     (0,),
+                     (100,),
+                     (0,)),
+              ('BroadcasterDonation',
+               (0,),
                (100,),
-               ATK_TGT_DOUBLE),)},
+               (0,)),
+              ('VideographerVideoStatic',
+               (0,),
+               (100,),
+               (0,)),
+              ('HighRollerNoAttack',
+              (0,),
+              (100,),
+              (100,)))},
  'plb': {'name': 'Skelecog',
         'singularname': 'a Skelecog',
 		'pluralname': 'Skelecogs',
@@ -7317,10 +7336,12 @@ SuitAttacks = {
  'VideographerRisingStars': ('shot5', ATK_TGT_SINGLE),
  'VideographerRisingStars2': ('shot5', ATK_TGT_SINGLE),
  'VideographerRisingStarsSacrifice': ('snap', ATK_TGT_SINGLE),
+ 'VideographerRisingStarsSilhouette': ('shot5', ATK_TGT_SINGLE),
  'VideographerVideoStatic': ('glower', ATK_TGT_SINGLE),
  'VideographerElectricShock': ('glower', ATK_TGT_SINGLE),
  'VideographerAttackRewind': ('snap', ATK_TGT_DOUBLE),
  'VideographerDirectorCuts': ('song-and-dance', ATK_TGT_SINGLE),
+ 'VideographerDeath': ('snap', ATK_TGT_SINGLE),
     # Filmmaker Cheats
  'FilmmakerCameraFlash': ('glower', ATK_TGT_SINGLE),
  'FilmmakerCameraRewind': ('throw-object', ATK_TGT_SINGLE),
@@ -7330,6 +7351,8 @@ SuitAttacks = {
  'DirectorAction': ('nothing', ATK_TGT_SINGLE),
  'DirectorActionRetaliation': ('glower', ATK_TGT_GROUP),
  'DirectorBackToOnes': ('nothing', ATK_TGT_SINGLE),
+    # Broadcaster Cheat
+ 'BroadcasterDonation': ('nothing', ATK_TGT_SINGLE),
     # Court Fees and Calculation Mirrors
  'SynergyFees': ('magic3', ATK_TGT_GROUP),
  'CalculatingFees': ('calculating-costs', ATK_TGT_SINGLE),

@@ -577,16 +577,23 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doRisingStars(attack)
     elif name == 'VideographerRisingStars2':
         suitTrack = MovieHighRollerCheats.doRisingStars(attack)
+    elif name == 'VideographerRisingStarsSilhouette':
+        suitTrack = MovieHighRollerCheats.doRisingStars(attack)
     elif name == 'VideographerRisingStarsSacrifice':
         suitTrack = MovieHighRollerCheats.doRisingStarsSacrifice(attack)
     elif name == 'VideographerVideoStatic':
         suitTrack = MovieHighRollerCheats.doVideoStatic(attack)
     elif name == 'VideographerElectricShock':
-        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 2)
+        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 3)
     elif name == 'VideographerAttackRewind':
         suitTrack = MovieHighRollerCheats.doAttackRewind(attack)
     elif name == 'VideographerDirectorCuts':
         suitTrack = MovieHighRollerCheats.doDirectorCuts(attack)
+    elif name == 'VideographerDeath':
+        suitTrack = MovieHighRollerCheats.doVideographerDeath(attack)
+    # broadcaster cheats
+    elif name == 'BroadcasterDonation':
+        suitTrack = MovieHighRollerCheats.doDonation2(attack)
     #filmmaker cheats
     elif name == 'FilmmakerCameraFlash':
         suitTrack = MovieHighRollerCheats.doCameraFlash(attack)
@@ -794,7 +801,7 @@ def doSuitAttack(attack):
         elif name == 'ScapegoatCourtRecordBan':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'HighRollerNoAttack':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack, unlureSuit)
         elif name == 'SoakRemoval':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'UnionBusterUnionBusterDamage':
