@@ -1228,10 +1228,16 @@ def doVideoStatic(attack):
                 headTrack.append(Func(headPart.setTexture, texture2, 1))
                 headTrack.append(Wait(theSuit.getDuration('throttletwo') - 4.25))
                 headTrack.append(Parallel(Func(headPart.setTexture, texture, 1), soundTrack4, Func(headPart.loop, 'neutral')))
-            notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
-                                                   'VULNERABILITY INCREASED!',
+            if suit.dna.name == 'bcaster':
+                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
+                                                   '1.25x Vulnerability Multiplier',
                                                    2), Func(theSuit.showHpStringLureManager2,
-                                                            '1.05x Dmg Multiplier'), Func(theSuit.setNeutralAnimation), Wait(2.0))
+                                                            '1.25x Dmg Multiplier'), Func(theSuit.setNeutralAnimation), Wait(2.0))
+            else:
+                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
+                                                   '1.1x Vulnerability Multiplier',
+                                                   2), Func(theSuit.showHpStringLureManager2,
+                                                            '1.1x Dmg Multiplier'), Func(theSuit.setNeutralAnimation), Wait(2.0))
             makeDesperate = Func(theSuit.makeVulnerable)
             headTracks.append(headTrack)
             makeDamageUp = Func(theSuit.makeDamageUp)

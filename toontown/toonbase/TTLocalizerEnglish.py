@@ -4117,7 +4117,7 @@ SuitCheatDescription = {
 'HighRollerSingingBlues': "The Blue Silhouette applies the winded effect to all Toons!",
 'HighRollerDamageReduction': "The Light Blue Silhouette applies a damage down to\nrandom Toons!",
 'HighRollerSplashback': "The Pink Silhouette retaliates against Toons who\nsoaked the Silhouettes!",
-'HighRollerCheerRetaliation': "The Purple Silhouette retaliates against healed Toons!",
+'HighRollerCheerRetaliation': "The Purple Silhouette retaliates against Toons with\ncheer!",
     # Videographer Cheats
  'VideographerRisingStars': "The Videographer summons cogs to his side!",
  'VideographerRisingStars2': "The Videographer summons cogs to his side!",

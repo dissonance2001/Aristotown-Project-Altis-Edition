@@ -1476,43 +1476,43 @@ class TownBattleCogPanel(DirectFrame):
             self.hp = 0
         self.maxHp = self.cog.getMaxHP()
         if condition == 9:
-            taskMgr.remove(self.uniqueName('blink-task'))
+            taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
             if self.healthBar2:
                 self.healthBar2.setProp('barColor', self.healthColors[condition])
                 self.healthBar2.setProp('value', self.cog.getHP())
-                taskMgr.remove(self.uniqueName('blink-task'))
+                taskMgr.remove(self.uniqueName('blink-task2'))
         elif condition == 10:
-            taskMgr.remove(self.uniqueName('blink-task'))
+            taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
             if self.healthBar2:
                 self.healthBar2.setProp('barColor', self.healthColors[condition])
                 self.healthBar2.setProp('value', self.cog.getHP())
                 blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.75), Task(self.__blinkGray), Task.pause(0.1))
-                taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                taskMgr.add(blinkTask, self.uniqueName('blink-task2'))
         elif condition == 11:
-            taskMgr.remove(self.uniqueName('blink-task'))
+            taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
             if self.healthBar2:
                 self.healthBar2.setProp('barColor', self.healthColors[condition])
                 self.healthBar2.setProp('value', self.cog.getHP())
                 blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.25), Task(self.__blinkGray), Task.pause(0.1))
-                taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                taskMgr.add(blinkTask, self.uniqueName('blink-task2'))
         elif condition == 13:
-            taskMgr.remove(self.uniqueName('blink-task'))
+            taskMgr.remove(self.uniqueName('blink-task2'))
             if self.healthBar2:
                 self.healthBar2.setProp('barColor', self.healthColors[condition])
                 self.healthBar2.setProp('value', self.cog.getHP())
                 blinkTask = Task.loop(Task(self.__blinkPurple), Task.pause(1.5), Task(self.__blinkPurpleColor),
                                       Task.pause(1.5))
-                taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                taskMgr.add(blinkTask, self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
         else:
             taskMgr.remove(self.uniqueName('blink-task'))
             if self.healthBar2:
                 self.healthBar2.setProp('barColor', self.healthColors[condition])
                 self.healthBar2.setProp('value', self.cog.getHP())
-                taskMgr.remove(self.uniqueName('blink-task'))
+                taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
         self.hpText['text'] = str(self.hp) + '/' + str(self.maxHp)
 
@@ -1861,7 +1861,7 @@ class TownBattleCogPanel(DirectFrame):
             self.blinkTask = None
 
         del self.blinkTask
-        taskMgr.remove(self.uniqueName('blink-task'))
+        taskMgr.remove(self.uniqueName('blink-task2'))
         self.healthNode.removeNode()
         self.button.removeNode()
         DirectFrame.destroy(self)

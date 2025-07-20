@@ -357,6 +357,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if 'allGagBoost' in base.localAvatar.battleConditions:
             allGagBoost = True
 
+        raisedAnte = False
+        if 'raisedAnte' in base.localAvatar.battleConditions:
+            raisedAnte = True
+
         groupDamageDown = False
         if 'groupDamageDown' in base.localAvatar.battleConditions:
             groupDamageDown = True
@@ -373,6 +377,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             button = self.buttons[track][level]
             if allGagBoost:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['allGagBoost'][0]
+            elif raisedAnte:
+                val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['raisedAnte'][0]
             else:
                 val = base.localAvatar.battleConditions[param][0]
             if base.localAvatar.battleConditions[param][0] > 0.0:
@@ -505,6 +511,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                 lureValue = int(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
                 damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost')
+            elif raisedAnte and not track == LURE_TRACK:
+                damage = math.ceil(damage * ((base.localAvatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0))
+                lureValue = int(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+                damageAppendStr = labelColorizeJustAll(damage, 'raisedAnte')
             else:
                 lureValue = int(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
@@ -1331,6 +1342,16 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(
                                 track, level) <= 0:
                             if base.localAvatar.battleConditions['allGagBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'raisedAnte' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['raisedAnte'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'raisedAnte' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['raisedAnte'][0] < 0.0:
                                 if not self.numItem(track, level) <= 0:
                                     self.makeDamageDownPressable(button, track, level)
                         if 'lureBoost' in base.localAvatar.battleConditions and not self.numItem(

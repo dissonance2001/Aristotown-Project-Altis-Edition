@@ -532,6 +532,7 @@ ValidStatusConditions = (
     'dancesession',
     'directorscutscalculator',
     'trickofthelight',
+    'hollywoodcalculator',
 
     # Cog Status Effects
     'bookkeeping',
@@ -589,9 +590,14 @@ ValidStatusConditions = (
     'fourthtrick',
     'silhouettespawn',
     'vulnerablebroadcaster',
+    'vulnerablesilhouette1',
+    'vulnerablesilhouette2',
+    'vulnerablesilhouette3',
+    'vulnerablevideographer',
 
     # Toon Status Effects
     'noUnites',
+    'raisedAnte',
     'confused',
     'encore2',
     'snappedtarget2',
