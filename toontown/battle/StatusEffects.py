@@ -11,7 +11,7 @@ class StatusEffect:
     All status effects shall inherit this class, with basic functionalities.
     '''
 
-    def __init__(self, roundsLeft, good, name = 'Status Effect', desc = 'A status effect.', icon = None, iconPath = DEFAULT_STATUS_ICON_PATH, targetable = True, tenured = False, hidden = False):
+    def __init__(self, roundsLeft, good, name = 'Status Effect', desc = 'A status effect.', icon = None, iconPath = DEFAULT_STATUS_ICON_PATH, damageMod = 1.0, defenseMod = 1.0, targetable = True, tenured = False, hidden = False):
         '''
         roundsLeft: An int that determines how many rounds of the status effect remain.  -1 for it to be permanent unless cleared.
         good: A boolean that determines if this status effect is good or bad, which is supposed to be for the circle behind icon.
@@ -19,6 +19,8 @@ class StatusEffect:
         desc: The description of the status effect that describes what it does.
         icon: The icon node of the status effect based on the given path.
         iconPath: For when we might want a different collection of model nodes for the icon (e.g. the Glass of Water for the Hydrated status effect).
+        damageMod: The damage modifier.  It can either be an int which will offer a flat damage change, or a float which will be a multiplier.
+        defenseMod: The defense modifier.  It can either be an int which will offer a flat damage change, or a float which will be a multiplier.  NOTE: For int, negative means the combatant will take less damage, while positive will make them take more damage.  For float, of course, incoming damage is multiplied.
         hidden: Whether or not this status effect is hidden (e.g. the 340% damage vulnerability Count Erfit gets from maxing out his arms).
         '''
         self.roundsLeft = roundsLeft
@@ -28,6 +30,8 @@ class StatusEffect:
         # Professor Control: I don't know if this will work or if I am missing something.
         # if icon:
         #     self.icon = loader.loadModel(iconPath).find('**/%s' % icon)
+        self.damageMod = damageMod
+        self.defenseMod = defenseMod
         self.targetable = targetable
         self.tenured = tenured
         self.hidden = hidden
@@ -59,16 +63,12 @@ class DamageModifier(StatusEffect):
     '''
 
     def __init__(self, roundsLeft, damageMod, hidden = False):
-        '''
-        damageMod: The damage modifier.  It can either be an int which will offer a flat damage change, or a float which will be a multiplier.
-        '''
         good = damageMod >= 0.0
         if isinstance(damageMod, float):
             desc = "This combatant's attacks are %sx as powerful." % damageMod
         else:
             desc = 'This combatant is dealing %s %s damage.' % (abs(damageMod), 'more' if good else 'less')
-        StatusEffect.__init__(self, roundsLeft, good, name='Damage %s' % ('Up' if good else 'Down'), desc=desc, icon='toon_damage_%s_icon' % ('up' if good else 'down'), hidden=hidden) # For the icon, I did not yet know how I would distinguish between a Cog and a Toon, but I think that is some BattleCalculatorAI.py stuff that can be resolved later.
-        self.damageMod = damageMod
+        StatusEffect.__init__(self, roundsLeft, good, name='Damage %s' % ('Up' if good else 'Down'), desc=desc, icon='toon_damage_%s_icon' % ('up' if good else 'down'), damageMod=damageMod, hidden=hidden) # For the icon, I did not yet know how I would distinguish between a Cog and a Toon, but I think that is some BattleCalculatorAI.py stuff that can be resolved later.
 
 class DefenseModifier(StatusEffect):
     '''
@@ -76,16 +76,12 @@ class DefenseModifier(StatusEffect):
     '''
 
     def __init__(self, roundsLeft, defenseMod, hidden = False):
-        '''
-        defenseMod: The defense modifier.  It can either be an int which will offer a flat damage change, or a float which will be a multiplier.  NOTE: For int, negative means the combatant will take less damage, while positive will make them take more damage.  For float, of course, incoming damage is multiplied.
-        '''
         good = defenseMod <= 0.0
         if isinstance(defenseMod, float):
             desc = 'This combatant is taking %sx as much damage.' % defenseMod
         else:
             desc = 'This combatant is taking %s %s damage.' % (abs(defenseMod), 'less' if good else 'more')
-        StatusEffect.__init__(self, roundsLeft, good, name='Damage Reduction' if good else 'Vulnerable', desc=desc, icon='%sshield_icon' % ('' if good else '_broken'), hidden=hidden)
-        self.defenseMod = defenseMod
+        StatusEffect.__init__(self, roundsLeft, good, name='Damage Reduction' if good else 'Vulnerable', desc=desc, icon='%sshield_icon' % ('' if good else '_broken'), defenseMod=defenseMod, hidden=hidden)
 
 class DamageOverTime(StatusEffect):
     '''
@@ -121,7 +117,7 @@ class AccuracyModifier(StatusEffect):
         Should the accuracy ever change, be sure that the icons are up to date.
         '''
         self.good = self.accuracyMod >= 0.0
-        self.desc = "This combatant's attacks are %s %s accurate." % (str(self.accuracyMod) + '%', 'more' if self.good else 'less')
+        self.desc = "This combatant's attacks are %s %s accurate." % (str(abs(self.accuracyMod)) + '%', 'more' if self.good else 'less')
         # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/toon_accuracy_%s_icon' % 'up' if self.good else 'down')
 
 class DamageAbsorption(StatusEffect):
