@@ -1,5 +1,6 @@
 import random, sys
 from math import floor
+import StatusEffects
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle.DistributedBattleAI import *
@@ -104,6 +105,24 @@ class BattleCalculatorAI:
             #toonId, condition))
             return 0
         return self.toonStatusConditions[toonId][condition]['modifier']
+    
+    def findRelevantEffects(self, avId, effectType, toon = False):
+        '''
+        Use this method to search for all effects an avatar has.  This includes effects that inherit other classes (e.g. if a list asked for all effects with DefenseModifier, then HarmoniousColors and RefractionBarrier would be included).
+        effectType: The effect from StatusEffects.py (StatusEffects.DamageModifier, StatusEffects.MarketBubble, etc.)
+        '''
+        effects = []
+        if toon:
+            for effect in self.toonStatusConditions[avId]:
+                if isinstance(effect, effectType):
+                    effects.append(effect)
+
+        else:
+            for effect in self.suitStatusConditions[avId]:
+                if isinstance(effect, effectType):
+                    effects.append(effect)
+        
+        return effects
 
     def getToonConditionTurns(self, toonId, condition):
         if not self.toonHasCondition(toonId, condition):
@@ -9704,6 +9723,40 @@ class BattleCalculatorAI:
                 attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
 
+        for toonId in self.battle.activeToons: # Damage over times.
+            for dot in self.findRelevantEffects(toonId, StatusEffects.DamageOverTime):
+                # This is going to make the damage over times incredibly slow by making it so only one damage over time plays at a time, but it will work mechanically.  TODO: Improve so that all damage over times play sequentially but have all Toons be damaged at once per attack.
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ATK_COL] = dot.attack
+                attack[SUIT_TGT_COL] = [self.battle.activeToons.index(toonId)]
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                for tgtId in attack[SUIT_TGT_COL]:
+                    attack[SUIT_HP_COL][tgtId] = dot.hpPerRound
+                    for defenseModifier in self.findRelevantEffects(self.battle.activeToons[tgtId], StatusEffects.DefenseModifier): # Professor Control: I'll make a proper comment for this later, but I currently have no regard for the order.
+                        if isinstance(defenseModifier.defenseMod, float):
+                            attack[SUIT_HP_COL][tgtId] *= defenseModifier.defenseMod
+                        else:
+                            attack[SUIT_HP_COL][tgtId] += defenseModifier.defenseMod
+                
+                for tgtId in attack[SUIT_TGT_COL]:
+                    self.__updateSuitAtkStat(self.battle.activeToons[tgtId])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+                
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, None)
+                attack[SUIT_BEFORE_TOONS_COL] = 0
+                self.battle.suitAttacks.append(attack)
+                if isinstance(dot, StatusEffects.LegallyBound) and dot.roundsLeft <= 1: # Legal Bindings will expire next turn; make all Stenographers Sanction that Toon.
+                    for i in xrange(len(self.battle.activeSuits)):
+                        if self.battle.activeSuits[i].dna.name == 'stenog':
+                            pass
 
 
     def __updateLureTimeouts(self):

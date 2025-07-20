@@ -502,6 +502,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def addSuit(self, suit):
         self.newSuits.append(suit)
         self.suits.append(suit)
+        self.battleCalc.suitStatusConditions[suit.doId] = SuitAttributes[suit.getStyleName()].get('initEffects', [])
         suit.battleTrap = NO_TRAP
         self.numSuitsEver += 1
 
@@ -572,6 +573,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.accept(event, self.__handleSuddenExit, extraArgs=[avId, 0])
         self.newToons.append(avId)
         self.toons.append(avId)
+        self.battleCalc.toonStatusConditions[avId] = []
         toon = simbase.air.doId2do.get(avId)
         if toon:
             if hasattr(self, 'doId'):
