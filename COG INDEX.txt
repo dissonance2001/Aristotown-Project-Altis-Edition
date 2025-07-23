@@ -325,8 +325,10 @@ std - Stunt Double Level 7-18
 director - Director Level 28.mgr
 bcaster - Broadcaster Level 33.mgr
 
+	Major Player Stunt Double:
+std2 - Stunt Double - Level 18.exe
+
 	Nothing:
-plb - PLACEHOLDER Level N/A.mgr
 put - PLACEHOLDER Level N/A.mgr
 prt - PLACEHOLDER Level N/A.mgr
 pla - PLACEHOLDER Level N/A.mgr
