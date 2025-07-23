@@ -77,10 +77,10 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 return self.showSuitsFallingHighRoller(suits, ts, name, callback)
             if suit.dna.name == 'director':
                 suit.setPos(0, 0, 50)
-                return self.showSuitsFallingHighRoller(suits, ts, name, callback)
+                return self.showSuitsFallingHighRoller2(suits, ts, name, callback)
             if suit.dna.name == 'fmaker':
                 suit.setPos(0, 0, 50)
-                return self.showSuitsFallingHighRoller(suits, ts, name, callback)
+                return self.showSuitsFallingHighRoller2(suits, ts, name, callback)
             suit.setState('Battle')
             if suit.dna.dept == 'l':
                 suit.reparentTo(self.bossCog)

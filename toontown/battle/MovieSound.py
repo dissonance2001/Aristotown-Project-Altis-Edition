@@ -223,7 +223,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 bonusTrack = Sequence(Wait(tSuitReact + 0.75 + uberDelay),
                                       Func(suit.showHpText, -hpBonus, 1, openEnded=0))
                 bonusTrack.append(updateHealthBar)
-            suitTrack.append(Func(suit.setNeutralAnimation))
+            suitTrack.append(Func(suit.setNeutralAnimationTrap))
             suitIndex = battle.activeSuits.index(suit)
             suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, totalDamage[targetIndex], battle))
             suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, totalDamage[targetIndex], battle))
@@ -239,16 +239,17 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 tracks.append(suitTrack)
             else:
                 tracks.append(Parallel(suitTrack, bonusTrack))
-        elif totalDamage[targetIndex] <= 0:
+                tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
+        elif totalDamage[targetIndex] <= 0 and not suit.dna.name == 'hroller':
             battle = sound['battle']
-            #if suit.isLured:
-                #tracks.append(__createSuitResetPosTrack(suit, battle))
-                #tracks.append(Func(battle.unlureSuit, suit))
-            tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, tSuitReact))
-            tracks.append(Func(suit.setNeutralAnimation))
-            tracks.append(Func(suit.setChatAbsolute,
-                                  '',
-                                  CFSpeech | CFTimeout))
+            if suit.isLured:
+                tracks.append(__createSuitResetPosTrack(suit, battle))
+                tracks.append(Func(battle.unlureSuit, suit))
+                tracks.append(Func(suit.setNeutralAnimationTrap))
+            tracks.append(MovieUtil.createSuitTeaseMultiTrackSound(suit, battle, tSuitReact))
+            tracks.append(Func(suit.setNeutralAnimationTrap))
+        elif totalDamage[targetIndex] <= 0 and suit.dna.name == 'hroller':
+            tracks.append(Func(suit.showHpTextWhite, 'IMMUNE!'))
 
     return tracks
 
@@ -290,7 +291,7 @@ def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
         return suitTrack
-    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'hroller':
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'nothing':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         showDamage = Sequence(
@@ -364,12 +365,9 @@ def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
-    updateTrack = Parallel(Func(suit.setChatAbsolute,
-                                '',
-                                CFSpeech | CFTimeout))
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.loop, 'neutral'))
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(walkTrack, updateTrack, moveTrack)
+    return Parallel(walkTrack, moveTrack)
 
 
 def createSuitResetPosTrack(suit, battle):

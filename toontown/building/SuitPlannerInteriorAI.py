@@ -162,6 +162,8 @@ class SuitPlannerInteriorAI:
             suit.setExecutive(1)
         if suit.dna.name == 'mh2':
             suit.setExecutive(1)
+        if suit.dna.name == 'std2':
+            suit.setExecutive(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'autocad' and not suit.dna.name == 'ant' and not suit.dna.name == 'whistleb' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'maudit' and not suit.dna.name == 'watchm':
             suit.setExecutive(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'djockey' and not suit.dna.name == 'autocad' and not suit.dna.name == 'whistleb' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'maudit' and not suit.dna.name == 'watchm':
@@ -367,11 +369,12 @@ class SuitPlannerInteriorAI:
             suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0)
             reserveSuits.append(suit)
         if specialCode == 'crf2':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 27, 0)
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.randint(27, 36), 0)
             reserveSuits.append(suit)
         if specialCode == 'videog':
             suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            reserveSuits.append(suit)
+            suit4 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
+            reserveSuits.append(random.choice((suit, suit4)))
         if specialCode == 'videog4':
             suit = self.__genSuitObject(self.zoneId, 18, 'p', 18, 0)
             reserveSuits.append(suit)
@@ -379,9 +382,9 @@ class SuitPlannerInteriorAI:
             suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             suit8 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             suit5 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            suit6 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            suit7 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            suit4 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
+            suit6 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
+            suit7 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
+            suit4 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
             suit2 = self.__genSuitObject(self.zoneId, 17, 'p', 17, 0)
             suit3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)
             reserveSuits.append(random.choice((suit, suit2, suit3, suit4, suit5, suit6, suit7, suit8)))

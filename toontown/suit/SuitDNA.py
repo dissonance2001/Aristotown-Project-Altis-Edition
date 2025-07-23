@@ -27,7 +27,7 @@ suitHeadTypes = [
 'skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'ant', 'sya', 'djockey', 'ptjockey', 'jas', 'tas', 'fhu', 'fsh', 'fhj',
 'kdh', 'dar', 'nhy', 'wrt', 'auh',
     # Pressbots
-'ppb', 'shb', 'bsd', 'gms', 'sbg', 'hck', 'ath', 'ghw', 'dcw', 'gzt', 'wnk', 'nsh', 'std', 'anc', 'jls', 'pbl', 'director', 'bcaster', 'plb', 'put', 'prt', 'pla', 'plk', 'plh',
+'ppb', 'shb', 'bsd', 'gms', 'sbg', 'hck', 'ath', 'ghw', 'dcw', 'gzt', 'wnk', 'nsh', 'std', 'anc', 'jls', 'pbl', 'director', 'bcaster', 'std2', 'put', 'prt', 'pla', 'plk', 'plh',
 'plg', 'plf', 'pld', 'pls'
 ]
 suitATypes = [
@@ -45,7 +45,7 @@ suitATypes = [
     # Techbots
 'vpr', 'brn', 'key', 'sfs', 'pyc', 'itn', 'rus', 'sya',
     # Pressbots
-'ghw', 'dcw', 'gzt', 'nsh', 'std', 'anc', 'pbl', 'director', 'bcaster'
+'ghw', 'dcw', 'gzt', 'nsh', 'std', 'anc', 'pbl', 'director', 'bcaster', 'std2',
 ]
 suitBTypes = [
     # Bossbots

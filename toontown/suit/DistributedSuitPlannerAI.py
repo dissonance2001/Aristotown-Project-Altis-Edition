@@ -473,6 +473,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'mh2':
             newSuit.setExecutive(1)
+        if newSuit.dna.name == 'std2':
+            newSuit.setExecutive(1)
         if executive and not newSuit.getManager():
             newSuit.setExecutive(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'whistleb' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'maudit' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':

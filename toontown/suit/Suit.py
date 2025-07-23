@@ -169,7 +169,7 @@ hydra = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 kerberos = (('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
 charon = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 pcrat = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
-hroller = (('glower', 'glower', 4), ('scabbard', 'scabbard', 4), ('wheelspin', 'wheelspin', 4), ('shot5', 'shot5', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('song-and-dance', 'song-and-dance', 4), ('walk', 'awalk', 4))
+hroller = (('cease', 'cease3', 4), ('taunt', 'taunt', 4), ('wheelspin', 'wheelspin', 4), ('shot5', 'shot5', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('song-and-dance', 'song-and-dance', 4), ('walk', 'awalk', 4))
 erfit = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 hrollers = (('glower', 'glower', 4), ('sanction', 'sanction', 4), ('snap', 'snap', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4))
 hroller2 = (('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('shot5', 'shot5', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
@@ -283,7 +283,7 @@ jls = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swi
 pbl = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 director = (('golf-club-swing', 'golf-club-swing', 4), ('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 bcaster = (('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
-plb = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
+std2 = (('glower', 'glower', 4), ('smile', 'smile', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4))
 put = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 prt = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 pla = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
@@ -2925,11 +2925,17 @@ class Suit(Avatar.Avatar):
             self.makeVulnerable()
             self.setHeight(9.5)
             self.setTransparency(1)
-        elif dna.name == 'plb':
-            self.scale = 7.0 / bSize
-            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.makeSkeletonManager()
-            self.setHeight(8.0)
+        elif dna.name == 'std2':
+            self.scale = 6.75 / aSize
+            self.handColor = VBase4(1, 0.973, 0.969, 1)
+            self.generateBody()
+            self.generateHead2('root')
+            texture = loader.loadTexture('phase_14/maps/stuntdouble.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.generateHead2('shades')
+            self.makeExecutive()
+            self.setHeight(9.0)
         elif dna.name == 'put':
             self.scale = 7.0 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -4654,6 +4660,8 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_14/models/char/whiteknight')
         if headType == 'root' and self.style.name == 'std':
             headModel = loader.loadModel('phase_14/models/char/yesman')
+        if headType == 'root' and self.style.name == 'std2':
+            headModel = loader.loadModel('phase_14/models/char/yesman')
         if headType == 'root' and self.style.name == 'sbg':
             headModel = loader.loadModel('phase_14/models/char/sandbagger')
         if headType == 'root' and self.style.name == 'key':
@@ -5412,7 +5420,7 @@ class Suit(Avatar.Avatar):
             condition = 11
         self.condition = condition
         if self.style.name == 'hrollers':
-            if self.maxHP == 13000:
+            if self.getActualLevel() == 34:
                 self.setDisplayName(self.createNameInfoMagenta())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5428,7 +5436,7 @@ class Suit(Avatar.Avatar):
                     taskMgr.add(blinkTask, self.uniqueName('blink-task'))
                 else:
                     self.virtualize(20)
-            elif self.maxHP == 12900:
+            elif self.getActualLevel() == 33:
                 self.setDisplayName(self.createNameInfoWhite())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5444,7 +5452,7 @@ class Suit(Avatar.Avatar):
                     taskMgr.add(blinkTask, self.uniqueName('blink-task'))
                 else:
                     self.virtualize(19)
-            elif self.maxHP == 12800:
+            elif self.getActualLevel() == 32:
                 self.setDisplayName(self.createNameInfoPurple())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5460,7 +5468,7 @@ class Suit(Avatar.Avatar):
                     taskMgr.add(blinkTask, self.uniqueName('blink-task'))
                 else:
                     self.virtualize(13)
-            elif self.maxHP == 12700:
+            elif self.getActualLevel() == 31:
                 self.setDisplayName(self.createNameInfoLightBlue())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5476,7 +5484,7 @@ class Suit(Avatar.Avatar):
                     taskMgr.add(blinkTask, self.uniqueName('blink-task'))
                 else:
                     self.virtualize(12)
-            elif self.maxHP == 12600:
+            elif self.getActualLevel() == 30:
                 self.setDisplayName(self.createNameInfoPink())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5492,7 +5500,7 @@ class Suit(Avatar.Avatar):
                     taskMgr.add(blinkTask, self.uniqueName('blink-task'))
                 else:
                     self.virtualize(14)
-            elif self.maxHP == 12500:
+            elif self.getActualLevel() == 29:
                 self.setDisplayName(self.createNameInfoRed())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5508,7 +5516,7 @@ class Suit(Avatar.Avatar):
                     taskMgr.add(blinkTask, self.uniqueName('blink-task'))
                 else:
                     self.virtualize(8)
-            elif self.maxHP == 12400:
+            elif self.getActualLevel() == 28:
                 self.setDisplayName(self.createNameInfoBlue())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5524,7 +5532,7 @@ class Suit(Avatar.Avatar):
                     taskMgr.add(blinkTask, self.uniqueName('blink-task'))
                 else:
                     self.virtualize(15)
-            elif self.maxHP == 12275:
+            elif self.getActualLevel() == 27:
                 self.setDisplayName(self.createNameInfoYellow())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5540,7 +5548,7 @@ class Suit(Avatar.Avatar):
                     taskMgr.add(blinkTask, self.uniqueName('blink-task'))
                 else:
                     self.virtualize(3)
-            elif self.maxHP == 12100:
+            elif self.getActualLevel() == 26:
                 self.setDisplayName(self.createNameInfoOrange())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5720,23 +5728,23 @@ class Suit(Avatar.Avatar):
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
             if self.style.name == 'hrollers':
-                if self.maxHP == 13000:
+                if self.getActualLevel() == 34:
                     self.virtualize(20)
-                elif self.maxHP == 12900:
+                elif self.getActualLevel() == 33:
                     self.virtualize(19)
-                elif self.maxHP == 12800:
+                elif self.getActualLevel() == 32:
                     self.virtualize(13)
-                elif self.maxHP == 12700:
+                elif self.getActualLevel() == 31:
                     self.virtualize(12)
-                elif self.maxHP == 12600:
+                elif self.getActualLevel() == 30:
                     self.virtualize(14)
-                elif self.maxHP == 12500:
+                elif self.getActualLevel() == 29:
                     self.virtualize(8)
-                elif self.maxHP == 12400:
+                elif self.getActualLevel() == 28:
                     self.virtualize(15)
-                elif self.maxHP == 12275:
+                elif self.getActualLevel() == 27:
                     self.virtualize(3)
-                elif self.maxHP == 12100:
+                elif self.getActualLevel() == 26:
                     self.virtualize(7)
                 else:
                     self.virtualize(0)

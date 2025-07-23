@@ -298,6 +298,20 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             0, maxHp)
             self.corpIcon.hide()
             self.deptLabel['text'] = ''
+        elif self.avatar.dna.name == 'hrollers' and self.maxHp > 9999 and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            0, maxHp)
+        elif self.avatar.dna.name == 'hrollers' and self.maxHp > 9999:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif self.avatar.dna.name == 'hrollers' and tempHp <= 0:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            0, maxHp)
+        elif self.avatar.dna.name == 'hrollers':
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            int(tempHp), maxHp)
         elif revives > 2 and self.avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
@@ -502,7 +516,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
 
     def __changeColor(self):
         self.interval = Parallel(
-                LerpColorScaleInterval(self.button, duration=0, colorScale=(self.healthColors[self.condition]),
+                LerpColorScaleInterval(self.button, duration=2, colorScale=(self.healthColors[self.condition]),
                                        blendType='easeInOut'))
         self.interval.start()
 

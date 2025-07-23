@@ -230,14 +230,18 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
             executive = 0
         self.executive = executive
         if self.dna.name == 'mh2':
-            self.maxHP = random.randint(200, 800)
+            self.maxHP = random.randint(200, 900)
+            self.currHP = self.maxHP
+        if self.dna.name == 'std2':
+            self.maxHP = random.randint(100, 700)
             self.currHP = self.maxHP
         if self.dna.name == 'autocad' or self.dna.name == 'maudit' or self.dna.name == 'chairp' or self.dna.name == 'watchm' \
                 or self.dna.name == 'ant':
             self.maxHP = int((((self.maxHP * random.choice((.90, .91, .92, .93,
-                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1))) * ToontownBattleGlobals.EXECUTIVE_HP_MULT)))
+                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16,
+                                                            1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25))) * ToontownBattleGlobals.EXECUTIVE_HP_MULT)))
             self.currHP = self.maxHP
-        if self.executive and not self.dna.name == 'mh2' and not self.dna.name == 'autocad' and not self.dna.name == 'maudit' and not self.dna.name == 'watchm' and not self.dna.name == 'chairp' \
+        if self.executive and not self.dna.name == 'mh2' and not self.dna.name == 'std2' and not self.dna.name == 'autocad' and not self.dna.name == 'maudit' and not self.dna.name == 'watchm' and not self.dna.name == 'chairp' \
                 and not self.dna.name == 'ant':
             self.maxHP = int(self.maxHP * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
             self.currHP = self.maxHP
@@ -298,9 +302,6 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         if manager == None:
             manager = 0
         self.manager = manager
-        if self.dna.name == 'hrollers':
-            self.maxHP = random.choice((12000, 12100, 12275, 12400, 12500, 12600, 12700, 12800, 12900, 13000))
-            self.currHP = self.maxHP
 
     def b_setSkeleRevives(self, num):
         if num == None:
@@ -410,7 +411,8 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         SuitBase.SuitBase.setSkelecog(self, flag)
         if self.isSkeleton:
             self.maxHP = int(((self.maxHP * random.choice((.90, .91, .92, .93,
-                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1)))))
+                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16,
+                                                            1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25)))))
             self.currHP = self.maxHP
 
     def b_setSkeleton(self, isSkeleton):
@@ -430,10 +432,9 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
             isSkeleton = 0
         self.isSkeleton = isSkeleton
         if self.isSkeleton:
-            self.maxHP = int(((self.maxHP * random.choice((.90, .91, .92,
-                                                           .93,
-                                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04,
-                                                           1.05, 1.06, 1.07, 1.08, 1.09, 1.1)))))
+            self.maxHP = int(((self.maxHP * random.choice((.90, .91, .92, .93,
+                                           .94, .95, .96, .97, .98, .99, 1, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16,
+                                                            1.17, 1.18, 1.19, 1.2, 1.21, 1.22, 1.23, 1.24, 1.25)))))
             self.currHP = self.maxHP
 
     def d_setSkelecog(self, flag):

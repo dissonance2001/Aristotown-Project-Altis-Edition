@@ -230,7 +230,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
     def createNameInfo(self):
         name = self.name
         dept = self.getStyleDept()
-        level = str(self.getActualLevel())
+        if self.dna.name == 'hrollers':
+            level = '25'
+        else:
+            level = str(self.getActualLevel())
         if self.getExecutive() and not self.getManager():
             level += TTLocalizer.ExecutivePostFix
         if self.getManager():

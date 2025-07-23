@@ -671,6 +671,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     suit.setNeutralAnimationRolled()
                 elif suit.style.name == 'hrollers':
                     suit.setNeutralAnimationRolled()
+                elif suit.style.name == 'std2':
+                    suit.setNeutralAnimationRolled()
                 elif suit.style.name == 'videog':
                     suit.setNeutralAnimationRolled()
                 elif suit.style.name == 'bcaster':
@@ -1058,6 +1060,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                             headPart.loop('neutral-lured')
                 else:
                     if suit.style.name == 'mh2':
+                        suit.setNeutralAnimationRolled()
+                    elif suit.style.name == 'std2':
                         suit.setNeutralAnimationRolled()
                     elif suit.style.name == 'hrollers':
                         suit.setNeutralAnimationRolled()

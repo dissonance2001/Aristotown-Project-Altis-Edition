@@ -224,6 +224,10 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'HighRollerBust':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     if splicedAnims:
@@ -666,6 +670,30 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
 def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
     return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
 
+def doPuzzleBan(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack.append(Wait(1.0))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
+    return Parallel(suitTrack, soundTrack)
+
+def doPuzzle(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack.append(Wait(3.0))
+    return Parallel(suitTrack)
+
+def doGameOver(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    soundTrack3 = getSoundTrack('cc_s_bgm_ara_hroller_int_stinger.ogg', node=suit)
+    suitTrack = Sequence(Parallel(getSuitAnimTrack(attack), soundTrack3, Sequence(Wait(4.0), Func(suit.setChatAbsolute, "Ha-HA!", CFSpeech | CFTimeout))))
+    suitTrack.append(Wait(1.0))
+    toonTracks = getToonTracks(attack, 5.0, ['cringe'], 5.0, ['victory'])
+    return Parallel(suitTrack, toonTracks)
+
 def doDonation2(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -992,6 +1020,7 @@ def doAttackRewind(attack):
     propTracks = Parallel()
     toonTracks = Parallel()
     soundTracks = Parallel()
+    smokeTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -1000,6 +1029,14 @@ def doAttackRewind(attack):
         gavel.setTexture(texture, 1)
         gavel.setP(-90)
         gavel.setH(180)
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        smokeTrack = Sequence(Wait(1.75), Func(smoke.reparentTo, toon),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
         toonPos = toon.getPos(battle)
         y = toonPos.getY()
         gavelPos = Point3(toonPos.getX(), y + 2, 30)
@@ -1054,11 +1091,12 @@ def doAttackRewind(attack):
             toonTracks.append(toonTrack)
             soundTracks.append(soundTrack)
             propTracks.append(propTrack)
+            smokeTracks.append(smokeTrack)
         else:
             toonTracks.append(toonTrack2)
             soundTracks.append(soundTrack)
             propTracks.append(propTrack2)
-    return Parallel(suitTrack, toonTracks, soundTrack2, soundTracks, propTracks)
+    return Parallel(suitTrack, toonTracks, smokeTracks, soundTrack2, soundTracks, propTracks)
 
 def doDirectorCuts(attack):
     suit = attack['suit']
@@ -1186,6 +1224,14 @@ def doElectricShock(attack, ind):
         y -= 5
     x = int((targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP)
     cagePos = [Point3(suitPos.getX(), y, 100.0), targetSuit.getHpr(battle)]
+    smoke = loader.loadModel('phase_4/models/props/test_clouds')
+    smoke.setColor(0.8, 0.7, 0.5, 1)
+    smoke.setBillboardPointEye()
+    smokeTrack = Sequence(Wait(suit.getDuration('walk') + 1), Func(smoke.reparentTo, targetSuit),
+                          Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                   LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                          Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                          Func(MovieUtil.removeProp, smoke))
     cagePropTrack = Sequence(
             getPropAppearTrack(cage, battle, cagePos, suit.getDuration('walk') + 1, scaleUpPoint=Point3(2.0, 2.0, 10.0), scaleUpTime=0), Parallel(cagePosition),
             Parallel(
@@ -1201,7 +1247,7 @@ def doElectricShock(attack, ind):
     selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + 1), Parallel(ActorInterval(targetSuit, 'large-zap'), Func(targetSuit.setHealthForMe, x), Func(targetSuit.showHpTextCheat, x),
             Func(targetSuit.showHpString, "OVERCHARGED!"), Func(targetSuit.updateHealthBar, 0)),
                                Func(targetSuit.setNeutralAnimation))
-    return Parallel(suitTrack, cagePropTracks, moveTrack, selfDamageTrack)
+    return Parallel(suitTrack, cagePropTracks, smokeTrack, moveTrack, selfDamageTrack)
 
 
 def doVideoStatic(attack):
@@ -1626,6 +1672,7 @@ def doSingingBlues(attack):
 def doGameTimeSpawn(attack):
     suit = attack['suit']
     battle = attack['battle']
+    target = attack['target']
     suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack2 = Sequence(MovieUtil.createSuitSnapInterval(suit), Func(suit.setNeutralAnimation))
     suitTrack.append(Wait(3.0))
@@ -2286,7 +2333,7 @@ def doBust(attack):
                 )
             )
         )
-        soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=6.5, node=suit)
+        soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=6.5, duration=2.0, node=suit)
         suitTrack = Sequence(MovieUtil.createSuitBustInterval(suit))
         suitTrack.append(Func(suit.setNeutralAnimation))
         talkTrack = Sequence(getSuitAnimTrack(attack))
@@ -2364,11 +2411,20 @@ def doDiceRouletteCogs(attack):
     suitTrack = Parallel(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     propTracks = Parallel()
     toonTracks = Parallel()
+    smokeTracks = Parallel()
     for suit in battle.activeSuits:
         gavel = loader.loadModel('phase_5/models/props/cc_m_bat_prp_dice')
         toonPos = suit.getPos(battle)
         y = toonPos.getY()
         gavelPos = Point3(toonPos.getX(), y, 30)
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        smokeTrack = Sequence(Wait(1.75), Func(smoke.reparentTo, suit),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
         propTrack = Sequence(
             getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
                                scaleUpPoint=Point3(2), scaleUpTime=1.5),
@@ -2390,7 +2446,8 @@ def doDiceRouletteCogs(attack):
         toonTrack.append(
                 Func(suit.setNeutralAnimation))
         toonTracks.append(toonTrack)
-    soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=1.5, node=suit)
+        smokeTracks.append(smokeTrack)
+    soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=1.5, duration=2.0, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack)
 
 def doDiceRouletteNothing(attack):
@@ -2418,6 +2475,8 @@ def doDiceRouletteAll(attack):
     toonTracks = Parallel()
     propTracks2 = Parallel()
     toonTracks2 = Parallel()
+    smokeTracks = Parallel()
+    smokeTracks2 = Parallel()
     for suit in battle.activeSuits:
         gavel = loader.loadModel('phase_5/models/props/cc_m_bat_prp_dice')
         toonPos = suit.getPos(battle)
@@ -2432,6 +2491,14 @@ def doDiceRouletteAll(attack):
                 Wait(1.5),
                 LerpScaleInterval(gavel, .25, MovieUtil.PNT3_ZERO)
             ))
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        smokeTrack = Sequence(Wait(1.75), Func(smoke.reparentTo, suit),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
         propTracks.append(propTrack)
         toonTrack = Sequence(
             Wait(1.5),
@@ -2444,6 +2511,7 @@ def doDiceRouletteAll(attack):
         toonTrack.append(
             Func(suit.setNeutralAnimation))
         toonTracks.append(toonTrack)
+        smokeTracks.append(smokeTrack)
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -2451,6 +2519,14 @@ def doDiceRouletteAll(attack):
         toonPos = toon.getPos(battle)
         y = toonPos.getY()
         gavelPos = Point3(toonPos.getX(), y, 30)
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        smokeTrack2 = Sequence(Wait(1.75), Func(smoke.reparentTo, toon),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
         propTrack2 = Sequence(
             getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
                                scaleUpPoint=Point3(1), scaleUpTime=1.5),
@@ -2483,7 +2559,8 @@ def doDiceRouletteAll(attack):
             )
         )
         toonTracks2.append(toonTrack2)
-    soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=1.5, node=suit)
+        smokeTracks2.append(smokeTrack2)
+    soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=1.5, duration=2.0, node=suit)
     return Parallel(suitTrack, toonTracks, toonTracks2, propTracks2, propTracks, soundTrack)
 
 def doCommercialBreak(attack):
@@ -2499,7 +2576,7 @@ def doCommercialBreak(attack):
         suitTrack = Sequence()
         if not suit.dna.name == 'hroller':
             suitTrack.append(Wait(1.0))
-            suitTrack.append(Parallel(ActorInterval(suit, 'soak'), MovieUtil.shortCircuitTrack(suit, battle)))
+            suitTrack.append(Parallel(ActorInterval(suit, 'soak'), MovieUtil.shortCircuitTrack2(suit, battle)))
         suitTracks.append(suitTrack)
     return Parallel(suitTracks, soundTrack, suitTrackHighRoller)
 
@@ -2517,9 +2594,18 @@ def doDiceRouletteToons(attack):
     propTracks = Parallel()
     toonTracks = Parallel()
     soundTracks = Parallel()
+    smokeTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        smokeTrack = Sequence(Wait(1.75), Func(smoke.reparentTo, toon),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
         gavel = loader.loadModel('phase_5/models/props/cc_m_bat_prp_dice')
         toonPos = toon.getPos(battle)
         y = toonPos.getY()
@@ -2553,12 +2639,13 @@ def doDiceRouletteToons(attack):
             )
         )
         )
-        soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=1.5, node=suit)
+        soundTrack = getSoundTrack('AA_drop_bigweight.ogg', delay=1.5, duration=2.0, node=suit)
         suitTrack.append(Func(suit.setNeutralAnimation))
         if dmg > 0:
             toonTracks.append(toonTrack)
             soundTracks.append(soundTrack)
             propTracks.append(propTrack)
+            smokeTracks.append(smokeTrack)
     return Parallel(suitTrack, toonTracks, soundTracks, propTracks)
 
 def doDamageReduction(attack):
@@ -2568,9 +2655,18 @@ def doDamageReduction(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack))
     propTracks = Parallel()
     toonTracks = Parallel()
+    smokeTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        smokeTrack = Sequence(Wait(1.75), Func(smoke.reparentTo, toon),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
         piano = globalPropPool.getProp('piano')
         safe = globalPropPool.getProp('safe')
         boulder = globalPropPool.getProp('boulder')
@@ -2579,10 +2675,10 @@ def doDamageReduction(attack):
         toonHpr = battle.getActorPosHpr(toon)
         y = toonPos.getY()
         propPos = Point3(toonPos.getX(), y, 30)
-        soundTrack2 = getSoundTrack('AA_drop_piano.ogg', delay=1.75, node=suit)
-        soundTrack3 = getSoundTrack('AA_drop_boulder.ogg', delay=1.75, node=suit)
-        soundTrack4 = getSoundTrack('AA_drop_safe.ogg', delay=1.75, node=suit)
-        soundTrack5 = getSoundTrack('AA_drop_bigweight.ogg', delay=1.75, node=suit)
+        soundTrack2 = getSoundTrack('AA_drop_piano.ogg', delay=1.75, duration=2.0, node=suit)
+        soundTrack3 = getSoundTrack('AA_drop_boulder.ogg', delay=1.75, duration=2.0, node=suit)
+        soundTrack4 = getSoundTrack('AA_drop_safe.ogg', delay=1.75, duration=2.0,  node=suit)
+        soundTrack5 = getSoundTrack('AA_drop_bigweight.ogg', delay=1.75, duration=2.0, node=suit)
         propTrack = Sequence(Func(piano.reparentTo, battle),
         getPropAppearTrack(piano, parent=battle, posPoints=[propPos, VBase3(180, 90, 0)], appearDelay=0.0,
                            scaleUpPoint=Point3(3), scaleUpTime=1.5),
@@ -2644,9 +2740,10 @@ def doDamageReduction(attack):
         )
         if dmg > 0:
             toonTracks.append(toonTrack)
+            smokeTracks.append(smokeTrack)
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     toonDamageTrack = getToonTracksCheat(attack, 1.75, ['nothing'], 0, ['neutral'])
-    return Parallel(suitTrack, toonDamageTrack, toonTracks, soundTrack, propTracks)
+    return Parallel(suitTrack, toonDamageTrack, smokeTracks, toonTracks, soundTrack, propTracks)
 
 def doGameTimeCog2(attack, ind):
     manager = attack['suit']
@@ -2703,7 +2800,7 @@ def doGameTimeCog2(attack, ind):
                                                        CFSpeech | CFTimeout))))))
     suitTrackQuestion = Sequence(Wait(1.0), Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                        "It's my time to shine!", CFSpeech | CFTimeout), Func(targetSuit.setNeutralAnimation)), Wait(3.0), Func(targetSuit.setChatAbsolute,
-                                                       "Union Bust!", CFSpeech | CFTimeout), Wait(7.0), Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
+                                                       "Union Bust!", CFSpeech | CFTimeout), Wait(7.0), Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
     managerTrackQuestion2 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                              "Who does the Major Player fancy?",
                                                              CFSpeech | CFTimeout),
@@ -2721,7 +2818,7 @@ def doGameTimeCog2(attack, ind):
                                           Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                  Func(targetSuit.setChatAbsolute,
                                       "Nobody!", CFSpeech | CFTimeout), Wait(7.0),
-                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
+                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
     managerTrackQuestion3 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                              "Which hand does the Head Attorney use during 'Objection'?",
                                                              CFSpeech | CFTimeout),
@@ -2739,7 +2836,7 @@ def doGameTimeCog2(attack, ind):
                                           Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                  Func(targetSuit.setChatAbsolute,
                                       "Right!", CFSpeech | CFTimeout), Wait(7.0),
-                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
+                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
     managerTrackQuestion4 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                              "TRUE or FALSE: The longest employee position name int he company is the Public Relations Representative?",
                                                              CFSpeech | CFTimeout),
@@ -2757,7 +2854,7 @@ def doGameTimeCog2(attack, ind):
                                           Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                  Func(targetSuit.setChatAbsolute,
                                       "FALSE!", CFSpeech | CFTimeout), Wait(7.0),
-                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
+                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
     managerTrackQuestion5 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                              "Who is the Name Dropper planning on having lunch with?",
                                                              CFSpeech | CFTimeout),
@@ -2775,7 +2872,7 @@ def doGameTimeCog2(attack, ind):
                                           Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                  Func(targetSuit.setChatAbsolute,
                                       "The Mingler!", CFSpeech | CFTimeout), Wait(7.0),
-                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
+                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
     managerTrackQuestion6 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                               "What does the acronym C.O.G.S. stand for?",
                                                               CFSpeech | CFTimeout),
@@ -2793,7 +2890,7 @@ def doGameTimeCog2(attack, ind):
                                            Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                   Func(targetSuit.setChatAbsolute,
                                        "Crush Organics until Green and Sad!", CFSpeech | CFTimeout), Wait(7.0),
-                                  Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
+                                  Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
     selfDamageTrack = Sequence(Wait(14), Func(targetSuit.showHpTextCheat, - targetSuit.currHP), Func(targetSuit.showHpString, "WRONG ANSWER!"),
                                Func(targetSuit.setHealthForMe, - targetSuit.currHP),
                                Func(targetSuit.updateHealthBar, 0))
@@ -2843,7 +2940,7 @@ def doGameTimeCog(attack, ind):
         Wait(13), Parallel(SoundInterval(globalBattleSoundCache.getSound('AA_cog_shock.ogg')),
         Func(cage.find('**/spotlight').hide),
         Parallel(cagePosition, Func(cage.reparentTo, head)),
-        Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn'))), Wait(1),
+        Parallel(cage.posInterval(0.1, Point3(0, 0, 0), blendType='easeIn'))),
         LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
         Func(MovieUtil.removeProp, cage)
     )

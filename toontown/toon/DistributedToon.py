@@ -2368,6 +2368,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             type = 'exclamation'
         elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
             type = 'question'
+        elif searchString.find(OTPLocalizer.DialogIndifferent) >= 0:
+            type = 'indifferent'
         elif random.randint(0, 1):
             type = 'statementA'
         else:
@@ -2403,6 +2405,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             sfxIndex = 4
         elif type == 'special':
             sfxIndex = 5
+        elif type == 'indifferent':
+            sfxIndex = 6
         else:
             self.notify.error('unrecognized dialogue type: ', type)
         

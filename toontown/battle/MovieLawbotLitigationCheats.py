@@ -223,6 +223,15 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'lgator' and attack['name'] == 'LitigatorBayouBash':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'sgoat' and attack['name'] == 'ScapegoatEnraged':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'caseman' and attack['name'] == 'CaseManagerInsurancePlan':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     if splicedAnims:
@@ -1175,14 +1184,14 @@ def doCaseInsurancePlanInsurance(attack):
     tauntIndex = attack['taunt']
     toon = attack['target'][0]['toon']
     if attack['suitName'] == 'caseman':
-        taunt = 'Hrm...'
+        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
     elif attack['suitName'] == 'fbd':
         taunt = 'Hrm...'
     else:
         taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
 
     suitTracks = Parallel()
-    tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+    tauntInterval = Sequence(Func(suit.setChatAbsoluteSpecial, taunt, CFSpeech | CFTimeout))
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         suitTrack.append(Wait(4.5))

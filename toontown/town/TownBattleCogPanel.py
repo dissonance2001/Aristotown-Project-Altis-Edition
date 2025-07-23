@@ -457,7 +457,10 @@ class TownBattleCogPanel(DirectFrame):
         self.pink.hide()
         self.rainbow.hide()
         self.hollywoods.hide()
-        t = 'Level ' + str(self.cog.getActualLevel())
+        if self.cog.dna.name == 'hrollers':
+            t = 'Level 25'
+        else:
+            t = 'Level ' + str(self.cog.getActualLevel())
         if self.cog.getExecutive() or self.cog.getManager() or self.cog.getGovernaught():
             if self.cog.getExecutive():
                 t += TTLocalizer.ExecutivePostFix
@@ -470,7 +473,7 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isImmortal and self.cog.dna.name == 'hroller':
             self.luredManager.show()
             self.insured.show()
-            self.absorbing3.show()
+            #self.absorbing3.show()
         elif self.cog.dna.name == 'hroller':
             self.luredManager.show()
             self.insured.show()
@@ -492,84 +495,84 @@ class TownBattleCogPanel(DirectFrame):
             self.luredManager2.show()
             self.lureImmune4.show()
             self.overcharged2.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 13000 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 34 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 13000:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 34:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12900 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 33 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12900:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 33:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12800 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 32 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune3.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12800:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 32:
             self.virtual.show()
             self.luredManager2.show()
             self.lureImmune3.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12700 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 31 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.lightblue.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12700:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 31:
             self.virtual.show()
             self.luredManager2.show()
             self.lightblue.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12600 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 30 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.pink.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12600:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 30:
             self.virtual.show()
             self.luredManager2.show()
             self.pink.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12500 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 29 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.red.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12500:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 29:
             self.virtual.show()
             self.luredManager2.show()
             self.red.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12400 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 28 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.blue.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12400:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 28:
             self.virtual.show()
             self.luredManager2.show()
             self.blue.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12275 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 27 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.yellow.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12275:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 27:
             self.virtual.show()
             self.luredManager2.show()
             self.yellow.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12100 and self.cog.isLured:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 26 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
             self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getMaxHP() == 12100:
+        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 26:
             self.virtual.show()
             self.luredManager2.show()
             self.orange.show()
@@ -1794,7 +1797,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .07, .07, .07)
         elif name == 'dcw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .065, .065, .065)
-        elif name == 'std':
+        elif name == 'std' or name == 'std2':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .1, .1, .1)
         elif name == 'gzt':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .075, .075, .075)

@@ -999,13 +999,13 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(
                 Func(self.loop, 'neutral-overide%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                 ).start()
-        elif self.isImmortal and not self.dna.name == 'dsf':
+        elif self.isImmortal and not self.dna.name == 'hroller':
             for headPart in self.animatedHeadParts: Sequence(
                 Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
-        elif self.isVulnerable and self.dna.name == 'crf':
+        elif self.isVulnerable and self.dna.name == 'hroller2':
             for headPart in self.animatedHeadParts: Sequence(
                 Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
@@ -1144,6 +1144,29 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                     ).start()
+
+    def setChatAbsoluteSpecial(self, chatString, chatFlags, dialogue=None, interrupt=True):
+        searchString = chatString.lower()
+        if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
+            self.animHead = 'murmur'
+        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
+            self.animHead = 'grunt'
+        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
+            self.animHead = 'question'
+        else:
+            stringLength = len(chatString)
+            if stringLength <= 1:
+                self.animHead = None
+            elif stringLength <= OTPLocalizer.DialogLength1:
+                self.animHead = 'grunt'
+            elif stringLength <= OTPLocalizer.DialogLength2:
+                self.animHead = 'murmur'
+            elif stringLength <= OTPLocalizer.DialogLength3:
+                self.animHead = 'statement'
+            else:
+                self.animHead = 'statement'
+        self.nametag.setChatText(chatString, chatFlags)
+        self.playCurrentDialogue(dialogue, chatFlags, interrupt)
 
     def cleanUpSoundList(self):
         removeList = []

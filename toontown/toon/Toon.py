@@ -347,116 +347,116 @@ def compileGlobalAnimList():
 def loadDialog():
     loadPath = 'phase_3.5/audio/dial/'
 
-    DogDialogueFiles = ('AV_dog_short', 'AV_dog_med', 'AV_dog_long', 'AV_dog_question', 'AV_dog_exclaim', 'AV_dog_howl')
+    DogDialogueFiles = ('AV_dog_short', 'AV_dog_med', 'AV_dog_long', 'AV_dog_question', 'AV_dog_exclaim', 'AV_dog_howl', 'AV_dog_indifferent')
     global DogDialogueArray
     for file in DogDialogueFiles:
         DogDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
-    catDialogueFiles = ('AV_cat_short', 'AV_cat_med', 'AV_cat_long', 'AV_cat_question', 'AV_cat_exclaim', 'AV_cat_howl')
+    catDialogueFiles = ('AV_cat_short', 'AV_cat_med', 'AV_cat_long', 'AV_cat_question', 'AV_cat_exclaim', 'AV_cat_howl', 'AV_cat_indifferent')
     global CatDialogueArray
     for file in catDialogueFiles:
         CatDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
     armadilloDialogueFiles = (
     'AV_armadillo_short', 'AV_armadillo_med', 'AV_armadillo_long', 'AV_armadillo_question', 'AV_armadillo_exclaim',
-    'AV_armadillo_howl')
+    'AV_armadillo_howl', 'AV_armadillo_indifferent')
     global ArmadilloDialogueArray
     for file in armadilloDialogueFiles:
         ArmadilloDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
     beaverDialogueFiles = (
-    'AV_beaver_short', 'AV_beaver_med', 'AV_beaver_long', 'AV_beaver_question', 'AV_beaver_exclaim', 'AV_beaver_howl')
+    'AV_beaver_short', 'AV_beaver_med', 'AV_beaver_long', 'AV_beaver_question', 'AV_beaver_exclaim', 'AV_beaver_howl', 'AV_beaver_indifferent')
     global BeaverDialogueArray
     for file in beaverDialogueFiles:
         BeaverDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
-    horseDialogueFiles = ('AV_horse_short', 'AV_horse_med', 'AV_horse_long', 'AV_horse_question', 'AV_horse_exclaim', 'AV_horse_howl')
+    horseDialogueFiles = ('AV_horse_short', 'AV_horse_med', 'AV_horse_long', 'AV_horse_question', 'AV_horse_exclaim', 'AV_horse_howl', 'AV_horse_indifferent')
     global HorseDialogueArray
     for file in horseDialogueFiles:
         HorseDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
     kangarooDialogueFiles = (
         'AV_kangaroo_short', 'AV_kangaroo_med', 'AV_kangaroo_long', 'AV_kangaroo_question', 'AV_kangaroo_exclaim',
-        'AV_kangaroo_howl')
+        'AV_kangaroo_howl', 'AV_kangaroo_indifferent')
     global KangarooDialogueArray
     for file in kangarooDialogueFiles:
         KangarooDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
     kiwiDialogueFiles = (
-        'AV_kiwi_short', 'AV_kiwi_med', 'AV_kiwi_long', 'AV_kiwi_question', 'AV_kiwi_exclaim', 'AV_kiwi_howl')
+        'AV_kiwi_short', 'AV_kiwi_med', 'AV_kiwi_long', 'AV_kiwi_question', 'AV_kiwi_exclaim', 'AV_kiwi_howl', 'AV_kiwi_indifferent')
     global KiwiDialogueArray
     for file in kiwiDialogueFiles:
         KiwiDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
     koalaDialogueFiles = (
-        'AV_koala_short', 'AV_koala_med', 'AV_koala_long', 'AV_koala_question', 'AV_koala_exclaim', 'AV_koala_howl')
+        'AV_koala_short', 'AV_koala_med', 'AV_koala_long', 'AV_koala_question', 'AV_koala_exclaim', 'AV_koala_howl', 'AV_koala_indifferent')
     global KoalaDialogueArray
     for file in koalaDialogueFiles:
         KoalaDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
     turkeyDialogueFiles = (
         'AV_turkey_short', 'AV_turkey_med', 'AV_turkey_long', 'AV_turkey_question', 'AV_turkey_exclaim',
-        'AV_turkey_howl')
+        'AV_turkey_howl', 'AV_turkey_indifferent')
     global TurkeyDialogueArray
     for file in turkeyDialogueFiles:
         TurkeyDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
-    rabbitDialogueFiles = ('AV_rabbit_short', 'AV_rabbit_med', 'AV_rabbit_long', 'AV_rabbit_question', 'AV_rabbit_exclaim', 'AV_rabbit_howl')
+    rabbitDialogueFiles = ('AV_rabbit_short', 'AV_rabbit_med', 'AV_rabbit_long', 'AV_rabbit_question', 'AV_rabbit_exclaim', 'AV_rabbit_howl', 'AV_rabbit_indifferent')
     global RabbitDialogueArray
     for file in rabbitDialogueFiles:
         RabbitDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
-    mouseDialogueFiles = ('AV_mouse_short', 'AV_mouse_med', 'AV_mouse_long', 'AV_mouse_question', 'AV_mouse_exclaim', 'AV_mouse_howl')
+    mouseDialogueFiles = ('AV_mouse_short', 'AV_mouse_med', 'AV_mouse_long', 'AV_mouse_question', 'AV_mouse_exclaim', 'AV_mouse_howl', 'AV_mouse_indifferent')
     global MouseDialogueArray
     for file in mouseDialogueFiles:
         MouseDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
-    duckDialogueFiles = ('AV_duck_short', 'AV_duck_med', 'AV_duck_long', 'AV_duck_question', 'AV_duck_exclaim', 'AV_duck_howl')
+    duckDialogueFiles = ('AV_duck_short', 'AV_duck_med', 'AV_duck_long', 'AV_duck_question', 'AV_duck_exclaim', 'AV_duck_howl', 'AV_duck_indifferent')
     global DuckDialogueArray
     for file in duckDialogueFiles:
         DuckDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
-    monkeyDialogueFiles = ('AV_monkey_short', 'AV_monkey_med', 'AV_monkey_long', 'AV_monkey_question', 'AV_monkey_exclaim', 'AV_monkey_howl')
+    monkeyDialogueFiles = ('AV_monkey_short', 'AV_monkey_med', 'AV_monkey_long', 'AV_monkey_question', 'AV_monkey_exclaim', 'AV_monkey_howl', 'AV_monkey_indifferent')
     global MonkeyDialogueArray
     for file in monkeyDialogueFiles:
         MonkeyDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
-    bearDialogueFiles = ('AV_bear_short', 'AV_bear_med', 'AV_bear_long', 'AV_bear_question', 'AV_bear_exclaim', 'AV_bear_howl')
+    bearDialogueFiles = ('AV_bear_short', 'AV_bear_med', 'AV_bear_long', 'AV_bear_question', 'AV_bear_exclaim', 'AV_bear_howl', 'AV_bear_indifferent')
     global BearDialogueArray
     for file in bearDialogueFiles:
         BearDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
-    pigDialogueFiles = ('AV_pig_short', 'AV_pig_med', 'AV_pig_long', 'AV_pig_question', 'AV_pig_exclaim', 'AV_pig_howl')
+    pigDialogueFiles = ('AV_pig_short', 'AV_pig_med', 'AV_pig_long', 'AV_pig_question', 'AV_pig_exclaim', 'AV_pig_howl', 'AV_pig_indifferent')
     global PigDialogueArray
     for file in pigDialogueFiles:
         PigDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
-    deerDialogueFiles = ('AV_deer_short', 'AV_deer_med', 'AV_deer_long', 'AV_deer_question', 'AV_deer_exclaim', 'AV_deer_howl')
+    deerDialogueFiles = ('AV_deer_short', 'AV_deer_med', 'AV_deer_long', 'AV_deer_question', 'AV_deer_exclaim', 'AV_deer_howl', 'AV_deer_indifferent')
     global DeerDialogueArray
     for file in deerDialogueFiles:
         DeerDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 		
-    beaverDialogFiles = ('AV_beaver_short', 'AV_beaver_med', 'AV_beaver_long', 'AV_beaver_question', 'AV_beaver_exclaim', 'AV_beaver_howl')
+    beaverDialogFiles = ('AV_beaver_short', 'AV_beaver_med', 'AV_beaver_long', 'AV_beaver_question', 'AV_beaver_exclaim', 'AV_beaver_howl', 'AV_beaver_indifferent')
     global BeaverDialogueArray
     for file in beaverDialogFiles:
         BeaverDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 		
-    gatorDialogFiles = ('AV_gator_short', 'AV_gator_med', 'AV_gator_long', 'AV_gator_question', 'AV_gator_exclaim', 'AV_gator_howl')
+    gatorDialogFiles = ('AV_gator_short', 'AV_gator_med', 'AV_gator_long', 'AV_gator_question', 'AV_gator_exclaim', 'AV_gator_howl', 'AV_gator_indifferent')
     global AlligatorDialogueArray
     for file in gatorDialogFiles:
         AlligatorDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 		
-    foxDialogFiles = ('AV_fox_short', 'AV_fox_med', 'AV_fox_long', 'AV_fox_question', 'AV_fox_exclaim', 'AV_fox_howl')
+    foxDialogFiles = ('AV_fox_short', 'AV_fox_med', 'AV_fox_long', 'AV_fox_question', 'AV_fox_exclaim', 'AV_fox_howl', 'AV_fox_indifferent')
     global FoxDialogueArray
     for file in foxDialogFiles:
         FoxDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
-    batDialogFiles = ('AV_bat_short', 'AV_bat_med', 'AV_bat_long', 'AV_bat_question', 'AV_bat_exclaim', 'AV_bat_howl')
+    batDialogFiles = ('AV_bat_short', 'AV_bat_med', 'AV_bat_long', 'AV_bat_question', 'AV_bat_exclaim', 'AV_bat_howl', 'AV_bat_indifferent')
     global BatDialogueArray
     for file in batDialogFiles:
         BatDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
 		
-    raccoonDialogFiles = ('AV_raccoon_short', 'AV_raccoon_med', 'AV_raccoon_long', 'AV_raccoon_question', 'AV_raccoon_exclaim', 'AV_raccoon_howl')
+    raccoonDialogFiles = ('AV_raccoon_short', 'AV_raccoon_med', 'AV_raccoon_long', 'AV_raccoon_question', 'AV_raccoon_exclaim', 'AV_raccoon_howl', 'AV_raccoon_indifferent')
     global RaccoonDialogueArray
     for file in raccoonDialogFiles:
         RaccoonDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))

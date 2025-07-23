@@ -331,10 +331,10 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.director.loop('neutral')
         self.filmmaker = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('mh2')
+        suitDNA.newSuit('std2')
         self.filmmaker.setDNA(suitDNA)
         self.filmmaker.setPickable(0)
-        self.filmmaker.setDisplayName('Mr. Hollywood\nSellbot\nLevel 25.exe')
+        self.filmmaker.setDisplayName('Stunt Double\nPressbot\nLevel 18.exe')
         self.filmmaker.doId = 0
         self.filmmaker.loop('neutral')
         self.majorplayer2 = DistributedSuitBase.DistributedSuitBase(cr)

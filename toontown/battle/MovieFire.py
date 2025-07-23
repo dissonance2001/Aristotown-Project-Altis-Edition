@@ -400,12 +400,76 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
         ActorInterval(kapow, 'kapow'), Func(kapow.hide)), LerpPosInterval(suit, 3.0, Point3(0, 150.0, 0.0)), suit.scaleInterval(3.0, 0.01)), Func(suit.hide)))
         if hitCount == 1:
             sival = Sequence(Parallel(reactIval, MovieUtil.createSuitStunIntervalFired(suit, 0.3, 1.3)), Wait(0.0), Func(cannonHolder.remove))
+
         else:
             sival = reactIval
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(updateHealthBar)
         suitResponseTrack.append(sival)
+        suitIndex = battle.activeSuits.index(suit)
+        if suit.getExecutive() or suit.getGovernaught():
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7),
+                                             battle))
+        else:
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
+            suitResponseTrack.append(
+                MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4),
+                                             battle))
         bonusTrack = Sequence(Wait(delay + tPieHitsSuit))
         if kbbonus > 0:
             bonusTrack.append(Wait(0.75))
@@ -414,7 +478,6 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0))
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
-
     else:
         suitResponseTrack = Parallel(suitResponseTrack, Sequence(Wait(4.25),Func(suit.showHpTextWhite,
                                            'FIRE IMMUNE!'), Func(suit.setChatAbsolute, random.choice(

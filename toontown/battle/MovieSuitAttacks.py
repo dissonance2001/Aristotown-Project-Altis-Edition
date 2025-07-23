@@ -460,7 +460,15 @@ def doSuitAttack(attack):
     elif name == 'SafetyViolation':
         suitTrack = MovieSellbotLitigationCheats.doViolation(attack)
     elif name == 'SafetyPromotion':
+        suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 1)
+    elif name == 'SafetyPromotion2':
         suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 2)
+    elif name == 'SafetyPromotion3':
+        suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 3)
+    elif name == 'SafetyPromotion4':
+        suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 4)
+    elif name == 'SafetyPromotion5':
+        suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 5)
         # union buster
     elif name == 'UnionBusterUnionDues':
         suitTrack = MovieUniversalCheats.doSynergy(attack)
@@ -486,7 +494,15 @@ def doSuitAttack(attack):
         suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack)
         # racketeer
     elif name == 'RacketeerProfiteering':
+        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 1)
+    elif name == 'RacketeerProfiteering2':
         suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 2)
+    elif name == 'RacketeerProfiteering3':
+        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 3)
+    elif name == 'RacketeerProfiteering4':
+        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 4)
+    elif name == 'RacketeerProfiteering5':
+        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 5)
     elif name == 'RacketeerExtortion':
         suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
     elif name == 'RacketeerExtortion2':
@@ -509,7 +525,15 @@ def doSuitAttack(attack):
     elif name == 'RadiographerHotTakeRetaliation':
         suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
     elif name == 'RadiographerOvermodulated':
+        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 1)
+    elif name == 'RadiographerOvermodulated2':
         suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 2)
+    elif name == 'RadiographerOvermodulated3':
+        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 3)
+    elif name == 'RadiographerOvermodulated4':
+        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 4)
+    elif name == 'RadiographerOvermodulated5':
+        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 5)
     elif name == 'RadiographerDanceSession':
         suitTrack = MovieSellbotLitigationCheats.doDanceSession(attack)
         # high roller phase 1
@@ -517,6 +541,12 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'HighRollerWheelSpin':
         suitTrack = MovieHighRollerCheats.doWheelSpin(attack)
+    elif name == 'HighRollerPuzzle':
+        suitTrack = MovieHighRollerCheats.doPuzzle(attack)
+    elif name == 'HighRollerPuzzleBan':
+        suitTrack = MovieHighRollerCheats.doPuzzleBan(attack)
+    elif name == 'HighRollerGameOver':
+        suitTrack = MovieHighRollerCheats.doGameOver(attack)
     elif name == 'HighRollerCommercialBreak':
         suitTrack = MovieHighRollerCheats.doCommercialBreak(attack)
     elif name == 'HighRollerGameTimeSpawn':
@@ -529,6 +559,18 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 2)
     elif name == 'HighRollerGameTimeCog4':
         suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 2)
+    elif name == 'HighRollerGameTimeCog5':
+        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 3)
+    elif name == 'HighRollerGameTimeCog6':
+        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 3)
+    elif name == 'HighRollerGameTimeCog7':
+        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 4)
+    elif name == 'HighRollerGameTimeCog8':
+        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 4)
+    elif name == 'HighRollerGameTimeCog9':
+        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 5)
+    elif name == 'HighRollerGameTimeCog10':
+        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 5)
     elif name == 'HighRollerBust':
         suitTrack = MovieHighRollerCheats.doBust(attack)
     # high roller phase 2 cheats
@@ -584,7 +626,13 @@ def doSuitAttack(attack):
     elif name == 'VideographerVideoStatic':
         suitTrack = MovieHighRollerCheats.doVideoStatic(attack)
     elif name == 'VideographerElectricShock':
+        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 2)
+    elif name == 'VideographerElectricShock2':
         suitTrack = MovieHighRollerCheats.doElectricShock(attack, 3)
+    elif name == 'VideographerElectricShock3':
+        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 4)
+    elif name == 'VideographerElectricShock4':
+        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 5)
     elif name == 'VideographerAttackRewind':
         suitTrack = MovieHighRollerCheats.doAttackRewind(attack)
     elif name == 'VideographerDirectorCuts':
@@ -611,6 +659,8 @@ def doSuitAttack(attack):
     elif name == 'DirectorBackToOnes':
         suitTrack = MovieHighRollerCheats.doBackToOnes(attack)
     #universal cheats
+    elif name == 'TargetCheck':
+        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'Desperation':
         suitTrack = MovieUniversalCheats.doDesperation(attack)
     elif name == 'SynergyFees':
@@ -903,6 +953,9 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         'suitName'] == 'nothing':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
@@ -914,7 +967,10 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     if splicedAnims:
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
-        track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
+        if attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke':
+            track.append(ActorInterval(suit, 'headhoncho-cigar-smoke', playRate=playRate))
+        else:
+            track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
     track.append(Func(suit.setHpr, battle, origHpr))
     # if suit.dna.name == 'scg' and suit.isAngry:
@@ -5661,22 +5717,15 @@ def doHeadHonchoCigarSmoke(attack):
     suitReset = Func(suit.setHpr, battle, origHpr)
     smoke = BattleParticles.createParticleEffect('Smoke')
     BattleParticles.setEffectTexture(smoke, 'snow-particle')
-    #cigar = globalPropPool.getProp('cigar')
+    cigar = globalPropPool.getProp('cigar')
     cigarPosPoints = [Point3(-0.05, -0.2, -0.25), VBase3(180.0, 0.0, 0.0)]
-    #cigarPropTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.6, 3.6,
-                                  #scaleUpPoint=Point3(6.0, 6.0, 6.0))
+    cigarPropTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 1.5, 2,
+                                  scaleUpPoint=Point3(6.0, 6.0, 6.0))
     toonTrack = getToonTrack(attack, 2.55, ['cringe'], 2.0, ['sidestep'])
     smokeTrack = getPartTrack(smoke, 2.45, 3.0, [smoke, suit, 0], softStop=-2)
-    suitTracks = Parallel()
-    multiTrackList = Parallel(suitTracks, toonTrack)
+    suitTracks = Parallel(getSuitTrack(attack), MovieUtil.createSuitHeadHonchoCigarSmokeInterval(suit))
+    multiTrackList = Parallel(suitTracks, toonTrack, cigarPropTrack)
     multiTrackList.append(smokeTrack)
-    tauntInterval = Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout)
-    suitTrack = Sequence()
-    suitTracks.append(headsUp)
-    suitTracks.append(suitTrack)
-    suitTracks.append(tauntInterval)
-    suitTracks.append(MovieUtil.createSuitHeadHonchoCigarSmokeInterval(suit))
-    suitTracks.append(suitReset)
 
     def changeColor(parts):
         track = Parallel()

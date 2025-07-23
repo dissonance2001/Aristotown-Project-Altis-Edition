@@ -3977,7 +3977,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return self.pinkSlips
 
     def addPinkSlips(self, amountToAdd):
-        pinkSlips = min(self.pinkSlips + amountToAdd, 255)
+        pinkSlips = min(self.pinkSlips + amountToAdd, 9999)
         self.b_setPinkSlips(pinkSlips)
 
     def removePinkSlips(self, amount):
@@ -4000,7 +4000,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return self.ceaseAndDesists
     
     def addCeaseAndDesists(self, amountToAdd):
-        ceaseAndDesists = min(self.ceaseAndDesists + amountToAdd, 255)
+        ceaseAndDesists = min(self.ceaseAndDesists + amountToAdd, 9999)
         self.b_setCeaseAndDesists(ceaseAndDesists)
     
     def removeCeaseAndDesists(self, amount):
@@ -5165,8 +5165,8 @@ def fires(count):
     Modifies the invoker's pink slip count.
     """
     invoker = spellbook.getInvoker()
-    if not 0 <= count <= 255:
-        return 'Your fire count must be in range (0-255).'
+    if not 0 <= count <= 9999:
+        return 'Your fire count must be in range (0-9999).'
     invoker.b_setPinkSlips(count)
     return 'You were given %d fires.' % count
 
@@ -5176,8 +5176,8 @@ def sues(count):
     Modifies the invoker's sue count.
     """
     invoker = spellbook.getInvoker()
-    if not 0 <= count <= 255:
-        return 'Your sue count must be in range (0-255).'
+    if not 0 <= count <= 9999:
+        return 'Your sue count must be in range (0-9999).'
     invoker.b_setCeaseAndDesists(count)
     return 'You were given %d sues.' % count
 	

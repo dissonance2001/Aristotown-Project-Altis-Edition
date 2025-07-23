@@ -8,6 +8,7 @@ from toontown.battle import MovieCamera
 from toontown.battle import SuitBattleGlobals
 from direct.directnotify import DirectNotifyGlobal
 from toontown.suit import Suit
+from toontown.suit import SuitDNA
 from toontown.battle import MovieUtil
 from toontown.chat.ChatGlobals import *
 from toontown.toonbase import ToontownBattleGlobals
@@ -218,7 +219,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
-                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker':
+                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
@@ -327,7 +328,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
-                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker':
+                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
@@ -435,7 +436,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
-                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker':
+                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
@@ -550,9 +551,16 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
     result.append(Func(reparentTrap))
     parent = battle
     if suit.battleTrapIsFresh:
-        if trapName == 'quicksand' or trapName == 'trapdoor'or trapName == 'wreckingball':
+        if trapName == 'quicksand' or trapName == 'trapdoor':
             trapProp.hide()
             trapProp.reparentTo(suit)
+            trapProp.setPos(Point3(0, MovieUtil.SUIT_TRAP_DISTANCE, 0))
+            trapProp.setHpr(Point3(0, 0, 0))
+            trapProp.wrtReparentTo(battle)
+        elif trapName == 'xspot':
+            trapProp.hide()
+            trapProp.reparentTo(suit)
+            trapProp.setScale(Point3(2, 2, 2))
             trapProp.setPos(Point3(0, MovieUtil.SUIT_TRAP_DISTANCE, 0))
             trapProp.setHpr(Point3(0, 0, 0))
             trapProp.wrtReparentTo(battle)
@@ -578,7 +586,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         slidePos = trapProp.getPos(parent)
         slidePos.setY(slidePos.getY() - 5.1)
         moveTrack = Sequence(Wait(0.1), LerpPosInterval(trapProp, 0.1, slidePos, other=battle))
-        animTrack = Sequence(ActorInterval(trapProp, 'banana', startTime=3.1), Wait(1.1), LerpScaleInterval(trapProp, 1, Point3(0.01, 0.01, 0.01)))
+        animTrack = Sequence(ActorInterval(trapProp, 'banana', startTime=3.1), Wait(1.1), LerpScaleInterval(trapProp, 1, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
         suitTrack = Sequence()
         suitTrack.append(ActorInterval(suit, 'slip-backward'))
         damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
@@ -604,7 +612,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         upHpr = Vec3(hpr[0], 179.9999, hpr[2])
         bounce1Hpr = Vec3(hpr[0], 120, hpr[2])
         bounce2Hpr = Vec3(hpr[0], 100, hpr[2])
-        rakeTrack = Sequence(Wait(0.5), LerpHprInterval(trapProp, 0.1, upHpr, startHpr=hpr), Wait(0.7), LerpHprInterval(trapProp, 0.4, hpr, startHpr=upHpr), LerpHprInterval(trapProp, 0.15, bounce1Hpr, startHpr=hpr), LerpHprInterval(trapProp, 0.05, hpr, startHpr=bounce1Hpr), LerpHprInterval(trapProp, 0.15, bounce2Hpr, startHpr=hpr), LerpHprInterval(trapProp, 0.05, hpr, startHpr=bounce2Hpr), Wait(0.2), LerpScaleInterval(trapProp, 0.2, Point3(0.01, 0.01, 0.01)))
+        rakeTrack = Sequence(Wait(0.5), LerpHprInterval(trapProp, 0.1, upHpr, startHpr=hpr), Wait(0.7), LerpHprInterval(trapProp, 0.4, hpr, startHpr=upHpr), LerpHprInterval(trapProp, 0.15, bounce1Hpr, startHpr=hpr), LerpHprInterval(trapProp, 0.05, hpr, startHpr=bounce1Hpr), LerpHprInterval(trapProp, 0.15, bounce2Hpr, startHpr=hpr), LerpHprInterval(trapProp, 0.05, hpr, startHpr=bounce2Hpr), Wait(0.2), LerpScaleInterval(trapProp, 0.2, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
         rakeAnimDuration = 3.125
         suitTrack = Sequence()
         suitTrack.append(ActorInterval(suit, 'rake-react', duration=rakeAnimDuration))
@@ -626,7 +634,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
     elif trapName == 'marbles':
         slidePos = trapProp.getPos(parent)
         slidePos.setY(slidePos.getY() - 6.5)
-        moveTrack = Sequence(Wait(0.1), LerpPosInterval(trapProp, 0.8, slidePos, other=battle), Wait(1.1), LerpScaleInterval(trapProp, 1, Point3(0.01, 0.01, 0.01)))
+        moveTrack = Sequence(Wait(0.1), LerpPosInterval(trapProp, 0.8, slidePos, other=battle), Wait(1.1), LerpScaleInterval(trapProp, 1, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
         animTrack = ActorInterval(trapProp, 'marbles', startTime=3.1)
         suitTrack = Sequence()
         suitTrack.append(ActorInterval(suit, 'slip-backward'))
@@ -658,7 +666,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             nameTag = suit.find('**/def_nameTag')
         else:
             nameTag = suit.find('**/joint_nameTag')
-        trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
+        trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
         moveTrack = Sequence(Wait(0.9), LerpPosInterval(suit, 0.9, sinkPos1, other=battle), LerpPosInterval(suit, 0.4, sinkPos2, other=battle), Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.1))
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.25), Wait(0.7))
         soundTrack = Sequence(Wait(0.7),
@@ -666,6 +674,69 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
+            suitIndex = battle.activeSuits.index(suit)
+            if suit.getExecutive() or suit.getGovernaught():
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+            else:
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -710,6 +781,69 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
+            suitIndex = battle.activeSuits.index(suit)
+            if suit.getExecutive() or suit.getGovernaught():
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+            else:
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -738,7 +872,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         sinkPos.setZ(sinkPos.getZ() - 9.1)
         dropPos.setZ(dropPos.getZ() + 15)
         landPos.setY(dropPos.getY() + 4)
-        trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
+        trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
         moveTrack = Sequence(Wait(2.2), LerpPosInterval(suit, 0.4, sinkPos, other=battle), Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.1))
         animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail-qs', 0.7, 0.25),
                              Func(trapProp.setColor, Vec4(0, 0, 0, 1)),
@@ -748,6 +882,69 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
+            suitIndex = battle.activeSuits.index(suit)
+            if suit.getExecutive() or suit.getGovernaught():
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7),
+                                                 battle))
+            else:
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
+                animTrack.append(
+                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4),
+                                                 battle))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
@@ -770,17 +967,17 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
         animTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
-    elif trapName == 'wreckingball':
+    elif trapName == 'xspot':
         ballPropTrack = Sequence()
-        ballPosPoints = [Point3(0, 0, 20), VBase3(-90, 0, 90)]
+        ballPosPoints = [Point3(0, 0, 20), VBase3(0, 90, 0)]
         ball = loader.loadModel('phase_5/models/char/wreckingball-ball')
         ballPropTrack.append(getPropAppearTrack(ball, trapProp, ballPosPoints, 0, Point3(1, 1, 1), scaleUpTime=0))
         ballPropTrack.append(Func(battle.movie.needRestoreRenderProp, ball))
-        ballPropTrack.append(Func(ball.wrtReparentTo, render))
+        #ballPropTrack.append(Func(ball.wrtReparentTo, render))
         targetPoint = battle.getActorPosHpr(suit)
         ballPropTrack.append(Wait(1.5))
-        ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(90, 0, 0)))
-        ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(90, 90, 0)))
+        ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, 0, 0)))
+        ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, -90, 0)))
         ballPropTrack.append(Func(battle.movie.clearRenderProp, trapProp))
         ballPropTrack.append(Func(MovieUtil.removeProp, ball))
         sinkPos = trapProp.getPos(battle)
@@ -793,15 +990,13 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
-            animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail-wb', 0.35, 0.25),
-                                 Func(trapProp.setColor, Vec4(0, 0, 0, 1)),
-                                 ActorInterval(suit, 'flail-wb', startTime=0.35, endTime=0),
-                                 ActorInterval(suit, 'flail-wb', endTime=1.25))
+            animTrack = Sequence(ActorInterval(suit, 'lured', endTime=1.25),
+                                     ActorInterval(suit, 'flail-wb', startTime=0.5, endTime=1.5))
             animTrack.append(MovieUtil.createSuitWreckingDeathTrack(suit, battle))
             result.append(Parallel(animTrack, damageTrack, ballPropTrack))
 
         else:
-            trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
+            trapTrack = Sequence(Wait(3.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
             moveTrack = Sequence(Wait(2.2), LerpPosInterval(suit, 0.4, sinkPos, other=battle),
                                  Func(suit.setPos, battle, dropPos), Wait(1.6))
             soundTrack = Sequence(Wait(2.2),
@@ -809,10 +1004,8 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                                                 node=suit))
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
-            animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail-wb', 0.35, 0.25),
-                                 Func(trapProp.setColor, Vec4(0, 0, 0, 1)),
-                                 ActorInterval(suit, 'flail-wb', startTime=0.35, endTime=0),
-                                 ActorInterval(suit, 'flail-wb'))
+            animTrack = Sequence(ActorInterval(suit, 'lured', endTime=1.25),
+                                     ActorInterval(suit, 'flail-wb', startTime=0.5))
             animTrack.append(Wait(0.6))
             animTrack.append(ActorInterval(suit, 'slip-forward', playRate=1.25))
             animTrack.append(Func(suit.setNeutralAnimationTrap))
@@ -842,9 +1035,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         oldHPR = base.camera.getHpr()
         
         # Cog looks down and up
-        suitTrack = Sequence(Func(suit.setChatAbsolute,
-                                   'Uh Oh...',
-                                   CFSpeech | CFTimeout))
+        suitTrack = Sequence()
         suitTrack.append(ActorInterval(suit, 'tnt-react', endTime=2))
         
         if base.localAvatar in battle.activeToons:
@@ -955,7 +1146,7 @@ def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
         return suitTrack
-    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'hroller':
+    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'nothing':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
@@ -1231,7 +1422,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
                 else:
-                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker':
+                    if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))

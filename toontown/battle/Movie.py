@@ -322,7 +322,7 @@ class Movie(DirectObject.DirectObject):
                 for s in battle.activeSuits:
                     pbpText = PlayByPlayText.PlayByPlayText()
                     pbpDc = PlayByPlayText.PlayByPlayText()
-                    if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'director' or s.dna.name == 'fmaker':
+                    if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'director' or s.dna.name == 'fmaker':
                         ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
                                                                              '',
                                                                              CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
@@ -551,11 +551,11 @@ class Movie(DirectObject.DirectObject):
             if ival:
                 track.append(ival)
                 camTrack.append(camIval)
-            ival, camIval = MovieSound.doSounds(self.__findToonAttack(SOUND))
+            ival, camIval = MovieZap.doZaps(self.__findToonAttack(ZAP))
             if ival:
                 track.append(ival)
                 camTrack.append(camIval)
-            ival, camIval = MovieZap.doZaps(self.__findToonAttack(ZAP))
+            ival, camIval = MovieSound.doSounds(self.__findToonAttack(SOUND))
             if ival:
                 track.append(ival)
                 camTrack.append(camIval)

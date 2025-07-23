@@ -47,19 +47,19 @@ def doTraps(traps):
                 rake2.pose('rake', 0)
                 trapPropList.append([rake, rake2])
             elif level == 2:
-                spring = globalPropPool.getProp('spring')
-                spring2 = MovieUtil.copyProp(spring)
-                trapPropList.append([spring, spring2])
-            elif level == 3:
                 marbles = globalPropPool.getProp('marbles')
                 marbles2 = MovieUtil.copyProp(marbles)
                 trapPropList.append([marbles, marbles2])
+            elif level == 3:
+                spring = globalPropPool.getProp('spring')
+                spring2 = MovieUtil.copyProp(spring)
+                trapPropList.append([spring, spring2])
             elif level == 4:
                 trapPropList.append([globalPropPool.getProp('quicksand')])
             elif level == 5:
                 trapPropList.append([globalPropPool.getProp('trapdoor')])
             elif level == 6:
-                trapPropList.append([globalPropPool.getProp('wreckingball')])
+                trapPropList.append([globalPropPool.getProp('xspot')])
             elif level == 7:
                 tnt = globalPropPool.getProp('tnt')
                 tnt2 = MovieUtil.copyProp(tnt)
@@ -97,9 +97,9 @@ def __doTrapLevel(trap, trapProps, explode = 0):
     elif level == 1:
         return __trapRake(trap, trapProps, explode)
     elif level == 2:
-        return __trapSpringboard(trap, trapProps, explode)
-    elif level == 3:
         return __trapMarbles(trap, trapProps, explode)
+    elif level == 3:
+        return __trapSpringboard(trap, trapProps, explode)
     elif level == 4:
         return __trapQuicksand(trap, trapProps, explode)
     elif level == 5:

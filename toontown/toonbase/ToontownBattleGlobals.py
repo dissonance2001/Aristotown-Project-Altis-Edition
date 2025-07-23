@@ -188,7 +188,7 @@ V2_BASE_CHANCE = 25
 pieNames = ['cupcake', 'fruitpie-slice', 'creampie-slice', 'birthday-cake-slice', 'fruitpie', 'creampie', 'birthday-cake', 'wedding-cake', 'lawbook']
 AvProps = (
 ('feather', 'bullhorn', 'lipstick', 'bamboocane','pixiedust', 'baton', 'pixiedust', 'baton'),
-('banana', 'rake', 'spring', 'marbles', 'quicksand', 'trapdoor', 'wreckingball', 'tnt'),
+('banana', 'rake', 'marbles', 'spring', 'quicksand', 'trapdoor', 'xspot', 'tnt'),
 ('1dollar', 'smmagnet', '5dollar', 'bigmagnet', '10dollar', 'hypnogogs', '50dollar', 'hypnogogs'),
 ('cupcake', 'fruitpieslice', 'creampieslice', 'creampieslice', 'fruitpie', 'creampie', 'cake', 'cake'),
 ('flower', 'waterglass', 'watergun', 'waterballoon', 'bottle', 'firehose', 'stormcloud', 'stormcloud'),
@@ -197,7 +197,7 @@ AvProps = (
 ('flowerpot', 'sandbag', 'bowlingball', 'anvil', 'weight', 'safe', 'boulder', 'piano'))
 AvPropsNew = (
 ('inventory_feather', 'inventory_megaphone', 'inventory_lipstick', 'inventory_bamboo_cane', 'inventory_pixiedust', 'inventory_juggling_cubes', 'inventory_cannon', 'inventory_ladder'),
-('inventory_banana_peel', 'inventory_rake', 'inventory_springboard', 'inventory_marbles', 'inventory_quicksand_icon', 'inventory_trapdoor', 'inventory_wreckingball', 'inventory_tnt'),
+('inventory_banana_peel', 'inventory_rake', 'inventory_marbles', 'inventory_springboard', 'inventory_quicksand_icon', 'inventory_trapdoor', 'inventory_wreckingball', 'inventory_tnt'),
 ('inventory_1dollarbill', 'inventory_small_magnet', 'inventory_5dollarbill', 'inventory_big_magnet', 'inventory_10dollarbill', 'inventory_hypno_goggles', 'inventory_50dollarbill', 'inventory_screen'),
 ('inventory_cup_cake', 'inventory_fruit_pie_slice', 'inventory_cream_pie_slice', 'inventory_cake_slice', 'inventory_fruitpie', 'inventory_creampie', 'inventory_cake', 'inventory_wedding'),
 ('inventory_squirt_flower', 'inventory_glass_of_water', 'inventory_water_gun', 'inventory_waterballoon', 'inventory_seltzer_bottle', 'inventory_firehose', 'inventory_storm_cloud', 'inventory_geyser'),
@@ -229,14 +229,14 @@ AvPropDamage = (
 ((90, 90), (Levels[0][6], Levels[0][7])),
 ((135, 135), (Levels[0][7], MaxSkill))),
 # Trap
-(((14, 14), (Levels[1][0], Levels[1][1])),
-((28, 28), (Levels[1][1], Levels[1][2])),
-((45, 45), (Levels[1][2], Levels[1][3])),
-((75, 75), (Levels[1][3], Levels[1][4])),
-((115, 115), (Levels[1][4], Levels[1][5])),
-((160, 160), (Levels[1][5], Levels[1][6])),
-((220, 220), (Levels[1][6], Levels[1][7])),
-((280, 280), (Levels[1][7], MaxSkill))),
+(((16, 16), (Levels[1][0], Levels[1][1])),
+((32, 32), (Levels[1][1], Levels[1][2])),
+((50, 50), (Levels[1][2], Levels[1][3])),
+((80, 80), (Levels[1][3], Levels[1][4])),
+((120, 120), (Levels[1][4], Levels[1][5])),
+((170, 170), (Levels[1][5], Levels[1][6])),
+((230, 230), (Levels[1][6], Levels[1][7])),
+((290, 290), (Levels[1][7], MaxSkill))),
 # Lure
 (((0, 0), (0, 0)),
 ((0, 0), (0, 0)),
@@ -321,7 +321,7 @@ TRAP_HEALTHY_BONUS = 0.2
 
 def getTrapDamage(trapLevel, toon, suit = None, executive = None):
     if suit:
-        executive = suit.getExecutive() or suit.getGovernaught()
+        executive = suit.getExecutive() or suit.getGovernaught() or suit.getManager()
     damage = getAvPropDamage(TRAP_TRACK, trapLevel, toon.experience.getExp(TRAP_TRACK))
     organicBonus = toon.checkGagBonus(TRAP_TRACK, trapLevel)
     if executive and organicBonus:
@@ -533,8 +533,17 @@ ValidStatusConditions = (
     'directorscutscalculator',
     'trickofthelight',
     'hollywoodcalculator',
+    'gameovercalculator',
+    'gametimecalculator',
+    'electricshockcalculator',
+    'target2',
+    'target3',
+    'target4',
+    'target5',
+    'target6',
 
     # Cog Status Effects
+    'killedbyroller',
     'bookkeeping',
     'bookkeeping2',
     'bantracks',

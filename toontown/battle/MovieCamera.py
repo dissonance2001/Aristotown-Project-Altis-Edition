@@ -1067,6 +1067,22 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'SafetyPromotion2':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'SafetyPromotion3':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'SafetyPromotion4':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'SafetyPromotion5':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
     # union buster cheats
     elif name == 'UnionBusterUnionDues':
         camTrack.append(defaultCamera(openShotDuration=1.5))
@@ -1116,6 +1132,14 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         # racketeer
     elif name == 'RacketeerProfiteering':
         camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'RacketeerProfiteering2':
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'RacketeerProfiteering3':
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'RacketeerProfiteering4':
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'RacketeerProfiteering5':
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'RacketeerExtortion':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'RacketeerExtortion2':
@@ -1149,6 +1173,22 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'RadiographerOvermodulated2':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'RadiographerOvermodulated3':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'RadiographerOvermodulated4':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'RadiographerOvermodulated5':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
     elif name == 'RadiographerDanceSession':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     #high roller phase 1 cheats
@@ -1159,11 +1199,17 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
                                  motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(attackDuration - 5.75)))
+    elif name == 'HighRollerGameOver':
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'HighRollerPuzzle':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'HighRollerPuzzleBan':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'HighRollerCommercialBreak':
         camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'HighRollerGameTimeSpawn':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(attackDuration - .7)))
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'HighRollerGameTimeCog':
         camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
     elif name == 'HighRollerGameTimeCog2':
@@ -1171,6 +1217,18 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HighRollerGameTimeCog3':
         camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
     elif name == 'HighRollerGameTimeCog4':
+        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
+    elif name == 'HighRollerGameTimeCog5':
+        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
+    elif name == 'HighRollerGameTimeCog6':
+        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
+    elif name == 'HighRollerGameTimeCog7':
+        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
+    elif name == 'HighRollerGameTimeCog8':
+        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
+    elif name == 'HighRollerGameTimeCog9':
+        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
+    elif name == 'HighRollerGameTimeCog10':
         camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration))
     elif name == 'HighRollerBust':
         if attackDuration > 2:
@@ -1261,6 +1319,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerElectricShock':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerElectricShock2':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerElectricShock3':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerElectricShock4':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerDeath':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerAttackRewind':
@@ -1297,6 +1361,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'CalculatingFees':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'DeathCheck':
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
+    elif name == 'TargetCheck':
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
         return camTrack2
     elif name == 'SoakRemoval':

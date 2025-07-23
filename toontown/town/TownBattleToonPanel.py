@@ -168,6 +168,9 @@ class TownBattleToonPanel(DirectFrame):
             allGagBoost = False
             if 'allGagBoost' in self.avatar.battleConditions:
                 allGagBoost = True
+            raisedAnte = False
+            if 'raisedAnte' in self.avatar.battleConditions:
+                raisedAnte = True
             damage = int(getAvPropDamage(track, level, self.avatar.experience.getExp(track)))
             lureValue = int(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
@@ -234,6 +237,10 @@ class TownBattleToonPanel(DirectFrame):
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
                 lureValue = int(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+            elif raisedAnte and not track == LURE_TRACK:
+                damage = int(math.ceil(damage * ((self.avatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
+                lureValue = int(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
             else:
                 lureValue = int(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
@@ -251,7 +258,7 @@ class TownBattleToonPanel(DirectFrame):
             if track == HEAL_TRACK:
                 self.roundsText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.roundsText['text'] = '+' + str(damage) + '/' + str(int(damage / 2.5))
+                    self.roundsText['text'] = '+' + str(damage) + '/' + str(int(damage / 2.22))
                 else:
                     self.roundsText['text'] = '+' + str(damage) + '/' + str(int(damage / 4))
                 self.roundsText.setColor(0.176, 1, 0, 1)
@@ -261,7 +268,7 @@ class TownBattleToonPanel(DirectFrame):
             if track == TRAP_TRACK:
                 self.damageText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.damageText['text'] = '-' + str(int(damage * 1.2)) + '/' + str(int(((damage * 1.2) * 1.3) + 1))
+                    self.damageText['text'] = '-' + str(int(damage * 1.15) + 1) + '/' + str(int(((damage * 1.15) * 1.3) + 1))
                 else:
                     self.damageText['text'] = '-' + str(damage) + '/' + str(int(damage * 1.3))
                 #self.exeDamageText.show()
@@ -280,7 +287,7 @@ class TownBattleToonPanel(DirectFrame):
             if track == SQUIRT_TRACK:
                 self.damageText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.damageText['text'] = '-' + str(int(damage * .5)) + '/ -' + str(damage) + '/ -' + str(int(damage * .5))
+                    self.damageText['text'] = '-' + str(int(damage * .75)) + '/ -' + str(damage) + '/ -' + str(int(damage * .75))
                 else:
                     self.damageText['text'] = '-' + str(int(damage * .25)) + '/ -' + str(damage) + '/ -' + str(int(damage * .25))
                 #self.soakedRoundsText.show()

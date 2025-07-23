@@ -527,9 +527,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       int(damage * 1.2)) + damageAppendStr,
-                                                                                   'bonus': '\nExe./Gov. Mult.: %i%s\nDaze Rounds: %i' % (
-                                                                                   math.ceil((damage * 1.2) * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS)),
+                                                                                       int(damage * 1.15) + 1) + damageAppendStr,
+                                                                                   'bonus': '\nExe./Gov./Mgr. Mult.: %i%s\nDaze Rounds: %i' % (
+                                                                                   math.ceil((damage * 1.15) * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS)),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -540,7 +540,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
-                                                                                   'bonus': '\nExe./Gov. Mult.: %i%s\nDaze Rounds: %i' % (
+                                                                                   'bonus': '\nExe./Gov./Mgr. Mult.: %i%s\nDaze Rounds: %i' % (
                                                                                    math.ceil(damage * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS)),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
@@ -597,7 +597,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(damage) + damageAppendStr,
-                                                                                   'bonus': '\nEncore Gag Bonus: 16%',
+                                                                                   'bonus': '\nEncore Gag Bonus: 20%',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
@@ -606,7 +606,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(damage) + damageAppendStr,
-                                                                                   'bonus': '\nEncore Gag Bonus: 8%',
+                                                                                   'bonus': '\nEncore Gag Bonus: 10%',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
@@ -637,7 +637,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
                                                                                    'bonus': '\nSelf Heal: %i%s' % (
-                                                                                   math.ceil(damage / 2.5),
+                                                                                   math.ceil(damage / 2.22),
                                                                                    damageAppendStr) + damageBonusStr,
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -662,7 +662,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        damage) + damageAppendStr,
                                                                                    'bonus': '\nSoak Rounds: %i\nSoaked Dodge Rate: %i%%' % (
                                                                                        ToontownBattleGlobals.AvSoakRounds[
-                                                                                           level], -ToontownBattleGlobals.AvSoakDefReduction) + damageBonusStr + '\nSplash Damage: 50%',
+                                                                                           level], -ToontownBattleGlobals.AvSoakDefReduction) + damageBonusStr + '\nSplash Damage: 75%',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.4125)
