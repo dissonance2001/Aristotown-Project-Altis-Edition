@@ -409,6 +409,11 @@ def __throwPie(throw, delay, hitCount, npcs):
         pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
     if hitSuit:
         suitResponseTrack = Sequence()
+        for s in battle.activeSuits:
+            if s.dna.name == 'hrollers' and s.getActualLevel() == 25:
+                suitResponseTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
+            if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
+                suitResponseTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
         showDamage = Sequence(Func(suit.showHpTextThrow, -hp, openEnded=0, attackTrack=THROW_TRACK), Func(suit.showHpString, "MARKED!", openEnded=0))
         #markDamage = Func(showMarkRounds, suit, level)
         value = hp

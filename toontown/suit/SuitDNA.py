@@ -18,7 +18,7 @@ suitHeadTypes = [
 'sc', 'pp', 'shy', 'tw', 'sw', 'bc', 'fct', 'nc', 'ovt', 'mb', 'trs', 'ls', 'bfh', 'rb', 'maudit', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra', 'kerberos', 'charon',
 'pcrat', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
-'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'videog',
+'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'put',
 'radiog', 'racket', 'ubuster', 'safesupervis', 'psetter',
     # Boardbots
 'bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'pbs', 'fmaker',
@@ -27,7 +27,7 @@ suitHeadTypes = [
 'skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'ant', 'sya', 'djockey', 'ptjockey', 'jas', 'tas', 'fhu', 'fsh', 'fhj',
 'kdh', 'dar', 'nhy', 'wrt', 'auh',
     # Pressbots
-'ppb', 'shb', 'bsd', 'gms', 'sbg', 'hck', 'ath', 'ghw', 'dcw', 'gzt', 'wnk', 'nsh', 'std', 'anc', 'jls', 'pbl', 'director', 'bcaster', 'std2', 'put', 'prt', 'pla', 'plk', 'plh',
+'ppb', 'shb', 'bsd', 'gms', 'sbg', 'hck', 'ath', 'ghw', 'dcw', 'gzt', 'wnk', 'nsh', 'std', 'anc', 'jls', 'pbl', 'director', 'bcaster', 'std2', 'videog', 'prt', 'pla', 'plk', 'plh',
 'plg', 'plf', 'pld', 'pls'
 ]
 suitATypes = [
@@ -39,13 +39,13 @@ suitATypes = [
     # Cashbots
 'pp', 'sw', 'nc', 'ovt', 'trs', 'rb', 'maudit', 'kerberos', 'charon', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
-'nd', 'dc', 'fcs', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'mh2', 'videog', 'radiog', 'ubuster', 'safesupervis',
+'nd', 'dc', 'fcs', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'mh2', 'radiog', 'ubuster', 'safesupervis',
     # Boardbots
 'mdm', 'cbr', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'gatekeep', 'fmaker', 'dold', 'dking', 'crystal', 'chairman',
     # Techbots
 'vpr', 'brn', 'key', 'sfs', 'pyc', 'itn', 'rus', 'sya',
     # Pressbots
-'ghw', 'dcw', 'gzt', 'nsh', 'std', 'anc', 'pbl', 'director', 'bcaster', 'std2',
+'ghw', 'dcw', 'gzt', 'nsh', 'std', 'anc', 'pbl', 'director', 'bcaster', 'std2', 'videog',
 ]
 suitBTypes = [
     # Bossbots

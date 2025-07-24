@@ -169,6 +169,11 @@ def __getSplashTrack(point, scale, delay, battle, splashHold = 0.01):
 def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 1.8, geyser = 0, uberRepeat = 0, revived = 0, level = 0):
     if hp > 0:
         suitTrack = Sequence()
+        for s in battle.activeSuits:
+            if s.dna.name == 'hrollers' and s.getActualLevel() == 25:
+                suitTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
+            if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
+                suitTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
         soakTracks = Parallel()
         sival = ActorInterval(suit, anim)
         sival = []
@@ -195,10 +200,6 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
                 animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.58))
             animTrack.append(Func(battle.unlureSuit, suit))
             moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
-            updateTrack = Parallel(Func(suit.setChatAbsolute,
-                                        '',
-                                        CFSpeech | CFTimeout))
-            animTrack.append(updateTrack)
             sival = Parallel(animTrack, moveTrack)
         elif geyser:
             animTrack = Sequence()

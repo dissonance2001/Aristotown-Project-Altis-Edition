@@ -498,21 +498,21 @@ class TownBattleCogPanel(DirectFrame):
         elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 34 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
-            self.orange.show()
+            self.syphon3.show()
             self.luredCog4.show()
         elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 34:
             self.virtual.show()
             self.luredManager2.show()
-            self.orange.show()
+            self.syphon3.show()
         elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 33 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
-            self.orange.show()
+            self.immortal2.show()
             self.luredCog4.show()
         elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 33:
             self.virtual.show()
             self.luredManager2.show()
-            self.orange.show()
+            self.immortal2.show()
         elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 32 and self.cog.isLured:
             self.virtual.show()
             self.luredManager2.show()
@@ -1577,8 +1577,6 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
         elif name == 'ksp':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'bsht':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .1, .1, .1)
         elif name == 'ppl':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
         elif name == 'stenog':
@@ -1613,7 +1611,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .1, .1, .1)
         elif name == 'cv':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .075, .075, .075)
-        elif name == 'm' or name == 'trs' or name == 'tf' or name == 'mdm':
+        elif name == 'm' or name == 'tf' or name == 'mdm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .089, .089, .089)
         elif name == 'pp' or name == 'sw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .06, .06, .06)
@@ -1639,8 +1637,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .16, .16, .16)
         elif name == 'mldr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'mh' or name == 'ym' or name == 'enf' or name == 'rb' or name == 'mh2' or name == 'cnd' or name == 'vpr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
+        elif name == 'mh' or name == 'ym' or name == 'std2' or name == 'bsht' or name == 'std' or name == 'enf' or name == 'rb' or name == 'mh2' or name == 'trs' or name == 'cnd' or name == 'vpr':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .105, .105, .105)
         elif name == 'dc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .11, .11, .11)
         elif name == 'pyc':
@@ -1797,8 +1795,6 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .07, .07, .07)
         elif name == 'dcw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .065, .065, .065)
-        elif name == 'std' or name == 'std2':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .1, .1, .1)
         elif name == 'gzt':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .075, .075, .075)
         elif name == 'wnk':

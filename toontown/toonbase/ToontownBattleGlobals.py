@@ -307,7 +307,7 @@ AvZapJumps = ((3, 2.25, 1.5),
 InstaKillChance = [2, 3, 5, 8, 10, 15, 20, 20]
 DropMissChance = [40, 40, 40, 40, 40, 40, 40, 40]
 LureMissChance = [15, 10, 15, 10, 15, 10, 15, 20]
-AvSoakRounds = (1, 1, 2, 2, 3, 3, 4, 4)
+AvSoakRounds = (2, 2, 2, 2, 3, 3, 4, 4)
 AvMarkRounds = (1, 1, 1, 1, 1, 1, 1, 1)
 AvDazeRounds = (2, 2, 2, 2, 2, 2, 2, 2)
 AvSelfHealThrow = (4, 6, 8, 10, 14, 28, 36, 44)
@@ -541,6 +541,7 @@ ValidStatusConditions = (
     'target4',
     'target5',
     'target6',
+    'barcalculator',
 
     # Cog Status Effects
     'killedbyroller',

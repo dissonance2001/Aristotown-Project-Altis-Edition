@@ -484,13 +484,32 @@ def __lureOneDollar(lure, npcs = []):
 
 def __lureSmallMagnet(lure, npcs = []):
     magnet = globalPropPool.getProp('small-magnet')
+    texture = loader.loadTexture('phase_5/maps/gag_palette_3.png')
+    texture2 = loader.loadTexture('phase_10/maps/cashbotHQExt_palette_2tmla_1.png')
+    magnet.setTexture(texture, 1)
     magnet.find('**/lightning').hide()
-    lightningTrack = Sequence(Wait(2.6), Func(magnet.find('**/lightning').show), Wait(3.7), Func(magnet.find('**/lightning').hide))
-    lightningTrack.start()
-    pos = Point3(-0.27, 0.19, 0.29)
-    hpr = Point3(-90.0, 84.17, -180.0)
-    scale = Point3(0.85, 0.85, 0.85)
-    return __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet=1, npcs=npcs)
+    magnet.find('**/lightning').setTexture(texture2, 1)
+    sizeTrack = Sequence(
+        Func(magnet.find('**/lightning').setScale, 1, random.uniform(1, 1.5), 1))
+    sizeTrack2 = Sequence(
+        Func(magnet.find('**/lightning').setScale, 1, random.uniform(.5, 1), 1))
+    sizeTrack3 = Sequence(
+        Func(magnet.find('**/lightning').setScale, 1, random.uniform(1.5, 2), 1))
+    sizeTrack4 = Sequence(
+        Func(magnet.find('**/lightning').setScale, 1, 1, 1))
+    flickerTrack = Sequence(Wait(0.025), Func(sizeTrack.loop), Func(magnet.find('**/lightning').show), Wait(0.025),
+                            Func(sizeTrack.finish), Func(magnet.find('**/lightning').hide),
+                            Wait(0.025), Func(sizeTrack2.loop), Func(magnet.find('**/lightning').show), Wait(0.025),
+                            Func(sizeTrack2.finish), Func(magnet.find('**/lightning').hide),
+                            Wait(0.025), Func(sizeTrack3.loop), Func(magnet.find('**/lightning').show), Wait(0.025),
+                            Func(sizeTrack3.finish), Func(magnet.find('**/lightning').hide),
+                            Wait(0.025), Func(sizeTrack4.loop), Func(magnet.find('**/lightning').show), Wait(0.025),
+                            Func(sizeTrack4.finish), Func(magnet.find('**/lightning').hide))
+    lightningTrack = Sequence(Wait(2.6), Func(flickerTrack.loop), Wait(3.7), Func(flickerTrack.finish))
+    pos = Point3(-0.27, 0.08, 0.29)
+    hpr = Point3(-90.0, 84.17, -180)
+    scale = Point3(0.75, 0.75, 0.75)
+    return Parallel(lightningTrack, __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet=1, npcs=npcs))
 
 
 def __lureFiveDollar(lure, npcs = []):
@@ -501,12 +520,23 @@ def __lureFiveDollar(lure, npcs = []):
 def __lureLargeMagnet(lure, npcs = []):
     magnet = globalPropPool.getProp('big-magnet')
     magnet.find('**/lightning').hide()
-    lightningTrack = Sequence(Wait(2.6), Func(magnet.find('**/lightning').show), Wait(3.7), Func(magnet.find('**/lightning').hide))
-    lightningTrack.start()
+    sizeTrack = Sequence(
+        Func(magnet.find('**/lightning').setScale, 1, random.uniform(1, 1.5), 1))
+    sizeTrack2 = Sequence(
+        Func(magnet.find('**/lightning').setScale, 1, random.uniform(.5, 1), 1))
+    sizeTrack3 = Sequence(
+        Func(magnet.find('**/lightning').setScale, 1, random.uniform(1.5, 2), 1))
+    sizeTrack4 = Sequence(
+        Func(magnet.find('**/lightning').setScale, 1, 1, 1))
+    flickerTrack = Sequence(Wait(0.025), Func(sizeTrack.loop), Func(magnet.find('**/lightning').show), Wait(0.025),Func(sizeTrack.finish), Func(magnet.find('**/lightning').hide),
+                            Wait(0.025), Func(sizeTrack2.loop), Func(magnet.find('**/lightning').show), Wait(0.025),Func(sizeTrack2.finish), Func(magnet.find('**/lightning').hide),
+                            Wait(0.025), Func(sizeTrack3.loop), Func(magnet.find('**/lightning').show), Wait(0.025),Func(sizeTrack3.finish), Func(magnet.find('**/lightning').hide),
+                            Wait(0.025), Func(sizeTrack4.loop), Func(magnet.find('**/lightning').show), Wait(0.025),Func(sizeTrack4.finish), Func(magnet.find('**/lightning').hide))
+    lightningTrack = Sequence(Wait(2.6), Func(flickerTrack.loop), Wait(3.7), Func(flickerTrack.finish))
     pos = Point3(-0.27, 0.08, 0.29)
     hpr = Point3(-90.0, 84.17, -180)
     scale = Point3(1.32, 1.32, 1.32)
-    return __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet=0, npcs=npcs)
+    return Parallel(lightningTrack, __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet=0, npcs=npcs))
 
 
 def __lureTenDollar(lure, npcs = []):
@@ -969,16 +999,18 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'xspot':
         ballPropTrack = Sequence()
-        ballPosPoints = [Point3(0, 0, 20), VBase3(0, 90, 0)]
+        suitPos = suit.getPos(battle)
+        y = suitPos.getY()
+        ballPosPoints = [Point3(suitPos.getX(), y - 4, 21.0), VBase3(0, -90, 0)]
         ball = loader.loadModel('phase_5/models/char/wreckingball-ball')
-        ballPropTrack.append(getPropAppearTrack(ball, trapProp, ballPosPoints, 0, Point3(1, 1, 1), scaleUpTime=0))
+        ballPropTrack.append(getPropAppearTrack(ball, battle, ballPosPoints, 0, Point3(1, 1, 1), scaleUpTime=0))
         ballPropTrack.append(Func(battle.movie.needRestoreRenderProp, ball))
         #ballPropTrack.append(Func(ball.wrtReparentTo, render))
         targetPoint = battle.getActorPosHpr(suit)
         ballPropTrack.append(Wait(1.5))
         ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, 0, 0)))
-        ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, -90, 0)))
-        ballPropTrack.append(Func(battle.movie.clearRenderProp, trapProp))
+        ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, 90, 0)))
+        #ballPropTrack.append(Func(battle.movie.clearRenderProp, trapProp))
         ballPropTrack.append(Func(MovieUtil.removeProp, ball))
         sinkPos = trapProp.getPos(battle)
         dropPos = trapProp.getPos(battle)

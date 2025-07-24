@@ -137,7 +137,7 @@ bellring = (('roll-o-dex', 'roll-o-dex', 4), ('quick-jump', 'jump', 4))
 mh2 = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-videog = (('snap', 'snap', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
+put = (('snap', 'snap', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
 racket = (('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
 ubuster = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
@@ -155,7 +155,7 @@ fct = (('watercooler', 'watercooler', 4), ('finger-wag', 'finger-wag', 4))
 nc = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 ovt = (('cigar-smoke', 'cigar-smoke', 4), ('effort', 'effort', 4))
 mb = (('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4))
-trs = (('effort', 'effort', 4), ('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
+trs = (('effort', 'effort', 4), ('pickpocket', 'pickpocket', 4), ('smile', 'smile', 4), ('rubber-stamp', 'rubber-stamp', 4))
 ls = (('hold-pencil', 'hold-pencil', 4), ('pen-squirt', 'fountain-pen', 4))
 bfh = (('watercooler', 'watercooler', 4), ('pickpocket', 'pickpocket', 4))
 rb = (('cigar-smoke', 'cigar-smoke', 4), ('pickpocket', 'pickpocket', 4), ('golf-club-swing', 'golf-club-swing', 4))
@@ -284,7 +284,7 @@ pbl = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swi
 director = (('golf-club-swing', 'golf-club-swing', 4), ('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 bcaster = (('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 std2 = (('glower', 'glower', 4), ('smile', 'smile', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4))
-put = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
+videog = (('snap', 'snap', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 prt = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 pla = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 plk = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
@@ -1407,7 +1407,7 @@ class Suit(Avatar.Avatar):
             self.scale = 6.25 / aSize
             self.handColor = VBase4(0.831, 0.831, 0.831, 1)
             self.generateBody()
-            self.generateHead2('root')
+            self.generateHead2('yesman')
             texture = loader.loadTexture('phase_14/maps/bigshot.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
@@ -1926,10 +1926,10 @@ class Suit(Avatar.Avatar):
             self.setHeight(7.2)
         elif dna.name == 'trs':
             self.scale = 6.5 / aSize
-            self.handColor = VBase4(0.784, 0.804, 0.78, 1)
-            self.generateFemaleBody()
-            self.generateHead2('twoface')
-            texture = loader.loadTexture('phase_3.5/maps/mingler3.jpg')
+            self.handColor = VBase4(0.592, 0.663, 0.627, 1)
+            self.generateBody()
+            self.generateHead2('yesman')
+            texture = loader.loadTexture('phase_3.5/maps/cheapskate.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.5)
@@ -2022,7 +2022,6 @@ class Suit(Avatar.Avatar):
             self.setHeight(10.0)
             self.setTransparency(1)
             self.makeImmortal()
-            self.makeShielding()
         elif dna.name == 'erfit':
             self.scale = 7.2 / aSize
             self.handColor = VBase4(1, 1, 1, 1.0)
@@ -2241,7 +2240,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(7.5)
             self.setTransparency(1)
-        elif dna.name == 'videog':
+        elif dna.name == 'put':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(0.835, 0.843, 0.847, 1)
             self.generateBody()
@@ -2378,7 +2377,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(7.2)
         elif dna.name == 'ang':
             self.scale = 6.5 / bSize
-            self.handColor = VBase4(0.91, 0.91, 0.91, 1)
+            self.handColor = VBase4(0.733, 0.733, 0.733, 1)
             self.generateFemaleBody()
             self.generateHead3('shyster', animated=True)
             self.generateHead2('angel_halo')
@@ -2841,8 +2840,8 @@ class Suit(Avatar.Avatar):
             self.scale = 6.0 / aSize
             self.handColor = VBase4(0.984, 0.988, 0.988, 1)
             self.generateBody()
-            self.generateHead2('root')
-            texture = loader.loadTexture('phase_14/maps/greatwhiteshark_tex.png')
+            self.generateHead2('backstabber')
+            texture = loader.loadTexture('phase_3.5/maps/doctorwhite.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.3)
@@ -2877,8 +2876,8 @@ class Suit(Avatar.Avatar):
             self.scale = 6.75 / aSize
             self.handColor = VBase4(1, 0.973, 0.969, 1)
             self.generateBody()
-            self.generateHead2('root')
-            texture = loader.loadTexture('phase_14/maps/stuntdouble.png')
+            self.generateHead2('yesman')
+            texture = loader.loadTexture('phase_3.5/maps/stuntdouble.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(9.0)
@@ -2929,18 +2928,24 @@ class Suit(Avatar.Avatar):
             self.scale = 6.75 / aSize
             self.handColor = VBase4(1, 0.973, 0.969, 1)
             self.generateBody()
-            self.generateHead2('root')
-            texture = loader.loadTexture('phase_14/maps/stuntdouble.png')
+            self.generateHead2('yesman')
+            texture = loader.loadTexture('phase_3.5/maps/stuntdouble.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead2('shades')
             self.makeExecutive()
             self.setHeight(9.0)
-        elif dna.name == 'put':
-            self.scale = 7.0 / bSize
-            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.makeSkeletonManager()
-            self.setHeight(8.0)
+        elif dna.name == 'videog':
+            self.scale = 7.5 / aSize
+            self.handColor = VBase4(0.835, 0.843, 0.847, 1)
+            self.generateBody()
+            self.makeVideographer()
+            self.generateHead3('multislacker', animated=True)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(10.0)
+            self.setTransparency(1)
         elif dna.name == 'prt':
             self.scale = 7.0 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -4848,6 +4853,10 @@ class Suit(Avatar.Avatar):
                 headPart.setX(-.03)
                 headPart.setZ(.1)
                 headPart.setY(.1)
+            if self.style.name == 'p':
+                headPart.setX(.03)
+            if self.style.name == 'ath':
+                headPart.setX(.03)
             if self.style.name == 'blh':
                 headPart.setY(.1)
             if self.style.name == 'ppl':
@@ -7079,9 +7088,6 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'arbit' and self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogFemaleArray
-        if self.style.name == 'trs' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
         if self.style.name == 'ang' and self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogFemaleArray
@@ -7271,9 +7277,6 @@ class Suit(Avatar.Avatar):
             loadDialog(1)
             return SkelecogDialogFemaleArray
         if self.style.name == 'nc' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'trs' and self.isSkeleton:
             loadDialog(1)
             return SkelecogDialogFemaleArray
         if self.style.name == 'nd' and self.isSkeleton:

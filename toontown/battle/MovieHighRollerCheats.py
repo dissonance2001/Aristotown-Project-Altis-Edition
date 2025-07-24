@@ -910,7 +910,7 @@ def doBackToOnes(attack):
     sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
     sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
     can = loader.loadModel('phase_5/models/props/megaphone')
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack2 = Sequence(ActorInterval(suit, 'glower', endTime=1.5), Wait(3.0), ActorInterval(suit, 'glower', startTime=1.5), Func(suit.setNeutralAnimation))
     posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(3.0), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
@@ -935,7 +935,7 @@ def doAction(attack):
     sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
     sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
     can = loader.loadModel('phase_5/models/props/megaphone')
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack2 = Sequence(ActorInterval(suit, 'glower', endTime=1.5), Wait(3.0), ActorInterval(suit, 'glower', startTime=1.5), Func(suit.setNeutralAnimation))
     posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(3.0), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
@@ -1220,8 +1220,6 @@ def doElectricShock(attack, ind):
     cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
     toonPos = toon.getPos(battle)
     y = suitPos.getY()
-    if dmg == 0:
-        y -= 5
     x = int((targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP)
     cagePos = [Point3(suitPos.getX(), y, 100.0), targetSuit.getHpr(battle)]
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
@@ -1244,7 +1242,7 @@ def doElectricShock(attack, ind):
             Func(MovieUtil.removeProp, cage)
         )
     cagePropTracks.append(cagePropTrack)
-    selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + 1), Parallel(ActorInterval(targetSuit, 'large-zap'), Func(targetSuit.setHealthForMe, x), Func(targetSuit.showHpTextCheat, x),
+    selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + 1), Parallel(ActorInterval(targetSuit, 'large-zap'), Func(targetSuit.setHealthForMe, int(targetSuit.maxHP)), Func(targetSuit.setHP, int(targetSuit.maxHP * 2)),
             Func(targetSuit.showHpString, "OVERCHARGED!"), Func(targetSuit.updateHealthBar, 0)),
                                Func(targetSuit.setNeutralAnimation))
     return Parallel(suitTrack, cagePropTracks, smokeTrack, moveTrack, selfDamageTrack)
@@ -1706,22 +1704,10 @@ def doDonation(attack):
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     for s in battle.activeSuits:
         if s.dna.name == 'hroller2':
-            print('Found manager... using it...')
             theSuit = s
 
     if theSuit == None:
-        print('Error finding manager... using self...')
         theSuit = suit
-
-    print('*************************************')
-
-    print('suit.currHP %i' % int(suit.currHP))
-    print('setHP() %i' % int(suit.currHP - (suit.currHP / 4)))
-    print('suit.currHP %i' % int(suit.currHP))
-
-    print('ts.currHP %i' % int(theSuit.currHP))
-    print('setHP() %i' % int(theSuit.currHP + (suit.currHP / 4)))
-    print('ts.currHP %i' % int(theSuit.currHP))
 
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     sinkPos = suit.getPos(battle)
@@ -1734,13 +1720,12 @@ def doDonation(attack):
     moveTrack = Sequence(LerpPosInterval(suit, 1.5, sinkPos2, other=battle), LerpPosInterval(suit, 0, sinkPos, other=battle), Wait(3.9), LerpPosInterval(suit, 0, sinkPos2, other=battle), LerpPosInterval(suit, 1.5, dropPos, other=battle), Func(suit.setPos, battle, dropPos))
 
     suitTrack = Sequence(ActorInterval(suit, 'walk'), getSuitAnimTrack(attack), ActorInterval(suit, 'walk'))
-    selfDamageTrack = Sequence(Wait(4.0), Func(suit.showHpText, -(suit.currHP / 4)), Func(suit.updateHealthBar, 0))
-    selfDamageTrack.append(Func(suit.setHealthForMe, - (suit.currHP / 4)))
-    managerHealTrack = Sequence(Wait(4.0), Func(theSuit.showHpText, (suit.currHP / 4)), Func(theSuit.updateHealthBar, 0),
+    selfDamageTrack = Sequence(Wait(4.0), Func(suit.showHpText, -3000), Func(suit.updateHealthBar, 0))
+    selfDamageTrack.append(Func(suit.setHealthForMe, - 3000))
+    managerHealTrack = Sequence(Wait(4.0), Func(theSuit.setHealthForMe, + 3000), Func(theSuit.showHpText, 3000), Func(theSuit.updateHealthBar, 0),
                                 Func(theSuit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHighRollerPhrases),
                                      CFSpeech | CFTimeout),
                                 SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=theSuit))
-    managerHealTrack.append(Func(theSuit.setHealthForMe, + (suit.currHP / 4)))
     return Parallel(suitTrack, moveTrack, selfDamageTrack, managerHealTrack)
 
 def createTNTExplosionTrack(parent, explosionPoint = None, scale = 1.0):
@@ -2576,7 +2561,7 @@ def doCommercialBreak(attack):
         suitTrack = Sequence()
         if not suit.dna.name == 'hroller':
             suitTrack.append(Wait(1.0))
-            suitTrack.append(Parallel(ActorInterval(suit, 'soak'), MovieUtil.shortCircuitTrack2(suit, battle)))
+            suitTrack.append(Parallel(ActorInterval(suit, 'soak', endTime=1), MovieUtil.shortCircuitTrack2(suit, battle)))
         suitTracks.append(suitTrack)
     return Parallel(suitTracks, soundTrack, suitTrackHighRoller)
 
@@ -3053,7 +3038,7 @@ def doGameTimeCog(attack, ind):
                                   ActorInterval(targetSuit, 'large-zap')
                                   , Func(targetSuit.setNeutralAnimation))
     selfDamageTrack = Sequence(Wait(16), Func(targetSuit.showHpTextCheat, + x), Func(targetSuit.showHpString, "OVERCHARGED!"),
-                               Func(targetSuit.setHealthForMe, + x),
+                               Func(targetSuit.setHealthForMe, int(targetSuit.maxHP)), Func(targetSuit.setHP,  int(targetSuit.maxHP * 2)),
                                Func(targetSuit.updateHealthBar, 0), Wait(2.0), Func(targetSuit.showHpTextWhite, '+ 1 ATTACK!'))
     suitTrack = random.choice((Parallel(managerTrackQuestion, suitTrackQuestion), Parallel(managerTrackQuestion2, suitTrackQuestion2), Parallel(managerTrackQuestion3, suitTrackQuestion3)
                                , Parallel(managerTrackQuestion5, suitTrackQuestion5), Parallel(managerTrackQuestion6, suitTrackQuestion6), Parallel(managerTrackQuestion4, suitTrackQuestion4)))

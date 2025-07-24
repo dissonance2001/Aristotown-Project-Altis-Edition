@@ -23,7 +23,7 @@ SUIT_EXTRA_RAKE_DISTANCE = 1.1
 SUIT_TRAP_DISTANCE = 4
 SUIT_TRAP_RAKE_DISTANCE = 4.5
 SUIT_TRAP_MARBLES_DISTANCE = 3.7
-SUIT_TRAP_TNT_DISTANCE = 4.6
+SUIT_TRAP_TNT_DISTANCE = 5.2
 PNT3_NEARZERO = Point3(0.01, 0.01, 0.01)
 PNT3_ZERO = Point3(0.0, 0.0, 0.0)
 PNT3_ONE = Point3(1.0, 1.0, 1.0)
@@ -459,10 +459,6 @@ def createSuitReviveTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'bfh' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
-    elif suit.style.name == 'trs' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
-    elif suit.style.name == 'trs' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
@@ -892,10 +888,6 @@ def createSuitReviveTrackVirtual(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'bfh' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
-    elif suit.style.name == 'trs' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
-    elif suit.style.name == 'trs' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
@@ -1204,10 +1196,6 @@ def createSuitDeathTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'bfh' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
-    elif suit.style.name == 'trs' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
-    elif suit.style.name == 'trs' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
@@ -1321,6 +1309,40 @@ def __HighRollerAbsorb(suitIndex, suits, hp, battle):
         suitTrack.append(updateHealthBar)
         suitTrack.append(Parallel(cameraTrack, ActorInterval(suits[suitIndex], 'pie-small-react'),
                                   createSuitStunInterval(suits[suitIndex], .5, 2.0)))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        return suitTrack
+    else:
+        return Sequence()
+
+def __ComboSilhouette(suitIndex, suits, hp, battle):
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].dna.name == 'hrollers' and suits[suitIndex].getActualLevel() == 25:
+        from toontown.battle import MovieCamera
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextStringSacrifice, 'NICE COMBO!', openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, hp)
+        cameraTrack = Sequence(MovieCamera.randomActorShot(suits[suitIndex], battle, 0, 'suit'))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(cameraTrack))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        return suitTrack
+    else:
+        return Sequence()
+
+def __KnockbackSilhouette(suitIndex, suits, hp, battle):
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].dna.name == 'hrollers' and suits[suitIndex].getActualLevel() == 26:
+        from toontown.battle import MovieCamera
+        revives = suits[suitIndex].getSkeleRevives()
+        suitTrack = Sequence()
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextStringKnockback, 'NICE KNOCKBACK!', openEnded=0))
+        value = hp
+        updateHealthBar = Func(suits[suitIndex].updateHealthBar, hp)
+        cameraTrack = Sequence(MovieCamera.randomActorShot(suits[suitIndex], battle, 0, 'suit'))
+        suitTrack.append(showDamage)
+        suitTrack.append(updateHealthBar)
+        suitTrack.append(Parallel(cameraTrack))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
         return suitTrack
     else:
@@ -1588,9 +1610,25 @@ def shortCircuitTrack(suit, battle):
     if suit.isHidden():
         return Sequence()
     else:
-        suitTrack = Sequence()
+        suitTrack = Sequence(Wait(3.0))
+        colorTracks = Parallel()
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.061, 0.061, 0.061)
+        smoke.setBillboardPointEye()
+        actorNode = suit.find('**/__Actor_modelRoot')
+        actorCollection = actorNode.findAllMatches('*')
+        parts = ()
+        for headPart in suit.headParts:
+            colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
+                                        LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0))))
+        for thingIndex in xrange(0, actorCollection.getNumPaths()):
+            thing = actorCollection[thingIndex]
+            colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1), LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0))))
+        smokeTrack = Sequence(Func(smoke.reparentTo, suit), Func(smoke.setY, 2), Parallel(LerpScaleInterval(smoke, 2.0, Point3(1, 1, 5)),
+                                       Sequence(Wait(1.0), LerpColorScaleInterval(smoke, 2.5, Vec4(1, 1, 1, 0)))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(removeProp, smoke))
         suitPos, suitHpr = battle.getActorPosHpr(suit)
-        suitTrack.append(LerpColorScaleInterval(suit, 0.8, (0, 0, 0, 0)))
         suitTrack.append(Func(avatarHide, suit))
         BattleParticles.loadParticles()
         explodePosPoints = [Point3(0, 0, 0), PNT3_ZERO]
@@ -1625,15 +1663,33 @@ def shortCircuitTrack(suit, battle):
             suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
             suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
             suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        return Parallel(suitTrack, explodeTrack)
+        return Parallel(suitTrack, smokeTrack, colorTracks)
 
 def shortCircuitTrack2(suit, battle):
     if suit.isHidden():
         return Sequence()
     else:
-        suitTrack = Sequence()
+        suitTrack = Sequence(Wait(3.0))
+        colorTracks = Parallel()
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.061, 0.061, 0.061)
+        smoke.setBillboardPointEye()
+        actorNode = suit.find('**/__Actor_modelRoot')
+        actorCollection = actorNode.findAllMatches('*')
+        parts = ()
+        for headPart in suit.headParts:
+            colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
+                                        LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0))))
+        for thingIndex in xrange(0, actorCollection.getNumPaths()):
+            thing = actorCollection[thingIndex]
+            colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1),
+                                        LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0))))
+        smokeTrack = Sequence(Func(smoke.reparentTo, suit), Func(smoke.setY, 2),
+                              Parallel(LerpScaleInterval(smoke, 2.0, Point3(1, 1, 5)),
+                                       Sequence(Wait(1.0), LerpColorScaleInterval(smoke, 2.5, Vec4(1, 1, 1, 0)))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(removeProp, smoke))
         suitPos, suitHpr = battle.getActorPosHpr(suit)
-        suitTrack.append(LerpColorScaleInterval(suit, 0.8, (0, 0, 0, 0)))
         suitTrack.append(Func(avatarHide, suit))
         BattleParticles.loadParticles()
         explodePosPoints = [Point3(0, 0, 0), PNT3_ZERO]
@@ -1643,9 +1699,10 @@ def shortCircuitTrack2(suit, battle):
         explode.setBillboardPointWorld(2)
         explodeTrack = Sequence()
         explodeTrack.append(
-        getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+            getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
         explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-        return Parallel(suitTrack, explodeTrack)
+        suitIndex = battle.activeSuits.index(suit)
+        return Parallel(suitTrack, smokeTrack, colorTracks)
 
 
 def createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits):
@@ -2424,7 +2481,7 @@ def zapCog(suit, anim, before, after, battle):
                                   Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
                                   Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
                                   Func(bodyPart.setColorScale, (1, 1, 1, 1))))
-    spazzTrack = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Func(zapSuit.play, anim), Wait(3.75), Func(zapSuit.setNeutralAnimationTrap))
+    spazzTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8), ActorInterval(zapSuit, anim, startTime=0), Func(zapSuit.setNeutralAnimationTrap))
     return Parallel(zapTrack, flashTrack, spazzTrack)
 
 def spawnHeadExplosion(suit, battle):

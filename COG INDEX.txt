@@ -125,7 +125,7 @@ fct - Fat Cat Level 4-10
 shy - Shylock Level 2-8
 sw - The Swindler Level 3-9
 ovt - Overtimer Level 5-15
-trs - Treasurer Level 6-15
+trs - Cheapskate Level 6-15
 bfh - Big Fish Level 7-18
 
 	Facility Cog:
@@ -190,7 +190,7 @@ dopa - Director Of Public Affairs Level 30.mgr
 	Street Manager:
 bellring - Bellringer Level 13.mgr
 
-	Major Player Hollywoods:
+	High Roller Hollywoods:
 mh2 - Mr. Hollywood Level 25.exe
 
 	Kudos Managers:
@@ -198,8 +198,7 @@ prethink - Prethinker Level 12.mgr
 mslacker - Multislacker Level 24.mgr
 psetter - Pacesetter Level 66.mgr
 
-	High Roller Manager:
-videog - Videographer Level 99.mgr
+put - N/A Level N/A
 
 	Sellbot 'Litigation' Team:
 radiog - Radiographer Level 32.mgr
@@ -322,14 +321,14 @@ wnk - White Knight Level 6-15
 std - Stunt Double Level 7-18
 
 	Videographer Manager:
+videog - Videographer Level 99.mgr
 director - Director Level 28.mgr
 bcaster - Broadcaster Level 33.mgr
 
-	Major Player Stunt Double:
+	High Roller Stunt Double:
 std2 - Stunt Double - Level 18.exe
 
 	Nothing:
-put - PLACEHOLDER Level N/A.mgr
 prt - PLACEHOLDER Level N/A.mgr
 pla - PLACEHOLDER Level N/A.mgr
 plk - PLACEHOLDER Level N/A.mgr

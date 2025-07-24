@@ -97,8 +97,6 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
         elif avatar.isSkeleton and self.avatar.dna.name == 'ambass':
             self.head.setPosHprScale(0, 0, 0.08, 180, 0, 0, s, s, s)
-        elif avatar.isSkeleton and not self.avatar.dna.name == 'ambass':
-            self.head.setPosHprScale(0, 0, 0.03, 180, 0, 0, s, s, s)
         else:
             self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
         if health > 1.5:

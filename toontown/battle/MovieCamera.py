@@ -1813,7 +1813,7 @@ def allGroupLowDiagonalShot(avatar, duration):
 
 
 def allGroupHighShot(avatar, duration):
-    return heldShot(0, -15, 7, 0, 0, 0, duration, 'allGroupHighShot')
+    return heldShot(0, -15, 10, 0, -10, 0, duration, 'allGroupHighShot')
 
 
 def toonGroupShot(avatar, duration):

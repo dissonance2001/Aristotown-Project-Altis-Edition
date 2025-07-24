@@ -378,6 +378,9 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
     headless = False
     if hp > 0:
         suitTrack = Sequence()
+        for s in battle.activeSuits:
+            if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
+                suitTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
         showDamage = Func(suit.showHpText, -hp, openEnded=0)
         updateHealthBar = Func(suit.updateHealthBar, hp)
         if majorObject:

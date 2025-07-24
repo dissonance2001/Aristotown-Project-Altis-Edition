@@ -2066,10 +2066,19 @@ def doElectrostaticEnergy(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack))
     targets = attack['target']
     cagePropTracks = Parallel()
+    smokeTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         toonPos = toon.getPos(battle)
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        smokeTrack = Sequence(Wait(1), Func(smoke.reparentTo, toon),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
         cage = loader.loadModel('phase_5/models/props/lightning')
         cage.setColorScale(0, 0.961, 1, 1)
         cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
@@ -2093,6 +2102,7 @@ def doElectrostaticEnergy(attack):
             Func(MovieUtil.removeProp, cage)
         )
         cagePropTracks.append(cagePropTrack)
+        smokeTracks.append(smokeTrack)
     #for t in attack['target']:
         #toon = t['toon']
         #dmg = t['hp']
@@ -2102,7 +2112,7 @@ def doElectrostaticEnergy(attack):
     lightingTrack = Sequence(Wait(0), LerpColorScaleInterval(render, 0.5, (0, 0.992, 1, 1)),
                              LerpColorScaleInterval(render, 2.5, (0, 0.992, 1, 1)),
                              LerpColorScaleInterval(render, 1, (oldcolor)))
-    return Parallel(suitTrack, cagePropTracks, toonTrack)
+    return Parallel(suitTrack, cagePropTracks, smokeTracks, toonTrack)
 
 def doRubOut(attack):
     suit = attack['suit']

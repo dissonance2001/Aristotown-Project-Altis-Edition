@@ -78,6 +78,8 @@ def attackAffectsGroup(track, level, type = None):
         return AvPropTargetCat[AvPropTarget[track]][level]
     elif track == SOUND_TRACK:
         return 1
+    elif track == ZAP_TRACK:
+        return 1
     else:
         return 0
 
