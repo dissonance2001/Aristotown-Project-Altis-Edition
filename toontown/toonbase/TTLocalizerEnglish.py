@@ -4148,6 +4148,12 @@ SuitCheatDescription = {
 'HighRollerGameTimeCog2': "The High Roller asks a contestant to answer a\ntrivia question!",
 'HighRollerGameTimeCog3': "The High Roller asks a contestant to answer a\ntrivia question!",
 'HighRollerGameTimeCog4': "The High Roller asks a contestant to answer a\ntrivia question!",
+'HighRollerGameTimeCog5': "The High Roller asks a contestant to answer a\ntrivia question!",
+'HighRollerGameTimeCog6': "The High Roller asks a contestant to answer a\ntrivia question!",
+'HighRollerGameTimeCog7': "The High Roller asks a contestant to answer a\ntrivia question!",
+'HighRollerGameTimeCog8': "The High Roller asks a contestant to answer a\ntrivia question!",
+'HighRollerGameTimeCog9': "The High Roller asks a contestant to answer a\ntrivia question!",
+'HighRollerGameTimeCog10': "The High Roller asks a contestant to answer a\ntrivia question!",
 'HighRollerBust': "The High Roller punishes Toons who chose a banned gag!",
     # High Roller Phase 2 Cheats
 'HighRollerPhase3': "phase 3",

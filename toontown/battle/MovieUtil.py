@@ -1610,7 +1610,7 @@ def shortCircuitTrack(suit, battle):
     if suit.isHidden():
         return Sequence()
     else:
-        suitTrack = Sequence(Wait(3.0))
+        suitTrack = Sequence()
         colorTracks = Parallel()
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.061, 0.061, 0.061)
@@ -1629,6 +1629,7 @@ def shortCircuitTrack(suit, battle):
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                               Func(removeProp, smoke))
         suitPos, suitHpr = battle.getActorPosHpr(suit)
+        suitTrack.append(LerpColorScaleInterval(suit, 1.0, (0, 0, 0, 0)))
         suitTrack.append(Func(avatarHide, suit))
         BattleParticles.loadParticles()
         explodePosPoints = [Point3(0, 0, 0), PNT3_ZERO]
