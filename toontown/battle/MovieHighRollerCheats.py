@@ -824,6 +824,7 @@ def doBudgetCuts(attack):
         tubes = []
         for i in xrange(0, 3):
             tubes.append(globalPropPool.getProp('redtape-tube'))
+            tubes[i].setColor(0, 0, 0, 1)
 
         hitPoint = lambda toon = toon: __toonTorsoPoint(toon)
         hips = toon.getHipsParts()
