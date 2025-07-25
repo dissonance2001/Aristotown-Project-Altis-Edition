@@ -1613,8 +1613,10 @@ def shortCircuitTrack(suit, battle):
         suitTrack = Sequence(Wait(1.5))
         colorTracks = Parallel()
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
-        smoke.setColor(0.061, 0.061, 0.061)
+        smoke.setColor(0.3, 0.3, 0.3)
         smoke.setScale(0.75, 1, 1)
+        smoke.setTransparency(1)
+        smoke.setTwoSided(True)
         smoke.setBillboardPointEye()
         actorNode = suit.find('**/__Actor_modelRoot')
         actorCollection = actorNode.findAllMatches('*')
@@ -1631,13 +1633,14 @@ def shortCircuitTrack(suit, battle):
                                         LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
                                         Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
         smokeTrack = Sequence(Func(smoke.reparentTo, battle), LerpPosInterval(smoke, 0, Point3(toonPos.getX(), y - 5, toonPos.getZ())),
-                              Parallel(Sequence(LerpScaleInterval(smoke, 2.0, Point3(.75, 1, 7.5)),
-                                                LerpScaleInterval(smoke, 2.0, Point3(.75, 1, 15))),
+                              Parallel(Sequence(LerpScaleInterval(smoke, 2.0, Point3(.5, 1, 5)),
+                                                LerpScaleInterval(smoke, 2.5, Point3(.5, 1, 10))),
                                        Sequence(Wait(1.5), LerpColorScaleInterval(smoke, 2.0, Vec4(1, 1, 1, 0)))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                               Func(removeProp, smoke))
         suitPos, suitHpr = battle.getActorPosHpr(suit)
         suitTrack.append(Func(avatarHide, suit))
+        suitTrack.append(Wait(2.0))
         BattleParticles.loadParticles()
         explodePosPoints = [Point3(0, 0, 0), PNT3_ZERO]
         splatName = 'dust2'
@@ -1699,8 +1702,8 @@ def shortCircuitTrack2(suit, battle):
                                         Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
         smokeTrack = Sequence(Func(smoke.reparentTo, battle),
                               LerpPosInterval(smoke, 0, Point3(toonPos.getX(), y - 5, toonPos.getZ())),
-                              Parallel(Sequence(LerpScaleInterval(smoke, 2.0, Point3(.75, 1, 7.5)),
-                                                LerpScaleInterval(smoke, 2.0, Point3(.75, 1, 15))),
+                              Parallel(Sequence(LerpScaleInterval(smoke, 2.0, Point3(.5, 1, 5)),
+                                                LerpScaleInterval(smoke, 1.5, Point3(.5, 1, 7.5))),
                                        Sequence(Wait(1.5), LerpColorScaleInterval(smoke, 2.0, Vec4(1, 1, 1, 0)))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                               Func(removeProp, smoke))
