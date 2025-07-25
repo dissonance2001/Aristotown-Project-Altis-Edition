@@ -33,7 +33,7 @@ bsht - Big Shot Level 6-15
 txl - Toxic Leader Level 7-18
 
 	Facility Cog:
-autocad - Autocaddie Level 14-15.exe
+autocad - Autocaddie Level 14-15.exe 
 
 	Facility Manager:
 clubpres - Club President Level 20-25.mgr (OFTF)
@@ -82,7 +82,7 @@ sh - Shyster Level 6-15
 br - Barrister Level 7-18
 
 	Facility Cog:
-whistleb - Whistleblower Level 15-20.exe
+whistleb - Whistleblower 14-15.exe 
 
 	Facility Manager:
 clerk - Head Attorney Level 20-25.mgr (OFTF)
@@ -119,7 +119,7 @@ ls - Loan Shark Level 7-18
 rb - Robber Baron Level 8-25
 
 	Operation Analysts:
-fct - Fat Cat Level 4-10
+fct - Fat Cat Level 4-12
 
 	Field Specialists:
 shy - Shylock Level 2-8
@@ -129,7 +129,7 @@ trs - Cheapskate Level 6-15
 bfh - Big Fish Level 7-18
 
 	Facility Cog:
-maudit - Mint Auditor Level 10-12.exe
+maudit - Mint Auditor Level 14-15.exe 
 
 	Facility Manager:
 supervis - Mint Supervisor Level 20-25.mgr (OFTF)
@@ -178,7 +178,7 @@ ppl - People Pleaser Level 6-15
 ksp - Kiss-Up Level 7-18
 
 	Facility Cog:
-watchp - Watchman Level 8-10.exe
+watchp - Watchman Level 14-15.exe 
 
 	Faclity Manager:
 foreman - Factory Foreman Level 20-25.mgr (OFTF)
@@ -228,7 +228,7 @@ bfh2 - Big Fish Level 6-15
 chw - Chairwarmer Level 7-18
 
 	Facility Cog:
-chairp - Chairperson Level 15-18.exe
+chairp - Chairperson Level 14-15.exe 
 
 	Facility Manager:
 bdirector - Board Director Level 20.mgr
@@ -277,7 +277,7 @@ pyc - Python Charmer Level 6-15
 sys - Industry Titan Level 7-18
 
 	Facility Cog:
-ant - Antivirus Level 15-20.exe 
+ant - Antivirus Level 14-15.exe 
 
 	Facility Manager:
 sya - Senior Developer Level 20.mgr 
@@ -301,6 +301,7 @@ wrt - Keylogger Level 45.mgr (broken)
 auh - Technocrat Level 50.mgr (broken)
 
 =============PRESSBOTS:===============
+	Regular Cogs:
 ppb - Paper Boy Level 1-5
 shb - Shutterbug Level 2-6
 gms - Gumshoe Level 3-7
@@ -310,7 +311,7 @@ gzt - Gazetteer Level 6-15
 nsh - News Hound Level 7-18
 anc - Anchor Man Level 8-20
 
-Operations Analysts:
+	Operations Analysts:
 bsd - Backseat Driver Level 2-8
 ath - Agonizing Author Level 4-12
 
@@ -319,6 +320,12 @@ sbg - Sandbagger Level 3-9
 dcw - Doctor White Level 5-15
 wnk - White Knight Level 6-15
 std - Stunt Double Level 7-18
+
+	Facility Cog:
+jls - Journalist Level 14-15.exe 
+
+	Facility Manager:
+pbl - Publisher Level 20.mgr 
 
 	Videographer Manager:
 videog - Videographer Level 99.mgr

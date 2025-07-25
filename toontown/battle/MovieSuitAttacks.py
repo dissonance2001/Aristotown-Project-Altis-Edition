@@ -136,7 +136,7 @@ def doSuitAttack(attack):
     elif name == 'Bash':
         suitTrack = doBash(attack)
     elif name == 'Beguile':
-        suitTrack = doTeeOffGroup(attack)
+        suitTrack = doBeguile(attack)
     elif name == 'CloseTheLoop':
         suitTrack = doFountainPenBindings(attack)
     elif name == 'HostileTakeover':
@@ -1835,36 +1835,35 @@ def doFillWithLead(attack):
 
 def doBeguile(attack):
     suit = attack['suit']
-    battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    damageDelay = 2.44
-    dodgeDelay = 1.64
-    suitName = suit.getStyleName()
-    posPoints = [Point3(-0.4, 3.65, 5.01), VBase3(-155.0, -20.0, 0.0)]
-    appearDelay = 0.8
-    suitHoldStart = 1.06
-    suitHoldStop = 1.69
-    suitHoldDuration = suitHoldStop - suitHoldStart
-    moveDuration = 1.1
-    suitSplicedAnims = []
-    suitSplicedAnims.append(['glower',
-     0.01,
-     0.01,
-     suitHoldStart])
-    suitSplicedAnims.extend(getSplicedLerpAnims('glower', suitHoldDuration, 1.1, startTime=suitHoldStart))
-    suitSplicedAnims.append(['glower', 0.01, suitHoldStop])
-    suitTrack = getSuitTrack(attack, splicedAnims=suitSplicedAnims)
-    toonFace = __toonFacePoint(toon, parent=battle)
-    damageAnims = [['duck',
-      0.01,
-      0.01,
-      1.4], ['cringe', 0.01, 0.3]]
-    toonTrack = getToonTrack(attack, splicedDamageAnims=damageAnims, damageDelay=damageDelay, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], showDamageExtraTime=1.7, showMissedExtraTime=1.7)
-    soundTrack = getSoundTrack('ttr_s_ene_bat_beguile.ogg', delay=1.3, node=suit)
-    soundMissTrack = getSoundTrack('ttr_s_ene_bat_beguileMiss.ogg', delay=1.3, node=suit)
-    return Parallel(suitTrack, toonTrack, soundTrack)
+    targets = attack['target']
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+
+    if base.config.GetBool('want-new-cogs', False):
+        head = suit.find('**/to_head')
+        if head.isEmpty():
+            head = suit.find('**/joint_head')
+    else:
+        head = suit.find('**/joint_head')
+    sparkle = globalPropPool.getProp('smile')
+    suitSplicedAnims = [['glower', 0.01, 0.01, 1.5],
+     ['glower', 2.0, 1.51]]
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    if suit.dna.name == 'videog':
+        sparklePosPoints = [Point3(-0.1, 1, -1.5), VBase3(335, 0, 0)]
+    else:
+        sparklePosPoints = [Point3(-0.1, 0.35, -1.5), VBase3(335, 0, 0)]
+    sparklePropTrack = Sequence(Wait(1.0))
+    sparklePropTrack.append(Func(__showProp, sparkle, head, sparklePosPoints[0], sparklePosPoints[1]))
+    sparklePropTrack.append(Func(sparkle.find('**/scale_joint_sign').hide))
+    sparklePropTrack.append(ActorInterval(sparkle, 'smile', startFrame=39))
+    sparklePropTrack.append(Func(MovieUtil.removeProp, sparkle))
+    dodgeAnims = [['duck', 1e-06, 0.8]]
+    toonTracks = getToonTracks(attack, damageDelay=2.1, damageAnimNames=['cringe'], dodgeDelay=1.7, splicedDodgeAnims=dodgeAnims)
+    soundTrack = getSoundTrack('ttr_s_ene_bat_beguile%s.ogg' % ('' if hitAtleastOneToon else 'Miss'), node=suit)
+    return Parallel(suitTrack, sparklePropTrack, toonTracks, soundTrack)
 
 def doCloseTheLoop(attack):
     suit = attack['suit']
@@ -2311,7 +2310,7 @@ def doRazzleDazzle(attack):
     else:
         hitPoint = lambda particleEffect = particleEffect, toon = toon, suit = suit: __toonMissPoint(particleEffect, toon, parent=suit.getRightHand())
     signPropTrack = Sequence(Func(__showProp, sign, suit.getRightHand(), signPosPoints[0], signPosPoints[1]), LerpScaleInterval(sign, 0.5, Point3(1.39, 1.39, 1.39)), Wait(0.5), Func(battle.movie.needRestoreParticleEffect, particleEffect), Func(particleEffect.start, sign), Func(particleEffect.wrtReparentTo, render), LerpPosInterval(particleEffect, 1.0, pos=hitPoint), Func(particleEffect.cleanup), LerpScaleInterval(sign, 0.5, Point3(0, 0, 0)), Func(battle.movie.clearRestoreParticleEffect, particleEffect))
-    signPropAnimTrack = ActorInterval(sign, 'smile', duration=2.5, startTime=0)
+    signPropAnimTrack = ActorInterval(sign, 'smile', duration=2.5, startTime=1)
     toonTrack = getToonTrack(attack, 2.0, ['cringe'], 1.3, ['sidestep'])
     soundTrack = getSoundTrack('SA_razzle_dazzle.ogg', delay=0.8, node=suit)
     return Sequence(Parallel(suitTrack, signPropTrack, signPropAnimTrack, toonTrack, soundTrack), Func(MovieUtil.removeProp, sign))

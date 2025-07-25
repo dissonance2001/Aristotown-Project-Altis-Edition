@@ -470,7 +470,16 @@ class TownBattleCogPanel(DirectFrame):
                 t += TTLocalizer.GovernaughtPostFix
         if self.cog.getSkeleRevives() > 0:
             t += TTLocalizer.SkeleRevivePostFix % (self.cog.getSkeleRevives() + 1)
-        if self.cog.isImmortal and self.cog.dna.name == 'hroller':
+        if self.cog.isImmortal and self.cog.isDamageUp and self.cog.dna.name == 'videog':
+            self.luredManager.show()
+            self.rainbow.show()
+            self.damageUpMgr.show()
+            # self.absorbing3.show()
+        elif self.cog.isImmortal and self.cog.dna.name == 'videog':
+            self.luredManager.show()
+            self.rainbow.show()
+            #self.absorbing3.show()
+        elif self.cog.isImmortal and self.cog.dna.name == 'hroller':
             self.luredManager.show()
             self.insured.show()
             #self.absorbing3.show()
@@ -1637,7 +1646,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .16, .16, .16)
         elif name == 'mldr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'mh' or name == 'ym' or name == 'std2' or name == 'bsht' or name == 'std' or name == 'enf' or name == 'rb' or name == 'mh2' or name == 'trs' or name == 'cnd' or name == 'vpr':
+        elif name == 'mh' or name == 'ym' or name == 'chairp' or name == 'std2' or name == 'bsht' or name == 'std' or name == 'enf' or name == 'rb' or name == 'mh2' or name == 'trs' or name == 'cnd' or name == 'vpr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .105, .105, .105)
         elif name == 'dc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .11, .11, .11)
@@ -1701,7 +1710,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .175, .175, .175)
         elif name == 'fires':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .07, .07, .07)
-        elif name == 'ovt':
+        elif name == 'ovt' or name == 'watchm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
         elif name == 'mplayer' or name == 'mplayer2':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
@@ -1735,7 +1744,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
         elif name == 'mslacker' or name == 'videog' or name == 'bcaster':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .06, .06, .06)
-        elif name == 'wsi' or name == 'maudit' or name == 'kerberos' or name == 'charon' or name == 'bdirector' or name == 'sya' or name == 'pbl' or name == 'foreman' or name == 'watchm' or name == 'chairp':
+        elif name == 'wsi' or name == 'maudit' or name == 'kerberos' or name == 'charon' or name == 'bdirector' or name == 'sya' or name == 'pbl' or name == 'foreman':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .12, .12, .12)
         elif name == 'shw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .00001, .00001, .00001)
@@ -1809,6 +1818,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .095, .095, .095)
         elif name == 'psetter':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
+        elif name == 'gld':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1075, .1075, .1075)
         else:
             self.suitHead.setPos(-0.27, 0.5, 0.13)
 

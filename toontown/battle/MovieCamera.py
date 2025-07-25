@@ -590,7 +590,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Bash':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'Beguile':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=2.1))
     elif name == 'CloseTheLoop':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HostileTakeover':
@@ -688,7 +688,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'BlueChip':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'FallingKnife':
-        camTrack.append(defaultCamera(openShotDuration=3.0))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=3, attackDuration=3),
+                                 heldShot(5, 0, .5, 155, 35, 0, attackDuration - 3)))
     elif name == 'GuiltTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Embezzle':
@@ -1255,25 +1256,25 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HighRollerRaisingTheAnte':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HighRollerDiceRouletteCogs':
-        camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.25, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
                                  motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
-                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 5.5)))
     elif name == 'HighRollerDiceRouletteToons':
-        camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.25, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
                                  motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
-                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 5.5)))
     elif name == 'HighRollerDiceRouletteEveryone':
-        camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.25, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
                                  motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
-                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 5.5)))
     elif name == 'HighRollerDiceRouletteNobody':
-        camTrack.append(Sequence(randomActorShot(suit, battle, 3.5, 'suit'),
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.25, 'suit'),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
                                  motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(2.0),
-                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7.75)))
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 5.5)))
     elif name == 'HighRollerVulnerable':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'HighRollerTrickOfTheLight':
@@ -1296,7 +1297,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HighRollerSplashback':
         if attackDuration > 1:
-            camTrack.append(defaultCamera(openShotDuration=1.5))
+            camTrack.append(Sequence(defaultCamera(openShotDuration=2, attackDuration=2),
+                                     heldShot(5, 0, .5, 155, 35, 0, attackDuration - 2)))
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
@@ -2056,6 +2058,28 @@ def randomGroupAttackCam(suit, targets, battle, attackDuration, openShotDuration
 
 
 def randomActorShot(actor, battle, duration, actorType, groupShot = 0):
+    height = actor.getHeight()
+    centralPoint = actor.getPos(battle)
+    centralPoint.setZ(centralPoint.getZ() + height * 0.75)
+    if actorType == 'suit':
+        x = 4 + random.random() * 8
+        y = -2 - random.random() * 4
+        z = height * 0.5 + random.random() * height * 1.5
+        if groupShot == 1:
+            y = -4
+            z = height * 0.5
+    else:
+        x = 2 + random.random() * 8
+        y = -2 + random.random() * 3
+        z = height + random.random() * height * 1.5
+        if groupShot == 1:
+            y = y + 3
+            z = height * 0.5
+    if MovieUtil.shotDirection == 'left':
+        x = -x
+    return focusShot(x, y, z, duration, centralPoint)
+
+def randomActorShotFallingKnife(actor, battle, duration, actorType, groupShot = 0):
     height = actor.getHeight()
     centralPoint = actor.getPos(battle)
     centralPoint.setZ(centralPoint.getZ() + height * 0.75)

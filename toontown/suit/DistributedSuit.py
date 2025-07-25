@@ -891,7 +891,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.isAngry:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
-        elif self.isImmortal and not self.dna.name == 'hroller':
+        elif self.isImmortal and not self.dna.name == 'hroller' and not self.dna.name == 'videog':
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
         elif self.isDanceSession:
@@ -932,7 +932,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.isAngry:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
-        elif self.isImmortal and not self.dna.name == 'hroller':
+        elif self.isImmortal and not self.dna.name == 'hroller' and not self.dna.name == 'videog':
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
         elif self.isVulnerable and self.dna.name == 'hroller2':
@@ -999,7 +999,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(
                 Func(self.loop, 'neutral-overide%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                 ).start()
-        elif self.isImmortal and not self.dna.name == 'hroller':
+        elif self.isImmortal and not self.dna.name == 'hroller' and not self.dna.name == 'videog':
             for headPart in self.animatedHeadParts: Sequence(
                 Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()

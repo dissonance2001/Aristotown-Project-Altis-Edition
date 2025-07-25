@@ -1610,26 +1610,33 @@ def shortCircuitTrack(suit, battle):
     if suit.isHidden():
         return Sequence()
     else:
-        suitTrack = Sequence()
+        suitTrack = Sequence(Wait(1.5))
         colorTracks = Parallel()
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.061, 0.061, 0.061)
+        smoke.setScale(0.75, 1, 1)
         smoke.setBillboardPointEye()
         actorNode = suit.find('**/__Actor_modelRoot')
         actorCollection = actorNode.findAllMatches('*')
         parts = ()
+        toonPos = suit.getPos(battle)
+        y = toonPos.getY()
         for headPart in suit.headParts:
             colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
-                                        LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0))))
+                                        LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0)),
+                                        Func(headPart.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
         for thingIndex in xrange(0, actorCollection.getNumPaths()):
             thing = actorCollection[thingIndex]
-            colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1), LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0))))
-        smokeTrack = Sequence(Func(smoke.reparentTo, suit), Func(smoke.setY, 2), Parallel(LerpScaleInterval(smoke, 2.0, Point3(1, 1, 5)),
-                                       Sequence(Wait(1.0), LerpColorScaleInterval(smoke, 2.5, Vec4(1, 1, 1, 0)))),
+            colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1),
+                                        LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
+                                        Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
+        smokeTrack = Sequence(Func(smoke.reparentTo, battle), LerpPosInterval(smoke, 0, Point3(toonPos.getX(), y - 5, toonPos.getZ())),
+                              Parallel(Sequence(LerpScaleInterval(smoke, 2.0, Point3(.75, 1, 7.5)),
+                                                LerpScaleInterval(smoke, 2.0, Point3(.75, 1, 15))),
+                                       Sequence(Wait(1.5), LerpColorScaleInterval(smoke, 2.0, Vec4(1, 1, 1, 0)))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                               Func(removeProp, smoke))
         suitPos, suitHpr = battle.getActorPosHpr(suit)
-        suitTrack.append(LerpColorScaleInterval(suit, 1.0, (0, 0, 0, 0)))
         suitTrack.append(Func(avatarHide, suit))
         BattleParticles.loadParticles()
         explodePosPoints = [Point3(0, 0, 0), PNT3_ZERO]
@@ -1639,7 +1646,7 @@ def shortCircuitTrack(suit, battle):
         explode.setBillboardPointWorld(2)
         explodeTrack = Sequence()
         explodeTrack.append(
-        getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+            getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
         explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
         suitIndex = battle.activeSuits.index(suit)
         if suit.getExecutive() or suit.getGovernaught():
@@ -1670,24 +1677,31 @@ def shortCircuitTrack2(suit, battle):
     if suit.isHidden():
         return Sequence()
     else:
-        suitTrack = Sequence(Wait(3.0))
+        suitTrack = Sequence(Wait(1.5))
         colorTracks = Parallel()
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.061, 0.061, 0.061)
+        smoke.setScale(0.75, 1, 1)
         smoke.setBillboardPointEye()
         actorNode = suit.find('**/__Actor_modelRoot')
         actorCollection = actorNode.findAllMatches('*')
         parts = ()
+        toonPos = suit.getPos(battle)
+        y = toonPos.getY()
         for headPart in suit.headParts:
             colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
-                                        LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0))))
+                                        LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0)),
+                                        Func(headPart.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
         for thingIndex in xrange(0, actorCollection.getNumPaths()):
             thing = actorCollection[thingIndex]
             colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1),
-                                        LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0))))
-        smokeTrack = Sequence(Func(smoke.reparentTo, suit), Func(smoke.setY, 2),
-                              Parallel(LerpScaleInterval(smoke, 2.0, Point3(1, 1, 5)),
-                                       Sequence(Wait(1.0), LerpColorScaleInterval(smoke, 2.5, Vec4(1, 1, 1, 0)))),
+                                        LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
+                                        Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
+        smokeTrack = Sequence(Func(smoke.reparentTo, battle),
+                              LerpPosInterval(smoke, 0, Point3(toonPos.getX(), y - 5, toonPos.getZ())),
+                              Parallel(Sequence(LerpScaleInterval(smoke, 2.0, Point3(.75, 1, 7.5)),
+                                                LerpScaleInterval(smoke, 2.0, Point3(.75, 1, 15))),
+                                       Sequence(Wait(1.5), LerpColorScaleInterval(smoke, 2.0, Vec4(1, 1, 1, 0)))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                               Func(removeProp, smoke))
         suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -1702,7 +1716,6 @@ def shortCircuitTrack2(suit, battle):
         explodeTrack.append(
             getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
         explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-        suitIndex = battle.activeSuits.index(suit)
         return Parallel(suitTrack, smokeTrack, colorTracks)
 
 
@@ -1747,7 +1760,7 @@ def createToonDodgeMultitrack(tDodge, toon, leftToons, rightToons):
 def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
     if suit.dna.name == 'sgoat' and suit.isAngry:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
-    elif suit.isImmortal and not suit.dna.name == 'hroller':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog':
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1), ActorInterval(suit, 'gag-miss'))
     else:
         suitTrack = Sequence(Wait(delay), ActorInterval(suit, 'gag-miss'))
@@ -1758,7 +1771,7 @@ def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
         suitTrack.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.dna.name == 'hroller2' and suit.isVulnerable:
         suitTrack.append(Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal and not suit.dna.name == 'hroller':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog':
         suitTrack.append(Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1),
                                   Func(suit.loop, 'highroller-neutral-levitate-loop')))
     else:
@@ -1769,7 +1782,7 @@ def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
 def createSuitTeaseMultiTrackSound(suit, battle, delay = 0.01):
     if suit.dna.name == 'sgoat' and suit.isAngry:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
-    elif suit.isImmortal and not suit.dna.name == 'hroller':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog':
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1), ActorInterval(suit, 'gag-miss'))
     else:
         suitTrack = Sequence(Wait(delay), ActorInterval(suit, 'gag-miss'))
@@ -1780,7 +1793,7 @@ def createSuitTeaseMultiTrackSound(suit, battle, delay = 0.01):
         suitTrack.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.dna.name == 'hroller2' and suit.isVulnerable:
         suitTrack.append(Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal and not suit.dna.name == 'hroller':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog':
         suitTrack.append(Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1),
                                   Func(suit.loop, 'highroller-neutral-levitate-loop')))
     else:

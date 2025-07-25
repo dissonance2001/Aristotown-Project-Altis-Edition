@@ -228,6 +228,22 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         'name'] == 'HighRollerBust':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'HighRollerDiceRouletteEveryone':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'HighRollerDiceRouletteCogs':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'HighRollerDiceRouletteNobody':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'HighRollerDiceRouletteToons':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     if splicedAnims:
@@ -1167,6 +1183,7 @@ def doRisingStars2(attack):
     moveTrack = Sequence(LerpPosInterval(suit, 0, sinkPos, other=battle), Wait(suit.getDuration('shot5')), LerpPosInterval(suit, 0, dropPos, other=battle), Func(suit.setPos, battle, dropPos))
 
     suitTrack = Parallel(ActorInterval(suit, 'shot5'), tauntInterval)
+    suitTrack.append(Func(suit.makeImmortal))
     return Parallel(suitTrack, moveTrack)
 
 def doRisingStars(attack):
@@ -1186,6 +1203,8 @@ def doRisingStars(attack):
     moveTrack = Sequence(LerpPosInterval(suit, 0, sinkPos, other=battle), Wait(suit.getDuration('shot5')), LerpPosInterval(suit, 0, dropPos, other=battle), Func(suit.setPos, battle, dropPos))
 
     suitTrack = Sequence(getSuitAnimTrack(attack))
+    if suit.isImmortal and attack['name'] == 'VideographerRisingStars':
+        suitTrack.append(Func(suit.makeNonImmortal))
     return Parallel(suitTrack, moveTrack)
 
 def doElectricShock(attack, ind):
@@ -2353,11 +2372,11 @@ def doDiceRoulette(attack):
     suit = attack['suit']
     battle = attack['battle']
     name = attack['name']
-    suitTrack = Sequence(Wait(2.25), MovieUtil.createSuitLaughIntervalDice(suit), Func(suit.setNeutralAnimation))
+    suitTrack = Sequence(MovieUtil.createSuitLaughIntervalDice(suit), Func(suit.setNeutralAnimation))
     suitTrack2 = Sequence(getSuitAnimTrack(attack))
     soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg')
-    soundTrack2 = getSoundTrack('cc_s_sfx_ene_hroller_reappear_after_wheel.ogg', delay=7.0, node=suit)
-    soundTrack3 = getSoundTrack('cc_s_sfx_ene_hroller_sweep_before_wheel.ogg', delay=3.0, node=suit)
+    soundTrack2 = getSoundTrack('cc_s_sfx_ene_hroller_reappear_after_wheel.ogg', delay=4.75, node=suit)
+    soundTrack3 = getSoundTrack('cc_s_sfx_ene_hroller_sweep_before_wheel.ogg', delay=0.75, node=suit)
     soundTrack = Parallel(soundTrack2, soundTrack3)
     if name == 'HighRollerDiceRouletteCogs':
         suitTrack.append(doDiceRouletteCogs(attack))

@@ -542,6 +542,7 @@ ValidStatusConditions = (
     'target5',
     'target6',
     'barcalculator',
+    'spawncalculator',
 
     # Cog Status Effects
     'killedbyroller',
