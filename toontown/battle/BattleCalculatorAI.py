@@ -7323,7 +7323,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'directorscutscalculator') and not self.suitHasCondition(suitId, 'silhouettespawn') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'immune') and not self.suitHasCondition(suitId, 'directorscutscalculator') and not self.suitHasCondition(suitId, 'silhouettespawn') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 'VideographerRisingStars2'  # Rising Stars w/ Managers
@@ -7353,7 +7353,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if not self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'silhouettespawn') and not self.suitHasCondition(suitId, 'directorscuts') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
+                if not self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'immune') and not self.suitHasCondition(suitId, 'silhouettespawn') and not self.suitHasCondition(suitId, 'directorscuts') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = 'VideographerRisingStars'  # Rising Stars Hollywoods
