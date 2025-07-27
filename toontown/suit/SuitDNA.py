@@ -10,7 +10,7 @@ notify = directNotify.newCategory('SuitDNA')
 suitHeadTypes = [
     # Bossbots
 'f', 'p', 'stg', 'ym', 'enf', 'mm', 'blh', 'ds', 'mldr', 'hh', 'bsht', 'cr', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed',
-'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass',
+'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'ttrclubpres',
     # Lawbots
 'bf', 'b', 'pf', 'dt', 'cv', 'ac', 'nn', 'bs', 'ad', 'sd', 'sh', 'le', 'br', 'bw', 'whistleb', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim',
 'redd', 'wsi', 'sgoat', 'caseman', 'stenog', 'lgator',
@@ -33,7 +33,7 @@ suitHeadTypes = [
 suitATypes = [
     # Bossbots
 'ym', 'enf', 'mldr', 'hh', 'bsht', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse',
-'bkeeper', 'wtapper', 'ambass',
+'bkeeper', 'wtapper', 'ambass', 'ttrclubpres',
     # Lawbots
 'dt', 'cv', 'le', 'br', 'bw', 'whistleb', 'arbit', 'whunter', 'wsi', 'caseman', 'stenog', 'lgator',
     # Cashbots
@@ -79,6 +79,11 @@ suitCTypes = [
     # Pressbots
 'shb', 'bsd', 'gms', 'sbg',
 ]
+nonTieredTypes = [
+    # Bossbots
+    'ttrclubpres',
+    ]
+
 suitDepts = ['c', 'l', 'm', 's', 'g', 't', 'p']
 suitDeptFullnames = {'c': TTLocalizer.Bossbot,
  'l': TTLocalizer.Lawbot,
@@ -171,7 +176,10 @@ def getSuitDeptFullname(name):
 
 
 def getSuitType(name):
-    index = suitHeadTypes.index(name)
+    if name == 'ttrclubpres':
+        return 8
+    else:
+        index = suitHeadTypes.index(name)
     return index % suitsPerDept + 1
 
 
@@ -261,7 +269,7 @@ class SuitDNA(AvatarDNA.AvatarDNA):
         dg = PyDatagram()
         dg.addFixedString(self.type, 1)
         if self.type == 's':
-            dg.addFixedString(self.name, 20)
+            dg.addFixedString(self.name, 15)
             dg.addFixedString(self.dept, 1)
         elif self.type == 'b':
             dg.addFixedString(self.dept, 1)
@@ -277,7 +285,7 @@ class SuitDNA(AvatarDNA.AvatarDNA):
         dgi = PyDatagramIterator(dg)
         self.type = dgi.getFixedString(1)
         if self.type == 's':
-            self.name = dgi.getFixedString(20)
+            self.name = dgi.getFixedString(15)
             self.dept = dgi.getFixedString(1)
             self.body = getSuitBodyType(self.name)
         elif self.type == 'b':
@@ -328,6 +336,13 @@ class SuitDNA(AvatarDNA.AvatarDNA):
         top = bottom + suitsPerLevel[level - 1]
         self.name = suitHeadTypes[random.choice(range(bottom, top))]
         self.body = getSuitBodyType(self.name)
+
+    def forceSpecificSuit(self, name, dept):
+        self.type = 's'
+        self.name = name
+        self.dept = dept
+        self.body = getSuitBodyType(self.name)
+        return
 
     def newGoon(self, name = None):
         if type == None:

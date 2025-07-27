@@ -101,6 +101,12 @@ txl = (('effort', 'effort', 4), ('glower', 'glower', 4), ('effort', 'effort', 4)
 tbc = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('cigar-smoke', 'cigar-smoke', 4))
 autocad = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
 clubpres = (('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
+ttrclubpres = (('golf-club-swing', 'golf-club-swing', 5),
+ ('speak', 'speak', 5),
+('magic1', 'magic1', 5),
+ ('quick-jump', 'jump', 5),
+ ('throw-paper', 'throw-paper', 5),
+ ('glower', 'glower', 5))
 derrman = (('pen-squirt', 'fountain-pen', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 derrhand = (('pen-squirt', 'fountain-pen', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('summon', 'summon', 4))
 mplayer = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
@@ -1451,6 +1457,15 @@ class Suit(Avatar.Avatar):
             self.makeExecutive()
             self.generateHead3('clubpresident', animated=True)
             self.setHeight(8.7)
+        elif dna.name == 'ttrclubpres':
+            self.scale = 4.125 / aSize
+            self.handColor = VBase4(0.918, 0.886, 0.875, 1)
+            self.generateBody()
+            self.generateTTRPresHead()
+            texture = loader.loadTexture('phase_4/maps/ttr_t_ene_cga_clubpresident.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(5.28)
         elif dna.name == 'derrman':
             self.scale = 4.5 / aSize
             self.handColor = VBase4(0.573, 0.384, 0.204, 1)
@@ -3881,6 +3896,11 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/arms').setTexture(armTex, 1)
         modelRoot.find('**/legs').setTexture(legTex, 1)
         modelRoot.find('**/hands').setTexture(handTex, 1)
+
+    def generateTTRPresHead(self): # TTR Club President Head
+        headModel = loader.loadModel('phase_4' + "/models/char/ttr_m_ene_bossbotClubPresident")
+        headModel.reparentTo(self.find('**/joint_head'))
+        self.headParts.append(headModel)
 
     def generateHead3(self, headType, headColor=None, headTexture=None, modelOverride=None, pathOverride=None,
                      extraArgs={}, animated=False, additionalAnims=[]):

@@ -55,6 +55,8 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 13
     elif name == 'clubpres':
         actualLevel = relLevel + 19
+    elif name == 'ttrclubpres':
+        actualLevel = relLevel + 19
     elif name == 'derrman':
         actualLevel = relLevel + 4
     elif name == 'derrhand':
@@ -631,7 +633,7 @@ SuitLevel = {
     'hho': 7.0,
 }
 
-SpecialCogDict = ('clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'foreman', 'dopr', 'dopa',
+SpecialCogDict = ('clubpres', 'ttrclubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'foreman', 'dopr', 'dopa',
                   'bellring', 'prethink', 'mslacker', 'videog', 'radiog', 'ubuster', 'racket', 'safesupervis', 'psetter', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra',
                   'kerberos', 'charon', 'pcrat', 'hroller', 'erfit', 'hroller2', 'hrollers', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi',
                   'sgoat', 'caseman', 'stenog', 'lgator', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'bcaster', 'dking', 'ottoman', 'crystal', 'chairman',
@@ -1075,6 +1077,39 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                              acc=(75, 75),
                              freq=(20, 20)))},
  'clubpres': {'name': 'Club\nPresident',
+              'singularname': 'a Club President',
+              'pluralname': 'Club Presidents',
+              'level': 15,
+              'hp':(889, 788, 815, 1026, 824, 891),
+              'def':(60, 60, 60, 60, 60, 60,),
+              'freq':(100, 100, 100, 100, 100, 100,),
+              'acc':(75, 75, 75, 75, 75, 75,),
+              'attacks':
+                  (SuitAttack('Golf',
+                              hp=(42, 42, 42, 42, 42, 42, 42, 42),
+                              acc=(100, 100, 100, 100, 100, 100, 100, 100),
+                              freq=(20, 20, 20, 20, 20, 20, 20, 20)),
+                   SuitAttack('Golf',
+                              hp=(42, 42, 42, 42, 42, 42, 42, 42),
+                              acc=(100, 100, 100, 100, 100, 100, 100, 100),
+                              freq=(20, 20, 20, 20, 20, 20, 20, 20)),
+                   SuitAttack('SongAndDance',
+                              hp=(38, 38, 38, 38, 38, 38, 38, 38),
+                              acc=(100, 100, 100, 100, 100, 100, 100, 100),
+                              freq=(15, 15, 15, 15, 15, 15, 15, 15)),
+                   SuitAttack('CigarSmoke',
+                              hp=(45, 45, 45, 45, 45, 45, 45, 45),
+                              acc=(100, 100, 100, 100, 100, 100, 100, 100),
+                              freq=(15, 15, 15, 15, 15, 15, 15, 15)),
+                   SuitAttack('GlowerPower',
+                              hp=(40, 40, 40, 40, 40, 40, 40, 40),
+                              acc=(100, 100, 100, 100, 100, 100, 100, 100),
+                              freq=(15, 15, 15, 15, 15, 15, 15, 15)),
+                   SuitAttack('PowerTrip',
+                              hp=(38, 38, 38, 38, 38, 38, 38, 38),
+                              acc=(100, 100, 100, 100, 100, 100, 100, 100),
+                              freq=(15, 15, 15, 15, 15, 15, 15, 15)))},
+    'ttrclubpres': {'name': 'Club\nPresident',
               'singularname': 'a Club President',
               'pluralname': 'Club Presidents',
               'level': 15,

@@ -110,9 +110,12 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
     def getElite(self):
         return self.isElite
 
-    def setupSuitDNA(self, level, type, track):
+    def setupSuitDNA(self, level, type, track, name):
         dna = SuitDNA.SuitDNA()
-        dna.newSuitRandom(type, track)
+        if name in SuitDNA.nonTieredTypes:
+            dna.forceSpecificSuit(name, track)
+        else:
+            dna.newSuitRandom(type, track)
         self.dna = dna
         self.track = track
         self.setLevel(level)
