@@ -1,0 +1,77 @@
+group "skyclan" [
+ visgroup "19000:safe_zone" [
+  vis [   "19000:safe_zone"   ]
+  group "streets" [
+  ]
+  group "buildings" [
+   landmark_building "sz1:toon_landmark_fabricworker_msc_DNARoot" [
+    code [ "toon_landmark_fabricworker_msc" ]
+    title [ "" ]
+    pos [ 75 179 -40.7 ]
+    nhpr [ 75 0 0 ]
+    door [
+     code [ "door_double_square_ur" ]
+       color [ 0 0.87 0.69 1 ]
+    ]
+   ]
+
+   landmark_building "sz2:toon_landmark_hangar_msc_DNARoot" [
+    code [ "toon_landmark_hangar_msc" ]
+    title [ "" ]
+    pos [ 93 -102 13.3 ]
+    nhpr [ 260 0 0 ]
+   ]
+
+   landmark_building "sz3:toon_landmark_repairshop_msc_DNARoot" [
+    code [ "toon_landmark_repairshop_msc" ]
+    title [ "" ]
+    pos [ 125 195 -38.8 ]
+    nhpr [ 295 4 0 ]
+    door [
+     code [ "door_double_square_ur" ]
+       color [ 0 0.87 0.69 1 ]
+    ]
+   ]
+
+   landmark_building "sz4:toon_landmark_workshop_msc_DNARoot" [
+    code [ "toon_landmark_workshop_msc" ]
+    title [ "" ]
+    pos [ -104 -156 27.652 ]
+    nhpr [ 120 0 0 ]
+    door [
+     code [ "door_double_square_ur" ]
+       color [ 0 0.87 0.69 1 ]
+    ]
+   ]
+
+   landmark_building "sz5:toon_landmark_watchtower_msc_DNARoot" [
+    code [ "toon_landmark_watchtower_msc" ]
+    title [ "" ]
+    pos [ -49.743 13.917 -0.150 ]
+    nhpr [ 245 0 0 ]
+    door [
+     code [ "door_double_square_ur" ]
+       color [ 0 0.87 0.69 1 ]
+    ]
+   ]
+
+   landmark_building "sz6:toon_landmark_clanhall_msc_DNARoot" [
+    code [ "toon_landmark_clanhall_msc" ]
+    title [ "" ]
+    pos [ -96 -33 0.028 ]
+    nhpr [ 130 0 0 ]
+    door [
+     code [ "door_double_square_ur" ]
+       color [ 0 0.87 0.69 1 ]
+    ]
+   ]
+  ]
+  group "props" [
+   prop "skyclan_playground_DNARoot" [
+    code [ "skyclan" ]
+    pos [ -50 -20 0 ]
+    nhpr [ 90 0 -0 ]
+   ]
+   ]
+ ]
+]
