@@ -18,6 +18,8 @@ from toontown.hood import DLHood
 from toontown.hood import GSHood
 from toontown.hood import OZHood
 from toontown.hood import GZHood
+from toontown.hood import TSHood
+from toontown.hood import SCHood
 from toontown.hood import SellbotHQ, CashbotHQ, LawbotHQ, BossbotHQ, BoardbotHQ
 from toontown.hood import TutorialHood
 from direct.task import TaskManagerGlobal
@@ -48,6 +50,8 @@ class PlayGame(StateData.StateData):
      ToontownGlobals.CashbotHQ: CashbotHQ.CashbotHQ,
      ToontownGlobals.LawbotHQ: LawbotHQ.LawbotHQ,
      ToontownGlobals.GolfZone: GZHood.GZHood,
+     ToontownGlobals.Toonseltown: TSHood.TSHood,
+     ToontownGlobals.SkyClan: SCHood.SCHood,      
      ToontownGlobals.PartyHood: PartyHood.PartyHood,
      ToontownGlobals.BoardbotHQ: BoardbotHQ.BoardbotHQ}
     Hood2StateDict = {ToontownGlobals.ToontownCentral: 'TTHood',
@@ -60,6 +64,8 @@ class PlayGame(StateData.StateData):
      ToontownGlobals.DonaldsDreamland: 'DLHood',
      ToontownGlobals.GoofySpeedway: 'GSHood',
      ToontownGlobals.OutdoorZone: 'OZHood',
+     ToontownGlobals.Toonseltown: 'TSHood',
+     ToontownGlobals.SkyClan: 'SCHood',
      ToontownGlobals.Tutorial: 'TutorialHood',
      ToontownGlobals.MyEstate: 'EstateHood',
      ToontownGlobals.BossbotHQ: 'BossbotHQ',
@@ -104,6 +110,8 @@ class PlayGame(StateData.StateData):
          State.State('GSHood', self.enterGSHood, self.exitGSHood, ['quietZone']),
          State.State('OZHood', self.enterOZHood, self.exitOZHood, ['quietZone']),
          State.State('GZHood', self.enterGZHood, self.exitGZHood, ['quietZone']),
+         State.State('TSHood', self.enterTSHood, self.exitTSHood, ['quietZone']),
+         State.State('SCHood', self.enterTSHood, self.exitSCHood, ['quietZone']),
          State.State('BossbotHQ', self.enterBossbotHQ, self.exitBossbotHQ, ['quietZone']),
          State.State('SellbotHQ', self.enterSellbotHQ, self.exitSellbotHQ, ['quietZone']),
          State.State('CashbotHQ', self.enterCashbotHQ, self.exitCashbotHQ, ['quietZone']),
@@ -377,6 +385,21 @@ class PlayGame(StateData.StateData):
 
     def exitGZHood(self):
         self._destroyHood()
+
+    def enterTSHood(self, requestStatus):
+        self.accept(self.hoodDoneEvent, self.handleHoodDone)
+        self.hood.enter(requestStatus)
+
+    def exitTSHood(self):
+        self._destroyHood()
+
+    def enterSCHood(self, requestStatus):
+        self.accept(self.hoodDoneEvent, self.handleHoodDone)
+        self.hood.enter(requestStatus)
+
+    def exitSCHood(self):
+        self._destroyHood()
+
 
     def enterSellbotHQ(self, requestStatus):
         self.accept(self.hoodDoneEvent, self.handleHoodDone)

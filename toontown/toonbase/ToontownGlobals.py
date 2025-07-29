@@ -630,8 +630,8 @@ streetPhaseMap = {
  MinniesMelodyland: 6,
  GoofySpeedway: 6,
  YeOlde: 7,
- Toonseltown: 13
- SkyClan: 13
+ Toonseltown: 13,
+ SkyClan: 13,
  TheBrrrgh: 8,
  DaisyGardens: 8,
  FunnyFarm: 8,
@@ -2055,6 +2055,43 @@ AV_TOUCH_CHECK_DIST_Z = 5.0
 AV_TOUCH_CHECK_TIMELIMIT_CL = 0.002
 AV_TOUCH_COUNT_LIMIT = 5
 AV_TOUCH_COUNT_TIME = 300
+hood2Id = [
+    ('TTC', (ToontownCentral,)),
+    ('DD', (DonaldsDock,)),
+    ('MML', (MinniesMelodyland,)),
+    ('DG', (DaisyGardens,)),
+    ('TB', (TheBrrrgh,)),
+    ('DDL', (DonaldsDreamland,)),
+    ('TS', (Toonseltown,)),
+    ('SC', (SkyClan,)),
+    ('GZ', (GolfZone,)),
+    ('GSW', (GoofySpeedway,)),
+    ('GS', (GoofySpeedway,)),
+    ('AA', (OutdoorZone,)),
+    ('OT', (YeOlde,)),
+    ('YEOLDE', (YeOlde,)),
+    ('YOTT', (YeOlde,)),
+    ('CEO', (BossbotHQ,)),
+    ('CJ', (LawbotHQ,)),
+    ('CFO', (CashbotHQ,)),
+    ('VP', (SellbotHQ,)),
+    ('BBHQ', (BossbotHQ,)),
+    ('LBHQ', (LawbotHQ,)),
+    ('CBHQ', (CashbotHQ,)),
+    ('SBHQ', (SellbotHQ,)),
+    ('FACTORY', (SellbotHQ, SellbotFactoryExt)),
+    ('FRONTENTRY', (SellbotHQ, SellbotFactoryExt)),
+    ('SIDEENTRY', (SellbotHQ, SellbotFactoryExt)),
+    ('BULLION', (CashbotHQ,)),
+    ('DOLLAR', (CashbotHQ,)),
+    ('COIN', (CashbotHQ,)),
+    ('OFFICEA', (LawbotHQ, LawbotOfficeExt)),
+    ('OFFICEB', (LawbotHQ, LawbotOfficeExt)),
+    ('OFFICEC', (LawbotHQ, LawbotOfficeExt)),
+    ('OFFICED', (LawbotHQ, LawbotOfficeExt)),
+    ('BACK', (BossbotHQ,)),
+    ('MIDDLE', (BossbotHQ,)),
+    ('FRONT', (BossbotHQ,))]
 SuitLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]
 
 
