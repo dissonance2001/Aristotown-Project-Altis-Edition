@@ -472,12 +472,12 @@ class TownBattleCogPanel(DirectFrame):
             t += TTLocalizer.SkeleRevivePostFix % (self.cog.getSkeleRevives() + 1)
         if self.cog.isImmortal and self.cog.isDamageUp and self.cog.dna.name == 'videog':
             self.luredManager.show()
-            self.rainbow.show()
-            self.damageUpMgr.show()
+            self.hollywoods.show()
+            self.damageUp2.show()
             # self.absorbing3.show()
         elif self.cog.isImmortal and self.cog.dna.name == 'videog':
             self.luredManager.show()
-            self.rainbow.show()
+            self.hollywoods.show()
             #self.absorbing3.show()
         elif self.cog.isImmortal and self.cog.dna.name == 'hroller':
             self.luredManager.show()

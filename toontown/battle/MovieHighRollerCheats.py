@@ -1203,7 +1203,7 @@ def doRisingStars(attack):
     moveTrack = Sequence(LerpPosInterval(suit, 0, sinkPos, other=battle), Wait(suit.getDuration('shot5')), LerpPosInterval(suit, 0, dropPos, other=battle), Func(suit.setPos, battle, dropPos))
 
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    if suit.isImmortal and attack['name'] == 'VideographerRisingStars':
+    if suit.isImmortal and attack['name'] == 'VideographerRisingStars' or attack['name'] == 'VideographerRisingStars2' or attack['name'] == 'VideographerRisingStarsSilhouette':
         suitTrack.append(Func(suit.makeNonImmortal))
     return Parallel(suitTrack, moveTrack)
 

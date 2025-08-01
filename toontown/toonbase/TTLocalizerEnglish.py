@@ -4191,7 +4191,7 @@ SuitCheatDescription = {
  'VideographerRisingStars': "The Videographer summons cogs to his side!",
  'VideographerRisingStars2': "The Videographer summons cogs to his side!",
  'VideographerRisingStarsSilhouette': "The Videographer summons a silhouette of himself\nto his side!",
- 'VideographerRisingStarsSacrifice': "The Videographer virtualizes all Mr. Hollywoods!",
+ 'VideographerRisingStarsSacrifice': "The Videographer virtualizes all Mr. Hollywoods\nand Stunt Doubles!",
  'VideographerVideoStatic': "The Videographer's signal seems to be getting more\nunstable!",
  'VideographerElectricShock': "The Videographer overcharges a random cog!",
  'VideographerElectricShock2': "The Videographer overcharges a random cog!",
