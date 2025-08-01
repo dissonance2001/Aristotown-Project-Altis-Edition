@@ -12,8 +12,8 @@ class TSSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         self.playgroundClass = TSPlayground.TSPlayground
         self.musicFile = 'phase_13/audio/bgm/winter/christmas_ts_sz.ogg'
         self.activityMusicFile = 'phase_13/audio/bgm/winter/christmas_ts_int.ogg'
-        self.dnaFile = 'phase_13/dna/toonseltown_sz.dna'
-        self.safeZoneStorageDNAFile = 'phase_13/dna/storage_TS_sz.dna'
+        self.dnaFile = 'phase_13/dna/toonseltown_sz.pdna'
+        self.safeZoneStorageDNAFile = 'phase_13/dna/storage_TS_sz.pdna'
 
     def load(self):
         SafeZoneLoader.SafeZoneLoader.load(self)

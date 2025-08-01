@@ -1,48 +1,16 @@
-import ToonHood
-from toontown.safezone import SCSafeZoneLoader
-from toontown.toonbase.ToontownGlobals import *
+from toontown.safezone.SCSafeZoneLoader import SCSafeZoneLoader
+from toontown.town.SCTownLoader import SCTownLoader
+from toontown.toonbase import ToontownGlobals
+from toontown.hood.ToonHood import ToonHood
 
-class SCHood(ToonHood.ToonHood):
 
-    def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):
-        ToonHood.ToonHood.__init__(self, parentFSM, doneEvent, dnaStore, hoodId)
-        self.id = SkyClan
-        self.safeZoneLoaderClass = SCSafeZoneLoader.SCSafeZoneLoader
-        self.storageDNAFile = 'phase_13/dna/storage_SC.dna'
-        self.skyFile = 'phase_3.5/models/props/BR_sky'
-        self.spookySkyFile = 'phase_3.5/models/props/BR_sky'
-        self.whiteFogColor = Vec4(0.8, 0.8, 0.8, 1)
-        self.titleColor = (1.0, 0.9, 0.5, 1.0)
+class SCHood(ToonHood):
+    notify = directNotify.newCategory('SCHood')
 
-    def load(self):
-        ToonHood.ToonHood.load(self)
-        self.parentFSM.getStateNamed('SCHood').addChild(self.fsm)
-        self.sky.setScale(2.0)
-        self.fog = Fog('SCFog')
-
-    def unload(self):
-        self.parentFSM.getStateNamed('SCHood').removeChild(self.fsm)
-        ToonHood.ToonHood.unload(self)
-        self.fog = None
-
-    def enter(self, *args):
-        ToonHood.ToonHood.enter(self, *args)
-        base.camLens.setNearFar(SpeedwayCameraNear, SpeedwayCameraFar)
-
-    def exit(self):
-        base.camLens.setNearFar(DefaultCameraNear, DefaultCameraFar)
-        ToonHood.ToonHood.exit(self)
-
-    def setWhiteFog(self):
-        if base.wantFog:
-            self.fog.setColor(self.whiteFogColor)
-            self.fog.setLinearRange(0.0, 800.0)
-            render.clearFog()
-            render.setFog(self.fog)
-            self.sky.clearFog()
-            self.sky.setFog(self.fog)
-
-    def setNoFog(self):
-        if base.wantFog:
-            render.clearFog()
-            self.sky.clearFog()
+    ID = ToontownGlobals.SkyClan
+    TOWNLOADER_CLASS = SCTownLoader
+    SAFEZONELOADER_CLASS = SCSafeZoneLoader
+    STORAGE_DNA = 'phase_13/dna/storage_SC.pdna'
+    SKY_FILE = 'phase_3,5/models/props/BR_sky'
+    SPOOKY_SKY_FILE = 'phase_3.5/models/props/BR_sky'
+    TITLE_COLOR = (1.0, 0.5, 0.5, 1.0)
