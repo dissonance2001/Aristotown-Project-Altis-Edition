@@ -1524,9 +1524,19 @@ struct ToonAttack {
   int8 suitRevive;
 };
 
+struct AttackData {
+  uint8 acc;
+  uint8 groupStatus;
+  string name;
+  int32 hp;
+  string suitName;
+  uint8(0-100) freq;
+  string animName;
+};
+
 struct SuitAttack {
   int8 index;
-  string attack;
+  AttackData attack;
   int8[] target;
   int16[] damage;
   int8 toonDied;

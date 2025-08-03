@@ -4722,10 +4722,6 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                              hp=(0,),
                              acc=(100,),
                              freq=(0,)),
-                  SuitAttack('CaseManagerLegallyBound', #45
-                             hp=(0,),
-                             acc=(100,),
-                             freq=(0,)),
                   SuitAttack('CaseManagerCourtRecordBan', #46
                              hp=(0,),
                              acc=(100,),
