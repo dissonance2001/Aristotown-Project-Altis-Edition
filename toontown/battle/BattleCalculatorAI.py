@@ -1498,7 +1498,8 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                     activeSuits = self.battle.activeSuits
-                    #suitIndex = activeSuits.index(target)
+                    target = self.battle.findSuit(targetId)
+                    suitIndex = activeSuits.index(target)
                     organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                     if organicBonus:
                         attackDamage *= 1.1
