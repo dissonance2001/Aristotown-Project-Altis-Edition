@@ -7438,7 +7438,7 @@ class BattleCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_GROUP}
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
