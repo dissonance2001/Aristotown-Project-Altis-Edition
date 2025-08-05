@@ -326,6 +326,11 @@ class Movie(DirectObject.DirectObject):
                         ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
                                                                              '',
                                                                              CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
+                    elif s.isSued:
+                        if not s.isSued:
+                            ptrack.append(Func(battle.unSueSuit, s))
+                        if s.isSued:
+                            ptrack.append(Func(battle.sueSuit, s))
                     else:
                         ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
                                                                                        '',

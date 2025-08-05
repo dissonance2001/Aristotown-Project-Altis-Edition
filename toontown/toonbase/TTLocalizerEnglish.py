@@ -4079,8 +4079,8 @@ SuitCheatDescription = {
 'BookkeeperPaperCutMarked': "The Bookkeeper retaliates when marked!",
 'BookkeeperPaperCut': "The Bookkeeper retaliates against the most dangerous\ntoon!",
 'BookkeeperExplodingDocument': "The Bookkeeper retaliates against the least dangerous\ntoon!",
-'BookkeeperBookkeepingRetaliation': "The Bookkeeper retaliates against toons who attacked him\nduring Bookkeeping!",
-'BookkeeperBookkeeping': "The Bookkeeper is focusing, do not attack him!",
+'BookkeeperBookkeepingRetaliation': "The Bookkeeper retaliates against toons who targeted him\nduring Bookkeeping!",
+'BookkeeperBookkeeping': "The Bookkeeper is focusing and must not be\ntargeted!",
     # Wiretapper Cheats
 'WiretapperCollectCall': "Don't answer the phone!",
 'WiretapperCollectCallDamage': "This toon is forced to pay collect call fees every turn\nuntil their dues are paid!",
@@ -4544,8 +4544,11 @@ SuitAttackNames = {
     # Court Fees and Calculation Mirrors
     'SynergyFees': "Court Costs!",
     'CalculatingFees': "Calculating Costs!",
-    # Soak Removal Movie for Managers
+    # Soak Removal Movie
     'SoakRemoval': "!",
+    # Sue Movies
+    'SueApplication': "!",
+    'SueRemoval': "!",
     # Death Check Movie for Absorbing Managers
     'DeathCheck': "!",
     # Target Check for Cog Targeting
@@ -8941,6 +8944,7 @@ GuestLostExp = 'Over Guest Limit'
 InventoryAffectsOneCog = 'Targets: One ' + Cog
 InventoryAffectsOneToon = 'Targets: One Toon'
 InventoryAffectsThreeCogs = 'Targets: Three Cogs'
+InventoryAffectsSoakedCogs = 'Targets: All Soaked Cogs'
 InventoryAffectsAllToons = 'Targets: All Toons'
 InventoryAffectsAllCogs = 'Targets: All ' + Cogs
 InventoryHealString = 'Toon-up'

@@ -830,11 +830,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'CaseManagerInsurancePlan':
         if not suit.isSkeleton:
             camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(2.0), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5), heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+                                      motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5), heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
 
         else:
             camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                     motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(2.0),
+                                     motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
                                      moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                      heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == 'CaseManagerInsurance':
@@ -1369,6 +1369,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
         return camTrack2
     elif name == 'SoakRemoval':
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
+    elif name == 'SueApplication':
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
+    elif name == 'SueRemoval':
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
         return camTrack2
     elif name == 'BanLevel4':

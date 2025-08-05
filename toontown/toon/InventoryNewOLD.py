@@ -674,7 +674,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        damage) + damageAppendStr,
                                                                                    'bonus': '\nSoak Rounds: %i\nSoaked Dodge Rate: %i%%' % (
                                                                                        ToontownBattleGlobals.AvSoakRounds[
-                                                                                           level], -ToontownBattleGlobals.AvSoakDefReduction) + damageBonusStr + '\nSplash Damage: 25%',
+                                                                                           level], -ToontownBattleGlobals.AvSoakDefReduction) + damageBonusStr + '\nSplash Damage: 33%',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.4125)
@@ -1305,6 +1305,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                 self.sueButton['state'] = DGG.DISABLED
                 self.sueButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
         # NOTE: At the time of sue implementation, there are no status conditions that prevent Cease & Desist usage.
+        if not 'noSues' in base.localAvatar.battleConditions:
+            self.sueButton['state'] = DGG.NORMAL
+            self.sueButton['image_color'] = Vec4(0, 0.6, 1, 1)
         if not 'noFires' in base.localAvatar.battleConditions:
             self.fireButton['state'] = DGG.NORMAL
             self.fireButton['image_color'] = Vec4(0, 0.6, 1, 1)
@@ -1314,6 +1317,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if 'noFires' in base.localAvatar.battleConditions:
             self.fireButton['state'] = DGG.DISABLED
             self.fireButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
+        if 'noSues' in base.localAvatar.battleConditions:
+            self.sueButton['state'] = DGG.DISABLED
+            self.sueButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
         if 'noSOS' in base.localAvatar.battleConditions:
             self.sosButton['state'] = DGG.DISABLED
             self.sosButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
@@ -1872,7 +1878,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         elif track == SQUIRT_TRACK:
             return TTLocalizer.InventoryAffectsThreeCogs
         elif track == ZAP_TRACK:
-            return TTLocalizer.InventoryAffectsThreeCogs
+            return TTLocalizer.InventoryAffectsSoakedCogs
         elif track == SOUND_TRACK:
             return TTLocalizer.InventoryAffectsOneCog
         elif track == DROP_TRACK:

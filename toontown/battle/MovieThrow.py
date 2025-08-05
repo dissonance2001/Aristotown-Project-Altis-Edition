@@ -450,10 +450,8 @@ def __throwPie(throw, delay, hitCount, npcs):
             sival = Parallel(ActorInterval(suit, 'pie-small-react'), MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
         elif hitCount == 1:
             sival = Parallel(ActorInterval(suit, 'pie-large'), MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
-        elif level <= 5:
-            sival = ActorInterval(suit, 'pie-small-react')
         else:
-            sival = ActorInterval(suit, 'pie-large')
+            sival = ActorInterval(suit, 'pie-small-react')
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(updateHealthBar)

@@ -7484,8 +7484,11 @@ SuitAttacks = {
     # Court Fees and Calculation Mirrors
  'SynergyFees': ('magic3', ATK_TGT_GROUP),
  'CalculatingFees': ('calculating-costs', ATK_TGT_SINGLE),
-    # Soak Removal Movie for Managers
+    # Soak Removal Movie
  'SoakRemoval': ('nothing', ATK_TGT_SINGLE),
+    # Sue Movies
+ 'SueApplication': ('nothing', ATK_TGT_SINGLE),
+ 'SueRemoval': ('nothing', ATK_TGT_SINGLE),
     # Death Check Movie for Absorbing Managers
  'DeathCheck': ('nothing', ATK_TGT_SINGLE),
     # Desperation Cheat For Litigation Managers

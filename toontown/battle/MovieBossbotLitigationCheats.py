@@ -980,6 +980,7 @@ def doRefinement(attack):
                 suitTrack.append(Func(suit.showHpString, "REFINED!"))
                 suitTrack.append(Func(suit.setHealthForMe, 125))
         suitTrack.append(Func(suit.updateHealthBar, 0))
+        suitTrack.append(Func(battle.unSueSuit, suit))
         if not suit.dna.name == 'ambass':
             suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
@@ -1259,6 +1260,7 @@ def doGhostMentality(attack):
         managerTracks.append(managerTrack)
         moveTracks.append(moveTrack)
         suitTrack = Sequence(Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5), MovieUtil.createGhostMentalityTrack(targetSuit, battle))
+        suitTrack.append(Func(battle.unSueSuit, targetSuit))
         if not targetSuit.dna.name == 'ambass':
             if targetSuit.isManager:
                 pass

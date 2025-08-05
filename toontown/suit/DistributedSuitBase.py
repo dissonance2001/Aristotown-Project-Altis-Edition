@@ -52,9 +52,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.stars.loop('stun')
         self.stars.setBlend(frameBlend=base.wantSmoothAnims)
         self.stars.adjustAllPriorities(100)
+        texture = loader.loadTexture('phase_5/maps/battle/ttcc_fx_battleParticles_palette_2.png')
         self.suedstars = BattleProps.globalPropPool.getProp('stun')
         self.suedstars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+        self.suedstars.setScale(1.5)
         self.suedstars.loop('stun')
+        self.suedstars.setTexture(texture, 1)
         self.suedstars.setBlend(frameBlend=base.wantSmoothAnims)
         self.suedstars.adjustAllPriorities(100)
         self.cRay = None
@@ -132,7 +135,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
     def getDizzy(self):
         return self.dizzy
 
-    def setSued(self, sued):
+    def setSued2(self, sued):
         head = self.find('**/to_head')
         # head = self.getHeadParts()[0]
 
@@ -142,7 +145,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         else:
             self.suedstars.detachNode()
 
-    def getSued(self):
+    def getSued2(self):
         return self.sued
 
     def setSoaked(self, soaked):
@@ -179,7 +182,8 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.cog
 
     def processCog(self):
-        self.maxHP = self.getHP()
+        if self.isSkelecog:
+            self.maxHP = self.getHP()
         #self.currHP = self.maxHP
 
     def setGovernaught(self, governaught):

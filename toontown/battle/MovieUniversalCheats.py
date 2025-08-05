@@ -779,6 +779,34 @@ def doSoakRemoval(attack):
     suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
     return suitTrack
 
+def doSueRemoval(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence()
+    suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Func(battle.unSueSuit, suit)))
+    suitTrack.append(Func(suit.removeSued))
+    return suitTrack
+
+def doSueApplication(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
+    splatName = 'dust'
+    splat = globalPropPool.getProp('dust')
+    explode = globalPropPool.getProp('dust')
+    explode.setTwoSided(True)
+
+    explode.setBillboardPointWorld(2)
+    explodeTrack = Sequence()
+    explodeTrack.append(
+        getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+    explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
+    suitTrack = Sequence()
+    suitTrack.append(Parallel(ActorInterval(suit, 'pie-small-react'), Func(battle.sueSuit, suit), Func(suit.showHpString, "CEASE AND DESIST!")))
+    suitTrack.append(Func(suit.makeSued))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('LB_receive_evidence.ogg'), node=suit))
+    return Parallel(suitTrack, soundTrack, explodeTrack)
+
 def doDeathCheck(attack):
     name = attack['name']
     suit = attack['suit']

@@ -406,6 +406,7 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(updateHealthBar)
         suitResponseTrack.append(sival)
+        suitResponseTrack.append(Func(battle.sueSuit, suit))
         bonusTrack = Sequence(Wait(delay + tPieHitsSuit))
         if kbbonus > 0:
             bonusTrack.append(Wait(0.75))

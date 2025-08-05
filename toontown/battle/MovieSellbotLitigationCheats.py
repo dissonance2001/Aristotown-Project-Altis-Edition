@@ -856,7 +856,7 @@ def doPromotion(attack, ind):
                                                    Func(targetSuit.makeIntoCTSManager),
                                                    Func(targetSuit.showHpString, "PROMOTION!"), Func(targetSuit.setManager, 1), Func(targetSuit.makeShielding),
                                                    Func(targetSuit.updateHealthBar, 0)),
-                               Func(targetSuit.setNeutralAnimation))
+                               Func(targetSuit.setNeutralAnimation), Func(battle.unSueSuit, targetSuit))
     soundTrack = getSoundTrack('TL_hypnotize.ogg', delay=2.5, node=suit)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=5.7)
     return Parallel(suitTrack, cagePropTrack, sprayTrack, moveTrack, selfDamageTrack, soundTrack2, soundTrack, spinTrack1, spinTrack2, spinTrack3)
@@ -1055,7 +1055,7 @@ def doUnionBusterDamage(attack):
             cagePropTracks.append(cagePropTrack)
             toonTracks.append(toonTrack)
             smokeTracks.append(smokeTrack)
-    toonDamageTrack = getToonTracksCheat(attack, 2.6, ['nothing'], 0, ['neutral'])
+    toonDamageTrack = getToonTracksCheat(attack, 3.2, ['nothing'], 0, ['neutral'])
     return Parallel(cagePropTracks, smokeTracks, toonDamageTrack, toonTracks)
 
 def doUnionBust(attack):
@@ -1259,6 +1259,7 @@ def doContractEnforcement(attack):
             suitTrack.append(Parallel(healSound, Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
                                            CFSpeech | CFTimeout)))
         suitTrack.append(Func(suit.setNeutralAnimation))
+        suitTrack.append(Func(battle.unSueSuit, suit))
         suitTracks.append(suitTrack)
         suitTracks.append(getSuitAnimTrack(attack, playRate=1.5))
         suitTracks.append(Wait(6.5))

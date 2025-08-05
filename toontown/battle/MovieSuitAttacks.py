@@ -671,6 +671,10 @@ def doSuitAttack(attack):
         suitTrack = MovieUniversalCheats.doDeathCheck(attack)
     elif name == 'SoakRemoval':
         suitTrack = MovieUniversalCheats.doSoakRemoval(attack)
+    elif name == 'SueApplication':
+        suitTrack = MovieUniversalCheats.doSueApplication(attack)
+    elif name == 'SueRemoval':
+        suitTrack = MovieUniversalCheats.doSueRemoval(attack)
     elif name == 'BanLevel4':
         if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
@@ -718,42 +722,42 @@ def doSuitAttack(attack):
         suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanToonup':
         if suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanTrap':
         if suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLure':
         if suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanThrow':
         if suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanSquirt':
         if suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanZap':
         if suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanSound':
         if suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanDrop':
         if suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts2(attack)
+            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanToonupTrap':
@@ -854,6 +858,10 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack, unlureSuit)
         elif name == 'SoakRemoval':
             resetSuitTrack = Sequence(suitTrack)
+        elif name == 'SueApplication':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'SueRemoval':
+            resetSuitTrack = Sequence(suitTrack)
         elif name == 'UnionBusterUnionBusterDamage':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'SafetyHeatWaveCalculation':
@@ -892,9 +900,10 @@ def getResetTrack(suit, battle):
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0
     unluredTrack = Func(battle.unlureSuit, suit)
+    unSuedTrack = Func(battle.unSueSuit, suit)
     walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), Func(suit.setNeutralAnimation))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(unluredTrack, walkTrack, moveTrack)
+    return Parallel(unluredTrack, unSuedTrack, walkTrack, moveTrack)
 
 
 def __makeCancelledNodePath():
@@ -926,9 +935,7 @@ def __createSuitResetPosTrack(suit, battle):
     moveDuration = 0.5
     neutralTrack =  Func(suit.setNeutralAnimation())
     unluredTrack = Func(battle.unlureSuit, suit)
-    updateTrack = Parallel(Func(suit.setChatAbsolute,
-                                '',
-                                CFSpeech | CFTimeout))
+    updateTrack = Func(battle.unSueSuit, suit)
     walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), neutralTrack)
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(unluredTrack, updateTrack, walkTrack, moveTrack)
@@ -945,6 +952,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     trapStorage = {}
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
+    unsueTrack = Func(battle.unSueSuit, suit)
     for s in battle.activeSuits:
         if s.dna.name == 'psetter':
             theSuit = s
@@ -992,6 +1000,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         return
 
     track.append(Func(returnTrapToSuit))
+    track.append(unsueTrack)
     return track
 
 
@@ -1001,6 +1010,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     battle = attack['battle']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
+    unsueTrack = Func(battle.unSueSuit, suit)
     for s in battle.activeSuits:
         if s.dna.name == 'psetter':
             theSuit = s
@@ -1029,6 +1039,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     track.append(
             Func(suit.setNeutralAnimation))
+    track.append(unsueTrack)
     return track
 
 
@@ -1102,8 +1113,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                     currentBossHealth2 = s.currHP
                 if s.dna.name == 'stenog' or s.dna.name == 'lgator' or s.dna.name == 'caseman':
                     currentBossHealth = s.currHP
-            if currentBossHealth2 == -1:
-                animTrack.append(Func(suit.removeInsured))
             if currentBossHealth == -1:
                 animTrack.append(Func(suit.makeDesperation))
                 animTrack.append(Func(suit.makeDamageUp))
@@ -1113,8 +1122,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                     currentBossHealth2 = s.currHP
                 if s.dna.name == 'sgoat' or s.dna.name == 'stenog' or s.dna.name == 'caseman':
                     currentBossHealth = s.currHP
-            if currentBossHealth2 == -1:
-                animTrack.append(Func(suit.removeInsured))
             if currentBossHealth == -1:
                 animTrack.append(Func(suit.makeDesperation))
                 animTrack.append(Func(suit.makeDamageUp))
@@ -1124,8 +1131,6 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                     currentBossHealth2 = s.currHP
                 if s.dna.name == 'sgoat' or s.dna.name == 'lgator' or s.dna.name == 'caseman':
                     currentBossHealth = s.currHP
-            if currentBossHealth2 == -1:
-                animTrack.append(Func(suit.removeInsured))
             if currentBossHealth == -1:
                 animTrack.append(Func(suit.makeDesperation))
                 animTrack.append(Func(suit.makeDamageUp))

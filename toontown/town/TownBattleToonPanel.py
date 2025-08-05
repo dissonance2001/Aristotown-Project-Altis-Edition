@@ -289,7 +289,7 @@ class TownBattleToonPanel(DirectFrame):
                 if self.avatar.trackBonusLevel[track] >= 1:
                     self.damageText['text'] = '-' + str(int(damage * .75)) + '/ -' + str(damage) + '/ -' + str(int(damage * .75))
                 else:
-                    self.damageText['text'] = '-' + str(int(damage * .25)) + '/ -' + str(damage) + '/ -' + str(int(damage * .25))
+                    self.damageText['text'] = '-' + str(int(damage / 3)) + '/ -' + str(damage) + '/ -' + str(int(damage / 3))
                 #self.soakedRoundsText.show()
                 #self.soakedRoundsText['text'] = 'Rounds: ' + str(ToontownBattleGlobals.AvSoakRounds[level])
             if track == ZAP_TRACK:

@@ -321,11 +321,28 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.luredSuits.append(suit)
             self.needAdjustTownBattle = 1
 
-    def isSuitEnraged(self, suit):
+    def unSueSuit(self, suit):
+        self.needAdjustTownBattle = 1
+        self.notify.debug('movie unluring suit %s' % suit.doId)
         if self.enragedSuits.count(suit) != 0:
-            suit.loop('neutral-enraged')
+            suit.setSued2(0)
+            self.enragedSuits.remove(suit)
+            self.needAdjustTownBattle = 1
+
+    def sueSuit(self, suit):
+        self.needAdjustTownBattle = 1
+        self.notify.debug('movie luring suit %s' % suit.doId)
+        if self.enragedSuits.count(suit) == 0:
+            suit.setSued2(1)
+            self.enragedSuits.append(suit)
+            self.needAdjustTownBattle = 1
+
+    def isSuitSued(self, suit):
+        if self.enragedSuits.count(suit) != 0:
+            suit.setSued2(1)
             return 1
         else:
+            suit.setSued2(0)
             return 0
 
     def removeEnragedSuit(self, suit):

@@ -226,7 +226,7 @@ AvPropDamage = (
 ((45, 45), (Levels[0][3], Levels[0][4])),
 ((60, 60), (Levels[0][4], Levels[0][5])),
 ((90, 90), (Levels[0][5], Levels[0][6])),
-((90, 90), (Levels[0][6], Levels[0][7])),
+((95, 95), (Levels[0][6], Levels[0][7])),
 ((135, 135), (Levels[0][7], MaxSkill))),
 # Trap
 (((16, 16), (Levels[1][0], Levels[1][1])),
@@ -543,8 +543,12 @@ ValidStatusConditions = (
     'target6',
     'barcalculator',
     'spawncalculator',
+    'deadcase',
+    'deadwire',
+    'deadunion',
 
     # Cog Status Effects
+    'zapped',
     'killedbyroller',
     'bookkeeping',
     'bookkeeping2',
@@ -592,6 +596,7 @@ ValidStatusConditions = (
     'immune',
     'dazed',
     'sued',
+    'suemovie',
     'contracted',
     'killedbyvideo',
     'noKB',
@@ -672,6 +677,7 @@ ValidStatusConditions = (
     'noDropGags',
     'noFires',
     'noSOS',
+    'noSues',
     'encore',
     'winded',
     'cheer',
