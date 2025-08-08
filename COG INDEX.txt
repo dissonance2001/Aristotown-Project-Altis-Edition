@@ -39,7 +39,7 @@ autocad - Autocaddie Level 14-15.exe
 clubpres - Club President Level 20-25.mgr (OFTF)
 
 	Directors:
-derrman - Derrick Man Level 5.mgr
+derrman - Derrick Man Level 10.mgr
 derrhand - Derrick Hand Level 25.mgr v2.0
 
 	Street Managers:
@@ -184,7 +184,7 @@ watchp - Watchman Level 14-15.exe
 foreman - Factory Foreman Level 20-25.mgr (OFTF)
 
 	Directors:
-dopr - Director Of Public Relations Level 10.mgr
+dopr - Director Of Public Relations Level 15.mgr
 dopa - Director Of Public Affairs Level 30.mgr
 
 	Street Manager:
@@ -238,7 +238,7 @@ ddiver - Deep Diver Level 7.mgr
 gatekeep - Gatekeeper Level 10.mgr
 
 	Directors:
-dola - Director Of Land Acquisition Level 7.mgr
+dola - Director Of Land Acquisition Level 12.mgr
 dold - Director Of Land Development Level 25.mgr
 
 	Videographer Manager:

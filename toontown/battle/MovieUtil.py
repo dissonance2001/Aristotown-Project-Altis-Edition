@@ -736,8 +736,7 @@ def createSuitReviveTrackVirtual(suit, battle):
         headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
         headInterval2 = Func(headPart.loop, 'neutral')
         hasAnimatedHead = True
-    suitTrack.append(
-        ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
+    suitTrack.append(ActorInterval(suit, 'lose'))
     suitTrack.append(Func(suit.hide))
     suitTrack.append(Func(suit.setSkelecog2, True))
     suitTrack.append(Func(suit.setVirtual, True, True))
@@ -1017,7 +1016,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         headInterval.append(ActorInterval(headPart, 'death', duration=2))
         hasAnimatedHead = True
     suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
-    suitTrack.append(Func(insertDeathSuit, suit, deathSuit, battle, suitPos, suitHpr))
+    suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
     suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2), headInterval))
     deathSound = base.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
     suitTrack.append(Parallel(ActorInterval(suit, 'slip-forward', duration=2),
@@ -1025,7 +1024,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         SoundInterval(deathSound, volume=0.5),
         LerpScaleInterval(deathSuit, 0.3, 0.0001,)))
     suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
-    suitTrack.append(Func(removeDeathSuit, suit, deathSuit, name='remove-death-suit'))
+    suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
     suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
     suitTrack.append(Func(suit.makeDead))
     returnval = Parallel()
@@ -1062,10 +1061,9 @@ def createSuitDeathTrack(suit, battle):
             hasAnimatedHead = True
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
+    suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
     suitTrack.append(ActorInterval(suit, 'lose'))
-    suitTrack.append(Func(suit.hide))
-    suitTrack.append(Func(suit.cleanupLoseActor))
-    suitTrack.append(Func(suit.makeDead))
+    suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:

@@ -134,6 +134,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('snowWaterfall.ptf')
     elif name == 'HeatWave':
         return loadParticleFile('heatwave.ptf')
+    elif name == 'GoldRush':
+        return loadParticleFile('goldRush.ptf')
     elif name == 'HeatWaveWaterfall':
         return loadParticleFile('heatwaveWaterfall.ptf')
     elif name == 'OrganizeEffect':

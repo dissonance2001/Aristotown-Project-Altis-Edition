@@ -2507,12 +2507,16 @@ class Suit(Avatar.Avatar):
             self.generateHead3('autocaddie', animated=True)
             self.setHeight(8.5)
         elif dna.name == 'jgd':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.generateSkeletonBody()
+            self.scale = 7.3 / aSize
+            self.handColor = VBase4(1, 1, 1, 1)
+            self.generateBody()
             self.makeExecutive()
+            self.generateHead3('majorplayer', animated=True)
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_majorplayer.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(10.0)
             self.setTransparency(1)
-            self.setHeight(8.5)
         elif dna.name == 'bby':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)

@@ -663,6 +663,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvilEye':
         camTrack.append(defaultCamera(openShotDuration=3.0))
+    elif name == 'DoubleCross':
+        camTrack.append(defaultCamera(openShotDuration=3.0))
+    elif name == 'Forecast':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'MysteriousDisappearance':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'GoldRush':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'GoldDust':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'FiveOClockShadow':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'SandTrap':
@@ -735,6 +745,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PowerTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Quake':
+        camTrack.append(defaultCamera(openShotDuration=3.0))
+    elif name == 'Aftershock':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'RazzleDazzle':
         camTrack.append(defaultCamera(openShotDuration=0.5))

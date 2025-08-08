@@ -6,6 +6,7 @@ ELEVATOR_VP_2 = 22
 ELEVATOR_MINT = 2
 ELEVATOR_CFO = 3
 ELEVATOR_CJ = 4
+ELEVATOR_ERCLAIM = 44
 ELEVATOR_OFFICE = 5
 ELEVATOR_STAGE = 6
 ELEVATOR_BB = 7
@@ -78,6 +79,12 @@ ELEVATOR_VP_2: {'openTime': 4.0,
                'countdown': bboard.get('elevatorCountdown', 5.0),
                'sfxVolume': 0.7,
                'collRadius': 7.5},
+ELEVATOR_ERCLAIM: {'openTime': 4.0,
+                              'closeTime': 4.0,
+                              'width': 15.8,
+                              'countdown': bboard.get('elevatorCountdown', 5.0),
+                              'sfxVolume': 0.7,
+                              'collRadius': 7.5},
  ELEVATOR_STAGE: {'openTime': 4.0,
                   'closeTime': 4.0,
                   'width': 6.5,
