@@ -5705,6 +5705,10 @@ class BattleCalculatorAI:
         return attack
 
     def __calculateSuitAttacks(self):
+        for i in xrange(len(self.battle.activeSuits)): # Who is cheating before the Cog attacks play but after the Toon attacks?
+            suitId = self.battle.activeSuits[i].doId
+            x = self.TurnsElapsed
+
         for i in xrange(len(self.battle.activeSuits)):
             #if i < len(self.battle.activeSuits):
                 suitId = self.battle.activeSuits[i].doId
@@ -5718,6 +5722,43 @@ class BattleCalculatorAI:
                     continue
                 attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
+
+                if self.battle.findSuit(suitId).dna.name == 'erclaim': # Check if the Cog that just attacked is capable of cheating (e.g. if self.battle.findSuit(suitId).dna.name == 'erclaim').
+                    pass # Professor Control: I don't believe there's a Laff Steal cheat, and if there is, I do not know how I would get it to function correctly.  I already have issues trying to get a cheat in my source to work when the Cog misses an attack.
+                elif False: # Keep checking for other corresponding Cog names; False is a placeholder.
+                    pass
+
+                for i in xrange(len(self.battle.activeSuits)): # Now, how about the other Cogs, including the one that just attacked?
+                    suitId = self.battle.activeSuits[i].doId
+                    if self.battle.activeSuits[i].dna.name == 'foreman' and self.getActualLevel() == 25 and self.__suitCanAttack(suitId): # Sniper Factory Foreman
+                        snipeAttack = getDefaultSuitAttack()
+                        snipeAttack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                        snipeAttack[SUIT_ATK_COL] = {'suitName': 'foreman',
+                         'name': 'PowerhouseSnipeBookkept',
+                         'animName': 'glower',
+                         'hp': 0,
+                         'acc': 100,
+                         'freq': 0,
+                         'group': SuitBattleGlobals.ATK_TGT_GROUP}
+                        snipeAttack[SUIT_TGT_COL] = attack[SUIT_TGT_COL] # All the same targets as the previous attack.  NOTE: This assumes attack was not used for any cheats between the attack and now, so DO NOT make a cheat list with the variable name attack.
+                        snipeAttack[SUIT_HP_COL] = [(hp * 0.75) for hp in attack[SUIT_HP_COL]] # Same HP values, but at 0.75x effectiveness.  May or may not need to be cast to ints.
+                        self.__calcSuitAtkHpALT(attack) # Professor Control: Due to sharing the Powerhouse's Bookkept Snipe, this will ruin the calculations and cause all Toons to take 0 damage because no Toon is bookkept, but I want to get this update out, along with other unforeseen consequences I overlooked due to my hastiness.
+                        for currTgt in snipeAttack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+
+                        targets = self.__CreateSuitTargetList(attack)
+                        allTargetsDead = True
+                        for currTgt in targets:
+                            if self.__getToonHp(currTgt) > 0:
+                                allTargetsDead = False
+                                break
+                        
+                        if allTargetsDead:
+                            snipeAttack = getDefaultSuitAttack()
+                        if self.__attackHasHit(snipeAttack, suit=1):
+                            self.__applySuitAttackDamages(snipeAttack, self.battle.findSuit(snipeAttack[SUIT_ID_COL]))
+                        snipeAttack[SUIT_BEFORE_TOONS_COL] = 0
+                        self.battle.suitAttacks.append(snipeAttack)
 
         for i in xrange(len(self.battle.activeSuits)): # Desperation for Litigation Managers
             suitId = self.battle.activeSuits[i].doId
