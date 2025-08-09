@@ -1545,7 +1545,7 @@ def doDoubleCross(attack):
                     0.01,
                     1.4], ['cringe', 0.01, 0.3]]
     toonTrack = getToonTrack(attack, splicedDamageAnims=damageAnims, damageDelay=damageDelay, dodgeDelay=dodgeDelay,
-                             dodgeAnimNames=['duck'], showDamageExtraTime=1.7, showMissedExtraTime=1.7)
+                             dodgeAnimNames=['duck'], showDamageExtraTime=1.5, showMissedExtraTime=1.5)
     return Parallel(suitTrack, toonTrack, xTracks)
 
 

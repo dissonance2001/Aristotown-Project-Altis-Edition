@@ -2743,13 +2743,15 @@ class BattleCalculatorAI:
                     elif theSuit.getGovernaught():
                         result = int(result * ToontownBattleGlobals.GOVERNAUGHT_DMG_MULT)
             targetIndex = self.battle.activeToons.index(toonId)
-            if atkType['name'] == 'SynergyFees':
+            if atkType['name'] == 'Aftershock':
+                result = random.randint(18, 38)
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkType['name'] == 'SynergyFees':
                 result = (24 + ((self.TurnsElapsed - 1) * 1.3))
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'CalculatingFees':
                 result = (24 + (self.TurnsElapsed * 1.3))
-                toon.setHp(toon.hp + result)
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'calculatingcalculator', 1, 1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'costscalculator', 1, 10, 'setBoth')
@@ -3445,12 +3447,9 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType['name'] == 'WiretapperVoicemail':
-                result = 0
+            elif atkType['name'] == 'WiretapperVoicemail': # Collect Call Calculator
+                result = (24 + (self.TurnsElapsed * 1.3))
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'immune', 1, 4, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'brokenconnectioncalculator', 1, 4, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'voicemailcalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'WiretapperBrokenConnection':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -5406,7 +5405,25 @@ class BattleCalculatorAI:
 
             # Professor Control: I honestly do not know how to best approach this issue.  Especially in the case of damage over times, a Cog's ID is -1 because no Cog exists.  However, this sets theSuit to None, and the rest of this is treated as if a Cog exists.  So, this will have to do for the time being.
             try:
-                if self.suitHasCondition(theSuit.doId, 'desperation') and self.suitHasCondition(theSuit.doId, 'enraged') and theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
+                if atkType['name'] == 'CalculatingFees' and self.suitHasCondition(theSuit.doId, 'desperation'):
+                    attack[SUIT_HP_COL][targetIndex] = result * 1.4
+                    toon.setHp(toon.hp + (result * 1.4))
+                elif atkType['name'] == 'CalculatingFees':
+                    attack[SUIT_HP_COL][targetIndex] = result
+                    toon.setHp(toon.hp + result)
+                elif atkType['name'] == 'UnionBusterUnionCalculator' and self.suitHasCondition(theSuit.doId, 'desperation'):
+                    attack[SUIT_HP_COL][targetIndex] = result * 1.4
+                    toon.setHp(toon.hp + (result * 1.4))
+                elif atkType['name'] == 'UnionBusterUnionCalculator':
+                    attack[SUIT_HP_COL][targetIndex] = result
+                    toon.setHp(toon.hp + result)
+                elif atkType['name'] == 'WiretapperVoicemail' and self.suitHasCondition(theSuit.doId, 'desperation'):
+                    attack[SUIT_HP_COL][targetIndex] = result * 1.4
+                    toon.setHp(toon.hp + (result * 1.4))
+                elif atkType['name'] == 'WiretapperVoicemail':
+                    attack[SUIT_HP_COL][targetIndex] = result
+                    toon.setHp(toon.hp + result)
+                elif self.suitHasCondition(theSuit.doId, 'desperation') and self.suitHasCondition(theSuit.doId, 'enraged') and theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
                     attack[SUIT_HP_COL][targetIndex] *= (1.2 + self.getToonConditionModifier(toonId, 'snapped') + self.getToonConditionModifier(toonId, 'corruption') + theSuit.getDamageMultiplier())
                 elif self.suitHasCondition(theSuit.doId, 'desperation') and theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
                     attack[SUIT_HP_COL][targetIndex] *= (.9 + self.getToonConditionModifier(toonId, 'snapped') + self.getToonConditionModifier(toonId, 'corruption') + theSuit.getDamageMultiplier())
@@ -10398,11 +10415,11 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'voicemailcalculator') and self.__suitCanAttack(suitId):
+                if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'WiretapperVoicemail', # Voicemail
+                     'name': 'WiretapperVoicemail', # Collect Call Calculation
                      'animName': 'phone',
                      'hp': 0,
                      'acc': 100,

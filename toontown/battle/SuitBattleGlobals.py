@@ -1828,7 +1828,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'freq':(30,30,30,35,40,45,50),
         'acc':(65,65,65,70,75,80,85),
         'attacks':
-            (SuitAttack('HeadShrink',
+            (SuitAttack('DoubleCross',
                         hp=(3, 3, 3, 5, 7, 10, 12),
                         acc=(70, 70, 70, 70, 70, 70, 70),
                         freq=(25, 25, 25, 25, 25, 25, 25)),

@@ -4876,6 +4876,8 @@ class Suit(Avatar.Avatar):
                 headPart.setY(.1)
             if self.style.name == 'p':
                 headPart.setX(.03)
+            if self.style.name == 'dc':
+                headPart.setZ(-.01)
             if self.style.name == 'ath':
                 headPart.setX(.03)
             if self.style.name == 'blh':

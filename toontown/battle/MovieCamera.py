@@ -664,7 +664,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'EvilEye':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'DoubleCross':
-        camTrack.append(defaultCamera(openShotDuration=3.0))
+        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'Forecast':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'MysteriousDisappearance':

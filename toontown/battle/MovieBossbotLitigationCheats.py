@@ -850,24 +850,21 @@ def doBrokenConnection(attack):
 def doVoicemail(attack):
     suit = attack['suit']
     battle = attack['battle']
-    phone = globalPropPool.getProp('phone')
-    receiver = globalPropPool.getProp('receiver')
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
-    suitName = suit.getStyleName()
-    phonePosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
-    receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
-    propTrack = Sequence(Func(__showProp, phone, suit.getLeftHand(), phonePosPoints[0], phonePosPoints[1]),
-                         Func(__showProp, receiver, suit.getLeftHand(), receiverPosPoints[0], receiverPosPoints[1]),
-                         LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_ONE, MovieUtil.PNT3_NEARZERO), Wait(0.24),
-                         Func(receiver.wrtReparentTo, suit.getRightHand()),
-                         LerpPosHprInterval(receiver, 0.0001, Point3(-0.45, 0.48, -0.62), VBase3(-87.47, -18.21, 7.82)),
-                         Wait(2.14), Func(receiver.wrtReparentTo, phone), Wait(0.62),
-                         LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO),
-                         Func(MovieUtil.removeProps, [receiver, phone]))
-    soundTrack = getSoundTrack('SA_hangup.ogg', delay=0.5, node=suit)
-    notifyTrack = Func(suit.showHpTextWhite, 'IMMUNE!')
-    makeImmune = Func(suit.makeImmortal)
-    return Parallel(suitTrack, propTrack, soundTrack, notifyTrack, makeImmune)
+    calculator = globalPropPool.getProp('court-costs-calculator')
+    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimation), Wait(2.0))
+    suitSpeechTrack = Func(suit.setChatAbsolute,
+                           "Collect calling dues have been increased to... %s dollars." %
+                           int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+    calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcDuration = 0.25
+    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPropTrack = getPropTrack(calculator, suit.getRightHand(), calcPosPoints, 0, calcDuration,
+                                 scaleUpPoint=scaleUpPoint, scaleUpTime=0, anim=1, propName='court-costs-calculator',
+                                 animStartTime=0,
+                                 animDuration=2.9)
+    soundTrack = getSoundTrack('SA_calculating_costs.ogg')
+    return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
+
 
 def doWiretapped(attack):
     suit = attack['suit']
