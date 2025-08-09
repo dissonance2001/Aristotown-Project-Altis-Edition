@@ -2865,12 +2865,8 @@ class BattleCalculatorAI:
                 self.setToonCondition(toon.doId, 'bound', 1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'bindingscalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'CaseManagerLegallyBound':
-                if self.toonHasCondition(toon.doId, 'bound'):
-                    if self.toonHasCondition(toon.doId, 'bound') and self.getToonConditionTurns(toon.doId, 'bound') <= 1:
-                        self.setToonCondition(toon.doId, 'markedforsanction', 1, 5, 'setBoth')
-                    result = 20
-                else:
-                    result = 0
+                if self.getToonConditionTurns(toon.doId, 'bound') <= 1: # Since all targets will be 'bound' by the new code way, the only thing we should be worried about is how many turns of the status effect are left.
+                    self.setToonCondition(toon.doId, 'markedforsanction', 1, 5, 'setBoth')
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'CaseManagerCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned2'):
@@ -3633,12 +3629,6 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'busted', 1, 5, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'unionbustercalculator', 0, 0, 'setBoth')
-            elif atkType['name'] == 'UnionBusterUnionBusterDamage':
-                if self.toonHasCondition(toon.doId, 'busted'):
-                    result = 25
-                else:
-                    result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'UnionBusterBreachOfContract':
                 result = 30
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -6683,7 +6673,7 @@ class BattleCalculatorAI:
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'UnionBusterUnionBusterDamage', # DOT Union Buster
                      'animName': 'nothing',
-                     'hp': 0,
+                     'hp': 25,
                      'acc': 100,
                      'freq': 0,
                      'group': SuitBattleGlobals.ATK_TGT_GROUP}
@@ -7416,11 +7406,15 @@ class BattleCalculatorAI:
                     attack[SUIT_ATK_COL] = {'suitName': '',
                                             'name': 'CaseManagerLegallyBound',  # Legally Bound for when Case Manager is defeated
                                             'animName': 'nothing',
-                                            'hp': 0,
+                                            'hp': 20,
                                             'acc': 100,
                                             'freq': 0,
                                             'group': SuitBattleGlobals.ATK_TGT_GROUP}
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for toonId in self.battle.activeToons:
+                        if self.toonHasCondition(toonId, 'bound'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(toonId))
+
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7488,11 +7482,15 @@ class BattleCalculatorAI:
                     attack[SUIT_ATK_COL] = {'suitName': '',
                                             'name': 'UnionBusterUnionBusterDamage',  # Union Buster for when Union Buster is defeated
                                             'animName': 'nothing',
-                                            'hp': 0,
+                                            'hp': 25,
                                             'acc': 100,
                                             'freq': 0,
                                             'group': SuitBattleGlobals.ATK_TGT_GROUP}
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for toonId in self.battle.activeToons:
+                        if self.toonHasCondition(toonId, 'busted'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(toonId))
+
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
@@ -7561,11 +7559,15 @@ class BattleCalculatorAI:
                     attack[SUIT_ATK_COL] = {'suitName': '',
                      'name': 'CaseManagerLegallyBound', # Legally Bound
                      'animName': 'nothing',
-                     'hp': 0,
+                     'hp': 20,
                      'acc': 100,
                      'freq': 0,
                      'group': SuitBattleGlobals.ATK_TGT_GROUP}
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    attack[SUIT_TGT_COL] = []
+                    for toonId in self.battle.activeToons:
+                        if self.toonHasCondition(toonId, 'bound'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(toonId))
+
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
