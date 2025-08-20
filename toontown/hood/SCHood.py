@@ -10,7 +10,7 @@ class SCHood(ToonHood):
     ID = ToontownGlobals.SkyClan
     TOWNLOADER_CLASS = SCTownLoader
     SAFEZONELOADER_CLASS = SCSafeZoneLoader
-    STORAGE_DNA = 'phase_13/dna/storage_SC.pdna'
-    SKY_FILE = 'phase_3,5/models/props/BR_sky'
+    STORAGE_DNA = 'phase_8/dna/storage_BR.pdna' #'phase_13/dna/storage_SC.pdna'
+    SKY_FILE = 'phase_3.5/models/props/BR_sky'
     SPOOKY_SKY_FILE = 'phase_3.5/models/props/BR_sky'
     TITLE_COLOR = (1.0, 0.5, 0.5, 1.0)

@@ -10,8 +10,8 @@ class SCSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         self.playgroundClass = SCPlayground.SCPlayground
         self.musicFile = 'phase_13/audio/bgm/skyclan.ogg'
         self.activityMusicFile = 'phase_13/audio/bgm/skyclan.ogg'
-        self.dnaFile = 'phase_13/dna/skyclan_sz.pdna'
-        self.safeZoneStorageDNAFile = 'phase_13/dna/storage_SC_sz.pdna'
+        self.dnaFile = 'phase_8/dna/the_burrrgh_sz.pdna' #'phase_13/dna/skyclan_sz.pdna'
+        self.safeZoneStorageDNAFile = 'phase_8/dna/storage_BR_sz.pdna' #'phase_13/dna/storage_SC_sz.pdna'
 
         
     def load(self):

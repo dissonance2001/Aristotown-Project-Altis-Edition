@@ -212,8 +212,8 @@ LegumeLane = 6400
 FunnyFarm = 500000
 GoofySpeedway = 8000
 YeOlde = 7000
-Toonseltown = 26000 # Placeholder, real Zone = 18000
-SkyClan = 27000 # Placeholder, real Zone = 19000
+Toonseltown = 18000 
+SkyClan = 21000 
 KnightKnoll = 7100
 NobleNook = 7200
 WizardWay=7300
@@ -245,7 +245,7 @@ ToonHall = 2513
 PacesetterLobby = 9613
 DerrickmanInterior = 2921
 PizzariaInterior = 3740
-ToontownCentralOld = 21000
+ToontownCentralOld = 19000
 SchoolHouse = 2516
 OTGagShop = 7502
 Dungeon = 7507
@@ -258,6 +258,8 @@ HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, Wacky
  OutdoorZone: (AcornAvenue, PeanutPlace, WalnutWay, LegumeLane),
  DonaldsDreamland: (LullabyLane, PajamaPlace, TwilightTerrace),
  GoofySpeedway: (),
+ Toonseltown: (),
+ SkyClan: (),              
  ToontownCentralOld: ()}
 WelcomeValleyToken = 0
 
@@ -615,7 +617,7 @@ phaseMap = {Tutorial: 4,
  DonaldsDreamland: 8,
  OutdoorZone: 6,
  Toonseltown: 13,
- SkyClan: 13, 
+ SkyClan: 8, #13
  BossbotHQ: 12,
  SellbotHQ: 9,
  CashbotHQ: 10,
@@ -661,7 +663,7 @@ dnaMap = {Tutorial: 'toontown_central',
  BoardbotHQ: 'cog_hq_boardbot',
  GolfZone: 'golf_zone',
  Toonseltown: 'toonseltown',
- SkyClan: 'skyclan'}
+ SkyClan: 'the_burrrgh'} # 'skyclan'
 hoodNameMap = {DonaldsDock: TTLocalizer.DonaldsDock,
  ToontownCentral: TTLocalizer.ToontownCentral,
  ToontownCentralOld: TTLocalizer.ToontownCentralOld,

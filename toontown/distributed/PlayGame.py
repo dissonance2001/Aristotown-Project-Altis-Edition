@@ -91,6 +91,8 @@ class PlayGame(StateData.StateData):
           'OTHood',
           'OZHood',
           'GZHood',
+          'TSHood',
+          'SCHood',                                                              
           'SellbotHQ',
           'CashbotHQ',
           'LawbotHQ',
