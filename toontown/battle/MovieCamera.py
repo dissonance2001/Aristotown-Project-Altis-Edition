@@ -663,6 +663,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvilEye':
         camTrack.append(defaultCamera(openShotDuration=3.0))
+    elif name == 'DoubleCross':
+        camTrack.append(defaultCamera(openShotDuration=2.5))
+    elif name == 'Forecast':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'MysteriousDisappearance':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'GoldRush':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'GoldDust':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'FiveOClockShadow':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'SandTrap':
@@ -735,6 +745,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PowerTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Quake':
+        camTrack.append(defaultCamera(openShotDuration=3.0))
+    elif name == 'Aftershock':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'RazzleDazzle':
         camTrack.append(defaultCamera(openShotDuration=0.5))
@@ -830,11 +842,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'CaseManagerInsurancePlan':
         if not suit.isSkeleton:
             camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(2.0), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5), heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+                                      motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5), heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
 
         else:
             camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                     motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(2.0),
+                                     motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
                                      moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                      heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == 'CaseManagerInsurance':
@@ -1369,6 +1381,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
         return camTrack2
     elif name == 'SoakRemoval':
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
+    elif name == 'SueApplication':
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
+    elif name == 'SueRemoval':
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
         return camTrack2
     elif name == 'BanLevel4':

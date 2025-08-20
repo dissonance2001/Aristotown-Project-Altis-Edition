@@ -437,18 +437,18 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             id = sa[SUIT_ID_COL]
             if id != -1:
                 index = suitIds.index(id)
-            if sa[SUIT_ATK_COL] == '':
+            if not sa[SUIT_ATK_COL]:
                 targetIndex = []
             else:
                 targetIndex = sa[SUIT_TGT_COL]
                 if targetIndex == []:
                     self.notify.debug('suit attack: %d must be group' % sa[SUIT_ATK_COL])
-            suitAttack = suitAttack + (index, sa[SUIT_ATK_COL], targetIndex)
+            suitAttack = suitAttack + (index, sa[SUIT_ATK_COL].values(), targetIndex)
             sa[SUIT_TAUNT_COL] = 0
-            if sa[SUIT_ATK_COL] != '':
+            if sa[SUIT_ATK_COL]:
                 suit = self.findSuit(id)
                 if suit:
-                    sa[SUIT_TAUNT_COL] = getAttackTauntIndex(sa[SUIT_ATK_COL], suit.getStyleName())
+                    sa[SUIT_TAUNT_COL] = getAttackTauntIndex(sa[SUIT_ATK_COL]['name'], suit.getStyleName())
             suitAttack = suitAttack + tuple(sa[3:])
             suitAttacks = suitAttacks + [suitAttack]
         p.append(suitAttacks)
@@ -1749,20 +1749,19 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             lastActiveSuitDied = 1
         for i in range(len(self.suitAttacks)):
             attack = self.suitAttacks[i][SUIT_ATK_COL]
-            if attack != NO_ATTACK:
+            if attack:
                 suitId = self.suitAttacks[i][SUIT_ID_COL]
                 suit = self.findSuit(suitId)
-                if suit == None:
-                    self.notify.warning('movieDone() - suit: %d is gone!' % suitId)
-                    continue
+                # if suit == None:
+                #     self.notify.warning('movieDone() - suit: %d is gone!' % suitId)
+                #     continue
                 if not (hasattr(suit, 'dna') and suit.dna):
                     toonId = self.air.getAvatarIdFromSender()
                     self.notify.warning('_movieDone avoiding crash, sender=%s but suit has no dna' % toonId)
                     self.air.writeServerEvent('suspicious', toonId, '_movieDone avoiding crash, suit has no dna')
                     continue
-                adict = getSuitAttack(suit.getStyleName(), suit.getLevel(), attack)
                 hps = self.suitAttacks[i][SUIT_HP_COL]
-                if adict['group'] == ATK_TGT_GROUP:
+                if attack['group'] == ATK_TGT_GROUP:
                     for activeToon in self.activeToons:
                         toon = self.getToon(activeToon)
                         if toon != None:
@@ -1778,7 +1777,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                                         toonHpDict[toon.doId][2] = 1
                                     toonHpDict[toon.doId][1] += hp
                 
-                elif adict['group'] == ATK_TGT_DOUBLE or adict['group'] == ATK_TGT_SINGLE:
+                elif attack['group'] == ATK_TGT_DOUBLE or attack['group'] == ATK_TGT_SINGLE:
                     for targetIndex in self.suitAttacks[i][SUIT_TGT_COL]:
                         if targetIndex >= len(self.activeToons):
                             self.notify.warning('movieDone() - toon: %d gone!' % targetIndex)

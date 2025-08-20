@@ -276,7 +276,10 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     level = trap['level']
     battle = trap['battle']
     origHpr = toon.getHpr(battle)
-    trapPoint = Point3(0, MovieUtil.SUIT_TRAP_DISTANCE, 0.025)
+    if propName == 'spring':
+        trapPoint = Point3(0, MovieUtil.SUIT_TRAP_DISTANCE, -.25)
+    else:
+        trapPoint = Point3(0, MovieUtil.SUIT_TRAP_DISTANCE, 0.025)
     trapDelay = 2.5
     hands = toon.getLeftHands()
 
@@ -304,7 +307,12 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     trapTrack.append(Func(trapProp.setScale, Point3(0.1, 0.1, 0.1)))
     trapTrack.append(Func(trapProp.reparentTo, suit))
     trapTrack.append(Func(trapProp.setPos, trapPoint))
-    trapTrack.append(LerpScaleInterval(trapProp, 0.25, Point3(1.7, 1.7, 1.7)))
+    if propName == 'wreckingball':
+        trapTrack.append(LerpScaleInterval(trapProp, 0.25, Point3(2.5, 2.5, 2.5)))
+        trapTrack.append(LerpScaleInterval(trapProp, 0.1, Point3(2.2, 2.2, 2.2)))
+    else:
+        trapTrack.append(LerpScaleInterval(trapProp, 0.25, Point3(2.0, 2.0, 2.0)))
+        trapTrack.append(LerpScaleInterval(trapProp, 0.1, Point3(1.7, 1.7, 1.7)))
     if explode == 1:
         dustNode = hidden.attachNewNode('DustNode')
         trapTrack.append(Func(trapProp.wrtReparentTo, hidden))

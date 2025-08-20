@@ -840,6 +840,7 @@ def doBayouBellow(attack):
         suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
         suitTrack.append(
             Func(suit.setNeutralAnimation))
+        suitTrack.append(Func(battle.unSueSuit, suit))
         suitTracks.append(Wait(0.5))
         suitTracks.append(MovieUtil.createSuitBellowInterval(theSuit))
         suitTracks.append(Wait(4.0))
@@ -1200,6 +1201,7 @@ def doCaseInsurancePlanInsurance(attack):
         if not suit.dna.name == 'caseman':
             suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
         suitTrack.append(Func(suit.setNeutralAnimation))
+        suitTrack.append(Func(battle.unSueSuit, suit))
         suitTrack.append(Func(suit.makeInsured))
         suitTracks.append(suitTrack)
         suitTracks.append(tauntInterval)
@@ -1260,6 +1262,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
         if not suit.dna.name == 'caseman':
             suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
         suitTrack.append(Func(suit.setNeutralAnimation))
+        suitTrack.append(Func(battle.unSueSuit, suit))
         suitTrack.append(Func(suit.makeInsured))
         suitTracks.append(suitTrack)
         suitTracks.append(tauntInterval)

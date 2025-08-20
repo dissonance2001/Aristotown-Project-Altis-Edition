@@ -645,6 +645,7 @@ from toontown.building import DistributedDirectorsElevator/AI
 from toontown.building import DistributedCFOElevator/AI
 from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
+from toontown.building import DistributedCountErclaimElevator/AI
 from toontown.building import DistributedBBElevator/AI
 from toontown.building import DistributedMultislackerElevator/AI
 from toontown.building import DistributedCMElevator/AI
@@ -736,6 +737,7 @@ from toontown.uberdog.ClientServicesManager/UD import ClientServicesManager/UD
 from toontown.uberdog.DistributedDeliveryManager/AI/UD import DistributedDeliveryManager/AI/UD
 from toontown.uberdog.DistributedDataStoreManager/AI/UD import DistributedDataStoreManager/AI/UD
 from toontown.suit import DistributedLawbotBoss/AI
+from toontown.suit import DistributedCountErclaimBoss/AI
 from toontown.coghq import DistributedLawbotBossGavel/AI
 from toontown.suit import DistributedLawbotBossSuit/AI
 from toontown.coghq import DistributedLawbotCannon/AI
@@ -1521,9 +1523,19 @@ struct ToonAttack {
   int8 suitRevive;
 };
 
+struct AttackData {
+  uint8 acc;
+  uint8 groupStatus;
+  string name;
+  int32 hp;
+  string suitName;
+  uint8(0-100) freq;
+  string animName;
+};
+
 struct SuitAttack {
   int8 index;
-  string attack;
+  AttackData attack;
   int8[] target;
   int16[] damage;
   int8 toonDied;
@@ -2701,6 +2713,9 @@ dclass DistributedCBMElevator : DistributedBossElevator {
 dclass DistributedCJElevator : DistributedBossElevator {
 };
 
+dclass DistributedCountErclaimElevator : DistributedBossElevator {
+};
+
 dclass DistributedBBElevator : DistributedBossElevator {
 };
 
@@ -3358,6 +3373,23 @@ dclass DistributedDeliveryManager : DistributedObject {
 };
 
 dclass DistributedLawbotBoss : DistributedBossCog {
+  setState(string) broadcast ram;
+  setBossDamage(uint16, uint8, int16) broadcast ram;
+  touchWitnessStand() airecv clsend;
+  hitBoss(uint8) airecv clsend;
+  healBoss(uint8) airecv clsend;
+  hitToon(uint32) airecv clsend;
+  hitDefensePan() airecv clsend;
+  hitProsecutionPan() airecv clsend;
+  hitChair(uint8, uint8) airecv clsend;
+  setLawyerIds(uint32[]) broadcast ram;
+  setTaunt(int8, int8) broadcast;
+  toonGotHealed(uint32) broadcast;
+  enteredBonusState() broadcast;
+  setBattleDifficulty(uint8) broadcast ram;
+};
+
+dclass DistributedCountErclaimBoss : DistributedBossCog {
   setState(string) broadcast ram;
   setBossDamage(uint16, uint8, int16) broadcast ram;
   touchWitnessStand() airecv clsend;

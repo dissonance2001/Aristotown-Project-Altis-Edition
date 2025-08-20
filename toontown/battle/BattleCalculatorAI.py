@@ -662,6 +662,8 @@ class BattleCalculatorAI:
                 else:
                     damage = getTrapDamage(trapLvl, toon, suit)
                     self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
+                if self.suitHasCondition(suitId, 'sued'):
+                    self.setSuitCondition(suitId, 'sued', 1, 4, 'alternateBoth')
                 if self.suitHasCondition(suitId, 'immune'):
                     damage = 0
                 if self.suitHasCondition(suitId, 'HRdamagereduction'):
@@ -761,6 +763,8 @@ class BattleCalculatorAI:
                 else:
                     damage = getTrapDamage(trapLvl, toon, suit)
                     self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
+                if self.suitHasCondition(suitId, 'sued'):
+                    self.setSuitCondition(suitId, 'sued', 1, 4, 'alternateBoth')
                 if self.suitHasCondition(suitId, 'immune'):
                     damage = 0
                 if self.suitHasCondition(suitId, 'HRdamagereduction'):
@@ -871,8 +875,23 @@ class BattleCalculatorAI:
                 targetId = targetList[currTarget].getDoId()
             if atkTrack == SUE:
                 suit = self.battle.findSuit(targetId)
+                toon = self.battle.getToon(toonId)
                 if not suit.getManager() and suit.currHP <= (suit.maxHP * 1.5) and not self.suitHasCondition(targetId, 'insured'):
                     self.setSuitCondition(targetId, 'sued', 1, 4, 'setBoth')
+                    self.setToonCondition(toonId, 'noSOS', 1, 3, 'setBoth')
+                    self.setToonCondition(toonId, 'noFires', 1, 3, 'setBoth')
+                    self.setToonCondition(toonId, 'noUnites', 1, 3, 'setBoth')
+                    self.setToonCondition(toonId, 'noSues', 1, 3, 'setBoth')
+                    costToSue = math.ceil(suit.getActualLevel() / 4)
+                    abilityToSue = toon.getCeaseAndDesists()
+                    toon.removeCeaseAndDesists(costToSue)
+                    if costToSue > abilityToSue:
+                        commentStr = 'Toon attempting to sue a %s cost cog with %s C&Ds' % (costToSue, abilityToSue)
+                        simbase.air.writeServerEvent('suspicious', toonId, commentStr)
+                        dislId = toon.DISLid
+                        simbase.air.banManager.ban(toonId, dislId, commentStr)
+                        print
+                        'Not enough Cease & Desists to sue cog - print a warning here'
             elif atkTrack == LURE:
                 self.currentlyImmuneSuits = self.getImmuneSuits()
                 if targetId not in self.currentlyImmuneSuits:
@@ -1045,6 +1064,8 @@ class BattleCalculatorAI:
                             attackDamage = 0
                         elif self.suitHasCondition(targetId, 'insured'):
                             attackDamage = 0
+                        elif self.suitHasCondition(targetId, 'contracted'):
+                            attackDamage = 0
                         else:
                             costToFire = math.ceil(suit.getActualLevel() / 3)
                             abilityToFire = toon.getPinkSlips()
@@ -1065,13 +1086,14 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noSues', 1, 3, 'setBoth')
                     bonus = 0
                 elif atkTrack == SUE:
                     suit = self.battle.findSuit(targetId)
                     attackDamage = 0
                     if suit:
-                        if not suit.getManager() and suit.currHP <= (suit.maxHP * 1.5) and not self.suitHasCondition(targetId, 'insured'):
-                            costToFire = math.ceil(suit.getActualLevel() / 4)
+                        if not suit.getManager() and suit.currHP > (suit.maxHP * 1.5) and not self.suitHasCondition(targetId, 'insured') and not self.suitHasCondition(targetId, 'contracted'):
+                            costToSue = math.ceil(suit.getActualLevel() / 4)
                             abilityToSue = toon.getCeaseAndDesists()
                             toon.removeCeaseAndDesists(costToSue)
                             if costToSue > abilityToSue:
@@ -1080,9 +1102,6 @@ class BattleCalculatorAI:
                                 dislId = toon.DISLid
                                 simbase.air.banManager.ban(toonId, dislId, commentStr)
                                 print 'Not enough Cease & Desists to sue cog - print a warning here'
-                    self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
                 elif atkTrack == HEAL:
                     if self.toonHasCondition(toon.doId, 'nolevel8s') and attackLevel == 7:
                         self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
@@ -1174,6 +1193,8 @@ class BattleCalculatorAI:
                                 self.setSuitCondition(target2.doId, 'soakedcalculator2', 0, 0, 'setBoth')
                             self.setSuitCondition(target2.doId, 'soaked', 1, self.NumRoundsSoaked[attackLevel],
                                                       'alternateBoth')
+                            if self.suitHasCondition(target2.doId, 'sued'):
+                                self.setSuitCondition(target2.doId, 'sued', 1, 4, 'alternateBoth')
                             organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                             if organicBonus:
                                 target2.setHP(target2.currHP - int(attackDamage / 1.33))
@@ -1181,8 +1202,8 @@ class BattleCalculatorAI:
                                 attackDamageAbsorbHR = (int(attackDamage / 1.33) * .115)
                             else:
                                 target2.setHP(target2.currHP - int(attackDamage / 4))
-                                attackDamageAbsorb = (int(attackDamage / 4) * .425)
-                                attackDamageAbsorbHR = (int(attackDamage / 4) * .115)
+                                attackDamageAbsorb = (int(attackDamage / 3) * .425)
+                                attackDamageAbsorbHR = (int(attackDamage / 3) * .115)
                             for s in self.battle.activeSuits:
                                 if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target.doId,
                                                                                                             'shielding'):
@@ -1220,15 +1241,17 @@ class BattleCalculatorAI:
                                 self.setSuitCondition(target3.doId, 'soakedcalculator2', 0, 0, 'setBoth')
                             self.setSuitCondition(target3.doId, 'soaked', 1, self.NumRoundsSoaked[attackLevel],
                                                       'alternateBoth')
+                            if self.suitHasCondition(target3.doId, 'sued'):
+                                self.setSuitCondition(target3.doId, 'sued', 1, 4, 'alternateBoth')
                             organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                             if organicBonus:
                                 target3.setHP(target3.currHP - int(attackDamage / 1.33))
                                 attackDamageAbsorb = (int(attackDamage / 1.33) * .425)
                                 attackDamageAbsorbHR = (int(attackDamage / 1.33) * .115)
                             else:
-                                target3.setHP(target3.currHP - int(attackDamage / 4))
-                                attackDamageAbsorb = (int(attackDamage / 4) * .425)
-                                attackDamageAbsorbHR = (int(attackDamage / 4) * .115)
+                                target3.setHP(target3.currHP - int(attackDamage / 3))
+                                attackDamageAbsorb = (int(attackDamage / 3) * .425)
+                                attackDamageAbsorbHR = (int(attackDamage / 3) * .115)
                             for s in self.battle.activeSuits:
                                 if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target.doId,
                                                                                                             'shielding'):
@@ -1264,6 +1287,8 @@ class BattleCalculatorAI:
                     self.setSuitCondition(targetId, 'soaked', 1, self.NumRoundsSoaked[attackLevel],
                                               'alternateBoth')
                     self.setToonCondition(toon.doId, 'soakToon', 1, 5, 'setBoth')
+                    if self.suitHasCondition(targetId, 'sued'):
+                        self.setSuitCondition(targetId, 'sued', 1, 4, 'alternateBoth')
                 elif atkTrack == THROW:
                     if self.toonHasCondition(toon.doId, 'nolevel8s') and attackLevel == 7:
                         self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
@@ -1281,6 +1306,8 @@ class BattleCalculatorAI:
                         self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
                     suit = self.battle.findSuit(targetId)
                     self.setSuitCondition(targetId, 'marked', 1, 1, 'setBoth')
+                    if self.suitHasCondition(targetId, 'sued'):
+                        self.setSuitCondition(targetId, 'sued', 1, 4, 'alternateBoth')
                     if suit.dna.name == 'bkeeper' and self.suitHasCondition(targetId, 'bookkeeping'):
                         self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
                         self.setSuitCondition(targetId, 'markedcalculator', 1, 10, 'setBoth')
@@ -1327,6 +1354,8 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toon.doId, 'noGags'):
                         self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
                     attackDamage = getAvPropDamage(attackTrack, attackLevel, toon.experience.getExp(attackTrack))
+                    if self.suitHasCondition(targetId, 'sued'):
+                        self.setSuitCondition(targetId, 'sued', 1, 4, 'alternateBoth')
                     if suit.dna.name == 'bkeeper' and self.suitHasCondition(targetId, 'bookkeeping'):
                         self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
                     if self.toonHasCondition(toonId, 'soundBoost'):
@@ -1452,6 +1481,8 @@ class BattleCalculatorAI:
                     if suit.dna.name == 'bkeeper' and self.suitHasCondition(targetId, 'bookkeeping'):
                         self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
                     attackDamage = getAvPropDamage(attackTrack, attackLevel, toon.experience.getExp(attackTrack))
+                    if self.suitHasCondition(targetId, 'sued'):
+                        self.setSuitCondition(targetId, 'sued', 1, 4, 'alternateBoth')
                     if self.suitHasCondition(targetId, 'soaked'):
                         attackDamage *= 1
                     if not self.suitHasCondition(targetId, 'soaked'):
@@ -1467,12 +1498,14 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                     activeSuits = self.battle.activeSuits
-                    #suitIndex = activeSuits.index(target)
+                    target = self.battle.findSuit(targetId)
+                    suitIndex = activeSuits.index(target)
                     organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                     if organicBonus:
                         attackDamage *= 1.1
                     if attackDamage > 0:
                         self.setSuitCondition(suit.doId, 'soaked', 1, 1, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'zapped', 1, 1, 'setBoth')
                     for s in self.battle.activeSuits:
                         if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(target.doId,
                                                                                                     'shielding'):
@@ -2293,6 +2326,12 @@ class BattleCalculatorAI:
             for s in self.battle.suits:
                 if s.dna.name == 'stenog' or s.dna.name == 'sgoat' or s.dna.name == 'caseman':
                     currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'caseman':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadcase', 1, 100, 'setBoth')
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
                 self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
         if theSuit.dna.name == 'stenog':
@@ -2424,9 +2463,7 @@ class BattleCalculatorAI:
         targets = []
         # Get the amount of Toons we are targeting and make sure it isn't more than the number of currently existing Toons.
         atkType = attack[SUIT_ATK_COL]
-        theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
-        atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
-        if atkType == 'VideographerAttackRewind':
+        if atkType['name'] == 'VideographerAttackRewind':
             if self.deadSuits > 3:
                 if len(self.battle.activeToons) >= 4:
                     toonCount = 4
@@ -2454,7 +2491,7 @@ class BattleCalculatorAI:
             toonCount = len(self.battle.activeToons)
         else:
             toonCount = min(len(self.battle.activeToons),
-                            2 if atkInfo['group'] == SuitBattleGlobals.ATK_TGT_DOUBLE else 1)
+                            2 if atkType['group'] == SuitBattleGlobals.ATK_TGT_DOUBLE else 1)
         suitId = attack[SUIT_ID_COL]
         for i in xrange(0, toonCount):
             if suitId in self.SuitAttackers and random.randint(0, 99) < 75:
@@ -2487,13 +2524,11 @@ class BattleCalculatorAI:
         targets = []
         # Get the amount of Suits we are targeting and make sure it isn't more than the number of currently existing Suits.
         atkType = attack[SUIT_ATK_COL]
-        theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
-        atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
         if self.__suitAtkAffectsGroup(attack):
             suitCount = len(self.battle.activeSuits)
         else:
             suitCount = min(len(self.battle.activeSuits),
-                            2 if atkInfo['group'] == SuitBattleGlobals.ATK_TGT_DOUBLE else 1)
+                            2 if atkType['group'] == SuitBattleGlobals.ATK_TGT_DOUBLE else 1)
         suitId = attack[SUIT_ID_COL]
         for i in xrange(0, suitCount):
             if suitId in self.SuitAttackers and random.randint(0, 99) < 75:
@@ -2558,8 +2593,6 @@ class BattleCalculatorAI:
         targets = []
         # Get the amount of Toons we are targeting and make sure it isn't more than the number of currently existing Toons.
         atkType = attack[SUIT_ATK_COL]
-        theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
-        atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
         toonCount = len(self.battle.activeToons)
         suitId = attack[SUIT_ID_COL]
         chosen = self.__pickRandomToon(suitId)
@@ -2599,12 +2632,12 @@ class BattleCalculatorAI:
         elif self.suitsAlwaysMiss:
             return False
         theSuit = self.battle.findSuit(suitId)
-        if not theSuit:
-            self.notify.warning('We did not find a Suit with ID %s.' % suitId)
-            return False # This should not impact __calcSuitAtkHpALT()'s ability to deal damage.
-        atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
-        atkAcc = atkInfo['acc']
-        suitAcc = SuitBattleGlobals.SuitAttributes[theSuit.dna.name]['acc'][theSuit.getLevel()]
+        # if not theSuit:
+        #     self.notify.warning('We did not find a Suit with ID %s.' % suitId)
+        #     return False
+        atkAcc = atkType['acc']
+        # suitAcc = SuitBattleGlobals.SuitAttributes[theSuit.dna.name]['acc'][theSuit.getLevel()]
+        suitAcc = 0 # suitAcc does absolutely nothing.  It was supposedly intended to alter the attack accuracy by using the average of the attack and Cog's accuracy, but that is likely obtrusive.  I'm keeping the variable anyway because of what is printed.
         acc = atkAcc
         randChoice = random.randint(0, 99)
         if self.notify.getDebug():
@@ -2616,16 +2649,11 @@ class BattleCalculatorAI:
 
     def __suitAtkAffectsGroup(self, attack):
         atkType = attack[SUIT_ATK_COL]
-        theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
-        try:
-            atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
-            return atkInfo['group'] == SuitBattleGlobals.ATK_TGT_GROUP
-        except: # Something went wrong, likely due to theSuit being None (because our ID is -1, meaning there is no Cog, which is intentional in cases like damage over-times).
-            return SuitBattleGlobals.SuitAttacks[atkType][1] == SuitBattleGlobals.ATK_TGT_GROUP
+        return atkType['group'] == SuitBattleGlobals.ATK_TGT_GROUP
 
     def __createSuitTargetList(self, attack):
         targetList = []
-        if attack[SUIT_ATK_COL] == '':
+        if not attack[SUIT_ATK_COL]:
             self.notify.debug('No attack, no targets')
             return targetList
         debug = self.notify.getDebug()
@@ -2655,17 +2683,13 @@ class BattleCalculatorAI:
             result = 0
             theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
             atkType = attack[SUIT_ATK_COL]
-            atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
             if toon and toon.immortalMode:
                 result = 1
             elif TOONS_TAKE_NO_DAMAGE:
                 result = 0
             elif self.__suitAtkHit(attack[SUIT_ID_COL], attack[SUIT_ATK_COL]):
-                atkType = attack[SUIT_ATK_COL]
-                theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
-                atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
                 mult = 1.0
-                result = int(atkInfo['hp'] * mult)
+                result = int(atkType['hp'] * mult)
                 if theSuit.getExecutive():
                     result = int(result * ToontownBattleGlobals.EXECUTIVE_DMG_MULT)
                 elif theSuit.getGovernaught():
@@ -2706,33 +2730,32 @@ class BattleCalculatorAI:
             result = 0
             theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
             atkType = attack[SUIT_ATK_COL]
-            # atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
             if toon and toon.immortalMode:
                 result = 1
             elif TOONS_TAKE_NO_DAMAGE:
                 result = 0
             elif self.__suitAtkHit(attack[SUIT_ID_COL], attack[SUIT_ATK_COL]):
-                atkType = attack[SUIT_ATK_COL]
-                theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
-                atkInfo = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel(), atkType)
                 mult = 1.0
-                result = int(atkInfo['hp'] * mult)
-                if theSuit.getExecutive():
-                    result = int(result * ToontownBattleGlobals.EXECUTIVE_DMG_MULT)
-                elif theSuit.getGovernaught():
-                    result = int(result * ToontownBattleGlobals.GOVERNAUGHT_DMG_MULT)
+                result = int(atkType['hp'] * mult)
+                if theSuit:
+                    if theSuit.getExecutive():
+                        result = int(result * ToontownBattleGlobals.EXECUTIVE_DMG_MULT)
+                    elif theSuit.getGovernaught():
+                        result = int(result * ToontownBattleGlobals.GOVERNAUGHT_DMG_MULT)
             targetIndex = self.battle.activeToons.index(toonId)
-            if atkType == 'SynergyFees':
+            if atkType['name'] == 'Aftershock':
+                result = random.randint(18, 38)
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkType['name'] == 'SynergyFees':
                 result = (24 + ((self.TurnsElapsed - 1) * 1.3))
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
-            elif atkType == 'CalculatingFees':
+            elif atkType['name'] == 'CalculatingFees':
                 result = (24 + (self.TurnsElapsed * 1.3))
-                toon.setHp(toon.hp + result)
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'calculatingcalculator', 1, 1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'costscalculator', 1, 10, 'setBoth')
-            elif atkType == 'StenographerSanction':
+            elif atkType['name'] == 'StenographerSanction':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
                 currentBossHealth = -1
@@ -2766,7 +2789,7 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 4:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkType == 'StenographerSanctionBindings':
+            elif atkType['name'] == 'StenographerSanctionBindings':
                 if self.toonHasCondition(toon.doId, 'markedforsanction'):
                     self.setToonCondition(toon.doId, 'markedforsanction', 1, 1, 'setBoth')
                     self.setToonCondition(toon.doId, 'allGagBoost', -25, 3, 'setBoth')
@@ -2775,20 +2798,22 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'StenographerCourtRecordBan':
+            elif atkType['name'] == 'StenographerCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned'):
                     self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
                     result = 50
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'CaseManagerInsurancePlan':
+            elif atkType['name'] == 'CaseManagerInsurancePlan':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'insurancecalculator', 0, 0, 'setBoth')
                 for suit in self.battle.activeSuits:
                     if not self.suitHasCondition(suit.doId, 'insured'):
                         self.setSuitCondition(suit.doId, 'insured', 1, 99, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
                 from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
                 boss = None
@@ -2802,7 +2827,7 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 4:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkType == 'CaseManagerInsurance':
+            elif atkType['name'] == 'CaseManagerInsurance':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 currentBossHealth = -1
@@ -2834,27 +2859,23 @@ class BattleCalculatorAI:
                             else:
                                 suit.setHP(suit.currHP + 50)
                     continue
-            elif atkType == 'CaseManagerLegalBindings':
+            elif atkType['name'] == 'CaseManagerLegalBindings':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'bound', 1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'bindingscalculator', 0, 0, 'setBoth')
-            elif atkType == 'CaseManagerLegallyBound':
-                if self.toonHasCondition(toon.doId, 'bound'):
-                    if self.toonHasCondition(toon.doId, 'bound') and self.getToonConditionTurns(toon.doId, 'bound') <= 1:
-                        self.setToonCondition(toon.doId, 'markedforsanction', 1, 5, 'setBoth')
-                    result = 20
-                else:
-                    result = 0
+            elif atkType['name'] == 'CaseManagerLegallyBound':
+                if self.getToonConditionTurns(toon.doId, 'bound') <= 1: # Since all targets will be 'bound' by the new code way, the only thing we should be worried about is how many turns of the status effect are left.
+                    self.setToonCondition(toon.doId, 'markedforsanction', 1, 5, 'setBoth')
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'CaseManagerCourtRecordBan':
+            elif atkType['name'] == 'CaseManagerCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned2'):
                     self.setToonCondition(toon.doId, 'banned2', 1, 1, 'setBoth')
                     result = 50
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'LitigatorSnapSoak': #soaked snap
+            elif atkType['name'] == 'LitigatorSnapSoak': #soaked snap
                 if self.toonHasCondition(toon.doId, 'soakToon'):
                     self.setToonCondition(toon.doId, 'snapped', .1, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'soakToon', 1, 1, 'setBoth')
@@ -2864,7 +2885,7 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'LitigatorSnap':
+            elif atkType['name'] == 'LitigatorSnap':
                 currentBossHealth = -1
                 for s in self.battle.suits:
                     if s.dna.name == 'stenog':
@@ -2877,7 +2898,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'LitigatorBayouBellow':
+            elif atkType['name'] == 'LitigatorBayouBellow':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bellowcalculator', 0, 0, 'setBoth')
@@ -2886,13 +2907,15 @@ class BattleCalculatorAI:
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'soaked', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'dazed', 0, 0, 'setBoth')
+                    self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
+                    self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
                     if self.suitHasCondition(suit.doId, 'lured'):
                         self.setSuitCondition(suit.doId, 'bellowattack', 1, 1, 'setBoth')
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
                 for suit in self.currentlyLuredSuits.keys():
                     self.__removeLured(suit)
-            elif atkType == 'LitigatorBayouBash':
+            elif atkType['name'] == 'LitigatorBayouBash':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
@@ -2909,7 +2932,7 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 6:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkType == 'ScapegoatEnraged':
+            elif atkType['name'] == 'ScapegoatEnraged':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'none')
@@ -2943,14 +2966,14 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 4:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            elif atkType == 'ScapegoatCourtRecordBan':
+            elif atkType['name'] == 'ScapegoatCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned3'):
                     self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
                     result = 50
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'ScapegoatShieldsUp':
+            elif atkType['name'] == 'ScapegoatShieldsUp':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(int(theSuit.currHP + result))
@@ -2963,16 +2986,16 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                         if currentBossHealth >= 1:
                             self.setSuitCondition(suit.doId, 'bellowcalculator', 1, 10, 'setBoth')
-            elif atkType == 'ScapegoatGavel':
+            elif atkType['name'] == 'ScapegoatGavel':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'noGags', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'gavelcalculator', 0, 0, 'setBoth')
-            elif atkType == 'ScapegoatBarnyardBash':
+            elif atkType['name'] == 'ScapegoatBarnyardBash':
                 result = 30
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(int(theSuit.currHP + result))
-            elif atkType == 'ReddPeckingOrder':
+            elif atkType['name'] == 'ReddPeckingOrder':
                 result = 25
                 self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
@@ -2990,10 +3013,10 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 6:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
-            elif atkType == 'ReddLiquidationSale':
+            elif atkType['name'] == 'ReddLiquidationSale':
                 result = 38
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'ReddAutoRepair':
+            elif atkType['name'] == 'ReddAutoRepair':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for suit in self.battle.activeSuits:
@@ -3007,7 +3030,7 @@ class BattleCalculatorAI:
                     else:
                         suit.setHP(suit.currHP + 125)
                 continue
-            elif atkType == 'WSIJuryNotice':
+            elif atkType['name'] == 'WSIJuryNotice':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
@@ -3023,19 +3046,20 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 6:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
-            elif atkType == 'WSICeaseAndDesist':
+            elif atkType['name'] == 'WSICeaseAndDesist':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
                 self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
+                self.setToonCondition(toon.doId, 'noSues', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'noDamage', 1, 2, 'setBoth')
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'immune', 1, 2, 'setBoth')
                     continue
-            elif atkType == 'PowerhouseAbsorb':
+            elif atkType['name'] == 'PowerhouseAbsorb':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'shielding', 1, 10, 'setBoth')
@@ -3049,7 +3073,7 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                         if currentBossHealth >= 1:
                             self.setSuitCondition(suit.doId, 'bantracks', 1, 2, 'setBoth')
-            elif atkType == 'PowerhouseSoakImmune':
+            elif atkType['name'] == 'PowerhouseSoakImmune':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
@@ -3063,7 +3087,7 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                         if currentBossHealth >= 1:
                             self.setSuitCondition(suit.doId, 'bantracks', 1, 2, 'setBoth')
-            elif atkType == 'PowerhouseLureImmune':
+            elif atkType['name'] == 'PowerhouseLureImmune':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
@@ -3077,7 +3101,7 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                         if currentBossHealth >= 1:
                             self.setSuitCondition(suit.doId, 'bantracks', 1, 2, 'setBoth')
-            elif atkType == 'PowerhouseSyphon':
+            elif atkType['name'] == 'PowerhouseSyphon':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
@@ -3091,7 +3115,7 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                         if currentBossHealth >= 1:
                             self.setSuitCondition(suit.doId, 'bantracks', 1, 2, 'setBoth')
-            elif atkType == 'PowerhouseSyphonDesperation':
+            elif atkType['name'] == 'PowerhouseSyphonDesperation':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'shielding', 0, 0, 'setBoth')
@@ -3101,7 +3125,9 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'syphoncalculator', 1, 5, 'setBoth')
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'syphon', 1, 99, 'setBoth')
-            elif atkType == 'PowerhouseSnipeVulnerable':
+                    self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
+                    self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
+            elif atkType['name'] == 'PowerhouseSnipeVulnerable':
                 if self.toonHasCondition(toon.doId, 'snapped'):
                     if self.suitHasCondition(theSuit.doId, 'lured'):
                         self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
@@ -3110,7 +3136,7 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'PowerhouseSnipeMulligan':
+            elif atkType['name'] == 'PowerhouseSnipeMulligan':
                 if self.toonHasCondition(toon.doId, 'mulligan'):
                     if self.suitHasCondition(theSuit.doId, 'lured'):
                         self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
@@ -3119,8 +3145,8 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'PowerhouseSnipeCollectCall':
-                if self.toonHasCondition(toon.doId, 'bound'):
+            elif atkType['name'] == 'PowerhouseSnipeCollectCall':
+                if self.toonHasCondition(toon.doId, 'collectcalled'):
                     if self.suitHasCondition(theSuit.doId, 'lured'):
                         self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
                     self.__removeLured(theSuit.doId)
@@ -3128,7 +3154,7 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'PowerhouseSnipeBookkept':
+            elif atkType['name'] == 'PowerhouseSnipeBookkept':
                 if self.toonHasCondition(toon.doId, 'bookkeepingtoon'):
                     if self.suitHasCondition(theSuit.doId, 'lured'):
                         self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
@@ -3137,12 +3163,12 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'PowerhouseSnipeSoaked':
+            elif atkType['name'] == 'PowerhouseSnipeSoaked':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
-            elif atkType == 'PowerhouseSnipeGagBan':
+            elif atkType['name'] == 'PowerhouseSnipeGagBan':
                 if self.toonHasCondition(toon.doId, 'banned') or self.toonHasCondition(toon.doId, 'banned2'):
                     self.setToonCondition(toon.doId, 'banned2', 1, 1, 'setBoth')
                     self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
@@ -3153,11 +3179,11 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'AmbassadorManagerialProtection':
+            elif atkType['name'] == 'AmbassadorManagerialProtection':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
-            elif atkType == 'AmbassadorRefinement':
+            elif atkType['name'] == 'AmbassadorRefinement':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
@@ -3168,6 +3194,8 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                 if currentBossHealth >= 1:
                     for suit in self.battle.activeSuits:
+                        self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
                         if suit.currHP <= 0:
                             continue
                         x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
@@ -3179,6 +3207,8 @@ class BattleCalculatorAI:
                             suit.setHP(suit.currHP + 200)
                 elif currentBossHealth <= 0:
                     for suit in self.battle.activeSuits:
+                        self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
                         if suit.currHP <= 0:
                             continue
                         x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
@@ -3189,7 +3219,7 @@ class BattleCalculatorAI:
                         else:
                             suit.setHP(suit.currHP + 125)
                     continue
-            elif atkType == 'AmbassadorRefinementManager':
+            elif atkType['name'] == 'AmbassadorRefinementManager':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
@@ -3223,7 +3253,7 @@ class BattleCalculatorAI:
                             else:
                                 suit.setHP(suit.currHP + 200)
                         continue
-            elif atkType == 'AmbassadorHeadRoller':
+            elif atkType['name'] == 'AmbassadorHeadRoller':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'damageupcalculator1', 1, 1, 'setBoth')
@@ -3254,7 +3284,7 @@ class BattleCalculatorAI:
                     self.setSuitCondition(theSuit.doId, 'mulligancalculator4', 1, 99, 'setBoth')
                 else:
                     self.setSuitCondition(theSuit.doId, 'mulligancalculator', 1, 99, 'setBoth')
-            elif atkType == 'AmbassadorPhase2':
+            elif atkType['name'] == 'AmbassadorPhase2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
@@ -3273,18 +3303,18 @@ class BattleCalculatorAI:
                     self.setSuitCondition(theSuit.doId, 'mulligancalculator4', 1, 99, 'setBoth')
                 else:
                     self.setSuitCondition(theSuit.doId, 'mulligancalculator', 1, 99, 'setBoth')
-            elif atkType == 'AmbassadorMulligan':
+            elif atkType['name'] == 'AmbassadorMulligan':
                 self.setToonCondition(toon.doId, 'mulligan', 1, 1, 'setBoth')
                 if self.suitHasCondition(theSuit.doId, 'lured'):
                     self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
                 self.__removeLured(theSuit.doId)
                 result = 36
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'AmbassadorManagerialProtectionImmunity':
+            elif atkType['name'] == 'AmbassadorManagerialProtectionImmunity':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'immune', 1, 4, 'setBoth')
-            elif atkType == 'AmbassadorHeadRollerGroup':
+            elif atkType['name'] == 'AmbassadorHeadRollerGroup':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'damageupcalculator2', 1, 1, 'setBoth')
@@ -3321,10 +3351,10 @@ class BattleCalculatorAI:
                     continue
                 for suit in self.currentlyLuredSuits.keys():
                     self.__removeLured(suit)
-            elif atkType == 'AmbassadorDamageUp': # Visual Damage Up
+            elif atkType['name'] == 'AmbassadorDamageUp': # Visual Damage Up
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'AmbassadorGhostMentality':
+            elif atkType['name'] == 'AmbassadorGhostMentality':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'headroller2calculator', 0, 0, 'setBoth')
@@ -3345,9 +3375,11 @@ class BattleCalculatorAI:
                 for suit in self.battle.activeSuits:
                     if not suit.isVirtual:
                         if suit.dna.name not in SuitBattleGlobals.SpecialCogDict:
+                            self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
+                            self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
                             suit.setDamageMultiplier(suit.getDamageMultiplier() * 1.5)
                             #self.setSuitCondition(suit.doId, 'contracted', 1, 99, 'setBoth')
-            elif atkType == 'BookkeeperBookkeepingRetaliation':
+            elif atkType['name'] == 'BookkeeperBookkeepingRetaliation':
                 if self.toonHasCondition(toon.doId, 'bookkeepingtoon'):
                     self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
                     self.setToonCondition(toon.doId, 'allGagBoost', -40, 3, 'setBoth')
@@ -3356,7 +3388,7 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'BookkeeperBookkeeping':
+            elif atkType['name'] == 'BookkeeperBookkeeping':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bookkeeping', 1, 2, 'setBoth')
@@ -3364,7 +3396,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(theSuit.doId, 'lured'):
                     self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
                 self.__removeLured(theSuit.doId)
-            elif atkType == 'BookkeeperExplodingDocument':
+            elif atkType['name'] == 'BookkeeperExplodingDocument':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
                 currentBossHealth = -1
@@ -3378,19 +3410,19 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'explodingcalculator', 0, 0, 'setBoth')
-            elif atkType == 'BookkeeperPaperCutMarked':
+            elif atkType['name'] == 'BookkeeperPaperCutMarked':
                 result = 40
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'markedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'markedcalculator2', 1, 10, 'setBoth')
-            elif atkType == 'BookkeeperPaperCutSoaked':
+            elif atkType['name'] == 'BookkeeperPaperCutSoaked':
                 result = 40
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'snapped', .2, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
-            elif atkType == 'BookkeeperPaperCut':
+            elif atkType['name'] == 'BookkeeperPaperCut':
                 result = 30
                 attack[SUIT_HP_COL][targetIndex] = result
                 currentBossHealth = -1
@@ -3403,7 +3435,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'snapped', .25, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'papercutcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'bookkeeping', 1, 1, 'setBoth')
-            elif atkType == 'WiretapperGagBan':
+            elif atkType['name'] == 'WiretapperGagBan':
                 if self.toonHasCondition(toon.doId, 'banned') or self.toonHasCondition(toon.doId, 'banned2'):
                     self.setToonCondition(toon.doId, 'banned2', 1, 1, 'setBoth')
                     self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
@@ -3411,38 +3443,35 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'WiretapperVoicemail':
-                result = 0
+            elif atkType['name'] == 'WiretapperVoicemail': # Collect Call Calculator
+                result = (24 + (self.TurnsElapsed * 1.3))
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'immune', 1, 4, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'brokenconnectioncalculator', 1, 4, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'voicemailcalculator', 0, 0, 'setBoth')
-            elif atkType == 'WiretapperBrokenConnection':
+            elif atkType['name'] == 'WiretapperBrokenConnection':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'vulnerable', 1, 4, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'brokenconnectioncalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'collectcallcalculator', 1, 4, 'setBoth')
-            elif atkType == 'WiretapperWiretapped':
+            elif atkType['name'] == 'WiretapperWiretapped':
                 result = random.randint(25, 45)
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'wiretappedcalculator', 0, 0, 'setBoth')
                 theSuit.setHP(int(theSuit.currHP + attack[SUIT_HP_COL][
                     targetIndex]))
-            elif atkType == 'WiretapperCollectCall':
+            elif atkType['name'] == 'WiretapperCollectCall':
                 result = (24 + (self.TurnsElapsed * 1.3))
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'collectcalled', 1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'vulnerable', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'collectcallcalculator', 0, 0, 'setBoth')
-            elif atkType == 'WiretapperCollectCallDamage':
+            elif atkType['name'] == 'WiretapperCollectCallDamage':
                 if self.toonHasCondition(toon.doId, 'collectcalled'):
                     result = (24 + (self.TurnsElapsed * 1.3))
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'SafetyHighPressure':
+            elif atkType['name'] == 'SafetyHighPressure':
                 result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'cannotDodge', 100, 2, 'setBoth')
@@ -3457,18 +3486,18 @@ class BattleCalculatorAI:
                         if self.suitHasCondition(suit.doId, 'lured'):
                             self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
-            elif atkType == 'SafetyHeatWaveCalculation':
+            elif atkType['name'] == 'SafetyHeatWaveCalculation':
                 result = (theSuit.getHP() / 40)
                 toon.setHp(toon.hp + result)
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'heatwavecalculationcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'heatwavecalculator', 1, 10, 'setBoth')
-            elif atkType == 'SafetyHeatWave':
+            elif atkType['name'] == 'SafetyHeatWave':
                 result = (theSuit.getHP() / 40)
                 toon.setHp(toon.hp + result)
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'heatwavecalculator', 0, 0, 'setBoth')
-            elif atkType == 'SafetyPromotion':
+            elif atkType['name'] == 'SafetyPromotion':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[1]
@@ -3479,10 +3508,12 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
                 targetSuit.setManager(1)
                 self.setSuitCondition(targetSuit.doId, 'shielding', 1, 99, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'sued', 0, 0, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'suemovie', 0, 0, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'promotioncalculator', 0, 0, 'setBoth')
                 continue
-            elif atkType == 'SafetyPromotion2':
+            elif atkType['name'] == 'SafetyPromotion2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[2]
@@ -3493,10 +3524,12 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
                 targetSuit.setManager(1)
                 self.setSuitCondition(targetSuit.doId, 'shielding', 1, 99, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'sued', 0, 0, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'suemovie', 0, 0, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'promotioncalculator', 0, 0, 'setBoth')
                 continue
-            elif atkType == 'SafetyPromotion3':
+            elif atkType['name'] == 'SafetyPromotion3':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[3]
@@ -3507,10 +3540,12 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
                 targetSuit.setManager(1)
                 self.setSuitCondition(targetSuit.doId, 'shielding', 1, 99, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'sued', 0, 0, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'suemovie', 0, 0, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'promotioncalculator', 0, 0, 'setBoth')
                 continue
-            elif atkType == 'SafetyPromotion4':
+            elif atkType['name'] == 'SafetyPromotion4':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[4]
@@ -3521,10 +3556,12 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
                 targetSuit.setManager(1)
                 self.setSuitCondition(targetSuit.doId, 'shielding', 1, 99, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'sued', 0, 0, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'suemovie', 0, 0, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'promotioncalculator', 0, 0, 'setBoth')
                 continue
-            elif atkType == 'SafetyPromotion5':
+            elif atkType['name'] == 'SafetyPromotion5':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[5]
@@ -3535,33 +3572,37 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
                 targetSuit.setManager(1)
                 self.setSuitCondition(targetSuit.doId, 'shielding', 1, 99, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'sued', 0, 0, 'setBoth')
+                self.setSuitCondition(targetSuit.doId, 'suemovie', 0, 0, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'promotioncalculator', 0, 0, 'setBoth')
                 continue
-            elif atkType == 'SafetyViolation':
+            elif atkType['name'] == 'SafetyViolation':
                 if self.toonHasCondition(toon.doId, 'banned'):
                     self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
                     result = 50
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'UnionBusterUnionDues':
+            elif atkType['name'] == 'UnionBusterUnionDues':
                 result = (24 + ((self.TurnsElapsed - 1) * 1.3))
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'unionduescalculator', 0, 0, 'setBoth')
-            elif atkType == 'UnionBusterUnionCalculator':
+            elif atkType['name'] == 'UnionBusterUnionCalculator':
                 result = (24 + (self.TurnsElapsed * 1.3))
                 toon.setHp(toon.hp + result)
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'unionduescalculationcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'unionduescalculator', 1, 10, 'setBoth')
-            elif atkType == 'UnionBusterContractEnforcement':
+            elif atkType['name'] == 'UnionBusterContractEnforcement':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'contractenforcementcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'unionbustcalculator', 1, 10, 'setBoth')
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'contracted', 1, 99, 'setBoth')
+                    self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
+                    self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
                     if suit.currHP <= 0:
                         continue
                     x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
@@ -3572,7 +3613,7 @@ class BattleCalculatorAI:
                     else:
                         suit.setHP(suit.currHP + 125)
                     continue
-            elif atkType == 'UnionBusterUnionBust':
+            elif atkType['name'] == 'UnionBusterUnionBust':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'unionbustcalculator', 0, 0, 'setBoth')
@@ -3583,18 +3624,12 @@ class BattleCalculatorAI:
                         theSuit.setHP(theSuit.currHP + 100)
                         targetSuit.setHP(int(targetSuit.currHP - targetSuit.currHP))
                         self.__removeLured(targetSuit.doId)
-            elif atkType == 'UnionBusterUnionBuster':
+            elif atkType['name'] == 'UnionBusterUnionBuster':
                 result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'busted', 1, 5, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'unionbustercalculator', 0, 0, 'setBoth')
-            elif atkType == 'UnionBusterUnionBusterDamage':
-                if self.toonHasCondition(toon.doId, 'busted'):
-                    result = 25
-                else:
-                    result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'UnionBusterBreachOfContract':
+            elif atkType['name'] == 'UnionBusterBreachOfContract':
                 result = 30
                 attack[SUIT_HP_COL][targetIndex] = result
                 currentBossHealth = -1
@@ -3608,7 +3643,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'breachcalculator', 0, 0, 'setBoth')
-            elif atkType == 'UnionBusterBreachOfContract2':
+            elif atkType['name'] == 'UnionBusterBreachOfContract2':
                 if self.toonHasCondition(toon.doId, 'soakToon'):
                     self.setToonCondition(toon.doId, 'soakToon', 0, 0, 'setBoth')
                     currentBossHealth = -1
@@ -3625,7 +3660,7 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'UnionBusterBreachOfContract3':
+            elif atkType['name'] == 'UnionBusterBreachOfContract3':
                 if self.toonHasCondition(toon.doId, 'snapped'):
                     currentBossHealth = -1
                     for s in self.battle.suits:
@@ -3641,7 +3676,7 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'UnionBusterBreachOfContract4':
+            elif atkType['name'] == 'UnionBusterBreachOfContract4':
                 if self.toonHasCondition(toon.doId, 'banned'):
                     currentBossHealth = -1
                     for s in self.battle.suits:
@@ -3669,11 +3704,11 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'UnionBusterUnionWages':
+            elif atkType['name'] == 'UnionBusterUnionWages':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'unionwagescalculator', 1, 1, 'setBoth')
-            elif atkType == 'RacketeerProfiteering':
+            elif atkType['name'] == 'RacketeerProfiteering':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[1]
@@ -3688,7 +3723,7 @@ class BattleCalculatorAI:
                     self.__removeLured(targetSuit.doId)
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'profiteeringcalculator', 0, 0, 'setBoth')
-            elif atkType == 'RacketeerProfiteering2':
+            elif atkType['name'] == 'RacketeerProfiteering2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[2]
@@ -3703,7 +3738,7 @@ class BattleCalculatorAI:
                     self.__removeLured(targetSuit.doId)
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'profiteeringcalculator', 0, 0, 'setBoth')
-            elif atkType == 'RacketeerProfiteering3':
+            elif atkType['name'] == 'RacketeerProfiteering3':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[3]
@@ -3718,7 +3753,7 @@ class BattleCalculatorAI:
                     self.__removeLured(targetSuit.doId)
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'profiteeringcalculator', 0, 0, 'setBoth')
-            elif atkType == 'RacketeerProfiteering4':
+            elif atkType['name'] == 'RacketeerProfiteering4':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[4]
@@ -3733,7 +3768,7 @@ class BattleCalculatorAI:
                     self.__removeLured(targetSuit.doId)
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'profiteeringcalculator', 0, 0, 'setBoth')
-            elif atkType == 'RacketeerProfiteering5':
+            elif atkType['name'] == 'RacketeerProfiteering5':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[5]
@@ -3748,12 +3783,12 @@ class BattleCalculatorAI:
                     self.__removeLured(targetSuit.doId)
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'profiteeringcalculator', 0, 0, 'setBoth')
-            elif atkType == 'RacketeerExtortion':
+            elif atkType['name'] == 'RacketeerExtortion':
                 result = random.randint(20, 40)
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(int(theSuit.currHP + result))
                 self.setSuitCondition(theSuit.doId, 'extortioncalculator', 0, 0, 'setBoth')
-            elif atkType == 'RacketeerExtortion2':
+            elif atkType['name'] == 'RacketeerExtortion2':
                 if not self.toonHasCondition(toon.doId, 'rushJobCompleted'):
                     result = random.randint(30, 50)
                     attack[SUIT_HP_COL][targetIndex] = result
@@ -3762,14 +3797,14 @@ class BattleCalculatorAI:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'extortioncalculator2', 0, 0, 'setBoth')
-            elif atkType == 'RacketeerCompensation':
+            elif atkType['name'] == 'RacketeerCompensation':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for suit in self.battle.activeSuits:
                     if suit.getHP() < suit.maxHP and not suit.dna.name == 'racket':
                         suit.setDamageMultiplier(suit.getDamageMultiplier() * 1.05)
                         #self.setSuitCondition(suit.doId, 'contracted', 1, 99, 'setBoth')
-            elif atkType == 'RacketeerHustling':
+            elif atkType['name'] == 'RacketeerHustling':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'hustlingcalculator', 0, 0, 'setBoth')
@@ -3777,7 +3812,7 @@ class BattleCalculatorAI:
                 for t in self.battle.activeToons:
                     self.setToonCondition(t, random.choice(
                         ('useToonUp','useTrap', 'useLure', 'useThrow', 'useSquirt', 'useZap', 'useSound', 'useDrop',)), 1, 2, 'setBoth')
-            elif atkType == 'RacketeerRacketeering':
+            elif atkType['name'] == 'RacketeerRacketeering':
                 if self.toonHasCondition(toon.doId, 'usedDrop'):
                     self.setToonCondition(toon.doId, 'noDropGags', 1, 2, 'setBoth')
                     self.setToonCondition(toon.doId, 'usedDrop', 1, 1, 'setBoth')
@@ -3804,7 +3839,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'usedZap', 1, 1, 'setBoth')
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'RacketeerPeckingOrderRetaliation':
+            elif atkType['name'] == 'RacketeerPeckingOrderRetaliation':
                 if self.toonHasCondition(toon.doId, 'banned'):
                     result = 45
                 elif self.toonHasCondition(toon.doId, 'banned2'):
@@ -3812,33 +3847,33 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'RacketeerPeckingOrderRetaliationSoak':
+            elif atkType['name'] == 'RacketeerPeckingOrderRetaliationSoak':
                 result = 45
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'RadiographerRadioInfrequency':
+            elif atkType['name'] == 'RadiographerRadioInfrequency':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
                     self.setToonCondition(t, 'groupDamageDown', -50, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'radioinfrequencycalculator', 0, 0, 'setBoth')
-            elif atkType == 'RadiographerHotTake':
+            elif atkType['name'] == 'RadiographerHotTake':
                 result = 20
                 self.setToonCondition(toon.doId, 'snapped', .50, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'hottakecalculator', 0, 0, 'setBoth')
                 theSuit.setHP(int(theSuit.currHP - (result * 4)))
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'RadiographerHotTakeRetaliation':
+            elif atkType['name'] == 'RadiographerHotTakeRetaliation':
                 result = 28
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
                 self.setToonCondition(toon.doId, 'snapped', .25, 3, 'setBoth')
                 theSuit.setHP(int(theSuit.currHP - (result * 4)))
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'RadiographerDanceSession':
+            elif atkType['name'] == 'RadiographerDanceSession':
                 result = 0
                 self.setSuitCondition(theSuit.doId, 'dancesession', 1, 4, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'dancesessioncalculator', 0, 0, 'setBoth')
-            elif atkType == 'RadiographerOvermodulated':
+            elif atkType['name'] == 'RadiographerOvermodulated':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[1]
@@ -3868,7 +3903,7 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'RadiographerOvermodulated2':
+            elif atkType['name'] == 'RadiographerOvermodulated2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[2]
@@ -3898,7 +3933,7 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'RadiographerOvermodulated3':
+            elif atkType['name'] == 'RadiographerOvermodulated3':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[3]
@@ -3928,7 +3963,7 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'RadiographerOvermodulated4':
+            elif atkType['name'] == 'RadiographerOvermodulated4':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[4]
@@ -3958,7 +3993,7 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'RadiographerOvermodulated5':
+            elif atkType['name'] == 'RadiographerOvermodulated5':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[5]
@@ -3988,23 +4023,23 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerCheerRetaliation':
+            elif atkType['name'] == 'HighRollerCheerRetaliation':
                 if self.toonHasCondition(toon.doId, 'cheer'):
                     result = 25
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.__removeLured(theSuit.doId)
-            elif atkType == 'HighRollerSingingBlues':
+            elif atkType['name'] == 'HighRollerSingingBlues':
                 result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'winded', -50, 2, 'setBoth')
-            elif atkType == 'HighRollerSyphon':
+            elif atkType['name'] == 'HighRollerSyphon':
                 result = random.randint(25, 45)
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(int(theSuit.currHP + attack[SUIT_HP_COL][
                     targetIndex]))
-            elif atkType == 'HighRollerBar':
+            elif atkType['name'] == 'HighRollerBar':
                 result = 50
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.__removeLured(theSuit.doId)
@@ -4017,7 +4052,7 @@ class BattleCalculatorAI:
                     continue
                 if suit.getHP() <= 0:
                     self.__removeLured(suit)
-            elif atkType == 'HighRollerDiceRouletteEveryone':
+            elif atkType['name'] == 'HighRollerDiceRouletteEveryone':
                 result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
@@ -4031,7 +4066,7 @@ class BattleCalculatorAI:
                     continue
                 if suit.getHP() <= 0:
                     self.__removeLured(suit)
-            elif atkType == 'HighRollerDiceRouletteCogs':
+            elif atkType['name'] == 'HighRollerDiceRouletteCogs':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
@@ -4045,17 +4080,17 @@ class BattleCalculatorAI:
                     continue
                 if suit.getHP() <= 0:
                     self.__removeLured(suit)
-            elif atkType == 'HighRollerDiceRouletteNobody':
+            elif atkType['name'] == 'HighRollerDiceRouletteNobody':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, 99, 'setBoth')
-            elif atkType == 'HighRollerDiceRouletteToons':
+            elif atkType['name'] == 'HighRollerDiceRouletteToons':
                 result = random.choice((0, 35))
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, 99, 'setBoth')
-            elif atkType == 'HighRollerDonation':
+            elif atkType['name'] == 'HighRollerDonation':
                 theSuit.setHP(int(theSuit.currHP - 3000))
                 if theSuit.getHP() <= 0:
                     self.setSuitCondition(theSuit.doId, 'deathcheck', 1, 1, 'setBoth')
@@ -4066,7 +4101,7 @@ class BattleCalculatorAI:
                     if managerTarget == None:
                         managerTarget = theSuit
                 managerTarget.setHP(managerTarget.getHP() + 3000)
-            elif atkType == 'HighRollerSplashback':
+            elif atkType['name'] == 'HighRollerSplashback':
                 if self.toonHasCondition(toon.doId, 'soakToon'):
                     self.setToonCondition(toon.doId, 'soakToon', 0, 0, 'setBoth')
                     result = 25
@@ -4074,7 +4109,7 @@ class BattleCalculatorAI:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.__removeLured(theSuit.doId)
-            elif atkType == 'HighRollerBust':
+            elif atkType['name'] == 'HighRollerBust':
                 if self.toonHasCondition(toon.doId, 'banned') or self.toonHasCondition(toon.doId, 'banned2'):
                     self.setToonCondition(toon.doId, 'banned2', 1, 1, 'setBoth')
                     self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
@@ -4082,7 +4117,7 @@ class BattleCalculatorAI:
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'HighRollerCommercialBreak':
+            elif atkType['name'] == 'HighRollerCommercialBreak':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for suit in self.battle.activeSuits:
@@ -4096,7 +4131,7 @@ class BattleCalculatorAI:
                     continue
                 for suit in self.currentlyLuredSuits.keys():
                     self.__removeLured(suit)
-            elif atkType == 'HighRollerDamageReduction':
+            elif atkType['name'] == 'HighRollerDamageReduction':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'lureBoost', -50, 2, 'setBoth')
@@ -4107,10 +4142,10 @@ class BattleCalculatorAI:
                 self.setToonCondition(toon.doId, 'squirtBoost', -50, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'trapBoost', -50, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'soundBoost', -50, 2, 'setBoth')
-            elif atkType == 'HighRollerWheelSpin':
+            elif atkType['name'] == 'HighRollerWheelSpin':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'HighRollerPuzzleBan':
+            elif atkType['name'] == 'HighRollerPuzzleBan':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4129,7 +4164,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 1, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 1, 0, 'setBoth')
                     self.setToonCondition(t, random.choice(('noSquirtGags', 'noSoundGags', 'noToonUpGags', 'noLureGags')), 1, 2, 'setBoth')
-            elif atkType == 'HighRollerNoAttack':
+            elif atkType['name'] == 'HighRollerNoAttack':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 if theSuit.dna.name == 'hroller2':
@@ -4149,7 +4184,7 @@ class BattleCalculatorAI:
                         self.setToonCondition(t, 'noZapGags', 1, 0, 'setBoth')
                         self.setToonCondition(t, 'noSoundGags', 1, 0, 'setBoth')
                         self.setToonCondition(t, random.choice(('noSquirtGags', 'noSoundGags', 'noToonUpGags', 'noLureGags')), 1, 2, 'setBoth')
-            elif atkType == 'HighRollerGameTimeSpawn':
+            elif atkType['name'] == 'HighRollerGameTimeSpawn':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'spawncalculator', 1, 1, 'setBoth')
@@ -4166,14 +4201,14 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 6:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'crf1')
-            elif atkType == 'HighRollerPuzzle':
+            elif atkType['name'] == 'HighRollerPuzzle':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gameovercalculator', 1, 10, 'setBoth')
                 for t in self.battle.activeToons:
                     self.setToonCondition(t, random.choice(
                         ('useToonUp','useTrap', 'useLure', 'useThrow', 'useSquirt', 'useZap', 'useSound', 'useDrop',)), 1, 2, 'setBoth')
-            elif atkType == 'HighRollerGameOver':
+            elif atkType['name'] == 'HighRollerGameOver':
                 if not self.toonHasCondition(toon.doId, 'rushJobCompleted'):
                     result = 35
                     attack[SUIT_HP_COL][targetIndex] = result
@@ -4181,7 +4216,7 @@ class BattleCalculatorAI:
                     result = 0
                     attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gameovercalculator', 0, 0, 'setBoth')
-            elif atkType == 'HighRollerGameTimeCog':
+            elif atkType['name'] == 'HighRollerGameTimeCog':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gametimecalculator', 0, 0, 'setBoth')
@@ -4212,7 +4247,7 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerGameTimeCog2':
+            elif atkType['name'] == 'HighRollerGameTimeCog2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gametimecalculator', 0, 0, 'setBoth')
@@ -4225,7 +4260,7 @@ class BattleCalculatorAI:
                 targetSuit.setHP(0)
                 self.setSuitCondition(targetSuit.doId, 'killedbyroller', 1, 2, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerGameTimeCog3':
+            elif atkType['name'] == 'HighRollerGameTimeCog3':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gametimecalculator', 0, 0, 'setBoth')
@@ -4251,7 +4286,7 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerGameTimeCog4':
+            elif atkType['name'] == 'HighRollerGameTimeCog4':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gametimecalculator', 0, 0, 'setBoth')
@@ -4264,7 +4299,7 @@ class BattleCalculatorAI:
                 targetSuit.setHP(0)
                 self.setSuitCondition(targetSuit.doId, 'killedbyroller', 1, 2, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerGameTimeCog5':
+            elif atkType['name'] == 'HighRollerGameTimeCog5':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gametimecalculator', 0, 0, 'setBoth')
@@ -4295,7 +4330,7 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerGameTimeCog6':
+            elif atkType['name'] == 'HighRollerGameTimeCog6':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gametimecalculator', 0, 0, 'setBoth')
@@ -4308,7 +4343,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target3', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerGameTimeCog7':
+            elif atkType['name'] == 'HighRollerGameTimeCog7':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gametimecalculator', 0, 0, 'setBoth')
@@ -4339,7 +4374,7 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerGameTimeCog8':
+            elif atkType['name'] == 'HighRollerGameTimeCog8':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 targetSuit = self.battle.activeSuits[4]
@@ -4352,7 +4387,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target3', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerGameTimeCog9':
+            elif atkType['name'] == 'HighRollerGameTimeCog9':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gametimecalculator', 0, 0, 'setBoth')
@@ -4383,7 +4418,7 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerGameTimeCog10':
+            elif atkType['name'] == 'HighRollerGameTimeCog10':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'gametimecalculator', 0, 0, 'setBoth')
@@ -4396,7 +4431,7 @@ class BattleCalculatorAI:
                 targetSuit.setHP(0)
                 self.setSuitCondition(targetSuit.doId, 'killedbyroller', 1, 2, 'setBoth')
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'HighRollerTrickOfTheLight':
+            elif atkType['name'] == 'HighRollerTrickOfTheLight':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
@@ -4430,37 +4465,37 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 6:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'crf2')
-            elif atkType == 'HighRollerPhase3':
+            elif atkType['name'] == 'HighRollerPhase3':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 1, 10, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
-            elif atkType == 'HighRollerRaisingTheAnte':
+            elif atkType['name'] == 'HighRollerRaisingTheAnte':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
                 self.setToonCondition(toon.doId, 'raisedAnte', 1250, 99, 'setBoth')
-            elif atkType == 'HighRollerConduction':
+            elif atkType['name'] == 'HighRollerConduction':
                 result = 40
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'HighRollerRolled':
+            elif atkType['name'] == 'HighRollerRolled':
                 result = random.randint(25, 50)
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'HighRollerFreeCruise':
+            elif atkType['name'] == 'HighRollerFreeCruise':
                 result = 35
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'HighRollerVulnerable':
+            elif atkType['name'] == 'HighRollerVulnerable':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'vulnerable', 1, 10, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 0, 0, 'setBoth')
-            elif atkType == 'HighRollerAceInTheHole':
+            elif atkType['name'] == 'HighRollerAceInTheHole':
                 result = 33
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'aceInTheHole', 1, 99, 'setBoth')
                 self.setToonCondition(toon.doId, 'corruption', .2, 99, 'setBoth')
-            elif atkType == 'VideographerRisingStars':
+            elif atkType['name'] == 'VideographerRisingStars':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
@@ -4476,7 +4511,7 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 6:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'videog')
-            elif atkType == 'VideographerRisingStars2':
+            elif atkType['name'] == 'VideographerRisingStars2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
@@ -4492,7 +4527,7 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if len(self.battle.activeSuits) < 6:
                                     boss.appendSuitsToBattle(boss.battleNumber, 'videog2')
-            elif atkType == 'VideographerDirectorCuts':
+            elif atkType['name'] == 'VideographerDirectorCuts':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
@@ -4529,7 +4564,7 @@ class BattleCalculatorAI:
                         for t in self.battle.activeToons:
                             if t in do.involvedToons:
                                 boss.appendSuitsToBattle(boss.battleNumber, 'videog3')
-            elif atkType == 'VideographerRisingStarsSilhouette':
+            elif atkType['name'] == 'VideographerRisingStarsSilhouette':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 if self.suitHasCondition(theSuit.doId, 'spawncalculator'):
@@ -4547,7 +4582,7 @@ class BattleCalculatorAI:
                             if t in do.involvedToons:
                                 if self.toonHasCondition(t, 'silhouettespawn'):
                                     boss.appendSuitsToBattle(boss.battleNumber, 'videog4')
-            elif atkType == 'VideographerDeath':
+            elif atkType['name'] == 'VideographerDeath':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for suit in self.battle.activeSuits:
@@ -4560,7 +4595,7 @@ class BattleCalculatorAI:
                         self.setSuitCondition(managerTarget.doId, 'killedbyvideo', 1, 2, 'setBoth')
                         managerTarget.setHP(0)
                         self.__removeLured(managerTarget.doId)
-            elif atkType == 'VideographerVideoStatic':
+            elif atkType['name'] == 'VideographerVideoStatic':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 managerTarget = None
@@ -4589,7 +4624,7 @@ class BattleCalculatorAI:
                             else:
                                 self.setSuitCondition(managerTarget.doId, 'vulnerablevideographer', (self.getSuitConditionModifier(managerTarget.doId, 'vulnerablevideographer') + 11), 99, 'setBoth')
                             managerTarget.setDamageMultiplier(managerTarget.getDamageMultiplier() * 1.1)
-            elif atkType == 'VideographerRisingStarsSacrifice':
+            elif atkType['name'] == 'VideographerRisingStarsSacrifice':
                 managerTarget = None
                 for suit in self.battle.activeSuits:
                     if suit.dna.name == 'mh2':
@@ -4610,7 +4645,7 @@ class BattleCalculatorAI:
                         managerTarget.setHP(managerTarget.maxHP / 2)
                         managerTarget.setMaxHP(managerTarget.maxHP / 2)
                         managerTarget.setDamageMultiplier(managerTarget.getDamageMultiplier() * 1.5)
-            elif atkType == 'BroadcasterDonation':
+            elif atkType['name'] == 'BroadcasterDonation':
                 managerTarget = None
                 for suit in self.battle.activeSuits:
                     if suit.dna.name == 'videog':
@@ -4624,7 +4659,7 @@ class BattleCalculatorAI:
                 self.__removeLured(theSuit.doId)
                 if suit.getHP() <= 0:
                     self.setSuitCondition(suit.doId, 'deathcheck', 1, 1, 'setBoth')
-            elif atkType == 'VideographerElectricShock':
+            elif atkType['name'] == 'VideographerElectricShock':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'electricshockcalculator', 0, 0, 'setBoth')
@@ -4639,7 +4674,7 @@ class BattleCalculatorAI:
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
                 targetSuit.setHP(int(targetSuit.currHP + x))
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'VideographerElectricShock2':
+            elif atkType['name'] == 'VideographerElectricShock2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'electricshockcalculator', 0, 0, 'setBoth')
@@ -4654,7 +4689,7 @@ class BattleCalculatorAI:
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
                 targetSuit.setHP(int(targetSuit.currHP + x))
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'VideographerElectricShock3':
+            elif atkType['name'] == 'VideographerElectricShock3':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'electricshockcalculator', 0, 0, 'setBoth')
@@ -4669,7 +4704,7 @@ class BattleCalculatorAI:
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
                 targetSuit.setHP(int(targetSuit.currHP + x))
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'VideographerElectricShock4':
+            elif atkType['name'] == 'VideographerElectricShock4':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'electricshockcalculator', 0, 0, 'setBoth')
@@ -4684,7 +4719,7 @@ class BattleCalculatorAI:
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
                 targetSuit.setHP(int(targetSuit.currHP + x))
                 self.__removeLured(targetSuit.doId)
-            elif atkType == 'FilmmakerCameraRewind':
+            elif atkType['name'] == 'FilmmakerCameraRewind':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'filmmakercalculator', 0, 0, 'setBoth')
@@ -4699,18 +4734,18 @@ class BattleCalculatorAI:
                             suit.setHP(suit.currHP + x)
                         else:
                             suit.setHP(suit.currHP + 125)
-            elif atkType == 'FilmmakerCameraFlash':
+            elif atkType['name'] == 'FilmmakerCameraFlash':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'confused', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'filmmakercalculator', 0, 0, 'setBoth')
-            elif atkType == 'DirectorCut':
+            elif atkType['name'] == 'DirectorCut':
                 self.setToonCondition(toon.doId, 'allGagBoost', -50, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'lureBoost', -50, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'directorcalculator', 0, 0, 'setBoth')
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType == 'DirectorAction':
+            elif atkType['name'] == 'DirectorAction':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'extortioncalculator2', 1, 10, 'setBoth')
@@ -4718,25 +4753,48 @@ class BattleCalculatorAI:
                 for t in self.battle.activeToons:
                     self.setToonCondition(t, random.choice(
                         ('useToonUp','useTrap', 'useLure', 'useThrow', 'useSquirt', 'useZap', 'useSound', 'useDrop',)), 1, 2, 'setBoth')
-            elif atkType == 'DirectorActionRetaliation':
+            elif atkType['name'] == 'DirectorActionRetaliation':
                 if not self.toonHasCondition(toon.doId, 'rushJobCompleted'):
                     result = random.randint(20, 40)
                     attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'extortioncalculator2', 0, 0, 'setBoth')
-            elif atkType == 'DirectorBackToOnes':
+            elif atkType['name'] == 'DirectorBackToOnes':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'directorcalculator', 0, 0, 'setBoth')
                 theSuit.setHP(int(theSuit.maxHP))
-            elif atkType == 'Desperation':
+            elif atkType['name'] == 'SueApplication':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'suemovie', 1, 99, 'setBoth')
+            elif atkType['name'] == 'SueRemoval':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'suemovie', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'sued', 0, 0, 'setBoth')
+            elif atkType['name'] == 'Desperation':
                 managerTarget = None
+                for t in self.battle.activeToons:
+                    self.setToonCondition(t, 'noToonUpGags', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'noTrapGags', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'noLureGags', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'noThrowGags', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'noSquirtGags', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'nolevel4s', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'nolevel5s', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'nolevel6s', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
+                    self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
                 for suit in self.battle.activeSuits:
                     if self.battle.findSuit(suit.doId).getManager():
                         managerTarget = suit
                     if managerTarget == None:
                         managerTarget = theSuit
                     self.setSuitCondition(managerTarget.doId, 'desperation', 1, 99, 'setBoth')
-            elif atkType == 'TargetCheck':
+            elif atkType['name'] == 'TargetCheck':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 if len(self.battle.activeSuits) > 1:
@@ -4765,7 +4823,7 @@ class BattleCalculatorAI:
                                                         self.setSuitCondition(theSuit.doId, 'target6', 1, 10, 'setBoth')
                                                     else:
                                                         pass
-            elif atkType == 'BanLevel4':
+            elif atkType['name'] == 'BanLevel4':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4774,7 +4832,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel5s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
-            elif atkType == 'BanLevel5':
+            elif atkType['name'] == 'BanLevel5':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4783,7 +4841,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel5s', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
-            elif atkType == 'BanLevel6':
+            elif atkType['name'] == 'BanLevel6':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4792,7 +4850,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel5s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
-            elif atkType == 'BanLevel7':
+            elif atkType['name'] == 'BanLevel7':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4801,7 +4859,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel5s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 1, 3, 'setBoth')
-            elif atkType == 'BanLevel8':
+            elif atkType['name'] == 'BanLevel8':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4810,7 +4868,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 1, 3, 'setBoth')
-            elif atkType == 'BanLevel45':
+            elif atkType['name'] == 'BanLevel45':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4819,7 +4877,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
-            elif atkType == 'BanLevel46':
+            elif atkType['name'] == 'BanLevel46':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4828,7 +4886,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
-            elif atkType == 'BanLevel47':
+            elif atkType['name'] == 'BanLevel47':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4837,7 +4895,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
-            elif atkType == 'BanLevel48':
+            elif atkType['name'] == 'BanLevel48':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4846,7 +4904,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 1, 3, 'setBoth')
-            elif atkType == 'BanLevel56':
+            elif atkType['name'] == 'BanLevel56':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4855,7 +4913,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
-            elif atkType == 'BanLevel57':
+            elif atkType['name'] == 'BanLevel57':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4864,7 +4922,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
-            elif atkType == 'BanLevel58':
+            elif atkType['name'] == 'BanLevel58':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4873,7 +4931,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 1, 3, 'setBoth')
-            elif atkType == 'BanLevel67':
+            elif atkType['name'] == 'BanLevel67':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4882,7 +4940,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
-            elif atkType == 'BanLevel68':
+            elif atkType['name'] == 'BanLevel68':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4891,7 +4949,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 1, 3, 'setBoth')
-            elif atkType == 'BanLevel78':
+            elif atkType['name'] == 'BanLevel78':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4900,7 +4958,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel6s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel7s', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 1, 3, 'setBoth')
-            elif atkType == 'BanToonup':
+            elif atkType['name'] == 'BanToonup':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4912,7 +4970,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanTrap':
+            elif atkType['name'] == 'BanTrap':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4924,7 +4982,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanLure':
+            elif atkType['name'] == 'BanLure':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4936,7 +4994,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanThrow':
+            elif atkType['name'] == 'BanThrow':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4948,7 +5006,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanSquirt':
+            elif atkType['name'] == 'BanSquirt':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4960,7 +5018,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanZap':
+            elif atkType['name'] == 'BanZap':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4972,7 +5030,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanSound':
+            elif atkType['name'] == 'BanSound':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4984,7 +5042,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanDrop':
+            elif atkType['name'] == 'BanDrop':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -4996,7 +5054,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 1, 3, 'setBoth')
-            elif atkType == 'BanToonupTrap':
+            elif atkType['name'] == 'BanToonupTrap':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5008,7 +5066,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanToonupLure':
+            elif atkType['name'] == 'BanToonupLure':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5020,7 +5078,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanToonupThrow':
+            elif atkType['name'] == 'BanToonupThrow':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5032,7 +5090,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanToonupSquirt':
+            elif atkType['name'] == 'BanToonupSquirt':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5044,7 +5102,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanToonupZap':
+            elif atkType['name'] == 'BanToonupZap':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5056,7 +5114,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanToonupSound':
+            elif atkType['name'] == 'BanToonupSound':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5068,7 +5126,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanToonupDrop':
+            elif atkType['name'] == 'BanToonupDrop':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5080,7 +5138,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 1, 3, 'setBoth')
-            elif atkType == 'BanTrapLure':
+            elif atkType['name'] == 'BanTrapLure':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5092,7 +5150,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanTrapThrow':
+            elif atkType['name'] == 'BanTrapThrow':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5104,7 +5162,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanTrapSquirt':
+            elif atkType['name'] == 'BanTrapSquirt':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5116,7 +5174,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanTrapZap':
+            elif atkType['name'] == 'BanTrapZap':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5128,7 +5186,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanTrapSound':
+            elif atkType['name'] == 'BanTrapSound':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5140,7 +5198,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanTrapDrop':
+            elif atkType['name'] == 'BanTrapDrop':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5152,7 +5210,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 1, 3, 'setBoth')
-            elif atkType == 'BanLureThrow':
+            elif atkType['name'] == 'BanLureThrow':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5164,7 +5222,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanLureSquirt':
+            elif atkType['name'] == 'BanLureSquirt':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5176,7 +5234,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanLureZap':
+            elif atkType['name'] == 'BanLureZap':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5188,7 +5246,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanLureSound':
+            elif atkType['name'] == 'BanLureSound':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5200,7 +5258,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanLureDrop':
+            elif atkType['name'] == 'BanLureDrop':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5212,7 +5270,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 1, 3, 'setBoth')
-            elif atkType == 'BanThrowSquirt':
+            elif atkType['name'] == 'BanThrowSquirt':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5224,7 +5282,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanThrowZap':
+            elif atkType['name'] == 'BanThrowZap':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5236,7 +5294,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanThrowSound':
+            elif atkType['name'] == 'BanThrowSound':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5248,7 +5306,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanThrowDrop':
+            elif atkType['name'] == 'BanThrowDrop':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5260,7 +5318,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 1, 3, 'setBoth')
-            elif atkType == 'BanSquirtZap':
+            elif atkType['name'] == 'BanSquirtZap':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5272,7 +5330,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanSquirtSound':
+            elif atkType['name'] == 'BanSquirtSound':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5284,7 +5342,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanSquirtDrop':
+            elif atkType['name'] == 'BanSquirtDrop':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5296,7 +5354,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 1, 3, 'setBoth')
-            elif atkType == 'BanZapSound':
+            elif atkType['name'] == 'BanZapSound':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5308,7 +5366,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 0, 0, 'setBoth')
-            elif atkType == 'BanZapDrop':
+            elif atkType['name'] == 'BanZapDrop':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5320,7 +5378,7 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'noZapGags', 1, 3, 'setBoth')
                     self.setToonCondition(t, 'noSoundGags', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'noDropGags', 1, 3, 'setBoth')
-            elif atkType == 'BanSoundDrop':
+            elif atkType['name'] == 'BanSoundDrop':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 for t in self.battle.activeToons:
@@ -5337,7 +5395,25 @@ class BattleCalculatorAI:
 
             # Professor Control: I honestly do not know how to best approach this issue.  Especially in the case of damage over times, a Cog's ID is -1 because no Cog exists.  However, this sets theSuit to None, and the rest of this is treated as if a Cog exists.  So, this will have to do for the time being.
             try:
-                if self.suitHasCondition(theSuit.doId, 'desperation') and self.suitHasCondition(theSuit.doId, 'enraged') and theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
+                if atkType['name'] == 'CalculatingFees' and self.suitHasCondition(theSuit.doId, 'desperation'):
+                    attack[SUIT_HP_COL][targetIndex] = result * 1.4
+                    toon.setHp(toon.hp + (result * 1.4))
+                elif atkType['name'] == 'CalculatingFees':
+                    attack[SUIT_HP_COL][targetIndex] = result
+                    toon.setHp(toon.hp + result)
+                elif atkType['name'] == 'UnionBusterUnionCalculator' and self.suitHasCondition(theSuit.doId, 'desperation'):
+                    attack[SUIT_HP_COL][targetIndex] = result * 1.4
+                    toon.setHp(toon.hp + (result * 1.4))
+                elif atkType['name'] == 'UnionBusterUnionCalculator':
+                    attack[SUIT_HP_COL][targetIndex] = result
+                    toon.setHp(toon.hp + result)
+                elif atkType['name'] == 'WiretapperVoicemail' and self.suitHasCondition(theSuit.doId, 'desperation'):
+                    attack[SUIT_HP_COL][targetIndex] = result * 1.4
+                    toon.setHp(toon.hp + (result * 1.4))
+                elif atkType['name'] == 'WiretapperVoicemail':
+                    attack[SUIT_HP_COL][targetIndex] = result
+                    toon.setHp(toon.hp + result)
+                elif self.suitHasCondition(theSuit.doId, 'desperation') and self.suitHasCondition(theSuit.doId, 'enraged') and theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
                     attack[SUIT_HP_COL][targetIndex] *= (1.2 + self.getToonConditionModifier(toonId, 'snapped') + self.getToonConditionModifier(toonId, 'corruption') + theSuit.getDamageMultiplier())
                 elif self.suitHasCondition(theSuit.doId, 'desperation') and theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
                     attack[SUIT_HP_COL][targetIndex] *= (.9 + self.getToonConditionModifier(toonId, 'snapped') + self.getToonConditionModifier(toonId, 'corruption') + theSuit.getDamageMultiplier())
@@ -5390,7 +5466,7 @@ class BattleCalculatorAI:
                 self.toonHPAdjusts[t] -= attack[SUIT_HP_COL][position]
 
     def __suitCanAttack(self, suitId):
-        if self.__combatantDead(suitId, toon=0) or self.__suitIsLured(suitId) or self.suitHasCondition(suitId, 'sued'):
+        if self.__combatantDead(suitId, toon=0) or self.__suitIsLured(suitId) or self.suitHasCondition(suitId, 'suemovie'):
             return 0
         return 1
 
@@ -5408,8 +5484,231 @@ class BattleCalculatorAI:
             tgtPos = self.battle.activeToons.index(currTgt)
 
         self.notify.debug('\n')
+    
+    def __getGenericSuitAttack(self, suitId):
+        '''
+        This method is for use with making standard Cog attacks.  Attacks with specific parameters (e.g. cheats) should be created manually.  This method can work for extra attacks, though, as a generic extra attack can be made easily with this method that, quite franky, gets used often.
+        '''
+        theSuit = self.battle.findSuit(suitId)
+        if theSuit.dna.name == 'lgator':
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'stenog' or s.dna.name == 'sgoat' or s.dna.name == 'caseman':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'caseman':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadcase', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'stenog':
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'lgator' or s.dna.name == 'sgoat' or s.dna.name == 'caseman':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'caseman':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadcase', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'caseman':
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'stenog' or s.dna.name == 'sgoat' or s.dna.name == 'lgator':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'caseman':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadcase', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'sgoat':
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'stenog' or s.dna.name == 'lgator' or s.dna.name == 'caseman':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'caseman':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadcase', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'phouse':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'ambass':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'wtapper':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadwire', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'bkeeper':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'wtapper' or s.dna.name == 'phouse' or s.dna.name == 'ambass':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'wtapper':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadwire', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'wtapper':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'phouse' or s.dna.name == 'bkeeper' or s.dna.name == 'ambass':
+                    currentBossHealth = s.currHP
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'ambass':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'phouse':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'wtapper':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadwire', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'videog':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'bcaster':
+                    currentBossHealth = s.currHP
+            currentBossHealth2 = -1
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'mh2':
+                    currentBossHealth2 = s.currHP
+                if s.dna.name == 'std2':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId,
+                                                                     'silhouettespawn') and self.suitHasCondition(
+                    theSuit.doId, 'phase3') and not self.suitHasCondition(theSuit.doId, 'immune'):
+                self.setSuitCondition(theSuit.doId, 'silhouettespawn', 1, 1, 'setBoth')
+            if currentBossHealth2 >= 1 and (x + 1) % 3 == 0:
+                self.setSuitCondition(theSuit.doId, 'hollywoodcalculator', 1, 1, 'setBoth')
+            if currentBossHealth3 >= 1 and (x + 1) % 3 == 0:
+                self.setSuitCondition(theSuit.doId, 'hollywoodcalculator', 1, 1, 'setBoth')
+        if theSuit.dna.name == 'radiog':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'ubuster' or s.dna.name == 'racket' or s.dna.name == 'safesupervis':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'ubuster':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadunion', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'racket':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'ubuster' or s.dna.name == 'safesupervis' or s.dna.name == 'radiog':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'ubuster':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadunion', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'ubuster':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'safesupervis' or s.dna.name == 'racket' or s.dna.name == 'radiog':
+                    currentBossHealth = s.currHP
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        if theSuit.dna.name == 'safesupervis':
+            x = self.TurnsElapsed
+            currentBossHealth = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'ubuster' or s.dna.name == 'racket' or s.dna.name == 'radiog':
+                    currentBossHealth = s.currHP
+            currentBossHealth3 = -1
+            for s in self.battle.suits:
+                if s.dna.name == 'ubuster':
+                    currentBossHealth3 = s.currHP
+            if currentBossHealth3 == -1:
+                self.setSuitCondition(theSuit.doId, 'deadunion', 1, 100, 'setBoth')
+            if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
+                self.setSuitCondition(theSuit.doId, 'desperation', 1, 100, 'setBoth')
+        attack = getDefaultSuitAttack()
+        attack[SUIT_ID_COL] = suitId
+        # attack[SUIT_ATK_COL] = self.__calcSuitAtkType(theSuit)
+        if not self.suitHasCondition(suitId, 'suemovie') and self.suitHasCondition(suitId, 'sued') and theSuit.currHP > 0:
+            attack[SUIT_ATK_COL] = {'suitName': '',
+                                    'name': 'SueApplication',  # Sue Application movie since the actual movie doesnt exist
+                                    'animName': 'nothing',
+                                    'hp': 0,
+                                    'acc': 100,
+                                    'freq': 0,
+                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE}
+        else:
+            attack[SUIT_ATK_COL] = SuitBattleGlobals.getSuitAttack(theSuit.dna.name, theSuit.getLevel())  # Professor Control: __calcSuitAtkType() is no longer used, but that has desperation code.  TODO: Find a new, possibly neater, way to pull off desperation.
+        attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+        if attack[SUIT_TGT_COL] == []:
+            attack = getDefaultSuitAttack()
+        attack[SUIT_HP_COL] = [-1 for i in xrange(len(self.battle.activeToons))]
+        self.__calcSuitAtkHpALT(attack)
+        if attack[SUIT_ATK_COL]:
+            if self.__suitAtkAffectsGroup(attack):
+                for currTgt in self.battle.activeToons:
+                    self.__updateSuitAtkStat(currTgt)
+
+            else:
+                for currTgt in attack[SUIT_TGT_COL]:
+                    self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+        
+        targets = self.__createSuitTargetList(attack)
+        allTargetsDead = True
+        for currTgt in targets:
+            if self.__getToonHp(currTgt) > 0:
+                allTargetsDead = False
+                break
+
+        if allTargetsDead:
+            attack = getDefaultSuitAttack()
+        if self.__attackHasHit(attack, suit=1):
+            self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+        attack[SUIT_BEFORE_TOONS_COL] = 0
+        return attack
 
     def __calculateSuitAttacks(self):
+        for i in xrange(len(self.battle.activeSuits)): # Who is cheating before the Cog attacks play but after the Toon attacks?
+            suitId = self.battle.activeSuits[i].doId
+            x = self.TurnsElapsed
+
         for i in xrange(len(self.battle.activeSuits)):
             #if i < len(self.battle.activeSuits):
                 suitId = self.battle.activeSuits[i].doId
@@ -5421,36 +5720,45 @@ class BattleCalculatorAI:
                     continue
                 if self.battle.pendingSuits.count(self.battle.activeSuits[i]) > 0 or self.battle.joiningSuits.count(self.battle.activeSuits[i]) > 0:
                     continue
-                attack = getDefaultSuitAttack()
-                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = self.__calcSuitAtkType(self.battle.activeSuits[i])
-                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                if attack[SUIT_TGT_COL] == []:
-                    attack = getDefaultSuitAttack()
-                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != '':
-                    if self.__suitAtkAffectsGroup(attack):
-                        for currTgt in self.battle.activeToons:
-                            self.__updateSuitAtkStat(currTgt)
-
-
-                    else:
-                        for currTgt in attack[SUIT_TGT_COL]:
-                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                targets = self.__createSuitTargetList(attack)
-                allTargetsDead = True
-                for currTgt in targets:
-                    if self.__getToonHp(currTgt) > 0:
-                        allTargetsDead = False
-                        break
-
-                if allTargetsDead:
-                    attack = getDefaultSuitAttack()
-                if self.__attackHasHit(attack, suit=1):
-                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                attack[SUIT_BEFORE_TOONS_COL] = 0
+                attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
+
+                if self.battle.findSuit(suitId).dna.name == 'erclaim': # Check if the Cog that just attacked is capable of cheating (e.g. if self.battle.findSuit(suitId).dna.name == 'erclaim').
+                    pass # Professor Control: I don't believe there's a Laff Steal cheat, and if there is, I do not know how I would get it to function correctly.  I already have issues trying to get a cheat in my source to work when the Cog misses an attack.
+                elif False: # Keep checking for other corresponding Cog names; False is a placeholder.
+                    pass
+
+                for i in xrange(len(self.battle.activeSuits)): # Now, how about the other Cogs, including the one that just attacked?
+                    suitId = self.battle.activeSuits[i].doId
+                    if self.battle.activeSuits[i].dna.name == 'foreman' and self.getActualLevel() == 25 and self.__suitCanAttack(suitId): # Sniper Factory Foreman
+                        snipeAttack = getDefaultSuitAttack()
+                        snipeAttack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                        snipeAttack[SUIT_ATK_COL] = {'suitName': 'foreman',
+                         'name': 'PowerhouseSnipeBookkept',
+                         'animName': 'glower',
+                         'hp': 0,
+                         'acc': 100,
+                         'freq': 0,
+                         'group': SuitBattleGlobals.ATK_TGT_GROUP}
+                        snipeAttack[SUIT_TGT_COL] = attack[SUIT_TGT_COL] # All the same targets as the previous attack.  NOTE: This assumes attack was not used for any cheats between the attack and now, so DO NOT make a cheat list with the variable name attack.
+                        snipeAttack[SUIT_HP_COL] = [(hp * 0.75) for hp in attack[SUIT_HP_COL]] # Same HP values, but at 0.75x effectiveness.  May or may not need to be cast to ints.
+                        self.__calcSuitAtkHpALT(attack) # Professor Control: Due to sharing the Powerhouse's Bookkept Snipe, this will ruin the calculations and cause all Toons to take 0 damage because no Toon is bookkept, but I want to get this update out, along with other unforeseen consequences I overlooked due to my hastiness.
+                        for currTgt in snipeAttack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+
+                        targets = self.__CreateSuitTargetList(attack)
+                        allTargetsDead = True
+                        for currTgt in targets:
+                            if self.__getToonHp(currTgt) > 0:
+                                allTargetsDead = False
+                                break
+                        
+                        if allTargetsDead:
+                            snipeAttack = getDefaultSuitAttack()
+                        if self.__attackHasHit(snipeAttack, suit=1):
+                            self.__applySuitAttackDamages(snipeAttack, self.battle.findSuit(snipeAttack[SUIT_ID_COL]))
+                        snipeAttack[SUIT_BEFORE_TOONS_COL] = 0
+                        self.battle.suitAttacks.append(snipeAttack)
 
         for i in xrange(len(self.battle.activeSuits)): # Desperation for Litigation Managers
             suitId = self.battle.activeSuits[i].doId
@@ -5458,13 +5766,19 @@ class BattleCalculatorAI:
             if self.battle.activeSuits[i].currHP <= 0 and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers:
                 attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = 'Desperation'  # Desperation Activation
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                 'name': 'Desperation', # Desperation Activation
+                 'animName': 'nothing',
+                 'hp': 0,
+                 'acc': 100,
+                 'freq': 0, # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                 'group': SuitBattleGlobals.ATK_TGT_SINGLE} # Why is Desperation single-target?
                 attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                 if attack[SUIT_TGT_COL] == []:
                     continue
                 attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                 self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != '':
+                if attack[SUIT_ATK_COL]:
                     if self.__suitAtkAffectsGroup(attack):
                         for currTgt in self.battle.activeToons:
                             self.__updateSuitAtkStat(currTgt)
@@ -5616,8 +5930,8 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'radioinfrequencycalculator', 1, 10, 'setBoth')
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'overmodulatedcalculator', 1, 10, 'setBoth')
-                if (x + 4) % 5 == 0:
-                    self.setSuitCondition(suitId, 'dancesessioncalculator', 1, 10, 'setBoth')
+                #if (x + 4) % 5 == 0:
+                    #self.setSuitCondition(suitId, 'dancesessioncalculator', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'hottakecalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'fmaker':  # filmmaker
@@ -5641,13 +5955,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerDeath'  # Videographer Death to Sacrifice All Cogs
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerDeath', # Videographer Death to Sacrifice All Cogs
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -5672,13 +5992,19 @@ class BattleCalculatorAI:
                 if self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BroadcasterDonation'  # Donation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BroadcasterDonation', # Donation
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -5702,13 +6028,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'killedbyvideo') and not self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerVideoStatic'  # Video Static Upon Death
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerVideoStatic', # Video Static Upon Death
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -5733,13 +6065,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'killedbyvideo') and not self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerVideoStatic'  # Video Static Upon Death
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerVideoStatic', # Video Static Upon Death
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -5763,13 +6101,26 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'filmmakercalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(['FilmmakerCameraRewind', 'FilmmakerCameraFlash'])
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'FilmmakerCameraRewind',
+                      'animName': 'throw-object',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'FilmmakerCameraFlash',
+                      'animName': 'glower',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}])
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -5793,13 +6144,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP < self.battle.activeSuits[i].maxHP and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'FilmmakerBudgetCuts'
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'FilmmakerBudgetCuts',
+                     'animName': 'glower',
+                     'hp': 30,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_DOUBLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -5824,13 +6181,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'killedbyvideo') and not self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerVideoStatic'  # Video Static Upon Death
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerVideoStatic', # Video Static Upon Death
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -5854,13 +6217,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'extortioncalculator2') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'DirectorActionRetaliation'
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'DirectorActionRetaliation',
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -5884,13 +6253,33 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'directorcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(['DirectorAction', 'DirectorCut', 'DirectorBackToOnes'])
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'DirectorAction',
+                      'animName': 'nothing',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'DirectorCut',
+                      'animName': 'nothing',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'DirectorBackToOnes',
+                      'animName': 'nothing',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}])
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -5913,76 +6302,28 @@ class BattleCalculatorAI:
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'wsi': #witness stand-in
                 if self.battle.activeSuits[i].getSkeleRevives() == 0 and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(['PeckingOrder', 'GuiltTrip', 'EvilEye', 'RestrainingOrder', 'PowerTrip'])
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    attack = self.__getGenericSuitAttack(suitId)
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'redd': #redd heir wing
                 if self.battle.activeSuits[i].getSkeleRevives() == 0 and self.__suitCanAttack(suitId):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(['Shake', 'GuiltTrip', 'DoubleTalk', 'Liquidate', 'WriteOff'])
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    attack = self.__getGenericSuitAttack(suitId)
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'soaked') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'ReddLiquidationSale'
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ReddLiquidationSale',
+                     'animName': 'magic1',
+                     'hp': 0,
+                     'acc': 85,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6007,13 +6348,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].getActualLevel() == 28 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerSingingBlues'  # Blue Silhouette
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerSingingBlues', # Blue Silhouette
+                     'animName': 'phone',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6037,13 +6384,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].getActualLevel() == 29 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerBar'  # Red Silhouette
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerBar', # Red Silhouette
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6067,13 +6420,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].getActualLevel() == 29 and self.suitHasCondition(suitId, 'barcalculator') and not self.battle.activeSuits[i].currHP <= 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerBar'  # Red Silhouette
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerBar', # Red Silhouette
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6097,13 +6456,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].getActualLevel() == 30 and not self.battle.activeSuits[i].currHP <= 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerSplashback'  # Pink Silhouette
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerSplashback', # Pink Silhouette
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6127,13 +6492,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].getActualLevel() == 31 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerDamageReduction'  # Light Blue Silhouette
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerDamageReduction', # Light Blue Silhouette
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_DOUBLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6157,13 +6528,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].getActualLevel() == 32 and not self.battle.activeSuits[i].currHP <= 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerCheerRetaliation'  # Purple Silhouette
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerCheerRetaliation', # Purple Silhouette
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6187,13 +6564,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].getActualLevel() == 33 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerDonation'  # White Silhouette
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerDonation', # White Silhouette
+                     'animName': 'shot5',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6217,13 +6600,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].getActualLevel() == 34 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerSyphon'  # Magenta Silhouette
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerSyphon', # Magenta Silhouette
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6248,13 +6637,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'ScapegoatCourtRecordBan'  # Gavel Court Record Ban Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ScapegoatCourtRecordBan', # Gavel Court Record Ban Retaliation
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6279,13 +6674,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SafetyViolation'
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SafetyViolation',
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6310,7 +6711,13 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterUnionBusterDamage'  # DOT Union Buster
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterUnionBusterDamage', # DOT Union Buster
+                     'animName': 'nothing',
+                     'hp': 25,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = []
                     for toonId in self.battle.activeToons:
                         if self.toonHasCondition(toonId, 'busted'):
@@ -6320,7 +6727,7 @@ class BattleCalculatorAI:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6341,46 +6748,58 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-            #    if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
-                  #  attack = getDefaultSuitAttack()
-                   # attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                  #  attack[SUIT_ATK_COL] = 'UnionBusterBreachOfContract2'  # Breach Of Contract Soaked
-                   # attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                 #   if attack[SUIT_TGT_COL] == []:
-                   #     continue
-                   # attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                   # self.__calcSuitAtkHpALT(attack)
-                   # if attack[SUIT_ATK_COL] != '':
-                    #    if self.__suitAtkAffectsGroup(attack):
-                     #       for currTgt in self.battle.activeToons:
-                        #        self.__updateSuitAtkStat(currTgt)
+                # if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                #     attack = getDefaultSuitAttack()
+                #     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                #     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                #      'name': 'UnionBusterBreachOfContract2', # Breach Of Contract Soaked
+                #      'animName': 'sanction',
+                #      'hp': 0,
+                #      'acc': 100,
+                #      'freq': 0,
+                #      'group': SuitBattleGlobals.ATK_TGT_GROUP}
+                #     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                #     if attack[SUIT_TGT_COL] == []:
+                #         continue
+                #     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                #     self.__calcSuitAtkHpALT(attack)
+                #     if attack[SUIT_ATK_COL]:
+                #         if self.__suitAtkAffectsGroup(attack):
+                #             for currTgt in self.battle.activeToons:
+                #                 self.__updateSuitAtkStat(currTgt)
 
-                      #  else:
-                          #  for currTgt in attack[SUIT_TGT_COL]:
-                           #     self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                  #  targets = self.__createSuitTargetList(attack)
-                  #  allTargetsDead = True
-                   # for currTgt in targets:
-                     #   if self.__getToonHp(currTgt) > 0:
-                         #   allTargetsDead = False
-                         #   break
+                #         else:
+                #             for currTgt in attack[SUIT_TGT_COL]:
+                #                 self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                #     targets = self.__createSuitTargetList(attack)
+                #     allTargetsDead = True
+                #     for currTgt in targets:
+                #         if self.__getToonHp(currTgt) > 0:
+                #             allTargetsDead = False
+                #             break
 
-                    #if allTargetsDead:
-                        #attack = getDefaultSuitAttack()
-                   # if self.__attackHasHit(attack, suit=1):
-                       # self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                 #   attack[SUIT_BEFORE_TOONS_COL] = 0
-                   # self.battle.suitAttacks.append(attack)
+                #     if allTargetsDead:
+                #         attack = getDefaultSuitAttack()
+                #     if self.__attackHasHit(attack, suit=1):
+                #         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                #     attack[SUIT_BEFORE_TOONS_COL] = 0
+                #     self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterBreachOfContract3'  # Breach Of Contract Vulnerabilities
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterBreachOfContract3', # Breach Of Contract Vulnerabilities
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6404,13 +6823,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterBreachOfContract4'  # Breach Of Contract Gag Ban Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterBreachOfContract4', # Breach Of Contract Gag Ban Retaliation
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6435,13 +6860,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'StenographerCourtRecordBan'  # Court Record Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'StenographerCourtRecordBan', # Court Record Retaliation
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6466,13 +6897,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerBust'
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerBust',
+                     'animName': 'bust',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6497,13 +6934,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerBust'  # Bust
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerBust', # Bust
+                     'animName': 'bust',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6527,13 +6970,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 3 == 0 and not self.TurnsElapsed == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = "HighRollerCommercialBreak" # Commercial Break after Puzzle
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerCommercialBreak', # Commercial Break after Puzzle
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6557,13 +7006,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'gameovercalculator'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerGameOver'  # Game Over after Using Puzzle
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerGameOver', # Game Over after Using Puzzle
+                     'animName': 'song-and-dance',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6587,13 +7042,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerWheelSpin'  # Wheel Spin
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerWheelSpin', # Wheel Spin
+                     'animName': 'wheelspin',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6617,13 +7078,26 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(('HighRollerPuzzle', 'HighRollerPuzzleBan'))  # Variation of these 2 every round
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerPuzzle',
+                      'animName': 'taunt',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerPuzzleBan',
+                      'animName': 'cease',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}])  # Variation of these 2 every round
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6647,13 +7121,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 3 == 0 and not self.TurnsElapsed == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = "HighRollerGameTimeSpawn" # Spawn After Puzzle
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerGameTimeSpawn', # Spawn After Puzzle
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6677,13 +7157,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'gametimecalculator'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'TargetCheck' # Checks for Alive Cogs to use Game Time on
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'TargetCheck', # Checks for Alive Cogs to use Game Time on
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6707,13 +7193,26 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target2') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(('HighRollerGameTimeCog', 'HighRollerGameTimeCog2'))  # Game Time
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog2',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}]) # Game Time
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6737,13 +7236,26 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(('HighRollerGameTimeCog3', 'HighRollerGameTimeCog4'))  # Game Time
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog3',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog4',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}]) # Game Time
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6767,13 +7279,26 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target4') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(('HighRollerGameTimeCog5', 'HighRollerGameTimeCog6'))  # Game Time
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog5',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog6',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}])  # Game Time
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6797,13 +7322,26 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target5') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(('HighRollerGameTimeCog7', 'HighRollerGameTimeCog8'))  # Game Time
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog7',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog8',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}])  # Game Time
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6827,13 +7365,26 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target6') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(('HighRollerGameTimeCog9', 'HighRollerGameTimeCog10'))  # Game Time
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog9',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerGameTimeCog10',
+                      'animName': 'snap',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}])  # Game Time
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6857,13 +7408,171 @@ class BattleCalculatorAI:
                 if len(self.battle.activeSuits) < 6 and self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'spawncalculator'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerGameTimeSpawn'  # Spawn Cogs
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerGameTimeSpawn', # Spawn Cogs
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'deadcase') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not self.battle.activeSuits[i].dna.name == 'caseman':
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = {'suitName': '',
+                                            'name': 'CaseManagerLegallyBound',  # Legally Bound for when Case Manager is defeated
+                                            'animName': 'nothing',
+                                            'hp': 20,
+                                            'acc': 100,
+                                            'freq': 0,
+                                            'group': SuitBattleGlobals.ATK_TGT_GROUP}
+                    attack[SUIT_TGT_COL] = []
+                    for toonId in self.battle.activeToons:
+                        if self.toonHasCondition(toonId, 'bound'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(toonId))
+
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL]:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'deadcase') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not self.battle.activeSuits[i].dna.name == 'caseman':
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = {'suitName': '',
+                                            'name': 'CaseManagerInsurance',  # Insurance for when Case Manager is defeated
+                                            'animName': 'nothing',
+                                            'hp': 0,
+                                            'acc': 100,
+                                            'freq': 0,
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE}
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL]:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'deadunion') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not self.battle.activeSuits[i].dna.name == 'ubuster':
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = {'suitName': '',
+                                            'name': 'UnionBusterUnionBusterDamage',  # Union Buster for when Union Buster is defeated
+                                            'animName': 'nothing',
+                                            'hp': 25,
+                                            'acc': 100,
+                                            'freq': 0,
+                                            'group': SuitBattleGlobals.ATK_TGT_GROUP}
+                    attack[SUIT_TGT_COL] = []
+                    for toonId in self.battle.activeToons:
+                        if self.toonHasCondition(toonId, 'busted'):
+                            attack[SUIT_TGT_COL].append(self.battle.activeToons.index(toonId))
+
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL]:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'deadwire') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not self.battle.activeSuits[i].dna.name == 'wtapper':
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = {'suitName': '',
+                                            'name': 'WiretapperCollectCallDamage',  # Collect Call for when Wiretapper is defeated
+                                            'animName': 'nothing',
+                                            'hp': 0,
+                                            'acc': 100,
+                                            'freq': 0,
+                                            'group': SuitBattleGlobals.ATK_TGT_GROUP}
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6888,7 +7597,13 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'CaseManagerLegallyBound'  # Legally Bound
+                    attack[SUIT_ATK_COL] = {'suitName': '',
+                     'name': 'CaseManagerLegallyBound', # Legally Bound
+                     'animName': 'nothing',
+                     'hp': 20,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = []
                     for toonId in self.battle.activeToons:
                         if self.toonHasCondition(toonId, 'bound'):
@@ -6898,7 +7613,7 @@ class BattleCalculatorAI:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6922,13 +7637,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'CaseManagerCourtRecordBan'  # Court Record Ban Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'CaseManagerCourtRecordBan', # Court Record Ban Retaliation
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6953,13 +7674,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'PowerhouseSnipeGagBan'  # Snipe Retaliation For Gag Bans
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'PowerhouseSnipeGagBan', # Snipe Retaliation For Gag Bans
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -6984,13 +7711,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BookkeeperBookkeepingRetaliation'  # Bookkeeping Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BookkeeperBookkeepingRetaliation', # Bookkeeping Retaliation
+                     'animName': 'nothing',
+                     'hp': 1,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7015,7 +7748,13 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'WiretapperCollectCallDamage'  # Collect Call Fees
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'WiretapperCollectCallDamage', # Collect Call Fees
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = []
                     for toonId in self.battle.activeToons:
                         if self.toonHasCondition(toonId, 'collectcalled'):
@@ -7025,7 +7764,7 @@ class BattleCalculatorAI:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7049,13 +7788,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'WiretapperGagBan'  # Budget Cuts Gag Ban Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'WiretapperGagBan', # Budget Cuts Gag Ban Retaliation
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7086,13 +7831,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'hollywoodcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerRisingStarsSacrifice'  # Rising Stars Sacrifice
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerRisingStarsSacrifice', # Rising Stars Sacrifice
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7116,13 +7867,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'electricshockcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'TargetCheck'  # Target Check
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'TargetCheck', # Target Check
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7146,13 +7903,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target3'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerElectricShock'  # Electric Shock
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerElectricShock', # Electric Shock
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7176,13 +7939,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target4'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerElectricShock2'  # Electric Shock
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerElectricShock2', # Electric Shock
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7206,13 +7975,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target5'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerElectricShock3'  # Electric Shock
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerElectricShock3', # Electric Shock
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7236,13 +8011,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target6'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerElectricShock4'  # Electric Shock
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerElectricShock4', # Electric Shock
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7266,13 +8047,19 @@ class BattleCalculatorAI:
                 if not self.suitHasCondition(suitId, 'phase3') and self.battle.activeSuits[i].currHP <= 7777:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerDirectorCuts'  # Director Cuts
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerDirectorCuts', # Director Cuts
+                     'animName': 'song-and-dance',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7296,13 +8083,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'silhouettespawn') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerRisingStarsSilhouette'  # Rising Stars Silhouette
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerRisingStarsSilhouette', # Rising Stars Silhouette
+                     'animName': 'shot5',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7326,13 +8119,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'immune') and not self.suitHasCondition(suitId, 'directorscutscalculator') and not self.suitHasCondition(suitId, 'silhouettespawn') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerRisingStars2'  # Rising Stars w/ Managers
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerRisingStars2', # Rising Stars w/ Managers
+                     'animName': 'shot5',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7356,13 +8155,19 @@ class BattleCalculatorAI:
                 if not self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'immune') and not self.suitHasCondition(suitId, 'silhouettespawn') and not self.suitHasCondition(suitId, 'directorscuts') and not len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerRisingStars'  # Rising Stars Hollywoods
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerRisingStars', # Rising Stars Hollywoods
+                     'animName': 'shot5',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7387,13 +8192,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'StenographerSanctionBindings'  # Court Sanction Legal Bindings Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'StenographerSanctionBindings', # Court Sanction Legal Bindings Retaliation
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7418,13 +8229,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'insurancecalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'CaseManagerInsurancePlan'  # Insurance Plan
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'CaseManagerInsurancePlan', # Insurance Plan
+                     'animName': 'throw-insurance',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7448,13 +8265,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'CaseManagerInsurance'  # Insurance Healing
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'CaseManagerInsurance', # Insurance Healing
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7479,13 +8302,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'gavelcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'ScapegoatGavel'  # Gavel
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ScapegoatGavel', # Gavel
+                     'animName': 'effort',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7510,13 +8339,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'LitigatorSnapSoak'  # Snap Soaked
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'LitigatorSnapSoak', # Snap Soaked
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7540,13 +8375,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'snappedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'LitigatorSnap'  # Snap Most Dangerous
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'LitigatorSnap', # Snap Most Dangerous
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7571,13 +8412,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'unionbustcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterUnionBust'  # Union Bust
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterUnionBust', # Union Bust
+                     'animName': 'quick-jump',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7601,13 +8448,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'unionbustercalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterUnionBuster'  # Union Buster
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterUnionBuster', # Union Buster
+                     'animName': 'summon',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7632,13 +8485,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'hottakecalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RadiographerHotTake'  # Hot Take
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RadiographerHotTake', # Hot Take
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7662,13 +8521,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'overmodulatedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'TargetCheck'  # Target Check
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'TargetCheck', # Target Check
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7692,13 +8557,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target2'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RadiographerOvermodulated'  # Overmodulated
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RadiographerOvermodulated', # Overmodulated
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7722,13 +8593,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target3'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RadiographerOvermodulated2'  # Overmodulated
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RadiographerOvermodulated2', # Overmodulated
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7752,13 +8629,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target4'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RadiographerOvermodulated3'  # Overmodulated
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RadiographerOvermodulated3', # Overmodulated
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7782,13 +8665,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target5'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RadiographerOvermodulated4'  # Overmodulated
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RadiographerOvermodulated4', # Overmodulated
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7812,13 +8701,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target6'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RadiographerOvermodulated5'  # Overmodulated
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RadiographerOvermodulated5', # Overmodulated
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7843,13 +8738,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'refinementcalculator') and not self.suitHasCondition(suitId, 'headroller2calculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorRefinement'  # Refinement
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorRefinement', # Refinement
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7873,13 +8774,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'refinemanagercalculator') and not self.suitHasCondition(suitId, 'headroller2calculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorRefinementManager'  # Refinement Manager
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorRefinementManager', # Refinement Manager
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7903,13 +8810,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'headroller2calculator') and self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorGhostMentality'  # Ghost Mentality
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorGhostMentality', # Ghost Mentality
+                     'animName': 'deadwood',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7933,13 +8846,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'headroller2calculator') and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorHeadRollerGroup'  # Group Head Roller
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorHeadRollerGroup', # Group Head Roller
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7964,13 +8883,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'explodingcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BookkeeperExplodingDocument'  # Exploding Document
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BookkeeperExplodingDocument', # Exploding Document
+                     'animName': 'throw-paper',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -7995,13 +8920,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'collectcallcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'WiretapperCollectCall'  # Collect Call
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'WiretapperCollectCall', # Collect Call
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8026,13 +8957,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'PowerhouseSnipeCollectCall'  # Snipe Retaliation Collect Call
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'PowerhouseSnipeCollectCall', # Snipe Retaliation Collect Call
+                     'animName': 'glower',
+                     'hp': 1,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8057,13 +8994,26 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(('HighRollerConduction', 'HighRollerFreeCruise'))  # Choice Conduction or Free Cruise or No Attack
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerConduction',
+                      'animName': 'throw-object',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_DOUBLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerFreeCruise',
+                      'animName': 'song-and-dance',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_GROUP}]) # Choice Conduction or Free Cruise or No Attack
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8089,15 +9039,48 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     if self.battle.activeSuits[i].currHP <= 51851 and not self.suitHasCondition(suitId, 'aceInTheHole'):
-                        attack[SUIT_ATK_COL] = 'HighRollerAceInTheHole'  # Ace In The Hole
+                        attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                         'name': 'HighRollerAceInTheHole', # Ace In The Hole
+                         'animName': 'nothing',
+                         'hp': 0,
+                         'acc': 100,
+                         'freq': 0,
+                         'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     else:
-                        attack[SUIT_ATK_COL] = random.choice(('HighRollerDiceRouletteCogs', 'HighRollerDiceRouletteToons', 'HighRollerDiceRouletteNobody', 'HighRollerNoAttack'))  # Dice Roulette Randomizer or No Attack
+                        attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                          'name': 'HighRollerDiceRouletteCogs',
+                          'animName': 'nothing',
+                          'hp': 0,
+                          'acc': 100,
+                          'freq': 0,
+                          'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                         {'suitName': self.battle.activeSuits[i].dna.name,
+                          'name': 'HighRollerDiceRouletteToons',
+                          'animName': 'nothing',
+                          'hp': 0,
+                          'acc': 100,
+                          'freq': 0,
+                          'group': SuitBattleGlobals.ATK_TGT_GROUP},
+                         {'suitName': self.battle.activeSuits[i].dna.name,
+                          'name': 'HighRollerDiceRouletteNobody',
+                          'animName': 'nothing',
+                          'hp': 0,
+                          'acc': 100,
+                          'freq': 0,
+                          'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                         {'suitName': self.battle.activeSuits[i].dna.name,
+                          'name': 'HighRollerNoAttack',
+                          'animName': 'nothing',
+                          'hp': 0,
+                          'acc': 100,
+                          'freq': 100,
+                          'group': SuitBattleGlobals.ATK_TGT_SINGLE}]) # Dice Roulette Randomizer or No Attack
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8122,13 +9105,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'promotioncalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'TargetCheck'  # Target Check for Promotion
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'TargetCheck', # Target Check for Promotion
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8152,13 +9141,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target2'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SafetyPromotion'  # Promotion
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SafetyPromotion', # Promotion
+                     'animName': 'mob-mentality',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8182,13 +9177,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target3'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SafetyPromotion2'  # Promotion
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SafetyPromotion2', # Promotion
+                     'animName': 'mob-mentality',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8212,13 +9213,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target4'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SafetyPromotion3'  # Promotion
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SafetyPromotion3', # Promotion
+                     'animName': 'mob-mentality',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8242,13 +9249,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target5'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SafetyPromotion4'  # Promotion
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SafetyPromotion4', # Promotion
+                     'animName': 'mob-mentality',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8272,13 +9285,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target6'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SafetyPromotion5'  # Promotion
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SafetyPromotion5', # Promotion
+                     'animName': 'mob-mentality',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8303,13 +9322,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'radioinfrequencycalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RadiographerRadioInfrequency'  # Radio Infrequency
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RadiographerRadioInfrequency', # Radio Infrequency
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8334,13 +9359,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'extortioncalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerExtortion'  # Extortion
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerExtortion', # Extortion
+                     'animName': 'magic3',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8364,13 +9395,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'profiteeringcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'TargetCheck'  # Target Check for Profiteering
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'TargetCheck', # Target Check for Profiteering
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8394,13 +9431,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target2'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerProfiteering5'  # Profiteering
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerProfiteering5', # Profiteering
+                     'animName': 'come-on',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8424,13 +9467,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target3'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerProfiteering2'  # Profiteering
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerProfiteering2', # Profiteering
+                     'animName': 'come-on',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8454,13 +9503,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target4'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerProfiteering3'  # Profiteering
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerProfiteering3', # Profiteering
+                     'animName': 'come-on',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8484,13 +9539,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target5'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerProfiteering4'  # Profiteering
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerProfiteering4', # Profiteering
+                     'animName': 'come-on',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8514,13 +9575,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target6'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerProfiteering5'  # Profiteering
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerProfiteering5', # Profiteering
+                     'animName': 'come-on',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8544,13 +9611,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerCompensation'  # Compensation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerCompensation', # Compensation
+                     'animName': 'rush-job',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8574,13 +9647,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'extortioncalculator2') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerExtortion2'  # Extortion Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerExtortion2', # Extortion Retaliation
+                     'animName': 'magic3',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8610,13 +9689,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soakedcalculator') or (x + 1) % 3 == 0 and len(self.battle.activeSuits) >= 6 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'WSICeaseAndDesist'  # Cease And Desist
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'WSICeaseAndDesist', # Cease And Desist
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8640,13 +9725,19 @@ class BattleCalculatorAI:
                 if x % 2 == 0 and len(self.battle.activeSuits) < 6 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'WSIJuryNotice'  # Jury Notice
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'WSIJuryNotice', # Jury Notice
+                     'animName': 'summon',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8671,13 +9762,19 @@ class BattleCalculatorAI:
                 if (x + 3) % 4 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'ReddAutoRepair'  # Auto Repair
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ReddAutoRepair', # Auto Repair
+                     'animName': 'effort',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8701,13 +9798,19 @@ class BattleCalculatorAI:
                 if (x + 1) % 3 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'ReddPeckingOrder'  # Pecking Order
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ReddPeckingOrder', # Pecking Order
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8732,13 +9835,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RadiographerHotTakeRetaliation'  # Hot Take Soak Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RadiographerHotTakeRetaliation', # Hot Take Soak Retaliation
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8763,13 +9872,26 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(('HighRollerRolled', 'HighRollerNoAttack'))  # Choice Rolled or No Attack
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerRolled',
+                      'animName': 'magic3',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_GROUP},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'HighRollerNoAttack',
+                      'animName': 'nothing',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 100,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}]) # Choice Rolled or No Attack
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8794,13 +9916,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'unionduescalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterUnionDues'  # Union Dues
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterUnionDues', # Union Dues
+                     'animName': 'magic3',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8824,13 +9952,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'breachcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterBreachOfContract'  # Breach Of Contract
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterBreachOfContract', # Breach Of Contract
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8854,13 +9988,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'unionduescalculationcalculator') and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterUnionCalculator'  # Union Dues Calculation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterUnionCalculator', # Union Dues Calculation
+                     'animName': 'calculator',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8885,13 +10025,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'costscalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SynergyFees'  # Court Costs
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SynergyFees', # Court Costs
+                     'animName': 'magic3',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8915,13 +10061,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'sanctioncalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'StenographerSanction'  # Court Sanction Regular
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'StenographerSanction', # Court Sanction Regular
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8946,13 +10098,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 99 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'ScapegoatEnraged'  # First Turn Enraged
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ScapegoatEnraged', # First Turn Enraged
+                     'animName': 'rage',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -8976,13 +10134,19 @@ class BattleCalculatorAI:
                 if self.getSuitConditionTurns(suitId, 'enraged') == 1 and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'ScapegoatShieldsUp'  # Shield's Up
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ScapegoatShieldsUp', # Shield's Up
+                     'animName': 'defense',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9006,13 +10170,19 @@ class BattleCalculatorAI:
                 if self.getSuitConditionTurns(suitId, 'shielding') == 1 and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'ScapegoatEnraged'  # Enraged
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ScapegoatEnraged', # Enraged
+                     'animName': 'rage',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9037,13 +10207,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'PowerhouseSnipeVulnerable'  # Snipe Retaliation Vulnerabilities
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'PowerhouseSnipeVulnerable', # Snipe Retaliation Vulnerabilities
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9067,13 +10243,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'PowerhouseSnipeBookkept'  # Snipe Retaliation For Bookkeeping
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'PowerhouseSnipeBookkept', # Snipe Retaliation For Bookkeeping
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9098,13 +10280,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BookkeeperPaperCutSoaked'  # Soaked Paper Cut Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BookkeeperPaperCutSoaked', # Soaked Paper Cut Retaliation
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9128,13 +10316,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'markedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BookkeeperPaperCutMarked'  # Marked Paper Cut Retaliation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BookkeeperPaperCutMarked', # Marked Paper Cut Retaliation
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9158,13 +10352,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'papercutcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BookkeeperPaperCut'  # Paper Cut
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BookkeeperPaperCut', # Paper Cut
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9188,13 +10388,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'bookkeepingcalculator') and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BookkeeperBookkeeping'  # Bookkeeping
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BookkeeperBookkeeping', # Bookkeeping
+                     'animName': 'effort',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9219,13 +10425,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'brokenconnectioncalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'WiretapperBrokenConnection'  # Broken Connection
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'WiretapperBrokenConnection', # Broken Connection
+                     'animName': 'pie-small-react',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9246,16 +10458,22 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'voicemailcalculator') and self.__suitCanAttack(suitId):
+                if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'WiretapperVoicemail'  # Voicemail
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'WiretapperVoicemail', # Collect Call Calculation
+                     'animName': 'phone',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9280,13 +10498,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 2440 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorPhase2'  # 'Phase 2'
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorPhase2', # 'Phase 2'
+                     'animName': 'pie-small-react',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9310,13 +10534,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorManagerialProtection'  # Managerial Protection
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorManagerialProtection', # Managerial Protection
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9340,13 +10570,19 @@ class BattleCalculatorAI:
                 if (self.suitHasCondition(suitId, 'damageupcalculator1') and self.__suitCanAttack(suitId)) or (self.suitHasCondition(suitId, 'damageupcalculator2') and self.__suitCanAttack(suitId)):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorDamageUp'  # Compensation
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorDamageUp', # Compensation
+                     'animName': 'summon',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9370,13 +10606,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'immunecalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorManagerialProtectionImmunity'  # Managerial Protection Immunity
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorManagerialProtectionImmunity', # Managerial Protection Immunity
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9401,13 +10643,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soaked') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerPeckingOrderRetaliationSoak'  # Extra Attack for Being Soaked
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerPeckingOrderRetaliationSoak', # Extra Attack for Being Soaked
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9431,13 +10679,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerPeckingOrderRetaliation'  # Retaliation to Gag Bans
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerPeckingOrderRetaliation', # Retaliation to Gag Bans
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9462,13 +10716,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'highpressurecalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SafetyHighPressure'  # High Pressure
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SafetyHighPressure', # High Pressure
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9492,13 +10752,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'heatwavecalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SafetyHeatWave' # Heat Wave
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SafetyHeatWave', # Heat Wave
+                     'animName': 'magic3-alt',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9528,13 +10794,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'dancesessioncalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RadiographerDanceSession'  # Dance Session
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RadiographerDanceSession', # Dance Session
+                     'animName': 'song-and-dance',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9559,13 +10831,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'bindingscalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'CaseManagerLegalBindings'  # Legal Bindings
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'CaseManagerLegalBindings', # Legal Bindings
+                     'animName': 'throw-object',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9590,13 +10868,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'unionwagescalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterUnionWages' # Union Wages
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterUnionWages', # Union Wages
+                     'animName': 'calculator',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9620,13 +10904,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'contractenforcementcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'UnionBusterContractEnforcement' # Contract Enforcement
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'UnionBusterContractEnforcement', # Contract Enforcement
+                     'animName': 'throw-paper',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9651,13 +10941,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'LitigatorBayouBash'  # Bayou Bash
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'LitigatorBayouBash', # Bayou Bash
+                     'animName': 'none',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9681,13 +10977,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'bellowcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'LitigatorBayouBellow'  # Bayou Bellow
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'LitigatorBayouBellow', # Bayou Bellow
+                     'animName': 'bellow',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9712,13 +11014,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'calculatingcalculator') and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'CalculatingFees'  # Calculating Costs
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'CalculatingFees', # Calculating Costs
+                     'animName': 'calculating-costs',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9742,13 +11050,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BanLevel%s' % random.choice(['45', '46', '47', '48', '56', '57', '58', '67', '68', '78'])
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BanLevel%s' % random.choice(['45', '46', '47', '48', '56', '57', '58', '67', '68', '78']),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9772,13 +11086,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BanLevel%s' % random.randint(4, 8)
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BanLevel%s' % random.randint(4, 8),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9803,13 +11123,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'Ban%s' % random.choice(['ToonupTrap', 'ToonupLure', 'ToonupThrow', 'ToonupSquirt', 'ToonupZap', 'ToonupSound', 'ToonupDrop', 'TrapLure', 'TrapThrow', 'TrapSquirt', 'TrapZap', 'TrapSound', 'TrapDrop', 'LureThrow', 'LureSquirt', 'LureZap', 'LureSound', 'LureDrop', 'ThrowSquirt', 'ThrowZap', 'ThrowSound', 'ThrowDrop', 'SquirtZap', 'SquirtSound', 'SquirtDrop', 'ZapSound', 'ZapDrop', 'SoundDrop'])
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'Ban%s' % random.choice(['ToonupTrap', 'ToonupLure', 'ToonupThrow', 'ToonupSquirt', 'ToonupZap', 'ToonupSound', 'ToonupDrop', 'TrapLure', 'TrapThrow', 'TrapSquirt', 'TrapZap', 'TrapSound', 'TrapDrop', 'LureThrow', 'LureSquirt', 'LureZap', 'LureSound', 'LureDrop', 'ThrowSquirt', 'ThrowZap', 'ThrowSound', 'ThrowDrop', 'SquirtZap', 'SquirtSound', 'SquirtDrop', 'ZapSound', 'ZapDrop', 'SoundDrop']),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9833,13 +11159,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'Ban%s' % random.choice(['Toonup', 'Trap', 'Lure', 'Throw', 'Squirt', 'Zap', 'Sound', 'Drop'])
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'Ban%s' % random.choice(['Toonup', 'Trap', 'Lure', 'Throw', 'Squirt', 'Zap', 'Sound', 'Drop']),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9864,13 +11196,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'heatwavecalculationcalculator') and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'SafetyHeatWaveCalculation'  # Calculating Heat Wave
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'SafetyHeatWaveCalculation', # Calculating Heat Wave
+                     'animName': 'soak',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9894,13 +11232,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BanLevel%s' % random.choice(['45', '46', '47', '48', '56', '57', '58', '67', '68', '78'])  # Gag Bans
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BanLevel%s' % random.choice(['45', '46', '47', '48', '56', '57', '58', '67', '68', '78']), # Gag Bans
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9925,13 +11269,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'mulligancalculator') and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorMulligan'  # Mulligan
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorMulligan', # Mulligan
+                     'animName': 'golf-club-swing',
+                     'hp': 0,
+                     'acc': 80,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9955,13 +11305,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'mulligancalculator2') and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorMulligan'  # Mulligan #2
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorMulligan', # Mulligan #2
+                     'animName': 'golf-club-swing',
+                     'hp': 0,
+                     'acc': 80,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -9985,13 +11341,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'mulligancalculator3') and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorMulligan'  # Mulligan #3
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorMulligan', # Mulligan #3
+                     'animName': 'golf-club-swing',
+                     'hp': 0,
+                     'acc': 80,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10015,13 +11377,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'mulligancalculator4') and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'AmbassadorMulligan'  # Mulligan #4
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorMulligan', # Mulligan #4
+                     'animName': 'golf-club-swing',
+                     'hp': 0,
+                     'acc': 80,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10046,13 +11414,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'desperation') and not self.suitHasCondition(suitId, 'syphoncalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'PowerhouseSyphonDesperation'  # Desperation Syphon For All Cogs
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'PowerhouseSyphonDesperation', # Desperation Syphon For All Cogs
+                     'animName': 'scabbard',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10076,13 +11450,40 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'rotationcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = random.choice(['PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseLureImmune', 'PowerhouseSyphon'])  # Rotation Of Conditions
+                    attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'PowerhouseAbsorb',
+                      'animName': 'defense',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'PowerhouseSoakImmune',
+                      'animName': 'nothing',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'PowerhouseLureImmune',
+                      'animName': 'nothing',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE},
+                     {'suitName': self.battle.activeSuits[i].dna.name,
+                      'name': 'PowerhouseSyphon',
+                      'animName': 'summon',
+                      'hp': 0,
+                      'acc': 100,
+                      'freq': 0,
+                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}]) # Rotation Of Conditions
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10106,13 +11507,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'PowerhouseSnipeSoaked'  # Soak Retaliation Snipe
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'PowerhouseSnipeSoaked', # Soak Retaliation Snipe
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10136,13 +11543,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'PowerhouseSnipeMulligan' # Snipe Retaliation For Being On Cooldown
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'PowerhouseSnipeMulligan', # Snipe Retaliation For Mulligan Attacks
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10167,13 +11580,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'wiretappedcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'WiretapperWiretapped'  # Wiretapped
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'WiretapperWiretapped', # Wiretapped
+                     'animName': 'phone',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10197,13 +11616,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'BanLevel%s' % random.randint(4, 8)
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BanLevel%s' % random.randint(4, 8),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10227,13 +11652,19 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'bantracks'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'Ban%s' % random.choice(['Toonup', 'Trap', 'Lure', 'Throw', 'Squirt', 'Zap', 'Sound', 'Drop'])
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'Ban%s' % random.choice(['Toonup', 'Trap', 'Lure', 'Throw', 'Squirt', 'Zap', 'Sound', 'Drop']),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10258,13 +11689,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'vulnerable') and self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerTrickOfTheLight'  # Trick Of The Light
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerTrickOfTheLight', # Trick Of The Light
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10288,13 +11725,19 @@ class BattleCalculatorAI:
                 if len(self.battle.activeSuits) == 1 and self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'trickofthelight') and not self.suitHasCondition(suitId, 'vulnerable') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerVulnerable'  # Vulnerability
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerVulnerable', # Vulnerability
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10318,13 +11761,19 @@ class BattleCalculatorAI:
                 if len(self.battle.activeSuits) > 1 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerNoAttack'  # No Attack
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerNoAttack', # No Attack
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 100,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10348,13 +11797,19 @@ class BattleCalculatorAI:
                 if len(self.battle.activeSuits) == 1 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerPhase3'  # Phase 3 Movie
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerPhase3', # Phase 3 Movie
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10378,13 +11833,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerRaisingTheAnte'  # Raising The Ante
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerRaisingTheAnte', # Raising The Ante
+                     'animName': 'magic3',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10408,13 +11869,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'HighRollerTrickOfTheLight'  # Trick Of The Light
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'HighRollerTrickOfTheLight', # Trick Of The Light
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10439,13 +11906,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'deathcheck') and not self.suitHasCondition(suitId, 'dead'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'DeathCheck'  # Check for Death
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'DeathCheck', # Check for Death
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10470,13 +11943,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'deathcheck') and not self.suitHasCondition(suitId, 'dead'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'DeathCheck'  # Check for Death
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'DeathCheck', # Check for Death
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10501,13 +11980,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'DeathCheck'  # Check for Death
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'DeathCheck', # Check for Death
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10532,13 +12017,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'shielding'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'DeathCheck'  # Check for Death
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'DeathCheck', # Check for Death
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10563,13 +12054,19 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'shielding'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'DeathCheck'  # Check for Death
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'DeathCheck', # Check for Death
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10596,13 +12093,19 @@ class BattleCalculatorAI:
                         suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerRacketeering'  # Racketeering
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerRacketeering', # Racketeering
+                     'animName': 'objection',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10626,13 +12129,19 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'hustlingcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'RacketeerHustling'  # Hustling
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'RacketeerHustling', # Hustling
+                     'animName': 'come-on',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10657,13 +12166,19 @@ class BattleCalculatorAI:
                 if self.deadSuits > 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = 'VideographerAttackRewind'  # Attack Rewind for Dead Suits
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'VideographerAttackRewind', # Attack Rewind for Dead Suits
+                     'animName': 'snap',
+                     'hp': 25,
+                     'acc': 85,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_DOUBLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
                     attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                     self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL] != '':
+                    if attack[SUIT_ATK_COL]:
                         if self.__suitAtkAffectsGroup(attack):
                             for currTgt in self.battle.activeToons:
                                 self.__updateSuitAtkStat(currTgt)
@@ -10690,165 +12205,39 @@ class BattleCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             if self.suitHasCondition(suitId, 'bellowattack') and self.battle.activeSuits[i].currHP > 0 and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict:
-                attack = getDefaultSuitAttack()
-                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = self.__calcSuitAtkType(self.battle.activeSuits[i])  # Random Extra Attack From Bayou Bellow
-                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                if attack[SUIT_TGT_COL] == []:
-                    continue
-                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != '':
-                    if self.__suitAtkAffectsGroup(attack):
-                        for currTgt in self.battle.activeToons:
-                            self.__updateSuitAtkStat(currTgt)
-
-                    else:
-                        for currTgt in attack[SUIT_TGT_COL]:
-                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                targets = self.__createSuitTargetList(attack)
-                allTargetsDead = True
-                for currTgt in targets:
-                    if self.__getToonHp(currTgt) > 0:
-                        allTargetsDead = False
-                        break
-
-                if allTargetsDead:
-                    attack = getDefaultSuitAttack()
-                if self.__attackHasHit(attack, suit=1):
-                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                attack[SUIT_BEFORE_TOONS_COL] = 0
+                attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack') and self.battle.activeSuits[i].currHP > 0:
-                attack = getDefaultSuitAttack()
-                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = self.__calcSuitAtkType(self.battle.activeSuits[i])  # Random Extra Attack
-                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                if attack[SUIT_TGT_COL] == []:
-                    continue
-                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != NO_ATTACK:
-                    if self.__suitAtkAffectsGroup(attack):
-                        for currTgt in self.battle.activeToons:
-                            self.__updateSuitAtkStat(currTgt)
-
-                    else:
-                        for currTgt in attack[SUIT_TGT_COL]:
-                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                targets = self.__createSuitTargetList(attack)
-                allTargetsDead = True
-                for currTgt in targets:
-                    if self.__getToonHp(currTgt) > 0:
-                        allTargetsDead = False
-                        break
-
-                if allTargetsDead:
-                    attack = getDefaultSuitAttack()
-                if self.__attackHasHit(attack, suit=1):
-                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                attack[SUIT_BEFORE_TOONS_COL] = 0
+                attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack2') and self.battle.activeSuits[i].currHP > 0:
-                attack = getDefaultSuitAttack()
-                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = self.__calcSuitAtkType(self.battle.activeSuits[i])  # Random Extra Attack
-                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                if attack[SUIT_TGT_COL] == []:
-                    continue
-                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != NO_ATTACK:
-                    if self.__suitAtkAffectsGroup(attack):
-                        for currTgt in self.battle.activeToons:
-                            self.__updateSuitAtkStat(currTgt)
-
-                    else:
-                        for currTgt in attack[SUIT_TGT_COL]:
-                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                targets = self.__createSuitTargetList(attack)
-                allTargetsDead = True
-                for currTgt in targets:
-                    if self.__getToonHp(currTgt) > 0:
-                        allTargetsDead = False
-                        break
-
-                if allTargetsDead:
-                    attack = getDefaultSuitAttack()
-                if self.__attackHasHit(attack, suit=1):
-                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                attack[SUIT_BEFORE_TOONS_COL] = 0
+                attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack3') and self.battle.activeSuits[i].currHP > 0:
-                attack = getDefaultSuitAttack()
-                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = self.__calcSuitAtkType(self.battle.activeSuits[i])  # Random Extra Attack
-                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                if attack[SUIT_TGT_COL] == []:
-                    continue
-                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != NO_ATTACK:
-                    if self.__suitAtkAffectsGroup(attack):
-                        for currTgt in self.battle.activeToons:
-                            self.__updateSuitAtkStat(currTgt)
-
-                    else:
-                        for currTgt in attack[SUIT_TGT_COL]:
-                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                targets = self.__createSuitTargetList(attack)
-                allTargetsDead = True
-                for currTgt in targets:
-                    if self.__getToonHp(currTgt) > 0:
-                        allTargetsDead = False
-                        break
-
-                if allTargetsDead:
-                    attack = getDefaultSuitAttack()
-                if self.__attackHasHit(attack, suit=1):
-                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                attack[SUIT_BEFORE_TOONS_COL] = 0
+                attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack4') and self.battle.activeSuits[i].currHP > 0:
-                attack = getDefaultSuitAttack()
-                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = self.__calcSuitAtkType(self.battle.activeSuits[i])  # Random Extra Attack
-                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                if attack[SUIT_TGT_COL] == []:
-                    continue
-                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != NO_ATTACK:
-                    if self.__suitAtkAffectsGroup(attack):
-                        for currTgt in self.battle.activeToons:
-                            self.__updateSuitAtkStat(currTgt)
-
-                    else:
-                        for currTgt in attack[SUIT_TGT_COL]:
-                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                targets = self.__createSuitTargetList(attack)
-                allTargetsDead = True
-                for currTgt in targets:
-                    if self.__getToonHp(currTgt) > 0:
-                        allTargetsDead = False
-                        break
-
-                if allTargetsDead:
-                    attack = getDefaultSuitAttack()
-                if self.__attackHasHit(attack, suit=1):
-                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                attack[SUIT_BEFORE_TOONS_COL] = 0
+                attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack5') and self.battle.activeSuits[i].currHP > 0:
+                attack = self.__getGenericSuitAttack(suitId)
+                self.battle.suitAttacks.append(attack)
+            if not self.suitHasCondition(suitId, 'zapped') and self.suitHasCondition(suitId, 'soaked') and self.getSuitConditionTurns(suitId, 'soaked') == 1 and self.battle.activeSuits[i].currHP > 0:
                 attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = self.__calcSuitAtkType(self.battle.activeSuits[i])  # Random Extra Attack
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                 'name': 'SoakRemoval', # Soak Removal
+                 'animName': 'nothing',
+                 'hp': 0,
+                 'acc': 100,
+                 'freq': 0,
+                 'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                 attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                 if attack[SUIT_TGT_COL] == []:
                     continue
                 attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                 self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != '':
+                if attack[SUIT_ATK_COL]:
                     if self.__suitAtkAffectsGroup(attack):
                         for currTgt in self.battle.activeToons:
                             self.__updateSuitAtkStat(currTgt)
@@ -10869,16 +12258,22 @@ class BattleCalculatorAI:
                     self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                 attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'soaked') and self.getSuitConditionTurns(suitId, 'soaked') == 1 and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.battle.activeSuits[i].currHP > 0:
+            if self.suitHasCondition(suitId, 'sued') and self.getSuitConditionTurns(suitId, 'sued') == 1 and self.battle.activeSuits[i].currHP > 0:
                 attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = 'SoakRemoval'  # Soak Removal
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                 'name': 'SueRemoval', # Sue Removal
+                 'animName': 'nothing',
+                 'hp': 0,
+                 'acc': 100,
+                 'freq': 0,
+                 'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                 attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                 if attack[SUIT_TGT_COL] == []:
                     continue
                 attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                 self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != '':
+                if attack[SUIT_ATK_COL]:
                     if self.__suitAtkAffectsGroup(attack):
                         for currTgt in self.battle.activeToons:
                             self.__updateSuitAtkStat(currTgt)
@@ -10899,16 +12294,22 @@ class BattleCalculatorAI:
                     self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                 attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'soaked') and self.getSuitConditionTurns(suitId, 'soaked') == 1 and self.battle.activeSuits[i].dna.name == 'mh2' and self.battle.activeSuits[i].currHP > 0:
+            if self.suitHasCondition(suitId, 'sued') and self.battle.activeSuits[i].currHP >= (self.battle.activeSuits[i].maxHP * 1.5):
                 attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                attack[SUIT_ATK_COL] = 'SoakRemoval'  # Soak Removal
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                 'name': 'SueRemoval', # Sue Removal
+                 'animName': 'nothing',
+                 'hp': 0,
+                 'acc': 100,
+                 'freq': 0,
+                 'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                 attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                 if attack[SUIT_TGT_COL] == []:
                     continue
                 attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
                 self.__calcSuitAtkHpALT(attack)
-                if attack[SUIT_ATK_COL] != '':
+                if attack[SUIT_ATK_COL]:
                     if self.__suitAtkAffectsGroup(attack):
                         for currTgt in self.battle.activeToons:
                             self.__updateSuitAtkStat(currTgt)

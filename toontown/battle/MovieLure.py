@@ -497,13 +497,13 @@ def __lureSmallMagnet(lure, npcs = []):
         Func(magnet.find('**/lightning').setScale, 1, random.uniform(1.5, 2), 1))
     sizeTrack4 = Sequence(
         Func(magnet.find('**/lightning').setScale, 1, 1, 1))
-    flickerTrack = Sequence(Wait(0.025), Func(sizeTrack.loop), Func(magnet.find('**/lightning').show), Wait(0.025),
+    flickerTrack = Sequence(Wait(0.05), Func(sizeTrack.loop), Func(magnet.find('**/lightning').show), Wait(0.075),
                             Func(sizeTrack.finish), Func(magnet.find('**/lightning').hide),
-                            Wait(0.025), Func(sizeTrack2.loop), Func(magnet.find('**/lightning').show), Wait(0.025),
+                            Wait(0.05), Func(sizeTrack2.loop), Func(magnet.find('**/lightning').show), Wait(0.075),
                             Func(sizeTrack2.finish), Func(magnet.find('**/lightning').hide),
-                            Wait(0.025), Func(sizeTrack3.loop), Func(magnet.find('**/lightning').show), Wait(0.025),
+                            Wait(0.05), Func(sizeTrack3.loop), Func(magnet.find('**/lightning').show), Wait(0.075),
                             Func(sizeTrack3.finish), Func(magnet.find('**/lightning').hide),
-                            Wait(0.025), Func(sizeTrack4.loop), Func(magnet.find('**/lightning').show), Wait(0.025),
+                            Wait(0.05), Func(sizeTrack4.loop), Func(magnet.find('**/lightning').show), Wait(0.075),
                             Func(sizeTrack4.finish), Func(magnet.find('**/lightning').hide))
     lightningTrack = Sequence(Wait(2.6), Func(flickerTrack.loop), Wait(3.7), Func(flickerTrack.finish))
     pos = Point3(-0.27, 0.08, 0.29)
@@ -528,10 +528,10 @@ def __lureLargeMagnet(lure, npcs = []):
         Func(magnet.find('**/lightning').setScale, 1, random.uniform(1.5, 2), 1))
     sizeTrack4 = Sequence(
         Func(magnet.find('**/lightning').setScale, 1, 1, 1))
-    flickerTrack = Sequence(Wait(0.025), Func(sizeTrack.loop), Func(magnet.find('**/lightning').show), Wait(0.025),Func(sizeTrack.finish), Func(magnet.find('**/lightning').hide),
-                            Wait(0.025), Func(sizeTrack2.loop), Func(magnet.find('**/lightning').show), Wait(0.025),Func(sizeTrack2.finish), Func(magnet.find('**/lightning').hide),
-                            Wait(0.025), Func(sizeTrack3.loop), Func(magnet.find('**/lightning').show), Wait(0.025),Func(sizeTrack3.finish), Func(magnet.find('**/lightning').hide),
-                            Wait(0.025), Func(sizeTrack4.loop), Func(magnet.find('**/lightning').show), Wait(0.025),Func(sizeTrack4.finish), Func(magnet.find('**/lightning').hide))
+    flickerTrack = Sequence(Wait(0.025), Func(sizeTrack.loop), Func(magnet.find('**/lightning').show), Wait(0.1),Func(sizeTrack.finish), Func(magnet.find('**/lightning').hide),
+                            Wait(0.025), Func(sizeTrack2.loop), Func(magnet.find('**/lightning').show), Wait(0.1),Func(sizeTrack2.finish), Func(magnet.find('**/lightning').hide),
+                            Wait(0.025), Func(sizeTrack3.loop), Func(magnet.find('**/lightning').show), Wait(0.1),Func(sizeTrack3.finish), Func(magnet.find('**/lightning').hide),
+                            Wait(0.025), Func(sizeTrack4.loop), Func(magnet.find('**/lightning').show), Wait(0.1),Func(sizeTrack4.finish), Func(magnet.find('**/lightning').hide))
     lightningTrack = Sequence(Wait(2.6), Func(flickerTrack.loop), Wait(3.7), Func(flickerTrack.finish))
     pos = Point3(-0.27, 0.08, 0.29)
     hpr = Point3(-90.0, 84.17, -180)
@@ -1003,11 +1003,11 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         y = suitPos.getY()
         ballPosPoints = [Point3(suitPos.getX(), y - 4, 21.0), VBase3(0, -90, 0)]
         ball = loader.loadModel('phase_5/models/char/wreckingball-ball')
-        ballPropTrack.append(getPropAppearTrack(ball, battle, ballPosPoints, 0, Point3(1, 1, 1), scaleUpTime=0))
         ballPropTrack.append(Func(battle.movie.needRestoreRenderProp, ball))
         #ballPropTrack.append(Func(ball.wrtReparentTo, render))
         targetPoint = battle.getActorPosHpr(suit)
-        ballPropTrack.append(Wait(1.5))
+        ballPropTrack.append(Wait(.5))
+        ballPropTrack.append(getPropAppearTrack(ball, battle, ballPosPoints, 0, Point3(1, 1, 1), scaleUpTime=0))
         ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, 0, 0)))
         ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, 90, 0)))
         #ballPropTrack.append(Func(battle.movie.clearRenderProp, trapProp))
@@ -1022,26 +1022,28 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence()
-            animTrack = Sequence(ActorInterval(suit, 'lured', endTime=1.25),
-                                     ActorInterval(suit, 'flail-wb', startTime=0.5, endTime=1.5))
+            animTrack = Sequence(ActorInterval(suit, 'lured', endTime=.75),
+                                     ActorInterval(suit, 'flail-wb', startTime=1, endTime=1.35))
             animTrack.append(MovieUtil.createSuitWreckingDeathTrack(suit, battle))
-            result.append(Parallel(animTrack, damageTrack, ballPropTrack))
+            trapTrack = Sequence(Wait(3.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)),
+                                 Func(MovieUtil.removeProp, trapProp))
+            result.append(Parallel(animTrack, trapTrack, damageTrack, ballPropTrack))
 
         else:
-            trapTrack = Sequence(Wait(3.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
-            moveTrack = Sequence(Wait(2.2), LerpPosInterval(suit, 0.4, sinkPos, other=battle),
+            trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
+            moveTrack = Sequence(Wait(1.2), LerpPosInterval(suit, 0.4, sinkPos, other=battle),
                                  Func(suit.setPos, battle, dropPos), Wait(1.6))
-            soundTrack = Sequence(Wait(2.2),
+            soundTrack = Sequence(Wait(1.2),
                                   SoundInterval(globalBattleSoundCache.getSound('AA_trap_wreckingball_nonfatal.ogg'),
                                                 node=suit))
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
-            animTrack = Sequence(ActorInterval(suit, 'lured', endTime=1.25),
-                                     ActorInterval(suit, 'flail-wb', startTime=0.5))
-            animTrack.append(Wait(0.6))
+            animTrack = Sequence(ActorInterval(suit, 'lured', endTime=.75),
+                                     ActorInterval(suit, 'flail-wb', startTime=1))
+            animTrack.append(Wait(1.1))
             animTrack.append(ActorInterval(suit, 'slip-forward', playRate=1.25))
             animTrack.append(Func(suit.setNeutralAnimationTrap))
-            damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
+            damageTrack = Sequence(Wait(2.5), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
             soundTrack.append(Wait(0.3))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
             suitIndex = battle.activeSuits.index(suit)
@@ -1071,7 +1073,8 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         suitTrack.append(ActorInterval(suit, 'tnt-react', endTime=2))
         
         if base.localAvatar in battle.activeToons:
-            suitTrack.append(Parallel(base.camera.posHprInterval(
+            if not died:
+                suitTrack.append(Parallel(base.camera.posHprInterval(
                              0.4, Point3(oldCamera[0], oldCamera[1], oldCamera[2]), Point3(0, 30, 0), blendType='easeInOut'),
                  Func(battle.movie.needRestoreColor),
                  Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
@@ -1079,6 +1082,8 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                  ActorInterval(suit, 'flail', startTime=0.9, duration=0.4, endTime=1.3),
                  LerpPosInterval(suit, 0.3, flyPos),
                  ))
+            else:
+                suitTrack.append(MovieUtil.midairSuitExplodeTrack(suit, battle))
         else:
             suitTrack.append(Parallel(
                  Func(battle.movie.needRestoreColor),
@@ -1089,7 +1094,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                  ))
         if died and not suit.isVirtual:
             suitGone = 1
-            suitTrack.append(MovieUtil.midairSuitExplodeTrack(suit, battle))
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "DAZED!", openEnded=0), Func(suit.updateHealthBar, hp))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
             soundTrack = Sequence(

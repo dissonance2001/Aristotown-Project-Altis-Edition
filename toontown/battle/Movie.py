@@ -326,6 +326,11 @@ class Movie(DirectObject.DirectObject):
                         ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
                                                                              '',
                                                                              CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
+                    elif s.isSued:
+                        if not s.isSued:
+                            ptrack.append(Func(battle.unSueSuit, s))
+                        if s.isSued:
+                            ptrack.append(Func(battle.sueSuit, s))
                     else:
                         ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
                                                                                        '',
@@ -948,7 +953,7 @@ class Movie(DirectObject.DirectObject):
         for sa in suitAttacks:
             targetGone = 0
             attack = sa[SUIT_ATK_COL]
-            if attack != '':
+            if attack:
                 suitIndex = sa[SUIT_ID_COL]
                 suitId = suits[suitIndex]
                 suit = self.battle.findSuit(suitId)
@@ -956,11 +961,13 @@ class Movie(DirectObject.DirectObject):
                 #     self.notify.warning('suit: %d not in battle!' % suitId)
                 #     return
                 # NOTE: Maybe there's a better way to handle this?  ~Professor Control
-                try:
-                    adict = getSuitAttack(suit.getStyleName(), suit.getLevel(), attack)
-                except:
-                    # Everything else is cut out, and adict is only used for the group status.
-                    adict = {'group': ATK_TGT_GROUP}
+                adict = {'suitName': attack[4],
+                 'name': attack[2],
+                 'animName': attack[6],
+                 'hp': attack[3],
+                 'acc': attack[0],
+                 'freq': attack[5],
+                 'group': attack[1]}
                 adict['suit'] = suit
                 adict['battle'] = self.battle
                 adict['playByPlayText'] = self.playByPlayText
