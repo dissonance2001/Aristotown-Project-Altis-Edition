@@ -1,0 +1,246 @@
+group "toonseltown" [
+ visgroup "18000:safe_zone" [
+  vis [   "18000:safe_zone"   ]
+  group "streets" [
+  ]
+  group "buildings" [
+ landmark_building "sz1:toon_landmark_TS_A1_DNARoot" [
+  code [ "toon_landmark_TS_A1" ]
+  title [ "Toy Shop" ]
+  pos [ -20.8479 -72.879 8 ]
+  nhpr [ -135 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+   color [ 0.23 0.85 0.6 1 ]
+  ]
+ ]
+ landmark_building "sz2:toon_landmark_TS_D1_DNARoot" [
+  code [ "toon_landmark_TS_D1" ]
+  title [ "Knitting Shop" ]
+  pos [ -86.2032 -65.8079 8 ]
+  nhpr [ 135 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz3:toon_landmark_TS_B1_DNARoot" [
+  code [ "toon_landmark_TS_B1" ]
+  title [ "Gift Wrapping" ]
+  pos [ -74.7387 33.9408 8 ]
+  nhpr [ 31 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+   color [ 0.23 0.85 0.6 1 ]
+  ]
+ ]
+ landmark_building "sz4:toon_landmark_TS_C1_DNARoot" [
+  code [ "toon_landmark_TS_C1" ]
+  title [ "The Bakery" ]
+  pos [ -17.7879 36.5052 8 ]
+  nhpr [ -45 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz5:toon_landmark_TS_E1_DNARoot" [
+  code [ "toon_landmark_TS_E1" ]
+  title [ "Reindeer Ranch" ]
+  pos [ -58.756 311.490 34.709 ]
+  nhpr [ 45 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz6:toon_landmark_TS_F1_DNARoot" [
+  code [ "toon_landmark_TS_F1" ]
+  title [ "Santa's Workshop" ]
+  pos [ 166.086 -24.680 29.208 ]
+  nhpr [ -90 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz7:toon_landmark_TS_G1_DNARoot" [
+  code [ "toon_landmark_TS_G1" ]
+  title [ "" ]
+  pos [ -125.902 74.132 20.5 ]
+  nhpr [ 45 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz8:toon_landmark_TS_H1_DNARoot" [
+  code [ "toon_landmark_TS_H1" ]
+  title [ "" ]
+  pos [ -70.016 103.416 20.5 ]
+  nhpr [ 0 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz9:toon_landmark_TS_I1_DNARoot" [
+  code [ "toon_landmark_TS_I1" ]
+  title [ "" ]
+  pos [ 36.823 67.1064 20.5 ]
+  nhpr [ -45 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz10:toon_landmark_TS_J1_DNARoot" [
+  code [ "toon_landmark_TS_J1" ]
+  title [ "" ]
+  pos [ 61.658 23.429 20.5 ]
+  nhpr [ -75 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz11:toon_landmark_TS_I2_DNARoot" [
+  code [ "toon_landmark_TS_I2" ]
+  title [ "" ]
+  pos [ 62.120 -67.650 20.5 ]
+  nhpr [ -110 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz12:toon_landmark_TS_J2_DNARoot" [
+  code [ "toon_landmark_TS_J2" ]
+  title [ "" ]
+  pos [ 17.308 -123.664 20.5 ]
+  nhpr [ -150 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz13:toon_landmark_TS_H2_DNARoot" [
+  code [ "toon_landmark_TS_H2" ]
+  title [ "" ]
+  pos [ -51.469 -137.091 20.5 ]
+  nhpr [ -180 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+ landmark_building "sz14:toon_landmark_TS_G2_DNARoot" [
+  code [ "toon_landmark_TS_G2" ]
+  title [ "" ]
+  pos [ -117.539 -123.646 20.5 ]
+  nhpr [ -205 0 0 ]
+  door [
+   code [ "door_double_square_ur" ]
+     color [ 0 0.87 0.69 1 ]
+  ]
+ ]
+  ]
+  group "props" [
+   prop "toonseltown_playground_DNARoot" [
+    code [ "toonseltown_playground" ]
+    pos [ -50 -20 0 ]
+    nhpr [ 90 0 -0 ]
+   ]
+ prop "mailbox_TS_DNARoot" [
+  code [ "mailbox_TS" ]
+  pos [ -49.9999 226.999 34.7197 ]
+  nhpr [ 0 0 0 ]
+ ]
+ prop "bench_TS_DNARoot" [
+  code [ "bench_TS" ]
+  pos [ -9.46435 255.535 34.7197 ]
+  nhpr [ 135 0 0 ]
+ ]
+ prop "bench_TS_DNARoot" [
+  code [ "bench_TS" ]
+  pos [ -18.295 268.732 34.7197 ]
+  nhpr [ 118 0 0 ]
+ ]
+ prop "bench_TS_DNARoot" [
+  code [ "bench_TS" ]
+  pos [ -22.5646 280.353 34.7197 ]
+  nhpr [ 106 0 0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ -50 46.9999 8.1 ]
+  nhpr [ 90 0 0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ -110 1.99994 8.1 ]
+  nhpr [ 90 0 -0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ -110 -37.9999 8.1 ]
+  nhpr [ 90 0 -0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ -49.9999 -82.9995 8.1 ]
+  nhpr [ 90 0 -0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ 10.0003 -37.9994 8.1 ]
+  nhpr [ 90 0 -0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ 10.0003 -2.99935 8.1 ]
+  nhpr [ 90 0 -0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ 143 -44.9991 28.3 ]
+  nhpr [ 90 0 -0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ 143 5.00084 28.3 ]
+  nhpr [ 90 0 0 ]
+ ]
+ prop "bench_TS_DNARoot" [
+  code [ "bench_TS" ]
+  pos [ -159.142 36.1421 20.7 ]
+  nhpr [ 45 0 0 ]
+ ]
+ prop "bench_TS_DNARoot" [
+  code [ "bench_TS" ]
+  pos [ -152.946 42.3712 20.7 ]
+  nhpr [ 45 0 -0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ -215.568 22.6054 31.7 ]
+  nhpr [ 75 0 0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ -232.683 -14.2204 30.7 ]
+  nhpr [ 75 0 -0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ -238.903 63.0219 44.7 ]
+  nhpr [ 75 0 -0 ]
+ ]
+ prop "lamppost_TS_DNARoot" [
+  code [ "lamppost_TS" ]
+  pos [ -279.32 39.687 44.7 ]
+  nhpr [ 75 0 -0 ]
+ ]
+  ]
+ ]
+]

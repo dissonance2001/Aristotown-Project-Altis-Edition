@@ -85,6 +85,8 @@ lToonHQ = 'Toon HQ'
 lSellbotHQ = 'Sellbot HQ'
 lGoofySpeedway = 'Roadster Raceway'
 lYeOlde = 'Ye Olde Toontown'
+lToonseltown = 'Toonseltown'
+lSkyClan = 'SkyClan'
 lOutdoorZone = 'Acorn Acres'
 lGolfZone = 'Acorn Acres Minigames'
 lPartyHood = 'Party Grounds'
@@ -157,7 +159,9 @@ GlobalStreetNames = {15000: ('to', 'on', 'Tutorial Terrace'),
  19500: ('to the', 'in the', 'Board Office A'),
  19600: ('to the', 'in the', 'Board Office B'),
  19700: ('to the', 'in the', 'Board Office C'),
- 20000: ('to the', 'in the', 'Playground')}
+ 20000: ('to the', 'in the', 'Playground'),
+ 26000: ('to the', 'in the', 'Playground'),
+ 27000: ('to the', 'in the', 'Playground')}
 DonaldsDock = ('to', 'in', lDonaldsDock)
 ToontownCentral = ('to', 'in', lToontownCentral)
 ToontownCentralOld = ('to', 'in', 'Toontown Central\n(September 19, 2013)')
@@ -178,6 +182,8 @@ Tutorial = ('to the', 'in the', 'Toon-torial')
 MyEstate = ('to', 'in', 'your house')
 WelcomeValley = ('to', 'in', 'Welcome Valley')
 GolfZone = ('to', 'in', lGolfZone)
+Toonseltown = ('to', 'in', lToonseltown)
+SkyClan = ('to', 'in', lSkyClan)
 PartyHood = ('to the', 'in the', lPartyHood)
 Factory = 'Factory'
 Headquarters = 'Headquarters'

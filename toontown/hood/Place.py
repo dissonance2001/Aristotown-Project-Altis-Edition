@@ -609,6 +609,27 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         base.localAvatar.stopQuestMap()
         base.localAvatar.obscureMoveFurnitureButton(-1)
 
+    def hookTeleportInDone(self):
+        teleportNotify.debug('Hooked TeleportInDone')
+        if hasattr(self, 'fsm'):
+            teleportNotify.debug('teleportInDone: %s' % self.nextState)
+            self.fsm.request(self.nextState, [1])
+
+    def doTeleport(self, hood):
+        try:
+            base.queuedHood = hood.upper()
+            request = ToontownGlobals.hood2Id[base.queuedHood]
+        except:
+            return
+
+        Place.teleportInDone = lambda self: self.hookTeleportInDone()
+        hoodId = request[0]
+        if len(request) >= 2:
+            zoneId = request[1]
+        else:
+            zoneId = hoodId
+        self.handleBookCloseTeleport(hoodId, zoneId)
+
     def enterDied(self, requestStatus, callback = None):
         if callback == None:
             callback = self.__diedDone

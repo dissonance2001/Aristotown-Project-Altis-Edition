@@ -3066,9 +3066,17 @@ def disableGC():
 def soprano():
     spellbook.getInvoker().magicTeleportInitiate(4000, 4401)
 	
+#@magicWord(category=CATEGORY_CREATIVE)
+#def oldttc():
+    #spellbook.getInvoker().magicTeleportInitiate(21000, 21000)
+
 @magicWord(category=CATEGORY_CREATIVE)
-def oldttc():
-    spellbook.getInvoker().magicTeleportInitiate(20000, 20000)
+def toonseltown():
+    spellbook.getInvoker().magicTeleportInitiate(18000, 18000)
+
+@magicWord(category=CATEGORY_CREATIVE)
+def skyclan():
+    spellbook.getInvoker().magicTeleportInitiate(19000, 19000)
    	
 @magicWord(category=CATEGORY_CREATIVE, types=[int])
 def globalTp(streetZone):

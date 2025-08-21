@@ -46,6 +46,8 @@ from toontown.hood import LawbotHQAI
 from toontown.hood import MMHoodAI
 from toontown.hood import OTHoodAI
 from toontown.hood import OZHoodAI
+from toontown.hood import TSHoodAI
+from toontown.hood import SCHoodAI
 from toontown.hood import SellbotHQAI
 from toontown.hood import TTHoodAI
 from toontown.hood import TTOHoodAI
@@ -219,6 +221,14 @@ class ToontownAIRepository(ToontownInternalRepository):
             self.hoodId2Hood[hood.zoneId] = hood
         if self.config.GetBool('want-golf-zone', True):
             hood = GZHoodAI.GZHoodAI(self)
+            self.hoods.append(hood)
+            self.hoodId2Hood[hood.zoneId] = hood
+        if self.config.GetBool('want-toonseltown', True):
+            hood = TSHoodAI.TSHoodAI(self)
+            self.hoods.append(hood)
+            self.hoodId2Hood[hood.zoneId] = hood
+        if self.config.GetBool('want-skyclan', True):
+            hood = SCHoodAI.SCHoodAI(self)
             self.hoods.append(hood)
             self.hoodId2Hood[hood.zoneId] = hood
         hood = TTOHoodAI.TTOHoodAI(self)

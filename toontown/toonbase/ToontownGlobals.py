@@ -212,6 +212,8 @@ LegumeLane = 6400
 FunnyFarm = 500000
 GoofySpeedway = 8000
 YeOlde = 7000
+Toonseltown = 18000 
+SkyClan = 21000 
 KnightKnoll = 7100
 NobleNook = 7200
 WizardWay=7300
@@ -243,7 +245,7 @@ ToonHall = 2513
 PacesetterLobby = 9613
 DerrickmanInterior = 2921
 PizzariaInterior = 3740
-ToontownCentralOld = 20000
+ToontownCentralOld = 19000
 SchoolHouse = 2516
 OTGagShop = 7502
 Dungeon = 7507
@@ -256,6 +258,8 @@ HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, Wacky
  OutdoorZone: (AcornAvenue, PeanutPlace, WalnutWay, LegumeLane),
  DonaldsDreamland: (LullabyLane, PajamaPlace, TwilightTerrace),
  GoofySpeedway: (),
+ Toonseltown: (),
+ SkyClan: (),              
  ToontownCentralOld: ()}
 WelcomeValleyToken = 0
 
@@ -364,12 +368,12 @@ LawbotStageIntB = 13400
 LawbotStageIntC = 13500
 LawbotStageIntD = 13600
 
-BoardbotHQ = 19000
-BoardbotLobby = 19100
-BoardbotOfficeLobby = 19200
-BoardOfficeIntA = 19500
-BoardOfficeIntB = 19600
-BoardOfficeIntC = 19700
+BoardbotHQ = 20000
+BoardbotLobby = 20100
+BoardbotOfficeLobby = 22200
+BoardOfficeIntA = 20500
+BoardOfficeIntB = 20600
+BoardOfficeIntC = 20700
 
 Tutorial = 15000
 MyEstate = 16000
@@ -501,6 +505,8 @@ Hoods = (DonaldsDock,
  FunnyFarm,
  GoofySpeedway,
  YeOlde,
+ Toonseltown,
+ SkyClan,
  DonaldsDreamland,
  BossbotHQ,
  SellbotHQ,
@@ -516,6 +522,8 @@ HoodsForTeleportAll = (DonaldsDock,
  OutdoorZone,
  GoofySpeedway,
  YeOlde,
+ Toonseltown,
+ SkyClan,
  DonaldsDreamland,
  BossbotHQ,
  SellbotHQ,
@@ -608,6 +616,8 @@ phaseMap = {Tutorial: 4,
  FunnyFarm: 8,
  DonaldsDreamland: 8,
  OutdoorZone: 6,
+ Toonseltown: 13,
+ SkyClan: 13, 
  BossbotHQ: 12,
  SellbotHQ: 9,
  CashbotHQ: 10,
@@ -622,6 +632,8 @@ streetPhaseMap = {
  MinniesMelodyland: 6,
  GoofySpeedway: 6,
  YeOlde: 7,
+ Toonseltown: 13,
+ SkyClan: 13,
  TheBrrrgh: 8,
  DaisyGardens: 8,
  FunnyFarm: 8,
@@ -649,7 +661,9 @@ dnaMap = {Tutorial: 'toontown_central',
  CashbotHQ: 'cog_hq_cashbot',
  LawbotHQ: 'cog_hq_lawbot',
  BoardbotHQ: 'cog_hq_boardbot',
- GolfZone: 'golf_zone'}
+ GolfZone: 'golf_zone',
+ Toonseltown: 'toonseltown',
+ SkyClan: 'skyclan'} 
 hoodNameMap = {DonaldsDock: TTLocalizer.DonaldsDock,
  ToontownCentral: TTLocalizer.ToontownCentral,
  ToontownCentralOld: TTLocalizer.ToontownCentralOld,
@@ -660,6 +674,8 @@ hoodNameMap = {DonaldsDock: TTLocalizer.DonaldsDock,
  FunnyFarm: TTLocalizer.FunnyFarm,
  GoofySpeedway: TTLocalizer.GoofySpeedway,
  YeOlde: TTLocalizer.YeOlde,
+ Toonseltown: TTLocalizer.Toonseltown,
+ SkyClan: TTLocalizer.SkyClan,  
  DonaldsDreamland: TTLocalizer.DonaldsDreamland,
  BossbotHQ: TTLocalizer.BossbotHQ,
  SellbotHQ: TTLocalizer.SellbotHQ,
@@ -675,6 +691,8 @@ safeZones = [ToontownCentral,
  DonaldsDock,
  DaisyGardens,
  YeOlde,
+ Toonseltown,
+ SkyClan,
  MinniesMelodyland,
  TheBrrrgh,
  DonaldsDreamland]
@@ -686,6 +704,8 @@ safeZoneCountMap = {MyEstate: 8,
  MinniesMelodyland: 5,
  GoofySpeedway: 500,
  YeOlde: 500,
+ Toonseltown: 500,
+ SkyClan: 500,
  TheBrrrgh: 8,
  DaisyGardens: 9,
  FunnyFarm: 500,
@@ -703,6 +723,8 @@ townCountMap = {MyEstate: 8,
  TheBrrrgh: 40,
  DaisyGardens: 40,
  YeOlde: 40,
+ Toonseltown: 40,
+ SkyClan: 40,
  FunnyFarm: 40,
  DonaldsDreamland: 40,
  OutdoorZone: 40,
@@ -718,6 +740,8 @@ hoodCountMap = {MyEstate: 2,
  DaisyGardens: 2,
  FunnyFarm: 2,
  YeOlde: 2,
+ Toonseltown: 2,
+ SkyClan: 2, 
  DonaldsDreamland: 2,
  OutdoorZone: 2,
  BossbotHQ: 2,
@@ -2033,6 +2057,43 @@ AV_TOUCH_CHECK_DIST_Z = 5.0
 AV_TOUCH_CHECK_TIMELIMIT_CL = 0.002
 AV_TOUCH_COUNT_LIMIT = 5
 AV_TOUCH_COUNT_TIME = 300
+hood2Id = [
+    ('TTC', (ToontownCentral,)),
+    ('DD', (DonaldsDock,)),
+    ('MML', (MinniesMelodyland,)),
+    ('DG', (DaisyGardens,)),
+    ('TB', (TheBrrrgh,)),
+    ('DDL', (DonaldsDreamland,)),
+    ('TS', (Toonseltown,)),
+    ('SC', (SkyClan,)),
+    ('GZ', (GolfZone,)),
+    ('GSW', (GoofySpeedway,)),
+    ('GS', (GoofySpeedway,)),
+    ('AA', (OutdoorZone,)),
+    ('OT', (YeOlde,)),
+    ('YEOLDE', (YeOlde,)),
+    ('YOTT', (YeOlde,)),
+    ('CEO', (BossbotHQ,)),
+    ('CJ', (LawbotHQ,)),
+    ('CFO', (CashbotHQ,)),
+    ('VP', (SellbotHQ,)),
+    ('BBHQ', (BossbotHQ,)),
+    ('LBHQ', (LawbotHQ,)),
+    ('CBHQ', (CashbotHQ,)),
+    ('SBHQ', (SellbotHQ,)),
+    ('FACTORY', (SellbotHQ, SellbotFactoryExt)),
+    ('FRONTENTRY', (SellbotHQ, SellbotFactoryExt)),
+    ('SIDEENTRY', (SellbotHQ, SellbotFactoryExt)),
+    ('BULLION', (CashbotHQ,)),
+    ('DOLLAR', (CashbotHQ,)),
+    ('COIN', (CashbotHQ,)),
+    ('OFFICEA', (LawbotHQ, LawbotOfficeExt)),
+    ('OFFICEB', (LawbotHQ, LawbotOfficeExt)),
+    ('OFFICEC', (LawbotHQ, LawbotOfficeExt)),
+    ('OFFICED', (LawbotHQ, LawbotOfficeExt)),
+    ('BACK', (BossbotHQ,)),
+    ('MIDDLE', (BossbotHQ,)),
+    ('FRONT', (BossbotHQ,))]
 SuitLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]
 
 

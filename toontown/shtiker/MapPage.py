@@ -19,7 +19,7 @@ class MapPage(ShtikerPage.ShtikerPage):
         mapModel.removeNode()
         self.allZones = []
         for hood in ToontownGlobals.Hoods:
-            if hood not in [ToontownGlobals.GolfZone, ToontownGlobals.FunnyFarm, ToontownGlobals.PartyHood, ToontownGlobals.GoofySpeedway]:
+            if hood not in [ToontownGlobals.GolfZone, ToontownGlobals.FunnyFarm, ToontownGlobals.PartyHood, ToontownGlobals.GoofySpeedway, ToontownGlobals.Toonseltown, ToontownGlobals.SkyClan]:
                 self.allZones.append(hood)
 
         self.cloudScaleList = (((0.55, 0, 0.4),), # DD
