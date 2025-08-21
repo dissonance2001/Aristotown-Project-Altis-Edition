@@ -875,7 +875,7 @@ def doAdvancement(attack, ind):
     suitTrack = Sequence()
     suitTrack.append(Wait(4))
     suitTracks.append(suitTrack)
-    suitTrack.append(Parallel(healSound, Func(targetSuit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
+    suitTrack.append(Parallel(healSound, Func(targetSuit.setChatAbsolute, "I suppose this is the only way I'll earn that promotion.",
                                            CFSpeech | CFTimeout)))
     suitTrack.append(Func(targetSuit.setNeutralAnimation))
     suitTrack.append(Func(targetSuit.makeTarget))
@@ -1336,7 +1336,7 @@ def doHeadRoller(attack, ind):
                                                                                           "Ouch.",
                                                                                           CFSpeech | CFTimeout),
                          Wait(1.0), MovieUtil.createSuitHeadlessDeathTrack(targetSuit, battle))
-    hpTrack = Sequence(Wait(3.25), Func(targetSuit.checkHeadRoller, manager, battle))
+    hpTrack = Sequence(Wait(3.25), Func(targetSuit.checkHeadRoller, manager, battle), Func(manager.makeDamageUp), Func(manager.checkDamageUp, + 5), Wait(3.0), Func(manager.showHpString, "+5% Damage!"))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.25, node=manager)
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=manager))
     return Parallel(managerTrack, soundTrack2, hpTrack, suitTrack, soundTrack)

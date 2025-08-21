@@ -1106,10 +1106,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                     ).start()
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'lured'), Func(self.setPlayRate, self.getPlayRate2(), 'lured2'), Func(self.loop, 'lured')
                      ).start()
-        elif self.dna.name == 'jur' and self.getActualLevel() == 24:
+        elif self.dna.name == 'clerk' and self.getActualLevel() == 24:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()
-        elif self.dna.name == 'mdr' and self.getActualLevel() == 23:
+        elif self.dna.name == 'foreman' and self.getActualLevel() == 23:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'rolled'), Func(self.loop, 'rolled')
                      ).start()
         elif self.isChainsawPhase2:
@@ -1132,7 +1132,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
         elif float(self.currHP) > float(self.maxHP * 1.5):
-            Sequence(Func(self.loop, 'neutral-unstable', fromFrame=60, toFrame=100)
+            Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
         else:
             self.setNeutralAnimationHead()
@@ -1144,10 +1144,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'lured'),
                      Func(self.setPlayRate, self.getPlayRate2(), 'lured2'), Func(self.loop, 'lured')
                      ).start()
-        elif self.dna.name == 'jur' and self.getActualLevel() == 24:
+        elif self.dna.name == 'clerk' and self.getActualLevel() == 24:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()
-        elif self.dna.name == 'mdr' and self.getActualLevel() == 23:
+        elif self.dna.name == 'foreman' and self.getActualLevel() == 23:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'rolled'), Func(self.loop, 'rolled')
                      ).start()
         elif self.isChainsawPhase2:
@@ -1171,7 +1171,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                 ).start()
         elif float(self.currHP) > float(self.maxHP * 1.5):
-            Sequence(Func(self.loop, 'neutral-unstable', fromFrame=60, toFrame=100)
+            Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
         else:
             if self.dna.name == 'videog':
@@ -1246,7 +1246,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             for headPart in self.animatedHeadParts: Sequence(
                 Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
-            Sequence(Func(self.loop, 'neutral-unstable')
+            Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
         else:
             for headPart in self.animatedHeadParts: Sequence(
