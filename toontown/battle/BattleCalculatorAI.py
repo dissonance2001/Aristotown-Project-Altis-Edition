@@ -3251,7 +3251,7 @@ class BattleCalculatorAI:
             elif atkType['name'] == 'PowerhouseSyphonDesperation':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'syphoncalculator', 1, 5, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'syphoncalculator', 0, 0, 'setBoth')
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'syphon', 1, 99, 'setBoth')
                     self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
@@ -9090,6 +9090,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
+                    self.setSuitCondition(suitId, 'rotationcalculator', 0, 0, 'setBoth')
                 if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'lureImmune') and self.__suitCanAttack(suitId):
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
