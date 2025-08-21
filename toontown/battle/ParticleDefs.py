@@ -875,7 +875,7 @@ def shred2(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(15.0000)
+    p0.emitter.setAmplitude(20.0000)
     p0.emitter.setAmplitudeSpread(1.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 3.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -2834,6 +2834,57 @@ def demotionSpray2(self):
     self.addParticles(p0)
 
 @particle
+def FireSpray(self):
+    self.reset()
+    self.setPos(0.000, 12.500, 3.000)
+    self.setHpr(180.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    #p0.setRenderer("PointParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(200)
+    p0.setBirthRate(0.0500)
+    p0.setLitterSize(7)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.8000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(500.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.addTextureFromFile('phase_3.5/maps/flame.png')
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(.25)
+    p0.renderer.setFinalXScale(.25)
+    p0.renderer.setInitialYScale(.25)
+    p0.renderer.setFinalYScale(.25)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, -4.0000, 0.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(0.8900)
+    self.addParticles(p0)
+
+@particle
 def reOrgSpray2(self):
     self.reset()
     self.setPos(0.000, 4.000, 3.000)
@@ -4084,6 +4135,60 @@ def liquidate(self):
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
     p0.emitter.setAmplitude(16.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 6.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(0.4500)
+    self.addParticles(p0)
+
+@particle
+def paperRainfall(self):
+    self.reset()
+    self.setPos(0.000, 0.000, -0.200)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(100)
+    p0.setBirthRate(0.0400)
+    p0.setLitterSize(3)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.4000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.addTextureFromFile('phase_11/maps/paper_rain.png')
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(.5)
+    p0.renderer.setFinalXScale(.5)
+    p0.renderer.setInitialYScale(.5)
+    p0.renderer.setFinalYScale(.5)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(100.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))

@@ -171,7 +171,7 @@ class TownBattleToonPanel(DirectFrame):
             raisedAnte = False
             if 'raisedAnte' in self.avatar.battleConditions:
                 raisedAnte = True
-            damage = int(getAvPropDamage(track, level, self.avatar.experience.getExp(track)))
+            damage = int(math.ceil(getAvPropDamage(track, level, self.avatar.experience.getExp(track))))
             lureValue = int(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
             if track == HEAL_TRACK and 'healBoost' in self.avatar.battleConditions:
@@ -182,7 +182,7 @@ class TownBattleToonPanel(DirectFrame):
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['trapBoost'][0] * 0.01) + 1.0)))
             elif track == LURE_TRACK and 'lureBoost' in self.avatar.battleConditions:
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['lureBoost'][0] * 0.01) + 1.0)))
-                lureValue = int(
+                lureValue = math.ceil(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) +
                      self.avatar.battleConditions['lureBoost'][
                          0]) / 2)
@@ -210,9 +210,9 @@ class TownBattleToonPanel(DirectFrame):
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             elif track == LURE_TRACK and 'encore' in self.avatar.battleConditions:
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
-                lureValue = int(
+                lureValue = int(math.ceil(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + self.avatar.battleConditions['encore'][
-                        0]) / 2)
+                        0]) / 2))
             elif track == SOUND_TRACK and 'encore2' in self.avatar.battleConditions:
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             elif track == TRAP_TRACK and 'encore2' in self.avatar.battleConditions:
@@ -227,34 +227,34 @@ class TownBattleToonPanel(DirectFrame):
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             elif track == LURE_TRACK and 'encore2' in self.avatar.battleConditions:
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
-                lureValue = int(
+                lureValue = int(math.ceil(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100) +
                      base.localAvatar.battleConditions['encore2'][
-                         0]) / 2)
+                         0]) / 2))
             elif track == SOUND_TRACK and 'winded' in self.avatar.battleConditions:
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['winded'][0] * 0.01) + 1.0)))
             elif allGagBoost and not track == LURE_TRACK:
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
-                lureValue = int(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+                lureValue = int(math.ceil(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
             elif raisedAnte and not track == LURE_TRACK:
                 damage = int(math.ceil(damage * ((self.avatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
-                lureValue = int(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+                lureValue = int(math.ceil(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
             else:
-                lureValue = int(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+                lureValue = int(math.ceil(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
             if numTargets is not None and targetIndex is not None and localNum is not None:
                 self.whichText.show()
                 self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
             if track == LURE_TRACK:
                 self.roundsText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(int(lureValue * 1.2))+'%'
+                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(int(lureValue * 1.2)) + '%'
                 else:
                     self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(lureValue) + '%'
-                #self.knockbackText.show()
-                #self.knockbackText['text'] = 'Knockback: ' + str(lureValue)+'%'
+                # self.knockbackText.show()
+                # self.knockbackText['text'] = 'Knockback: ' + str(lureValue)+'%'
             if track == HEAL_TRACK:
                 self.roundsText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
@@ -262,41 +262,44 @@ class TownBattleToonPanel(DirectFrame):
                 else:
                     self.roundsText['text'] = '+' + str(damage) + '/' + str(int(damage / 4))
                 self.roundsText.setColor(0.176, 1, 0, 1)
-                #self.selfHealText.show()
-                #self.selfHealText['text'] = 'Self Heal: ' + str(damage / 2.5)
-                #self.selfHealText.setColor(0.176, 1, 0, 1)
+                # self.selfHealText.show()
+                # self.selfHealText['text'] = 'Self Heal: ' + str(damage / 2.5)
+                # self.selfHealText.setColor(0.176, 1, 0, 1)
             if track == TRAP_TRACK:
                 self.damageText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.damageText['text'] = '-' + str(int(damage * 1.15) + 1) + '/' + str(int(((damage * 1.15) * 1.3) + 1))
+                    self.damageText['text'] = '-' + str(int(damage * 1.15) + 1) + '/' + str(
+                        int(((damage * 1.15) * 1.3) + 1))
                 else:
                     self.damageText['text'] = '-' + str(damage) + '/' + str(int(damage * 1.3))
-                #self.exeDamageText.show()
-                #self.exeDamageText['text'] = 'Exe./Gov.: ' + str(damage * 1.3)
+                # self.exeDamageText.show()
+                # self.exeDamageText['text'] = 'Exe./Gov.: ' + str(damage * 1.3)
             if track == SOUND_TRACK:
                 self.damageText.show()
                 self.damageText['text'] = '-' + str(damage)
             if track == THROW_TRACK:
                 self.damageText.show()
                 self.damageText['text'] = '-' + str(damage)
-                #self.selfHealText.show()
-                #self.selfHealText['text'] = 'Self Heal: ' + str(damage/5)
+                # self.selfHealText.show()
+                # self.selfHealText['text'] = 'Self Heal: ' + str(damage/5)
             if track == DROP_TRACK:
                 self.damageText.show()
                 self.damageText['text'] = '-' + str(damage)
             if track == SQUIRT_TRACK:
                 self.damageText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.damageText['text'] = '-' + str(int(damage * .75)) + '/ -' + str(damage) + '/ -' + str(int(damage * .75))
+                    self.damageText['text'] = '-' + str(int(damage * .75)) + '/ -' + str(damage) + '/ -' + str(
+                        int(damage * .75))
                 else:
-                    self.damageText['text'] = '-' + str(int(damage / 3)) + '/ -' + str(damage) + '/ -' + str(int(damage / 3))
-                #self.soakedRoundsText.show()
-                #self.soakedRoundsText['text'] = 'Rounds: ' + str(ToontownBattleGlobals.AvSoakRounds[level])
+                    self.damageText['text'] = '-' + str(int(damage / 3)) + '/ -' + str(damage) + '/ -' + str(
+                        int(damage / 3))
+                # self.soakedRoundsText.show()
+                # self.soakedRoundsText['text'] = 'Rounds: ' + str(ToontownBattleGlobals.AvSoakRounds[level])
             if track == ZAP_TRACK:
                 self.damageText.show()
                 self.damageText['text'] = '-' + str(damage)
-                #self.soakedDamageText.show()
-                #self.soakedDamageText['text'] = 'If Soaked: ' + str(damage * 3)
+                # self.soakedDamageText.show()
+                # self.soakedDamageText['text'] = 'If Soaked: ' + str(damage * 3)
         else:
             self.notify.error('Bad track value: %s' % track)
 
@@ -305,7 +308,9 @@ class TownBattleToonPanel(DirectFrame):
         targetList = range(numTargets)
         targetList.reverse()
         try:
-            if self.avatar.trackBonusLevel[track] >= 1:
+            if 'confused' in self.avatar.battleConditions:
+                marker = '-'
+            elif self.avatar.trackBonusLevel[track] >= 1:
                 marker = 'O'
             else:
                 marker = 'X'

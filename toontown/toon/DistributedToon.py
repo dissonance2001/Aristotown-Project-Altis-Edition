@@ -137,6 +137,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.onAwardOrder = CatalogItemList.CatalogItemList(store=CatalogItem.Customization | CatalogItem.DeliveryDate)
         self.splash = None
         self.tossTrack = None
+        self.hpTextInterval = None
         self.pieTracks = {}
         self.splatTracks = {}
         self.lastTossedPie = 0
@@ -2726,10 +2727,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         for word in words:
             if word == '':
                 newwords.append(word)
-            elif word[0] == '\x07':
-                newwords.append('\x01WLRed\x01' + self.chatGarbler.garbleSingle(self, word) + '\x02')
-            elif not self.whiteListEnabled or base.whiteList.isWord(word):
-                newwords.append(word)
             else:
                 newwords.append('\x01WLRed\x01' + word + '\x02')
 
@@ -2807,11 +2804,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardPointEye()
+                self.hpText.setBillboardAxis()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
-                seq.start()
+                self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+                self.hpTextInterval.start()
 
     def setName(self, name = 'unknownDistributedAvatar'):
         DistributedPlayer.DistributedPlayer.setName(self, name)

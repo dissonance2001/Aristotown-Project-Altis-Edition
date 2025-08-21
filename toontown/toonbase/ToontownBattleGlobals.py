@@ -306,8 +306,8 @@ AvZapJumps = ((3, 2.25, 1.5),
               (3, 2.75, 2.5))
 InstaKillChance = [2, 3, 5, 8, 10, 15, 20, 20]
 DropMissChance = [40, 40, 40, 40, 40, 40, 40, 40]
-LureMissChance = [15, 10, 15, 10, 15, 10, 15, 20]
-AvSoakRounds = (2, 2, 2, 2, 3, 3, 4, 4)
+LureMissChance = [5, 10, 5, 10, 5, 10, 5, 10]
+AvSoakRounds = (3, 3, 3, 3, 4, 4, 4, 4)
 AvMarkRounds = (1, 1, 1, 1, 1, 1, 1, 1)
 AvDazeRounds = (2, 2, 2, 2, 2, 2, 2, 2)
 AvSelfHealThrow = (4, 6, 8, 10, 14, 28, 36, 44)
@@ -453,6 +453,8 @@ def getUberFlagSafe(flagMask, index):
 
 ValidStatusConditions = (
     # Manager Calculators
+    'rageBuilding',
+    'powerhouseRotation',
     'costscalculator',
     'insurancecalculator',
     'snappedcalculator',
@@ -475,13 +477,17 @@ ValidStatusConditions = (
     'mulligancalculator4',
     'collectcallfeescalculator',
     'collectcallcalculator',
+    'collectcallcalculator3',
+    'busycalculator',
     'wiretappedcalculator',
     'rotationcalculator',
     'papercutcalculator',
     'explodingcalculator',
+    'explodingcalculator2',
     'refinementcalculator',
     'gavelcalculator',
     'bellowcalculator',
+    'bellowcalculator2',
     'bookkeepingcalculator',
     'rolledcalculator',
     'diceroulettecalculator',
@@ -507,6 +513,15 @@ ValidStatusConditions = (
     'wiretappedcalculator',
     'cheercalculator',
     'bindingscalculator2',
+    'sanctioncalculator2',
+    'gagbansnipe',
+    'mulligansnipe',
+    'breachvulnerable',
+    'breachgagban',
+    'gavelcalculator2',
+    'collectcallsnipe',
+    'vulnerablesnipe',
+    'bookkeepersnipe',
     'highpressurecalculator',
     'heatwavecalculator',
     'heatwavecalculationcalculator',
@@ -541,10 +556,18 @@ ValidStatusConditions = (
     'target4',
     'target5',
     'target6',
+    'ambtarget2',
+    'ambtarget3',
+    'ambtarget4',
+    'ambtarget5',
+    'ambtarget6',
+    'ambheadrollertarget',
+    'advancementcalculator',
+    'headrollertargetcalculator',
     'barcalculator',
     'spawncalculator',
     'deadcase',
-    'deadwire',
+    'deadpower',
     'deadunion',
 
     # Cog Status Effects
@@ -575,6 +598,11 @@ ValidStatusConditions = (
     'extraAttack3',
     'extraAttack4',
     'extraAttack5',
+    'extraAttack6',
+    'extraAttack7',
+    'extraAttack8',
+    'extraAttack9',
+    'extraAttack10',
     'extraGlower',
     'extraGlower2',
     'extraGlower3',
@@ -622,10 +650,17 @@ ValidStatusConditions = (
     'vulnerablesilhouette1',
     'vulnerablesilhouette2',
     'vulnerablesilhouette3',
+    'brokenconnection',
     'vulnerablevideographer',
+    'collectcallcalculator2',
+    'desperationcalculator',
+    'lureResist',
 
     # Toon Status Effects
+    'hidden',
+    'burned',
     'noUnites',
+    'markToon',
     'raisedAnte',
     'confused',
     'encore2',

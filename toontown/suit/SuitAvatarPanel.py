@@ -296,6 +296,9 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             0, maxHp)
             self.corpIcon.hide()
             self.deptLabel['text'] = ''
+        elif self.avatar.isImmortal and not self.avatar.dna.name == 'hroller' and not self.avatar.dna.name == 'hroller2' and not self.avatar.dna.name == 'videog':
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogImmune % (
+            'Immune!')
         elif self.avatar.dna.name == 'hrollers' and self.maxHp > 9999 and tempHp <= 0:
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
@@ -335,7 +338,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                         revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
         elif revives > 2 and self.avatar.isSkeleton:
             self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
-                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), self.maxHp)
+                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
         elif revives > 1 and self.avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
@@ -484,16 +487,24 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray), Task.pause(0.1))
             taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
         elif condition == 13:
+            taskMgr.remove(self.frame.uniqueName('pulse-task'))
             self.button.setColor(1, 1, 1, 1)
-            blinkTask = Task.loop(Task(self.__pulsePurple), Task.pause(1.5), Task(self.__pulsePurpleColor),
-                                  Task.pause(1.5))
-            taskMgr.add(blinkTask, self.frame.uniqueName('blink-task'))
+            blinkTask = Task.loop(Task(self.__pulsePurple), Task.pause(1), Task(self.__pulsePurpleColor),
+                                  Task.pause(3))
+            taskMgr.add(blinkTask, self.frame.uniqueName('pulse-task'))
         else:
             self.button.setColor(1, 1, 1, 1)
-            self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(self.healthColors[condition]),
-                                   blendType='easeInOut'))
-            self.changeInterval.start()
+            if self.avatar.isImmortal:
+                self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 1, 1, 1),
+                                       blendType='easeInOut'))
+                self.changeInterval.start()
+            else:
+                self.changeInterval = Parallel(
+                    LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                           blendType='easeInOut'))
+                self.changeInterval.start()
             taskMgr.remove(self.frame.uniqueName('blink-task'))
+            taskMgr.remove(self.frame.uniqueName('pulse-task'))
             self.blinkTask = None
         #self.buttonInterval.start()
         #self.hideCorpIcon.start()
@@ -513,10 +524,15 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.head.setColor(self.healthColors[10], 1)
 
     def __changeColor(self):
-        self.interval = Parallel(
-                LerpColorScaleInterval(self.button, duration=2, colorScale=(self.healthColors[self.condition]),
-                                       blendType='easeInOut'))
-        self.interval.start()
+        if self.avatar.isImmortal:
+            self.interval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 1, 1, 1),
+                                   blendType='easeInOut'))
+            self.interval.start()
+        else:
+            self.interval = Parallel(
+                    LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[self.condition]),
+                                           blendType='easeInOut'))
+            self.interval.start()
 
     def __changeColorHead(self):
         self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(self.healthColors[self.condition]),
@@ -549,24 +565,24 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.interval.start()
 
     def __pulsePurple(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=2, colorScale=(0.992, 0.227, 1, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(0.992, 0.227, 1, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulsePurpleColor(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=2, colorScale=(self.healthColors[13]),
+        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[13]),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulsePurpleHead(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=2, colorScale=(0.992, 0.227, 1, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.head, duration=1, colorScale=(0.992, 0.227, 1, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __headAnim(self, task):
         hasAnimatedHead = False
         for part in self.avatar.animatedHeadParts:
-            if not self.avatar.isSkeleton and self.avatar.dna.name == 'blr' or not self.avatar.isSkeleton and self.avatar.dna.name == 'dsk' or not self.avatar.isSkeleton and self.avatar.dna.name == 'bdb' or not self.avatar.isSkeleton and self.avatar.dna.name == 'bs':
+            if not self.avatar.isSkeleton and self.avatar.dna.name == 'radiog' or not self.avatar.isSkeleton and self.avatar.dna.name == 'ubuster' or not self.avatar.isSkeleton and self.avatar.dna.name == 'ang' or not self.avatar.isSkeleton and self.avatar.dna.name == 'cv':
                 hasAnimatedHead = True
                 copyPart = part.copyTo(self.head)
                 p1 = Point3()
@@ -574,13 +590,13 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                 copyPart.calcTightBounds(p1, p2)
                 d = p2 - p1
                 biggest = max(d[0], d[1], d[2])
-                if self.avatar.dna.name == 'dsk' and not self.avatar.isSkeleton:
+                if self.avatar.dna.name == 'radiog' and not self.avatar.isSkeleton:
                     s = 0.4 / biggest
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.04, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))
                     headInterval.start()
-                elif self.avatar.dna.name == 'blr' and not self.avatar.isSkeleton:
+                elif self.avatar.dna.name == 'radiog' and not self.avatar.isSkeleton:
                     s = 0.4 / biggest
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.04, 180, 0, 0, s, s, s)),
@@ -593,7 +609,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                             Wait(0.05), Func(copyPart.removeNode))
                     headInterval.start()
         for part in self.avatar.headParts:
-            if self.avatar.isSkeleton and self.avatar.dna.name == 'blr' or self.avatar.isSkeleton and self.avatar.dna.name == 'dsk' or self.avatar.isSkeleton and self.avatar.dna.name == 'bdb' or self.avatar.isSkeleton and self.avatar.dna.name == 'bs':
+            if self.avatar.isSkeleton and self.avatar.dna.name == 'radiog' or self.avatar.isSkeleton and self.avatar.dna.name == 'ubuster' or self.avatar.isSkeleton and self.avatar.dna.name == 'ang' or self.avatar.isSkeleton and self.avatar.dna.name == 'cv':
                 hasAnimatedHead = True
                 copyPart = part.copyTo(self.head)
                 p1 = Point3()
@@ -607,7 +623,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                             Wait(0.05), Func(copyPart.removeNode))
                 headInterval.start()
         for part in self.avatar.headParts:
-            if not self.avatar.dna.name == 'blr' and not self.avatar.dna.name == 'dsk' and not self.avatar.dna.name == 'bdb' and not self.avatar.dna.name == 'bs':
+            if not self.avatar.dna.name == 'radiog' and not self.avatar.dna.name == 'ubuster' and not self.avatar.dna.name == 'ang' and not self.avatar.dna.name == 'cv':
                 hasAnimatedHead = True
                 copyPart = part.copyTo(self.head)
                 p1 = Point3()
@@ -616,43 +632,43 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                 d = p2 - p1
                 biggest = max(d[0], d[1], d[2])
                 s = 0.3 / biggest
-                if self.avatar.dna.name == 'dvp' and not self.avatar.isSkeleton:
+                if self.avatar.dna.name == 'racket' and not self.avatar.isSkeleton:
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))
                     headInterval.start()
 
-                elif self.avatar.dna.name == 'th' and not self.avatar.isSkeleton:
+                elif self.avatar.dna.name == 'rainmake' and not self.avatar.isSkeleton:
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))
                     headInterval.start()
-                elif self.avatar.dna.name == 'dvk' and not self.avatar.isSkeleton:
+                elif self.avatar.dna.name == 'racket' and not self.avatar.isSkeleton:
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))
                     headInterval.start()
-                elif self.avatar.dna.name == 'mp' and not self.avatar.isSkeleton:
+                elif self.avatar.dna.name == 'redd' and not self.avatar.isSkeleton:
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))
                     headInterval.start()
-                elif self.avatar.dna.name == 'blr' and not self.avatar.isSkeleton:
+                elif self.avatar.dna.name == 'radiog' and not self.avatar.isSkeleton:
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.04, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))
                     headInterval.start()
-                elif self.avatar.dna.name == 'dsk' and not self.avatar.isSkeleton:
+                elif self.avatar.dna.name == 'ubuster' and not self.avatar.isSkeleton:
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.04, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))
                     headInterval.start()
-                elif self.avatar.isSkeleton and self.avatar.dna.name == 'gtk':
+                elif self.avatar.isSkeleton and self.avatar.dna.name == 'ambass':
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.08, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))
                     headInterval.start()
-                elif self.avatar.isSkeleton and not self.avatar.dna.name == 'gtk':
+                elif self.avatar.isSkeleton and not self.avatar.dna.name == 'ambass':
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.03, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))
@@ -696,6 +712,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
     def __cleanupSequence(self):
         self.blinkTask = None
         taskMgr.remove(self.frame.uniqueName('blink-task'))
+        taskMgr.remove(self.frame.uniqueName('pulse-task'))
         self.headTask = None
         taskMgr.remove(self.frame.uniqueName('head-task'))
         if self.labelInterval:

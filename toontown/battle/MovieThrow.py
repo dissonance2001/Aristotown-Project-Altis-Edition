@@ -479,16 +479,23 @@ def __throwPie(throw, delay, hitCount, npcs):
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         suitResponseTrack.append(Func(suit.setNeutralAnimation))
         suitIndex = battle.activeSuits.index(suit)
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-        suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
+        if suit.dna.name == 'sgoat' and suit.isShielding:
+            suitResponseTrack.append(Func(suit.addRageBuilding, hp))
+        if suit.dna.name == 'phouse':
+            suitResponseTrack.append(Func(suit.addPowerhouseRotation, hp))
+        if suit.isSued:
+            suitResponseTrack.append(Func(suit.makeSued, 3))
+        if not suit.isShielding:
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+            suitResponseTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
     else:
         suitResponseTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
@@ -500,28 +507,10 @@ def __throwPie(throw, delay, hitCount, npcs):
          suitResponseTrack]
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
-    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'hroller':
-        revives = suits[suitIndex].getSkeleRevives()
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding:
         suitTrack = Sequence()
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
-        value = hp
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.425))
+        showDamage = Sequence(Func(suits[suitIndex].addAbsorbDamage, suits[suitIndex], int(hp * 0.45)))
         suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
-        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        return suitTrack
-    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'hrolnothingler':
-        revives = suits[suitIndex].getSkeleRevives()
-        suitTrack = Sequence()
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
-        value = hp
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.115))
-        suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
-        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
-                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
         return suitTrack
     else:
         return Sequence()

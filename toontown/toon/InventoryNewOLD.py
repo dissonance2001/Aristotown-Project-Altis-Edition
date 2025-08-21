@@ -403,133 +403,133 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                 return ""
 
         if track == HEAL_TRACK and 'healBoost' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['healBoost'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['healBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'healBoost')
         elif track == HEAL_TRACK and 'encore' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
         elif track == TRAP_TRACK and 'trapBoost' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['trapBoost'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['trapBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'trapBoost')
         elif track == LURE_TRACK and 'lureBoost' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['lureBoost'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['lureBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'lureBoost')
-            lureValue = int(
+            lureValue = int(math.ceil(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100)  + base.localAvatar.battleConditions['lureBoost'][
-                        0]) / 2)
+                        0]) / 2))
         elif track == SOUND_TRACK and 'soundBoost' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['soundBoost'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['soundBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'soundBoost')
         elif track == SOUND_TRACK and 'encore' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
         elif track == TRAP_TRACK and 'encore' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
         elif track == THROW_TRACK and 'encore' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
         elif track == SQUIRT_TRACK and 'encore' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
         elif track == ZAP_TRACK and 'encore' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
         elif track == DROP_TRACK and 'encore' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
         elif track == LURE_TRACK and 'encore' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
-            lureValue = int(
+            lureValue = int(math.ceil(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['encore'][
-                    0]) / 2)
+                    0]) / 2))
         elif track == SOUND_TRACK and 'encore2' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
         elif track == TRAP_TRACK and 'encore2' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
         elif track == THROW_TRACK and 'encore2' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
         elif track == SQUIRT_TRACK and 'encore2' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
         elif track == ZAP_TRACK and 'encore2' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
         elif track == DROP_TRACK and 'encore2' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
         elif track == LURE_TRACK and 'encore2' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
-            lureValue = int(
+            lureValue = int(math.ceil(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['encore2'][
-                    0]) / 2)
+                    0]) / 2))
         elif track == SOUND_TRACK and 'winded' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['winded'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['winded'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'winded')
         elif track == THROW_TRACK and 'throwBoost' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['throwBoost'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['throwBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'throwBoost')
         elif track == SQUIRT_TRACK and 'squirtBoost' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['squirtBoost'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['squirtBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'squirtBoost')
         elif track == ZAP_TRACK and 'zapBoost' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['zapBoost'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['zapBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'zapBoost')
         elif track == DROP_TRACK and 'dropBoost' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['dropBoost'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['dropBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'dropBoost')
         elif track == SOUND_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
         elif track == SQUIRT_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
         elif track == ZAP_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
         elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
         elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 5:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
         elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 3:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
         elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1:
-            damage = math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0))
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
         else:
             self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
             if allGagBoost and not track == LURE_TRACK:
-                damage = math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0))
-                lureValue = int(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
+                lureValue = int(math.ceil(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
                 damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost')
             elif raisedAnte and not track == LURE_TRACK:
-                damage = math.ceil(damage * ((base.localAvatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0))
-                lureValue = int(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
+                lureValue = int(math.ceil(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
                 damageAppendStr = labelColorizeJustAll(damage, 'raisedAnte')
             else:
-                lureValue = int(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+                lureValue = int(math.ceil(
+                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
 
-        damage = int(damage)
+        damage = math.ceil(damage)
         organicBonus = self.toon.checkGagBonus(track, level)
         if track == TRAP_TRACK and organicBonus:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       int(damage * 1.15) + 1) + damageAppendStr,
+                                                                                       int(math.ceil(damage * 1.15))) + damageAppendStr,
                                                                                    'bonus': '\nExe./Gov./Mgr. Mult.: %i%s\nDaze Rounds: %i' % (
-                                                                                   math.ceil((damage * 1.15) * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS)),
+                                                                                  int(math.ceil((damage * 1.15) * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS))),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -541,7 +541,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
                                                                                    'bonus': '\nExe./Gov./Mgr. Mult.: %i%s\nDaze Rounds: %i' % (
-                                                                                   math.ceil(damage * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS)),
+                                                                                   int(math.ceil(damage * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS))),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -553,7 +553,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        ToontownBattleGlobals.AvLureRounds[
                                                                                            level] + 1,
                                                                                    'bonus': '\nKnockback: %s' %
-                                                                                       str(int(lureValue * 1.2))+'%' + damageAppendStr,
+                                                                                       int(math.ceil(lureValue * 1.2))+'%' + damageAppendStr,
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
@@ -564,7 +564,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        ToontownBattleGlobals.AvLureRounds[
                                                                                            level] + 1,
                                                                                    'bonus': '\nKnockback: %s' %
-                                                                                       str(lureValue)+'%' + damageAppendStr,
+                                                                                       str(int(lureValue))+'%' + damageAppendStr,
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.34625)
@@ -573,10 +573,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nMark Rounds: %i\nMarked Damage: %i%%\nSelf Heal: %i' % (
                                                                                        ToontownBattleGlobals.AvMarkRounds[
-                                                                                           level], +ToontownBattleGlobals.AvMarkBoost, math.ceil(damage / 5)) + damageBonusStr,
+                                                                                           level], +ToontownBattleGlobals.AvMarkBoost, int(math.ceil(damage / 5))) + damageBonusStr,
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.42625)
@@ -585,7 +585,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nMark Rounds: %i\nMarked Damage: %i%%' % (
                                                                                        ToontownBattleGlobals.AvMarkRounds[
                                                                                            level], +ToontownBattleGlobals.AvMarkBoost),
@@ -596,7 +596,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
-                                                                                   'damage': str(damage) + damageAppendStr,
+                                                                                   'damage': str(int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nEncore Gag Bonus: 20%',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -605,7 +605,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
-                                                                                   'damage': str(damage) + damageAppendStr,
+                                                                                   'damage': str(int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nEncore Gag Bonus: 10%',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -615,7 +615,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': "\nZap Jump Dmg.: 100%",
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -625,7 +625,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': "\nZap Jump Dmg.: 100%",
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -637,7 +637,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
                                                                                    'bonus': '\nSelf Heal: %i%s' % (
-                                                                                   math.ceil(damage / 2.22),
+                                                                                   int(math.ceil(damage / 2.22)),
                                                                                    damageAppendStr) + damageBonusStr,
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -649,7 +649,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damage': str(
                                                                                        damage) + damageAppendStr,
                                                                                    'bonus': '\nSelf Heal: %i%s' % (
-                                                                                   math.ceil(damage / 4),
+                                                                                   int(math.ceil(damage / 4)),
                                                                                    damageAppendStr) + damageBonusStr,
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -659,7 +659,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nSoak Rounds: %i\nSoaked Dodge Rate: %i%%' % (
                                                                                        ToontownBattleGlobals.AvSoakRounds[
                                                                                            level], -ToontownBattleGlobals.AvSoakDefReduction) + damageBonusStr + '\nSplash Damage: 75%',
@@ -671,7 +671,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nSoak Rounds: %i\nSoaked Dodge Rate: %i%%' % (
                                                                                        ToontownBattleGlobals.AvSoakRounds[
                                                                                            level], -ToontownBattleGlobals.AvSoakDefReduction) + damageBonusStr + '\nSplash Damage: 33%',
@@ -683,7 +683,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nBonus Damage: Up to\n25% w/Debuffs',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -693,7 +693,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': '',
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -1470,8 +1470,6 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
                                 track, level) <= 0:
                             self.makeDamageDownPressable(button, track, level)
-                        if 'noDamage' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
-                            self.makeUnpressable(button, track, level)
                         if 'noGags' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
                             self.makeBannablePressable(button, track, level)
                         if track == HEAL_TRACK and 'useToonUp' in base.localAvatar.battleConditions and not \
@@ -1565,6 +1563,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                             self.makeUnpressable(button, track, level)
                         if track == LURE_TRACK and 'confused' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
                                 track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if 'noDamage' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
                             self.makeUnpressable(button, track, level)
                         if self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
                             self.makeUnpressable(button, track, level)
