@@ -3477,6 +3477,7 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'headrollertargetcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bellowattack', 1, 1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget6', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget5', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget4', 0, 0, 'setBoth')
@@ -3494,6 +3495,7 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'headrollertargetcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bellowattack', 1, 1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget6', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget5', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget4', 0, 0, 'setBoth')
@@ -3511,6 +3513,7 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'headrollertargetcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bellowattack', 1, 1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget6', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget5', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget4', 0, 0, 'setBoth')
@@ -3528,6 +3531,7 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'headrollertargetcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bellowattack', 1, 1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget6', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget5', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget4', 0, 0, 'setBoth')
@@ -3545,6 +3549,7 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'headrollertargetcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bellowattack', 1, 1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget6', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget5', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'ambtarget4', 0, 0, 'setBoth')
@@ -3593,6 +3598,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'damageupcalculator2', 1, 1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'headroller2calculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'headrollercalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'bellowattack', 1, 1, 'setBoth')
                 for suit in self.battle.activeSuits:
                     if suit.currHP <= 0:
                         continue
