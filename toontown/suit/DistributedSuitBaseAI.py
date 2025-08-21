@@ -30,6 +30,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         self.cog = 0
         self.isSkeleton = 0
         self.manager = 0
+        self.isVirtual = 0
         self.governaught = 0
         self.dmgMult = 1.0
         self.vulnerabilityMult = 1.0
@@ -325,6 +326,10 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
 
     def useSkeleRevive(self):
         self.skeleRevives -= 1
+        if self.getSkeleton() > 0:
+            self.setVirtual(1)
+        else:
+            self.setSkeleton(1)
         self.currHP = self.maxHP
         self.reviveFlag = 1
         self.setDamageMultiplier(self.getDamageMultiplier() * 1.5)
@@ -427,9 +432,6 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         if isSkeleton == None:
             isSkeleton = 0
         self.isSkeleton = isSkeleton
-        if self.isSkeleton:
-            self.maxHP = int(self.maxHP * random.uniform(.75, 1.25))
-            self.currHP = self.maxHP
 
     def d_setSkelecog(self, flag):
         self.sendUpdate('setSkelecog', [flag])
@@ -441,13 +443,13 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         return 0
 
     def setVirtual(self, flag):
+        if flag == None:
+            flag = 0
+        self.isVirtual = flag
         SuitBase.SuitBase.setVirtual(self, flag)
 
     def getVirtual(self):
-        return 0
-
-    def isVirtual(self):
-        return self.getVirtual()
+        return self.isVirtual
 
     def setWaiter(self, flag):
         SuitBase.SuitBase.setWaiter(self, flag)

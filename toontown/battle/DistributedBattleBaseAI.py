@@ -1733,7 +1733,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                  'isForeman': suit.isForeman(),
                  'isBoss': 0,
                  'isSupervisor': suit.isSupervisor(),
-                 'isVirtual': suit.isVirtual(),
+                 'isVirtual': suit.getVirtual(),
                  'hasRevives': suit.getMaxSkeleRevives(),
                  'isElite': suit.getElite(),
                  'activeToons': self.activeToons[:]}
@@ -1777,7 +1777,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                                         toonHpDict[toon.doId][2] = 1
                                     toonHpDict[toon.doId][1] += hp
                 
-                elif attack['group'] == ATK_TGT_DOUBLE or attack['group'] == ATK_TGT_SINGLE:
+                elif attack['group'] == ATK_TGT_TRIPLE or attack['group'] == ATK_TGT_DOUBLE or attack['group'] == ATK_TGT_SINGLE:
                     for targetIndex in self.suitAttacks[i][SUIT_TGT_COL]:
                         if targetIndex >= len(self.activeToons):
                             self.notify.warning('movieDone() - toon: %d gone!' % targetIndex)

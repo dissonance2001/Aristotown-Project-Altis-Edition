@@ -244,6 +244,10 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         'name'] == 'HighRollerDiceRouletteToons':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'BroadcasterDonation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     if splicedAnims:
@@ -348,12 +352,12 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     if suit:
         animTrack.append(Func(toon.headsUp, battle, suitPos))
     indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
                                Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
@@ -392,12 +396,12 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     if suit:
         animTrack.append(Func(toon.headsUp, battle, suitPos))
     indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(1, 0, 0, 1)),
-                               LerpColorScaleInterval(indicator, 0.5, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
                                Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
@@ -594,13 +598,13 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
-    if toon.hp - dmg <= 0:
-        suit = attack['suit']
-        toonTrack.append(Wait(3.0))
-        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-        else:
-            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+  #  if toon.hp - dmg <= 0:
+      #  suit = attack['suit']
+       # toonTrack.append(Wait(3.0))
+       # if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+          #  suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+      #  else:
+         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -620,13 +624,13 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
     toonTrack.append(Func(toon.loop, 'neutral'))
-    if toon.hp - dmg <= 0:
-        suit = attack['suit']
-        toonTrack.append(Wait(3.0))
-        if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-        else:
-            suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
+   # if toon.hp - dmg <= 0:
+     #   suit = attack['suit']
+     #   toonTrack.append(Wait(3.0))
+      #  if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+        #    suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
+      #  else:
+        #    suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
 
 
@@ -731,12 +735,6 @@ def doDonation2(attack):
         headTrack.append(Func(headPart.loop, 'neutral'))
         headTracks.append(headTrack)
     soundTrack = getSoundTrack('mus_dialup_0.ogg')
-    notifyTrack = Sequence(Parallel(ActorInterval(suit, 'mob-mentality', endTime=1), getSuitAnimTrack(attack)), Wait(4.0),
-                           Func(suit.setHealthForMe, - 1111), Func(suit.showHpText, - 1111),
-                           Func(suit.updateHealthBar, 0), Func(suit.setNeutralAnimation), Wait(2.0))
-    if (suit.currHP - 1111) <= 0:
-        notifyTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-    notifyTracks.append(notifyTrack)
     for s in battle.activeSuits:
         if s.dna.name == 'videog' and not suit.dna.name == 'videog':
             theSuit = s
@@ -752,10 +750,10 @@ def doDonation2(attack):
                 headTrack.append(Wait(5.0))
                 headTrack.append(Func(headPart.setTexture, texture, 1))
                 headTrack.append(Func(headPart.loop, 'neutral'))
-            notifyTrack = Sequence(ActorInterval(theSuit, 'mob-mentality', endTime=1), Wait(4.0), Func(theSuit.setHealthForMe, + (1111)),  Func(theSuit.showHpText, (1111)),
-                                Func(theSuit.updateHealthBar, 0), Func(theSuit.setNeutralAnimation), Wait(2.0))
             headTracks.append(headTrack)
-            notifyTracks.append(Parallel(notifyTrack))
+            notifyTrack = Sequence(Parallel(getSuitAnimTrack(attack), Func(suit.checkBroadcasterDonation, theSuit, battle)),
+                                    Wait(6.0))
+            notifyTracks.append(notifyTrack)
     if theSuit == None:
         theSuit = suit
 
@@ -1272,9 +1270,6 @@ def doVideoStatic(attack):
     suit = attack['suit']
     battle = attack['battle']
     notifyTracks = Sequence(Wait(0.5))
-    cameraTracks = Sequence()
-    makeDesperates = Parallel()
-    makeDamageUps = Parallel()
     headTracks = Parallel()
     theSuit = None
     soundTrack = getSoundTrack('tv_static.ogg', delay=1, node=suit)
@@ -1294,25 +1289,21 @@ def doVideoStatic(attack):
                 headTrack.append(Parallel(Func(headPart.setTexture, texture, 1), soundTrack4, Func(headPart.loop, 'neutral')))
             if suit.dna.name == 'bcaster':
                 notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
-                                                   '1.25x Vulnerability Multiplier',
+                                                   '+ 25% Vulnerable',
                                                    2), Func(theSuit.showHpStringLureManager2,
-                                                            '1.25x Dmg Multiplier'), Func(theSuit.setNeutralAnimation), Wait(2.0))
+                                                            '+ 25% Damage'), Func(theSuit.makeDamageUp), Func(theSuit.makeVulnerable), Func(theSuit.setNeutralAnimation), Func(theSuit.checkDamageUp, + 25), Func(theSuit.checkVulnerabilityUp, + 25), Wait(2.0))
             else:
                 notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
-                                                   '1.1x Vulnerability Multiplier',
+                                                   '+ 10% Vulnerable',
                                                    2), Func(theSuit.showHpStringLureManager2,
-                                                            '1.1x Dmg Multiplier'), Func(theSuit.setNeutralAnimation), Wait(2.0))
-            makeDesperate = Func(theSuit.makeVulnerable)
+                                                            '+ 10% Damage'), Func(theSuit.makeDamageUp), Func(theSuit.makeVulnerable), Func(theSuit.setNeutralAnimation), Func(theSuit.checkDamageUp, + 10), Func(theSuit.checkVulnerabilityUp, + 10), Wait(2.0))
             headTracks.append(headTrack)
-            makeDamageUp = Func(theSuit.makeDamageUp)
             cameraTrack = Sequence(MovieCamera.motionShot(0.0, 12.0, 6.0, -180, 0, 0.0, 0, theSuit), Wait(3.0))
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
     if theSuit == None:
         theSuit = suit
 
-    return Parallel(notifyTracks, makeDamageUps, soundTrack2, headTracks, soundTrack, makeDesperates)
+    return Parallel(notifyTracks, soundTrack2, headTracks, soundTrack)
 
 
 def doRisingStarsSacrifice(attack):

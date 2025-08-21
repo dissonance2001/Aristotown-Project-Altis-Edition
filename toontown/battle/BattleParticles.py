@@ -62,6 +62,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('confetti.ptf')
     elif name == 'DemotionFreeze':
         return loadParticleFile('demotionFreeze.ptf')
+    elif name == 'FireSpray':
+        return loadParticleFile('FireSpray.ptf')
     elif name == 'demotionUnFreeze2':
         return loadParticleFile('demotionUnFreeze2.ptf')
     elif name == 'DemotionSpray':
@@ -100,6 +102,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return __makeSprayLift()
     elif name == 'HeavyRainfall':
         return loadParticleFile('liquidate2.ptf')
+    elif name == 'paperRainfall':
+        return loadParticleFile('paperRainfall.ptf')
     elif name == 'HotAir':
         return loadParticleFile('hotAirSpray.ptf')
     elif name == 'PoundKey':
@@ -114,6 +118,10 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return __makeSprayLift()
     elif name == 'ShiftLift':
         return __makeShiftLift()
+    elif name == 'InsuranceLift':
+        return __makeInsuranceLift()
+    elif name == 'SyphonLift':
+        return __makeSyphonLift()
     elif name == 'Shred':
         return loadParticleFile('shred.ptf')
     elif name == 'Smile':
@@ -201,6 +209,26 @@ def __makeShiftLift():
     particles = effect.getParticlesNamed('particles-1')
     particles.renderer.setCenterColor(Vec4(1, 1, 0, 0.9))
     particles.renderer.setEdgeColor(Vec4(1, 1, 0, 0.6))
+    particles.emitter.setRadius(0.01)
+    effect.setHpr(0, 180, 0)
+    effect.setPos(0, 0, 0)
+    return effect
+
+def __makeInsuranceLift():
+    effect = loadParticleFile('pixieDrop.ptf')
+    particles = effect.getParticlesNamed('particles-1')
+    particles.renderer.setCenterColor(Vec4(0, 1, 0.078, 0.9))
+    particles.renderer.setEdgeColor(Vec4(0, 1, 0.078, 0.6))
+    particles.emitter.setRadius(0.01)
+    effect.setHpr(0, 180, 0)
+    effect.setPos(0, 0, 0)
+    return effect
+
+def __makeSyphonLift():
+    effect = loadParticleFile('pixieDrop.ptf')
+    particles = effect.getParticlesNamed('particles-1')
+    particles.renderer.setCenterColor(Vec4(1, 0, 0, 0.9))
+    particles.renderer.setEdgeColor(Vec4(1, 0, 0, 0.6))
     particles.emitter.setRadius(0.01)
     effect.setHpr(0, 180, 0)
     effect.setPos(0, 0, 0)

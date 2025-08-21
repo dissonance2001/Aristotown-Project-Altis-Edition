@@ -225,21 +225,28 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 bonusTrack.append(updateHealthBar)
             suitTrack.append(Func(suit.setNeutralAnimationTrap))
             suitIndex = battle.activeSuits.index(suit)
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, totalDamage[targetIndex], battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, totalDamage[targetIndex], battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, totalDamage[targetIndex], battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, totalDamage[targetIndex], battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, totalDamage[targetIndex], battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, totalDamage[targetIndex], battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, totalDamage[targetIndex], battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, totalDamage[targetIndex], battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, totalDamage[targetIndex], battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, totalDamage[targetIndex], battle))
+            if suit.dna.name == 'sgoat' and suit.isShielding:
+                suitTrack.append(Func(suit.addRageBuilding, totalDamage[targetIndex]))
+            if suit.dna.name == 'phouse':
+                suitTrack.append(Func(suit.addPowerhouseRotation, totalDamage[targetIndex]))
+            if suit.isSued:
+                suitTrack.append(Func(suit.makeSued, 3))
+            if not suit.isShielding:
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, totalDamage[targetIndex], battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, totalDamage[targetIndex], battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, totalDamage[targetIndex], battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, totalDamage[targetIndex], battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, totalDamage[targetIndex], battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, totalDamage[targetIndex], battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, totalDamage[targetIndex], battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, totalDamage[targetIndex], battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, totalDamage[targetIndex], battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, totalDamage[targetIndex], battle))
             if bonusTrack == None:
                 tracks.append(suitTrack)
             else:
                 tracks.append(Parallel(suitTrack, bonusTrack))
-                tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
+                tracks.append(Func(suit.showHpTextWhite, 'IMMUNE!'))
         elif totalDamage[targetIndex] <= 0 and not suit.dna.name == 'hroller':
             battle = sound['battle']
             if suit.isLured:
@@ -280,30 +287,10 @@ def __getSuitDeathTracks(sound):
 
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
-    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'hroller':
-        revives = suits[suitIndex].getSkeleRevives()
+    if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding:
         suitTrack = Sequence()
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
-        value = hp
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.425))
+        showDamage = Sequence(Func(suits[suitIndex].addAbsorbDamage, suits[suitIndex], int(hp * 0.45)))
         suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
-        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'), MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        return suitTrack
-    elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'nothing':
-        revives = suits[suitIndex].getSkeleRevives()
-        suitTrack = Sequence()
-        showDamage = Sequence(
-            Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK),
-            Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
-        value = hp
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(value * 0.115))
-        suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
-        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'pie-small-react'),
-                                  MovieUtil.createSuitStunInterval(suits[suitIndex], .5, 2.0)))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
         return suitTrack
     else:
         return Sequence()

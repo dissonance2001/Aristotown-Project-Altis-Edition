@@ -307,6 +307,15 @@ class Movie(DirectObject.DirectObject):
             MovieUtil.shotDirection = 'right'
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
+            s.addLuredRounds(s.getLuredRounds() - 1)
+            if not s.getSoakRounds() <= 0:
+                s.makeSoaked(s.getSoakRounds() - 1)
+            if not s.getSuedRounds() <= 0:
+                s.makeSued(s.getSuedRounds() - 1)
+            if not s.getEnrageCounter() <= 1:
+                s.makeAngry(s.getEnrageCounter() - 1)
+            if s.isDazed:
+                s.makeUnDazed()
 
         tattacks, tcam = self.__doToonAttacks()
         if tattacks:
@@ -320,17 +329,10 @@ class Movie(DirectObject.DirectObject):
                 battle = a['battle']
                 ival, camIval = MovieSuitAttacks.doSuitAttack(a)
                 for s in battle.activeSuits:
-                    pbpText = PlayByPlayText.PlayByPlayText()
-                    pbpDc = PlayByPlayText.PlayByPlayText()
                     if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'director' or s.dna.name == 'fmaker':
                         ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
                                                                              '',
                                                                              CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
-                    elif s.isSued:
-                        if not s.isSued:
-                            ptrack.append(Func(battle.unSueSuit, s))
-                        if s.isSued:
-                            ptrack.append(Func(battle.sueSuit, s))
                     else:
                         ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
                                                                                        '',
@@ -993,7 +995,7 @@ class Movie(DirectObject.DirectObject):
                         adict['target'] = targets
                     else:
                         targetGone = 1
-                elif adict['group'] == ATK_TGT_SINGLE or adict['group'] == ATK_TGT_DOUBLE:
+                elif adict['group'] == ATK_TGT_SINGLE or adict['group'] == ATK_TGT_DOUBLE or adict['group'] == ATK_TGT_TRIPLE:
                     targets = []
                     for targetIndex in sa[SUIT_TGT_COL]:
                         targetId = toons[targetIndex]

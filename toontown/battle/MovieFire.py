@@ -327,7 +327,7 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
     toonFace = Func(toon.headsUp, battle, suitPos)
     toonTrack.append(Wait(delay))
     toonTrack.append(toonFace)
-    toonTrack.append(ActorInterval(toon, 'pushbutton'))
+    toonTrack.append(Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'pushbutton')))
     if hitSuit:
         toonTrack.append(ActorInterval(toon, 'wave', duration=2.0))
         toonTrack.append(ActorInterval(toon, 'duck'))

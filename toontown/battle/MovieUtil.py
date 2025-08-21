@@ -318,12 +318,13 @@ def createSuitReviveTrack(suit, battle):
     suitTrack.append(Sequence(Func(suit.showHpText2,
                                    '0.5x HP MULTIPLIER',
                                    2), Func(suit.showHpStringLureManager2,
-                                            '1.5x Dmg Multiplier'), Func(suit.showHpString,
-                                                                         '-1 Skeletal Revive')))
+                                            '+ 50% Damage'), Func(suit.showHpString,
+                                                                         '-1 Revive')))
     suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeRevive))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
@@ -393,7 +394,7 @@ def createSuitReviveTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'hroller' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
-    elif suit.style.name == 'ambass':
+    elif suit.style.name == 'ambass' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
     elif suit.style.name == 'safesupervis' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
@@ -550,6 +551,7 @@ def createAmbassadorReviveTrack(suit, battle):
     suitTrack.append(Func(suit.setMaxHP, 4880))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeRevive))
     suitTrack.append(ActorInterval(suit, 'pie-small-react'))
     suitTrack.append(Func(suit.setNeutralAnimation))
@@ -597,13 +599,14 @@ def createSuitReviveRedd(suit, battle):
     suitTrack.append(Func(suit.setHealthForMe, 0))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     suitTrack.append(Sequence(Func(suit.showHpText2,
                                            '0.5x HP MULTIPLIER',
                                            2), Func(suit.showHpStringLureManager2,
-                                           '1.5x Dmg Multiplier'), Func(suit.showHpString,
-                                           '-1 Virtual Revive')))
+                                           '+ 50% Damage'), Func(suit.showHpString,
+                                           '-1 Revive')))
     suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     if suit.style.name == 'mp' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
@@ -678,9 +681,10 @@ def createGhostMentalityTrack(suit, battle):
     suitTrack.append(Func(suit.setVirtual, True, True))
     suitTrack.append(Func(suit.setCog, True))
     suitTrack.append(Func(suit.show))
-    suitTrack.append(Func(suit.showHpText2, '1.5x Dmg Multiplier', 2))
+    suitTrack.append(Func(suit.showHpText2, '+ 50% Damage', 2))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(ActorInterval(suit, 'slip-backward'))
     suitTrack.append(Func(suit.setNeutralAnimation))
@@ -719,6 +723,7 @@ def createRisingStars(suit, battle):
     suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(LerpColorScaleInterval(suit, 0, (0, 0, 0, 0)))
     suitTrack.append(Func(suit.setNeutralAnimation))
@@ -746,14 +751,15 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Sequence(Func(suit.showHpText2,
                                            '0.5x HP MULTIPLIER',
                                            2), Func(suit.showHpStringLureManager2,
-                                           '1.5x Dmg Multiplier'), Func(suit.showHpString,
-                                           '-1 Virtual Revive')))
+                                           '+ 50% Damage'), Func(suit.showHpString,
+                                           '-1 Revive')))
     suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeLaserRevive))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
@@ -1765,7 +1771,7 @@ def createToonDodgeMultitrack(tDodge, toon, leftToons, rightToons):
 def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
     if suit.dna.name == 'sgoat' and suit.isAngry:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
-    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog':
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1), ActorInterval(suit, 'gag-miss'))
     else:
         suitTrack = Sequence(Wait(delay), ActorInterval(suit, 'gag-miss'))
@@ -1776,7 +1782,7 @@ def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
         suitTrack.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.dna.name == 'hroller2' and suit.isVulnerable:
         suitTrack.append(Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog':
         suitTrack.append(Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1),
                                   Func(suit.loop, 'highroller-neutral-levitate-loop')))
     else:
@@ -1787,7 +1793,7 @@ def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
 def createSuitTeaseMultiTrackSound(suit, battle, delay = 0.01):
     if suit.dna.name == 'sgoat' and suit.isAngry:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
-    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog':
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1), ActorInterval(suit, 'gag-miss'))
     else:
         suitTrack = Sequence(Wait(delay), ActorInterval(suit, 'gag-miss'))
@@ -1798,7 +1804,7 @@ def createSuitTeaseMultiTrackSound(suit, battle, delay = 0.01):
         suitTrack.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.dna.name == 'hroller2' and suit.isVulnerable:
         suitTrack.append(Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog':
         suitTrack.append(Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1),
                                   Func(suit.loop, 'highroller-neutral-levitate-loop')))
     else:
@@ -1970,9 +1976,7 @@ def createButtonIntervalZap(battle, delay, originHpr, suitPos, toon):
                          Func(toon.loop, 'neutral'),
                          Func(toon.setHpr, battle, originHpr))
     buttonTrack = Sequence(Wait(delay),
-                           Func(showProps, buttons, hands),
-                           LerpScaleInterval(button, 1.0, button.getScale(), startScale=Point3(0.01, 0.01, 0.01)),
-                           Wait(2.5),
+                           Func(showProps, buttons, hands), ActorInterval(button, 'zap-button'),
                            LerpScaleInterval(button, 1.0, Point3(0.01, 0.01, 0.01), startScale=button.getScale()),
                            Func(removeProps, buttons))
     return toonTrack, buttonTrack
@@ -1989,8 +1993,7 @@ def createButtonIntervalDrop(battle, delay, originHpr, suitPos, toon):
                          Func(toon.setHpr, battle, originHpr))
     buttonTrack = Sequence(Wait(delay),
                            Func(showProps, buttons, hands),
-                           LerpScaleInterval(button, 1.0, button.getScale(), startScale=Point3(0.01, 0.01, 0.01)),
-                           Wait(2.5),
+                           ActorInterval(button, 'drop-button'),
                            LerpScaleInterval(button, 1.0, Point3(0.01, 0.01, 0.01), startScale=button.getScale()),
                            Func(removeProps, buttons))
     return toonTrack, buttonTrack
@@ -2500,7 +2503,7 @@ def zapCog(suit, anim, before, after, battle):
                                   Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
                                   Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
                                   Func(bodyPart.setColorScale, (1, 1, 1, 1))))
-    spazzTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8), ActorInterval(zapSuit, anim, startTime=0), Func(zapSuit.setNeutralAnimationTrap))
+    spazzTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8), ActorInterval(zapSuit, anim, startTime=0))
     return Parallel(zapTrack, flashTrack, spazzTrack)
 
 def spawnHeadExplosion(suit, battle):

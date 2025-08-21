@@ -1,10 +1,17 @@
 from direct.actor import Actor
+import random
+import math
 from direct.directnotify import DirectNotifyGlobal
 from otp.avatar import Avatar
 from direct.interval.IntervalGlobal import *
 from toontown.suit import SuitDNA
+from toontown.battle import MovieUtil
 from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import *
+from direct.interval.IntervalGlobal import *
+from toontown.battle import BattleParticles
+from direct.particles import ParticleEffect
+from direct.showutil import Effects
 from toontown.battle import SuitBattleGlobals
 from toontown.nametag import NametagGlobals
 from direct.task.Task import Task
@@ -109,10 +116,10 @@ fbed = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4))
 mplayer2 = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
 chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('neutral', 'neutral-override', 4))
-phouse = (('speak', 'speak', 4), ('scabbard', 'scabbard', 4),('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
-bkeeper = (('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
-wtapper = (('speak', 'speak', 4), ('snap', 'snap', 4), ('cease', 'nothing', 4), ('roll-o-dex', 'roll-o-dex', 4))
-ambass = (('deadwood', 'deadwood', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('cease', 'cease', 4), ('snap', 'snap', 4))
+phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4),('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
+bkeeper = (('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
+wtapper = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('snap', 'snap2', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
+ambass = (('deadwood', 'deadwood', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('cease', 'cease', 4), ('snap', 'snap2', 4))
 
 # Sellbots
 cc = (('speak', 'speak', 4), ('glower', 'glower', 4))
@@ -137,11 +144,11 @@ bellring = (('roll-o-dex', 'roll-o-dex', 4), ('quick-jump', 'jump', 4))
 mh2 = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-put = (('snap', 'snap', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
+put = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
 racket = (('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
 ubuster = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
-safesupervis = (('cease', 'cease', 4), ('snap', 'snap', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
+safesupervis = (('cease', 'cease', 4), ('snap', 'snap2', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
 psetter = (('quick-jump', 'jump', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4), ('neutral2', 'neutral', 4))
 
 # Cashbots
@@ -169,10 +176,10 @@ hydra = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 kerberos = (('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
 charon = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 pcrat = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
-hroller = (('cease', 'cease3', 4), ('taunt', 'taunt', 4), ('wheelspin', 'wheelspin', 4), ('shot5', 'shot5', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('song-and-dance', 'song-and-dance', 4), ('walk', 'awalk', 4))
+hroller = (('cease', 'cease3', 4), ('taunt', 'taunt', 4), ('wheelspin', 'wheelspin', 4), ('shot5', 'shot5', 4), ('bust', 'bust', 4), ('snap', 'snap2', 4), ('song-and-dance', 'song-and-dance', 4), ('walk', 'awalk', 4))
 erfit = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
-hrollers = (('glower', 'glower', 4), ('sanction', 'sanction', 4), ('snap', 'snap', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4))
-hroller2 = (('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap', 4), ('shot5', 'shot5', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
+hrollers = (('glower', 'glower', 4), ('sanction', 'sanction', 4), ('snap', 'snap2', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4))
+hroller2 = (('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap2', 4), ('shot5', 'shot5', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
 
 # Lawbots
 bf = (('shredder', 'shredder', 4), ('finger-wag', 'finger-wag', 4))
@@ -225,7 +232,7 @@ ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dola = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-pbs = (('snap', 'snap', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
+pbs = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 fmaker = (('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 jgd = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 bby = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -284,7 +291,7 @@ pbl = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swi
 director = (('golf-club-swing', 'golf-club-swing', 4), ('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 bcaster = (('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 std2 = (('glower', 'glower', 4), ('smile', 'smile', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
-videog = (('snap', 'snap', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('smile', 'smile', 4))
+videog = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('smile', 'smile', 4))
 prt = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 pla = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 plk = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
@@ -1218,6 +1225,8 @@ class Suit(Avatar.Avatar):
         self.isEnraged = 0
         self.isAbsorbing = 0
         self.isRental = 0
+        self.isLureResist = 0
+        self.isTarget = 0
         self.splats = set()
 
     def delete(self):
@@ -1283,6 +1292,7 @@ class Suit(Avatar.Avatar):
         self.zapActor = None
         self.isSkeleton = 0
         self.isFired = 0
+        self.isDazed = 0
         self.isLured = 0
         self.isPhase3 = 0
         self.isDesperation = 0
@@ -1305,6 +1315,19 @@ class Suit(Avatar.Avatar):
         self.isDamageUp = 0
         self.isSoaked = 0
         self.isVirtual = 0
+        self.isBookkeeping = 0
+        self.headInterval = None
+        self.pulseInterval = None
+        self.blinkInterval = None
+        self.suitColorTrack = None
+        self.partTracks = None
+        self.extraAttack = 0
+        self.damageMult = 0
+        self.lureRounds = 0
+        self.vulnerability = 0
+        self.rageBuilding = 0
+        self.powerhouseRotation = 0
+        self.statusEffects = 0
 
         # Bossbots
         if dna.name == 'f':
@@ -1537,15 +1560,14 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'phouse':
             self.scale = 5.0 / aSize
-            self.handColor = VBase4(0.863, 0.349, 0.122, 1)
+            self.handColor = VBase4(0.686, 0.569, 0.439, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead3('dola', animated=True)
-            texture = loader.loadTexture('phase_14/maps/ttcc_ene_dola.png')
+            self.generateHead3('circuitbreaker', animated=True)
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_circuitbreaker2.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(6.5)
-            self.setTransparency(1)
+            self.setHeight(6.66)
         elif dna.name == 'bkeeper':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.784, 0.745, 0.69, 1)
@@ -1566,7 +1588,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_wiretapper.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(9.0)
+            self.setHeight(9.5)
             self.setTransparency(1)
         elif dna.name == 'ambass':
             self.scale = 7.3 / aSize
@@ -2279,7 +2301,7 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.generateHead3('redd', animated=True)
             self.makeExecutive()
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_redd.png')
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_racket.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(9.0)
@@ -2657,6 +2679,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
                 headPart.setTwoSided(True)
+                headPart.setTransparency(1)
             self.setHeight(8.1)
         elif dna.name == 'inw':
             self.scale = 7.0 / aSize
@@ -3931,7 +3954,10 @@ class Suit(Avatar.Avatar):
                 self.animatedHeadParts.append(headModel)
             headModel.reparentTo(self.find('**/joint_head'))
             headModel.setBlend(frameBlend=base.wantSmoothAnims)
-            headModel.loop('neutral')
+            if self.headInterval != None:
+                self.headInterval.finish()
+                del self.headInterval
+            self.headInterval = Sequence(Func(headModel.loop, 'neutral')).start()
             if 'x' in extraArgs:
                 if extraArgs['x'] != None:
                     headModel.setX(extraArgs['x'])
@@ -5420,6 +5446,7 @@ class Suit(Avatar.Avatar):
         self.currHP -= hp
         messenger.send(self.uniqueName('suitHpUpdate'), [self.currHP, self.maxHP, hp])
         health = float(self.currHP) / float(self.maxHP)
+        taskMgr.remove(self.uniqueName('pulse-task'))
         if self.isVirtual and not self.isSkeleton:
             self.healthBar.hide()
             self.healthBarGlow.hide()
@@ -5685,19 +5712,16 @@ class Suit(Avatar.Avatar):
             if condition <= 9:
                 taskMgr.remove(self.uniqueName('blink-task'))
                 if not self.virtual:
-                    taskMgr.remove(self.uniqueName('blink-task'))
                     self.healthBar.setColor(1, 1, 1, 1)
                     self.healthBarGlow.setColor(1, 1, 1, 1)
                 else:
                     self.healthBarGlow.setColor(0, 0, 0, 0)
-                    taskMgr.remove(self.uniqueName('blink-task'))
                     if not self.style.name == 'hrollers':
                         self.virtualize(condition)
                 self.__changeColor()
             elif condition == 10:
                 taskMgr.remove(self.uniqueName('blink-task'))
                 if not self.virtual:
-                    taskMgr.remove(self.uniqueName('blink-task'))
                     self.healthBar.setColor(1, 1, 1, 1)
                     self.healthBarGlow.setColor(1, 1, 1, 1)
                 blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray), Task.pause(0.1))
@@ -5705,30 +5729,24 @@ class Suit(Avatar.Avatar):
             elif condition == 11:
                 taskMgr.remove(self.uniqueName('blink-task'))
                 if not self.virtual:
-                    taskMgr.remove(self.uniqueName('blink-task'))
                     self.healthBar.setColor(1, 1, 1, 1)
                     self.healthBarGlow.setColor(1, 1, 1, 1)
-                if self.healthCondition == 10:
-                    taskMgr.remove(self.uniqueName('blink-task'))
                 blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray), Task.pause(0.1))
                 taskMgr.add(blinkTask, self.uniqueName('blink-task'))
             elif condition == 13:
-                taskMgr.remove(self.uniqueName('blink-task'))
+                taskMgr.remove(self.uniqueName('pulse-task'))
                 if not self.virtual:
-                    taskMgr.remove(self.uniqueName('blink-task'))
                     self.healthBar.setColor(1, 1, 1, 1)
                     self.healthBarGlow.setColor(1, 1, 1, 1)
-                blinkTask = Task.loop(Task(self.__pulsePurple), Task.pause(1.5), Task(self.__pulsePurpleColor), Task.pause(1.5))
-                taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                blinkTask = Task.loop(Task(self.__pulsePurple), Task.pause(1), Task(self.__pulsePurpleColor), Task.pause(3))
+                taskMgr.add(blinkTask, self.uniqueName('pulse-task'))
             else:
                 taskMgr.remove(self.uniqueName('blink-task'))
                 if not self.virtual:
                     self.healthBar.setColor(1, 1, 1, 1)
                     self.healthBarGlow.setColor(1, 1, 1, 1)
-                    taskMgr.remove(self.uniqueName('blink-task'))
                 else:
                     self.healthBarGlow.setColor(0, 0, 0, 0)
-                    taskMgr.remove(self.uniqueName('blink-task'))
                     if not self.style.name == 'hrollers':
                         self.virtualize(condition)
                 self.__changeColor()
@@ -5815,9 +5833,9 @@ class Suit(Avatar.Avatar):
 
     def __pulsePurple(self, task):
         if not self.virtual:
-            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=2, colorScale=(0.992, 0.227, 1, 1),
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(0.992, 0.227, 1, 1),
                                    blendType='easeInOut'))
-            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=2, colorScale=(0.992, 0.227, 1, 1),
+            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(0.992, 0.227, 1, 1),
                                    blendType='easeInOut'))
             self.interval.start()
             self.glowInterval.start()
@@ -5827,10 +5845,17 @@ class Suit(Avatar.Avatar):
                 self.virtualizePurple(17)
 
     def __changeColor(self):
-        if not self.virtual:
-            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=0, colorScale=(self.healthColors[self.condition]),
+        if self.isImmortal:
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
-            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=0, colorScale=(self.healthColors[self.condition]),
+            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(1, 1, 1, 1),
+                                   blendType='easeInOut'))
+            self.interval.start()
+            self.glowInterval.start()
+        elif not self.virtual:
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(self.healthColors[self.condition]),
+                                   blendType='easeInOut'))
+            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(self.healthColors[self.condition]),
                                    blendType='easeInOut'))
             self.interval.start()
             self.glowInterval.start()
@@ -5841,9 +5866,9 @@ class Suit(Avatar.Avatar):
 
     def __pulsePurpleColor(self, task):
         if not self.virtual:
-            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=2, colorScale=(self.healthColors[13]),
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(self.healthColors[13]),
                                    blendType='easeInOut'))
-            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=2, colorScale=(self.healthGlowColors[13]),
+            self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(self.healthGlowColors[13]),
                                    blendType='easeInOut'))
             self.interval.start()
             self.glowInterval.start()
@@ -6294,11 +6319,20 @@ class Suit(Avatar.Avatar):
     def makeDesperation(self, elite=False):
         self.isDesperation = 1
 
-    def makeSoaked(self, elite=False):
-        self.isSoaked = 1
+    def getSoakRounds(self):
+        return self.isSoaked
+
+    def makeSoaked(self, num):
+        self.isSoaked = num
 
     def makeUnSoaked(self, elite=False):
         self.isSoaked = 0
+
+    def makeTarget(self):
+        self.isTarget = 1
+
+    def makeUnTarget(self):
+        self.isTarget = 0
 
     def makeImmortal(self, elite=False):
         #self.healthBar.setColor(1, 1, 1, 1)
@@ -6314,8 +6348,14 @@ class Suit(Avatar.Avatar):
        # self.__changeColor()
         self.isImmortal = 0
 
-    def makeLured(self, elite=False):
+    def makeLured(self):
         self.isLured = 1
+
+    def addLuredRounds(self, num):
+        self.lureRounds = num
+
+    def getLuredRounds(self):
+        return self.lureRounds
 
     def makeUnLured(self, elite=False):
         self.isLured = 0
@@ -6332,7 +6372,7 @@ class Suit(Avatar.Avatar):
     def makeUnSoakResistant(self, elite=False):
         self.isSoakImmune = 0
 
-    def makeSyphon(self, elite=False):
+    def makeSyphon(self, battle):
         self.isSyphon = 1
 
     def makeInversion(self, elite=False):
@@ -6398,14 +6438,56 @@ class Suit(Avatar.Avatar):
         self.isStormCell = 1
         self.isOilRain = 0
 
-    def makeUnSyphon(self, elite=False):
+    def makeUnSyphon(self):
         self.isSyphon = 0
 
-    def makeVulnerable(self, elite=False):
+    def makeVulnerable(self):
+        if self.suitColorTrack != None:
+            self.suitColorTrack.finish()
+        node = self.getGeomNode().getChild(0)
+        self.suitColorTrack = Sequence(
+                    LerpColorScaleInterval(node, duration=1, colorScale=(0.89, 0.608, 0.608, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(node, duration=1, colorScale=(0.89, 0.608, 0.608, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
         self.isVulnerable = 1
+        if not self.style.name == 'bcaster':
+            self.suitColorTrack.loop()
 
-    def makeUnVulnerable(self, elite=False):
+    def setVulnerability(self, num):
+        self.vulnerability = num
+
+    def getVulnerability(self):
+        return self.vulnerability
+
+    def setRageBuilding(self, num):
+        self.rageBuilding = num
+
+    def getRageBuilding(self):
+        return self.rageBuilding
+
+    def setPowerhouseRotation(self, num):
+        self.powerhouseRotation = num
+
+    def getPowerhouseRotation(self):
+        return self.powerhouseRotation
+
+    def setDamageUp(self, num):
+        self.damageMult = num
+
+    def makeLureResist(self):
+        self.isLureResist = 1
+
+    def getDamageUp(self):
+        return self.damageMult
+
+    def makeUnVulnerable(self):
         self.isVulnerable = 0
+        if self.suitColorTrack != None:
+            self.suitColorTrack.finish()
 
     def makeDead(self, elite=False):
         self.isDead = 1
@@ -6413,13 +6495,19 @@ class Suit(Avatar.Avatar):
     def makeUnDead(self, elite=False):
         self.isDead = 0
 
+    def makeDazed(self):
+        self.isDazed = 1
+
+    def makeUnDazed(self):
+        self.isDazed = 0
+
     def makeRevive(self, elite=False):
         self.isRevived = 1
 
     def makeLaserRevive(self, elite=False):
         self.isLaserRevived = 1
 
-    def makeDamageUp(self, elite=False):
+    def makeDamageUp(self):
         self.isDamageUp = 1
 
     def makeUnDamageUp(self, elite=False):
@@ -6431,14 +6519,17 @@ class Suit(Avatar.Avatar):
     def makeUnDamageReduction(self, elite=False):
         self.isDamageReduction = 0
 
-    def makeAngry(self, elite=False):
-        self.isAngry = 1
+    def makeAngry(self, num):
+        self.isAngry = num
         self.isShielding = 0
+
+    def getEnrageCounter(self):
+        return self.isAngry
 
     def makeUnShielding(self, elite=False):
         self.isShielding = 0
 
-    def makeShielding(self, elite=False):
+    def makeShielding(self):
         self.isShielding = 1
         self.isAngry = 0
 
@@ -6946,11 +7037,321 @@ class Suit(Avatar.Avatar):
         if not self.isSkeleton:
             modelRoot.find('**/body').setTexture(texture, 1)
 
+    def getPartTrack(self, particleEffect, startDelay, durationDelay, partExtraArgs, softStop=0):
+        particleEffect = partExtraArgs[0]
+        parent = partExtraArgs[1]
+        if len(partExtraArgs) > 2:
+            worldRelative = partExtraArgs[2]
+        else:
+            worldRelative = 1
+        return Sequence(Wait(startDelay),
+                        ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True,
+                                         softStopT=softStop))
+
     def makeInsured(self):
         self.isInsured= 1
 
     def removeInsured(self):
         self.isInsured = 0
+
+    def makeExtraAttacks(self, num):
+        self.extraAttack = num
+        if self.extraAttack == 1:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack.loop()
+        if self.extraAttack == 2:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack2 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack2.loop()
+        if self.extraAttack == 3:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack3 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.0, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.0, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.0, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.0, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.0, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.0, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.0, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.0, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack3.loop()
+        if self.extraAttack == 4:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack4 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack4.loop()
+        if self.extraAttack == 5:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack5 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack5.loop()
+        if self.extraAttack == 6:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack6 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack6.loop()
+        if self.extraAttack == 7:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack7 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack7.loop()
+        if self.extraAttack == 8:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack8 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack8.loop()
+        if self.extraAttack == 9:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack9 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack9.loop()
+        if self.extraAttack == 10:
+            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack10 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack10.loop()
+
+
+    def getExtraAttacks(self):
+        return self.extraAttack
+
+    def removeExtraAttacks(self):
+        self.extraAttack = 0
+        if self.knifeTrack != None:
+            self.knifeTrack.finish()
+
+    def makeBookkeeping(self):
+        self.isBookkeeping= 1
+        node = self.getGeomNode().getChild(0)
+        self.suitColorTrack = Sequence(LerpColorScaleInterval(node, duration=1, colorScale=(0.537, 0.878, 0.533, 1),
+                                                         blendType='easeInOut'),
+                                  LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1),
+                                                         blendType='easeInOut'),
+                                  LerpColorScaleInterval(node, duration=1, colorScale=(0.537, 0.878, 0.533, 1),
+                                                         blendType='easeInOut'),
+                                  LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
+        self.suitColorTrack.loop()
+
+    def removeBookkeeping(self):
+        self.isBookkeeping = 0
+        if self.suitColorTrack != None:
+            self.suitColorTrack.finish()
 
     def makeDanceSession(self):
         self.isDanceSession = 1
@@ -6958,8 +7359,11 @@ class Suit(Avatar.Avatar):
     def removeDanceSession(self):
         self.isDanceSession = 0
 
-    def makeSued(self):
-        self.isSued = 1
+    def makeSued(self, num):
+        self.isSued = num
+
+    def getSuedRounds(self):
+        return self.isSued
 
     def removeSued(self):
         self.isSued = 0
@@ -6980,11 +7384,29 @@ class Suit(Avatar.Avatar):
         self.isLitigationManager = 1
 
     def makeIntoEnraged(self):
-        self.loop('neutral-enraged')
+        BattleParticles.loadParticles()
         self.isEnraged = 1
+        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
+        flameEffect = BattleParticles.createParticleEffect('FiredFlame')
+        flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
+        BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
+        BattleParticles.setEffectTexture(flameEffect, 'fire')
+        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
+        self.baseFlameTrack = self.getPartTrack(baseFlameEffect, 0, 5.5, [baseFlameEffect, self, 0])
+        self.flameTrack = self.getPartTrack(flameEffect, 0, 5.5, [flameEffect, self, 0])
+        self.flecksTrack = self.getPartTrack(flecksEffect, 0, 5.5, [flecksEffect, self, 0])
+        self.baseFlameTrack.loop()
+        self.flameTrack.loop()
+        self.flecksTrack.loop()
 
     def removeEnraged(self):
         self.isEnraged = 0
+        if self.baseFlameTrack != None:
+            self.baseFlameTrack.finish()
+        if self.flameTrack != None:
+            self.flameTrack.finish()
+        if self.flecksTrack != None:
+            self.flecksTrack.finish()
 
     def makeIntoAbsorbing(self):
         self.isAbsorbing = 1
@@ -7055,7 +7477,7 @@ class Suit(Avatar.Avatar):
             return ChainsawORDialogArray
         if self.style.name == 'phouse' and not self.isSkeleton:
             loadDialog(1)
-            return DOLADialogArray
+            return DerrickHandDialogArray
         if self.style.name == 'bkeeper' and not self.isSkeleton:
             loadDialog(1)
             return CaseManagerDialogArray

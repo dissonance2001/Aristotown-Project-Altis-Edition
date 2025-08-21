@@ -1,5 +1,6 @@
 from panda3d.core import *
 from panda3d.direct import *
+import random
 from toontown.toonbase import ToontownGlobals
 from toontown.suit import Suit
 from toontown.toonbase.ToontownBattleGlobals import *
@@ -86,6 +87,17 @@ class TownBattleCogPanel(DirectFrame):
         self.hidden = False
         self.cog = None
         self.suit = None
+        self.sued = None
+        self.suedRoundsText = None
+        self.luredText = None
+        self.dazedText = None
+        self.extraAttacksText = None
+        self.luredManagerText = None
+        self.soakedRoundsText = None
+        self.vulnerabilityText = None
+        self.damageMultText = None
+        self.rageBuildingText = None
+        self.enrageCountText = None
         self.isLoaded = 0
         self.notify.info("Loading Cog Battle Panel!")
         self.healthText = DirectLabel(parent=self, text='', pos=(0.11, 1.0, 0.244), text_scale=0.065)
@@ -106,258 +118,6 @@ class TownBattleCogPanel(DirectFrame):
         healthBar.setH(0)
         healthBar.setR(0)
         healthBar.reparentTo(self.healthNode)
-        status = loader.loadModel('phase_3.5/models/gui/status_effects')
-        status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        status3 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        status4 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        self.enraged = status.find('**/rage_mode_icon')  # second slot enraged
-        self.enraged.reparentTo(self.healthNode)
-        self.enraged.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.enraged.hide()
-        self.shielding = status.find('**/defense_mode_icon')  # second slot defense
-        self.shielding.reparentTo(self.healthNode)
-        self.shielding.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.shielding.hide()
-        self.enraged2 = status2.find('**/rage_mode_icon')  # third slot enraged
-        self.enraged2.reparentTo(self.healthNode)
-        self.enraged2.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.enraged2.hide()
-        self.shielding2 = status2.find('**/defense_mode_icon')  # third slot defense
-        self.shielding2.reparentTo(self.healthNode)
-        self.shielding2.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.shielding2.hide()
-        self.enraged3 = status3.find('**/rage_mode_icon')  # fourth slot enraged
-        self.enraged3.reparentTo(self.healthNode)
-        self.enraged3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.enraged3.hide()
-        self.shielding3= status3.find('**/defense_mode_icon')  # fourth slot defense
-        self.shielding3.reparentTo(self.healthNode)
-        self.shielding3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.shielding3.hide()
-        self.overcharged = status.find('**/overcharge_icon') # second slot overcharge
-        self.overcharged.reparentTo(self.healthNode)
-        self.overcharged.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.overcharged.hide()
-        self.overcharged2 = status2.find('**/overcharge_icon') #third slot overcharge
-        self.overcharged2.reparentTo(self.healthNode)
-        self.overcharged2.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.overcharged2.hide()
-        self.lured = status.find('**/lured_prestige_icon') #lure resistance overcharge first slot
-        self.lured.reparentTo(self.healthNode)
-        self.lured.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.lured.hide()
-        self.luredCog = status.find('**/lured_icon')  # lure icon first
-        self.luredCog.reparentTo(self.healthNode)
-        self.luredCog.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.luredCog.hide()
-        self.luredCog2 = status2.find('**/lured_icon')  # lure icon 2nd
-        self.luredCog2.reparentTo(self.healthNode)
-        self.luredCog2.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.luredCog2.hide()
-        self.luredCog3 = status3.find('**/lured_icon')  # lure icon 3rd
-        self.luredCog3.reparentTo(self.healthNode)
-        self.luredCog3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.luredCog3.hide()
-        self.luredCog4 = status4.find('**/lured_icon')  # lure icon 4th
-        self.luredCog4.reparentTo(self.healthNode)
-        self.luredCog4.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.luredCog4.hide()
-        self.luredManager = status2.find('**/lured_prestige_icon') # lure resistance manager first slot
-        self.luredManager.reparentTo(self.healthNode)
-        self.luredManager.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.luredManager.hide()
-        self.luredManager2 = status3.find('**/lured_prestige_icon') #lure resistance second slot
-        self.luredManager2.reparentTo(self.healthNode)
-        self.luredManager2.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165) #second slot lure resist
-        self.luredManager2.hide()
-        self.insured = status3.find('**/insured_icon') #second slot insurance
-        self.insured.reparentTo(self.healthNode)
-        self.insured.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.insured.hide()
-        self.insured2 = status2.find('**/insured_icon')
-        self.insured2.reparentTo(self.healthNode)
-        self.insured2.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165) #third slot insurance
-        self.insured2.hide()
-        self.insured4 = status4.find('**/insured_icon')
-        self.insured4.reparentTo(self.healthNode)
-        self.insured4.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)  # 1st slot insurance
-        self.insured4.hide()
-        self.insured3 = status.find('**/insured_icon')
-        self.insured3.reparentTo(self.healthNode)
-        self.insured3.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165) # 4th slot insurance
-        self.insured3.hide()
-        self.damageUp = status2.find('**/suit_damage_up_icon') #second slot damage up
-        self.damageUp.reparentTo(self.healthNode)
-        self.damageUp.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.damageUp.hide()
-        self.damageUp2 = status.find('**/suit_damage_up_icon') # third slot damage up
-        self.damageUp2.reparentTo(self.healthNode)
-        self.damageUp2.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.damageUp2.hide()
-        self.damageUpMgr = status3.find('**/suit_damage_up_icon') # 4th slot damage up
-        self.damageUpMgr.reparentTo(self.healthNode)
-        self.damageUpMgr.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.damageUpMgr.hide()
-        self.skeleton = status.find('**/skelecog_icon')
-        self.skeleton.reparentTo(self.healthNode)
-        self.skeleton.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.skeleton.hide()
-        self.virtual = status.find('**/virtual_icon')
-        self.virtual.reparentTo(self.healthNode)
-        self.virtual.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.virtual.hide()
-        self.immortal = status.find('**/worker_management_icon') #second slot immunity icon
-        self.immortal.reparentTo(self.healthNode)
-        self.immortal.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.immortal.hide()
-        self.immortal2 = status.find('**/unite_cooldown_icon')  # third slot immunity icon
-        self.immortal2.reparentTo(self.healthNode)
-        self.immortal2.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.immortal2.hide()
-        self.immortal3 = status2.find('**/focused_defense_icon')  # third slot immunity icon
-        self.immortal3.reparentTo(self.healthNode)
-        self.immortal3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.immortal3.hide()
-        self.immortal4 = status.find('**/focused_defense_icon')  # fourth slot immunity icon
-        self.immortal4.reparentTo(self.healthNode)
-        self.immortal4.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.immortal4.hide()
-        self.vulnerable = status.find('**/broken_shield_icon')  # first slot vulnerability icon
-        self.vulnerable.reparentTo(self.healthNode)
-        self.vulnerable.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.vulnerable.hide()
-        self.vulnerable2 = status2.find('**/broken_shield_icon') # second slot vulnerability icon
-        self.vulnerable2.reparentTo(self.healthNode)
-        self.vulnerable2.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.vulnerable2.hide()
-        self.vulnerable3 = status3.find('**/broken_shield_icon') # third slot vulnerability icon
-        self.vulnerable3.reparentTo(self.healthNode)
-        self.vulnerable3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.vulnerable3.hide()
-        self.vulnerable4 = status4.find('**/broken_shield_icon')  # fourth slot vulnerability icon
-        self.vulnerable4.reparentTo(self.healthNode)
-        self.vulnerable4.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.vulnerable4.hide()
-        self.soakResist = status.find('**/soaked_icon')  # first slot soak resist icon
-        self.soakResist.reparentTo(self.healthNode)
-        self.soakResist.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.soakResist.hide()
-        self.soakResist2 = status2.find('**/soaked_icon')  # 2 slot soak resist icon
-        self.soakResist2.reparentTo(self.healthNode)
-        self.soakResist2.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.soakResist2.hide()
-        self.soakResist3 = status3.find('**/soaked_icon')  # 3 slot soak resist icon
-        self.soakResist3.reparentTo(self.healthNode)
-        self.soakResist3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.soakResist3.hide()
-        self.soakResist4 = status4.find('**/soaked_icon')  # 4 slot soak resist icon
-        self.soakResist4.reparentTo(self.healthNode)
-        self.soakResist4.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.soakResist4.hide()
-        self.syphon = status.find('**/ink_drain_icon')  # 1 slot soak syphon icon
-        self.syphon.reparentTo(self.healthNode)
-        self.syphon.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.syphon.hide()
-        self.syphon2 = status2.find('**/ink_drain_icon')  # 2 slot soak syphon icon
-        self.syphon2.reparentTo(self.healthNode)
-        self.syphon2.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.syphon2.hide()
-        self.syphon3 = status3.find('**/ink_drain_icon')  # 3 slot soak syphon icon
-        self.syphon3.reparentTo(self.healthNode)
-        self.syphon3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.syphon3.hide()
-        self.syphon4 = status4.find('**/ink_drain_icon')  # 4 slot soak syphon icon
-        self.syphon4.reparentTo(self.healthNode)
-        self.syphon4.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.syphon4.hide()
-        self.absorbing = status.find('**/damage_absorb_icon')  # 1 slot absorb icon
-        self.absorbing.reparentTo(self.healthNode)
-        self.absorbing.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.absorbing.hide()
-        self.absorbing2 = status2.find('**/damage_absorb_icon')  # 2 slot absorb icon
-        self.absorbing2.reparentTo(self.healthNode)
-        self.absorbing2.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.absorbing2.hide()
-        self.absorbing3 = status3.find('**/damage_absorb_icon')  # 3 slot absorb icon
-        self.absorbing3.reparentTo(self.healthNode)
-        self.absorbing3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.absorbing3.hide()
-        self.absorbing4 = status4.find('**/damage_absorb_icon')  # 4 slot absorb icon
-        self.absorbing4.reparentTo(self.healthNode)
-        self.absorbing4.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.absorbing4.hide()
-        self.damageReduction = status.find('**/shield_icon')  # 1 slot damage reduction
-        self.damageReduction.reparentTo(self.healthNode)
-        self.damageReduction.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.damageReduction.hide()
-        self.damageReduction2 = status2.find('**/shield_icon')  # 2 slot damage reduction
-        self.damageReduction2.reparentTo(self.healthNode)
-        self.damageReduction2.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.damageReduction2.hide()
-        self.damageReduction3 = status3.find('**/shield_icon')  # 3 slot damage reduction
-        self.damageReduction3.reparentTo(self.healthNode)
-        self.damageReduction3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.damageReduction3.hide()
-        self.damageReduction4 = status4.find('**/shield_icon')  # 4 slot damage reduction
-        self.damageReduction4.reparentTo(self.healthNode)
-        self.damageReduction4.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.damageReduction4.hide()
-        self.lureImmune = status.find('**/cashback_icon')  # 1 slot lure immune
-        self.lureImmune.reparentTo(self.healthNode)
-        self.lureImmune.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.lureImmune.hide()
-        self.lureImmune2 = status2.find('**/cashback_icon')  # 2 slot lure immune
-        self.lureImmune2.reparentTo(self.healthNode)
-        self.lureImmune2.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.lureImmune2.hide()
-        self.lureImmune3 = status3.find('**/cashback_icon')  # 3 slot lure immune
-        self.lureImmune3.reparentTo(self.healthNode)
-        self.lureImmune3.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.lureImmune3.hide()
-        self.lureImmune4 = status4.find('**/cashback_icon')  # 4 slot lure immune
-        self.lureImmune4.reparentTo(self.healthNode)
-        self.lureImmune4.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.lureImmune4.hide()
-        self.yellow = status3.find('**/fizzle_icon')  # 3 slot lure immune
-        self.yellow.reparentTo(self.healthNode)
-        self.yellow.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.yellow.hide()
-        self.orange = status3.find('**/full_deck_icon')  # 3 slot lure immune
-        self.orange.reparentTo(self.healthNode)
-        self.orange.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.orange.hide()
-        self.lightblue = status3.find('**/duck_drop_icon')  # 3 slot lure immune
-        self.lightblue.reparentTo(self.healthNode)
-        self.lightblue.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.lightblue.hide()
-        self.green = status3.find('**/no_green_light_icon')  # 3 slot lure immune
-        self.green.reparentTo(self.healthNode)
-        self.green.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.green.hide()
-        self.blue = status3.find('**/singing_blues_icon')  # 3 slot lure immune
-        self.blue.reparentTo(self.healthNode)
-        self.blue.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.blue.hide()
-        self.red = status3.find('**/trap_card_icon')  # 3 slot lure immune
-        self.red.reparentTo(self.healthNode)
-        self.red.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.red.hide()
-        self.pink = status3.find('**/brain_icon')  # 3 slot lure immune
-        self.pink.reparentTo(self.healthNode)
-        self.pink.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.pink.hide()
-        self.rainbow = status3.find('**/harmonious_colors_icon')
-        self.rainbow.reparentTo(self.healthNode)
-        self.rainbow.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.rainbow.hide()
-        self.hollywoods = status3.find('**/marked_icon')
-        self.hollywoods.reparentTo(self.healthNode)
-        self.hollywoods.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.hollywoods.hide()
-        self.sharkwatcher = status3.find('**/ripped_icon')
-        self.sharkwatcher.reparentTo(self.healthNode)
-        self.sharkwatcher.setPosHprScale(-0.3925, 0.5, 0.025, 0, 0, 0, .24, .24, .24)
-        self.sharkwatcher.hide()
         self.healthBar2 = DirectWaitBar(parent=self, pos=(-0.026, -0.11, -0.035), relief=DGG.SUNKEN, value=100,
                                         frameSize=(-2.5, 2.75, -0.6, 0.65),
                                         barTexture='phase_3.5/maps/battlegui/healthbar.png',
@@ -376,11 +136,56 @@ class TownBattleCogPanel(DirectFrame):
         infoButton.reparentTo(self.healthNode)
         self.hpText = DirectLabel(parent=self, text='', text_fg=Vec4(0, 0, 0, 1), pos=(0.09, 0.125, 0.1335),
                                   text_scale=0.072)
+        self.enraged = None
+        self.shielding = None
+        self.overcharged = None
+        self.luredCog = None
+        self.luredManager = None
+        self.status8 = None
+        self.statusFrame = None
+        self.statusFramePanel = None
+        self.insured = None
+        self.damageUp = None
+        self.skeleton = None
+        self.virtual = None
+        self.immortal = None
+        self.vulnerable = None
+        self.soakResist = None
+        self.syphon = None
+        self.absorbing = None
+        self.damageReduction = None
+        self.status = None
+        self.status2 = None
+        self.status3 = None
+        self.status4 = None
+        self.status5 = None
+        self.status6 = None
+        self.status7 = None
+        self.status8 = None
+        self.attackIcon = None
+        self.attackIcon1 = None
+        self.attackIcon2 = None
+        self.attackIcon3 = None
+        self.attackIcon4 = None
+        self.attackIcon5 = None
+        self.attackIcon6 = None
+        self.attackIcon7 = None
+        self.lureImmune = None
+        self.rainbow = None
+        self.hollywoods = None
+        self.sharkwatcher = None
+        self.soaked = None
+        self.dazed = None
+        self.pulseTask = None
+        self.extraAttacks = None
         self.setScale(0.525)
         self.button = button
         self.head = None
         self.suitHead = None
         self.blinkTask = None
+        self.luredCogTest = None
+        self.statusText1 = None
+        self.statusText2 = None
         self.hide()
         healthGui.removeNode()
         gui.removeNode()
@@ -396,67 +201,168 @@ class TownBattleCogPanel(DirectFrame):
         self.setLevelText()
 
     def setLevelText(self):
-        self.skeleton.hide()
-        self.virtual.hide()
-        self.damageUp.hide()
-        self.luredManager2.hide()
-        self.damageUpMgr.hide()
-        self.overcharged2.hide()
-        self.overcharged.hide()
-        self.shielding.hide()
-        self.shielding2.hide()
-        self.shielding3.hide()
-        self.enraged.hide()
-        self.enraged2.hide()
-        self.enraged3.hide()
-        self.damageUp2.hide()
-        self.insured2.hide()
-        self.insured.hide()
-        self.insured3.hide()
-        self.lured.hide()
-        self.luredCog.hide()
-        self.luredCog2.hide()
-        self.luredCog3.hide()
-        self.luredCog4.hide()
-        self.immortal.hide()
-        self.immortal2.hide()
-        self.immortal3.hide()
-        self.immortal4.hide()
-        self.luredManager.hide()
-        self.syphon.hide()
-        self.syphon2.hide()
-        self.syphon3.hide()
-        self.insured4.hide()
-        self.syphon4.hide()
-        self.vulnerable.hide()
-        self.vulnerable2.hide()
-        self.vulnerable3.hide()
-        self.vulnerable4.hide()
-        self.soakResist.hide()
-        self.soakResist2.hide()
-        self.soakResist3.hide()
-        self.soakResist4.hide()
-        self.absorbing.hide()
-        self.absorbing2.hide()
-        self.absorbing3.hide()
-        self.absorbing4.hide()
-        self.damageReduction.hide()
-        self.damageReduction2.hide()
-        self.damageReduction3.hide()
-        self.damageReduction4.hide()
-        self.lureImmune.hide()
-        self.lureImmune2.hide()
-        self.lureImmune3.hide()
-        self.lureImmune4.hide()
-        self.yellow.hide()
-        self.orange.hide()
-        self.lightblue.hide()
-        self.green.hide()
-        self.blue.hide()
-        self.red.hide()
-        self.pink.hide()
-        self.rainbow.hide()
-        self.hollywoods.hide()
+        taskMgr.remove(self.uniqueName('overcharge-pulse-task'))
+        self.statusEffects = 0
+        if self.attackIcon != None:
+            self.attackIcon.removeNode()
+        if self.pulseTask != None:
+            self.pulseTask.finish()
+            del self.pulseTask
+        if self.attackIcon1 != None:
+            self.attackIcon1.removeNode()
+        if self.attackIcon2 != None:
+            self.attackIcon2.removeNode()
+        if self.attackIcon3 != None:
+            self.attackIcon3.removeNode()
+        if self.attackIcon4 != None:
+            self.attackIcon4.removeNode()
+        if self.attackIcon5 != None:
+            self.attackIcon5.removeNode()
+        if self.attackIcon6 != None:
+            self.attackIcon6.removeNode()
+        if self.attackIcon7 != None:
+            self.attackIcon7.removeNode()
+        if self.statusFrame != None:
+            self.statusFrame.removeNode()
+        if self.status != None:
+            self.status.removeNode()
+        if self.status2 != None:
+            self.status2.removeNode()
+        if self.status3 != None:
+            self.status3.removeNode()
+        if self.status4 != None:
+            self.status4.removeNode()
+        if self.status5 != None:
+            self.status5.removeNode()
+        if self.status6 != None:
+            self.status6.removeNode()
+        if self.status7 != None:
+            self.status7.removeNode()
+        if self.status8 != None:
+            self.status8.removeNode()
+        self.status = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status3 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status4 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status5 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status6 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status7 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status8 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.attackIcon7 = self.status8.find('**/default_background')  # fourth upper
+        self.attackIcon7.reparentTo(self.healthNode)
+        self.attackIcon7.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+        self.attackIcon7.hide()
+        self.attackIcon6 = self.status7.find('**/default_background')  # third upper
+        self.attackIcon6.reparentTo(self.healthNode)
+        self.attackIcon6.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+        self.attackIcon6.hide()
+        self.attackIcon5 = self.status6.find('**/default_background')  # second upper
+        self.attackIcon5.reparentTo(self.healthNode)
+        self.attackIcon5.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+        self.attackIcon5.hide()
+        self.attackIcon4 = self.status5.find('**/default_background')  # first upper
+        self.attackIcon4.reparentTo(self.healthNode)
+        self.attackIcon4.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+        self.attackIcon4.hide()
+        self.attackIcon3 = self.status4.find('**/default_background')  # fourth
+        self.attackIcon3.reparentTo(self.healthNode)
+        self.attackIcon3.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+        self.attackIcon2 = self.status3.find('**/default_background')  # third
+        self.attackIcon2.reparentTo(self.healthNode)
+        self.attackIcon2.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+        self.attackIcon1 = self.status2.find('**/default_background')  # second
+        self.attackIcon1.reparentTo(self.healthNode)
+        self.attackIcon1.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+        self.attackIcon = self.status.find('**/default_background')  # first
+        self.attackIcon.reparentTo(self.healthNode)
+        self.attackIcon.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+        self.attackIcon.setColor(1, 1, 1, 1)
+        self.attackIcon1.setColor(1, 1, 1, 1)
+        self.attackIcon2.setColor(1, 1, 1, 1)
+        self.attackIcon3.setColor(1, 1, 1, 1)
+        self.attackIcon4.setColor(1, 1, 1, 1)
+        self.attackIcon5.setColor(1, 1, 1, 1)
+        self.attackIcon6.setColor(1, 1, 1, 1)
+        self.attackIcon7.setColor(1, 1, 1, 1)
+        if self.luredText != None:
+            self.luredText.removeNode()
+        if self.damageMultText != None:
+            self.damageMultText.removeNode()
+        if self.extraAttacks != None:
+            self.extraAttacks.removeNode()
+        if self.sued != None:
+            self.sued.removeNode()
+        if self.suedRoundsText != None:
+            self.suedRoundsText.removeNode()
+        if self.extraAttacksText != None:
+            self.extraAttacksText.removeNode()
+        if self.dazed != None:
+            self.dazed.removeNode()
+        if self.dazedText != None:
+            self.dazedText.removeNode()
+        if self.enrageCountText != None:
+            self.enrageCountText.removeNode()
+        if self.soakedRoundsText != None:
+            self.soakedRoundsText.removeNode()
+        if self.soaked != None:
+            self.soaked.removeNode()
+        if self.enraged != None:
+            self.enraged.removeNode()
+        if self.dazed != None:
+            self.dazed.removeNode()
+        if self.soaked != None:
+            self.soaked.removeNode()
+        if self.extraAttacks != None:
+            self.extraAttacks.removeNode()
+        if self.shielding != None:
+            self.shielding.removeNode()
+        if self.skeleton != None:
+            self.skeleton.removeNode()
+        if self.virtual != None:
+            self.virtual.removeNode()
+        if self.damageUp != None:
+            self.damageUp.removeNode()
+        if self.overcharged != None:
+            self.overcharged.removeNode()
+        if self.insured != None:
+            self.insured.removeNode()
+        if self.vulnerabilityText != None:
+            self.vulnerabilityText.removeNode()
+        if self.luredCog != None:
+            self.luredCog.removeNode()
+        if self.luredManagerText != None:
+            self.luredManagerText.removeNode()
+        if self.rageBuildingText != None:
+            self.rageBuildingText.removeNode()
+        if self.immortal != None:
+            self.immortal.removeNode()
+        if self.luredManager != None:
+            self.luredManager.removeNode()
+        if self.syphon != None:
+            self.syphon.removeNode()
+        if self.vulnerable != None:
+            self.vulnerable.removeNode()
+        if self.soakResist != None:
+            self.soakResist.removeNode()
+        if self.absorbing != None:
+            self.absorbing.removeNode()
+        if self.damageReduction != None:
+            self.damageReduction.removeNode()
+        if self.lureImmune != None:
+            self.lureImmune.removeNode()
+        if self.rainbow != None:
+            self.rainbow.removeNode()
+        if self.hollywoods != None:
+            self.hollywoods.removeNode()
+        if self.sharkwatcher != None:
+            self.sharkwatcher.removeNode()
+        if self.statusFramePanel != None:
+            self.statusFramePanel.removeNode()
+        if self.cog.dna.name == 'shw':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.sharkwatcher = status.find('**/ripped_icon')
+            self.sharkwatcher.reparentTo(self.healthNode)
+            self.sharkwatcher.setPosHprScale(-0.3925, 0.5, 0.025, 0, 0, 0, .24, .24, .24)
         if self.cog.dna.name == 'hrollers':
             t = 'Level 25'
         else:
@@ -470,1063 +376,1779 @@ class TownBattleCogPanel(DirectFrame):
                 t += TTLocalizer.GovernaughtPostFix
         if self.cog.getSkeleRevives() > 0:
             t += TTLocalizer.SkeleRevivePostFix % (self.cog.getSkeleRevives() + 1)
-        if self.cog.isImmortal and self.cog.isDamageUp and self.cog.dna.name == 'videog':
-            self.luredManager.show()
-            self.hollywoods.show()
-            self.damageUp2.show()
-            # self.absorbing3.show()
-        elif self.cog.isImmortal and self.cog.dna.name == 'videog':
-            self.luredManager.show()
-            self.hollywoods.show()
-            #self.absorbing3.show()
-        elif self.cog.isImmortal and self.cog.dna.name == 'hroller':
-            self.luredManager.show()
-            self.insured.show()
-            #self.absorbing3.show()
-        elif self.cog.dna.name == 'hroller':
-            self.luredManager.show()
-            self.insured.show()
-        elif self.cog.dna.name == 'hroller2' and self.cog.isVulnerable:
-            self.luredManager.show()
-        elif self.cog.dna.name == 'hroller2' and self.cog.isPhase3:
-            self.luredManager.show()
-            self.rainbow.show()
-        elif self.cog.dna.name == 'hroller2':
-            self.luredManager.show()
-            self.hollywoods.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.healthCondition == 13 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lureImmune4.show()
-            self.overcharged2.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.healthCondition == 13:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lureImmune4.show()
-            self.overcharged2.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 34 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 34:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 33 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.immortal2.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 33:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.immortal2.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 32 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lureImmune3.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 32:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lureImmune3.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 31 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lightblue.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 31:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lightblue.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 30 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.pink.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 30:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.pink.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 29 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.red.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 29:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.red.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 28 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.blue.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 28:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.blue.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 27 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.yellow.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 27:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.yellow.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 26 and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.orange.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.getActualLevel() == 26:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.orange.show()
-        elif self.cog.dna.name == 'hrollers' and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.green.show()
-            self.luredCog4.show()
-        elif self.cog.dna.name == 'hrollers':
-            self.virtual.show()
-            self.luredManager2.show()
-            self.green.show()
-        elif self.cog.isVirtual and self.cog.isImmortal:
-            self.virtual.show()
-            self.immortal.show()
-            self.immortal2.show()
-            self.immortal4.show()
-        elif self.cog.isSkeleton and self.cog.isImmortal:
-            self.virtual.hide()
-            self.immortal.show()
-            self.immortal2.show()
-            self.immortal4.show()
-        elif self.cog.isImmortal:
-            self.luredManager.show()
-            self.immortal.show()
-            self.immortal2.show()
-            self.immortal4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isAngry:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.enraged3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isAngry:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.enraged3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isShielding:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.shielding3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.shielding3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and not self.cog.getManager() and self.cog.isSyphon:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.syphon4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and not self.cog.getManager() and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and not self.cog.getManager() and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.damageUpMgr.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isInsured and not self.cog.getManager():
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.insured3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and not self.cog.getManager():
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isSyphon:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.syphon4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isLureImmune:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.lureImmune4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isShielding:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.absorbing4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isSyphon:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.syphon4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isVulnerable:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.vulnerable4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.damageUpMgr.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVirtual:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.isInsured and not self.cog.getManager():
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.insured3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and not self.cog.getManager() and self.cog.isSyphon:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.syphon4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and not self.cog.getManager() and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and not self.cog.getManager() and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.damageUpMgr.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and not self.cog.getManager():
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.isSyphon:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.syphon4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.isLureImmune:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.lureImmune4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.isShielding:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.absorbing4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.isSyphon:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.syphon4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.isVulnerable:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.vulnerable4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-            self.damageUpMgr.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSkeleton:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.overcharged2.show()
-        elif self.cog.healthCondition == 13 and not self.cog.getManager() and self.cog.isSyphon and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.syphon3.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and not self.cog.getManager() and self.cog.isInsured and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.insured2.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isInsured and not self.cog.getManager():
-            self.luredManager.show()
-            self.overcharged.show()
-            self.insured2.show()
-        elif self.cog.healthCondition == 13 and not self.cog.getManager() and self.cog.isSyphon:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.syphon3.show()
-        elif self.cog.healthCondition == 13 and not self.cog.getManager() and self.cog.isInsured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.insured2.show()
-        elif self.cog.healthCondition == 13 and not self.cog.getManager() and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.luredCog3.show()
-        elif self.cog.healthCondition == 13 and not self.cog.getManager():
-            self.luredManager.show()
-            self.overcharged.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSyphon and self.cog.isLureImmune:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.syphon3.show()
-            self.lureImmune4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSyphon and self.cog.isShielding:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.syphon3.show()
-            self.absorbing4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSyphon and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.syphon3.show()
-            self.damageUpMgr.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVulnerable and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.vulnerable3.show()
-            self.damageUpMgr.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSyphon and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.syphon3.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVulnerable and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.vulnerable3.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVulnerable:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.vulnerable3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSyphon:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.syphon3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isLureImmune and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.lureImmune3.show()
-            self.damageUpMgr.show()
-        elif self.cog.healthCondition == 13 and self.cog.isShielding and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.absorbing3.show()
-            self.damageUpMgr.show()
-        elif self.cog.healthCondition == 13 and self.cog.isLureImmune and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.lureImmune3.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isShielding and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.absorbing3.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSyphon and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.syphon3.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSoakImmune and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.soakResist3.show()
-            self.luredCog4.show()
-        elif self.cog.healthCondition == 13 and self.cog.isLured and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.luredCog4.show()
-            self.damageUp2.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSoakImmune:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.soakResist3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isLureImmune:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.lureImmune3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isShielding:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.absorbing3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isSyphon:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.syphon3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isVulnerable:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.vulnerable3.show()
-        elif self.cog.healthCondition == 13 and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.damageUp2.show()
-        elif self.cog.healthCondition == 13 and self.cog.isLured:
-            self.luredManager.show()
-            self.overcharged.show()
-            self.luredCog3.show()
-        elif self.cog.healthCondition == 13:
-            self.luredManager.show()
-            self.overcharged.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'bcaster' and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.vulnerable3.show()
-            self.luredCog4.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'bcaster':
-            self.virtual.show()
-            self.luredManager2.show()
-            self.vulnerable3.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.enraged2.show()
-            self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isInsured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.enraged2.show()
-            self.insured3.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.enraged2.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isAngry:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.enraged2.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.shielding2.show()
-            self.luredCog4.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.shielding2.show()
-            self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.dna.name == 'sgoat' and self.cog.isShielding:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.shielding2.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.shielding2.show()
-            self.luredCog4.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.shielding2.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isInsured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.shielding2.show()
-            self.insured4.show()
-        elif self.cog.isSkeleton and self.cog.dna.name == 'sgoat' and self.cog.isShielding:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.shielding2.show()
-        elif self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isDamageUp and self.cog.isInsured:
-            self.luredManager.show()
-            self.shielding.show()
-            self.damageUp2.show()
-            self.insured3.show()
-        elif self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isLured:
-            self.luredManager.show()
-            self.shielding.show()
-            self.luredCog3.show()
-        elif self.cog.dna.name == 'sgoat' and self.cog.isShielding and self.cog.isInsured:
-            self.luredManager.show()
-            self.shielding.show()
-            self.insured2.show()
-        elif self.cog.dna.name == 'sgoat' and self.cog.isShielding:
-            self.luredManager.show()
-            self.shielding.show()
-        elif self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isDamageUp and self.cog.isInsured:
-            self.luredManager.show()
-            self.enraged.show()
-            self.damageUp2.show()
-            self.insured3.show()
-        elif self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.enraged.show()
-            self.damageUp2.show()
-        elif self.cog.dna.name == 'sgoat' and self.cog.isAngry and self.cog.isInsured:
-            self.luredManager.show()
-            self.enraged.show()
-            self.insured2.show()
-        elif self.cog.dna.name == 'sgoat' and self.cog.isAngry:
-            self.luredManager.show()
-            self.enraged.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isContracted and self.cog.isLured:
-            self.virtual.show()
-            self.insured.show()
-            self.luredCog3.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isInsured and self.cog.isLured:
-            self.virtual.show()
-            self.insured.show()
-            self.luredCog3.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isSyphon and self.cog.isLured:
-            self.virtual.show()
-            self.syphon2.show()
-            self.luredCog3.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isSyphon and self.cog.isDamageUp:
-            self.virtual.show()
-            self.syphon2.show()
-            self.damageUp2.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isContracted:
-            self.virtual.show()
-            self.insured.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isInsured:
-            self.virtual.show()
-            self.insured.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isSyphon:
-            self.virtual.show()
-            self.syphon2.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isLured and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredCog2.show()
-            self.damageUp2.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isLured:
-            self.virtual.show()
-            self.luredCog2.show()
-        elif self.cog.isVirtual and not self.cog.getManager() and self.cog.isDamageUp:
-            self.virtual.show()
-            self.damageUp.show()
-        elif self.cog.isVirtual and not self.cog.getManager():
-            self.virtual.show()
-        elif self.cog.isVirtual and self.cog.isSyphon and self.cog.isLured and self.cog.isVulnerable:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.vulnerable3.show()
-            self.luredCog4.show()
-        elif self.cog.isVirtual and self.cog.isSyphon and self.cog.isVulnerable:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.vulnerable3.show()
-        elif self.cog.isVirtual and self.cog.isSyphon and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-            self.luredCog4.show()
-        elif self.cog.isVirtual and self.cog.isVulnerable and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.vulnerable3.show()
-            self.luredCog4.show()
-        elif self.cog.isVirtual and self.cog.isVulnerable and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.vulnerable3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.isSyphon and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.isSyphon:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-        elif self.cog.isVirtual and self.cog.isLureImmune and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lureImmune3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.isLureImmune:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.lureImmune3.show()
-        elif self.cog.isVirtual and self.cog.isShielding and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.absorbing3.show()
-            self.luredCog4.show()
-        elif self.cog.isVirtual and self.cog.isShielding and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.absorbing3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.isShielding:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.absorbing3.show()
-        elif self.cog.isVirtual and self.cog.isSyphon and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-            self.luredCog4.show()
-        elif self.cog.isVirtual and self.cog.isSyphon and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.isSyphon:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-        elif self.cog.isVirtual and self.cog.isDamageUp and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.luredCog3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isVirtual and self.cog.isDamageUp:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.damageUp2.show()
-        elif self.cog.isVirtual and self.cog.isLured:
-            self.virtual.show()
-            self.luredManager2.show()
-            self.luredCog3.show()
-        elif self.cog.isVirtual:
-            self.virtual.show()
-            self.luredManager2.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isSyphon and self.cog.isLured:
-            self.skeleton.show()
-            self.syphon2.show()
-            self.luredCog3.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isContracted and self.cog.isLured:
-            self.skeleton.show()
-            self.insured.show()
-            self.luredCog3.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isInsured and self.cog.isLured:
-            self.skeleton.show()
-            self.insured.show()
-            self.luredCog3.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isSyphon and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.syphon2.show()
-            self.damageUp2.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isSyphon:
-            self.skeleton.show()
-            self.syphon2.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isLured and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredCog2.show()
-            self.damageUp2.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isLured:
-            self.skeleton.show()
-            self.luredCog2.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isContracted:
-            self.skeleton.show()
-            self.insured.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isInsured:
-            self.skeleton.show()
-            self.insured.show()
-        elif self.cog.isSkeleton and not self.cog.getManager() and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.damageUp.show()
-        elif self.cog.isSkeleton and not self.cog.getManager():
-            self.skeleton.show()
-        elif self.cog.isSkeleton and self.cog.isInsured and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.insured2.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.isSyphon and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-            self.luredCog4.show()
-        elif self.cog.isSkeleton and self.cog.isInsured and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.insured2.show()
-            self.luredCog4.show()
-        elif self.cog.isSkeleton and self.cog.isSyphon and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.isContracted:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.insured2.show()
-        elif self.cog.isSkeleton and self.cog.isInsured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.insured2.show()
-        elif self.cog.isSkeleton and self.cog.isSyphon:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-        elif self.cog.isSkeleton and self.cog.isVulnerable and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.vulnerable3.show()
-            self.luredCog4.show()
-        elif self.cog.isSkeleton and self.cog.isVulnerable and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.vulnerable3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.isVulnerable:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.vulnerable3.show()
-        elif self.cog.isSkeleton and self.cog.isLureImmune and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.lureImmune3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.isLureImmune:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.lureImmune3.show()
-        elif self.cog.isSkeleton and self.cog.isShielding and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.absorbing3.show()
-            self.luredCog4.show()
-        elif self.cog.isSkeleton and self.cog.isShielding and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.absorbing3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.isShielding:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.absorbing3.show()
-        elif self.cog.isSkeleton and self.cog.isSyphon and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-            self.luredCog4.show()
-        elif self.cog.isSkeleton and self.cog.isSyphon and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.isSyphon:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.syphon3.show()
-        elif self.cog.isSkeleton and self.cog.isDamageUp and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.luredCog3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSkeleton and self.cog.isDamageUp:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.damageUp2.show()
-        elif self.cog.isSkeleton and self.cog.isLured:
-            self.skeleton.show()
-            self.luredManager2.show()
-            self.luredCog3.show()
-        elif self.cog.isSkeleton:
-            self.skeleton.show()
-            self.luredManager2.show()
-        elif not self.cog.getManager() and self.cog.isContracted and self.cog.isLured:
-            self.insured4.show()
-            self.luredCog2.show()
-        elif not self.cog.getManager() and self.cog.isInsured and self.cog.isLured:
-            self.insured4.show()
-            self.luredCog2.show()
-        elif not self.cog.getManager() and self.cog.isSyphon and self.cog.isLured:
-            self.syphon.show()
-            self.luredCog2.show()
-        elif not self.cog.getManager() and self.cog.isSyphon:
-            self.syphon.show()
-        elif not self.cog.getManager() and self.cog.isLured and self.cog.isDamageUp:
-            self.luredCog2.show()
-            self.luredManager.show()
-            self.damageUp2.show()
-        elif not self.cog.getManager() and self.cog.isLured:
-            self.luredCog.show()
-        elif not self.cog.getManager() and self.cog.isContracted:
-            self.insured4.show()
-        elif not self.cog.getManager() and self.cog.isInsured:
-            self.insured4.show()
-        elif self.cog.isSyphon and self.cog.isLured and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.syphon2.show()
-            self.luredCog3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isLureImmune and self.cog.isDamageUp and self.cog.isSyphon:
-            self.luredManager.show()
-            self.lureImmune2.show()
-            self.syphon3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isShielding and self.cog.isDamageUp and self.cog.isSyphon:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.syphon3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isSoakImmune and self.cog.isDamageUp and self.cog.isSyphon:
-            self.luredManager.show()
-            self.soakResist2.show()
-            self.syphon3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isDamageUp and self.cog.isLured and self.cog.isContracted:
-            self.luredManager.show()
-            self.luredCog2.show()
-            self.damageUp2.show()
-            self.insured3.show()
-        elif self.cog.isDamageUp and self.cog.isLured and self.cog.isInsured:
-            self.luredManager.show()
-            self.luredCog2.show()
-            self.damageUp2.show()
-            self.insured3.show()
-        elif self.cog.isContracted and self.cog.isLured:
-            self.luredManager.show()
-            self.insured.show()
-            self.luredCog3.show()
-        elif self.cog.isInsured and self.cog.isLured:
-            self.luredManager.show()
-            self.insured.show()
-            self.luredCog3.show()
-        elif self.cog.isSoakImmune and self.cog.isLured:
-            self.luredManager.show()
-            self.soakResist2.show()
-            self.luredCog3.show()
-        elif self.cog.isLureImmune and self.cog.isSyphon:
-            self.luredManager.show()
-            self.lureImmune2.show()
-            self.syphon3.show()
-        elif self.cog.isShielding and self.cog.isSyphon:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.syphon3.show()
-        elif self.cog.isSyphon and self.cog.isLured:
-            self.luredManager.show()
-            self.syphon2.show()
-            self.luredCog3.show()
-        elif self.cog.isSyphon and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.syphon2.show()
-            self.damageUp2.show()
-        elif self.cog.isVulnerable and self.cog.isLured and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.vulnerable2.show()
-            self.luredCog3.show()
-            self.damageUpMgr.show()
-        elif self.cog.isVulnerable and self.cog.isLured:
-            self.luredManager.show()
-            self.vulnerable2.show()
-            self.luredCog3.show()
-        elif self.cog.isVulnerable and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.vulnerable2.show()
-            self.damageUp2.show()
-        elif self.cog.isSyphon:
-            self.luredManager.show()
-            self.syphon2.show()
-        elif self.cog.isVulnerable:
-            self.luredManager.show()
-            self.vulnerable2.show()
-        elif self.cog.isSoakImmune:
-            self.luredManager.show()
-            self.soakResist2.show()
-        elif self.cog.isShielding and self.cog.isContracted and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.insured2.show()
-            self.damageUpMgr.show()
-        elif self.cog.isShielding and self.cog.isInsured and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.insured2.show()
-            self.damageUpMgr.show()
-        elif self.cog.isInsured and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.insured.show()
-            self.damageUp2.show()
-        elif self.cog.isInsured:
-            self.luredManager.show()
-            self.insured.show()
-        elif self.cog.isLureImmune and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.lureImmune2.show()
-            self.damageUp2.show()
-        elif self.cog.isLureImmune:
-            self.luredManager.show()
-            self.lureImmune2.show()
-        elif self.cog.isShielding and self.cog.isContracted and self.cog.isLured:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.insured2.show()
-            self.luredCog4.show()
-        elif self.cog.isShielding and self.cog.isInsured and self.cog.isLured:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.insured2.show()
-            self.luredCog4.show()
-        elif self.cog.isShielding and self.cog.isContracted:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.insured2.show()
-        elif self.cog.isShielding and self.cog.isInsured:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.insured2.show()
-        elif self.cog.isShielding and self.cog.isLured:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.luredCog3.show()
-        elif self.cog.isShielding and self.cog.isDamageUp:
-            self.luredManager.show()
-            self.absorbing2.show()
-            self.damageUp2.show()
-        elif self.cog.isShielding:
-            self.luredManager.show()
-            self.absorbing2.show()
-        elif self.cog.isDamageUp and self.cog.isLured:
-            self.luredManager.show()
-            self.luredCog2.show()
-            self.damageUp2.show()
-        elif self.cog.isDamageUp:
-            self.luredManager.show()
-            self.damageUp.show()
-        elif self.cog.isLured:
-            self.luredManager.show()
-            self.luredCog2.show()
-        elif self.cog.getManager():
-            self.luredManager.show()
-        else:
-            self.skeleton.hide()
-            self.virtual.hide()
-            self.damageUp.hide()
-            self.luredManager2.hide()
-            self.damageUpMgr.hide()
-            self.overcharged2.hide()
-            self.overcharged.hide()
-            self.shielding.hide()
-            self.shielding2.hide()
-            self.shielding3.hide()
-            self.enraged.hide()
-            self.enraged2.hide()
-            self.enraged3.hide()
-            self.damageUp2.hide()
-            self.insured2.hide()
-            self.insured.hide()
-            self.lured.hide()
-            self.luredCog.hide()
-            self.luredCog2.hide()
-            self.luredCog3.hide()
-            self.luredCog4.hide()
-            self.immortal.hide()
-            self.immortal2.hide()
-            self.immortal3.hide()
-            self.immortal4.hide()
-            self.luredManager.hide()
-            self.syphon.hide()
-            self.syphon2.hide()
-            self.syphon3.hide()
-            self.syphon4.hide()
-            self.vulnerable.hide()
-            self.vulnerable2.hide()
-            self.vulnerable3.hide()
-            self.vulnerable4.hide()
-            self.soakResist.hide()
-            self.soakResist2.hide()
-            self.soakResist3.hide()
-            self.soakResist4.hide()
-            self.absorbing.hide()
-            self.absorbing2.hide()
-            self.absorbing3.hide()
-            self.absorbing4.hide()
-            self.damageReduction.hide()
-            self.damageReduction2.hide()
-            self.damageReduction3.hide()
-            self.damageReduction4.hide()
-            self.lureImmune.hide()
-            self.lureImmune2.hide()
-            self.lureImmune3.hide()
-            self.lureImmune4.hide()
-            self.insured3.hide()
-            self.yellow.hide()
-            self.orange.hide()
-            self.insured4.hide()
-            self.lightblue.hide()
-            self.green.hide()
-            self.blue.hide()
-            self.red.hide()
-            self.pink.hide()
-            self.rainbow.hide()
-            self.hollywoods.hide()
+        if self.cog.isVirtual:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.virtual = status.find('**/virtual_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.virtual.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0.361, 0.361, 0.361, 1)
+                self.virtual.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.virtual.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0.361, 0.361, 0.361, 1)
+                self.virtual.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.virtual.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0.361, 0.361, 0.361, 1)
+                self.virtual.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.virtual.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0.361, 0.361, 0.361, 1)
+                self.virtual.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.virtual.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0.361, 0.361, 0.361, 1)
+                self.virtual.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.virtual.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0.361, 0.361, 0.361, 1)
+                self.virtual.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.virtual.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0.361, 0.361, 0.361, 1)
+                self.virtual.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.virtual.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0.361, 0.361, 0.361, 1)
+                self.virtual.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isSkeleton and not self.cog.isVirtual:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.skeleton = status.find('**/skelecog_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.skeleton.reparentTo(self.attackIcon)
+                self.skeleton.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.skeleton.reparentTo(self.attackIcon1)
+                self.skeleton.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.skeleton.reparentTo(self.attackIcon2)
+                self.skeleton.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.skeleton.reparentTo(self.attackIcon3)
+                self.skeleton.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.skeleton.reparentTo(self.attackIcon4)
+                self.skeleton.setColor(1, 1, 1, 1)
+                self.skeleton.show()
+            if self.statusEffects == 6:
+                self.skeleton.reparentTo(self.attackIcon5)
+                self.skeleton.setColor(1, 1, 1, 1)
+                self.skeleton.show()
+            if self.statusEffects == 7:
+                self.skeleton.reparentTo(self.attackIcon6)
+                self.skeleton.setColor(1, 1, 1, 1)
+                self.skeleton.show()
+            if self.statusEffects == 8:
+                self.skeleton.reparentTo(self.attackIcon7)
+                self.skeleton.setColor(1, 1, 1, 1)
+                self.skeleton.show()
+        if self.cog.getManager() or self.cog.isLureResist or self.cog.extraAttack or self.cog.isInsured or self.cog.isContracted or self.cog.healthCondition == 13:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.luredManager = status.find('**/lured_prestige_icon')
+            if self.cog.isDesperation and self.cog.isAngry or self.cog.dna.name == 'hroller' or self.cog.isImmortal or self.cog.extraAttack or (self.cog.getActualLevel() == 25 and self.cog.dna.name == 'hrollers'):
+                self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
+                                                    text="0",
+                                                    text_fg=(1, 0, 0, 1),
+                                                    text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                    pos=(0.25, 0, -.5),
+                                                    text_scale=.5)
+            elif self.cog.isDesperation or self.cog.dna.name == 'hroller2' or self.cog.dna.name == 'videog' or self.cog.dna.name == 'fires' or self.cog.dna.name == 'fbed' or self.cog.dna.name == 'mouthp' \
+                    or self.cog.dna.name == 'rainmake' or self.cog.dna.name == 'whunter' or self.cog.dna.name == 'wsi' or self.cog.dna.name == 'redd' or self.cog.dna.name == 'duckshfl' or self.cog.dna.name == 'treek' \
+                    or self.cog.dna.name == 'bellring' or self.cog.dna.name == 'ddiver' or self.cog.dna.name == 'gatekeep' or self.cog.isAngry or self.cog.isVulnerable or (self.cog.isSkeleton and self.cog.getManager()) or self.cog.extraAttack:
+                self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
+                                                text="1",
+                                                text_fg=(1, 0, 0, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.5)
+            else:
+                self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
+                                                    text="2",
+                                                    text_fg=(1, 0, 0, 1),
+                                                    text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                    pos=(0.25, 0, -.5),
+                                                    text_scale=.5)
+            self.luredManagerText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.luredManager.reparentTo(self.healthNode)
+                self.luredManager.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.luredManager.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.luredManager.reparentTo(self.healthNode)
+                self.luredManager.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.luredManager.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.luredManager.reparentTo(self.healthNode)
+                self.luredManager.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.luredManager.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.luredManager.reparentTo(self.healthNode)
+                self.luredManager.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.luredManager.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.luredManager.reparentTo(self.healthNode)
+                self.luredManager.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.luredManager.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.luredManager.reparentTo(self.healthNode)
+                self.luredManager.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.luredManager.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.luredManager.reparentTo(self.healthNode)
+                self.luredManager.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.luredManager.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.attackIcon7.reparentTo(self.healthNode)
+                self.attackIcon7.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.luredManager.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.healthCondition == 13:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.overcharged = status.find('**/overcharge_icon')
+            self.overcharged.setScale(0.8)
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.overcharged.reparentTo(self.healthNode)
+                self.overcharged.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .145, .145, .145)
+                self.pulseTask = Sequence(LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.992, 0.227, 1, 1),
+                                   blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(self.healthColors[13]),
+                                   blendType='easeInOut'), Wait(2)).loop()
+                self.overcharged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.overcharged.reparentTo(self.healthNode)
+                self.overcharged.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .145, .145, .145)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.992, 0.227, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(self.healthColors[13]),
+                                           blendType='easeInOut'), Wait(2)).loop()
+                self.overcharged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.overcharged.reparentTo(self.healthNode)
+                self.overcharged.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .145, .145, .145)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.992, 0.227, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(self.healthColors[13]),
+                                           blendType='easeInOut'), Wait(2)).loop()
+                self.overcharged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.overcharged.reparentTo(self.healthNode)
+                self.overcharged.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .145, .145, .145)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.992, 0.227, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(self.healthColors[13]),
+                                           blendType='easeInOut'), Wait(2)).loop()
+                self.overcharged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.overcharged.reparentTo(self.healthNode)
+                self.overcharged.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .145, .145, .145)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.992, 0.227, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(self.healthColors[13]),
+                                           blendType='easeInOut'), Wait(2)).loop()
+                self.overcharged.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.overcharged.reparentTo(self.healthNode)
+                self.overcharged.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .145, .145, .145)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.992, 0.227, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(self.healthColors[13]),
+                                           blendType='easeInOut'), Wait(2)).loop()
+                self.overcharged.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.overcharged.reparentTo(self.healthNode)
+                self.overcharged.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .145, .145, .145)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.992, 0.227, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(self.healthColors[13]),
+                                           blendType='easeInOut'), Wait(2)).loop()
+                self.overcharged.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.overcharged.reparentTo(self.healthNode)
+                self.overcharged.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .145, .145, .145)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.992, 0.227, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(self.healthColors[13]),
+                                           blendType='easeInOut'), Wait(2)).loop()
+                self.overcharged.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isImmortal and self.cog.dna.name == 'videog':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.hollywoods = status.find('**/marked_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.hollywoods.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.hollywoods.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.hollywoods.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.hollywoods.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.hollywoods.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.hollywoods.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.hollywoods.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.hollywoods.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.dna.name == 'hroller2' and not self.cog.isPhase3:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.hollywoods = status.find('**/marked_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.hollywoods.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.hollywoods.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.hollywoods.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.hollywoods.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.hollywoods.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.hollywoods.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.hollywoods.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.hollywoods.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.hollywoods.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.dna.name == 'phouse':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/pyromaniac_icon')
+            self.rageBuildingText = DirectLabel(parent=self.extraAttacks, relief=None,
+                                                text="%s" % self.cog.getPowerhouseRotation() + "%", text_fg=(1, 0, 0, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.5)
+            self.rageBuildingText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.extraAttacks.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.extraAttacks.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.extraAttacks.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.extraAttacks.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.extraAttacks.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.extraAttacks.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.extraAttacks.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.extraAttacks.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.dna.name == 'hroller':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/insured_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.extraAttacks.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.extraAttacks.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.extraAttacks.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.extraAttacks.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.extraAttacks.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.extraAttacks.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.extraAttacks.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.extraAttacks.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.dna.name == 'hroller2' and not self.cog.isVulnerable and self.cog.isPhase3:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/harmonious_colors_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.extraAttacks.reparentTo(self.healthNode)
+                self.extraAttacks.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.56, 0, 1, 1), blendType='easeInOut')).loop()
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.extraAttacks.reparentTo(self.healthNode)
+                self.extraAttacks.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.extraAttacks.reparentTo(self.healthNode)
+                self.extraAttacks.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.extraAttacks.reparentTo(self.healthNode)
+                self.extraAttacks.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.extraAttacks.reparentTo(self.healthNode)
+                self.extraAttacks.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.extraAttacks.reparentTo(self.healthNode)
+                self.extraAttacks.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.extraAttacks.reparentTo(self.healthNode)
+                self.extraAttacks.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.dna.name == 'hrollers':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            if self.cog.getActualLevel() == 34:
+                self.rainbow = status.find('**/ink_drain_icon')
+            if self.cog.getActualLevel() == 33:
+                self.rainbow = status.find('**/unite_cooldown_icon')
+            if self.cog.getActualLevel() == 32:
+                self.rainbow = status.find('**/cashback_icon')
+            if self.cog.getActualLevel() == 31:
+                self.rainbow = status.find('**/duck_drop_icon')
+            if self.cog.getActualLevel() == 30:
+                self.rainbow = status.find('**/brain_icon')
+            if self.cog.getActualLevel() == 29:
+                self.rainbow = status.find('**/trap_card_icon')
+            if self.cog.getActualLevel() == 28:
+                self.rainbow = status.find('**/singing_blues_icon')
+            if self.cog.getActualLevel() == 27:
+                self.rainbow = status.find('**/fizzle_icon')
+            if self.cog.getActualLevel() == 26:
+                self.rainbow = status.find('**/full_deck_icon')
+            if self.cog.getActualLevel() == 25:
+                self.rainbow = status.find('**/no_green_light_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.rainbow.reparentTo(self.healthNode)
+                self.rainbow.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.rainbow.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.rainbow.reparentTo(self.healthNode)
+                self.rainbow.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.rainbow.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.rainbow.reparentTo(self.healthNode)
+                self.rainbow.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.rainbow.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.rainbow.reparentTo(self.healthNode)
+                self.rainbow.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.rainbow.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.rainbow.reparentTo(self.healthNode)
+                self.rainbow.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.rainbow.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.rainbow.reparentTo(self.healthNode)
+                self.rainbow.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.rainbow.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.rainbow.reparentTo(self.healthNode)
+                self.rainbow.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.rainbow.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.rainbow.reparentTo(self.healthNode)
+                self.rainbow.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.56, 0, 1, 1),
+                                           blendType='easeInOut')).loop()
+                self.rainbow.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isAngry:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/rage_mode_icon')
+            self.enrageCountText = DirectLabel(parent=self.enraged, relief=None,
+                                              text="%s" % self.cog.getEnrageCounter(), text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.5)
+            self.enrageCountText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.enraged.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.enraged.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.enraged.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.enraged.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.enraged.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.enraged.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.enraged.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.enraged.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isShielding and self.cog.dna.name == 'sgoat':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.absorbing = status.find('**/defense_mode_icon')
+            self.rageBuildingText = DirectLabel(parent=self.absorbing, relief=None,
+                                                text="%s" % self.cog.getRageBuilding() + "%", text_fg=(1, 0, 0, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.5)
+            self.rageBuildingText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.absorbing.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.absorbing.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.absorbing.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.absorbing.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.absorbing.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.absorbing.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.absorbing.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.absorbing.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isShielding and not self.cog.dna.name == 'sgoat':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.absorbing = status.find('**/damage_absorb_icon')  # 3 slot absorb icon
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.absorbing.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.absorbing.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.absorbing.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.absorbing.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.absorbing.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.absorbing.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.absorbing.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.absorbing.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.absorbing.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isLureImmune and not self.cog.dna.name == 'hrollers':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.lureImmune = status.find('**/cashback_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.lureImmune.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.lureImmune.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.lureImmune.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.lureImmune.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.lureImmune.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.lureImmune.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.lureImmune.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.lureImmune.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.lureImmune.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.lureImmune.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.lureImmune.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.lureImmune.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.lureImmune.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.lureImmune.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.lureImmune.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.lureImmune.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.immortal = status.find('**/schadenfreude_icon')
+            self.damageMultText = DirectLabel(parent=self.immortal, relief=None, text="1", text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.5)
+            self.damageMultText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isTarget:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.immortal = status.find('**/union_bust_icon')
+            self.damageMultText = DirectLabel(parent=self.immortal, relief=None, text="1", text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.5)
+            self.damageMultText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isDamageUp:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.damageUp = status.find('**/suit_damage_up_icon')
+            self.damageMultText = DirectLabel(parent=self.damageUp, relief=None, text="%s" % self.cog.getDamageUp() + "%", text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.5)
+            self.damageMultText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isVulnerable and not self.cog.dna.name == 'hroller2':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.vulnerable = status.find('**/broken_shield_icon')  # third slot vulnerability icon
+            if self.cog.dna.name == 'bcaster':
+                self.vulnerabilityText = DirectLabel(parent=self.vulnerable, relief=None,
+                                                 text="100%",
+                                                 text_fg=(0, 1, 0.047, 1),
+                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                 pos=(0.25, 0, -.5),
+                                                 text_scale=.5)
+            else:
+                self.vulnerabilityText = DirectLabel(parent=self.vulnerable, relief=None,
+                                                     text="%s" % self.cog.getVulnerability() + "%",
+                                                     text_fg=(0, 1, 0.047, 1),
+                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                     pos=(0.25, 0, -.5),
+                                                     text_scale=.5)
+            self.vulnerabilityText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.vulnerable.reparentTo(self.healthNode)
+                self.vulnerable.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.vulnerable.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.vulnerable.reparentTo(self.healthNode)
+                self.vulnerable.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.vulnerable.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.vulnerable.reparentTo(self.healthNode)
+                self.vulnerable.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.vulnerable.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.vulnerable.reparentTo(self.healthNode)
+                self.vulnerable.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.vulnerable.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.vulnerable.reparentTo(self.healthNode)
+                self.vulnerable.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.vulnerable.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.vulnerable.reparentTo(self.healthNode)
+                self.vulnerable.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.vulnerable.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.vulnerable.reparentTo(self.healthNode)
+                self.vulnerable.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.vulnerable.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.vulnerable.reparentTo(self.healthNode)
+                self.vulnerable.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.vulnerable.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isSyphon:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.syphon = status.find('**/ink_drain_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.syphon.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.syphon.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.syphon.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.syphon.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.syphon.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.syphon.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.syphon.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.syphon.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.syphon.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.syphon.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.syphon.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.syphon.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.syphon.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.syphon.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.syphon.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.syphon.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isInsured:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/insured_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.insured.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.insured.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.insured.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.insured.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.insured.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.insured.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.insured.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.insured.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isContracted:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/insured_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.insured.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.insured.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.insured.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.insured.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.insured.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.insured.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.insured.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.insured.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.insured.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.extraAttack:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/extra_attacks_icon')
+            self.extraAttacksText = DirectLabel(parent=self.extraAttacks, relief=None, text="+%s" % self.cog.getExtraAttacks(),
+                                                text_fg=(1, 0, 0, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.5)
+            self.extraAttacksText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.extraAttacks.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.extraAttacks.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.extraAttacks.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.extraAttacks.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.extraAttacks.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.extraAttacks.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.extraAttacks.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.extraAttacks.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isSoakImmune:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.soakResist = status.find('**/soaked_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.soakResist.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.soakResist.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.soakResist.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.soakResist.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.soakResist.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.soakResist.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.soakResist.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.soakResist.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.soakResist.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.soakResist.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.soakResist.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.soakResist.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.soakResist.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.soakResist.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.soakResist.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.soakResist.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isSued:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.sued = status.find('**/sued_icon')
+            self.suedRoundsText = DirectLabel(parent=self.sued, relief=None, text="%s" % self.cog.getSuedRounds(),
+                                         text_fg=(1, 1, 1, 1),
+                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -.5),
+                                         text_scale=.5)
+            self.suedRoundsText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.sued.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.sued.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.sued.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.sued.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.sued.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.sued.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.sued.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.sued.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.sued.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.sued.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.sued.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.sued.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.sued.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.sued.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.sued.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.sued.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isLured:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.luredCog = status.find('**/lured_icon')
+            self.luredText = DirectLabel(parent=self.luredCog, relief=None, text="%s" % self.cog.getLuredRounds(),
+                                         text_fg=(1, 1, 1, 1),
+                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -.5),
+                                         text_scale=.5)
+            self.luredText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.luredCog.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.luredCog.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.luredCog.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.luredCog.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.luredCog.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.luredCog.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.luredCog.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.luredCog.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.luredCog.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.luredCog.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.luredCog.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.luredCog.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.luredCog.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.luredCog.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.luredCog.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.luredCog.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isDazed:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.dazed = status.find('**/confusion_icon')
+            self.dazedText = DirectLabel(parent=self.dazed, relief=None,
+                                         text="1",
+                                         text_fg=(1, 1, 1, 1),
+                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -.5),
+                                         text_scale=.5)
+            self.dazedText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.dazed.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.dazed.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.dazed.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.dazed.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.dazed.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.dazed.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.dazed.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.dazed.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isSoaked:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.soaked = status.find('**/scope_creep_icon')
+            self.soakedRoundsText = DirectLabel(parent=self.soaked, relief=None, text="%s" % self.cog.getSoakRounds(),
+                                         text_fg=(1, 1, 1, 1),
+                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -.5),
+                                         text_scale=.5)
+            self.soakedRoundsText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.soaked.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.soaked.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.soaked.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.soaked.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.soaked.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.soaked.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.soaked.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.soaked.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.soaked.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.soaked.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.soaked.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.soaked.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.soaked.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.soaked.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.soaked.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.soaked.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         self.healthText['text'] = t
 
     def updateHealthBar(self):
         self.setLevelText()
-        if self.cog.dna.name == 'shw':
-            self.sharkwatcher.show()
-        else:
-            self.sharkwatcher.hide()
         condition = self.cog.healthCondition
         if self.cog.getHP() >= 0:
             self.hp = self.cog.getHP()
         else:
             self.hp = 0
         self.maxHp = self.cog.getMaxHP()
-        if condition == 9:
+        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2' and not self.cog.dna.name == 'videog':
+            self.hp = 'Immune!'
+            self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
+            if self.healthBar2:
+                self.healthBar2.setProp('barColor', (1, 1, 1, 1))
+                self.__changeColor()
+                self.healthBar2.setProp('value', self.cog.getHP())
+                taskMgr.remove(self.uniqueName('blink-task2'))
+        elif condition == 9:
             taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
             if self.healthBar2:
-                self.healthBar2.setProp('barColor', self.healthColors[condition])
+                self.healthBar2.setProp('barColor', (1, 1, 1, 1))
+                self.__changeColor()
                 self.healthBar2.setProp('value', self.cog.getHP())
                 taskMgr.remove(self.uniqueName('blink-task2'))
         elif condition == 10:
             taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
             if self.healthBar2:
-                self.healthBar2.setProp('barColor', self.healthColors[condition])
+                self.healthBar2.setProp('barColor', (1, 1, 1, 1))
+                self.__changeColor()
                 self.healthBar2.setProp('value', self.cog.getHP())
-                blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.75), Task(self.__blinkGray), Task.pause(0.1))
+                blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray), Task.pause(0.1))
                 taskMgr.add(blinkTask, self.uniqueName('blink-task2'))
         elif condition == 11:
             taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
             if self.healthBar2:
-                self.healthBar2.setProp('barColor', self.healthColors[condition])
+                self.healthBar2.setProp('barColor', (1, 1, 1, 1))
+                self.__changeColor()
                 self.healthBar2.setProp('value', self.cog.getHP())
                 blinkTask = Task.loop(Task(self.__blinkRed), Task.pause(0.25), Task(self.__blinkGray), Task.pause(0.1))
                 taskMgr.add(blinkTask, self.uniqueName('blink-task2'))
         elif condition == 13:
             taskMgr.remove(self.uniqueName('blink-task2'))
             if self.healthBar2:
-                self.healthBar2.setProp('barColor', self.healthColors[condition])
+                self.healthBar2.setProp('barColor', (1, 1, 1, 1))
                 self.healthBar2.setProp('value', self.cog.getHP())
-                blinkTask = Task.loop(Task(self.__blinkPurple), Task.pause(1.5), Task(self.__blinkPurpleColor),
-                                      Task.pause(1.5))
+                blinkTask = Task.loop(Task(self.__blinkPurple), Task.pause(1), Task(self.__blinkPurpleColor),
+                                      Task.pause(3))
                 taskMgr.add(blinkTask, self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(1, 1, 1, 1.0)
         else:
             taskMgr.remove(self.uniqueName('blink-task'))
             if self.healthBar2:
-                self.healthBar2.setProp('barColor', self.healthColors[condition])
+                self.healthBar2.setProp('barColor', (1, 1, 1, 1))
+                self.__changeColor()
                 self.healthBar2.setProp('value', self.cog.getHP())
                 taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
-        self.hpText['text'] = str(self.hp) + '/' + str(self.maxHp)
+        if self.cog.isImmortal:
+            self.hpText['text'] = str(self.hp)
+        else:
+            self.hpText['text'] = str(self.hp) + '/' + str(self.maxHp)
+
+    def __pulsePurple(self, num):
+        if num == 1:
+            x = self.attackIcon
+        if num == 2:
+            x = self.attackIcon1
+        if num == 3:
+            x = self.attackIcon2
+        if num == 4:
+            x = self.attackIcon3
+        if num == 5:
+            x = self.attackIcon4
+        if num == 6:
+            x = self.attackIcon5
+        if num == 7:
+            x = self.attackIcon6
+        if num == 8:
+            x = self.attackIcon7
+        self.interval = Parallel(LerpColorScaleInterval(x, duration=1, colorScale=(0.992, 0.227, 1, 1),
+                                   blendType='easeInOut'))
+        self.interval.start()
+
+    def __pulsePurpleColor(self, num):
+        if num == 1:
+            x = self.attackIcon
+        if num == 2:
+            x = self.attackIcon1
+        if num == 3:
+            x = self.attackIcon2
+        if num == 4:
+            x = self.attackIcon3
+        if num == 5:
+            x = self.attackIcon4
+        if num == 6:
+            x = self.attackIcon5
+        if num == 7:
+            x = self.attackIcon6
+        if num == 8:
+            x = self.attackIcon7
+        self.interval = Parallel(LerpColorScaleInterval(x, duration=1, colorScale=(self.healthColors[13]),
+                                   blendType='easeInOut'))
+        self.interval.start()
 
     def updateStatusIcons(self, cog, battle):
         if battle.isSuitLured(cog):
@@ -1535,35 +2157,35 @@ class TownBattleCogPanel(DirectFrame):
             self.lured.hide()
 
     def __changeColor(self):
-        self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=0, colorScale=(self.healthColors[self.cog.healthCondition]),
+        if self.cog.isImmortal:
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=1, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
-        self.interval.start()
+            self.interval.start()
+        else:
+            self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=1,
+                                                            colorScale=(self.healthColors[self.cog.healthCondition]),
+                                                            blendType='easeInOut'))
+            self.interval.start()
 
     def __pulseRed(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=.25, colorScale=(1, 0, 0, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=0, colorScale=(1, 0, 0, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
     def __pulseGray(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=.25, colorScale=(0.431, 0.431, 0.431, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=0, colorScale=(0.431, 0.431, 0.431, 1),
                                    blendType='easeInOut'))
         self.interval.start()
 
-    def __pulsePurple(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=1, colorScale=(0.702, 0, 1, 1),
+    def __blinkPurple(self, task):
+        self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=1, colorScale=(0.992, 0.227, 1, 1),
                                                         blendType='easeInOut'))
         self.interval.start()
 
-    def __pulsePurpleColor(self, task):
+    def __blinkPurpleColor(self, task):
         self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=1, colorScale=(self.healthColors[13]),
                                                         blendType='easeInOut'))
         self.interval.start()
-
-    def __blinkPurple(self, task):
-        self.healthBar2.setProp('barColor', (0.702, 0, 1, 1))
-
-    def __blinkPurpleColor(self, task):
-        self.healthBar2.setProp('barColor', self.healthColors[13])
 
     def __blinkRed(self, task):
         self.healthBar2.setProp('barColor', self.healthColors[9])
@@ -1613,7 +2235,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'bkeeper':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .09, .09, .09)
         elif name == 'cbr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .06, .06, .06)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .065, .065, .065)
         elif name == 'le':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .115, .115, .115)
         elif name == 'bgh':
@@ -1731,7 +2353,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'dola':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .0875, .0875, .0875)
         elif name == 'phouse':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .0875, .0875, .0875)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .065, .065, .065)
         elif name == 'dking':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.145, -180, 0, 0, .08, .08, .08)
         elif name == 'racket':
@@ -1856,10 +2478,175 @@ class TownBattleCogPanel(DirectFrame):
             return
         self.isLoaded = 0
         self.exit()
+        if self.luredText != None:
+            self.luredText.removeNode()
+        if self.damageMultText != None:
+            self.damageMultText.removeNode()
+        if self.extraAttacks != None:
+            self.extraAttacks.removeNode()
+        if self.sued != None:
+            self.sued.removeNode()
+        if self.suedRoundsText != None:
+            self.suedRoundsText.removeNode()
+        if self.extraAttacksText != None:
+            self.extraAttacksText.removeNode()
+        if self.dazed != None:
+            self.dazed.removeNode()
+        if self.dazedText != None:
+            self.dazedText.removeNode()
+        if self.enrageCountText != None:
+            self.enrageCountText.removeNode()
+        if self.soakedRoundsText != None:
+            self.soakedRoundsText.removeNode()
+        if self.soaked != None:
+            self.soaked.removeNode()
+        if self.enraged != None:
+            self.enraged.removeNode()
+        if self.dazed != None:
+            self.dazed.removeNode()
+        if self.soaked != None:
+            self.soaked.removeNode()
+        if self.extraAttacks != None:
+            self.extraAttacks.removeNode()
+        if self.shielding != None:
+            self.shielding.removeNode()
+        if self.skeleton != None:
+            self.skeleton.removeNode()
+        if self.virtual != None:
+            self.virtual.removeNode()
+        if self.damageUp != None:
+            self.damageUp.removeNode()
+        if self.attackIcon != None:
+            self.attackIcon.removeNode()
+        if self.attackIcon1 != None:
+            self.attackIcon1.removeNode()
+        if self.attackIcon2 != None:
+            self.attackIcon2.removeNode()
+        if self.attackIcon3 != None:
+            self.attackIcon3.removeNode()
+        if self.attackIcon4 != None:
+            self.attackIcon4.removeNode()
+        if self.attackIcon5 != None:
+            self.attackIcon5.removeNode()
+        if self.attackIcon6 != None:
+            self.attackIcon6.removeNode()
+        if self.attackIcon7 != None:
+            self.attackIcon7.removeNode()
+        if self.damageUpMgr != None:
+            self.damageUpMgr.removeNode()
+        if self.overcharged != None:
+            self.overcharged.removeNode()
+        if self.insured != None:
+            self.insured.removeNode()
+        if self.overcharged != None:
+            self.overcharged.removeNode()
+        if self.lured != None:
+            self.lured.removeNode()
+        if self.vulnerabilityText != None:
+            self.vulnerabilityText.removeNode()
+        if self.luredManagerText != None:
+            self.luredManagerText.removeNode()
+        if self.rageBuildingText != None:
+            self.rageBuildingText.removeNode()
+        if self.immortal != None:
+            self.immortal.removeNode()
+        if self.luredManager != None:
+            self.luredManager.removeNode()
+        if self.syphon != None:
+            self.syphon.removeNode()
+        if self.vulnerable != None:
+            self.vulnerable.removeNode()
+        if self.soakResist != None:
+            self.soakResist.removeNode()
+        if self.absorbing != None:
+            self.absorbing.removeNode()
+        if self.damageReduction != None:
+            self.damageReduction.removeNode()
+        if self.lureImmune != None:
+            self.lureImmune.removeNode()
+        if self.rainbow != None:
+            self.rainbow.removeNode()
+        if self.hollywoods != None:
+            self.hollywoods.removeNode()
+        if self.sharkwatcher != None:
+            self.sharkwatcher.removeNode()
+        if self.luredCog != None:
+            self.luredCog.removeNode()
+        if self.statusFrame != None:
+            self.statusFrame.removeNode()
+        if self.status != None:
+            self.status.removeNode()
+        if self.status2 != None:
+            self.status2.removeNode()
+        if self.status3 != None:
+            self.status3.removeNode()
+        if self.status4 != None:
+            self.status4.removeNode()
+        if self.status5 != None:
+            self.status5.removeNode()
+        if self.status6 != None:
+            self.status6.removeNode()
+        if self.status7 != None:
+            self.status7.removeNode()
+        if self.status8 != None:
+            self.status8.removeNode()
+        if self.pulseTask != None:
+            self.pulseTask.finish()
+            del self.pulseTask
+        if self.statusFramePanel != None:
+            self.statusFramePanel.removeNode()
+        if self.statusText2 != None:
+            self.statusText2.removeNode()
+        if self.statusText1 != None:
+            self.statusText1.removeNode()
+        del self.enraged
+        del self.shielding
+        del self.overcharged
+        del self.luredCog
+        del self.luredManager
+        del self.insured
+        del self.damageUp
+        del self.skeleton
+        del self.virtual
+        del self.immortal
+        del self.vulnerable
+        del self.soakResist
+        del self.syphon
+        del self.absorbing
+        del self.damageReduction
+        del self.lureImmune
+        del self.rainbow
+        del self.hollywoods
+        del self.sharkwatcher
+        del self.soaked
+        del self.dazed
+        del self.extraAttacks
         del self.cog
         del self.button
         del self.blinkTask
         del self.hpText
+        del self.status
+        del self.status2
+        del self.status3
+        del self.status4
+        del self.status5
+        del self.status6
+        del self.status7
+        del self.status8
+        del self.attackIcon
+        del self.attackIcon1
+        del self.attackIcon2
+        del self.attackIcon3
+        del self.attackIcon4
+        del self.attackIcon5
+        del self.attackIcon6
+        del self.attackIcon7
+        del self.statusFrame
+        del self.healthNode
+        del self.statusFramePanel
+        del self.statusText2
+        del self.statusText2
+        del self.pulseTask
         DirectFrame.destroy(self)
 
     def cleanup(self):
@@ -1872,11 +2659,20 @@ class TownBattleCogPanel(DirectFrame):
 
         del self.blinkTask
         taskMgr.remove(self.uniqueName('blink-task2'))
-        self.healthNode.removeNode()
-        self.button.removeNode()
         DirectFrame.destroy(self)
 
     def cleanupHead(self):
         if self.suitHead:
             self.suitHead.removeNode()
             del self.suitHead
+
+    def showPanel(self, inside, status):
+        if inside:
+            if self.statusFramePanel != None:
+                self.statusFramePanel.show()
+
+    def hidePanel(self, inside, status):
+        if inside:
+            if self.statusFramePanel != None:
+                self.statusFramePanel.hide()
+
