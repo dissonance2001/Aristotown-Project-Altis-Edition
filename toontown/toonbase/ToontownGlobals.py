@@ -617,7 +617,7 @@ phaseMap = {Tutorial: 4,
  DonaldsDreamland: 8,
  OutdoorZone: 6,
  Toonseltown: 13,
- SkyClan: 8, #13
+ SkyClan: 13, 
  BossbotHQ: 12,
  SellbotHQ: 9,
  CashbotHQ: 10,
@@ -663,7 +663,7 @@ dnaMap = {Tutorial: 'toontown_central',
  BoardbotHQ: 'cog_hq_boardbot',
  GolfZone: 'golf_zone',
  Toonseltown: 'toonseltown',
- SkyClan: 'the_burrrgh'} # 'skyclan'
+ SkyClan: 'skyclan'} 
 hoodNameMap = {DonaldsDock: TTLocalizer.DonaldsDock,
  ToontownCentral: TTLocalizer.ToontownCentral,
  ToontownCentralOld: TTLocalizer.ToontownCentralOld,
