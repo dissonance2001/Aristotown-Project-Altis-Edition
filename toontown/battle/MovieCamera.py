@@ -962,7 +962,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpDesc = pbpDc.getShowIntervalDesc(
                 'The Powerhouse retaliates against toons with existing\nvulnerabilities!',
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=1.0)
@@ -975,7 +975,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpDesc = pbpDc.getShowIntervalDesc(
                 'The Powerhouse doubles down damage on toons who chose\nbanned gags!',
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=1.0)
@@ -990,7 +990,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpDesc = pbpDc.getShowIntervalDesc(
                 'The Powerhouse retaliates against toons who attacked the Bookkeeper\nwhile Bookkeeping!',
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=1.0)
@@ -1003,7 +1003,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpDesc = pbpDc.getShowIntervalDesc(
                 'The Powerhouse retaliates against toons who took damage\nfrom fore!',
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
@@ -1016,7 +1016,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpDesc = pbpDc.getShowIntervalDesc(
                 'The Powerhouse retaliates against confused toons!',
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=1.0)
@@ -1041,16 +1041,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     # bookkeeper cheats
     elif name == 'BookkeeperPaperCutSoaked':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                     motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(4),
-                                     defaultCamera(openShotDuration=0, attackDuration=attackDuration - 4)))
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(4),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4)))
     elif name == 'BookkeeperPaperCutMarked':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(4),
-                                 defaultCamera(openShotDuration=0, attackDuration=attackDuration - 4)))
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4)))
     elif name == 'BookkeeperPaperCut':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(4),
-                                 defaultCamera(openShotDuration=0, attackDuration=attackDuration - 4)))
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4)))
     elif name == 'BookkeeperExplodingDocument':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'BookkeeperBookkeepingRetaliation':

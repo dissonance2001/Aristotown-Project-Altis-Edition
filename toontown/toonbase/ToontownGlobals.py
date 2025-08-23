@@ -1938,9 +1938,9 @@ BossbotBossBattleThreePosHpr = (0,
  0,
  0)
 DinerBattleAPosHpr = (20,
- - 240,
+ - 300,
  0,
- 0,
+ 90,
  0,
  0)
 DinerBattleBPosHpr = (-20,

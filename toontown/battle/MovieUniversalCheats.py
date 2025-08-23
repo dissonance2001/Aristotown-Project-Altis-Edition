@@ -610,162 +610,163 @@ def doDesperation(attack):
     makeDamageUps = Parallel()
     theSuit = None
     for s in battle.activeSuits:
-        if s.dna.name == 'ambass' and not suit.dna.name == 'ambass':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'wtapper' and not suit.dna.name == 'wtapper':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'bkeeper' and not suit.dna.name == 'bkeeper':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'phouse' and not suit.dna.name == 'phouse':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'radiog' and not suit.dna.name == 'radiog':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'racket' and not suit.dna.name == 'racket':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'ubuster' and not suit.dna.name == 'ubuster':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'safesupervis' and not suit.dna.name == 'safesupervis':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'stenog' and not suit.dna.name == 'stenog':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'lgator' and not suit.dna.name == 'lgator':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'sgoat' and not suit.dna.name == 'sgoat':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 ' +40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                       '+1 Lure Resistance'))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
-        if s.dna.name == 'caseman' and not suit.dna.name == 'caseman':
-            theSuit = s
-            notifyTrack = Sequence(Func(theSuit.showHpText2,
-                                        'DESPERATION!',
-                                        2), Func(theSuit.showHpStringDesperation,
-                                                 '+40% Damage'), Func(theSuit.showHpStringDesperation2,
-                                                                        '+1 Lure Resistance'))
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
-            makeDesperate = Func(theSuit.makeDesperation)
-            makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-            notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-            makeDesperates.append(makeDesperate)
-            makeDamageUps.append(makeDamageUp)
+        if not suit.isDesperation:
+            if s.dna.name == 'ambass' and not suit.dna.name == 'ambass':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'wtapper' and not suit.dna.name == 'wtapper':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'bkeeper' and not suit.dna.name == 'bkeeper':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'phouse' and not suit.dna.name == 'phouse':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'radiog' and not suit.dna.name == 'radiog':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'racket' and not suit.dna.name == 'racket':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'ubuster' and not suit.dna.name == 'ubuster':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'safesupervis' and not suit.dna.name == 'safesupervis':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'stenog' and not suit.dna.name == 'stenog':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'lgator' and not suit.dna.name == 'lgator':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'sgoat' and not suit.dna.name == 'sgoat':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     ' +40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                           '+1 Lure Resistance'))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
+            if s.dna.name == 'caseman' and not suit.dna.name == 'caseman':
+                theSuit = s
+                notifyTrack = Sequence(Func(theSuit.showHpText2,
+                                            'DESPERATION!',
+                                            2), Func(theSuit.showHpStringDesperation,
+                                                     '+40% Damage'), Func(theSuit.showHpStringDesperation2,
+                                                                            '+1 Lure Resistance'))
+                cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+                makeDesperate = Func(theSuit.makeDesperation)
+                makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+                notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+                makeDesperates.append(makeDesperate)
+                makeDamageUps.append(makeDamageUp)
     if theSuit == None:
         print('Error finding manager... using self...')
         theSuit = suit

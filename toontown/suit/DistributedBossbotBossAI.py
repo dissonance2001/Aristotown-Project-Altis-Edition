@@ -96,23 +96,48 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            weakenedValue = ((1, 1),
-             (2, 2),
-             (2, 2),
-             (1, 1),
-             (1, 1, 1, 1, 1))
-            listVersion = list(SuitBuildingGlobals.SuitBuildingInfo)
-            if simbase.config.GetBool('bossbot-boss-cheat', 0):
-                listVersion[14] = weakenedValue
-                SuitBuildingGlobals.SuitBuildingInfo = tuple(listVersion)
-            retval = self.invokeSuitPlanner(SuitBuildingGlobals.SUIT_PLANNER_CEO, 0)
-            return retval
-        else:
-            suits = self.generateDinerSuits()
-            return suits
+            cogs = self.invokeEmptyPlanner(11, 'lit2')
+            activeSuits = cogs['activeSuits']
+            reserveSuits = cogs['reserveSuits']
+            random.shuffle(activeSuits)
+            while len(activeSuits) >= 6:
+                suit = activeSuits.pop()
+                reserveSuits.append((suit, 100))
+
+            def compareJoinChance(a, b):
+                return cmp(a[1], b[1])
+
+            reserveSuits.sort(compareJoinChance)
+            return {'activeSuits': activeSuits,
+                    'reserveSuits': reserveSuits}
+        if battleNumber == 2:
+            cogs = self.invokeEmptyPlanner(11, 'lit')
+            activeSuits = cogs['activeSuits']
+            reserveSuits = cogs['reserveSuits']
+            random.shuffle(activeSuits)
+            while len(activeSuits) >= 6:
+                suit = activeSuits.pop()
+                reserveSuits.append((suit, 100))
+
+            def compareJoinChance(a, b):
+                return cmp(a[1], b[1])
+
+            reserveSuits.sort(compareJoinChance)
+            return {'activeSuits': activeSuits,
+                    'reserveSuits': reserveSuits}
+
+    def generateNewReserves(self, battleNumber, specialCode):
+        if battleNumber == 1:
+            cogs = self.invokeReservesPlanner(11, specialCode)
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
+        elif battleNumber == 2:
+            cogs = self.invokeReservesPlanner(11, specialCode)
+            reserveSuits = cogs['reserveSuits']
+            return {'reserveSuits': reserveSuits}
 
     def invokeSuitPlanner(self, buildingCode, skelecog):
-        suits = DistributedBossCogAI.DistributedBossCogAI.invokeSuitPlanner(self, buildingCode, skelecog)
+        suits = DistributedMinibossAI.DistributedMinibossAI.invokeSuitPlanner(self, buildingCode, skelecog)
         activeSuits = suits['activeSuits'][:]
         reserveSuits = suits['reserveSuits'][:]
         if len(activeSuits) + len(reserveSuits) >= 6:
@@ -120,7 +145,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                 activeSuits.append(reserveSuits.pop()[0])
 
         retval = {'activeSuits': activeSuits,
-         'reserveSuits': reserveSuits}
+                  'reserveSuits': reserveSuits}
         return retval
 
     def makeBattle(self, bossCogPosHpr, battlePosHpr, roundCallback, finishCallback, battleNumber, battleSide):
@@ -248,23 +273,10 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def enterBattleTwo(self):
         self.resetBattles()
-        self.createFoodBelts()
-        self.createBanquetTables()
-        for belt in self.foodBelts:
-            belt.turnOn()
-
-        for table in self.tables:
-            table.turnOn()
-
         self.barrier = self.beginBarrier('BattleTwo', self.involvedToons, ToontownGlobals.BossbotBossServingDuration + 1, self.__doneBattleTwo)
 
     def exitBattleTwo(self):
         self.ignoreBarrier(self.barrier)
-        for table in self.tables:
-            table.goInactive()
-
-        for belt in self.foodBelts:
-            belt.goInactive()
 
     def __doneBattleTwo(self, avIds):
         self.b_setState('PrepareBattleThree')
@@ -314,22 +326,10 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.b_setState('BattleThree')
 
     def makeBattleThreeBattles(self):
-        if not self.battleThreeBattlesMade:
-            if not self.tables:
-                self.createBanquetTables()
-                for table in self.tables:
-                    table.turnOn()
-                    table.goInactive()
-
-            notDeadList = []
-            for table in self.tables:
-                tableInfo = table.getNotDeadInfo()
-                notDeadList += tableInfo
-
-            self.notDeadList = notDeadList
-            self.postBattleState = 'PrepareBattleFour'
-            self.initializeBattles(3, ToontownGlobals.BossbotBossBattleThreePosHpr)
-            self.battleThreeBattlesMade = True
+        self.notDeadList = notDeadList
+        self.postBattleState = 'PrepareBattleFour'
+        self.initializeBattles(3, ToontownGlobals.BossbotBossBattleThreePosHpr)
+        self.battleThreeBattlesMade = True
 
     def generateDinerSuits(self):
         diners = []

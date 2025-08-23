@@ -72,7 +72,7 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         # Hacky fix for crashing when we run over a table.
         self.tableIndex = 15
         self.bossMaxDamage = ToontownGlobals.LawbotBossMaxDamage
-        self.elevatorType = ElevatorConstants.ELEVATOR_CJ
+        self.elevatorType = ElevatorConstants.ELEVATOR_ERCLAIM
         self.gavels = {}
         self.chairs = {}
         self.cannons = {}

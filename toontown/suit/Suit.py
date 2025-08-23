@@ -5845,7 +5845,7 @@ class Suit(Avatar.Avatar):
                 self.virtualizePurple(17)
 
     def __changeColor(self):
-        if self.isImmortal:
+        if self.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2':
             self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
             self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(1, 1, 1, 1),

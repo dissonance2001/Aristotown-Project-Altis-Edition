@@ -913,14 +913,14 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
 
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
-def skipCJ():
+def skipCount():
     """
     Skips to the final round of the CJ.
     """
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedLawbotBossAI):
+        if isinstance(do, DistributedCountErclaimBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break
@@ -932,14 +932,14 @@ def skipCJ():
     boss.b_setState('RollToBattleTwo')
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
-def skipCJ2():
+def skipCount2():
     """
     Skips to the final round of the CJ.
     """
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedLawbotBossAI):
+        if isinstance(do, DistributedCountErclaimBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break
@@ -952,14 +952,14 @@ def skipCJ2():
 
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
-def skipCJFinal():
+def skipCountFinal():
     """
     Kills the CJ.
     """
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedLawbotBossAI):
+        if isinstance(do, DistributedCountErclaimBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break
@@ -970,14 +970,14 @@ def skipCJFinal():
     return 'Skipped to CJ Final.'
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
-def killCJ():
+def killCount():
     """
     Kills the CJ.
     """
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedLawbotBossAI):
+        if isinstance(do, DistributedCountErclaimBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break

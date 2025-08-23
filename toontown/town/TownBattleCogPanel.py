@@ -1386,6 +1386,91 @@ class TownBattleCogPanel(DirectFrame):
                                            blendType='easeInOut'), Wait(1)).loop()
                 self.immortal.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+        if self.cog.isBookkeeping:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.immortal = status.find('**/unite_cooldown_icon')
+            self.damageMultText = DirectLabel(parent=self.immortal, relief=None, text="1", text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.5)
+            self.damageMultText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.immortal.reparentTo(self.healthNode)
+                self.immortal.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.immortal.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if self.cog.isTarget:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/union_bust_icon')
@@ -2103,7 +2188,7 @@ class TownBattleCogPanel(DirectFrame):
                 self.healthBar2.setProp('value', self.cog.getHP())
                 taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
-        if self.cog.isImmortal:
+        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2':
             self.hpText['text'] = str(self.hp)
         else:
             self.hpText['text'] = str(self.hp) + '/' + str(self.maxHp)
@@ -2157,7 +2242,7 @@ class TownBattleCogPanel(DirectFrame):
             self.lured.hide()
 
     def __changeColor(self):
-        if self.cog.isImmortal:
+        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2':
             self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=1, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
             self.interval.start()
