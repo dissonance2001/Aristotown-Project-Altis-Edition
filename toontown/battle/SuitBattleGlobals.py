@@ -1,4 +1,5 @@
 import random
+import StatusEffects
 from toontown.battle.BattleBase import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
@@ -380,6 +381,7 @@ def getSuitVitals(name, level = -1):
         level = 0
     dict['hp'] = data['hp'][level]
     dict['def'] = data['def'][level]
+    dict['initEffects'] = data.get('initEffects', [])
     attacks = data['attacks']
     cheats = data['cheats']
     alist = []
@@ -1294,6 +1296,8 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               'def':(60,),
               'freq':(0,),
               'acc':(75,),
+              'initEffects': [StatusEffects.LureResistance(1),
+                              StatusEffects.RevvingUp()],
               'attacks':
                   (SuitAttack('SoakRemoval',
                               hp=(0,),
@@ -1323,6 +1327,8 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                'def':(60,),
                'freq':(0,),
                'acc':(75,),
+               'initEffects': [StatusEffects.LureResistance(1),
+                               StatusEffects.RevvingUp()],
                'attacks':
                    (SuitAttack('SoakRemoval',
                                hp=(0,),
@@ -2824,6 +2830,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              'def':(65,),
              'freq':(0,),
              'acc':(80,),
+             'initEffects': [StatusEffects.LureResistance(1)],
              'attacks':
                  (SuitAttack('SoakRemoval',
                              hp=(0,),
@@ -3261,6 +3268,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               'def':(60, 60, 60, 60, 60, 60),
               'freq':(100, 100, 100, 100, 100, 100),
               'acc':(75, 75, 75, 75, 75, 75),
+              'initEffects': [StatusEffects.InsurancePolicy()],
               'attacks':
                   (SuitAttack('LifeInsurance',
                               hp=(0, 0, 0, 0, 0, 0),
@@ -3348,6 +3356,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
           'def':(60,),
           'freq':(0,),
           'acc':(75,),
+          'initEffects': [StatusEffects.LureResistance(3)],
           'attacks':
               (SuitAttack('SoakRemoval',
                           hp=(0,),
@@ -3377,6 +3386,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'def':(65,),
          'freq':(0,),
          'acc':(75,),
+         'initEffects': [StatusEffects.LureResistance(3)],
          'attacks':
              (SuitAttack('SoakRemoval',
                          hp=(0,),
@@ -3406,6 +3416,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'def':(60,),
            'freq':(0,),
            'acc':(100,),
+           'initEffects': [StatusEffects.LureResistance(3)],
            'attacks':
                (SuitAttack('SoakRemoval',
                            hp=(0,),
@@ -3435,6 +3446,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               'def':(60,),
               'freq':(0,),
               'acc':(75,),
+              'initEffects': [StatusEffects.LureResistance(3)],
               'attacks':
                   (SuitAttack('SoakRemoval',
                               hp=(0,),
@@ -3464,6 +3476,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
             'def':(60,),
             'freq':(0,),
             'acc':(75,),
+            'initEffects': [StatusEffects.LureResistance(3)],
             'attacks':
                  (SuitAttack('SoakRemoval',
                              hp=(0,),
@@ -3648,6 +3661,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               'def':(60,60,60,60,60,60,60,60,60,60,),
               'freq':(0,0,0,0,0,0,0,0,0,0,),
               'acc':(75,75,75,75,75,75,75,75,75,75,),
+              'initEffects': [StatusEffects.RefractionBarrier()],
               'attacks':
                   (SuitAttack('SoakRemoval',
                               hp=(0,0,0,0,0,0,0,0,0,0,),
@@ -4313,6 +4327,8 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               'def':(60,),
               'freq':(0,),
               'acc':(75,),
+              'initEffects': [StatusEffects.LureResistance(1),
+                              StatusEffects.ExtraAttacks(1)],
               'attacks':
                   (SuitAttack('SoakRemoval',
                               hp=(0,),
@@ -4342,6 +4358,8 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              'def':(60,),
              'freq':(0,),
              'acc':(75,),
+             'initEffects': [StatusEffects.LureResistance(1, hidden=True),
+                             StatusEffects.WillOfThePeople()],
              'attacks':
                  (SuitAttack('SoakRemoval',
                              hp=(0,),
@@ -4486,6 +4504,8 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'def':(65,),
            'freq':(50,),
            'acc':(75,),
+           'initEffects': [StatusEffects.LureResistance(2),
+                           StatusEffects.RageBuilding()],
            'attacks':
                (SuitAttack('SoakRemoval',
                            hp=(0,),
@@ -4547,6 +4567,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              'def':(65,),
              'freq':(50,),
              'acc':(75,),
+             'initEffects': [StatusEffects.LureResistance(2)],
              'attacks':
                  (SuitAttack('SoakRemoval',
                              hp=(0,),
@@ -4744,6 +4765,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
             'def':(65,),
             'freq':(50,),
             'acc':(75,),
+            'initEffects': [StatusEffects.LureResistance(2)],
             'attacks':
                 (SuitAttack('SoakRemoval',
                             hp=(0,),
@@ -4861,6 +4883,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
             'def':(65,),
             'freq':(50,),
             'acc':(75,),
+            'initEffects': [StatusEffects.LureResistance(2)],
             'attacks':
                 (SuitAttack('SoakRemoval',
                             hp=(0,),
