@@ -944,10 +944,10 @@ def doUnionCalculator(attack):
     calculator.setScale(1.5)
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'), Func(suit.setNeutralAnimation), Wait(2.0))
     if suit.isDesperation:
-        suitSpeechTrack = Func(suit.setChatAbsolute, "You can't stop production... Union Dues have been increased to... %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+        suitSpeechTrack = Func(suit.setChatAbsolute, "You can't stop production; Union Dues have been increased to... %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     else:
         suitSpeechTrack = Func(suit.setChatAbsolute,
-                               "You can't stop production... Union Dues have been increased to... %s." %
+                               "You can't stop production; Union Dues have been increased to... %s." %
                               int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcPropTrack = Sequence(

@@ -923,7 +923,7 @@ def doVoicemail(attack):
     calculator.setScale(1.5)
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimation), Wait(2.0))
     suitSpeechTrack = Func(suit.setChatAbsolute,
-                           "Every call costs more... and I always keep track. Updating billing record... Index has been increased to %s dollars." %
+                           "Every call costs more, and I always keep track. Updating billing record... to %s dollars." %
                            int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcPropTrack = Sequence(

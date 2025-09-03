@@ -1038,7 +1038,7 @@ def doCourtSanctionBindings(attack):
             getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
             Func(MovieUtil.removeProp, sanctioned),
             Func(battle.movie.clearRenderProp, sanctioned))
-        suitTrack = getSuitTrack(attack)
+        suitTrack = getSuitAnimTrack(attack)
         soundTrack = getSoundTrack('SA_sanction.ogg', delay=.5, node=suit)
         notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextCheat, - int(dmg)), Func(toon.showHpString, "SANCTIONED!"))
         if dmg > 0:
