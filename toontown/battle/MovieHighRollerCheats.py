@@ -1019,7 +1019,7 @@ def doCameraRewind(attack):
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         suitTrack.append(Wait(4.5))
-        if not suit.dna.name == 'videog' and not suit.dna.name == 'bcaster' and not suit.dna.name == 'hroller2':
+        if not suit.dna.name == 'videog' and not suit.dna.name == 'hroller2':
             suitTrack.append(Func(suit.checkCameraRewind))
             suitTrack.append(Func(suit.updateHealthBar, 0))
         if not theSuit:
@@ -1033,7 +1033,7 @@ def doCameraRewind(attack):
     posPoints = [Point3(-0.25, 0, 0), VBase3(0, 180, 0)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
-        if not suit.dna.name == 'videog' and not suit.dna.name == 'bcaster' and not suit.dna.name == 'hroller2':
+        if not suit.dna.name == 'videog' and not suit.dna.name == 'hroller2':
             theSuit = attack['suit']
             hitPoint = suit.getPos(battle)
             hitPoint.setZ(suit.height + 2)
@@ -2286,6 +2286,177 @@ def doPhase3(attack):
     suitTrack.append(Func(suit.makeImmortal))
     suitTrack.append(Func(suit.makeUnVulnerable))
     return Parallel(talkTrack, suitTrack, suitTrack2, soundTrack1)
+
+def doExplodingDocument(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
+    explode = []
+    toonPos = toon.getPos(battle)
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
+    explosionTrack = Sequence()
+    explosionTrack.append(Wait(2.25))
+    explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
+    for i in xrange(0, 3):
+        explode.append(globalPropPool.getProp('explosion'))
+    explodePosPoints = [Point3(0, 15, 5), MovieUtil.PNT3_ZERO]
+    explodePosPoints1 = [Point3(0, 15, 5), MovieUtil.PNT3_ZERO]
+    explodeHprPoints = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
+    explodeHprPoints1 = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
+    explodeTracks = Parallel()
+    for i in xrange(0, 3):
+        explodeTrack = Sequence()
+        explodeTrack.append(Wait(2.25))
+        explodeTrack.append(
+            getPropAppearTrack(explode[i], suit, explodePosPoints, 1e-06, Point3(1.7, 1.7, 1.7), scaleUpTime=0.1))
+        explodeTrack.append(
+            getPropAppearTrack(explode[i], suit, explodePosPoints1, 1e-06, Point3(0, 0, 0), scaleUpTime=0.3))
+        explodeTrack.append(
+            getPropAppearTrack(explode[i], suit, explodeHprPoints, 1e-06, Point3(0, 0, 0), scaleUpTime=0.3))
+        explodeTrack.append(
+            getPropAppearTrack(explode[i], suit, explodeHprPoints1, 1e-06, Point3(0, 0, 0), scaleUpTime=0.1))
+        explodeTracks.append(explodeTrack)
+    dmg = target[0]['hp']
+    tnt = globalPropPool.getProp('shredder-paper')
+    paper = globalPropPool.getProp('shredder-paper')
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+    posPoints = [Point3(.675, -1.5, -0.075), VBase3(10, 250, -10)]
+    propTrack = Sequence(
+        getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0))
+    propTrack.append(Wait(1.5))
+    hitPoint = __toonFacePoint(toon, parent=battle)
+    hitPoint.setX(hitPoint.getX() - 1.4)
+    missPoint = __toonGroundPoint(attack, toon, 3.1, parent=battle)
+    missPoint.setX(missPoint.getX() - 1.1)
+    propTrack.append(getPropThrowTrack(attack, tnt, [hitPoint], [missPoint], .25, parent=battle))
+    toonTrack = getToonTrackCheat(attack, 2.5, ['slip-forward'], 3.4, ['struggle'])
+   # toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2.5, ['slip-forward'])
+    soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
+    notifyTrack = Sequence(Wait(2.5), Func(toon.showHpText, - int(dmg)))
+    leftPosPoints = [Point3(0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
+    rightPosPoints = [Point3(-0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
+    leftKnifeTracks = Parallel()
+    rightKnifeTracks = Parallel()
+    leftKnives = []
+    rightKnives = []
+    for i in xrange(0, 5):
+        leftKnives.append(globalPropPool.getProp('dagger'))
+        rightKnives.append(globalPropPool.getProp('dagger'))
+
+    for i in xrange(0, 5):
+        knifeDelay = 0.07
+        leftTrack = Sequence()
+        leftTrack.append(Wait(2.0))
+        leftTrack.append(Wait(i * knifeDelay))
+        leftTrack.append(
+                getPropAppearTrack(leftKnives[i], suit, leftPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
+        leftTrack.append(getPropThrowTrack(attack, leftKnives[i], hitPointNames=['face'], missPointNames=['miss'],
+                                               hitDuration=0.3, missDuration=0.3))
+        leftKnifeTracks.append(leftTrack)
+        rightTrack = Sequence()
+        rightTrack.append(Wait(2.0))
+        rightTrack.append(Wait(i * knifeDelay))
+        rightTrack.append(
+                getPropAppearTrack(rightKnives[i], suit, rightPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
+        rightTrack.append(getPropThrowTrack(attack, rightKnives[i], hitPointNames=['face'], missPointNames=['miss'],
+                                                hitDuration=0.3, missDuration=0.3))
+        rightKnifeTracks.append(rightTrack)
+    return Parallel(explodeTracks, suitTrack, toonTrack, soundTrack, propTrack, notifyTrack, explosionTrack, leftKnifeTracks, rightKnifeTracks)
+
+
+def doViralSensation(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    damageDelay = 1.2
+    attackDelay = 1.2
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    partTracks = Parallel()
+    allHeadTracks = Parallel()
+    allChestTracks = Parallel()
+    toonTracks2 = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        if dmg > 0:
+            headParts = toon.getHeadParts()
+            sprayEffects = BattleParticles.createParticleEffect('ReOrgSprayNew')
+            BattleParticles.loadParticles()
+            BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
+                                             color=Vec4(random.random(), random.random(), random.random(), 1))
+            partTrack = getPartTrack(sprayEffects, 0.5, 3.0, [sprayEffects, toon, 0], softStop=-1)
+            partTracks.append(partTrack)
+            toonTrack = Sequence()
+            toonTrack.append(Wait(damageDelay + 5))
+            toonTrack.append(Func(toon.showHpStringViral, "VIRAL SENSATION!"))
+            toonTracks2.append(toonTrack)
+            print
+            '***********headParts pos=', headParts[0].getPos()
+            print
+            '***********headParts hpr=', headParts[0].getHpr()
+            headTracks = Parallel()
+            for partNum in xrange(0, headParts.getNumPaths()):
+                part = headParts.getPath(partNum)
+                x = part.getX()
+                y = part.getY()
+                z = part.getZ()
+                h = part.getH()
+                p = part.getP()
+                r = part.getR()
+                headTracks.append(Sequence(Wait(attackDelay), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.03)),
+                                           LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)),
+                                           LerpPosInterval(part, 0.1, Point3(x - 0.4, y, z - 0.03)),
+                                           LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)),
+                                           LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.04)),
+                                           LerpPosInterval(part, 0.25, Point3(x, y, z + 2.2)),
+                                           LerpHprInterval(part, 0.25, VBase3(360, 0, 180)),
+                                           LerpPosInterval(part, 0.25, Point3(x, y, z + 3.1)),
+                                           LerpPosInterval(part, 0.1, Point3(x, y, z + 0.3)), Wait(0.1),
+                                           LerpHprInterval(part, 0.35, VBase3(-745, 0, 180),
+                                                           startHpr=VBase3(0, 0, 180)),
+                                           LerpHprInterval(part, 0.5, VBase3(25, 0, 180), startHpr=VBase3(0, 0, 180)),
+                                           LerpPosInterval(part, 0.15, Point3(x, y, z + 1)),
+                                           LerpHprInterval(part, 0.3, VBase3(h, p, r)), Wait(0.2),
+                                           LerpPosInterval(part, 0.1, Point3(x, y, z)), Wait(0.1)))
+
+            allHeadTracks.append(headTracks)
+
+            def getChestTrack(part, attackDelay=attackDelay):
+                origScale = part.getScale()
+                return Sequence(Wait(attackDelay), LerpHprInterval(part, 1.1, VBase3(180, 0, 0)), Wait(1.1),
+                                LerpHprInterval(part, 1.1, part.getHpr()))
+
+            chestTracks = Parallel()
+            arms = toon.findAllMatches('**/arms')
+            sleeves = toon.findAllMatches('**/sleeves')
+            hands = toon.findAllMatches('**/hands')
+            print
+            '*************arms hpr=', arms[0].getHpr()
+            for partNum in xrange(0, arms.getNumPaths()):
+                chestTracks.append(getChestTrack(arms.getPath(partNum)))
+                chestTracks.append(getChestTrack(sleeves.getPath(partNum)))
+                chestTracks.append(getChestTrack(hands.getPath(partNum)))
+
+            allChestTracks.append(chestTracks)
+
+    damageAnims = [['neutral',
+                    0.01,
+                    0.01,
+                    0.5], ['juggle',
+                           0.01,
+                           0.01,
+                           1.48], ['think', 0.01, 2.28]]
+    dodgeAnims = []
+    dodgeAnims.append(['think',
+                       0.01,
+                       0,
+                       0.6])
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.01,
+                               dodgeAnimNames=['duck'], showDamageExtraTime=2.1, showMissedExtraTime=2.0)
+    return Parallel(suitTrack, partTracks, toonTracks2, toonTracks, allHeadTracks, allChestTracks)
 
 def doRolled(attack):
     suit = attack['suit']

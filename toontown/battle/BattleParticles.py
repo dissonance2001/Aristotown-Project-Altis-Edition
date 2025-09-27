@@ -54,6 +54,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return __makeGearExplosion(numParticles, 'Wide')
     elif name == 'BrainStorm':
         return loadParticleFile('brainStorm.ptf')
+    elif name == 'ReOrgSprayNew':
+        return loadParticleFile('ReOrgSprayNew.ptf')
     elif name == 'BuzzWord':
         return loadParticleFile('buzzWord.ptf')
     elif name == 'Calculate':

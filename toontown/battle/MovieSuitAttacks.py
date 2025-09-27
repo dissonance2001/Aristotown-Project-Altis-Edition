@@ -684,6 +684,8 @@ def doSuitAttack(attack):
     # broadcaster cheats
     elif name == 'BroadcasterDonation':
         suitTrack = MovieHighRollerCheats.doDonation2(attack)
+    elif name == 'BroadcasterViralSensation':
+        suitTrack = MovieHighRollerCheats.doViralSensation(attack)
     #filmmaker cheats
     elif name == 'ChoreoChoreography':
         suitTrack = MovieHighRollerCheats.doChoreography(attack)
@@ -692,7 +694,7 @@ def doSuitAttack(attack):
     elif name == 'FilmmakerCameraRewind':
         suitTrack = MovieHighRollerCheats.doCameraRewind(attack)
     elif name == 'FilmmakerBudgetCuts':
-        suitTrack = MovieHighRollerCheats.doBudgetCuts(attack)
+        suitTrack = MovieHighRollerCheats.doExplodingDocument(attack)
     #director cheats
     elif name == 'DirectorCut':
         suitTrack = MovieHighRollerCheats.doCut(attack)
@@ -3560,17 +3562,19 @@ def doReOrg(attack):
     targets = attack['target']
     damageDelay = 1.2
     attackDelay = 1.2
-    sprayEffects = BattleParticles.createParticleEffect('DemotionSpray2')
-    BattleParticles.loadParticles()
-    BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
-                                     color=Vec4(1, 0, 0, 1))
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    partTracks = getPartTrack(sprayEffects, 0.5, 3.0, [sprayEffects, suit, 0], softStop=-1)
+    partTracks = Parallel()
     allHeadTracks = Parallel()
     allChestTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        sprayEffects = BattleParticles.createParticleEffect('ReOrgSprayNew')
+        BattleParticles.loadParticles()
+        BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
+                                         color=Vec4(1, 0, 0, 1))
+        partTrack = getPartTrack(sprayEffects, 0.5, 3.0, [sprayEffects, toon, 0], softStop=-1)
+        partTracks.append(partTrack)
         if dmg > 0:
             headParts = toon.getHeadParts()
             print '***********headParts pos=', headParts[0].getPos()
@@ -3991,16 +3995,16 @@ def doEvilEye(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    damageDelay = 2.44
-    dodgeDelay = 1.64
+    damageDelay = 0.5
+    dodgeDelay = 0.5
     suitName = suit.getStyleName()
-    posPoints = [Point3(-0.4, 5.5, suit.height - 2), VBase3(-155.0, -20.0, 0.0)]
+    posPoints = [Point3(-0.4, 5.0, suit.height - 2), VBase3(-155.0, -20.0, 0.0)]
     appearDelay = 0.8
-    suitHoldStart = 1.06
-    suitHoldStop = 1.69
+    suitHoldStart = .5
+    suitHoldStop = 1
     suitHoldDuration = suitHoldStop - suitHoldStart
-    eyeHoldDuration = 1.1
-    moveDuration = 1.1
+    eyeHoldDuration = 0.5
+    moveDuration = 0.6
     suitSplicedAnims = []
     suitSplicedAnims.append(['glower',
      0.01,
@@ -4008,7 +4012,7 @@ def doEvilEye(attack):
      suitHoldStart])
     suitSplicedAnims.extend(getSplicedLerpAnims('glower', suitHoldDuration, 1.1, startTime=suitHoldStart))
     suitSplicedAnims.append(['glower', 0.01, suitHoldStop])
-    suitTrack = getSuitTrack(attack, splicedAnims=suitSplicedAnims)
+    suitTrack = getSuitTrack(attack, playRate=1.25)
     eyePropTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -4030,7 +4034,7 @@ def doEvilEye(attack):
       0.01,
       1.4], ['cringe', 0.01, 0.3]]
     toonTracks = getToonTracks(attack, splicedDamageAnims=damageAnims, damageDelay=damageDelay, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], showDamageExtraTime=1.7, showMissedExtraTime=1.7)
-    soundTrack = getSoundTrack('SA_evil_eye.ogg', delay=1.3, node=suit)
+    soundTrack = getSoundTrack('SA_evil_eye.ogg', delay=0.5, node=suit)
     return Parallel(suitTrack, toonTracks, eyePropTracks, soundTrack)
 
 

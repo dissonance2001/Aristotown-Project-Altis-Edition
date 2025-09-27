@@ -483,6 +483,24 @@ class DistributedAvatar(DistributedActor, Avatar):
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'),Wait(1.5), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
             self.hpTextInterval.start()
 
+    def showHpStringViral(self, text, duration = 0.85, scale = 1):
+        if self.HpTextEnabled and not self.ghostMode:
+            self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+            self.HpTextGenerator.setText(text)
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            r = a = 1.0
+            g = b = 0.0
+            self.HpTextGenerator.setTextColor(0.988, 0, 1, 1)
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText = self.attachNewNode(self.hpTextNode)
+            self.hpText.setScale(scale)
+            self.hpText.setBillboardAxis()
+            self.hpText.setBin('fixed', 99)
+            self.hpText.setPos(0, 0, self.height / 2)
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'),Wait(1.5), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval.start()
+
 
     def showHpStringMissed(self, text, duration = 0.85, scale = 1):
         if self.HpTextEnabled and not self.ghostMode:

@@ -2954,6 +2954,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
             self.setHeight(9.0)
+            self.makeShielding()
         elif dna.name == 'bcaster':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(0.835, 0.843, 0.847, 1)

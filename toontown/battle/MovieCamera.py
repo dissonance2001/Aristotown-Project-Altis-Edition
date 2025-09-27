@@ -682,7 +682,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'EvictionNotice':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvilEye':
-        camTrack.append(defaultCamera(openShotDuration=3.0))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'DoubleCross':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'Forecast':
@@ -1450,6 +1450,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         # broadcaster cheats
     elif name == 'BroadcasterDonation':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'BroadcasterViralSensation':
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     #filmmaker cheats
     elif name == 'ChoreoChoreography':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
@@ -1460,7 +1462,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3.5)))
     elif name == 'FilmmakerBudgetCuts':
-        camTrack.append(Sequence(heldShot(10, 0, 10, 115, -30, 0, 3), defaultCamera(openShotDuration=1.5, attackDuration=attackDuration - 3)))
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     #director cheats
     elif name == 'DirectorCut':
         camTrack.append(defaultCamera(openShotDuration=4.0))

@@ -4053,6 +4053,7 @@ NonUnLureCheats = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseGenera
                    'Desperation2',
  'VideographerRisingStarsSilhouette',
  'BroadcasterDonation',
+                   'BroadcasterViralSensation',
  'FilmmakerCameraFlash',
  'FilmmakerCameraRewind',
  'FilmmakerBudgetCuts',
@@ -4159,6 +4160,7 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseGenerat
  'VideographerDirectorCuts',
  'VideographerRisingStarsSilhouette',
  'BroadcasterDonation',
+                  'BroadcasterViralSensation',
  'FilmmakerCameraFlash',
  'FilmmakerCameraRewind',
  'FilmmakerBudgetCuts',
@@ -4337,8 +4339,8 @@ SuitCheatDescription = {
 'HighRollerSplashback': "The Pink Silhouette retaliates against Toons who\nsoaked the Silhouettes!",
 'HighRollerCheerRetaliation': "The Purple Silhouette retaliates against Toons with\ncheer!",
     # Videographer Cheats
- 'VideographerRisingStars': "The Videographer summons cogs to his side!",
- 'VideographerRisingStars2': "The Videographer summons cogs to his side!",
+ 'VideographerRisingStars': "The Videographer summons a cog to his side!",
+ 'VideographerRisingStars2': "The Videographer summons a cog to his side!",
  'VideographerRisingStarsSilhouette': "The Videographer creates a silhouette of himself!",
  'VideographerRisingStarsSacrifice': "The Videographer virtualizes all Mr. Hollywoods\nand Stunt Doubles!",
  'VideographerVideoStatic': "The Videographer's signal is becoming more unstable!",
@@ -4347,16 +4349,17 @@ SuitCheatDescription = {
  'VideographerElectricShock3': "The Videographer overcharges a random cog!",
  'VideographerElectricShock4': "The Videographer overcharges a random cog!",
  'VideographerAttackRewind': "The Videographer attacks again when cogs are destroyed!",
- 'VideographerDirectorCuts': "The Videographer is now immune until all directors\nare destroyed!",
+ 'VideographerDirectorCuts': "The Videographer is now immune until all producers\nare destroyed!",
  'VideographerDeath': "The High Roller removes all cogs from the battle!",
     # Broadcaster Cheats
- 'BroadcasterDonation': "The Silhouette donates part of his health to the\nVideographer!",
+ 'BroadcasterDonation': "The Videographer Silhouette donates part of his health \nto the Videographer!",
+ 'BroadcasterViralSensation': "The Videographer Silhouette applies a damage buff to Toons\nat random!",
     # Choreographer Cheats
  'ChoreoChoreography': "The Choreographer applies a damage vulnerability to all\nToons who can't keep up with him!",
     # Filmmaker Cheats
- 'FilmmakerCameraFlash': "The Broadcaster disrupts a random Toon's vision!",
+ 'FilmmakerCameraFlash': "The Photographer disrupts a random Toon's vision!",
  'FilmmakerCameraRewind': "The Filmmaker heals all damaged cogs!",
- 'FilmmakerBudgetCuts': "The Directors attack when damaged!",
+ 'FilmmakerBudgetCuts': "The Producers attack when damaged!",
     # Director Cheats
  'DirectorCut': "The Director cuts a Toon's gag damage in half!",
  'DirectorAction': "The Director requires specific gag usage!",
@@ -4712,12 +4715,13 @@ SuitAttackNames = {
     'VideographerDeath': "Intermission!",
     # Broadcaster Cheats
     'BroadcasterDonation': "Video Refresh!",
+    'BroadcasterViralSensation': "Viral Sensation!",
     # Choreographer Cheats
     'ChoreoChoreography': "Out Of Step!",
     # Filmmaker Cheats
     'FilmmakerCameraFlash': "Flash Coverage!",
     'FilmmakerCameraRewind': "Rewind The Reel!",
-    'FilmmakerBudgetCuts': "Final Cut!",
+    'FilmmakerBudgetCuts': "Cut From The Deal!",
     # Director Cheats
     'DirectorCut': "Cut!",
     'DirectorAction': "Action!",
@@ -7506,6 +7510,12 @@ SuitAttackTaunts = {
                             "We're not taking you off the air quite yet!",
                             "Looks like we've got some crosstalk going on.",
                             "We'll have to set up a little phantom power!"],
+'BroadcasterViralSensation': ["Strike a pose, you're trending!",
+                            "Don't move, this is your viral moment.",
+                            "One shot, and you're famous!",
+                              "You'll be famous... until the next Toon comes along.",
+                              "Millions of views, zero royalties.",
+                            "The spotlight loves you, for now."],
     # Choreographer Cheats
 'ChoreoChoreography': ["This is a performance, not a free-for-all!",
                             "Miss a step, and you'll regret it.",
