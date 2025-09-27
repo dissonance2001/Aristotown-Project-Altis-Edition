@@ -593,6 +593,13 @@ ValidStatusConditions = (
     'deadcase',
     'deadpower',
     'deadunion',
+    'cinemacalculator',
+    'choreocalculator',
+    'HRpowertrip',
+    'HRconduction',
+    'HRrolled',
+    'HRdiceroulette',
+    'HRfreecruise',
 
     # Cog Status Effects
     'zapped',

@@ -318,7 +318,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         suitDNA.newSuit('videog')
         self.videographer.setDNA(suitDNA)
         self.videographer.setPickable(0)
-        self.videographer.setDisplayName('Videographer\nSellbot\nLevel 99.mgr')
+        self.videographer.setDisplayName('Videographer\nPressbot\nLevel 99.mgr')
         self.videographer.doId = 0
         self.videographer.loop('neutral')
         self.director = DistributedSuitBase.DistributedSuitBase(cr)

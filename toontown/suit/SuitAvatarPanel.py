@@ -34,14 +34,16 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                     Vec4(1, 0, 0, 1),
                     Vec4(1, 0, 0, 1),
                     Vec4(0.3, 0.3, 0.3, 1),  # out
-                    Vec4(1, 0, 0, 1),
+                    Vec4(1, 0, 0, 1),  # 12
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
-                    Vec4(1, 0.416, 0.937, 1),  # 14 pink silhouette
+                    Vec4(1, 0.6, 0.89, 1),  # 14 pink silhouette
                     Vec4(0, 0.361, 1, 1),
                     Vec4(1, 1, 1, 1),  # 15 blue silhouette
                     Vec4(186 / 255, 82 / 255, 1, 1),
-                    Vec4(0.702, 0, 1, 1))  # 17 purple puls
+                    Vec4(0.702, 0, 1, 1),
+                    Vec4(1, 1, 1, 1),
+                    Vec4(1, 0, 0.906, 1))  # 18 white (20 magenta sil)
     healthGlowColors = (Vec4(0, 1, 0.078, 1),
                         Vec4(0.388, 1, 0, 1),
                         Vec4(0.686, 1, 0, 1),
@@ -52,15 +54,18 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                         Vec4(1, 0.533, 0, 1.0),
                         Vec4(1, 0, 0, 1),
                         Vec4(1, 0, 0, 1),
-                        Vec4(0.431, 0.431, 0.431, 1),  # out
+                        Vec4(0, 0, 0, 0),  # out
                         Vec4(1, 0, 0, 1),
                         Vec4(0.0, 1.0, 1.0, 1),  # overheal
                         Vec4(0.553, 0, 1, 1),  # overcharge
-                        Vec4(1, 0.416, 0.937, 1),  # 14 pink silhouette
+                        Vec4(1, 0.6, 0.89, 1),  # 14 pink silhouette
                         Vec4(0, 0.361, 1, 1),
                         Vec4(1, 1, 1, 1),  # 15 blue silhouette
                         Vec4(186 / 255, 82 / 255, 1, 1),
-                        Vec4(0.702, 0, 1, 1))  # 17 purple pulse
+                        Vec4(0.702, 0, 1, 1),
+                        Vec4(1, 1, 1, 1),
+                        Vec4(1, 0, 0.906, 1)
+                        )  # 18 white
 
     def __init__(self, avatar):
         AvatarPanel.AvatarPanel.__init__(self, avatar, FriendsListPanel=FriendsListPanel)
@@ -72,33 +77,34 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.frame = DirectFrame(geom=gui.find('**/avatar_panel'), geom_scale=0.21, geom_color=(0.69, 0.706, 0.718, 1), geom_pos=(0, 0, 0.02), relief=None, pos=(-0.23, 0, -0.46), parent=base.a2dTopRight)
         self.head = self.frame.attachNewNode('head')
         health = float(avatar.currHP) / float(avatar.maxHP)
-        for part in avatar.headParts:
-            copyPart = part.copyTo(self.head)
-            copyPart.setDepthTest(1)
-            copyPart.setDepthWrite(1)
+        if not self.avatar.dna.name == 'hrollers' and not self.avatar.dna.name == 'bcaster':
+            for part in avatar.headParts:
+                copyPart = part.copyTo(self.head)
+                copyPart.setDepthTest(1)
+                copyPart.setDepthWrite(1)
 
-        p1 = Point3()
-        p2 = Point3()
-        self.head.calcTightBounds(p1, p2)
-        d = p2 - p1
-        biggest = max(d[0], d[1], d[2])
-        s = 0.3 / biggest
-        if self.avatar.dna.name == 'ls' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'bfh2' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'racket' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'redd' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'rainmake' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif self.avatar.dna.name == 'dking' and not avatar.isSkeleton:
-            self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-        elif avatar.isSkeleton and self.avatar.dna.name == 'ambass':
-            self.head.setPosHprScale(0, 0, 0.08, 180, 0, 0, s, s, s)
-        else:
-            self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
+            p1 = Point3()
+            p2 = Point3()
+            self.head.calcTightBounds(p1, p2)
+            d = p2 - p1
+            biggest = max(d[0], d[1], d[2])
+            s = 0.3 / biggest
+            if self.avatar.dna.name == 'ls' and not avatar.isSkeleton:
+                self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
+            elif self.avatar.dna.name == 'bfh2' and not avatar.isSkeleton:
+                self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
+            elif self.avatar.dna.name == 'racket' and not avatar.isSkeleton:
+                self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
+            elif self.avatar.dna.name == 'redd' and not avatar.isSkeleton:
+                self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
+            elif self.avatar.dna.name == 'rainmake' and not avatar.isSkeleton:
+                self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
+            elif self.avatar.dna.name == 'dking' and not avatar.isSkeleton:
+                self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
+            elif avatar.isSkeleton and self.avatar.dna.name == 'ambass':
+                self.head.setPosHprScale(0, 0, 0.08, 180, 0, 0, s, s, s)
+            else:
+                self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
         if health > 1.5:
             self.condition = 13
         elif health > 1.25:
@@ -130,13 +136,36 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         else:
             self.condition = 11
         self.avatar = avatar
+        if self.avatar.dna.name == 'bcaster':
         #if avatar.isVirtual:
-            #self.head.setColor(1, 1, 1, 1)
-            #self.head.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
-            #for part in avatar.headParts:
-              #  copyPart = part.copyTo(self.head)
-               # copyPart.setDepthTest(1)
-               # copyPart.setDepthWrite(1)
+            self.head.setColor(1, 1, 1, 1)
+            self.head.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+            for part in avatar.headParts:
+                copyPart = part.copyTo(self.head)
+                copyPart.setDepthTest(1)
+                copyPart.setDepthWrite(1)
+            p1 = Point3()
+            p2 = Point3()
+            self.head.calcTightBounds(p1, p2)
+            d = p2 - p1
+            biggest = max(d[0], d[1], d[2])
+            s = 0.3 / biggest
+            self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
+        if self.avatar.dna.name == 'hrollers':
+        #if avatar.isVirtual:
+            self.head.setColor(1, 1, 1, 1)
+            self.head.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+            for part in avatar.headParts:
+                copyPart = part.copyTo(self.head)
+                copyPart.setDepthTest(1)
+                copyPart.setDepthWrite(1)
+            p1 = Point3()
+            p2 = Point3()
+            self.head.calcTightBounds(p1, p2)
+            d = p2 - p1
+            biggest = max(d[0], d[1], d[2])
+            s = 0.3 / biggest
+            self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
         self.nameLabel = DirectLabel(parent=self.frame, pos=(0, 0, 0.36), relief=None,
                                      text=SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name'],
                                      text_font=avatar.getFont(), text_pos=(0, 0),
@@ -296,7 +325,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             0, maxHp)
             self.corpIcon.hide()
             self.deptLabel['text'] = ''
-        elif self.avatar.isImmortal and not self.avatar.dna.name == 'hroller' and not self.avatar.dna.name == 'hroller2' and not self.avatar.dna.name == 'videog':
+        elif self.avatar.isImmortal and not self.avatar.dna.name == 'hroller' and not self.avatar.isPhase3:
             self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogImmune % (
             'Immune!')
         elif self.avatar.dna.name == 'hrollers' and self.maxHp > 9999 and tempHp <= 0:
@@ -494,15 +523,93 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             taskMgr.add(blinkTask, self.frame.uniqueName('pulse-task'))
         else:
             self.button.setColor(1, 1, 1, 1)
-            if self.avatar.isImmortal:
+            if self.avatar.isImmortal and not self.avatar.isPhase3 and not self.avatar.dna.name == 'hroller':
                 self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 1, 1, 1),
                                        blendType='easeInOut'))
                 self.changeInterval.start()
             else:
-                self.changeInterval = Parallel(
-                    LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
-                                           blendType='easeInOut'))
-                self.changeInterval.start()
+                if self.avatar.dna.name == 'bcaster':
+                    self.changeInterval = Parallel(
+                        LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                               blendType='easeInOut'), LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[condition]),
+                                               blendType='easeInOut'))
+                    self.changeInterval.start()
+                if self.avatar.dna.name == 'hrollers':
+                    if self.avatar.getActualLevel() == 34:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[20]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 33:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[19]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 32:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[13]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 31:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[12]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 30:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[14]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 29:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[8]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 28:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[15]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 27:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[3]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 26:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[7]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 25:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[0]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                else:
+                    self.changeInterval = Parallel(
+                        LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                               blendType='easeInOut'))
+                    self.changeInterval.start()
             taskMgr.remove(self.frame.uniqueName('blink-task'))
             taskMgr.remove(self.frame.uniqueName('pulse-task'))
             self.blinkTask = None
@@ -524,9 +631,26 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.head.setColor(self.healthColors[10], 1)
 
     def __changeColor(self):
-        if self.avatar.isImmortal:
+        if self.avatar.isImmortal and not self.avatar.isPhase3 and not self.avatar.dna.name == 'hroller':
             self.interval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
+            self.interval.start()
+        elif self.avatar.isImmortal and not self.avatar.isPhase3 and self.avatar.dna.name == 'hroller':
+            self.interval = Sequence(
+                LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 0, 0, 1),
+                                       blendType='easeInOut'),
+                LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 0.5, 0, 1),
+                                       blendType='easeInOut'),
+                LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 1, 0, 1),
+                                       blendType='easeInOut'),
+                LerpColorScaleInterval(self.button, duration=1, colorScale=(0, 1, 0, 1),
+                                       blendType='easeInOut'),
+                LerpColorScaleInterval(self.button, duration=1, colorScale=(0, 0, 1, 1),
+                                       blendType='easeInOut'),
+                LerpColorScaleInterval(self.button, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                                       blendType='easeInOut'),
+                LerpColorScaleInterval(self.button, duration=1, colorScale=(0.56, 0, 1, 1),
+                                       blendType='easeInOut')).loop()
             self.interval.start()
         else:
             self.interval = Parallel(
@@ -540,9 +664,85 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.interval.start()
 
     def __pulseRed(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+        if self.avatar.dna.name == 'bcaster':
+            self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(1, 0, 0, 1),
+                                                            blendType='easeInOut'), LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
                                    blendType='easeInOut'))
-        self.interval.start()
+            self.interval.start()
+        if self.avatar.dna.name == 'hrollers':
+            if self.avatar.getActualLevel() == 34:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[20]),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 33:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[19]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 32:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[13]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 31:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[12]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 30:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[14]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 29:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[8]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 28:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[15]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 27:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[3]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 26:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[7]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 25:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[0]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+        else:
+            self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                       blendType='easeInOut'))
+            self.interval.start()
 
     def __pulseWhite(self):
         self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 1, 1, 1),
@@ -550,9 +750,76 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.interval.start()
 
     def __pulseGray(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+        if self.avatar.dna.name == 'bcaster':
+            self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                            blendType='easeInOut'), LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
                                    blendType='easeInOut'))
-        self.interval.start()
+            self.interval.start()
+        if self.avatar.dna.name == 'hrollers':
+            if self.avatar.getActualLevel() == 34:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 33:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 32:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 31:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 30:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 29:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 28:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 27:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 26:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 25:
+                self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'),
+                                         LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                                blendType='easeInOut'))
+                self.interval.start()
+        else:
+            self.interval = Parallel(LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                       blendType='easeInOut'))
+            self.interval.start()
 
     def __pulseRedHead(self, task):
         self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(1, 0, 0, 1),

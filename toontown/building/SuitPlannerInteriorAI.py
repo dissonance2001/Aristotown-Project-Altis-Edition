@@ -386,12 +386,39 @@ class SuitPlannerInteriorAI:
         if specialCode == 'crf2':
             suit = self.__genSuitObject(self.zoneId, 27, 'm', random.randint(27, 36), 0)
             reserveSuits.append(suit)
+        if specialCode == 'sil1':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((27, 29)), 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil2':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((28, 30)), 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil3':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((31, 32)), 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil4':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((33, 34)), 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil5':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((35, 36)), 0)
+            reserveSuits.append(suit)
         if specialCode == 'videog':
             suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
             suit4 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
             reserveSuits.append(random.choice((suit, suit4)))
         if specialCode == 'videog4':
             suit = self.__genSuitObject(self.zoneId, 18, 'p', 18, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'choreo':
+            suit = self.__genSuitObject(self.zoneId, 17, 'p', 17, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'cinema':
+            suit = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'fmaker':
+            suit = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'director':
+            suit = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)
             reserveSuits.append(suit)
         if specialCode == 'videog2':
             suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
@@ -400,7 +427,12 @@ class SuitPlannerInteriorAI:
         if specialCode == 'videog3':
             suit2 = self.__genSuitObject(self.zoneId, 17, 'p', 17, 0)
             suit3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)
-            reserveSuits.append(random.choice((suit2, suit3)))
+            suit = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)
+            suit4 = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
+            reserveSuits.append(suit3)
+            reserveSuits.append(suit)
+            reserveSuits.append(suit2)
+            reserveSuits.append(suit4)
         if specialCode == 'gtk':
             # generate random bossbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0)

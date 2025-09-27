@@ -68,7 +68,7 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
+AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
             ('falling-knife', 'falling-knife'), ('throw-object', 'throw-object'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),
             ('throw-paper', 'throw-paper'), ('mob-mentality', 'mob-mentality'), ('neutral', 'neutral'), ('neutral2', 'neutral'), ('magnet', 'magnet'), ('neutral2-hurt', 'neutral-hurt'),
             ('neutral-hurt', 'neutral-hurt'), ('neutral-unstable', 'neutral-unstable'), ('neutral-enraged-return', 'neutral-enraged-return'), ('ottoman-sit-loop', 'ottoman-sit-loop'),
@@ -113,7 +113,7 @@ derrhand = (('pen-squirt', 'fountain-pen', 4), ('quick-jump', 'jump', 4), ('glow
 mplayer = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
 fires = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4))
 fbed = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4))
-mplayer2 = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
+choreo = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
 chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('neutral', 'neutral-override', 4))
 phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4),('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
@@ -144,7 +144,7 @@ bellring = (('roll-o-dex', 'roll-o-dex', 4), ('quick-jump', 'jump', 4))
 mh2 = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-put = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
+cinema = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
 racket = (('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
 ubuster = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
@@ -291,7 +291,7 @@ pbl = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swi
 director = (('golf-club-swing', 'golf-club-swing', 4), ('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 bcaster = (('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 std2 = (('glower', 'glower', 4), ('smile', 'smile', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
-videog = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('smile', 'smile', 4))
+videog = (('cigar-smoke', 'cigar-smoke', 4), ('snap', 'snap2', 4), ('finger-wag', 'finger-wag', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('smile', 'smile', 4))
 prt = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 pla = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 plk = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
@@ -1134,7 +1134,7 @@ class Suit(Avatar.Avatar):
                     Vec4(1, 0, 0, 1),
                     Vec4(1, 0, 0, 1),
                     Vec4(0.3, 0.3, 0.3, 1), #out
-                    Vec4(1, 0, 0, 1),
+                    Vec4(1, 0, 0, 1), #12
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
                     Vec4(1, 0.6, 0.89, 1),  # 14 pink silhouette
@@ -1143,7 +1143,7 @@ class Suit(Avatar.Avatar):
                     Vec4(186 / 255, 82 / 255, 1, 1),
                     Vec4(0.702, 0, 1, 1),
                     Vec4(1, 1, 1, 1),
-                    Vec4(1, 0, 0.906, 1)) # 18 white
+                    Vec4(1, 0, 0.906, 1)) # 18 white (20 magenta sil)
     healthGlowColors = (Vec4(0, 1, 0.078, 1),
                     Vec4(0.388, 1, 0, 1),
                     Vec4(0.686, 1, 0, 1),
@@ -1525,17 +1525,17 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.0)
             self.setTransparency(1)
-        elif dna.name == 'mplayer2':
-            self.scale = 7.3 / aSize
-            self.handColor = VBase4(1, 1, 1, 1)
+        elif dna.name == 'choreo':
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(0.835, 0.843, 0.847, 1)
             self.generateBody()
-            self.makeExecutive()
-            self.generateHead3('majorplayer', animated=True)
-            texture = loader.loadTexture('phase_12/maps/ttcc_ene_majorplayer.png')
+            self.makeVideographer2()
+            self.generateHead2('skeleskull_A')
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_c_exe.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(10.0)
-            self.setTransparency(1)
+            self.generateHead3('autocaddie', animated=True)
+            self.setHeight(9.0)
         elif dna.name == 'chainsaw':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
@@ -2046,7 +2046,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.835, 0.843, 0.847, 1)
             self.generateHighRollerBodyWhite()
             self.generateHead3('highroller', animated=True)
-            self.setHeight(10.0)
+            self.setHeight(11.0)
             self.setTransparency(1)
             self.makeImmortal()
         elif dna.name == 'erfit':
@@ -2065,15 +2065,16 @@ class Suit(Avatar.Avatar):
             self.generateHighRollerBodyWhite()
             self.generateHead3('highroller', animated=True)
             self.makeVirtual()
-            self.setHeight(10.0)
+            self.setHeight(11.0)
             self.setTransparency(1)
         elif dna.name == 'hroller2':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(0.835, 0.843, 0.847, 1)
             self.generateHighRollerBody()
             self.makeHighRoller()
+            self.makeImmortal()
             self.generateHead3('highroller', animated=True)
-            self.setHeight(10.0)
+            self.setHeight(11.0)
             self.setTransparency(1)
 
         # Sellbots
@@ -2272,17 +2273,17 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(7.5)
             self.setTransparency(1)
-        elif dna.name == 'put':
-            self.scale = 7.5 / aSize
+        elif dna.name == 'cinema':
+            self.scale = 7.0 / aSize
             self.handColor = VBase4(0.835, 0.843, 0.847, 1)
             self.generateBody()
-            self.makeVideographer()
-            self.generateHead3('multislacker', animated=True)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+            self.makeVideographer2()
+            self.generateHead2('skeleskull_A')
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(10.0)
-            self.setTransparency(1)
+            self.generateHead3('autocaddie', animated=True)
+            self.setHeight(9.0)
         elif dna.name == 'radiog':
             self.scale = 6.8 / aSize
             self.handColor = VBase4(0.612, 0.376, 0.608, 1)
@@ -2527,7 +2528,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
-            self.setHeight(8.5)
+            self.setHeight(9.0)
         elif dna.name == 'jgd':
             self.scale = 7.3 / aSize
             self.handColor = VBase4(1, 1, 1, 1)
@@ -2952,9 +2953,9 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
-            self.setHeight(8.5)
+            self.setHeight(9.0)
         elif dna.name == 'bcaster':
-            self.scale = 7.0 / aSize
+            self.scale = 7.5 / aSize
             self.handColor = VBase4(0.835, 0.843, 0.847, 1)
             self.generateBody()
             self.makeVideographer2()
@@ -2964,7 +2965,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.makeVirtual()
             self.makeVulnerable()
-            self.setHeight(9.5)
+            self.setHeight(11.5)
             self.setTransparency(1)
         elif dna.name == 'std2':
             self.scale = 6.75 / aSize
@@ -2986,7 +2987,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(10.0)
+            self.setHeight(11.5)
             self.setTransparency(1)
         elif dna.name == 'prt':
             self.scale = 7.0 / bSize
@@ -3444,6 +3445,14 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-s').setTexture(texture3, 1)
             modelRoot.find('**/necktie-s').show()
         elif self.style.name == 'director':
+            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
+            modelRoot.find('**/necktie-s').setTexture(texture3, 1)
+            modelRoot.find('**/necktie-s').show()
+        elif self.style.name == 'cinema':
+            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
+            modelRoot.find('**/necktie-s').setTexture(texture3, 1)
+            modelRoot.find('**/necktie-s').show()
+        elif self.style.name == 'choreo':
             modelRoot.find('**/necktie-w').setTexture(texture3, 1)
             modelRoot.find('**/necktie-s').setTexture(texture3, 1)
             modelRoot.find('**/necktie-s').show()
@@ -4049,7 +4058,7 @@ class Suit(Avatar.Avatar):
                 headModel.setY(-.2)
             elif self.style.name == 'bcaster':
                 headModel.setY(-.2)
-            elif headType == 'clubpresident' and not self.style.name == 'fmaker' and not self.style.name == 'director':
+            elif headType == 'clubpresident' and not self.style.name == 'fmaker' and not self.style.name == 'director' and not self.style.name == 'choreo' and not self.style.name == 'cinema':
                 headModel.setZ(-.1)
                 headModel.setY(-.2)
             elif headType == 'mouthpiece' and self.style.name == 'wtapper':
@@ -4161,7 +4170,7 @@ class Suit(Avatar.Avatar):
                 textureGlass = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker_glass.png')
                 headModel.find('**/glass').setTexture(textureGlass, 1)
                 headModel.find('**/brain').hide()
-            elif headType == 'autocaddie' and not self.style.name == 'fmaker' and not self.style.name == 'director':
+            elif headType == 'autocaddie' and not self.style.name == 'fmaker' and not self.style.name == 'director' and not self.style.name == 'cinema' and not self.style.name == 'choreo':
                 textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_c_exe.png')
                 textureGlass2 = loader.loadTexture('phase_12/maps/cc_t_ene_ceo.png')
                 headModel.find('**/head').setTexture(textureGlass, 1)
@@ -4179,6 +4188,22 @@ class Suit(Avatar.Avatar):
                 headModel.setY(-.2)
                 headModel.setColor(1, 1, 1, 1)
                 textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_g_exe.png')
+                textureGlass2 = loader.loadTexture('phase_12/maps/cc_t_ene_ceo.png')
+                headModel.find('**/head').setTexture(textureGlass, 1)
+                headModel.setTexture(textureGlass2, 1)
+            elif headType == 'autocaddie' and self.style.name == 'choreo':
+                headModel.setZ(.25)
+                headModel.setY(-.2)
+                headModel.setColor(1, 1, 1, 1)
+                textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_c_exe.png')
+                textureGlass2 = loader.loadTexture('phase_12/maps/cc_t_ene_ceo.png')
+                headModel.find('**/head').setTexture(textureGlass, 1)
+                headModel.setTexture(textureGlass2, 1)
+            elif headType == 'autocaddie' and self.style.name == 'cinema':
+                headModel.setZ(.25)
+                headModel.setY(-.2)
+                headModel.setColor(1, 1, 1, 1)
+                textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
                 textureGlass2 = loader.loadTexture('phase_12/maps/cc_t_ene_ceo.png')
                 headModel.find('**/head').setTexture(textureGlass, 1)
                 headModel.setTexture(textureGlass2, 1)
@@ -4820,6 +4845,18 @@ class Suit(Avatar.Avatar):
             headModel.setY(-.2)
             textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_p_exe.png')
             headModel.setTexture(textureGlass, 1)
+        if headType == 'skeleskull_A' and self.style.name == 'cinema':
+            headModel = loader.loadModel('phase_5/models/char/skullbase')
+            headModel.setZ(-.1)
+            headModel.setY(-.2)
+            textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
+            headModel.setTexture(textureGlass, 1)
+        if headType == 'skeleskull_A' and self.style.name == 'choreo':
+            headModel = loader.loadModel('phase_5/models/char/skullbase')
+            headModel.setZ(-.1)
+            headModel.setY(-.2)
+            textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_g_exe.png')
+            headModel.setTexture(textureGlass, 1)
         if headType == 'ear01':
             headModel = loader.loadModel('phase_4/models/char/mole_cog')
             headModel.setZ(-.4)
@@ -4853,6 +4890,18 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_13/models/props/angel_halo')
             headModel.setZ(1)
             headModel.setScale(1.5)
+        if headType == 'goon_hat_patrol':
+            headModel = loader.loadModel('phase_4/models/accessories/apriltoons/cc_m_acc_hat_goon_patrol')
+            textureGlass = loader.loadTexture('phase_4/maps/apriltoons/accessories/cc_t_acc_hat_goon_patrol_purple.png')
+            headModel.setTexture(textureGlass, 1)
+            headModel.setZ(1)
+            headModel.setScale(0.25)
+        if headType == 'goon_hat_security':
+            headModel = loader.loadModel('phase_4/models/accessories/apriltoons/cc_m_acc_hat_goon_security')
+            textureGlass = loader.loadTexture('phase_4/maps/apriltoons/accessories/cc_t_acc_hat_goon_security.png')
+            headModel.setTexture(textureGlass, 1)
+            headModel.setZ(1)
+            headModel.setScale(0.25)
         if headType == 'antenna_stick':
             headModel = loader.loadModel('phase_4/models/char/mole_cog')
             headModel.setZ(-.4)
@@ -4887,6 +4936,22 @@ class Suit(Avatar.Avatar):
             if self.style.name == 'ang' and headType == 'angel_halo':
                 headPart.setZ(1.25)
                 headPart.setScale(.75)
+            if headType == 'goon_hat_patrol':
+                headPart.setZ(1.25)
+                headPart.setH(180)
+                headPart.setY(1.5)
+                headPart.setScale(.01)
+                textureGlass = loader.loadTexture(
+                    'phase_4/maps/apriltoons/accessories/cc_t_acc_hat_goon_patrol_purple.png')
+                headPart.setTexture(textureGlass, 1)
+            if headType == 'goon_hat_security':
+                headPart.setZ(1.25)
+                headPart.setY(1.5)
+                headPart.setH(180)
+                headPart.setScale(.01)
+                textureGlass = loader.loadTexture(
+                    'phase_4/maps/apriltoons/accessories/cc_t_acc_hat_goon_patrol_purple.png')
+                headPart.setTexture(textureGlass, 1)
             if headType == 'skeleskull_A':
                 headPart.setY(-.2)
                 headPart.setZ(-.1)
@@ -5484,7 +5549,7 @@ class Suit(Avatar.Avatar):
             condition = 11
         self.condition = condition
         if self.style.name == 'hrollers':
-            if self.getActualLevel() == 34:
+            if self.getActualLevel() == 34: #36
                 self.setDisplayName(self.createNameInfoMagenta())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -6454,7 +6519,7 @@ class Suit(Avatar.Avatar):
                                            blendType='easeInOut'),
                     LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
         self.isVulnerable = 1
-        if not self.style.name == 'bcaster':
+        if not self.style.name == 'bcaster' and not self.style.name == 'hroller' and not self.style.name == 'hroller2':
             self.suitColorTrack.loop()
 
     def setVulnerability(self, num):
@@ -7118,20 +7183,20 @@ class Suit(Avatar.Avatar):
             self.knifeTrack3 = Parallel(
             Sequence(
                 Parallel(
-                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.0, toData=0.0, blendType='easeIn'),
-                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.0, blendType='easeOut')
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
                 ),
                 Parallel(
-                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.0, blendType='easeOut'),
-                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.0, toData=0.0, blendType='easeIn')
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
                 ),
                 Parallel(
-                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.0, toData=0.0, blendType='easeIn'),
-                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.0, blendType='easeOut')
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
                 ),
                 Parallel(
-                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.0, blendType='easeOut'),
-                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.0, toData=0.0, blendType='easeIn')
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
                 )
             ),
             LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
@@ -7658,6 +7723,12 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'director':
             loadDialog(1)
             return SkelecogDialogArray
+        if self.style.name == 'cinema':
+            loadDialog(1)
+            return SkelecogDialogArray
+        if self.style.name == 'choreo':
+            loadDialog(1)
+            return SkelecogDialogArray
         if self.style.name == 'jgd' and not self.isSkeleton:
             loadDialog(1)
             return FeatherbedderDialogArray
@@ -7947,6 +8018,22 @@ class Suit(Avatar.Avatar):
 
     def generateAngelHalo(self):
         self.Vault = loader.loadModel('phase_13/models/props/angel_halo')
+        self.Vault.reparentTo(self.find('**/joint_head'))
+        self.Vault.setScale(1.5)
+        self.Vault.setPosHpr(0, 0, 0, 0, 0, 0)
+        self.Vault.setZ(1)
+        self.isHud = True
+
+    def generateSecurityGoonHat(self):
+        self.Vault = loader.loadModel('phase_13/models/accessories/cc_m_acc_hat_goon_security')
+        self.Vault.reparentTo(self.find('**/joint_head'))
+        self.Vault.setScale(1.5)
+        self.Vault.setPosHpr(0, 0, 0, 0, 0, 0)
+        self.Vault.setZ(1)
+        self.isHud = True
+
+    def generateGoonHat(self):
+        self.Vault = loader.loadModel('phase_13/models/accessories/cc_m_acc_hat_goon_patrol')
         self.Vault.reparentTo(self.find('**/joint_head'))
         self.Vault.setScale(1.5)
         self.Vault.setPosHpr(0, 0, 0, 0, 0, 0)

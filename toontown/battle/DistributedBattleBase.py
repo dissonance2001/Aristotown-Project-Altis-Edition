@@ -696,14 +696,15 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     suit.setNeutralAnimationRolled()
                 elif suit.style.name == 'director':
                     suit.setNeutralAnimationRolled()
+                elif suit.style.name == 'cinema':
+                    suit.setNeutralAnimationRolled()
+                elif suit.style.name == 'choreo':
+                    suit.setNeutralAnimationRolled()
                 elif suit.style.name == 'fmaker':
                     suit.setNeutralAnimationRolled()
                 else:
                     suit.setNeutralAnimation()
                 suit.setDizzy(0)
-                for headPart in suit.animatedHeadParts:
-                    headPart.loop(
-                        'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
         return oldtoons
 
     def adjust(self, timestamp):
@@ -1081,6 +1082,10 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     elif suit.style.name == 'std2':
                         suit.setNeutralAnimationRolled()
                     elif suit.style.name == 'hrollers':
+                        suit.setNeutralAnimationRolled()
+                    elif suit.style.name == 'cinema':
+                        suit.setNeutralAnimationRolled()
+                    elif suit.style.name == 'choreo':
                         suit.setNeutralAnimationRolled()
                     elif suit.style.name == 'videog':
                         suit.setNeutralAnimationRolled()

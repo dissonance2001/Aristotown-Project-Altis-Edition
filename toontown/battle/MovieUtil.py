@@ -387,7 +387,7 @@ def createSuitReviveTrack(suit, battle):
     elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dola_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'wtapper' and deathSuit.isSkeleton:
@@ -439,6 +439,10 @@ def createSuitReviveTrack(suit, battle):
     elif suit.style.name == 'm' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.style.name == 'fmaker' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+    elif suit.style.name == 'cinema' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+    elif suit.style.name == 'choreo' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     elif suit.style.name == 'director' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
@@ -741,7 +745,8 @@ def createSuitReviveTrackVirtual(suit, battle):
         headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
         headInterval2 = Func(headPart.loop, 'neutral')
         hasAnimatedHead = True
-    suitTrack.append(ActorInterval(suit, 'lose'))
+    suitTrack.append(
+        ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(suit.hide))
     suitTrack.append(Func(suit.setSkelecog2, True))
     suitTrack.append(Func(suit.setVirtual, True, True))
@@ -822,7 +827,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dola_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'wtapper' and deathSuit.isSkeleton:
@@ -882,6 +887,10 @@ def createSuitReviveTrackVirtual(suit, battle):
     elif suit.style.name == 'nc' and deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'fmaker' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+    elif suit.style.name == 'cinema' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+    elif suit.style.name == 'choreo' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     elif suit.style.name == 'director' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
@@ -1021,22 +1030,33 @@ def createVirtualSuitDeathTrack(suit, battle):
     for headPart in suit.animatedHeadParts:
         headInterval.append(ActorInterval(headPart, 'death', duration=2))
         hasAnimatedHead = True
-    suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
-    suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
-    suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2), headInterval))
-    deathSound = base.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
-    suitTrack.append(Parallel(ActorInterval(suit, 'slip-forward', duration=2),
-        Func(suit.nametag3d.hide),
-        SoundInterval(deathSound, volume=0.5),
-        LerpScaleInterval(deathSuit, 0.3, 0.0001,)))
-    suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
-    suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
-    suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
-    suitTrack.append(Func(suit.makeDead))
+    if suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
+        suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
+        suitTrack.append(Func(insertDeathSuit, suit, deathSuit, battle, suitPos, suitHpr))
+        suitTrack.append(Parallel(ActorInterval(suit, 'mplayer-kneel-into')))
+        deathSound = base.loadSfx('phase_11/audio/sfx/LB_capacitor_discharge_3.ogg')
+        suitTrack.append(Parallel(Func(suit.loop, 'mplayer-kneel-neutral'), LerpColorScaleInterval(suit, duration=1.25, colorScale=(0, 0, 0, 0),
+                                   blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
+        suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
+        suitTrack.append(Func(removeDeathSuit, suit, deathSuit, name='remove-death-suit'))
+        suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
+        suitTrack.append(Func(suit.makeDead))
+    else:
+        suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
+        suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
+        suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2), headInterval))
+        deathSound = base.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
+        suitTrack.append(Parallel(ActorInterval(suit, 'slip-forward', duration=2),
+                                  LerpColorScaleInterval(suit, duration=1.0, colorScale=(0, 0, 0, 0),
+                                                         blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
+        suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
+        suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
+        suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
+        suitTrack.append(Func(suit.makeDead))
     returnval = Parallel()
     multiTrack = Parallel(suitTrack, returnval)
     if hasAnimatedHead:
-        if not suit.style.name == 'wsi':
+        if not suit.style.name == 'wsi' and not suit.style.name == 'bcaster' and not suit.style.name == 'hrollers':
             returnval.append(headInterval)
     return multiTrack
 
@@ -1131,7 +1151,7 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dola_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'wtapper' and deathSuit.isSkeleton:
@@ -1236,6 +1256,10 @@ def createSuitDeathTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.style.name == 'fmaker' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+    elif suit.style.name == 'cinema' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+    elif suit.style.name == 'choreo' and not deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     elif suit.style.name == 'director' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     elif suit.style.name == 'mm' and not deathSuit.isSkeleton:
@@ -1304,19 +1328,8 @@ def createSuitDeathTrack(suit, battle):
 
 def __HighRollerAbsorb(suitIndex, suits, hp, battle):
     if len(suits) > suitIndex >= 0 and suits[suitIndex].dna.name == 'hroller':
-        from toontown.battle import MovieCamera
-        revives = suits[suitIndex].getSkeleRevives()
-        suitTrack = Sequence()
-        showDamage = Sequence(Func(suits[suitIndex].showHpText, -hp, openEnded=0))
-        value = hp
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, hp)
-        cameraTrack = Sequence(MovieCamera.randomActorShot(suits[suitIndex], battle, 0, 'suit'))
-        suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
-        suitTrack.append(Parallel(cameraTrack, ActorInterval(suits[suitIndex], 'pie-small-react'),
-                                  createSuitStunInterval(suits[suitIndex], .5, 2.0)))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
-        return suitTrack
+        showDamage = Sequence(Func(suits[suitIndex].addLevelDamage, suits[suitIndex], int(hp)))
+        return showDamage
     else:
         return Sequence()
 
@@ -1443,9 +1456,9 @@ def createSuitCrashTrack(suit, battle):
     deathSoundTrack = Sequence(Wait(0), SoundInterval(soundTrack, volume=1.0))
     hasAnimatedHead = False
     for headPart in suit.animatedHeadParts:
-        headInterval = ActorInterval(headPart, 'neutral', startTime=0, endTime=0)
+        headInterval = Sequence(Wait(0.25), (ActorInterval(headPart, 'neutral', startTime=0, endTime=0)))
         hasAnimatedHead = True
-    suitTrack = Sequence(Wait(hitTime), Func(suit.setZ, suit.getZ() + .1),
+    suitTrack = Sequence(Wait(0.175), Func(suit.setZ, suit.getZ() + .1),
                          Func(node.setScale, Point3(suitScale[0], suitScale[1], suitScale[2] * 0.0001)),
                          Func(node.setColorScale, Vec4(0.0, 0.0, 0.0, 1)),
                          Func(suit.deleteDropShadow),
@@ -1771,7 +1784,7 @@ def createToonDodgeMultitrack(tDodge, toon, leftToons, rightToons):
 def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
     if suit.dna.name == 'sgoat' and suit.isAngry:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
-    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1), ActorInterval(suit, 'gag-miss'))
     else:
         suitTrack = Sequence(Wait(delay), ActorInterval(suit, 'gag-miss'))
@@ -1782,7 +1795,7 @@ def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
         suitTrack.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.dna.name == 'hroller2' and suit.isVulnerable:
         suitTrack.append(Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
         suitTrack.append(Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1),
                                   Func(suit.loop, 'highroller-neutral-levitate-loop')))
     else:
@@ -1793,7 +1806,7 @@ def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
 def createSuitTeaseMultiTrackSound(suit, battle, delay = 0.01):
     if suit.dna.name == 'sgoat' and suit.isAngry:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
-    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1), ActorInterval(suit, 'gag-miss'))
     else:
         suitTrack = Sequence(Wait(delay), ActorInterval(suit, 'gag-miss'))
@@ -1804,7 +1817,7 @@ def createSuitTeaseMultiTrackSound(suit, battle, delay = 0.01):
         suitTrack.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.dna.name == 'hroller2' and suit.isVulnerable:
         suitTrack.append(Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog':
+    elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
         suitTrack.append(Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1),
                                   Func(suit.loop, 'highroller-neutral-levitate-loop')))
     else:
@@ -2147,11 +2160,11 @@ def createSuitLaughIntervalDice(suit):
     head.calcTightBounds(p1, p2)
     stunInterval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
     hasAnimatedHead = False
-    suitInterval = ActorInterval(suit, 'wheelspin', startTime=2.25)
+    suitInterval = ActorInterval(suit, 'wheelspin', startTime=2.25, endTime=5.75)
     for headPart in suit.animatedHeadParts:
-        headInterval = Sequence(ActorInterval(headPart, 'wheelspin', startTime=2.25),  Func(headPart.loop,
+        headInterval = Sequence(ActorInterval(headPart, 'wheelspin', startTime=2.25, endTime=5.75),  Func(headPart.loop,
                             'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-        headLoop = ActorInterval(suit, 'wheelspin', startTime=2.5)
+        headLoop = ActorInterval(suit, 'wheelspin', startTime=2.5, endTime=5.5)
         hasAnimatedHead = True
         return Parallel(headInterval, suitInterval)
     else:

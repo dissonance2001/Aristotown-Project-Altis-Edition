@@ -864,7 +864,7 @@ def doPromotion(attack, ind):
                              LerpScaleInterval(cage, .25, MovieUtil.PNT3_ZERO),
                              Func(MovieUtil.removeProp, cage)
                              )
-    moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('mob-mentality')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, dropPos))
+    moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('mob-mentality')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
     suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
     sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
     spinTrack1 = getPartTrack(spinEffect1, 2.1, 7.7, [spinEffect1, targetSuit, 0], softStop=-2)
@@ -1615,7 +1615,7 @@ def doOvermodulated(attack, ind):
     battle = attack['battle']
     targetPos2 = toon.getPos(battle)
     headsUp2 = Func(suit.headsUp, battle, targetPos2)
-    moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('sanction')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, dropPos))
+    moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('sanction')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
     suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
     selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + .5), Parallel(ActorInterval(targetSuit, 'slip-backward'),
                                                    Func(targetSuit.showHpString, "+ 1 ATTACK!"), Func(targetSuit.makeExtraAttacks, targetSuit.getExtraAttacks() + 1)), Func(targetSuit.setNeutralAnimation))

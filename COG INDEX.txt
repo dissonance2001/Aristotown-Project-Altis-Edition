@@ -46,8 +46,8 @@ derrhand - Derrick Hand Level 25.mgr v2.0
 fires - Firestarter Level 20.mgr
 fbed - Featherbedder Level 30.mgr
 
-	High Roller Manager:
-mplayer2 - Major Player (HR) Level 88.mgr (unused)
+	Videographer Manager:
+choreo - Choreographer Level 26.mgr
 
 	Kudos Managers:
 mplayer - Major Player Level 28.mgr
@@ -198,7 +198,8 @@ prethink - Prethinker Level 12.mgr
 mslacker - Multislacker Level 24.mgr
 psetter - Pacesetter Level 66.mgr
 
-put - N/A Level N/A
+	Videographer Manager:
+cinema - Cinematographer Level 26.mgr
 
 	Sellbot 'Litigation' Team:
 radiog - Radiographer Level 32.mgr
@@ -329,7 +330,7 @@ pbl - Publisher Level 20.mgr
 
 	Videographer Manager:
 videog - Videographer Level 99.mgr
-director - Director Level 28.mgr
+director - Director Level 30.mgr
 bcaster - Broadcaster Level 33.mgr
 
 	High Roller Stunt Double:

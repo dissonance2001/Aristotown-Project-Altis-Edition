@@ -329,7 +329,7 @@ class Movie(DirectObject.DirectObject):
                 battle = a['battle']
                 ival, camIval = MovieSuitAttacks.doSuitAttack(a)
                 for s in battle.activeSuits:
-                    if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'director' or s.dna.name == 'fmaker':
+                    if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'choreo' or s.dna.name == 'cinema' or s.dna.name == 'director' or s.dna.name == 'fmaker':
                         ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
                                                                              '',
                                                                              CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))

@@ -65,10 +65,10 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 return self.showSuitsFallingSilhouette(suits, ts, name, callback)
             if suit.dna.name == 'hroller2':
                 suit.setPos(0, 0, 50)
-                return self.showSuitsFallingHighRoller2(suits, ts, name, callback)
+                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
             if suit.dna.name == 'videog':
                 suit.setPos(0, 0, 50)
-                return self.showSuitsFallingVideographer(suits, ts, name, callback)
+                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
             if suit.dna.name == 'bcaster':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingSilhouette(suits, ts, name, callback)
@@ -77,10 +77,16 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 return self.showSuitsFallingHighRoller(suits, ts, name, callback)
             if suit.dna.name == 'director':
                 suit.setPos(0, 0, 50)
-                return self.showSuitsFallingHighRoller2(suits, ts, name, callback)
+                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
             if suit.dna.name == 'fmaker':
                 suit.setPos(0, 0, 50)
-                return self.showSuitsFallingHighRoller2(suits, ts, name, callback)
+                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
+            if suit.dna.name == 'choreo':
+                suit.setPos(0, 0, 50)
+                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
+            if suit.dna.name == 'cinema':
+                suit.setPos(0, 0, 50)
+                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
             suit.setState('Battle')
             if suit.dna.dept == 'l':
                 suit.reparentTo(self.bossCog)
@@ -122,7 +128,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             suitTrack = Sequence()
             if suit in self.joiningSuits:
                 i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-                destPos, h = self.suitPendingPoints[i]
+                destPos, h = self.suitPendingPointsSilhouettes[i]
                 destHpr = VBase3(h, 0, 0)
             else:
                 destPos, destHpr = self.getActorPosHpr(suit, self.suits)
@@ -165,7 +171,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             suitTrack = Sequence()
             if suit in self.joiningSuits:
                 i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-                destPos, h = self.suitPendingPoints[i]
+                destPos, h = self.suitPendingPointsSilhouettes[i]
                 destHpr = VBase3(h, 0, 0)
             else:
                 destPos, destHpr = self.getActorPosHpr(suit, self.suits)
@@ -209,7 +215,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             suitTrack = Sequence()
             if suit in self.joiningSuits:
                 i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-                destPos, h = self.suitPendingPoints[i]
+                destPos, h = self.suitPendingPointsSilhouettes[i]
                 destHpr = VBase3(h, 0, 0)
             else:
                 destPos, destHpr = self.getActorPosHpr(suit, self.suits)
@@ -252,7 +258,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             suitTrack = Sequence()
             if suit in self.joiningSuits:
                 i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-                destPos, h = self.suitPendingPoints[i]
+                destPos, h = self.suitPendingPointsSilhouettes[i]
                 destHpr = VBase3(h, 0, 0)
             else:
                 destPos, destHpr = self.getActorPosHpr(suit, self.suits)
@@ -295,7 +301,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             suitTrack = Sequence()
             if suit in self.joiningSuits:
                 i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-                destPos, h = self.suitPendingPoints[i]
+                destPos, h = self.suitPendingPointsSilhouettes[i]
                 destHpr = VBase3(h, 0, 0)
             else:
                 destPos, destHpr = self.getActorPosHpr(suit, self.suits)

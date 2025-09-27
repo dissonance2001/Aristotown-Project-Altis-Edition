@@ -147,12 +147,9 @@ def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
-    updateTrack = Parallel(Func(suit.setChatAbsoluteTrap,
-                                '',
-                                CFSpeech | CFTimeout))
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
-    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(walkTrack, updateTrack, moveTrack)
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr))
+    moveTrack = LerpPosInterval(suit, 0, resetPos, other=battle)
+    return Parallel(walkTrack, moveTrack)
 	
 def createSuitResetPosTrack(suit, battle):
     return __createSuitResetPosTrack(suit, battle)
@@ -189,8 +186,8 @@ def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
-    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr))
+    moveTrack = LerpPosInterval(suit, 0, resetPos, other=battle)
     return Parallel(walkTrack, moveTrack)
 
 
@@ -222,6 +219,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
+        resetPos, resetHpr = battle.getActorPosHpr(suit)
         zapTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8))
         suitTrack.append(Parallel(MovieUtil.zapCog(suit, anim, .5, 2.0, battle), MovieUtil.createSuitStunInterval(suit, .5, 2.0), deathTracks))
         bonusTrack = Sequence(Wait(tContact))
@@ -247,6 +245,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         suitTrack.append(Func(battle.unlureSuit, suit))
+        suitTrack.append(createSuitResetPosTrack(suit, battle))
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
         suitTrack.append(Parallel(__soakRemoval(suit, 1)))
         suitTrack.append(soakRemoval)

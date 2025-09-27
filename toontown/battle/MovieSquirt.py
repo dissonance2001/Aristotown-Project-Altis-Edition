@@ -165,6 +165,14 @@ def __getSplashTrack(point, scale, delay, battle, splashHold = 0.01):
     splash.setScale(scale)
     return Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(delay), Func(prepSplash, splash, point), ActorInterval(splash, 'splash-from-splat'), Wait(splashHold), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash))
 
+def __createSuitResetPosTrack2(suit, battle):
+    resetPos, resetHpr = battle.getActorPosHpr(suit)
+    moveDist = Vec3(suit.getPos(battle) - resetPos).length()
+    moveDuration = 0.5
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
+    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
+    return Parallel(walkTrack, moveTrack)
+
 
 def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 1.8, geyser = 0, uberRepeat = 0, revived = 0, level = 0):
     if hp > 0:
@@ -274,6 +282,8 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -kbbonus, 2, openEnded=0, attackTrack=SQUIRT_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, kbbonus))
+        if kbbonus == 0:
+            bonusTrack.append(Sequence(Wait(suit.getDuration(anim)), __createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         if hpbonus > 0:
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=SQUIRT_TRACK))

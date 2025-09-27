@@ -310,6 +310,14 @@ def __getSoundTrack(level, hitSuit, node = None):
     else:
         return throwTrack
 
+def __createSuitResetPosTrack2(suit, battle):
+    resetPos, resetHpr = battle.getActorPosHpr(suit)
+    moveDist = Vec3(suit.getPos(battle) - resetPos).length()
+    moveDuration = 0.5
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
+    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
+    return Parallel(walkTrack, moveTrack)
+
 
 def __throwPie(throw, delay, hitCount, npcs):
     toon = throw['toon']
@@ -371,26 +379,13 @@ def __throwPie(throw, delay, hitCount, npcs):
         splatBillboard = Func(__billboardProp, splat)
         splatAnim = ActorInterval(splat, splatName)
         splatHide = Func(MovieUtil.removeProp, splat)
+        splatTexture = Func(suit.splatSuit, level, 0)
         pieTrack.append(pieFly)
         pieTrack.append(pieHide)
         pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
         pieTrack.append(splatShow)
-        if level == 0:
-            pieTrack.append(Func(random.choice((__splatSuitWedding1, __splatSuitWedding2, __splatSuitWedding3, __splatSuitWedding4)), suit, level))
-        if level == 1:
-            pieTrack.append(Func(random.choice((__splatSuitFruit1, __splatSuitFruit2, __splatSuitFruit3, __splatSuitFruit4)), suit, level))
-        if level == 2:
-            pieTrack.append(Func(random.choice((__splatSuitCream1, __splatSuitCream2, __splatSuitCream3, __splatSuitCream4)), suit, level))
-        if level == 3:
-            pieTrack.append(Func(random.choice((__splatSuitCake1, __splatSuitCake2, __splatSuitCake3, __splatSuitCake4)), suit, level))
-        if level == 4:
-            pieTrack.append(Func(random.choice((__splatSuitFruit1, __splatSuitFruit2, __splatSuitFruit3, __splatSuitFruit4)), suit, level))
-        if level == 5:
-            pieTrack.append(Func(random.choice((__splatSuitCream1, __splatSuitCream2, __splatSuitCream3, __splatSuitCream4)), suit, level))
-        if level == 6:
-            pieTrack.append(Func(random.choice((__splatSuitCake1, __splatSuitCake2, __splatSuitCake3, __splatSuitCake4)), suit, level))
-        if level == 7:
-            pieTrack.append(Func(random.choice((__splatSuitWedding1, __splatSuitWedding2, __splatSuitWedding3, __splatSuitWedding4)), suit, level))
+        if not suit.isVirtual:
+            pieTrack.append(splatTexture)
         pieTrack.append(splatBillboard)
         pieTrack.append(splatAnim)
         pieTrack.append(splatHide)
@@ -463,6 +458,11 @@ def __throwPie(throw, delay, hitCount, npcs):
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -kbbonus, 2, openEnded=0, attackTrack=THROW_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, kbbonus))
+        if kbbonus == 0 and level <= 5:
+            bonusTrack.append(Sequence(Wait(suit.getDuration('pie-small-react')), __createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
+        if kbbonus == 0 and level > 5:
+            bonusTrack.append(Sequence(Wait(suit.getDuration('pie-large')), __createSuitResetPosTrack2(suit, battle),
+                                       Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         if hpbonus > 0:
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=THROW_TRACK))
@@ -1342,6 +1342,43 @@ def __splatSuitCream4(suit, level):
     # for headPart in suit.headParts:
     # if not suit.dna.name == 'lit':
     # headPart.setTexture(splat, splatTex)
+    if suit.dna.name == 'dsf':
+        suit.find('**/highroller_body').setTexture(splat, splatTex)
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+    elif suit.dna.name == 'mad':
+        suit.find('**/highroller_body').setTexture(splat, splatTex)
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+    elif suit.dna.name == 'crf':
+        suit.find('**/highroller_body').setTexture(splat, splatTex)
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+    elif suit.isSkeleton:
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+        for headPart in suit.headParts:
+            headPart.setTexture(splat, splatTex)
+    else:
+        suit.find('**/body').setTexture(splat, splatTex)
+        suit.find('**/necktie-s').setTexture(splat, splatTex)
+        suit.find('**/necktie-w').setTexture(splat, splatTex)
+        suit.find('**/bowtie').setTexture(splat, splatTex)
+
+def __splatSuit(suit, level):
+    splatTex = loader.loadTexture('phase_5/maps/' + splatDict[level] + '_%s.png' % random.choice((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)))
+    splatTex2 = loader.loadTexture('phase_5/maps/tiny_' + splatDict[level] + '.png')
+    splat = TextureStage(splatDict[level])
+    splat.setMode(TextureStage.MDecal)
+    # splat.setSavedResult(False)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
         suit.find('**/body').setTexture(splat, splatTex)

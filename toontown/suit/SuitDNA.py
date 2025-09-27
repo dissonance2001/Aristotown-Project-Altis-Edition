@@ -10,7 +10,7 @@ notify = directNotify.newCategory('SuitDNA')
 suitHeadTypes = [
     # Bossbots
 'f', 'p', 'stg', 'ym', 'enf', 'mm', 'blh', 'ds', 'mldr', 'hh', 'bsht', 'cr', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed',
-'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass',
+'choreo', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass',
     # Lawbots
 'bf', 'b', 'pf', 'dt', 'cv', 'ac', 'nn', 'bs', 'ad', 'sd', 'sh', 'le', 'br', 'bw', 'whistleb', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim',
 'redd', 'wsi', 'sgoat', 'caseman', 'stenog', 'lgator',
@@ -18,7 +18,7 @@ suitHeadTypes = [
 'sc', 'pp', 'shy', 'tw', 'sw', 'bc', 'fct', 'nc', 'gld', 'mb', 'trs', 'ls', 'bfh', 'rb', 'ovt', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra', 'kerberos', 'charon',
 'pcrat', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
-'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'put',
+'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'cinema',
 'radiog', 'racket', 'ubuster', 'safesupervis', 'psetter',
     # Boardbots
 'bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'pbs', 'fmaker',
@@ -32,14 +32,14 @@ suitHeadTypes = [
 ]
 suitATypes = [
     # Bossbots
-'ym', 'enf', 'mldr', 'hh', 'bsht', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse',
+'ym', 'enf', 'mldr', 'hh', 'bsht', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'choreo', 'chainsaw', 'chainsaw2', 'phouse',
 'bkeeper', 'wtapper', 'ambass',
     # Lawbots
 'dt', 'cv', 'le', 'br', 'bw', 'whistleb', 'arbit', 'whunter', 'wsi', 'caseman', 'stenog', 'lgator',
     # Cashbots
 'pp', 'sw', 'nc', 'trs', 'rb', 'ovt', 'kerberos', 'charon', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
-'nd', 'dc', 'fcs', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'mh2', 'radiog', 'ubuster', 'safesupervis',
+'nd', 'dc', 'fcs', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'ubuster', 'safesupervis',
     # Boardbots
 'mdm', 'cbr', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'gatekeep', 'fmaker', 'dold', 'dking', 'crystal', 'chairman',
     # Techbots

@@ -809,11 +809,40 @@ def doAbsorbMovie(attack):
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
 
+def doAbsorbMovieLevel(attack):
+    theSuit = attack['suit']
+    notifyTracks = Sequence()
+    notifyTrack = Sequence(Func(theSuit.checkLevelDamage))
+    cameraTrack = Wait(3.0)
+    notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+    return Sequence(notifyTracks)
+
 def doSoakRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence()
     suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
+    return suitTrack
+
+def __createSuitResetPosTrack2(suit, battle):
+    resetPos, resetHpr = battle.getActorPosHpr(suit)
+    moveDist = Vec3(suit.getPos(battle) - resetPos).length()
+    moveDuration = 0.5
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
+    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
+    return Parallel(walkTrack, moveTrack)
+
+def doLureRemoval(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Parallel(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured))
+    return suitTrack
+
+def doMarkRemoval(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence()
+    suitTrack.append(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.splatClear), Func(suit.setNeutralAnimation)))
     return suitTrack
 
 def doSueRemoval(attack):

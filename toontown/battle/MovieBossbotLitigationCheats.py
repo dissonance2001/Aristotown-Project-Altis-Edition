@@ -939,7 +939,7 @@ def doVoicemailReal(attack):
     battle = attack['battle']
     phone = globalPropPool.getProp('phone')
     receiver = globalPropPool.getProp('receiver')
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     suitName = suit.getStyleName()
     phonePosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
     receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
@@ -1031,7 +1031,7 @@ def doBusySignal(attack):
     cagePropTracks.append(cagePropTrack2)
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
-    suitTrack = Sequence(Wait(3.5), getSuitTrack(attack))
+    suitTrack = Sequence(Wait(3.5), getSuitAnimTrack(attack))
     soundTrack1 = getSoundTrack('tt_s_ara_cmg_itemHitsFloor.ogg', delay=1.75, node=suit)
     soundTrack2 = getSoundTrack('SA_cease_and_desist.ogg', delay=3.5, node=suit)
     soundTrack3 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=4.75)

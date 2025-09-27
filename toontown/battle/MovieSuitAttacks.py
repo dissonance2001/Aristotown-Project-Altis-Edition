@@ -649,7 +649,7 @@ def doSuitAttack(attack):
     elif name == 'HighRollerBar':
         suitTrack = MovieHighRollerCheats.doBar(attack)
     elif name == 'HighRollerSingingBlues':
-        suitTrack = MovieHighRollerCheats.doSingingBlues(attack)
+        suitTrack = MovieHighRollerCheats.doSingingBluesMegaphone(attack)
     elif name == 'HighRollerDamageReduction':
         suitTrack = MovieHighRollerCheats.doDamageReduction(attack)
     elif name == 'HighRollerSplashback':
@@ -685,6 +685,8 @@ def doSuitAttack(attack):
     elif name == 'BroadcasterDonation':
         suitTrack = MovieHighRollerCheats.doDonation2(attack)
     #filmmaker cheats
+    elif name == 'ChoreoChoreography':
+        suitTrack = MovieHighRollerCheats.doChoreography(attack)
     elif name == 'FilmmakerCameraFlash':
         suitTrack = MovieHighRollerCheats.doCameraFlash(attack)
     elif name == 'FilmmakerCameraRewind':
@@ -717,6 +719,10 @@ def doSuitAttack(attack):
         suitTrack = MovieUniversalCheats.doDeathCheck(attack)
     elif name == 'SoakRemoval':
         suitTrack = MovieUniversalCheats.doSoakRemoval(attack)
+    elif name == 'MarkRemoval':
+        suitTrack = MovieUniversalCheats.doMarkRemoval(attack)
+    elif name == 'LureRemoval':
+        suitTrack = MovieUniversalCheats.doLureRemoval(attack)
     elif name == 'SueApplication':
         suitTrack = MovieUniversalCheats.doSueApplication(attack)
     elif name == 'SueRemoval':
@@ -727,6 +733,8 @@ def doSuitAttack(attack):
         suitTrack = MovieUniversalCheats.doAbilityQueued(attack)
     elif name == 'AbsorbMovie':
         suitTrack = MovieUniversalCheats.doAbsorbMovie(attack)
+    elif name == 'AbsorbMovieLevel':
+        suitTrack = MovieUniversalCheats.doAbsorbMovieLevel(attack)
     elif name == 'BanLevel4':
         if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
@@ -888,31 +896,36 @@ def doSuitAttack(attack):
         unlureSuit = Parallel(Func(suit.makeUnLured), Func(battle.unlureSuit, suit))
         checkLuredCog = Func(suit.checkCogLured, battle)
         unlureSuit = Func(suit.makeUnLured)
+        suitTrack2 = Sequence(suitTrack)
         suitTrack = Sequence(preWalkTrack, suitTrack, neutralIval, toonHprTrack)
         suitPos = suit.getPos(battle)
         resetPos, resetHpr = battle.getActorPosHpr(suit)
         resetTrack = getResetTrack(suit, battle)
         if name == 'ScapegoatCourtRecordBan':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CaseManagerCourtRecordBan':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'StenographerCourtRecordBan':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CaseManagerLegallyBound':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CaseManagerInsurance':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CalculatingFees':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'Desperation':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'Desperation2':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'LureRemoval':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ScapegoatCourtRecordBan':
-            resetSuitTrack = Sequence(suitTrack)
-        elif name == 'HighRollerNoAttack':
-            resetSuitTrack = Sequence(suitTrack, unlureSuit)
+            resetSuitTrack = Sequence(suitTrack2)
+        #elif name == 'HighRollerNoAttack':
+           # resetSuitTrack = Sequence(suitTrack2, unlureSuit)
         elif name == 'SoakRemoval':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'MarkRemoval':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'SueApplication':
             resetSuitTrack = Sequence(suitTrack)
@@ -921,12 +934,20 @@ def doSuitAttack(attack):
         elif name == 'SueDamage':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'AbilityQueued':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'HighRollerSplashback':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'HighRollerCheerRetaliation':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'HighRollerBust':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'UnionBusterUnionBusterDamage':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AmbassadorMulligan':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'AbsorbMovie':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'AbsorbMovieLevel':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'SafetyHeatWaveCalculation':
             resetSuitTrack = Sequence(suitTrack)
@@ -935,11 +956,11 @@ def doSuitAttack(attack):
         elif name == 'UnionBusterUnionCalculator':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'WiretapperGagBan':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'WiretapperCollectCall2':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'ScapegoatBarnyardBash':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseSnipeVulnerable':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'PowerhouseSnipeGagBan':
@@ -951,7 +972,7 @@ def doSuitAttack(attack):
         elif name == 'PowerhouseSnipeMulligan':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'PowerhouseBurnDamage':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         else:
             resetSuitTrack = Sequence(unlureSuit, resetTrack, suitTrack)
         waitTrack = Sequence(Func(battle.unlureSuit, suit))
@@ -959,6 +980,14 @@ def doSuitAttack(attack):
     else:
         resetSuitTrack = Sequence(suitTrack, toonHprTrack) # Make sure we play the movie and, if necessary, reset the Toon's position.
     return (resetSuitTrack, camTrack)
+
+def __createSuitResetPosTrack(suit, battle):
+    resetPos, resetHpr = battle.getActorPosHpr(suit)
+    moveDist = Vec3(suit.getPos(battle) - resetPos).length()
+    moveDuration = 0.5
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
+    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
+    return Parallel(walkTrack, moveTrack)
 
 
 def getResetTrack(suit, battle):
@@ -1985,7 +2014,7 @@ def doPoundKey(attack):
         particleEffects.append(particleEffect)
 
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    partTracks = getPartTracks(attack, particleEffects, 1.1, 3.0, 0, softStop=-1)
+    partTracks = getPartTracks(attack, particleEffects, 1.1, 2.0, 0, softStop=-2)
     phonePosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
     receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
     propTrack = Sequence(Func(__showProp, phone, suit.getLeftHand(), phonePosPoints[0], phonePosPoints[1]), Func(__showProp, receiver, suit.getLeftHand(), receiverPosPoints[0], receiverPosPoints[1]), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_ONE, MovieUtil.PNT3_NEARZERO), Wait(0.24), Func(receiver.wrtReparentTo, suit.getRightHand()), LerpPosHprInterval(receiver, 0.0001, Point3(-0.45, 0.48, -0.62), VBase3(-87.47, -18.21, 7.82)), Wait(2.14), Func(receiver.wrtReparentTo, phone), Wait(0.62), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProps, [receiver, phone]))
@@ -2141,7 +2170,7 @@ def doBeguile(attack):
      ['glower', 2.0, 1.51]]
     suitTrack = Sequence(getSuitAnimTrack(attack))
     if suit.dna.name == 'videog':
-        sparklePosPoints = [Point3(-0.1, 1, -1.5), VBase3(335, 0, 0)]
+        sparklePosPoints = [Point3(-0.1, 0.25, -1.5), VBase3(360, 0, 0)]
     else:
         sparklePosPoints = [Point3(-0.1, 0.35, -1.5), VBase3(335, 0, 0)]
     sparklePropTrack = Sequence(Wait(1.0))

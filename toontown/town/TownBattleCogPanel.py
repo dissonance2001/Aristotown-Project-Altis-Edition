@@ -422,30 +422,38 @@ class TownBattleCogPanel(DirectFrame):
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.skeleton.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
             if self.statusEffects == 2:
                 self.skeleton.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
             if self.statusEffects == 3:
                 self.skeleton.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
             if self.statusEffects == 4:
                 self.skeleton.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
             if self.statusEffects == 5:
                 self.skeleton.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
                 self.skeleton.show()
             if self.statusEffects == 6:
                 self.skeleton.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
                 self.skeleton.show()
             if self.statusEffects == 7:
                 self.skeleton.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
                 self.skeleton.show()
             if self.statusEffects == 8:
                 self.skeleton.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
                 self.skeleton.show()
         if self.cog.getManager() or self.cog.isLureResist or self.cog.extraAttack or self.cog.isInsured or self.cog.isContracted or self.cog.healthCondition == 13:
@@ -805,88 +813,88 @@ class TownBattleCogPanel(DirectFrame):
                 self.extraAttacks.reparentTo(self.healthNode)
                 self.extraAttacks.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.56, 0, 1, 1), blendType='easeInOut')).loop()
+                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 0.5, 0, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 1, 0, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0, 1, 0, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0, 0, 1, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0.29, 0, 0.51, 1),
+                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0.56, 0, 1, 1), blendType='easeInOut')).loop()
                 self.extraAttacks.setColor(1, 1, 1, 1)
             if self.statusEffects == 2:
                 self.extraAttacks.reparentTo(self.healthNode)
                 self.extraAttacks.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.extraAttacks.setColor(1, 1, 1, 1)
             if self.statusEffects == 3:
                 self.extraAttacks.reparentTo(self.healthNode)
                 self.extraAttacks.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.extraAttacks.setColor(1, 1, 1, 1)
             if self.statusEffects == 4:
                 self.extraAttacks.reparentTo(self.healthNode)
                 self.extraAttacks.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.extraAttacks.setColor(1, 1, 1, 1)
             if self.statusEffects == 5:
                 self.extraAttacks.reparentTo(self.healthNode)
                 self.extraAttacks.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.extraAttacks.setColor(1, 1, 1, 1)
                 self.attackIcon4.show()
@@ -894,19 +902,19 @@ class TownBattleCogPanel(DirectFrame):
                 self.extraAttacks.reparentTo(self.healthNode)
                 self.extraAttacks.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.extraAttacks.setColor(1, 1, 1, 1)
                 self.attackIcon5.show()
@@ -914,19 +922,19 @@ class TownBattleCogPanel(DirectFrame):
                 self.damageUp.reparentTo(self.healthNode)
                 self.damageUp.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.damageUp.setColor(1, 1, 1, 1)
                 self.attackIcon6.show()
@@ -934,19 +942,19 @@ class TownBattleCogPanel(DirectFrame):
                 self.extraAttacks.reparentTo(self.healthNode)
                 self.extraAttacks.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.extraAttacks.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
@@ -977,95 +985,95 @@ class TownBattleCogPanel(DirectFrame):
                 self.rainbow.reparentTo(self.healthNode)
                 self.rainbow.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.rainbow.setColor(1, 1, 1, 1)
             if self.statusEffects == 2:
                 self.rainbow.reparentTo(self.healthNode)
                 self.rainbow.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.rainbow.setColor(1, 1, 1, 1)
             if self.statusEffects == 3:
                 self.rainbow.reparentTo(self.healthNode)
                 self.rainbow.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.rainbow.setColor(1, 1, 1, 1)
             if self.statusEffects == 4:
                 self.rainbow.reparentTo(self.healthNode)
                 self.rainbow.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.rainbow.setColor(1, 1, 1, 1)
             if self.statusEffects == 5:
                 self.rainbow.reparentTo(self.healthNode)
                 self.rainbow.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.rainbow.setColor(1, 1, 1, 1)
                 self.attackIcon4.show()
@@ -1073,19 +1081,19 @@ class TownBattleCogPanel(DirectFrame):
                 self.rainbow.reparentTo(self.healthNode)
                 self.rainbow.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.rainbow.setColor(1, 1, 1, 1)
                 self.attackIcon5.show()
@@ -1093,19 +1101,19 @@ class TownBattleCogPanel(DirectFrame):
                 self.rainbow.reparentTo(self.healthNode)
                 self.rainbow.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.rainbow.setColor(1, 1, 1, 1)
                 self.attackIcon6.show()
@@ -1113,19 +1121,19 @@ class TownBattleCogPanel(DirectFrame):
                 self.rainbow.reparentTo(self.healthNode)
                 self.rainbow.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.5, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 0.5, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0, 1, 0, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0, 1, 0, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0, 0, 1, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.29, 0, 0.51, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0.29, 0, 0.51, 1),
                                            blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.56, 0, 1, 1),
+                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
                 self.rainbow.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
@@ -1221,7 +1229,7 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(1, 0.984, 0, 1)
                 self.absorbing.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
-        if self.cog.isShielding and not self.cog.dna.name == 'sgoat':
+        if self.cog.isShielding and not self.cog.dna.name == 'sgoat' and not self.cog.dna.name == 'hroller':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.absorbing = status.find('**/damage_absorb_icon')  # 3 slot absorb icon
             self.statusEffects += 1
@@ -2137,13 +2145,13 @@ class TownBattleCogPanel(DirectFrame):
         else:
             self.hp = 0
         self.maxHp = self.cog.getMaxHP()
-        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2' and not self.cog.dna.name == 'videog':
+        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.isPhase3:
             self.hp = 'Immune!'
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
             if self.healthBar2:
                 self.healthBar2.setProp('barColor', (1, 1, 1, 1))
                 self.__changeColor()
-                self.healthBar2.setProp('value', self.cog.getHP())
+                self.healthBar2.setProp('value', self.cog.getMaxHP())
                 taskMgr.remove(self.uniqueName('blink-task2'))
         elif condition == 9:
             taskMgr.remove(self.uniqueName('blink-task2'))
@@ -2188,7 +2196,7 @@ class TownBattleCogPanel(DirectFrame):
                 self.healthBar2.setProp('value', self.cog.getHP())
                 taskMgr.remove(self.uniqueName('blink-task2'))
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
-        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2':
+        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.isPhase3:
             self.hpText['text'] = str(self.hp)
         else:
             self.hpText['text'] = str(self.hp) + '/' + str(self.maxHp)
@@ -2242,7 +2250,7 @@ class TownBattleCogPanel(DirectFrame):
             self.lured.hide()
 
     def __changeColor(self):
-        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2':
+        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.isPhase3:
             self.interval = Parallel(LerpColorScaleInterval(self.healthBar2, duration=1, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
             self.interval.start()
@@ -2302,6 +2310,10 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'fmaker':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
         elif name == 'director':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
+        elif name == 'choreo':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
+        elif name == 'cinema':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
         elif name == 'key':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .065, .065, .065)
