@@ -5145,7 +5145,9 @@ class BattleCalculatorAI:
             elif atkType['name'] == 'VideographerRisingStars':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'silhouettespawn', 1, 99, 'setBoth')
+                if not self.suitHasCondition(theSuit.doId, 'silspawn'):
+                    self.setToonCondition(toon.doId, 'silhouettespawn', 1, 99, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'silspawn', 1, 99, 'setBoth')
                 from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
 
                 boss = None
@@ -15655,7 +15657,7 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'immune', 0, 0, 'setBoth')
                 if suit.dna.name == 'sgoat' and self.TurnsElapsed == 0:
                     self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')
-                if suit.dna.name == 'director' and self.TurnsElapsed == 0:
+                if suit.dna.name == 'director':
                     self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')
                 suit.b_setHP(suit.getHP())
 

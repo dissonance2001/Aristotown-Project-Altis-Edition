@@ -552,6 +552,7 @@ ValidStatusConditions = (
     'gametimecalculator',
     'electricshockcalculator',
     'target2',
+    'silspawn',
     'target3',
     'target4',
     'target5',
