@@ -19,7 +19,7 @@ class LawbotHQAI(CogHQAI.CogHQAI):
             DistributedLawbotBossAI.DistributedLawbotBossAI,
             FADoorCodes.LB_DISGUISE_INCOMPLETE,
             DistributedCountErclaimElevatorAI.DistributedCountErclaimElevatorAI,
-            DistributedCountErclaimBossAI.DistributedCountErclaimBossAI)
+            DistributedLawbotBossAI.DistributedLawbotBossAI)
 
         self.lawOfficeElevators = []
         self.officeBoardingParty = None

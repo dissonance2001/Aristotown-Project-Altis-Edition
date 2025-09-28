@@ -288,7 +288,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
-            cogs = self.invokeEmptyPlanner(11, 'lit')
+            cogs = self.invokeEmptyPlanner(11, random.choice(('litpair1', 'litpair2', 'litpair3', 'litpair4', 'litpair5', 'litpair6')))
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)

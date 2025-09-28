@@ -2219,6 +2219,8 @@ def doOverheat(attack):
             return track
         sprayEffect = BattleParticles.createParticleEffect('FireSpray')
         sprayEffect2 = BattleParticles.createParticleEffect('FireSpray')
+        BattleParticles.setEffectTexture(sprayEffect2, 'fire')
+        BattleParticles.setEffectTexture(sprayEffect, 'fire')
         partTrack4 = getPartTrack(sprayEffect, 1, 3.25, [sprayEffect2, toon, 0], softStop=-1)
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextCheat, - int(dmg)),
                                Func(toon.showHpStringSnipe, "BURNED!"))

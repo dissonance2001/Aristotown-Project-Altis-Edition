@@ -225,15 +225,72 @@ class SuitPlannerInteriorAI:
             miniboss4 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)
             activeSuits.append(random.choice((miniboss, miniboss3)))
             activeSuits.append(random.choice((miniboss2, miniboss4)))
-        elif specialCode == 'lit':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)
+        elif specialCode == 'stenog':
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'lgator':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)
+            activeSuits.append(miniboss)
+        elif specialCode == 'caseman':
             miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)
+            activeSuits.append(miniboss3)
+        elif specialCode == 'sgoat':
             miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)
+            activeSuits.append(miniboss4)
+        elif specialCode == 'lit':
+            pair1 = []
+            pair2 = []
+            pair3 = []
+            pair4 = []
+            pair5 = []
+            pair6 = []
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0) # Litigator
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0) # Stenographer
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0) # Case Manager
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0) # Scapegoat
+            pair1.append(miniboss)
+            pair1.append(miniboss2)
+            pair2.append(miniboss4)
+            pair2.append(miniboss3)
+            pair3.append(miniboss)
+            pair3.append(miniboss3)
+            pair4.append(miniboss4)
+            pair4.append(miniboss2)
+            pair5.append(miniboss)
+            pair5.append(miniboss4)
+            pair6.append(miniboss2)
+            pair6.append(miniboss3)
+            activeSuits.append(random.choice((pair1, pair2, pair3, pair4, pair5, pair6)))
+        elif specialCode == 'litpair1':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0) # Litigator
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0) # Stenographer
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
-            activeSuits.append(miniboss4)
+        elif specialCode == 'litpair2':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)  # Case Manager
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)  # Scapegoat
             activeSuits.append(miniboss3)
+            activeSuits.append(miniboss4)
+        elif specialCode == 'litpair3':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)  # Litigator
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)  # Scapegoat
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss4)
+        elif specialCode == 'litpair4':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)  # Case Manager
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)  # Stenographer
+            activeSuits.append(miniboss3)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'litpair5':
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)  # Scapegoat
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)  # Stenographer
+            activeSuits.append(miniboss4)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'litpair6':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)  # Case Manager
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)  # Litigator
+            activeSuits.append(miniboss3)
+            activeSuits.append(miniboss)
         elif specialCode == 'ambassador':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)
@@ -371,6 +428,18 @@ class SuitPlannerInteriorAI:
             # witness stand-in
             suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0)
             reserveSuits.append(suit)
+        if specialCode == 'stenog':
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)
+            reserveSuits.append(miniboss2)
+        if specialCode == 'lgator':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)
+            reserveSuits.append(miniboss)
+        if specialCode == 'caseman':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)
+            reserveSuits.append(miniboss3)
+        if specialCode == 'sgoat':
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)
+            reserveSuits.append(miniboss4)
         if specialCode == 'ffm2':
             # generate random cashbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, 17, 't', random.randint(17, 20), 0)
