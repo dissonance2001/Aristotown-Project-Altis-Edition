@@ -215,9 +215,8 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 else:
                     suitTrack.append(
                         Parallel(ActorInterval(suit, 'sound-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
-            if kbbonus == 0:
-                suitTrack.append(__createSuitResetPosTrack(suit, battle))
-                suitTrack.append(Func(battle.unlureSuit, suit))
+            suitTrack.append(__createSuitResetPosTrack(suit, battle))
+            suitTrack.append(Func(battle.unlureSuit, suit))
             bonusTrack = None
             if hpBonus > 0:
                 bonusTrack = Sequence(Wait(tSuitReact + 0.75 + uberDelay),
@@ -249,10 +248,9 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 tracks.append(Func(suit.showHpTextWhite, 'IMMUNE!'))
         elif totalDamage[targetIndex] <= 0 and not suit.dna.name == 'hroller':
             battle = sound['battle']
-            if suit.isLured:
-                tracks.append(__createSuitResetPosTrack(suit, battle))
-                tracks.append(Func(battle.unlureSuit, suit))
-                tracks.append(Func(suit.setNeutralAnimationTrap))
+            tracks.append(__createSuitResetPosTrack(suit, battle))
+            tracks.append(Func(battle.unlureSuit, suit))
+            tracks.append(Func(suit.setNeutralAnimationTrap))
             tracks.append(MovieUtil.createSuitTeaseMultiTrackSound(suit, battle, tSuitReact))
             tracks.append(Func(suit.setNeutralAnimationTrap))
         elif totalDamage[targetIndex] <= 0 and suit.dna.name == 'hroller':

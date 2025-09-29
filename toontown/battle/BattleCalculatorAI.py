@@ -15659,7 +15659,7 @@ class BattleCalculatorAI:
                             currentBossHealth4 = s.currHP
                     if currentBossHealth <= 0 and currentBossHealth2 <= 0 and currentBossHealth3 <= 0 and currentBossHealth4 <= 0:
                         self.setSuitCondition(suit.doId, 'immune', 0, 0, 'setBoth')
-                if suit.dna.name == 'sgoat' and self.TurnsElapsed == 0:
+                if suit.dna.name == 'sgoat' and not self.suitHasCondition(suit.doId, 'enraged'):
                     self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')
                 if suit.dna.name == 'sgoat':
                     for s in self.battle.activeSuits:

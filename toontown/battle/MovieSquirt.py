@@ -282,12 +282,12 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -kbbonus, 2, openEnded=0, attackTrack=SQUIRT_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, kbbonus))
-        if kbbonus == 0:
-            bonusTrack.append(Sequence(Wait(suit.getDuration(anim)), __createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         if hpbonus > 0:
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=SQUIRT_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
+        if kbbonus == 0:
+            suitTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:
@@ -1125,8 +1125,9 @@ def __doGeyser(squirt, delay, fShowStun, uberClone = 0):
     buttons = [button, button2]
     hands = toon.getLeftHands()
     battle = squirt['battle']
+    suitPos = suit.getPos(battle)
     origHpr = toon.getHpr(battle)
-    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle), Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'squirt-button')), Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'), Func(toon.setHpr, battle, origHpr))
+    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, suitPos), Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'squirt-button')), Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'), Func(toon.setHpr, battle, origHpr))
     tracks.append(toonTrack)
     hitSuit = hp > 0
     scale = sprayScales[level]
