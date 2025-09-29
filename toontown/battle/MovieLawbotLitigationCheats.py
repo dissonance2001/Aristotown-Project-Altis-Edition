@@ -848,7 +848,7 @@ def doSnap(attack, suit):
     suitDelay = 1.45
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
-    suitTrack = getSuitTrack(attack)
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     notifyTracks = Parallel()
     posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
     propTracks = Parallel()
@@ -861,6 +861,10 @@ def doSnap(attack, suit):
         teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
         teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
         if dmg > 0:
+            targetPos = toon.getPos(battle)
+            suitTrack.append(Func(suit.headsUp, battle, targetPos))
+            origPos, origHpr = battle.getActorPosHpr(suit)
+            suitTrack.append(Func(suit.setHpr, battle, origHpr))
             notifyTrack = Sequence(Wait(3.1), Func(toon.showHpTextCheat, - int(dmg)),
                                    Func(toon.showHpString, "VULNERABLE!"))
             notifyTracks.append(notifyTrack)
@@ -896,7 +900,6 @@ def doSnap(attack, suit):
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     soundTrack = getSoundTrack('SA_bite.ogg', delay=2, node=suit)
     toonTracks = getToonTracksCheat(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
                                dodgeAnimNames=['neutral'], showDamageExtraTime=1.4)
@@ -1042,6 +1045,10 @@ def doCourtSanctionBindings(attack):
         soundTrack = getSoundTrack('SA_sanction.ogg', delay=.5, node=suit)
         notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextCheat, - int(dmg)), Func(toon.showHpString, "SANCTIONED!"))
         if dmg > 0:
+            targetPos = toon.getPos(battle)
+            suitTrack.append(Func(suit.headsUp, battle, targetPos))
+            origPos, origHpr = battle.getActorPosHpr(suit)
+            suitTrack.append(Func(suit.setHpr, battle, origHpr))
             propTracks.append(propTrack)
             suitTracks.append(suitTrack)
             soundTracks.append(soundTrack)

@@ -2406,56 +2406,6 @@ class BattleCalculatorAI:
     def __calcSuitAtkType(self, theSuit):
         attacks = SuitBattleGlobals.SuitAttributes[theSuit.dna.name]['attacks']
         atk = SuitBattleGlobals.pickSuitAttack(attacks, theSuit.getLevel())
-        if theSuit.dna.name == 'lgator':
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'stenog' or s.dna.name == 'sgoat' or s.dna.name == 'caseman':
-                    currentBossHealth = s.currHP
-            currentBossHealth3 = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'caseman':
-                    currentBossHealth3 = s.currHP
-            if currentBossHealth3 == -1:
-                self.setSuitCondition(theSuit.doId, 'deadcase', 1, 100, 'setBoth')
-        if theSuit.dna.name == 'stenog':
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'lgator' or s.dna.name == 'sgoat' or s.dna.name == 'caseman':
-                    currentBossHealth = s.currHP
-        if theSuit.dna.name == 'caseman':
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'stenog' or s.dna.name == 'sgoat' or s.dna.name == 'lgator':
-                    currentBossHealth = s.currHP
-        if theSuit.dna.name == 'sgoat':
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'stenog' or s.dna.name == 'lgator' or s.dna.name == 'caseman':
-                    currentBossHealth = s.currHP
-        if theSuit.dna.name == 'phouse':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'ambass':
-                    currentBossHealth = s.currHP
-        if theSuit.dna.name == 'bkeeper':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'wtapper' or s.dna.name == 'phouse' or s.dna.name == 'ambass':
-                    currentBossHealth = s.currHP
-        if theSuit.dna.name == 'wtapper':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'phouse' or s.dna.name == 'bkeeper' or s.dna.name == 'ambass':
-                    currentBossHealth = s.currHP
-        if theSuit.dna.name == 'ambass':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'phouse':
-                    currentBossHealth = s.currHP
         if theSuit.dna.name == 'videog':
             x = self.TurnsElapsed
             currentBossHealth = -1
@@ -2475,49 +2425,6 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'hollywoodcalculator', 1, 1, 'setBoth')
             if currentBossHealth3 >= 1 and (x + 1) % 3 == 0:
                 self.setSuitCondition(theSuit.doId, 'hollywoodcalculator', 1, 1, 'setBoth')
-     #   if theSuit.dna.name == 'hroller':
-           # x = self.TurnsElapsed
-           # return 'HighRollerWheelSpin'
-     #   if theSuit.dna.name == 'hroller2':
-         #   x = self.TurnsElapsed
-          #  if x % 99 == 0:
-           #     return 14
-           # else:
-              #  return 1
-       # if theSuit.dna.name == 'hrollers':
-           # x = self.TurnsElapsed
-           # if theSuit.maxHP <= 12275:
-              #  return random.randint(1, 2)
-           # if theSuit.maxHP <= 12100:
-                #return random.randint(1, 2)
-            #if theSuit.maxHP <= 12000:
-                #return random.randint(1, 2)
-        #    else:
-              #  return 2
-        if theSuit.dna.name == 'radiog':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'ubuster' or s.dna.name == 'racket' or s.dna.name == 'safesupervis':
-                    currentBossHealth = s.currHP
-        if theSuit.dna.name == 'racket':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'ubuster' or s.dna.name == 'safesupervis' or s.dna.name == 'radiog':
-                    currentBossHealth = s.currHP
-        if theSuit.dna.name == 'ubuster':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'safesupervis' or s.dna.name == 'racket' or s.dna.name == 'radiog':
-                    currentBossHealth = s.currHP
-        if theSuit.dna.name == 'safesupervis':
-            x = self.TurnsElapsed
-            currentBossHealth = -1
-            for s in self.battle.suits:
-                if s.dna.name == 'ubuster' or s.dna.name == 'racket' or s.dna.name == 'radiog':
-                    currentBossHealth = s.currHP
         return atk
 
     def __calcSuitTarget(self, attack):
@@ -2860,19 +2767,6 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'insured', 1, 99, 'setBoth')
                         self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
                         self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
-                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedLawbotBossAI):
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                boss = do
-                                break
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                if len(self.battle.activeSuits) < 4:
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkType['name'] == 'CaseManagerInsurance':
                 for s in self.battle.suits:
                     if s.getManager():
@@ -2913,6 +2807,19 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'bound', 1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'bindingscalculator', 0, 0, 'setBoth')
+                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedLawbotBossAI):
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                boss = do
+                                break
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if len(self.battle.activeSuits) < 4:
+                                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkType['name'] == 'CaseManagerLegalBindings2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -2923,6 +2830,7 @@ class BattleCalculatorAI:
                     if s.getManager():
                         self.setSuitCondition(s.doId, 'dotfinished', 1, 1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'bound'):
+                    result = 20
                     if self.toonHasCondition(toon.doId, 'bound') and self.getToonConditionTurns(toon.doId,
                                                                                                 'bound') <= 1:
                         self.setToonCondition(toon.doId, 'markedforsanction', 1, 5, 'setBoth')
@@ -2932,7 +2840,6 @@ class BattleCalculatorAI:
                                 currentBossHealth = s.currHP
                                 if currentBossHealth >= 1:
                                     self.setSuitCondition(suit.doId, 'sanctioncalculator2', 1, 10, 'setBoth')
-                    result = 20
                 else:
                     result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -6124,7 +6031,7 @@ class BattleCalculatorAI:
                 elif atkType['name'] == 'CaseManagerLegallyBound' and self.suitHasCondition(theSuit.doId, 'desperation'):
                     attack[SUIT_HP_COL][targetIndex] = math.ceil(result * 1.4)
                 elif atkType['name'] == 'CaseManagerLegallyBound':
-                    attack[SUIT_HP_COL][targetIndex] = math.ceil(result * self.getSuitConditionModifier(theSuit.doId, 'desperation'))
+                    attack[SUIT_HP_COL][targetIndex] = result
                 elif atkType['name'] == 'PowerhouseBurnDamage' and self.suitHasCondition(theSuit.doId, 'desperation'):
                     attack[SUIT_HP_COL][targetIndex] = math.ceil(result * 1.4)
                 elif atkType['name'] == 'PowerhouseBurnDamage':
