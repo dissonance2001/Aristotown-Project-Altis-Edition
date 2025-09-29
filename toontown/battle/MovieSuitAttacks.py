@@ -710,7 +710,7 @@ def doSuitAttack(attack):
     elif name == 'AmbassadorTargetCheck':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'Desperation':
-        suitTrack = MovieUniversalCheats.doDesperation(attack)
+        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'Desperation2':
         suitTrack = MovieUniversalCheats.doDesperation2(attack)
     elif name == 'SynergyFees':
@@ -2016,7 +2016,7 @@ def doPoundKey(attack):
         particleEffects.append(particleEffect)
 
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    partTracks = getPartTracks(attack, particleEffects, 1.1, 2.0, 0, softStop=-2)
+    partTracks = getPartTracks(attack, particleEffects, 1.1, 4.0, 0, softStop=-2)
     phonePosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
     receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
     propTrack = Sequence(Func(__showProp, phone, suit.getLeftHand(), phonePosPoints[0], phonePosPoints[1]), Func(__showProp, receiver, suit.getLeftHand(), receiverPosPoints[0], receiverPosPoints[1]), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_ONE, MovieUtil.PNT3_NEARZERO), Wait(0.24), Func(receiver.wrtReparentTo, suit.getRightHand()), LerpPosHprInterval(receiver, 0.0001, Point3(-0.45, 0.48, -0.62), VBase3(-87.47, -18.21, 7.82)), Wait(2.14), Func(receiver.wrtReparentTo, phone), Wait(0.62), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProps, [receiver, phone]))

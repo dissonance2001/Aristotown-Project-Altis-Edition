@@ -5355,20 +5355,22 @@ class BattleCalculatorAI:
                     self.setToonCondition(t, 'nolevel7s', 0, 0, 'setBoth')
                     self.setToonCondition(t, 'nolevel8s', 0, 0, 'setBoth')
                 for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'desperationcalculator', 1, 10, 'setBoth')
                     if self.battle.findSuit(suit.doId).getManager():
                         managerTarget = suit
                     if managerTarget == None:
                         managerTarget = theSuit
-                    self.setSuitCondition(managerTarget.doId, 'desperation', self.getSuitConditionModifier(managerTarget.doId, 'desperation') + (.4 / (len(self.battle.activeSuits) - 1)), 99, 'setBoth')
-                    self.setSuitCondition(managerTarget.doId, 'desperationcalculator', 0, 0, 'setBoth')
                     if theSuit.dna.name == 'lgator':
-                        self.setSuitCondition(managerTarget.doId, 'deadgator', 1, 99, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'deadgator', 1, 99, 'setBoth')
                     if theSuit.dna.name == 'caseman':
-                        self.setSuitCondition(managerTarget.doId, 'deadcase', 1, 99, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'deadcase', 1, 99, 'setBoth')
                     if theSuit.dna.name == 'stenog':
-                        self.setSuitCondition(managerTarget.doId, 'deadsteno', 1, 99, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'deadsteno', 1, 99, 'setBoth')
                     if theSuit.dna.name == 'sgoat':
-                        self.setSuitCondition(managerTarget.doId, 'deadgoat', 1, 99, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'deadgoat', 1, 99, 'setBoth')
+            elif atkType['name'] == 'Desperation2':
+                self.setSuitCondition(theSuit.doId, 'desperation', self.getSuitConditionModifier(theSuit.doId, 'desperation') + .4, 99, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'desperationcalculator', 0, 0, 'setBoth')
                 from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
                 boss = None
@@ -5380,17 +5382,14 @@ class BattleCalculatorAI:
                                 break
                         for t in self.battle.activeToons:
                             if t in do.involvedToons:
-                                if self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadgator') and not self.suitHasCondition(theSuit.doId, 'activegator') and not managerTarget.dna.name == 'lgator':
+                                if self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadgator') and not self.suitHasCondition(theSuit.doId, 'activegator') and not theSuit.dna.name == 'lgator':
                                     boss.appendSuitsToBattle(boss.battleNumber, 'lgator')
-                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadsteno') and not self.suitHasCondition(theSuit.doId, 'activesteno') and not managerTarget.dna.name == 'stenog':
+                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadsteno') and not self.suitHasCondition(theSuit.doId, 'activesteno') and not theSuit.dna.name == 'stenog':
                                     boss.appendSuitsToBattle(boss.battleNumber, 'stenog')
-                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadcase') and not self.suitHasCondition(theSuit.doId, 'activecase') and not managerTarget.dna.name == 'caseman':
+                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadcase') and not self.suitHasCondition(theSuit.doId, 'activecase') and not theSuit.dna.name == 'caseman':
                                     boss.appendSuitsToBattle(boss.battleNumber, 'caseman')
-                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadgoat') and not self.suitHasCondition(theSuit.doId, 'activegoat') and not managerTarget.dna.name == 'sgoat':
+                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadgoat') and not self.suitHasCondition(theSuit.doId, 'activegoat') and not theSuit.dna.name == 'sgoat':
                                     boss.appendSuitsToBattle(boss.battleNumber, 'sgoat')
-            elif atkType['name'] == 'Desperation2':
-                self.setSuitCondition(theSuit.doId, 'desperation', self.getSuitConditionModifier(theSuit.doId, 'desperation') + .4, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'desperationcalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'TargetCheck':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -6025,9 +6024,12 @@ class BattleCalculatorAI:
                     if self.suitHasCondition(theSuit.doId, 'desperation'):
                         attack[SUIT_HP_COL][targetIndex] = math.ceil(result * (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation')))
                         toon.setHp(toon.hp + math.ceil(result * (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))))
-                    if theSuit.getDamageMultiplier() > 1:
+                    elif theSuit.getDamageMultiplier() > 1:
                         attack[SUIT_HP_COL][targetIndex] = math.ceil(result * theSuit.getDamageMultiplier())
                         toon.setHp(toon.hp + math.ceil(result * theSuit.getDamageMultiplier()))
+                    else:
+                        attack[SUIT_HP_COL][targetIndex] = result
+                        toon.setHp(toon.hp + result)
                 elif atkType['name'] == 'CaseManagerLegallyBound' and self.suitHasCondition(theSuit.doId, 'desperation'):
                     attack[SUIT_HP_COL][targetIndex] = math.ceil(result * 1.4)
                 elif atkType['name'] == 'CaseManagerLegallyBound':
@@ -6056,26 +6058,35 @@ class BattleCalculatorAI:
                     if self.suitHasCondition(theSuit.doId, 'desperation'):
                         attack[SUIT_HP_COL][targetIndex] = math.ceil(result * (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation')))
                         toon.setHp(toon.hp + math.ceil(result * (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))))
-                    if theSuit.getDamageMultiplier() > 1:
+                    elif theSuit.getDamageMultiplier() > 1:
                         attack[SUIT_HP_COL][targetIndex] = math.ceil(result * theSuit.getDamageMultiplier())
                         toon.setHp(toon.hp + math.ceil(result * theSuit.getDamageMultiplier()))
+                    else:
+                        attack[SUIT_HP_COL][targetIndex] = result
+                        toon.setHp(toon.hp + result)
                 elif atkType['name'] == 'SafetyHeatWaveCalculation':
                     if self.suitHasCondition(theSuit.doId, 'desperation'):
                         attack[SUIT_HP_COL][targetIndex] = math.ceil(result * (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation')))
                         toon.setHp(toon.hp + math.ceil(result * (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))))
-                    if theSuit.getDamageMultiplier() > 1:
+                    elif theSuit.getDamageMultiplier() > 1:
                         attack[SUIT_HP_COL][targetIndex] = math.ceil(result * theSuit.getDamageMultiplier())
                         toon.setHp(toon.hp + math.ceil(result * theSuit.getDamageMultiplier()))
+                    else:
+                        attack[SUIT_HP_COL][targetIndex] = result
+                        toon.setHp(toon.hp + result)
                 elif atkType['name'] == 'WiretapperCollectCall2':
                     if self.suitHasCondition(theSuit.doId, 'desperation'):
                         attack[SUIT_HP_COL][targetIndex] = math.ceil(result * (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation')))
                         toon.setHp(toon.hp + math.ceil(result * (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))))
-                    if self.suitHasCondition(theSuit.doId, 'brokenconnection'):
+                    elif self.suitHasCondition(theSuit.doId, 'brokenconnection'):
                         attack[SUIT_HP_COL][targetIndex] = math.ceil(result * self.getSuitConditionModifier(theSuit.doId, 'brokenconnection'))
                         toon.setHp(toon.hp + math.ceil(result * self.getSuitConditionModifier(theSuit.doId, 'brokenconnection')))
-                    if theSuit.getDamageMultiplier() > 1:
+                    elif theSuit.getDamageMultiplier() > 1:
                         attack[SUIT_HP_COL][targetIndex] = math.ceil(result * theSuit.getDamageMultiplier())
                         toon.setHp(toon.hp + math.ceil(result * theSuit.getDamageMultiplier()))
+                    else:
+                        attack[SUIT_HP_COL][targetIndex] = result
+                        toon.setHp(toon.hp + result)
                 else:
                     if theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
                         result *= 1.5
@@ -15301,7 +15312,9 @@ class BattleCalculatorAI:
                     self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                 attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'desperationcalculator'):
+        for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
+            suitId = self.battle.activeSuits[i].doId
+            if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
                 attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                 attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
