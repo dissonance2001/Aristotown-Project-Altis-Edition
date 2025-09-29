@@ -14269,6 +14269,7 @@ class BattleCalculatorAI:
                     self.battle.suitAttacks.append(attack)
 
     def __calculateSuitAttacksWitnessStandIn(self):
+        x = self.TurnsElapsed
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
 
