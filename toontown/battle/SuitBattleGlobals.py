@@ -122,7 +122,7 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'whunter':
         actualLevel = relLevel + 19
     elif name == 'erclaim':
-        actualLevel = relLevel + 27
+        actualLevel = relLevel + 19
     elif name == 'redd':
         actualLevel = relLevel + 19
     elif name == 'wsi':
@@ -185,7 +185,7 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'hroller':
         actualLevel = relLevel + 99
     elif name == 'erfit':
-        actualLevel = relLevel + 34
+        actualLevel = relLevel + 19
     elif name == 'hrollers':
         actualLevel = relLevel + 24
     elif name == 'hroller2':
@@ -280,6 +280,8 @@ def getActualFromRelativeLevel(name, relLevel):
         actualLevel = relLevel + 9
     elif name == 'gatekeep':
         actualLevel = relLevel + 29
+    elif name == 'trainer':
+        actualLevel = relLevel + 19
     elif name == 'dola':
         actualLevel = relLevel + 11
     elif name == 'dold':
@@ -637,7 +639,7 @@ SuitLevel = {
 
 SpecialCogDict = ('clubpres', 'cinema', 'choreo', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'foreman', 'dopr', 'dopa',
                   'bellring', 'prethink', 'mslacker', 'videog', 'radiog', 'ubuster', 'racket', 'safesupervis', 'psetter', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra',
-                  'kerberos', 'charon', 'pcrat', 'hroller', 'erfit', 'hroller2', 'hrollers', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi',
+                  'kerberos', 'charon', 'pcrat', 'hroller', 'erfit', 'trainer', 'hroller2', 'hrollers', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi',
                   'sgoat', 'caseman', 'stenog', 'lgator', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'bcaster', 'dking', 'ottoman', 'crystal', 'chairman',
                   'sya', 'pbl', 'fmaker', 'director')
 LitigationManagers = ('lgator', 'stenog', 'caseman', 'sgoat', 'safesupervis', 'ubuster', 'radiog', 'racket', 'ambass', 'wtapper', 'bkeeper', 'phouse')
@@ -3566,7 +3568,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'singularname': 'a Count Erfit',
            'pluralname': 'Count Erfits',
            'level': 25,
-           'hp': (2770,),
+           'hp': (7777,),
            'def':(60,),
            'freq':(0,),
            'acc':(75,),
@@ -4323,7 +4325,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              'singularname': 'a Count Erclaim',
              'pluralname': 'Count Erclaims',
              'level': 21,
-             'hp':(3950,),
+             'hp':(2656,),
              'def':(60,),
              'freq':(0,),
              'acc':(75,),
@@ -5430,11 +5432,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                           hp=(38,),
                           acc=(75,),
                           freq=(20,)))},
- 'pbs': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
+ 'trainer': {'name': 'Personal Trainer',
+         'singularname': 'a Personal Trainer',
+         'pluralname': 'Personal Trainers',
          'level': 20,
-         'hp':(3333,),
+         'hp':(2000,),
          'def':(60,),
          'freq':(0,),
          'acc':(50,),
@@ -7534,6 +7536,29 @@ SuitAttacks = {
     # Universal Director Cheats
  'DirectorCompensation': ('nothing', ATK_TGT_SINGLE),
  'DirectorOverwhelmingAuthority': ('nothing', ATK_TGT_GROUP),
+    # Count Erclaim Cheats
+ 'ErclaimLaffSteal': ('magic1', ATK_TGT_GROUP),
+ 'ErclaimTargetCheck': ('nothing', ATK_TGT_SINGLE),
+ 'ErclaimSacrifice': ('quick-jump', ATK_TGT_SINGLE),
+ 'ErclaimSacrifice2': ('quick-jump', ATK_TGT_SINGLE),
+ 'ErclaimSacrifice3': ('quick-jump', ATK_TGT_SINGLE),
+ 'ErclaimSacrifice4': ('quick-jump', ATK_TGT_SINGLE),
+ 'ErclaimSacrifice5': ('quick-jump', ATK_TGT_SINGLE),
+ 'ErclaimRiseFromTheScrap': ('quick-jump', ATK_TGT_SINGLE),
+ 'ErclaimScopeCreep': ('effort', ATK_TGT_SINGLE),
+ 'ErclaimPhase2': ('nothing', ATK_TGT_SINGLE),
+    # Count Erfit Cheats
+ 'ErfitHydrationCheck': ('throw-object', ATK_TGT_SINGLE),
+ 'ErfitHydrationCheckRevert': ('nothing', ATK_TGT_GROUP),
+ 'ErfitProToonShake': ('nothing', ATK_TGT_SINGLE),
+ 'ErfitProToonShake2': ('nothing', ATK_TGT_SINGLE),
+ 'ErfitGainsFromTheScrap': ('quick-jump', ATK_TGT_SINGLE),
+ 'ErfitPersonalTrainer': ('smile', ATK_TGT_SINGLE),
+ 'ErfitPhase2': ('nothing', ATK_TGT_SINGLE),
+    # Personal Trainer Cheats
+ 'TrainerWorkout': ('nothing', ATK_TGT_SINGLE),
+ 'TrainerFlex': ('glower', ATK_TGT_SINGLE),
+ 'TrainerGains': ('glower', ATK_TGT_SINGLE),
     # Court Fees and Calculation Mirrors
  'SynergyFees': ('magic3', ATK_TGT_GROUP),
  'CalculatingFees': ('calculating-costs', ATK_TGT_SINGLE),

@@ -460,11 +460,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
             suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         if bonusTrack != None:
             suitTrack = Parallel(suitTrack, bonusTrack)
-    elif kbbonus == 0:
-        suitTrack = MovieUtil.createSuitTeaseMultiTrack(suit, battle, delay=delay + tObjectAppears)
     else:
-        if hitSuit:
-            return
         if alreadyTeased > 0:
             return
         else:

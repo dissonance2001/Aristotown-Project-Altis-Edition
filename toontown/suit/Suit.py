@@ -232,7 +232,7 @@ ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dola = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-pbs = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
+trainer = (('snap', 'snap2', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 fmaker = (('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 jgd = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 bby = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -2050,7 +2050,7 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
             self.makeImmortal()
         elif dna.name == 'erfit':
-            self.scale = 7.2 / aSize
+            self.scale = 7.5 / aSize
             self.handColor = VBase4(1, 1, 1, 1.0)
             self.generateBody()
             self.makeCountErfit()
@@ -2058,7 +2058,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_counterclaim.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(9.0)
+            self.setHeight(10)
         elif dna.name == 'hrollers':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(0.835, 0.843, 0.847, 1)
@@ -2511,13 +2511,16 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setTransparency(1)
             self.setHeight(9.31)
-        elif dna.name == 'pbs':
+        elif dna.name == 'trainer':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.generateSkeletonBody()
-            self.makeExecutive()
-            self.setTransparency(1)
-            self.setHeight(8.5)
+            self.handColor = VBase4(1, 1, 1, 1.0)
+            self.generateBody()
+            self.makeCountErfitTrainer()
+            self.generateHead3('bloodsucker', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_bloodsucker.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(9)
         elif dna.name == 'fmaker':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.835, 0.843, 0.847, 1)
@@ -7032,6 +7035,17 @@ class Suit(Avatar.Avatar):
                 'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         modelRoot.find('**/body').setTexture(texture, 1)
 
+    def makeCountErfitTrainer(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isGovernaught = 1
+        try:
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_counterfit2.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
+
     def makeDummy(self, modelRoot=None):
         if not modelRoot:
             modelRoot = self
@@ -7575,6 +7589,9 @@ class Suit(Avatar.Avatar):
             loadDialog(1)
             return WitchHunterDialogArray
         if self.style.name == 'erfit' and not self.isSkeleton:
+            loadDialog(1)
+            return CountErfitDialogArray
+        if self.style.name == 'erclaim' and not self.isSkeleton:
             loadDialog(1)
             return CountErfitDialogArray
         if self.style.name == 'rainmake' and not self.isSkeleton:

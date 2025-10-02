@@ -1659,17 +1659,61 @@ def shortCircuitTrack(suit, battle):
         suitTrack.append(Func(suit.hide))
         suitTrack.append(Func(suit.cleanupLoseActor))
         suitTrack.append(Func(suit.makeDead))
-        suitTrack.append(Wait(2.0))
+        suitTrack.append(Wait(1.0))
         BattleParticles.loadParticles()
-        explodePosPoints = [Point3(0, 0, 0), PNT3_ZERO]
+        explodePosPoints = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ()), PNT3_ZERO]
         splatName = 'dust2'
         explode = globalPropPool.getProp('dust2')
         explode.setTwoSided(True)
+        explode.setColor(0.251, 0.251, 0.251, 1)
+        explode.setTransparency(1)
         explode.setBillboardPointWorld(2)
-        explodeTrack = Sequence()
+        explodeTrack = Sequence(Wait(0.3))
         explodeTrack.append(
-            getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+            getPropAppearTrack(explode, battle, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
         explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
+        explodePosPoints2 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() - 2), PNT3_ZERO]
+        splatName = 'dust2'
+        explode2 = globalPropPool.getProp('dust2')
+        explode2.setTwoSided(True)
+        explode2.setColor(0.251, 0.251, 0.251, 1)
+        explode2.setTransparency(1)
+        explode2.setBillboardPointWorld(2)
+        explodeTrack2 = Sequence(Wait(.15))
+        explodeTrack2.append(
+            getPropAppearTrack(explode2, battle, explodePosPoints2, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack2.append(Sequence(ActorInterval(explode2, splatName), Func(explode2.detachNode)))
+        explodePosPoints3 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + 2), PNT3_ZERO]
+        splatName = 'dust2'
+        explode3 = globalPropPool.getProp('dust2')
+        explode3.setTwoSided(True)
+        explode3.setColor(0.251, 0.251, 0.251, 1)
+        explode3.setTransparency(1)
+        explode3.setBillboardPointWorld(2)
+        explodeTrack3 = Sequence(Wait(.45))
+        explodeTrack3.append(
+            getPropAppearTrack(explode3, battle, explodePosPoints3, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack3.append(Sequence(ActorInterval(explode3, splatName), Func(explode3.detachNode)))
+        explodePosPoints4 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + 4), PNT3_ZERO]
+        explode4 = globalPropPool.getProp('dust2')
+        explode4.setTwoSided(True)
+        explode4.setColor(0.251, 0.251, 0.251, 1)
+        explode4.setTransparency(1)
+        explode4.setBillboardPointWorld(2)
+        explodeTrack4 = Sequence(Wait(.6))
+        explodeTrack4.append(
+            getPropAppearTrack(explode3, battle, explodePosPoints4, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack4.append(Sequence(ActorInterval(explode4, splatName), Func(explode4.detachNode)))
+        explodePosPoints5 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() - 4), PNT3_ZERO]
+        explode5 = globalPropPool.getProp('dust2')
+        explode5.setTwoSided(True)
+        explode5.setColor(0.251, 0.251, 0.251, 1)
+        explode5.setTransparency(1)
+        explode5.setBillboardPointWorld(2)
+        explodeTrack5 = Sequence()
+        explodeTrack5.append(
+            getPropAppearTrack(explode3, battle, explodePosPoints5, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack5.append(Sequence(ActorInterval(explode5, splatName), Func(explode5.detachNode)))
         suitIndex = battle.activeSuits.index(suit)
         if suit.getExecutive() or suit.getGovernaught():
             suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
@@ -1693,7 +1737,7 @@ def shortCircuitTrack(suit, battle):
             suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
             suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
             suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        return Parallel(suitTrack, smokeTrack, colorTracks)
+        return Parallel(suitTrack, explodeTrack, explodeTrack2, explodeTrack3, explodeTrack4, explodeTrack5, colorTracks)
 
 def shortCircuitTrack2(suit, battle):
     if suit.isHidden():
@@ -1702,8 +1746,10 @@ def shortCircuitTrack2(suit, battle):
         suitTrack = Sequence(Wait(1.5))
         colorTracks = Parallel()
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
-        smoke.setColor(0.061, 0.061, 0.061)
+        smoke.setColor(0.3, 0.3, 0.3)
         smoke.setScale(0.75, 1, 1)
+        smoke.setTransparency(1)
+        smoke.setTwoSided(True)
         smoke.setBillboardPointEye()
         actorNode = suit.find('**/__Actor_modelRoot')
         actorCollection = actorNode.findAllMatches('*')
@@ -1719,10 +1765,9 @@ def shortCircuitTrack2(suit, battle):
             colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1),
                                         LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
                                         Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
-        smokeTrack = Sequence(Func(smoke.reparentTo, battle),
-                              LerpPosInterval(smoke, 0, Point3(toonPos.getX(), y - 5, toonPos.getZ())),
+        smokeTrack = Sequence(Func(smoke.reparentTo, battle), LerpPosInterval(smoke, 0, Point3(toonPos.getX(), y - 5, toonPos.getZ())),
                               Parallel(Sequence(LerpScaleInterval(smoke, 2.0, Point3(.5, 1, 5)),
-                                                LerpScaleInterval(smoke, 1.5, Point3(.5, 1, 7.5))),
+                                                LerpScaleInterval(smoke, 2.5, Point3(.5, 1, 10))),
                                        Sequence(Wait(1.5), LerpColorScaleInterval(smoke, 2.0, Vec4(1, 1, 1, 0)))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                               Func(removeProp, smoke))
@@ -1730,17 +1775,62 @@ def shortCircuitTrack2(suit, battle):
         suitTrack.append(Func(suit.hide))
         suitTrack.append(Func(suit.cleanupLoseActor))
         suitTrack.append(Func(suit.makeDead))
+        suitTrack.append(Wait(1.0))
         BattleParticles.loadParticles()
-        explodePosPoints = [Point3(0, 0, 0), PNT3_ZERO]
+        explodePosPoints = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ()), PNT3_ZERO]
         splatName = 'dust2'
         explode = globalPropPool.getProp('dust2')
         explode.setTwoSided(True)
+        explode.setColor(0.251, 0.251, 0.251, 1)
+        explode.setTransparency(1)
         explode.setBillboardPointWorld(2)
-        explodeTrack = Sequence()
+        explodeTrack = Sequence(Wait(0.3))
         explodeTrack.append(
-            getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+            getPropAppearTrack(explode, battle, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
         explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-        return Parallel(suitTrack, smokeTrack, colorTracks)
+        explodePosPoints2 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() - 2), PNT3_ZERO]
+        splatName = 'dust2'
+        explode2 = globalPropPool.getProp('dust2')
+        explode2.setTwoSided(True)
+        explode2.setColor(0.251, 0.251, 0.251, 1)
+        explode2.setTransparency(1)
+        explode2.setBillboardPointWorld(2)
+        explodeTrack2 = Sequence(Wait(.15))
+        explodeTrack2.append(
+            getPropAppearTrack(explode2, battle, explodePosPoints2, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack2.append(Sequence(ActorInterval(explode2, splatName), Func(explode2.detachNode)))
+        explodePosPoints3 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + 2), PNT3_ZERO]
+        splatName = 'dust2'
+        explode3 = globalPropPool.getProp('dust2')
+        explode3.setTwoSided(True)
+        explode3.setColor(0.251, 0.251, 0.251, 1)
+        explode3.setTransparency(1)
+        explode3.setBillboardPointWorld(2)
+        explodeTrack3 = Sequence(Wait(.45))
+        explodeTrack3.append(
+            getPropAppearTrack(explode3, battle, explodePosPoints3, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack3.append(Sequence(ActorInterval(explode3, splatName), Func(explode3.detachNode)))
+        explodePosPoints4 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + 4), PNT3_ZERO]
+        explode4 = globalPropPool.getProp('dust2')
+        explode4.setTwoSided(True)
+        explode4.setColor(0.251, 0.251, 0.251, 1)
+        explode4.setTransparency(1)
+        explode4.setBillboardPointWorld(2)
+        explodeTrack4 = Sequence(Wait(.6))
+        explodeTrack4.append(
+            getPropAppearTrack(explode3, battle, explodePosPoints4, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack4.append(Sequence(ActorInterval(explode4, splatName), Func(explode4.detachNode)))
+        explodePosPoints5 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() - 4), PNT3_ZERO]
+        explode5 = globalPropPool.getProp('dust2')
+        explode5.setTwoSided(True)
+        explode5.setColor(0.251, 0.251, 0.251, 1)
+        explode5.setTransparency(1)
+        explode5.setBillboardPointWorld(2)
+        explodeTrack5 = Sequence()
+        explodeTrack5.append(
+            getPropAppearTrack(explode3, battle, explodePosPoints5, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack5.append(Sequence(ActorInterval(explode5, splatName), Func(explode5.detachNode)))
+        return Parallel(suitTrack, explodeTrack, explodeTrack2, explodeTrack3, explodeTrack4, explodeTrack5, colorTracks)
 
 
 def createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits):

@@ -1583,8 +1583,6 @@ class BattleCalculatorAI:
                         self.setSuitCondition(target.doId, 'soaked', 1, 1, 'setBoth')
                         self.setSuitCondition(target.doId, 'zapped', 1, 1, 'setBoth')
                         self.__removeLured(target.doId)
-                        if self.suitHasCondition(target.doId, 'lured'):
-                            self.setSuitCondition(target.doId, 'lured', 0, 0, 'setBoth')
                     if self.__isWet(targetId) or self.__isRaining(self.battle.getToon(toonId)):
                         chance = InstaKillChance[atkLevel]
                         if random.randint(0, 99) <= chance:

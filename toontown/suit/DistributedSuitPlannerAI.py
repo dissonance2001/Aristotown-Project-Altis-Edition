@@ -1261,6 +1261,10 @@ def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
         revives = 1
     elif name == 'wsi':
         revives = 1
+    elif name == 'erclaim':
+        revives = 1
+    elif name == 'erfit':
+        revives = 1
     elif name == 'redd':
         revives = 1
     sp.createNewSuit([], pointmap, suitName=name, suitLevel=level, skelecog=skelecog, revives=revives, waiter=waiter)

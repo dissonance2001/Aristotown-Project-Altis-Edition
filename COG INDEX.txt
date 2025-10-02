@@ -245,8 +245,10 @@ dold - Director Of Land Development Level 25.mgr
 	Videographer Manager:
 fmaker - Filmmaker Level 26.mgr
 
+	Count Erclaim/Erfit Manager:
+trainer - NOTHING Level N/A.mgr
+
 	Nothing:
-pbs - NOTHING Level N/A.mgr
 jgd - NOTHING Level N/A.mgr
 bby - NOTHING Level N/A.mgr
 
@@ -331,7 +333,7 @@ pbl - Publisher Level 20.mgr
 	Videographer Manager:
 videog - Videographer Level 99.mgr
 director - Director Level 30.mgr
-bcaster - Broadcaster Level 33.mgr
+bcaster - Videographer Silhouette Level 33.mgr
 
 	High Roller Stunt Double:
 std2 - Stunt Double - Level 18.exe
