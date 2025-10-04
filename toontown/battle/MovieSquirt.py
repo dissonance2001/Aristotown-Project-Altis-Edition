@@ -356,7 +356,7 @@ def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, attack, lev
             suitTrack.append(Func(suits[suitIndex].addPowerhouseRotation, hp + 150))
         if suits[suitIndex].isSued:
             suitTrack.append(Func(suits[suitIndex].makeSued, 3))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
         #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
             #suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
         if suits[suitIndex].isVirtual:
@@ -406,7 +406,7 @@ def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
             suitTrack.append(Func(suits[suitIndex].addPowerhouseRotation, hp + 150))
         if suits[suitIndex].isSued:
             suitTrack.append(Func(suits[suitIndex].makeSued, 3))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
         #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
             #suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
         if suits[suitIndex].isVirtual:
@@ -456,7 +456,7 @@ def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
             suitTrack.append(Func(suits[suitIndex].addPowerhouseRotation, hp + 150))
         if suits[suitIndex].isSued:
             suitTrack.append(Func(suits[suitIndex].makeSued, 3))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
         #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
             #suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
         if suits[suitIndex].isVirtual:
@@ -506,7 +506,7 @@ def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
             suitTrack.append(Func(suits[suitIndex].addPowerhouseRotation, hp + 150))
         if suits[suitIndex].isSued:
             suitTrack.append(Func(suits[suitIndex].makeSued, 3))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimation))
+        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
         #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
            # suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
         if suits[suitIndex].isVirtual:

@@ -204,7 +204,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     else:
         track.append(
-            Func(suit.setNeutralAnimation))
+            Func(suit.setNeutralAnimationDrop))
 
     def returnTrapToSuit(suit = suit, trapStorage = trapStorage):
         return
@@ -242,7 +242,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     else:
         track.append(
-            Func(suit.setNeutralAnimation))
+            Func(suit.setNeutralAnimationDrop))
     return track
 
 
@@ -841,7 +841,7 @@ def doMarkRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence()
-    suitTrack.append(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.splatClear), Func(suit.setNeutralAnimation)))
+    suitTrack.append(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.splatClear), Func(suit.setNeutralAnimationDrop)))
     return suitTrack
 
 def doSueRemoval(attack):
@@ -937,7 +937,7 @@ def doCourtCalculations(attack):
     calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimation), Wait(2.0))
+    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimationDrop), Wait(2.0))
     if suit.isDesperation:
         suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     else:

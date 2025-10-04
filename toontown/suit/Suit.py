@@ -7134,6 +7134,69 @@ class Suit(Avatar.Avatar):
     def removeInsured(self):
         self.isInsured = 0
 
+    def leaveAfterimageTask(self, task):
+        """Create a faded clone of the Cog as an afterimage."""
+        ghost = NodePath("afterimage")
+        self.copyTo(ghost)  # duplicate suit into ghost node
+        ghost.reparentTo(render)
+        ghost.setPos(self.getPos(render))
+        ghost.setHpr(self.getHpr(render))
+        ghost.setScale(self.getScale())
+
+        # Make ghost transparent + tinted
+        ghost.setTransparency(TransparencyAttrib.MAlpha)
+        ghost.setColorScale(1, 1, 1, 0.5)  # semi-transparent
+
+        # Fade out + remove
+        fade = Sequence(
+            LerpColorScaleInterval(ghost, 0.4, (1, 1, 1, 0)),  # fade to invisible
+            Func(ghost.hide)
+        )
+        fade.start()
+
+        return task.again  # repeat every 0.1 sec
+
+    def leaveAfterimageTask2(self, task):
+        """Create a faded clone of the Cog as an afterimage."""
+        ghost = NodePath("afterimage")
+        self.copyTo(ghost)  # duplicate suit into ghost node
+        ghost.reparentTo(render)
+        ghost.setPos(self.getPos(render))
+        ghost.setHpr(self.getHpr(render))
+        ghost.setScale(self.getScale())
+
+        # Make ghost transparent + tinted
+        ghost.setTransparency(TransparencyAttrib.MAlpha)
+        ghost.setColorScale(1, 1, 1, 0.5)  # semi-transparent
+
+        # Fade out + remove
+        fade = Sequence(
+            LerpColorScaleInterval(ghost, 0.4, (1, 1, 1, 0)),  # fade to invisible
+            Func(ghost.hide)
+        )
+        fade.start()
+
+        return task.again  # repeat every 0.1 sec
+
+    def leaveAfterimageTask3(self, task):
+        """Create a faded clone of the Cog as an afterimage."""
+        ghost = NodePath("afterimage")
+        self.copyTo(ghost)  # duplicate suit into ghost node
+        ghost.reparentTo(self)
+
+        # Make ghost transparent + tinted
+        ghost.setTransparency(TransparencyAttrib.MAlpha)
+        ghost.setColorScale(1, 1, 1, 0.5)  # semi-transparent
+
+        # Fade out + remove
+        fade = Sequence(
+            LerpColorScaleInterval(ghost, 0.4, (1, 1, 1, 0)),  # fade to invisible
+            Func(ghost.hide)
+        )
+        fade.start()
+
+        return task.again  # repeat every 0.1 sec
+
     def makeExtraAttacks(self, num):
         self.extraAttack = num
         if self.extraAttack == 1:

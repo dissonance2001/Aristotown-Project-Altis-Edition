@@ -206,7 +206,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
     #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     track.append(
-        Func(suit.setNeutralAnimation))
+        Func(suit.setNeutralAnimationDrop))
 
     def returnTrapToSuit(suit = suit, trapStorage = trapStorage):
         return
@@ -268,7 +268,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
       #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     if not attack['name'] == 'BroadcasterDonation':
         track.append(
-            Func(suit.setNeutralAnimation))
+            Func(suit.setNeutralAnimationDrop))
     return track
 
 def getSuitAnimTrackHighRoller(attack, delay = 0, splicedAnims = None, playRate = 1.0):

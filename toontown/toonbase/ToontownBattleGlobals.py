@@ -751,6 +751,7 @@ ValidStatusConditions = (
     'squirtBoost',
     'nolevel7s',
     'soakToon',
+    'markToon',
     'nolevel6s',
     'nolevel5s',
     'nolevel8s',

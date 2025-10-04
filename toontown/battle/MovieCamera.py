@@ -1307,6 +1307,57 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
     elif name == 'RadiographerDanceSession':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'ErclaimLaffSteal':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'ErclaimRiseFromTheScrap':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ErclaimScopeCreep':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ErclaimPhase2':
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
+    elif name == 'ErclaimSacrifice':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErclaimSacrifice2':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErclaimSacrifice3':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErclaimSacrifice4':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErclaimSacrifice5':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErfitHydrationCheck':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'ErfitHydrationCheckRevert':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=3, attackDuration=3),
+                                 heldShot(5, 0, .5, 155, 35, 0, attackDuration - 3)))
+    elif name == 'ErfitProToonShake':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'ErfitGainsFromTheScrap':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErfitGainsFromTheScrap2':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErfitGainsFromTheScrap3':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErfitGainsFromTheScrap4':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErfitGainsFromTheScrap5':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'ErfitPersonalTrainer':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ErfitPhase2':
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
     #high roller phase 1 cheats
     elif name == 'HighRollerNoAttack':
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')

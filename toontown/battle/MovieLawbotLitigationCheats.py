@@ -206,7 +206,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     else:
         track.append(
-            Func(suit.setNeutralAnimation))
+            Func(suit.setNeutralAnimationDrop))
 
     def returnTrapToSuit(suit = suit, trapStorage = trapStorage):
         return
@@ -253,7 +253,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     else:
         track.append(
-            Func(suit.setNeutralAnimation))
+            Func(suit.setNeutralAnimationDrop))
     return track
 
 
@@ -983,7 +983,7 @@ def doBayouBash(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack2 = Sequence(MovieUtil.createSuitSnapInterval(suit), Func(suit.setNeutralAnimation))
+    suitTrack2 = Sequence(MovieUtil.createSuitSnapInterval(suit), Func(suit.setNeutralAnimationDrop))
     suitTrack2.append(Wait(1.25))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     return Parallel(suitTrack, suitTrack2, soundTrack)
@@ -1045,10 +1045,6 @@ def doCourtSanctionBindings(attack):
         soundTrack = getSoundTrack('SA_sanction.ogg', delay=.5, node=suit)
         notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextCheat, - int(dmg)), Func(toon.showHpString, "SANCTIONED!"))
         if dmg > 0:
-            targetPos = toon.getPos(battle)
-            suitTrack.append(Func(suit.headsUp, battle, targetPos))
-            origPos, origHpr = battle.getActorPosHpr(suit)
-            suitTrack.append(Func(suit.setHpr, battle, origHpr))
             propTracks.append(propTrack)
             suitTracks.append(suitTrack)
             soundTracks.append(soundTrack)
@@ -1379,7 +1375,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
         )
         knifeTracks.append(knifeTrack)
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
-    suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimation))
+    suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimationDrop))
     #insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
     #soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)

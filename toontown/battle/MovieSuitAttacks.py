@@ -5,6 +5,7 @@ from toontown.battle import MovieSellbotLitigationCheats
 from toontown.battle import MovieHighRollerCheats
 from toontown.battle import MovieDirectorsCheats
 from toontown.battle import MovieUniversalCheats
+from toontown.battle import MovieCountCheats
 from toontown.battle import MovieUtil
 from toontown.battle import BattleParticles
 from direct.directnotify import DirectNotifyGlobal
@@ -578,6 +579,45 @@ def doSuitAttack(attack):
         suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 5)
     elif name == 'RadiographerDanceSession':
         suitTrack = MovieSellbotLitigationCheats.doDanceSession(attack)
+        # erclaim erfit cheats
+    elif name == 'ErclaimLaffSteal':
+        suitTrack = MovieCountCheats.doLaffSteal(attack)
+    elif name == 'ErclaimRiseFromTheScrap':
+        suitTrack = MovieCountCheats.doRiseFromTheScrap(attack)
+    elif name == 'ErclaimScopeCreep':
+        suitTrack = MovieCountCheats.doScopeCreep(attack)
+    elif name == 'ErclaimPhase2':
+        suitTrack = MovieCountCheats.doErclaimPhase2(attack)
+    elif name == 'ErclaimSacrifice':
+        suitTrack = MovieCountCheats.doSacrifice(attack)
+    elif name == 'ErclaimSacrifice2':
+        suitTrack = MovieCountCheats.doSacrifice(attack)
+    elif name == 'ErclaimSacrifice3':
+        suitTrack = MovieCountCheats.doSacrifice(attack)
+    elif name == 'ErclaimSacrifice4':
+        suitTrack = MovieCountCheats.doSacrifice(attack)
+    elif name == 'ErclaimSacrifice5':
+        suitTrack = MovieCountCheats.doSacrifice(attack)
+    elif name == 'ErfitHydrationCheck':
+        suitTrack = MovieCountCheats.doHydrationCheck(attack)
+    elif name == 'ErfitHydrationCheckRevert':
+        suitTrack = MovieCountCheats.doHydrationCheckRevert(attack)
+    elif name == 'ErfitProToonShake':
+        suitTrack = MovieCountCheats.doProToonShake(attack)
+    elif name == 'ErfitGainsFromTheScrap':
+        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
+    elif name == 'ErfitGainsFromTheScrap2':
+        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
+    elif name == 'ErfitGainsFromTheScrap3':
+        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
+    elif name == 'ErfitGainsFromTheScrap4':
+        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
+    elif name == 'ErfitGainsFromTheScrap5':
+        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
+    elif name == 'ErfitPersonalTrainer':
+        suitTrack = MovieCountCheats.doPersonalTrainer(attack)
+    elif name == 'ErfitPhase2':
+        suitTrack = MovieCountCheats.doErfitPhase2(attack)
         # high roller phase 1
     elif name == 'HighRollerNoAttack':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
@@ -1091,7 +1131,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
     #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     track.append(
-        Func(suit.setNeutralAnimation))
+        Func(suit.setNeutralAnimationDrop))
 
     def returnTrapToSuit(suit = suit, trapStorage = trapStorage):
         return
@@ -1135,7 +1175,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
         #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     track.append(
-            Func(suit.setNeutralAnimation))
+            Func(suit.setNeutralAnimationDrop))
     track.append(unsueTrack)
     return track
 
@@ -2883,7 +2923,7 @@ def doDenialOfService(attack):
 def doHostileTakeoverNew(attack):
     suit = attack['suit']
     battle = attack['battle']
-    knifeDelay = 4.0
+    knifeDelay = 3.0
     suitTrack = getSuitAnimTrack(attack, playRate=1.25)
     knifeTracks = Parallel()
     for i in xrange(120):
@@ -2904,7 +2944,7 @@ def doHostileTakeoverNew(attack):
      ['slip-forward', 0.01, 1.0]]
     dodgeAnims = [['duck', 1e-06, 0.8]]
     toonTracks = getToonTracks(attack, damageDelay=knifeDelay + 0.11, splicedDamageAnims=damageAnims, dodgeDelay=knifeDelay - 0.1, splicedDodgeAnims=dodgeAnims)
-    soundTrack = Sequence(Wait(4.0), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_hostileTakeover.ogg'), node=suit))
+    soundTrack = Sequence(Wait(3.0), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_hostileTakeover.ogg'), node=suit))
     return Parallel(suitTrack, knifeTracks, soundTrack, toonTracks)
 
 

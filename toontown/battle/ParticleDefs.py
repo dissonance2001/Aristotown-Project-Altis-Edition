@@ -833,8 +833,8 @@ def shred(self):
 @particle
 def shred2(self):
     self.reset()
-    self.setPos(0.000, 3.000, 2.300)
-    self.setHpr(0.000, 0.000, 0.000)
+    self.setPos(0.000, 12.500, 6.000)
+    self.setHpr(180.000, -15.000, 0.000)
     self.setScale(1.000, 1.000, 1.000)
     p0 = Particles.Particles('particles-1')
     # Particles parameters
@@ -2836,8 +2836,8 @@ def demotionSpray2(self):
 @particle
 def FireSpray(self):
     self.reset()
-    self.setPos(0.000, 12.500, 3.000)
-    self.setHpr(180.000, 0.000, 0.000)
+    self.setPos(0.000, 10.000, 4.000)
+    self.setHpr(180.000, -10.000, 0.000)
     self.setScale(1.000, 1.000, 1.000)
     p0 = Particles.Particles('particles-1')
     # Particles parameters
@@ -2875,7 +2875,7 @@ def FireSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitude(8.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))

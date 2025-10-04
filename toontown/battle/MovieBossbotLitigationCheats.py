@@ -155,7 +155,7 @@ def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
-    neutralTrack =  Func(suit.setNeutralAnimation())
+    neutralTrack =  Func(suit.setNeutralAnimation)
     unluredTrack = Func(battle.unlureSuit, suit)
     updateTrack = Parallel(Func(suit.setChatAbsolute,
                                 '',
@@ -661,10 +661,11 @@ def doPaperCut(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        BattleParticles.loadParticles()
         particleEffect = BattleParticles.createParticleEffect('Shred2')
         targetPos = toon.getPos(battle)
         origPos, origHpr = battle.getActorPosHpr(suit)
-        partTrack = getPartTrack(particleEffect, 4, 5.0, [particleEffect, suit, 0], softStop=-2)
+        partTrack = getPartTrack(particleEffect, 4, 5.0, [particleEffect, toon, 0], softStop=-2)
         toonTrack = getToonTracksCheat(attack, 5.5, ['cringe'], 3.4, ['struggle'])
         notifyTrack = Sequence(Wait(5.5), Func(toon.showHpTextCheat, - int(dmg)),
                            Func(toon.showHpString, "VULNERABLE!"))
@@ -673,7 +674,7 @@ def doPaperCut(attack):
             partTracks.append(partTrack)
     suitTrack2 = Sequence(Wait(4), ActorInterval(suit, 'sanction', endTime=1), Wait(2.0),
                           ActorInterval(suit, 'sanction', startTime=1), Func(suit.setHpr, battle, origHpr),
-                          Func(suit.setNeutralAnimation))
+                          Func(suit.setNeutralAnimationDrop))
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5), Func(suit.headsUp, battle, targetPos))
     soundTrack = getSoundTrack('SA_shred.ogg', delay=4, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
@@ -742,7 +743,7 @@ def doBookkeepingRetaliation(attack):
         toon = t['toon']
         dmg = t['hp']
         suitTrack = Sequence(getSuitAnimTrack(attack))
-        suitTrack2 = Sequence(ActorInterval(suit, 'effort', duration=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimation))
+        suitTrack2 = Sequence(ActorInterval(suit, 'effort', duration=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimationDrop))
         notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextCheat, - int(dmg)),
                                Func(toon.showHpString, "GAG DEBUFF!"))
         soundTrack1 = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
@@ -848,7 +849,7 @@ def doCollectCall(attack):
     cagePropTracks.append(cagePropTrack2)
     origPos, origHpr = battle.getActorPosHpr(suit)
     suitReset = Func(suit.setHpr, battle, origHpr)
-    suitTrack.append(Sequence(ActorInterval(suit, 'phone', playRate=1.5), Func(suit.setNeutralAnimation)))
+    suitTrack.append(Sequence(ActorInterval(suit, 'phone', playRate=1.5), Func(suit.setNeutralAnimationDrop)))
     soundTrack1 = getSoundTrack('tt_s_ara_cmg_itemHitsFloor.ogg', delay=1.75, node=suit)
     soundTrack2 = getSoundTrack('SA_bash.ogg', delay=0, node=suit)
     soundTrack3 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=4.75)
@@ -921,7 +922,7 @@ def doVoicemail(attack):
     calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimation), Wait(2.0))
+    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimationDrop), Wait(2.0))
     suitSpeechTrack = Func(suit.setChatAbsolute,
                            "Every call costs more, and I always keep track. Updating billing record... to %s dollars." %
                            int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
@@ -1421,12 +1422,12 @@ def doAmbassadorPhase2(attack):
     soundTrack3 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     suitTrackAnim.append(MovieUtil.createAmbassadorReviveTrack(theSuit, battle))
     suitTrackAnim.append(Func(theSuit.makeAmbassadorPhase3))
-    suitTrackAnim.append(Func(theSuit.setNeutralAnimation))
+    suitTrackAnim.append(Func(theSuit.setNeutralAnimationDrop))
     suitTrackAnim.append(Wait(2))
     suitTrackAnim.append(Parallel(Func(theSuit.updateHealthBar, 0), ActorInterval(theSuit, 'frustrated'),
                                   Func(theSuit.showHpString, "+ 50% Damage!"),
                                   Func(theSuit.setChatAbsolute, "You toons have me so overworked, you made me blow right through my suit! Now it's time to bring out the big guns.", CFSpeech | CFTimeout),
-                                  Func(theSuit.setNeutralAnimation)))
+                                  Func(theSuit.setNeutralAnimationDrop)))
     suitTrackAnim.append(Wait(3))
     return Parallel(suitTrackAnim, soundTrack3)
 
@@ -1814,7 +1815,7 @@ def doSoakImmune(attack):
     makeUnShielding3 = Func(suit.makeUnLureImmune)
     suitTrack = Sequence(getSuitAnimTrack(attack), Func(suit.removePowerhouseRotation))
     suitTrack.append(Wait(3.0))
-    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.setNeutralAnimation))
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.setNeutralAnimationDrop))
     return Parallel(suitTrack, makeShielding, makeUnShielding2, suitTrack2, makeUnShielding3, makeUnShielding)
 
 def doSyphon(attack):
@@ -1850,7 +1851,7 @@ def doSyphonDesperation(attack):
         if not s.dna.name == 'phouse':
             suitTrack.append(Func(s.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout))
         suitTrack.append(makeSyphon)
-        suitTrack.append(Func(s.setNeutralAnimation))
+        suitTrack.append(Func(s.setNeutralAnimationDrop))
         suitTracks.append(suitTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack), Func(theSuit.removePowerhouseRotation))
     suitTrack.append(Wait(3.0))
@@ -1950,7 +1951,7 @@ def doLureImmune(attack):
     makeUnShielding3 = Func(suit.makeLureImmune)
     suitTrack = Sequence(getSuitAnimTrack(attack), Func(suit.removePowerhouseRotation))
     suitTrack.append(Wait(3.0))
-    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'rake-react'), Func(suit.setNeutralAnimation))
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'rake-react'), Func(suit.setNeutralAnimationDrop))
     return Parallel(suitTrack, suitTrack2, makeShielding, makeUnShielding2, makeUnShielding3, makeUnShielding)
 
 def doLiquidateGROUP(attack):
@@ -2079,7 +2080,7 @@ def doBudgetCuts(attack):
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'calculator', playRate=1.25), Func(suit.setNeutralAnimation), Wait(2.0))
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'calculator', playRate=1.25), Func(suit.setNeutralAnimationDrop), Wait(2.0))
     calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
@@ -2110,7 +2111,7 @@ def doBudgetCutsOLD(attack):
     battle = attack['battle']
     targets = attack['target']
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'rubber-stamp'), Func(suit.setNeutralAnimation))
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'rubber-stamp'), Func(suit.setNeutralAnimationDrop))
     toonTracks = Parallel()
     notifyTracks = Parallel()
     propTracks = Parallel()
@@ -2151,7 +2152,7 @@ def doBudgetCuts2(attack):
     battle = attack['battle']
     calculator = globalPropPool.getProp('court-costs-calculator')
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'calculating-costs'), Func(suit.setNeutralAnimation))
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'calculating-costs'), Func(suit.setNeutralAnimationDrop))
     suitTrack2.append(Wait(2.0))
     calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcDuration = 0.25
