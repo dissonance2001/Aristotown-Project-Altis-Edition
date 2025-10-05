@@ -144,8 +144,7 @@ def __doSuitDrops(dropTargetPairs, npcs, npcDrops):
         objName = objects[level]
         target = dropTargetPair[1]
         hp = target['hp']
-        if hp > 0:
-            lastDrop = dropTargetPairs.index(dropTargetPair) == len(dropTargetPairs) - 1
+        lastDrop = dropTargetPairs.index(dropTargetPair) == len(dropTargetPairs) - 1
         track = __dropObjectForSingle(drop, delay, objName, level, alreadyDodged, alreadyTeased, npcs, target, npcDrops,
                                       lastDrop)
         if track:
