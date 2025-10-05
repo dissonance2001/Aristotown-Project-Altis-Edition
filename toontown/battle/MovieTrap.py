@@ -332,13 +332,8 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     button = globalPropPool.getProp('trap-button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
-    toonTrack = Sequence()
-    toonTrack.append(Func(MovieUtil.showProps, buttons, hands))
-    toonTrack.append(Func(toon.headsUp, battle, suitPos))
-    toonTrack.append(ActorInterval(toon, 'pushbutton'))
-    toonTrack.append(Func(MovieUtil.removeProps, buttons))
-    toonTrack.append(Func(toon.loop, 'neutral'))
-    toonTrack.append(Func(toon.setHpr, battle, origHpr))
+    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, suitPos), Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'trap-button')),
+                         Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'), Func(toon.setHpr, battle, origHpr))
     if propName == 'quicksand':
         propSound = globalBattleSoundCache.getSound('TL_quicksand.ogg')
     elif propName == 'spring':

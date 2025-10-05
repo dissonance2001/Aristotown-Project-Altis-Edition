@@ -642,6 +642,148 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
 def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
     return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
 
+def doThrowBookCog(attack, ind):
+    theSuit = attack['suit']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[ind]
+
+    suitTracks = Parallel()
+    suitTrack = Sequence()
+    suitTrack.append(Wait(3))
+    suitTrack.append(Parallel(ActorInterval(targetSuit, 'flatten', duration=.55), MovieUtil.createSuitCrashTrack(targetSuit, battle)))
+    suitTracks.append(suitTrack)
+    posPoints = [Point3(-0.5, 0, 0), VBase3(0, 0, 180)]
+    knifeTracks = Parallel()
+    hitPoint = targetSuit.getPos(battle)
+    hitPoint2 = targetSuit.getPos(battle)
+    hitPoint2.setZ(targetSuit.height + 4)
+    hitPoint.setY(hitPoint.getY() + 0.5)
+    knife = globalPropPool.getProp('lawbook')
+    knifeTrack = Sequence(
+            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, Point3(2.25, 2.25, 2.25),
+                               scaleUpTime=0.1),
+            Wait(1.5),
+            Parallel(
+                getThrowTrack(knife, hitPoint, 1.0, battle, -100),
+                LerpHprInterval(knife, 0.5, VBase3(0, 0, 0)), LerpScaleInterval(knife, 0, VBase3(7, 7, 7))), Sequence(Wait(1), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0))),
+            Func(MovieUtil.removeProp, knife)
+        )
+    knifeTracks.append(knifeTrack)
+    hpTrack = Sequence(Wait(3), Func(targetSuit.checkHeadRoller2, theSuit, battle))
+    soundTrack3 = getSoundTrack('LB_toonup.ogg', delay=3, node=theSuit)
+    suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
+    soundTrack2 = getSoundTrack('AA_drop_bigweight_miss.ogg', delay=3, node=theSuit)
+    multiTrack = Parallel(soundTrack2)
+    return Parallel(suitTrackAnim, suitTracks, hpTrack, soundTrack3, multiTrack, knifeTracks)
+
+def doPaperRain(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    dmg = target[0]['hp']
+    toon = target[0]['toon']
+    partDelay = 0
+    damageDelay = 1.5
+    dodgeDelay = 1
+    cloudPropTracks = Parallel()
+    puddleTracks = Parallel()
+    suitTrack = Sequence(Wait(0.5), getSuitTrack(attack))
+    notifyTracks = Parallel()
+    for t in attack['target']:
+        toon = t['toon']
+        dmg = t['hp']
+        BattleParticles.loadParticles()
+        cloud = globalPropPool.getProp('stormcloud')
+        rainEffect = BattleParticles.createParticleEffect(file='paperRainfall')
+        rainEffect2 = BattleParticles.createParticleEffect(file='paperRainfall')
+        rainEffect3 = BattleParticles.createParticleEffect(file='paperRainfall')
+        initialCloudHeight = suit.height + 30
+        cloudPosPoints = [Point3(0, 3, initialCloudHeight), VBase3(180, 0, 0)]
+        cloudPropTrack = Sequence()
+        cloudPropTrack.append(Func(cloud.pose, 'stormcloud', 0))
+        cloudPropTrack.append(getPropAppearTrack(cloud, suit, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.25))
+        cloudPropTrack.append(Func(battle.movie.needRestoreRenderProp, cloud))
+        cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
+        targetPoint = __toonFacePoint(toon)
+        targetPoint.setZ(targetPoint[2] + 30)
+        notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextCheat, - int(dmg)),
+                               Func(toon.showHpString, "VULNERABLE!"))
+        if dmg > 0:
+            notifyTracks.append(notifyTrack)
+        cloudPropTrack.append(Wait(0.6))
+        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
+        cloudPropTrack.append(Parallel(
+            Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=3.1, cleanup=True, softStopT=-1)),
+            Sequence(Wait(0.1), ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=4.0, cleanup=True, softStopT=-1)),
+            Sequence(Wait(0.1), ParticleInterval(rainEffect3, cloud, worldRelative=0, duration=4.0, cleanup=True, softStopT=-1)),
+            Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=2.3))))
+        cloudPropTrack.append(Wait(0.4))
+        cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
+        cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
+        cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
+        cloudPropTracks.append(cloudPropTrack)
+    soundTrack1 = getSoundTrack('LB_boss_paper_spin.ogg', delay=1.0, node=suit)
+    soundTrack = Parallel(soundTrack1)
+    damageAnims = [['cringe',
+                    0.01,
+                    0.4,
+                    0.8], ['duck', 0.01, 1.6]]
+    toonTracks = getToonTracksCheat(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims,
+                                    dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
+    return Parallel(suitTrack, toonTracks, cloudPropTracks, notifyTracks, soundTrack)
+
+def doWhirlwind(attack):
+    suit = attack['suit']
+    target = attack['target']
+    dmg = target[0]['hp']
+    toon = target[0]['toon']
+    battle = attack['battle']
+    suitTrack = Sequence(getSuitTrack(attack))
+    cagePropTracks = Parallel()
+    # for t in attack['target']:
+    # toon = t['toon']
+    # dmg = t['hp']
+    cage = loader.loadModel('phase_5/models/cogdominium/tt_m_ara_cfg_whirlwind')
+    cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
+    # cage.setH(90)
+    # cage.setPosHpr(0, 0, 0, 180, 0, 0)
+    toonPos = toon.getPos(battle)
+    y = toonPos.getY()
+    if dmg == 0:
+        y -= 5
+    cagePos = [Point3(toonPos.getX(), y, 100.0), toon.getHpr(battle)]
+    spinTrack = Sequence(LerpHprInterval(cage, 5, Point3(-7200, 0, 0)))
+    cagePropTrack = Sequence(
+        getPropAppearTrack(cage, battle, cagePos, .50, scaleUpPoint=Point3(2.0), scaleUpTime=1.0),
+        Parallel(cagePosition),
+        Parallel(
+            cage.posInterval(0.5, Point3(toonPos.getX(), y, 0.1), blendType='easeIn'),
+            SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/tt_s_ara_cfg_whirlwind.ogg'), duration=0.75, node=cage)
+        ),
+        Func(base.playSfx, base.loader.loadSfx('phase_5/audio/sfx/tt_s_ara_cfg_toonInWhirlwind.ogg'), node=cage), Parallel(spinTrack),
+        LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
+        Func(MovieUtil.removeProp, cage)
+    )
+    cagePropTracks.append(cagePropTrack)
+    damageAnims = [['slip-forward', 0.0001, 0.5]]
+    damageAnims = []
+    damageAnims.append(['duck',
+                        0.01,
+                        0.01,
+                        1.1])
+    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
+    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
+    toonTrack = getToonTrack(attack, damageDelay=.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91,
+                             dodgeAnimNames=['sidestep'], showDamageExtraTime=2.1, showMissedExtraTime=1.0)
+    toonSpinTrack = Sequence(Wait(0.9), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)),
+                                 LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)),
+                                 LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)),
+                                 LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)),
+                                 LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)),
+                             LerpHprInterval(toon, 2.0, Point3(-2620, 0, 0)),
+                                 LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5))
+    return Parallel(suitTrack, cagePropTracks, toonTrack, toonSpinTrack)
+
 def doPeckingOrder(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -1051,6 +1193,57 @@ def doCourtSanctionBindings(attack):
             notifyTracks.append(notifyTrack)
     toonDamageTrack = getToonTracksCheat(attack, 0.8, ['conked'], 0, ['neutral'])
     return Parallel(suitTracks, toonTracks, toonDamageTrack, propTracks, soundTracks, notifyTracks)
+
+def doGavelCourtRecord2(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    propTracks = Parallel()
+    toonTracks = Parallel()
+    nothingTrack = Sequence(Wait(1.0))
+    suitTrack = Sequence(getSuitTrack(attack))
+    for t in targets:
+        toon = t['toon']
+        gavel = globalPropPool.getProp('LB_gavel')
+        dmg = t['hp']
+        toonPos = toon.getPos(battle)
+        gavelPos = Point3(toonPos.getX(), -17.5, 0)
+        propTrack = Sequence(
+            getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
+                               scaleUpPoint=Point3(1), scaleUpTime=1.5),
+            LerpHprInterval(gavel, 0.5, VBase3(0, -90, 0)),
+            Parallel(getSoundTrack('LB_gavel.ogg'), Sequence(
+                Wait(0.1),
+                LerpHprInterval(gavel, 0.5, VBase3(0, 0, 0)),
+                LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO)
+            ))
+        )
+        toonTrack = Sequence(
+            Wait(2.0),
+            Parallel(
+                Func(toon.enterFlattened),
+
+            ),
+            Wait(1.0),
+            Parallel(
+                Sequence(
+                    Wait(0.5),
+                    Func(toon.exitFlattened),
+                    Func(toon.showHpText, -dmg, openEnded=0),
+                    #Func(__doDamage, toon, dmg, t['died'])
+                ),
+                getSoundTrack('toon_decompress.ogg'),
+                Sequence(
+                    ActorInterval(toon, 'jump'),
+                    Func(toon.loop, 'neutral')
+                )
+            )
+        )
+        if dmg > 0:
+            propTracks.append(propTrack)
+            toonTracks.append(toonTrack)
+    toonDamageTrack = getToonTracksCheat(attack, 3.5, ['nothing'], 0, ['neutral'])
+    return Parallel(toonTracks, toonDamageTrack, suitTrack, propTracks)
 
 def doGavelCourtRecord(attack):
     suit = attack['suit']

@@ -143,13 +143,14 @@ def __doSuitDrops(dropTargetPairs, npcs, npcDrops):
         level = drop['level']
         objName = objects[level]
         target = dropTargetPair[1]
-        lastDrop = dropTargetPairs.index(dropTargetPair) == len(dropTargetPairs) - 1
+        hp = target['hp']
+        if hp > 0:
+            lastDrop = dropTargetPairs.index(dropTargetPair) == len(dropTargetPairs) - 1
         track = __dropObjectForSingle(drop, delay, objName, level, alreadyDodged, alreadyTeased, npcs, target, npcDrops,
                                       lastDrop)
         if track:
             toonTracks.append(track)
             delay += TOON_DROP_DELAY
-        hp = target['hp']
         if hp <= 0:
             if level >= 4:
                 alreadyTeased = 1
@@ -376,94 +377,94 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
     kbbonus = target['kbbonus']
     hpbonus = drop['hpbonus']
     headless = False
-    if hp > 0:
-        suitTrack = Sequence()
-        for s in battle.activeSuits:
-            if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
-                suitTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
-        showDamage = Func(suit.showHpText, -hp, openEnded=0)
-        updateHealthBar = Func(suit.updateHealthBar, hp)
+    suitTrack = Sequence()
+    for s in battle.activeSuits:
+        if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
+            suitTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
+    showDamage = Func(suit.showHpText, -hp, openEnded=0)
+    updateHealthBar = Func(suit.updateHealthBar, hp)
+    if majorObject:
+        anim = 'flatten'
+    else:
+        anim = 'drop-react'
+    if died and majorObject:
+        suitReact = ActorInterval(suit, anim, endTime=0.55)
+    elif not lastDrop:
+        suitReact = ActorInterval(suit, anim, endTime=TOON_DROP_DELAY)
+    else:
+        suitReact = ActorInterval(suit, anim)
+    suitTrack.append(Wait(delay + tObjectAppears))
+    suitTrack.append(showDamage)
+    suitTrack.append(updateHealthBar)
+    suitGettingHit = Parallel(suitReact)
+    if level == UBER_GAG_LEVEL_INDEX:
+        gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
+        suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
+    bonusTrack = None
+    if died and not suit.isVirtual:
         if majorObject:
-            anim = 'flatten'
-        else:
-            anim = 'drop-react'
-        if died and majorObject:
-            suitReact = ActorInterval(suit, anim, endTime=0.55)
-        elif not lastDrop:
-            suitReact = ActorInterval(suit, anim, endTime=TOON_DROP_DELAY)
-        else:
-            suitReact = ActorInterval(suit, anim)
-        suitTrack.append(Wait(delay + tObjectAppears))
-        suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
-        suitGettingHit = Parallel(suitReact)
-        if level == UBER_GAG_LEVEL_INDEX:
-            gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
-            suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
-        bonusTrack = None
-        if died and not suit.isVirtual:
-            if majorObject:
-                bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
+            bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
                                       Func(suit.showHpText, -hpbonus, 1),
                                       Func(suit.updateHealthBar, hpbonus))
-                suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit, battle))
-                suitTrack.append(suitGettingHit)
-                suitIndex = battle.activeSuits.index(suit)
-                if not suit.isShielding:
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-                    suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
+            suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit, battle))
+            suitTrack.append(suitGettingHit)
+            suitIndex = battle.activeSuits.index(suit)
+            if not suit.isShielding:
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+                suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
+            if hp > 0:
                 return Parallel(suitTrack, bonusTrack)
             else:
-                #headless = True
-                sequence = Sequence(Wait(random.uniform(0.25, 2.0)))
-                thing = Parallel(sequence, MovieUtil.spawnHeadExplosion(suit, battle))
-                suitGettingHit.append(thing)
-        suitTrack.append(suitGettingHit)
-        if hpbonus > 0:
-            bonusTrack = Sequence(Wait(delay + tObjectAppears + 1), Func(suit.showHpText, -hpbonus, 1), Func(suit.updateHealthBar, hpbonus))
-        if suit.dna.name == 'redd' and revived != 0:
-            suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        if revived != 0 and suit.isSkeleton:
-            suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
-            suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0 and suit.isVirtual:
-            suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died != 0 and not suit.isVirtual:
-            suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
-        suitTrack.append(Func(suit.setNeutralAnimationDrop))
-        suitIndex = battle.activeSuits.index(suit)
-        if suit.dna.name == 'sgoat' and suit.isShielding:
-            suitTrack.append(Func(suit.addRageBuilding, hp))
-        if suit.dna.name == 'phouse':
-            suitTrack.append(Func(suit.addPowerhouseRotation, hp))
-        if suit.isSued:
-            suitTrack.append(Func(suit.makeSued, 3))
-        if not suit.isShielding:
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
-        if bonusTrack != None:
-            suitTrack = Parallel(suitTrack, bonusTrack)
-    else:
-        if alreadyTeased > 0:
-            return
+                return suitTrack
         else:
+            #headless = True
+            sequence = Sequence(Wait(random.uniform(0.25, 2.0)))
+            thing = Parallel(sequence, MovieUtil.spawnHeadExplosion(suit, battle))
+            suitGettingHit.append(thing)
+    suitTrack.append(suitGettingHit)
+    if hpbonus > 0:
+        bonusTrack = Sequence(Wait(delay + tObjectAppears + 1), Func(suit.showHpText, -hpbonus, 1), Func(suit.updateHealthBar, hpbonus))
+    if suit.dna.name == 'redd' and revived != 0:
+        suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
+    if revived != 0 and suit.isSkeleton:
+        suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
+    if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
+    if died != 0 and suit.isVirtual:
+        suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
+    if died != 0 and not suit.isVirtual:
+        suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
+    suitTrack.append(Func(suit.setNeutralAnimationDrop))
+    suitIndex = battle.activeSuits.index(suit)
+    if suit.dna.name == 'sgoat' and suit.isShielding:
+        suitTrack.append(Func(suit.addRageBuilding, hp))
+    if suit.dna.name == 'phouse':
+        suitTrack.append(Func(suit.addPowerhouseRotation, hp))
+    if suit.isSued:
+        suitTrack.append(Func(suit.makeSued, 3))
+    if not suit.isShielding:
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
+        suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
+    if bonusTrack != None:
+        suitTrack = Parallel(suitTrack, bonusTrack)
+    else:
+        if not hp > 0 and not died:
             suitTrack = MovieUtil.createSuitTeaseMultiTrack(suit, battle, delay=delay + tObjectAppears)
     return suitTrack
 

@@ -354,6 +354,23 @@ def doSuitAttack(attack):
         suitTrack = MovieLawbotLitigationCheats.doCeaseAndDesist(attack)
     elif name == 'WSIJuryNotice':
         suitTrack = MovieLawbotLitigationCheats.doJuryNotice(attack)
+        # arbitrator cheats
+    elif name == 'ArbitratorObjection':
+        suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord2(attack)
+    elif name == 'ArbitratorPaperFiling':
+        suitTrack = MovieLawbotLitigationCheats.doPaperRain(attack)
+    elif name == 'ArbitratorWhirlwind':
+        suitTrack = MovieLawbotLitigationCheats.doWhirlwind(attack)
+    elif name == 'ArbitratorThrowBook':
+        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 1)
+    elif name == 'ArbitratorThrowBook2':
+        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 2)
+    elif name == 'ArbitratorThrowBook3':
+        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 3)
+    elif name == 'ArbitratorThrowBook4':
+        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 4)
+    elif name == 'ArbitratorThrowBook5':
+        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 5)
     #litigator cheats
     elif name == 'LitigatorSnapSoak':
         suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
@@ -2694,8 +2711,8 @@ def doSynergy(attack):
     particleEffect = BattleParticles.createParticleEffect('Synergy')
     waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
     suitTrack = getSuitAnimTrack(attack)
-    partTrack = getPartTrack(particleEffect, 1.0, 3.9, [particleEffect, suit, 0], softStop=-2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.9, [waterfallEffect, suit, 0], softStop=-2)
+    partTrack = getPartTrack(particleEffect, 1.0, 3.4, [particleEffect, suit, 0], softStop=-2)
+    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.4, [waterfallEffect, suit, 0], softStop=-2)
     damageAnims = [['slip-forward']]
     dodgeAnims = []
     dodgeAnims.append(['jump',
@@ -2734,8 +2751,8 @@ def doSynergy2(attack):
     waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
     suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Func(suit.setNeutralAnimation))
-    partTrack = getPartTrack(particleEffect, 1.0, 3.9, [particleEffect, suit, 0], softStop=-2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.9, [waterfallEffect, suit, 0], softStop=-2)
+    partTrack = getPartTrack(particleEffect, 1.0, 3.4, [particleEffect, suit, 0], softStop=-2)
+    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.4, [waterfallEffect, suit, 0], softStop=-2)
     damageAnims = [['slip-forward']]
     dodgeAnims = []
     dodgeAnims.append(['jump',
@@ -6815,7 +6832,7 @@ def doSpin(attack):
     targets = attack['target']
     damageDelay = 1.7
     sprayEffects = [BattleParticles.createParticleEffect(file='spinSpray') for t in targets]
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitTrack(attack))
     sprayTracks = getPartTracks(attack, sprayEffects, 1.0, 3.9, 0, softStop=-2)
     spinTracks1 = Parallel()
     spinTracks2 = Parallel()

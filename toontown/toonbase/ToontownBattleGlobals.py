@@ -691,6 +691,9 @@ ValidStatusConditions = (
     'collectcallcalculator2',
     'desperationcalculator',
     'lureResist',
+    'throwbookcalculator',
+    'whirlwindcalculator',
+    'paperfilingcalculator',
 
     # Toon Status Effects
     'hidden',

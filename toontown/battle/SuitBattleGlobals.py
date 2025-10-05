@@ -112,7 +112,7 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'clerk':
         actualLevel = relLevel + 19
     elif name == 'arbit':
-        actualLevel = relLevel + 49
+        actualLevel = relLevel + 34
     elif name == 'judy':
         actualLevel = relLevel + 19
     elif name == 'mouthp':
@@ -642,7 +642,7 @@ SpecialCogDict = ('clubpres', 'cinema', 'choreo', 'derrman', 'derrhand', 'mplaye
                   'kerberos', 'charon', 'pcrat', 'hroller', 'erfit', 'trainer', 'hroller2', 'hrollers', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi',
                   'sgoat', 'caseman', 'stenog', 'lgator', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'bcaster', 'dking', 'ottoman', 'crystal', 'chairman',
                   'sya', 'pbl', 'fmaker', 'director')
-LitigationManagers = ('lgator', 'stenog', 'caseman', 'sgoat', 'safesupervis', 'ubuster', 'radiog', 'racket', 'ambass', 'wtapper', 'bkeeper', 'phouse')
+LitigationManagers = ('lgator', 'stenog', 'caseman', 'sgoat', 'safesupervis', 'ubuster', 'radiog', 'racket', 'arbit', 'ambass', 'wtapper', 'bkeeper', 'phouse')
 
 ATK_TGT_UNKNOWN = 1
 ATK_TGT_SINGLE = 2
@@ -4160,7 +4160,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'singularname': 'a Arbitrator',
            'pluralname': 'Arbitrators',
            'level': 16,
-           'hp':(4000,),
+           'hp':(3750,),
            'def':(65,),
            'freq':(100,),
            'acc':(75,),
@@ -4169,38 +4169,26 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                            hp=(0,),
                            acc=(100,),
                            freq=(0,)),
-                SuitAttack('Jargon',
-                           hp=(1,),
-                           acc=(100,),
-                           freq=(20,)),
-                SuitAttack('Legalese',
-                           hp=(1,),
-                           acc=(100,),
-                           freq=(20,)),
-                SuitAttack('ParadigmShift',
-                           hp=(28,),
-                           acc=(100,),
-                           freq=(10,)),
-                SuitAttack('RestrainingOrder',
-                           hp=(34,),
-                           acc=(100,),
-                           freq=(10,)),
-                SuitAttack('EvictionNotice',
-                           hp=(33,),
-                           acc=(100,),
-                           freq=(10,)),
-                SuitAttack('Filibuster',
-                           hp=(32,),
-                           acc=(100,),
-                           freq=(10,)),
-                SuitAttack('RedTape',
-                           hp=(27,),
-                           acc=(100,),
-                           freq=(10,)),
-                SuitAttack('GuiltTrip',
-                           hp=(37,),
-                           acc=(100,),
-                           freq=(10,)))},
+                    SuitAttack('Jargon',
+                             hp=(39,),
+                             acc=(95,),
+                             freq=(10,)),
+                  SuitAttack('EvictionNotice',
+                             hp=(40,),
+                             acc=(85,),
+                             freq=(15,)),
+                  SuitAttack('RestrainingOrder',
+                             hp=(44,),
+                             acc=(90,),
+                             freq=(10,)),
+                  SuitAttack('Legalese',
+                             hp=(36,),
+                             acc=(90,),
+                             freq=(35,)),
+                  SuitAttack('GuiltTrip',
+                             hp=(30,),
+                             acc=(90,),
+                             freq=(30,)))},
  'judy': {'name': 'Judy',
           'singularname': 'a Judy',
           'pluralname': 'Judies',
@@ -7321,6 +7309,15 @@ SuitAttacks = {
  'Watercooler': ('watercooler', ATK_TGT_SINGLE), # Single, Double or Group Targets Available
  'Withdrawal': ('magic1', ATK_TGT_SINGLE),
  'WriteOff': ('hold-pencil', ATK_TGT_SINGLE),
+    # Arbitrator Cheats
+ 'ArbitratorObjection': ('cease', ATK_TGT_GROUP),
+ 'ArbitratorPaperFiling': ('magic3', ATK_TGT_SINGLE),
+ 'ArbitratorWhirlwind': ('effort', ATK_TGT_SINGLE),
+ 'ArbitratorThrowBook': ('throw-object', ATK_TGT_SINGLE),
+ 'ArbitratorThrowBook2': ('throw-object', ATK_TGT_SINGLE),
+ 'ArbitratorThrowBook3': ('throw-object', ATK_TGT_SINGLE),
+ 'ArbitratorThrowBook4': ('throw-object', ATK_TGT_SINGLE),
+ 'ArbitratorThrowBook5': ('throw-object', ATK_TGT_SINGLE),
     # Litigator Cheats
  'LitigatorSnapSoak': ('throw-object', ATK_TGT_GROUP),
  'LitigatorSnap': ('throw-object', ATK_TGT_SINGLE),

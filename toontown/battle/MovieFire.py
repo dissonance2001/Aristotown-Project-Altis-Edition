@@ -318,16 +318,14 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
      died))
     pieName = pieNames[0]
     hitSuit = hp > 0
-    button = globalPropPool.getProp('button')
-    buttonType = globalPropPool.getPropType('button')
-    button2 = MovieUtil.copyProp(button)
-    buttons = [button, button2]
     hands = toon.getLeftHands()
     toonTrack = Sequence()
-    toonFace = Func(toon.headsUp, battle, suitPos)
     toonTrack.append(Wait(delay))
-    toonTrack.append(toonFace)
-    toonTrack.append(Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'pushbutton')))
+    button = globalPropPool.getProp('button')
+    button2 = MovieUtil.copyProp(button)
+    buttons = [button, button2]
+    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, suitPos), Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'button')),
+                         Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'), Func(toon.setHpr, battle, origHpr))
     if hitSuit:
         toonTrack.append(ActorInterval(toon, 'wave', duration=2.0))
         toonTrack.append(ActorInterval(toon, 'duck'))

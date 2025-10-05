@@ -988,6 +988,16 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                    Func(ambassador.updateHealthBar, 0)),
                                Func(ambassador.setNeutralAnimation)).start()
 
+    def checkHeadRoller2(self, ambassador, battle):
+        x = int(self.currHP)
+        self.damageInterval = Sequence(Func(self.showHpTextCheat, -self.currHP), Func(self.showHpStringSacrifice, "GUILTY!"), Func(self.setHealthForMe, - self.currHP),
+                               Func(self.updateHealthBar, 0)).start()
+        self.healInterval = Sequence(Parallel(Func(ambassador.showHpTextCheat, +self.currHP),
+                                                   Func(ambassador.showHpString, "SYPHONED!"),
+                                                   Func(ambassador.setHealthForMe, +self.currHP),
+                                                   Func(ambassador.updateHealthBar, 0)),
+                               Func(ambassador.setNeutralAnimation)).start()
+
     def splatSuit(self, level, clear):
         if not clear:
             splatDict = {0: 'splat_cake', 1: 'splat_fruit', 2: 'splat_cream',

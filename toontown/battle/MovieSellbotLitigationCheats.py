@@ -1089,7 +1089,7 @@ def doUnionBust(attack):
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.8, 0.7, 0.5, 1)
         smoke.setBillboardPointEye()
-        suitTrack = Sequence(Wait(2), Parallel(ActorInterval(targetSuit, 'flatten', duration = 1.25), MovieUtil.createSuitCrashTrack(targetSuit, battle)))
+        suitTrack = Sequence(Wait(2), Parallel(ActorInterval(targetSuit, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(targetSuit, battle)))
         selfDamageTrack = Sequence(Wait(2), Func(targetSuit.showHpTextCheat, -targetSuit.currHP),
                                    Func(targetSuit.showHpStringSacrifice, "BUSTED!"),
                                    Func(targetSuit.setHealthForMe, - targetSuit.currHP),

@@ -1655,7 +1655,7 @@ def shortCircuitTrack(suit, battle):
                                        Sequence(Wait(1.5), LerpColorScaleInterval(smoke, 2.0, Vec4(1, 1, 1, 0)))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                               Func(removeProp, smoke))
-        suitPos, suitHpr = battle.getActorPosHpr(suit)
+        suitPos = suit.getPos(battle)
         suitTrack.append(Func(suit.hide))
         suitTrack.append(Func(suit.cleanupLoseActor))
         suitTrack.append(Func(suit.makeDead))
@@ -1771,7 +1771,7 @@ def shortCircuitTrack2(suit, battle):
                                        Sequence(Wait(1.5), LerpColorScaleInterval(smoke, 2.0, Vec4(1, 1, 1, 0)))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                               Func(removeProp, smoke))
-        suitPos, suitHpr = battle.getActorPosHpr(suit)
+        suitPos = suit.getPos(battle)
         suitTrack.append(Func(suit.hide))
         suitTrack.append(Func(suit.cleanupLoseActor))
         suitTrack.append(Func(suit.makeDead))

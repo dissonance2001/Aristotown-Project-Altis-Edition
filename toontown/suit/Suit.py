@@ -198,7 +198,7 @@ br = (('quick-jump', 'jump', 4), ('glower', 'glower', 4))
 bw = (('finger-wag', 'fingerwag', 4), ('cigar-smoke', 'cigar-smoke', 4))
 whistleb = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
 clerk = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-arbit = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+arbit = (('effort', 'effort', 4), ('speak', 'speak', 4), ('cease', 'cease3', 4), ('sanction', 'sanction3', 4))
 judy = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 mouthp = (('roll-o-dex', 'roll-o-dex', 4), ('finger-wag', 'finger-wag', 4))
 rainmake = (('effort', 'effort', 4), ('sit-dock', 'sit-dock', 4))
@@ -1748,13 +1748,13 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'arbit':
             self.scale = 7.2 / aSize
             self.handColor = VBase4(0.69, 0.678, 0.765, 1)
-            self.generateBody()
+            self.generateFemaleBody()
             self.generateHead3('clo', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_clo.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.makeExecutive()
-            self.setHeight(8.7)
+            self.setHeight(9.25)
         elif dna.name == 'judy':
             self.scale = 4.5 / cSize
             self.handColor = VBase4(0.361, 0.435, 0.694, 1)
@@ -3424,6 +3424,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_highcollar_%s_gov.png' % self.style.dept)
         elif self.isExecutive and self.style.name == 'ins':
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_highcollar_%s_e.png' % self.style.dept)
+        modelRoot.setTransparency(1)
         modelRoot.find('**/hands').setColor(self.handColor)
         modelRoot.find('**/necktie-s').hide()
         modelRoot.find('**/necktie-w').hide()
@@ -4053,11 +4054,11 @@ class Suit(Avatar.Avatar):
                 headModel.setTwoSided(True)
             elif headType == 'clo':
                 headModel.setZ(-.1)
-                headModel.setY(-.1)
+                #headModel.setY(-.1)
                 headModel.setX(0)
                 headModel.setR(-90)
                 headModel.setH(90)
-                headModel.setScale(.4)
+                headModel.setScale(.45)
             elif self.style.name == 'videog':
                 headModel.setY(-.2)
             elif self.style.name == 'bcaster':
