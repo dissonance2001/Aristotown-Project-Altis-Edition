@@ -624,9 +624,9 @@ def doHighPressure(attack):
     for suit in battle.activeSuits:
         suitTrack = getSuitAnimTrack(attack, playRate=2.0)
         suitTrack.append(Wait(1.75))
-        suitTrack.append(Func(suit.showHpTextCheat, - int(100 * len(battle.activeToons))))
+        suitTrack.append(Func(suit.showHpTextCheat, - int(50 * len(battle.activeToons))))
         suitTrack.append(Func(suit.showHpString, "OVERWORKED!"))
-        suitTrack.append(Func(suit.setHealthForMe, - (100 * len(battle.activeToons))))
+        suitTrack.append(Func(suit.setHealthForMe, - (50 * len(battle.activeToons))))
         suitTrack.append(Func(suit.updateHealthBar, 0))
         suitTrack.append(Parallel(Func(suit.checkCogHPBomb, battle), ActorInterval(suit, 'slip-backward')))
         suitTracks.append(suitTrack)
@@ -942,7 +942,7 @@ def doUnionCalculator(attack):
     calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'), Func(suit.setNeutralAnimation), Wait(2.0))
+    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'), Func(suit.setNeutralAnimationDrop), Wait(2.0))
     if suit.isDesperation:
         suitSpeechTrack = Func(suit.setChatAbsolute, "You can't stop production; Union Dues have been increased to... %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     else:
@@ -1172,7 +1172,7 @@ def doUnionWages(attack):
     for targetSuit in battle.activeSuits:
         if not targetSuit.isContracted and not targetSuit.dna.name == 'ubuster':
             damageSuits.append(targetSuit)
-    makeImmune = Parallel(Func(suit.makeUnDamageUp), Func(suit.checkDamageUp, +  (5 * len(damageSuits))))
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, +  (5 * len(damageSuits))))
     managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextCheat, + (100 * len(damageSuits))),
                                 Func(suit.showHpString, "+%s" % (5 * len(damageSuits)) + "%" + " Damage!"), Func(suit.setHealthForMe, + (100 * len(damageSuits))),
                                 Func(suit.updateHealthBar, 0))

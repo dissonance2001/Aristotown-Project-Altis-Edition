@@ -3813,7 +3813,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'cannotDodge', 100, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'highpressurecalculator', 0, 0, 'setBoth')
                 for suit in self.battle.activeSuits:
-                    suit.setHP(math.ceil(suit.currHP - 100))
+                    suit.setHP(math.ceil(suit.currHP - 50))
                     if suit.currHP <= 0:
                         if suit.getSkeleRevives() >= 1:
                             suit.useSkeleRevive()
@@ -6704,9 +6704,9 @@ class BattleCalculatorAI:
                 #if len(self.battle.activeSuits) >= 4 and x % 4 == 0:
                     #self.setSuitCondition(suitId, 'voicemailcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'ambass': #ambassador
-                if (x + 2) % 4 == 0:
+                if (x + 3) % 4 == 0:
                     self.setSuitCondition(suitId, 'refinementcalculator', 1, 10, 'setBoth')
-                if (x + 2) % 4 == 0:
+                if (x + 3) % 4 == 0:
                     self.setSuitCondition(suitId, 'advancementcalculator', 1, 10, 'setBoth')
                 currentBossHealth = -1
                 for s in self.battle.suits:
@@ -6714,12 +6714,12 @@ class BattleCalculatorAI:
                         currentBossHealth = s.currHP
                     if (x + 2) % 3 == 0 and currentBossHealth > 0:
                         self.setSuitCondition(suitId, 'refinemanagercalculator', 1, 10, 'setBoth')
-                if (x + 4) % 5 == 0:
+                if (x + 1) % 5 == 0:
                     self.setSuitCondition(suitId, 'headroller2calculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'safesupervis': #safety supervisor
                 if len(self.battle.activeSuits) >= 6 and (x + 1) % 2 == 0:
                     self.setSuitCondition(suitId, 'highpressurecalculator', 1, 10, 'setBoth')
-                if (x + 3) % 5 == 0:
+                if (x + 1) % 4 == 0:
                     self.setSuitCondition(suitId, 'promotioncalculator', 1, 10, 'setBoth')
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'heatwavecalculationcalculator', 1, 10, 'setBoth')
@@ -7280,7 +7280,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
-                                            'name': 'ArbitratorThrowBook',  # ThrowBook
+                                            'name': 'ArbitratorThrowBook2',  # ThrowBook
                                             'animName': 'throw-object',
                      'hp': 0,
                      'acc': 100,
@@ -7316,7 +7316,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
-                                            'name': 'ArbitratorThrowBook',  # ThrowBook
+                                            'name': 'ArbitratorThrowBook3',  # ThrowBook
                                             'animName': 'throw-object',
                      'hp': 0,
                      'acc': 100,
@@ -7352,7 +7352,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
-                                            'name': 'ArbitratorThrowBook',  # ThrowBook
+                                            'name': 'ArbitratorThrowBook4',  # ThrowBook
                                             'animName': 'throw-object',
                      'hp': 0,
                      'acc': 100,
@@ -7388,7 +7388,7 @@ class BattleCalculatorAI:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
-                      'name': 'ArbitratorThrowBook', # ThrowBook
+                      'name': 'ArbitratorThrowBook5', # ThrowBook
                      'animName': 'throw-object',
                      'hp': 0,
                      'acc': 100,
@@ -9306,7 +9306,7 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'ambass': #ambassador
-                if self.battle.activeSuits[i].currHP <= 2440 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
+                if self.battle.activeSuits[i].currHP <= 2550 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,

@@ -1194,7 +1194,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.25))
     # safety supervisor cheats
     elif name == 'SafetyHighPressure':
-        camTrack.append(defaultCamera(openShotDuration=3.0))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=3, attackDuration=3),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 3)))
     elif name == 'SafetyHeatWave':
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=4.0), randomActorShot(suit, battle, attackDuration - 4, 'suit')))
     elif name == 'SafetyHeatWaveCalculation':

@@ -1004,6 +1004,8 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AmbassadorMulligan':
             resetSuitTrack = Sequence(suitTrack)
+        elif name == 'ArbitratorObjection':
+            resetSuitTrack = Sequence(suitTrack)
         elif name == 'AbsorbMovie':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'AbsorbMovieLevel':
@@ -3570,14 +3572,14 @@ def doPinkSlip(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    throwDelay = 2.43
-    throwDuration = 0.5
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        throwDelay = 2.43
+        throwDuration = 0.5
+        posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
         paper = globalPropPool.getProp('pink-slip')
         paperAppearTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.8, Point3(8, 8, 8), scaleUpTime=0.25))
         paperAppearTrack.append(Wait(0.93))
@@ -3592,7 +3594,7 @@ def doPinkSlip(attack):
             paperAppearTrack.append(Wait(paperPause))
             paperAppearTrack.append(LerpPosInterval(paper, 0.2, slidePoint))
             paperAppearTrack.append(LerpPosInterval(paper, 1.1, landPoint))
-            paperSpinTrack = Sequence(Wait(throwDelay), LerpHprInterval(paper, throwDuration, VBase3(300, 0, 0)), Wait(paperPause), LerpHprInterval(paper, 1.3, VBase3(-200, 100, 100)))
+            paperSpinTrack = Sequence(Wait(throwDelay), LerpHprInterval(paper, throwDuration, VBase3(0, 0, 0)), Wait(paperPause), LerpHprInterval(paper, 1.3, VBase3(-200, 100, 100)))
         else:
             slidePoint = Point3(hitPoint.getX(), hitPoint.getY() - 5, hitPoint.getZ())
             paperAppearTrack.append(LerpPosInterval(paper, 0.5, slidePoint))
