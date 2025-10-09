@@ -60,6 +60,7 @@ class BattleCalculatorAI:
         self.toonHPAdjusts = {}
         self.toonSkillPtsGained = {}
         self.absorbDamage = 0
+        self.syphonHP = 0
         self.levelDamage = 0
         self.traps = {}
         self.npcTraps = {}
@@ -2653,7 +2654,9 @@ class BattleCalculatorAI:
             attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
 
             if self.suitHasCondition(theSuit.doId, 'syphon'):
-                theSuit.setHP(math.ceil(theSuit.currHP + result))
+                self.syphonHP += math.ceil(result)
+                #theSuit.setHP(math.ceil(theSuit.currHP + result))
+
 
     def __calcSuitAtkHpALT(self, attack):
         '''
@@ -3162,6 +3165,21 @@ class BattleCalculatorAI:
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'immune', 1, 2, 'setBoth')
                     continue
+            elif atkType['name'] == 'PowerhouseGroundbreaker':
+                result = 25
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setToonCondition(toon.doId, 'noDamage', 1, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'hidden', 1, 3, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'groundbreakercalculator', 0, 0, 'setBoth')
+            elif atkType['name'] == 'PowerhouseGroundbreakerRevert':
+                if self.toonHasCondition(toon.doId, 'noDamage'):
+                    result = 25
+                    attack[SUIT_HP_COL][targetIndex] = result
+                    self.setToonCondition(toon.doId, 'noDamage', 0, 0, 'setBoth')
+                    self.setToonCondition(toon.doId, 'hidden', 0, 0, 'setBoth')
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'PowerhouseBurnDamage':
                 for s in self.battle.suits:
                     if s.getManager():
@@ -5447,6 +5465,11 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
+            elif atkType['name'] == 'SyphonMovie':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                theSuit.setHP(math.ceil(theSuit.currHP + self.syphonHP))
+                self.syphonHP = 0
             elif atkType['name'] == 'Desperation':
                 managerTarget = None
                 if not self.suitHasCondition(theSuit.doId, 'deadgoat') and not self.suitHasCondition(theSuit.doId, 'deadgator') and not self.suitHasCondition(theSuit.doId, 'deadsteno') and not self.suitHasCondition(theSuit.doId, 'deadcase'):
@@ -6681,6 +6704,8 @@ class BattleCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'phouse': #powerhouse
                 if x % 99 == 0:
                     self.setSuitCondition(suitId, 'rotationcalculator', 1, 10, 'setBoth')
+                if (x + 2) % 4 == 0:
+                    self.setSuitCondition(suitId, 'groundbreakercalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
                 if (x + 1) % 4 == 0:
                     self.setSuitCondition(suitId, 'explodingcalculator', 1, 9, 'setBoth')
@@ -6697,8 +6722,8 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'wiretappedcalculator', 1, 10, 'setBoth')
                 if (x + 4) % 5 == 0:
                     self.setSuitCondition(suitId, 'voicemailcalculator', 1, 10, 'setBoth')
-                if (x + 4) % 5 == 0:
-                    self.setSuitCondition(suitId, 'busycalculator', 1, 10, 'setBoth')
+                #if (x + 4) % 5 == 0:
+                    #self.setSuitCondition(suitId, 'busycalculator', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'collectcallcalculator', 1, 10, 'setBoth')
                 #if len(self.battle.activeSuits) >= 4 and x % 4 == 0:
@@ -6773,6 +6798,42 @@ class BattleCalculatorAI:
 
             # Gag Ban Retaliations & DOT
             if self.battle.activeSuits[i].dna.name == 'sgoat':
+                if self.suitHasCondition(suitId, 'gavelcalculator2'):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                            'name': 'ScapegoatBarnyardBash',  # Suppression Revert
+                                            'animName': 'nothing',
+                                            'hp': 0,
+                                            'acc': 100,
+                                            'freq': 0,
+                                            'group': SuitBattleGlobals.ATK_TGT_GROUP}
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL]:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
@@ -7014,43 +7075,6 @@ class BattleCalculatorAI:
                      'acc': 100,
                      'freq': 0,
                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}
-                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
-                    if attack[SUIT_TGT_COL] == []:
-                        continue
-                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
-                    self.__calcSuitAtkHpALT(attack)
-                    if attack[SUIT_ATK_COL]:
-                        if self.__suitAtkAffectsGroup(attack):
-                            for currTgt in self.battle.activeToons:
-                                self.__updateSuitAtkStat(currTgt)
-
-                        else:
-                            for currTgt in attack[SUIT_TGT_COL]:
-                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
-                    targets = self.__createSuitTargetList(attack)
-                    allTargetsDead = True
-                    for currTgt in targets:
-                        if self.__getToonHp(currTgt) > 0:
-                            allTargetsDead = False
-                            break
-
-                    if allTargetsDead:
-                        attack = getDefaultSuitAttack()
-                    if self.__attackHasHit(attack, suit=1):
-                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
-                    attack[SUIT_BEFORE_TOONS_COL] = 0
-                    self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'sgoat':
-                if self.suitHasCondition(suitId, 'gavelcalculator2'):
-                    attack = getDefaultSuitAttack()
-                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ScapegoatBarnyardBash', # Suppression Revert
-                     'animName': 'nothing',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
@@ -8148,6 +8172,43 @@ class BattleCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
 
             # Gag Ban Retaliations & DOT
+            if self.battle.activeSuits[i].dna.name == 'phouse':
+                if self.TurnsElapsed % 1 == 0:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                            'name': 'PowerhouseGroundbreakerRevert',  # Snipe Retaliation Vulnerabilities
+                                            'animName': 'nothing',
+                                            'hp': 0,
+                                            'acc': 100,
+                                            'freq': 0,
+                                            'group': SuitBattleGlobals.ATK_TGT_GROUP}
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL]:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'ambass':
                 if self.suitHasCondition(suitId, 'headrollertargetcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
@@ -9646,7 +9707,7 @@ class BattleCalculatorAI:
                 if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'desperation') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'desperation') and self.__suitCanAttack(suitId):
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 or self.suitHasCondition(suitId, 'rotationcalculator') and self.suitHasCondition(suitId, 'desperation') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
@@ -9743,9 +9804,6 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                     self.setSuitCondition(suitId, 'rotationcalculator', 0, 0, 'setBoth')
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'lureImmune') and self.__suitCanAttack(suitId):
-                    attack = self.__getAbilityQueued(suitId)
-                    self.battle.suitAttacks.append(attack)
                 if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'lureImmune') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
@@ -9906,7 +9964,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'shielding') and self.__suitCanAttack(suitId):
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'syphon') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = random.choice([
@@ -9925,8 +9983,8 @@ class BattleCalculatorAI:
                       'freq': 0,
                       'group': SuitBattleGlobals.ATK_TGT_SINGLE},
                      {'suitName': self.battle.activeSuits[i].dna.name,
-                      'name': 'PowerhouseSyphon',
-                      'animName': 'summon',
+                      'name': 'PowerhouseAbsorb',
+                      'animName': 'defense',
                       'hp': 0,
                       'acc': 100,
                       'freq': 0,
@@ -10248,6 +10306,58 @@ class BattleCalculatorAI:
                      'acc': 100,
                      'freq': 0,
                      'group': SuitBattleGlobals.ATK_TGT_SINGLE}
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL]:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
+                    self.battle.suitAttacks.append(attack)
+
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'phouse': #powerhouse
+                if self.suitHasCondition(suitId, 'groundbreakercalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getAbilityQueued(suitId)
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'groundbreakercalculator') and self.__suitCanAttack(suitId):
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    if self.battle.activeSuits[i].currHP <= 2000:
+                        attack[SUIT_ATK_COL] = {'suitName': 'phouse',
+                                                'name': 'PowerhouseGroundbreaker',
+                                                'animName': 'quick-jump',
+                                                'hp': 0,
+                                                'acc': 100,
+                                                'freq': 0,
+                                                'group': SuitBattleGlobals.ATK_TGT_DOUBLE}
+                    else:
+                        attack[SUIT_ATK_COL] = {'suitName': 'phouse',
+                                                'name': 'PowerhouseGroundbreaker',
+                                                'animName': 'quick-jump',
+                                                'hp': 0,
+                                                'acc': 100,
+                                                'freq': 0,
+                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE}
                     attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
                     if attack[SUIT_TGT_COL] == []:
                         continue
@@ -15772,6 +15882,42 @@ class BattleCalculatorAI:
             if self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.__suitCanAttack(suitId) and not self.battle.activeSuits[i].dna.name == 'hrollers':
                 attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                 'name': 'SyphonMovie', # Syphon Movie
+                 'animName': 'nothing',
+                 'hp': 0,
+                 'acc': 100,
+                 'freq': 0, # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                 'group': SuitBattleGlobals.ATK_TGT_SINGLE} # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
+                self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'hrollers':
                 if self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
@@ -15836,6 +15982,42 @@ class BattleCalculatorAI:
                     self.battle.suitAttacks.append(attack)
                 if not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict:
                     attack = self.__getGenericSuitAttack(suitId)
+                    self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'syphon') and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                    attack = getDefaultSuitAttack()
+                    attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                    attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                            'name': 'SyphonMovie',  # Syphon Movie
+                                            'animName': 'nothing',
+                                            'hp': 0,
+                                            'acc': 100,
+                                            'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                    attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                    if attack[SUIT_TGT_COL] == []:
+                        continue
+                    attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                    self.__calcSuitAtkHpALT(attack)
+                    if attack[SUIT_ATK_COL]:
+                        if self.__suitAtkAffectsGroup(attack):
+                            for currTgt in self.battle.activeToons:
+                                self.__updateSuitAtkStat(currTgt)
+
+                        else:
+                            for currTgt in attack[SUIT_TGT_COL]:
+                                self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                    targets = self.__createSuitTargetList(attack)
+                    allTargetsDead = True
+                    for currTgt in targets:
+                        if self.__getToonHp(currTgt) > 0:
+                            allTargetsDead = False
+                            break
+
+                    if allTargetsDead:
+                        attack = getDefaultSuitAttack()
+                    if self.__attackHasHit(attack, suit=1):
+                        self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                    attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
 
                 if self.battle.findSuit(suitId).dna.name == 'erclaim': # Check if the Cog that just attacked is capable of cheating (e.g. if self.battle.findSuit(suitId).dna.name == 'erclaim').
@@ -15964,32 +16146,392 @@ class BattleCalculatorAI:
             if self.suitHasCondition(suitId, 'extraAttack') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
+                self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack2') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
+                self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack2')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack3') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack3')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
+                self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack4') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
+                self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack4')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack5') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack5')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
+                self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack6') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
+                self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack6')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack7') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack7')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
+                self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack8') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
+                self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack8')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack9') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
                 self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack9')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
+                self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'extraAttack10') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getGenericSuitAttack(suitId)
+                self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack10')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                attack = getDefaultSuitAttack()
+                attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
+                attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'SyphonMovie',  # Syphon Movie
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE}  # Why is Desperation single-target?
+                attack[SUIT_TGT_COL] = self.__calcSuitTarget(attack)
+                if attack[SUIT_TGT_COL] == []:
+                    continue
+                attack[SUIT_HP_COL] = [-1 for j in xrange(len(self.battle.activeToons))]
+                self.__calcSuitAtkHpALT(attack)
+                if attack[SUIT_ATK_COL]:
+                    if self.__suitAtkAffectsGroup(attack):
+                        for currTgt in self.battle.activeToons:
+                            self.__updateSuitAtkStat(currTgt)
+
+                    else:
+                        for currTgt in attack[SUIT_TGT_COL]:
+                            self.__updateSuitAtkStat(self.battle.activeToons[currTgt])
+                targets = self.__createSuitTargetList(attack)
+                allTargetsDead = True
+                for currTgt in targets:
+                    if self.__getToonHp(currTgt) > 0:
+                        allTargetsDead = False
+                        break
+
+                if allTargetsDead:
+                    attack = getDefaultSuitAttack()
+                if self.__attackHasHit(attack, suit=1):
+                    self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
+                attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
 
 
@@ -16283,6 +16825,7 @@ class BattleCalculatorAI:
         self.TurnsElapsed += 1
         self.deadSuits -= self.deadSuits
         self.absorbDamage -= self.absorbDamage
+        self.syphonHP -= self.syphonHP
         self.levelDamage -= self.levelDamage
         self.notify.debug('Current Elapsed Turns: ' + str(self.TurnsElapsed))
         luredSuits = self.currentlyLuredSuits.keys()

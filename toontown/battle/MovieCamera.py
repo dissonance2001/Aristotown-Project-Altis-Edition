@@ -985,6 +985,15 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'PowerhouseSyphonDesperation':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'PowerhouseGroundbreaker':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+    elif name == 'PowerhouseGroundbreakerRevert':
+        if attackDuration > 2:
+            camTrack.append(heldShot(10, 0, 10, 115, -30, 0, attackDuration))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == 'PowerhouseSnipeVulnerable':
         if attackDuration > 2:
             camTrack2 = defaultCamera(openShotDuration=1.0)
@@ -1560,7 +1569,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
     elif name == 'Desperation2':
-        camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'AbilityQueued':
         camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
@@ -1594,13 +1603,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
     elif name == 'AbsorbMovie':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'AbsorbMovieLevel':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'SueDamage':
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        return camTrack2
+    elif name == 'SyphonMovie':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'BanLevel4':
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')

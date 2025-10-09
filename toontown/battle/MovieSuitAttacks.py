@@ -419,6 +419,10 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doAbsorb(attack)
     elif name == 'PowerhouseSoakImmune':
         suitTrack = MovieBossbotLitigationCheats.doSoakImmune(attack)
+    elif name == 'PowerhouseGroundbreaker':
+        suitTrack = MovieBossbotLitigationCheats.doGroundbreaker(attack)
+    elif name == 'PowerhouseGroundbreakerRevert':
+        suitTrack = MovieBossbotLitigationCheats.doGroundbreakerRevert(attack)
     elif name == 'PowerhouseLureImmune':
         suitTrack = MovieBossbotLitigationCheats.doLureImmune(attack)
     elif name == 'PowerhouseSyphon':
@@ -782,6 +786,8 @@ def doSuitAttack(attack):
         suitTrack = MovieUniversalCheats.doMarkRemoval(attack)
     elif name == 'LureRemoval':
         suitTrack = MovieUniversalCheats.doLureRemoval(attack)
+    elif name == 'SyphonMovie':
+        suitTrack = MovieUniversalCheats.doSyphonMovie(attack)
     elif name == 'SueApplication':
         suitTrack = MovieUniversalCheats.doSueApplication(attack)
     elif name == 'SueRemoval':
@@ -1023,6 +1029,8 @@ def doSuitAttack(attack):
         elif name == 'ScapegoatBarnyardBash':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseSnipeVulnerable':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'PowerhouseGroundbreakerRevert':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'PowerhouseSnipeGagBan':
             resetSuitTrack = Sequence(suitTrack)
@@ -1350,15 +1358,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                 currentBossHealth = s.currHP
         if currentBossHealth == -1:
             animTrack.append(Func(suit.removeInsured))
-        x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
-        if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-            syphonSuitTrack = Parallel(Func(suit.showHpTextCheat, +0), Func(suit.showHpString, "SYPHONED!"), Func(suit.setHealthForMe, + 0), Func(suit.updateHealthBar, 0))
-        elif suit.currHP + dmg > (suit.maxHP * suit.hardMaxHP) and suit.isSyphon:
-            syphonSuitTrack = Parallel(Func(suit.showHpTextCheat, x), Func(suit.showHpString, "SYPHONED!"),
-                                       Func(suit.setHealthForMe, x), Func(suit.updateHealthBar, 0))
-        else:
-            syphonSuitTrack = Parallel(Func(suit.showHpTextCheat, +dmg), Func(suit.showHpString, "SYPHONED!"),
-                                       Func(suit.setHealthForMe, + dmg), Func(suit.updateHealthBar, 0))
+        syphonSuitTrack = Parallel(Sequence(Func(suit.addSyphonHP, suit, +dmg)))
     if suit:
         if dmg > 0 and suit.isSyphon:
             animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))

@@ -891,7 +891,7 @@ def doSuppression(attack):
 
         toonTrack.append(Sequence(
             Wait(2.3),
-            Parallel(hideParts(headParts), hideParts(torsoParts), hideParts(legsParts), dustCloudHideIval),
+            Parallel(hideParts(headParts), hideParts(torsoParts), hideParts(legsParts), dustCloudHideIval), Func(toon.hide),
             Wait(1.7)))
 
     toonTrack.append(getToonTrack(attack, 2.3, ['conked'], 2.5, ['jump']))
@@ -934,7 +934,7 @@ def doSuppressionRevert(attack):
                                          Func(dustCloud.setPos, Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + 3)),
                                          dustCloud.track, Func(dustCloud.detachNode), Func(dustCloud.destroy), Wait(2.0))
 
-            toonTrack.append(Sequence(
+            toonTrack.append(Sequence(Func(toon.show),
                 Parallel(showParts(headParts), showParts(torsoParts), showParts(legsParts), dustCloudShowIval),
             ))
         toonTracks.append(toonTrack)

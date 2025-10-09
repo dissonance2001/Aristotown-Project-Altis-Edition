@@ -2335,3 +2335,63 @@ def doSnipe(attack):
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
     return Parallel(suitTracks, toonTracks, rightKnifeTracks, notifyTracks, toonDamageTrack, leftKnifeTracks, explosionTracks, soundTracks)
 
+def doGroundbreaker(attack):
+    battle = attack['battle']
+    targets = attack['target']
+    damageDelay = 1.3
+    dodgeDelay = 0.25
+    suitTrack = getSuitTrack(attack)
+    damageAnims = [['melt'], ['jump', 1.5, 0.4]]
+    puddleTracks = Parallel()
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay,
+                               dodgeAnimNames=['sidestep'])
+    soundTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        sandTrap = globalPropPool.getProp('quicksand')
+        sandTrap.setHpr(Point3(120, 0, 0))
+        sandTrap.setScale(0.01)
+        sandTrap.setColor(0, 0, 0, 1)
+        puddleTracks.append(Sequence(Wait(5.0), Func(toon.hide)))
+        puddleTracks.append(Sequence(
+            Func(battle.movie.needRestoreRenderProp, sandTrap),
+            Wait(damageDelay - 0.7),
+            Func(sandTrap.reparentTo, battle),
+            Func(sandTrap.setPos, toon.getPos(battle)),
+            LerpScaleInterval(sandTrap, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO),
+            Wait(0.3 if dmg == 0 else 3.2),
+            LerpFunctionInterval(sandTrap.setAlphaScale, fromData=1, toData=0, duration=0.8),
+            Func(MovieUtil.removeProp, sandTrap),
+            Func(battle.movie.clearRenderProp, sandTrap)
+        ))
+        soundTracks.append(getSoundTrack('SA_quake.ogg', duration=0.67 if dmg == 0 else 0.0, node=toon))
+
+    return Parallel(suitTrack, toonTracks, soundTracks, puddleTracks)
+
+def doGroundbreakerRevert(attack):
+    battle = attack['battle']
+    targets = attack['target']
+    damageDelay = 1.3
+    dodgeDelay = 0.25
+    damageAnims = [['slip-forward']]
+    puddleTracks = Parallel()
+    soundTracks = Parallel()
+    suitTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        sinkPos = toon.getPos(battle)
+        sinkPos.setZ(sinkPos.getZ() + 15)
+        dropPos = toon.getPos(battle)
+        moveTrack = Sequence(Func(toon.show), LerpPosInterval(toon, 0, sinkPos, other=battle), LerpPosInterval(toon, 0.5, dropPos, other=battle), Func(toon.setPos, battle, dropPos))
+        toonTrack = Parallel(Sequence(ActorInterval(toon, 'slip-forward'), Func(toon.loop, 'neutral')), Func(toon.showHpText, -dmg, openEnded=0))
+        if dmg > 0:
+            suitTrack = Sequence(Wait(4.0))
+            suitTracks.append(suitTrack)
+            puddleTracks.append(toonTrack)
+            puddleTracks.append(moveTrack)
+            soundTracks.append(getSoundTrack('Toon_bodyfall_synergy.ogg', delay=0.5, duration=0.67 if dmg == 0 else 0.0, node=toon))
+
+    return Parallel(soundTracks, suitTracks, puddleTracks)
+

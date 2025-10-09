@@ -455,6 +455,7 @@ ValidStatusConditions = (
     # Manager Calculators
     'rageBuilding',
     'powerhouseRotation',
+    'groundbreakercalculator',
     'costscalculator',
     'insurancecalculator',
     'snappedcalculator',

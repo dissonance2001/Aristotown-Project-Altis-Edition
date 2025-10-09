@@ -7364,6 +7364,8 @@ SuitAttacks = {
  'PowerhouseSnipeCollectCall': ('magic3-alt', ATK_TGT_GROUP),
  'PowerhouseGeneration': ('effort', ATK_TGT_SINGLE),
  'PowerhouseBurnDamage': ('nothing', ATK_TGT_GROUP),
+ 'PowerhouseGroundbreaker': ('quick-jump', ATK_TGT_SINGLE),
+ 'PowerhouseGroundbreakerRevert': ('nothing', ATK_TGT_GROUP),
     # Bookkeeper Cheats
  'BookkeeperPaperCutSoaked': ('nothing', ATK_TGT_GROUP),
  'BookkeeperPaperCutMarked': ('nothing', ATK_TGT_GROUP),
@@ -7568,6 +7570,7 @@ SuitAttacks = {
  'SoakRemoval': ('nothing', ATK_TGT_SINGLE),
  'MarkRemoval': ('nothing', ATK_TGT_SINGLE),
  'LureRemoval': ('nothing', ATK_TGT_SINGLE),
+ 'SyphonMovie': ('nothing', ATK_TGT_SINGLE),
     # Sue Movies
  'SueApplication': ('nothing', ATK_TGT_SINGLE),
  'SueRemoval': ('nothing', ATK_TGT_SINGLE),

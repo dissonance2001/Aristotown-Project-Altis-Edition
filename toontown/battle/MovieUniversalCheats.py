@@ -775,7 +775,7 @@ def doDesperation(attack):
 def doDesperation2(attack):
     theSuit = attack['suit']
     battle = attack['battle']
-    notifyTracks = Sequence(Wait(0.5))
+    notifyTracks = Sequence()
     cameraTracks = Sequence()
     makeDesperates = Parallel()
     makeDamageUps = Parallel()
@@ -786,7 +786,7 @@ def doDesperation2(attack):
                                                                '+1 Lure Resistance'))
     makeDesperate = Func(theSuit.makeDesperation)
     makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
-    cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, theSuit), Wait(3.0))
+    cameraTrack = Sequence(Wait(3.0))
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     makeDesperates.append(makeDesperate)
     makeDamageUps.append(makeDamageUp)
@@ -806,6 +806,15 @@ def doAbsorbMovie(attack):
     notifyTrack = Sequence(Func(theSuit.checkAbsorbDamage))
     cameraTrack = Wait(3.0)
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+    return Sequence(notifyTracks)
+
+def doSyphonMovie(attack):
+    theSuit = attack['suit']
+    notifyTracks = Sequence()
+    notifyTrack = Sequence(Func(theSuit.checkSyphonHP))
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    cameraTrack = Wait(3.0)
+    notifyTracks.append(Parallel(notifyTrack, healSound))
     return Sequence(notifyTracks)
 
 def doAbsorbMovieLevel(attack):
