@@ -413,7 +413,7 @@ class OptionsTabPage(DirectFrame):
 
         # Create the FPS button
         self.fpsButton = DirectButton(
-            parent=self.displayNode,  # same parent as your other Display tab buttons
+            parent=self.displayNode,
             relief=None,
             image=(guiButton.find('**/QuitBtn_UP'),
                    guiButton.find('**/QuitBtn_DN'),
@@ -422,7 +422,7 @@ class OptionsTabPage(DirectFrame):
             text="",  # text will be set dynamically
             text_scale=options_text_scale,
             text_pos=button_textpos,
-            pos=(buttonbase_xcoord, 0.0, buttonbase_ycoord - 5 * textRowHeight),  # below Reset FOV
+            pos=(buttonbase_xcoord + 0.15, 0.0, buttonbase_ycoord - 7.25 * textRowHeight),
             command=toggleFPS
         )
 
