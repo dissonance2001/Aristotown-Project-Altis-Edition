@@ -396,15 +396,12 @@ class OptionsTabPage(DirectFrame):
                                               pos = (buttonbase_xcoord, 0.0, buttonbase_ycoord - 6* textRowHeight),
                                               command = self.__doToggleAnimations)
 
-        # Determine parent for Display tab
-        parentFrame = getattr(self, 'displayTab', None) or getattr(self, 'displayOptionsFrame', None) or self
-
-        # Helper function to update text
-        def updateFPSButtonText(button):
+        # Helper function to update button text
+        def updateFPSButtonText():
             if getattr(base, 'frameRateMeter', None):
-                button['text'] = "FPS: ON"
+                self.fpsButton['text'] = "FPS: ON"
             else:
-                button['text'] = "FPS: OFF"
+                self.fpsButton['text'] = "FPS: OFF"
 
         # Toggle function
         def toggleFPS():
@@ -412,24 +409,25 @@ class OptionsTabPage(DirectFrame):
                 base.setFrameRateMeter(False)
             else:
                 base.setFrameRateMeter(True)
-            updateFPSButtonText(self.fpsButton)
+            updateFPSButtonText()
 
-        # Create the compact button
+        # Create the FPS button
         self.fpsButton = DirectButton(
-            parent=parentFrame,
-            text="",  # text set below
-            text_scale=0.03,  # smaller text
-            text_fg=Vec4(0, 0, 0, 1),
-            text_shadow=Vec4(1, 1, 1, 1),
-            frameColor=Vec4(1, 1, 0, 1),  # yellow
-            frameSize=(-0.2, 0.2, -0.05, 0.05),  # compact size
-            relief=1,  # simple raised look
-            command=toggleFPS,
-            pos=(0, 0, -0.25)  # adjust vertical position
+            parent=self.displayNode,  # same parent as your other Display tab buttons
+            relief=None,
+            image=(guiButton.find('**/QuitBtn_UP'),
+                   guiButton.find('**/QuitBtn_DN'),
+                   guiButton.find('**/QuitBtn_RLVR')),
+            image_scale=button_image_scale,
+            text="",  # text will be set dynamically
+            text_scale=options_text_scale,
+            text_pos=button_textpos,
+            pos=(buttonbase_xcoord, 0.0, buttonbase_ycoord - 5 * textRowHeight),  # below Reset FOV
+            command=toggleFPS
         )
 
-        # Initialize text
-        updateFPSButtonText(self.fpsButton)
+        # Initialize button text based on current FPS state
+        updateFPSButtonText()
 
         self.WASD_Label = DirectLabel(parent = self.controlsNode, relief = None, text = '', text_align = TextNode.ALeft, text_scale = options_text_scale, text_wordwrap = 16, pos = (leftMargin, 0, textStartHeight))
         self.WASD_toggleButton = DirectButton(parent = self.controlsNode, relief = None, image = (guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale = button_image_scale, text = '', text_scale = options_text_scale, text_pos = button_textpos, pos = (buttonbase_xcoord, 0.0, buttonbase_ycoord), command = self.__doToggleWASD)
