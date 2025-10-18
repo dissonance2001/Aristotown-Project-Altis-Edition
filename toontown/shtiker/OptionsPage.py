@@ -16,7 +16,7 @@ from toontown.toontowngui import FeatureComingSoonDialog
 from decimal import Decimal
 from toontown.dmenu import DMenuQuit
 from direct.showbase.DirectObject import DirectObject
-from direct.gui.DirectGui import DirectCheckButton
+from panda3d.core import Vec4
 disabledImageColor = Vec4(0.6, 0.6, 0.6, 1)
 speedChatStyles = (
     (
@@ -399,16 +399,37 @@ class OptionsTabPage(DirectFrame):
         # Determine parent for Display tab
         parentFrame = getattr(self, 'displayTab', None) or getattr(self, 'displayOptionsFrame', None) or self
 
-        # Create FPS toggle
-        self.fpsToggle = DirectCheckButton(
+        # Helper function to update text
+        def updateFPSButtonText(button):
+            if getattr(base, 'frameRateMeter', None):
+                button['text'] = "FPS: ON"
+            else:
+                button['text'] = "FPS: OFF"
+
+        # Toggle function
+        def toggleFPS():
+            if getattr(base, 'frameRateMeter', None):
+                base.setFrameRateMeter(False)
+            else:
+                base.setFrameRateMeter(True)
+            updateFPSButtonText(self.fpsButton)
+
+        # Create the compact button
+        self.fpsButton = DirectButton(
             parent=parentFrame,
-            text="Show FPS",
-            scale=0.07,
-            pos=(0, 0, -0.25),  # adjust vertical position to fit layout
-            indicatorValue=1 if getattr(base, 'frameRateMeter', None) else 0,
-            command=lambda checked: base.setFrameRateMeter(bool(checked))
+            text="",  # text set below
+            text_scale=0.03,  # smaller text
+            text_fg=Vec4(0, 0, 0, 1),
+            text_shadow=Vec4(1, 1, 1, 1),
+            frameColor=Vec4(1, 1, 0, 1),  # yellow
+            frameSize=(-0.2, 0.2, -0.05, 0.05),  # compact size
+            relief=1,  # simple raised look
+            command=toggleFPS,
+            pos=(0, 0, -0.25)  # adjust vertical position
         )
-        # Controls
+
+        # Initialize text
+        updateFPSButtonText(self.fpsButton)
 
         self.WASD_Label = DirectLabel(parent = self.controlsNode, relief = None, text = '', text_align = TextNode.ALeft, text_scale = options_text_scale, text_wordwrap = 16, pos = (leftMargin, 0, textStartHeight))
         self.WASD_toggleButton = DirectButton(parent = self.controlsNode, relief = None, image = (guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale = button_image_scale, text = '', text_scale = options_text_scale, text_pos = button_textpos, pos = (buttonbase_xcoord, 0.0, buttonbase_ycoord), command = self.__doToggleWASD)
