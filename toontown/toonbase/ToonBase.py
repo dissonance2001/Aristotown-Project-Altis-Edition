@@ -47,6 +47,8 @@ class ToonBase(OTPBase.OTPBase):
             height = displayInfo.getDisplayModeHeight(i)
             if (width, height) not in self.resList:
                 self.resList.append((width, height))
+        #  Enable FPS counter (Python 2 compatible)
+        base.setFrameRateMeter(True)
 
         # Next, separate the resolutions by their ratio:
         self.resDict = {}

@@ -16,6 +16,7 @@ from toontown.toontowngui import FeatureComingSoonDialog
 from decimal import Decimal
 from toontown.dmenu import DMenuQuit
 from direct.showbase.DirectObject import DirectObject
+from direct.gui.DirectGui import DirectCheckButton
 disabledImageColor = Vec4(0.6, 0.6, 0.6, 1)
 speedChatStyles = (
     (
@@ -394,6 +395,19 @@ class OptionsTabPage(DirectFrame):
                                               text_pos = button_textpos,
                                               pos = (buttonbase_xcoord, 0.0, buttonbase_ycoord - 6* textRowHeight),
                                               command = self.__doToggleAnimations)
+
+        # Determine parent for Display tab
+        parentFrame = getattr(self, 'displayTab', None) or getattr(self, 'displayOptionsFrame', None) or self
+
+        # Create FPS toggle
+        self.fpsToggle = DirectCheckButton(
+            parent=parentFrame,
+            text="Show FPS",
+            scale=0.07,
+            pos=(0, 0, -0.25),  # adjust vertical position to fit layout
+            indicatorValue=1 if getattr(base, 'frameRateMeter', None) else 0,
+            command=lambda checked: base.setFrameRateMeter(bool(checked))
+        )
         # Controls
 
         self.WASD_Label = DirectLabel(parent = self.controlsNode, relief = None, text = '', text_align = TextNode.ALeft, text_scale = options_text_scale, text_wordwrap = 16, pos = (leftMargin, 0, textStartHeight))
