@@ -594,6 +594,26 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camera.setPos(camera.getPos() + Vec3(+ x_shake, y_shake, z_shake))
         return task.cont
 
+    def shake_camera_high_pressure(task):
+        camera = base.camera
+        shake_intensity = 1.0  # Adjust for desired shake intensity
+        x_shake = random.uniform(-shake_intensity, shake_intensity)
+        y_shake = random.uniform(-shake_intensity, shake_intensity)
+        z_shake = random.uniform(-shake_intensity, shake_intensity)
+        camera.setPosHpr(0.0, -10.0, 10.0, 0, -20, 0)
+        camera.setPos(camera.getPos() + Vec3(+ x_shake, y_shake, z_shake))
+        return task.cont
+
+    def shake_camera_advancement(task):
+        camera = base.camera
+        shake_intensity = 0.5  # Adjust for desired shake intensity
+        x_shake = random.uniform(-shake_intensity, shake_intensity)
+        y_shake = random.uniform(-shake_intensity, shake_intensity)
+        z_shake = random.uniform(-shake_intensity, shake_intensity)
+        camera.setPosHpr(0.0, -10.0, 10.0, 0, -20, 0)
+        camera.setPos(camera.getPos() + Vec3(+ x_shake, y_shake, z_shake))
+        return task.cont
+
     def shake_camera_tremor(task):
         camera = base.camera
         shake_intensity = 0.1  # Adjust for desired shake intensity
@@ -682,7 +702,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'EvictionNotice':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvilEye':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'DoubleCross':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'Forecast':
@@ -710,7 +730,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'FreezeAssets':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'GlowerPower':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
+        camTrack.append(defaultCamera(openShotDuration=0.75))
     elif name == 'ReArrange':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'ShortSqueeze':
@@ -823,7 +843,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
         # redd heir wing cheats
     elif name == 'ReddLiquidationSale':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ReddPeckingOrder':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'ReddAutoRepair':
@@ -834,11 +854,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'WSICeaseAndDesist':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ArbitratorObjection':
-        camTrack.append(defaultCamera(openShotDuration=0.0))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 2)))
     elif name == 'ArbitratorPaperFiling':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(heldShot(0.0, -17.5, 10.0, 0, -20, 0, attackDuration))
     elif name == 'ArbitratorWhirlwind':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
     elif name == 'ArbitratorThrowBook':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.7),
@@ -956,7 +976,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ScapegoatEnraged':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 heldRelativeShot(suit, 0.0, 7, 6, -180, -20.0, 0.0, attackDuration)))
+                                 heldRelativeShot(suit, 0.0, 8, 6, -180, -20.0, 0.0, attackDuration)))
     elif name == 'ScapegoatGavel':
         camTrack.append(defaultCamera(openShotDuration=2))
     elif name == 'ScapegoatBarnyardBash':
@@ -1049,21 +1069,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     elif name == 'PowerhouseSnipeCollectCall':
-        if attackDuration > 2:
-            camTrack2 = defaultCamera(openShotDuration=1.0)
-            pbpText = attack['playByPlayText']
-            pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = pbpDc.getShowIntervalDesc(
-                'The Powerhouse retaliates against confused toons!',
-                attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
-            return Parallel(pbpTrack, pbpDesc, camTrack2)
-        else:
-            camTrack2 = defaultCamera(openShotDuration=1.0)
-            return camTrack2
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'PowerhouseGeneration':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 heldRelativeShot(suit, 0.0, 7, 9, -180, -20.0, 0.0, attackDuration)))
+                                 heldRelativeShot(suit, 0.0, 9, 10, -180, -20.0, 0.0, attackDuration)))
+    elif name == 'PowerhouseGeneration2':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 heldRelativeShot(suit, 0.0, 9, 10, -180, -20.0, 0.0, attackDuration)))
     elif name == 'PowerhouseBurnDamage':
         if attackDuration > 2:
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
@@ -1080,17 +1092,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
     # bookkeeper cheats
     elif name == 'BookkeeperPaperCutSoaked':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(4),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4)))
+        camTrack.append(defaultCamera(openShotDuration=.5))
     elif name == 'BookkeeperPaperCutMarked':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(4),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4)))
+        camTrack.append(defaultCamera(openShotDuration=.5))
     elif name == 'BookkeeperPaperCut':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(4),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4)))
+        camTrack.append(defaultCamera(openShotDuration=.5))
     elif name == 'BookkeeperExplodingDocument':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'BookkeeperBookkeepingRetaliation':
@@ -1143,22 +1149,22 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     # ambassador cheats
     elif name == 'AmbassadorHeadRoller':
-        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AmbassadorHeadRoller2':
-        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AmbassadorHeadRoller3':
-        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AmbassadorHeadRoller4':
-        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AmbassadorHeadRoller5':
-        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AmbassadorHeadRollerGroup':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'AmbassadorAdvancement':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
-                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
-                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0.5, attackDuration=0.5), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
+                                 Func(taskMgr.add, shake_camera_advancement, 'camera_shake'), Wait(2.0),
+                                 Func(taskMgr.remove, 'camera_shake'),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 2.5)))
     elif name == 'AmbassadorAdvancement2':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
@@ -1203,15 +1209,17 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.25))
     # safety supervisor cheats
     elif name == 'SafetyHighPressure':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=3, attackDuration=3),
-                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 3)))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=4, attackDuration=4), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
+                                 Func(taskMgr.add, shake_camera_high_pressure, 'camera_shake'), Wait(3.0),
+                                 Func(taskMgr.remove, 'camera_shake'),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 7)))
     elif name == 'SafetyHeatWave':
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=4.0), randomActorShot(suit, battle, attackDuration - 4, 'suit')))
     elif name == 'SafetyHeatWaveCalculation':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'SafetyViolation':
         if attackDuration > 2:
-            camTrack.append(defaultCamera(openShotDuration=2.0))
+            camTrack.append(defaultCamera(openShotDuration=1.5))
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
@@ -1313,12 +1321,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RacketeerPeckingOrderRetaliation':
         if attackDuration > 2:
-            camTrack.append(defaultCamera(openShotDuration=2.0))
+            camTrack.append(defaultCamera(openShotDuration=1.5))
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     elif name == 'RacketeerPeckingOrderRetaliationSoak':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=1.5))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
         # radiographer
     elif name == 'RadiographerRadioInfrequency':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1590,6 +1602,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'SoakRemoval':
         camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
+    elif name == 'GovernaughtDeath':
+        camTrack2 = Sequence(heldShot(10, 0, 10, 115, -30, 0, attackDuration))
+        return camTrack2
     elif name == 'MarkRemoval':
         camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
@@ -1669,7 +1684,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 5 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1679,7 +1694,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 6 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1689,7 +1704,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 7 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1699,7 +1714,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 8 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1709,7 +1724,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 6 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1719,7 +1734,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 7 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1729,7 +1744,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 8 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1739,7 +1754,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 7 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1749,7 +1764,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 8 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1759,7 +1774,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc('Level 7 and 8 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Quality Control!', 3.5)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:

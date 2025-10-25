@@ -310,6 +310,8 @@ class Movie(DirectObject.DirectObject):
             s.addLuredRounds(s.getLuredRounds() - 1)
             if not s.getSoakRounds() <= 0:
                 s.makeSoaked(s.getSoakRounds() - 1)
+            if not s.getMarkRounds() <= 0:
+                s.makeMarked(s.getMarkRounds() - 1)
             if not s.getSuedRounds() <= 0:
                 s.makeSued(s.getSuedRounds() - 1)
             if not s.getEnrageCounter() <= 1:

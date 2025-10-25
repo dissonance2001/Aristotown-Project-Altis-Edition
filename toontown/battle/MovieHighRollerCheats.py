@@ -1282,7 +1282,7 @@ def doElectricShock(attack, ind):
                           Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                           Func(MovieUtil.removeProp, smoke))
     cagePropTrack = Sequence(
-            getPropAppearTrack(cage, battle, cagePos, suit.getDuration('walk') + 1, scaleUpPoint=Point3(2.0, 2.0, 10.0), scaleUpTime=0), Parallel(cagePosition),
+            getPropAppearTrack(cage, battle, cagePos, suit.getDuration('walk') + 1, scaleUpPoint=Point3(5.0, 2.0, 10.0), scaleUpTime=0), Parallel(cagePosition),
             Parallel(
                 cage.posInterval(0, Point3(suitPos.getX(), y, 0.1), blendType='easeIn'),
                 SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/AA_lightning.ogg'), duration=0.75, node=cage)

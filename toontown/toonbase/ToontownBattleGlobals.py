@@ -181,9 +181,9 @@ DLF_ELITE = 64
 EXECUTIVE_HP_MULT = 1.5
 EXECUTIVE_DMG_MULT = 1.2
 EXECUTIVE_BASE_CHANCE = 30
-GOVERNAUGHT_HP_MULT = 0.75
-GOVERNAUGHT_DMG_MULT = 1.5
-GOVERNAUGHT_BASE_CHANCE = 20
+GOVERNAUGHT_HP_MULT = 2
+GOVERNAUGHT_DMG_MULT = 1.0
+GOVERNAUGHT_BASE_CHANCE = 5
 V2_BASE_CHANCE = 25
 pieNames = ['cupcake', 'fruitpie-slice', 'creampie-slice', 'birthday-cake-slice', 'fruitpie', 'creampie', 'birthday-cake', 'wedding-cake', 'lawbook']
 AvProps = (
@@ -307,7 +307,7 @@ AvZapJumps = ((3, 2.25, 1.5),
 InstaKillChance = [2, 3, 5, 8, 10, 15, 20, 20]
 DropMissChance = [40, 40, 40, 40, 40, 40, 40, 40]
 LureMissChance = [5, 10, 5, 10, 5, 10, 5, 10]
-AvSoakRounds = (3, 3, 3, 3, 4, 4, 4, 4)
+AvSoakRounds = (4, 4, 4, 4, 4, 4, 4, 4)
 AvMarkRounds = (1, 1, 1, 1, 1, 1, 1, 1)
 AvDazeRounds = (2, 2, 2, 2, 2, 2, 2, 2)
 AvSelfHealThrow = (4, 6, 8, 10, 14, 28, 36, 44)
@@ -461,6 +461,8 @@ ValidStatusConditions = (
     'snappedcalculator',
     'sanctioncalculator',
     'bindingscalculator',
+    'alreadySoakRemoval',
+    'alreadyMarkRemoval',
     'soakedcalculator',
     'soakedcalculator2',
     'damageupcalculator1',
@@ -623,6 +625,10 @@ ValidStatusConditions = (
     'lureImmune',
     'soakImmune',
     'damageReduction',
+    'burncalculator',
+    'deadpromotion',
+    'sounded',
+    'burncalculator2',
     'ban2levels',
     'ban2tracks',
     'bash1',
@@ -671,6 +677,7 @@ ValidStatusConditions = (
     'soaked',
     'lured',
     'marked',
+    'markedThrow',
     'immune',
     'dazed',
     'sued',
@@ -775,4 +782,5 @@ ValidStatusConditions = (
     'noDamage',
     'busted',
     'collectcalled',
+    'govDamageBoost',
 )

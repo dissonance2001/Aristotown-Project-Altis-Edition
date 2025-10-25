@@ -667,44 +667,6 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             if currStateName != 'NoLocalToon':
                 self.localToonFsm.request('NoLocalToon')
         self.__requestAdjustTownBattle()
-        for suit in self.activeSuits:
-            if self.isSuitLured(suit):
-                suit.loop('lured')
-                suit.setDizzy(1)
-                if suit.style.name == 'hroller2':
-                    for headPart in suit.animatedHeadParts:
-                        headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
-                elif suit.style.name == 'hrollers':
-                    for headPart in suit.animatedHeadParts:
-                        headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
-                elif suit.style.name == 'hroller':
-                    for headPart in suit.animatedHeadParts:
-                        headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        headPart.loop('neutral-lured')
-            else:
-                if suit.style.name == 'mh2':
-                    suit.setNeutralAnimationRolled()
-                elif suit.style.name == 'hrollers':
-                    suit.setNeutralAnimationRolled()
-                elif suit.style.name == 'std2':
-                    suit.setNeutralAnimationRolled()
-                elif suit.style.name == 'videog':
-                    suit.setNeutralAnimationRolled()
-                elif suit.style.name == 'bcaster':
-                    suit.setNeutralAnimationRolled()
-                elif suit.style.name == 'director':
-                    suit.setNeutralAnimationRolled()
-                elif suit.style.name == 'cinema':
-                    suit.setNeutralAnimationRolled()
-                elif suit.style.name == 'choreo':
-                    suit.setNeutralAnimationRolled()
-                elif suit.style.name == 'fmaker':
-                    suit.setNeutralAnimationRolled()
-                else:
-                    suit.setNeutralAnimation()
-                suit.setDizzy(0)
         return oldtoons
 
     def adjust(self, timestamp):

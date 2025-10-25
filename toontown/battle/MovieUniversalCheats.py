@@ -591,10 +591,14 @@ def __soakRemoval(suit, remove=0):
     if suit.isSkeleton:
         suitBody = [suit]
     else:
-        suitBody = [suit.find('**/body'), suit.find('**/hands')]
+        suitBody = [suit]
     suitInterval = Sequence()
     if suit.dna.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryLitigator))
+    if suit.style.name == 'safesupervis' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeDryFirestarter))
+    if suit.style.name == 'fires' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeDryFirestarter))
     for bodyPart in suitBody:
         if bodyPart:
             suitInterval.append(Func(bodyPart.setColor, color))
@@ -828,30 +832,55 @@ def doAbsorbMovieLevel(attack):
 def doSoakRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Sequence()
-    suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
-    return suitTrack
+    suitTrack = Parallel()
+    suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1), Func(suit.makeUnSoaked)))
+    for suit in battle.activeSuits:
+        suitTrack.append(Func(suit.checkSoakRounds))
+    if suit.isVirtual and suit.dna.name == 'redd':
+        makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, - 50))
+    elif suit.dna.name == 'redd':
+        makeDamageUp = Parallel(Func(suit.makeUnDamageUp), Func(suit.checkDamageUp, - 50))
+    else:
+        makeDamageUp = Parallel()
+    return Parallel(suitTrack)
 
 def __createSuitResetPosTrack2(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationAttack))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(walkTrack, moveTrack)
 
 def doLureRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Parallel(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured))
+    suitTrack = Parallel(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.setDizzy, 0), Func(suit.makeUnLured))
     return suitTrack
 
 def doMarkRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Sequence()
-    suitTrack.append(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.splatClear), Func(suit.setNeutralAnimationDrop)))
+    suitTrack = Parallel()
+    suitTrack.append(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.splatClear), Func(suit.makeUnMarked), Func(suit.setNeutralAnimationDrop)))
+    for suit in battle.activeSuits:
+        suitTrack.append(Func(suit.checkMarkRounds))
     return suitTrack
+
+def doGovernaughtDeath(attack):
+    battle = attack['battle']
+    targets = attack['target']
+    notifyTracks = Parallel()
+    soundTracks = Parallel()
+    waitTrack = Sequence(Wait(3.0))
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        soundTrack = getSoundTrack('LB_toonup.ogg', node=toon)
+        notifyTrack = Sequence(Func(toon.showHpString, "+5% Damage!"))
+        soundTracks.append(soundTrack)
+        notifyTracks.append(notifyTrack)
+    return Parallel(notifyTracks, soundTracks, waitTrack)
 
 def doSueRemoval(attack):
     suit = attack['suit']

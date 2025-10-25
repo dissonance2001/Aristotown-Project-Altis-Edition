@@ -1340,16 +1340,6 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         else:
                             self.makeNoncreditPressable(button, track, level)
 
-                        if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(
-                                track, level) <= 0:
-                            if base.localAvatar.battleConditions['allGagBoost'][0] > 0.0:
-                                if not self.numItem(track, level) <= 0:
-                                    self.makeDamageUpPressable(button, track, level)
-                        if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(
-                                track, level) <= 0:
-                            if base.localAvatar.battleConditions['allGagBoost'][0] < 0.0:
-                                if not self.numItem(track, level) <= 0:
-                                    self.makeDamageDownPressable(button, track, level)
                         if 'raisedAnte' in base.localAvatar.battleConditions and not self.numItem(
                                 track, level) <= 0:
                             if base.localAvatar.battleConditions['raisedAnte'][0] > 0.0:
@@ -1358,6 +1348,16 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         if 'raisedAnte' in base.localAvatar.battleConditions and not self.numItem(
                                 track, level) <= 0:
                             if base.localAvatar.battleConditions['raisedAnte'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['allGagBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['allGagBoost'][0] < 0.0:
                                 if not self.numItem(track, level) <= 0:
                                     self.makeDamageDownPressable(button, track, level)
                         if 'lureBoost' in base.localAvatar.battleConditions and not self.numItem(
@@ -1724,18 +1724,6 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         button.configure(image_color=(1, 0, 0, 1))
         self.addToPropBonusIval(button)
 
-    def makeRushJobPressable(self, button, track, level):
-        organicBonus = self.toon.checkGagBonus(track, level)
-        propBonus = self.checkPropBonus(track)
-        bonus = organicBonus or propBonus
-        if bonus:
-            shadowColor = self.ShadowBuffedColor
-        else:
-            shadowColor = self.ShadowColor
-        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
-        button.configure(image_color=(0, 1, 0.047, 1))
-        self.addToPropBonusIval(button)
-
     def makeDamageUpPressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)
         propBonus = self.checkPropBonus(track)
@@ -1745,8 +1733,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             shadowColor = self.ShadowColor
         button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
-        button.configure(image_color=(0, 1, 0.949, 1))
-        self.addToPropBonusIval(button)
+        button.configure(image_color=(1, 1, 1, 1))
+        if bonus:
+            self.addToPropBonusIvalDamageUpBonus(button)
+        else:
+            self.addToPropBonusIvalDamageUp(button)
 
     def makeDamageDownPressable(self, button, track, level):
         organicBonus = self.toon.checkGagBonus(track, level)
@@ -1757,7 +1748,22 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             shadowColor = self.ShadowColor
         button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
-        button.configure(image_color=(1, 0.984, 0, 1))
+        button.configure(image_color=(1, 1, 1, 1))
+        if bonus:
+            self.addToPropBonusIvalDamageDownBonus(button)
+        else:
+            self.addToPropBonusIvalDamageDown(button)
+
+    def makeRushJobPressable(self, button, track, level):
+        organicBonus = self.toon.checkGagBonus(track, level)
+        propBonus = self.checkPropBonus(track)
+        bonus = organicBonus or propBonus
+        if bonus:
+            shadowColor = self.ShadowBuffedColor
+        else:
+            shadowColor = self.ShadowColor
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
+        button.configure(image_color=(0, 1, 0.047, 1))
         self.addToPropBonusIval(button)
 
     def makeDeletePressable(self, button, track, level):
@@ -1998,5 +2004,65 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
         goDark = LerpColorScaleInterval(flashObject, 0.5, Point4(0.1, 0.1, 0.1, 1.0), Point4(1, 1, 1, 1), blendType='easeIn')
         goBright = LerpColorScaleInterval(flashObject, 0.5, Point4(1, 1, 1, 1), Point4(0.1, 0.1, 0.1, 1.0), blendType='easeOut')
+        newSeq = Sequence(goDark, goBright, Wait(0.2))
+        self.propBonusIval.append(newSeq)
+
+    def addToPropBonusIvalDamageUp(self, button):
+        flashObject = button
+        try:
+            flashObject = button.component('image0')
+        except:
+            pass
+
+        goDark = LerpColorScaleInterval(flashObject, 0.5, Point4(0, 0.6, 1, 1), Point4(0, 1, 0.949, 1), blendType='easeIn')
+        goBright = LerpColorScaleInterval(flashObject, 0.5, Point4(0, 1, 0.949, 1), Point4(0, 0.6, 1, 1), blendType='easeOut')
+        newSeq = Sequence(goDark, Wait(0.2), goBright)
+        self.propBonusIval.append(newSeq)
+
+    def addToPropBonusIvalDamageUpBonus(self, button):
+        flashObject = button
+        try:
+            flashObject = button.component('image0')
+        except:
+            pass
+
+        goDark = LerpColorScaleInterval(flashObject, 0.5, Point4(0, .2, .9, 1), Point4(0, 1, 0.949, 1), blendType='easeIn')
+        goBright = LerpColorScaleInterval(flashObject, 0.5, Point4(0, 1, 0.949, 1), Point4(0, .2, .9, 1), blendType='easeOut')
+        newSeq = Sequence(goDark, Wait(0.2), goBright)
+        self.propBonusIval.append(newSeq)
+
+    def addToPropBonusIvalDamageDown(self, button):
+        flashObject = button
+        try:
+            flashObject = button.component('image0')
+        except:
+            pass
+
+        goDark = LerpColorScaleInterval(flashObject, 0.5, Point4(0, 0.6, 1, 1), Point4(1, 0.984, 0, 1), blendType='easeIn')
+        goBright = LerpColorScaleInterval(flashObject, 0.5, Point4(1, 0.984, 0, 1), Point4(0, 0.6, 1, 1), blendType='easeOut')
+        newSeq = Sequence(goDark, Wait(0.2), goBright)
+        self.propBonusIval.append(newSeq)
+
+    def addToPropBonusIvalDamageDownBonus(self, button):
+        flashObject = button
+        try:
+            flashObject = button.component('image0')
+        except:
+            pass
+
+        goDark = LerpColorScaleInterval(flashObject, 0.5, Point4(0, .2, .9, 1), Point4(1, 0.984, 0, 1), blendType='easeIn')
+        goBright = LerpColorScaleInterval(flashObject, 0.5, Point4(1, 0.984, 0, 1), Point4(0, .2, .9, 1), blendType='easeOut')
+        newSeq = Sequence(goDark, Wait(0.2), goBright)
+        self.propBonusIval.append(newSeq)
+
+    def addToPropBonusIvalRushJob(self, button):
+        flashObject = button
+        try:
+            flashObject = button.component('image0')
+        except:
+            pass
+
+        goDark = LerpColorScaleInterval(flashObject, 0.5, Point4(1.0, 1.0, 1.0, 1.0), Point4(0, 1, 0.047, 1), blendType='easeIn')
+        goBright = LerpColorScaleInterval(flashObject, 0.5, Point4(0, 1, 0.047, 1), Point4(1.0, 1.0, 1.0, 1.0), blendType='easeOut')
         newSeq = Sequence(goDark, goBright, Wait(0.2))
         self.propBonusIval.append(newSeq)

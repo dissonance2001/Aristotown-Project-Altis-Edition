@@ -66,6 +66,12 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('demotionFreeze.ptf')
     elif name == 'FireSpray':
         return loadParticleFile('FireSpray.ptf')
+    elif name == 'FireSprayPromotion':
+        return loadParticleFile('FireSprayPromotion.ptf')
+    elif name == 'BurnSpray':
+        return loadParticleFile('BurnSpray.ptf')
+    elif name == 'ZapSpray':
+        return loadParticleFile('ZapSpray.ptf')
     elif name == 'demotionUnFreeze2':
         return loadParticleFile('demotionUnFreeze2.ptf')
     elif name == 'DemotionSpray':
@@ -88,6 +94,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('fingerwag.ptf')
     elif name == 'FiredFlame':
         return loadParticleFile('firedFlame.ptf')
+    elif name == 'FiredFlame2':
+        return loadParticleFile('firedFlame2.ptf')
     elif name == 'FreezeAssets':
         return loadParticleFile('freezeAssets.ptf')
     elif name == 'GlowerPower':
@@ -108,6 +116,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('paperRainfall.ptf')
     elif name == 'HotAir':
         return loadParticleFile('hotAirSpray.ptf')
+    elif name == 'HotAir2':
+        return loadParticleFile('hotAirSpray2.ptf')
     elif name == 'PoundKey':
         return loadParticleFile('poundkey.ptf')
     elif name == 'ShiftSpray':

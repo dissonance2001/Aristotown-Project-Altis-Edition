@@ -639,6 +639,10 @@ SuitHealingPhrases = ("Thank you.",
                    "Much obliged.",
                    "Appreciated.",
                       "Well adjusted.")
+SuitMarkedPhrases = ("Well it's been fun.",
+                   "So much for that promotion.",
+                   "Uh oh.",
+                      "Noooooooo!")
 SuitBashPhrases = ("You seem to be in alligator territory.",
                    "Good luck treading theses waters now.",
                    "In just a snap.",

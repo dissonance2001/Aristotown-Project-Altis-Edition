@@ -234,14 +234,20 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         else:
             sival = ActorInterval(suit, anim)
         #soakTracks.append(__soakSuit(suit, tContact))
-        showDamage = Sequence(Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK), Func(suit.showHpString, 'SOAKED %i ROUNDS' % (ToontownBattleGlobals.AvSoakRounds[level]), openEnded=0))
+        if suit.dna.name == 'redd':
+            showDamage = Sequence(Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK), Func(suit.showHpString, 'SOAKED 2 ROUNDS', openEnded=0))
+        else:
+            showDamage = Sequence(Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK), Func(suit.showHpString, 'SOAKED 4 ROUNDS', openEnded=0))
         value = hp
         #if kbbonus > 0:
             #value += kbbonus
         #if hpbonus > 0:
             #value += hpbonus
         updateHealthBar = Func(suit.updateHealthBar, value)
-        soakSuit = (Func(suit.makeSoaked, ToontownBattleGlobals.AvSoakRounds[level] - 1))
+        if suit.dna.name == 'redd':
+            soakSuit = (Func(suit.makeSoaked, 1))
+        else:
+            soakSuit = (Func(suit.makeSoaked, 3))
         suitTrack.append(Func(suit.setSoaked, 1))
         if suit.dna.name == 'sgoat' and suit.isShielding:
             suitTrack.append(Func(suit.addRageBuilding, hp + 150))
@@ -254,11 +260,11 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         suitIndex = battle.activeSuits.index(suit)
         soakTracks.append(Wait(tContact))
         if toon.getTrackBonusLevel(SQUIRT_TRACK) > 1:
-            soakTracks.append(__soakNearby(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, attack, level))
-            soakTracks.append(__soakNearby2(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, attack, level))
+            soakTracks.append(__soakNearby(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level))
+            soakTracks.append(__soakNearby2(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level))
         else:
-            soakTracks.append(__soakNearby3(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, attack, level))
-            soakTracks.append(__soakNearby4(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, attack, level))
+            soakTracks.append(__soakNearby3(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level))
+            soakTracks.append(__soakNearby4(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
         suitTrack.append(soakSuit)
@@ -309,6 +315,7 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
             suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
             suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
+        suitTrack.append(Func(suit.setDizzy, 0))
         suitTrack.append(Func(suit.setNeutralAnimation))
         return Parallel(suitTrack, bonusTrack, soakTracks)
     else:
@@ -336,41 +343,15 @@ def __ScapegoatAbsorbSplash(suitIndex, suits, hp, battle):
     else:
         return Sequence()
 
-def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, attack, level=0):
+def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
-        value = int(hp / 1.33)
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextSquirt, level, -int(math.ceil(hp / 1.33)), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, 'SOAKED %i ROUNDS' % (ToontownBattleGlobals.AvSoakRounds[level]), openEnded=0))
-        soakSuit = Func(suits[suitIndex].makeSoaked, ToontownBattleGlobals.AvSoakRounds[level] - 1)
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, value)
+        value = (hp * 0.75)
         suitTrack.append(Wait(tContact))
-        suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
+        suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level=0))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
-        suitTrack.append(soakSuit)
-        suitTrack.append(Func(suits[suitIndex].setSoaked, 1))
-        if suits[suitIndex].dna.name == 'sgoat' and suits[suitIndex].isShielding:
-            suitTrack.append(Func(suits[suitIndex].addRageBuilding, hp + 150))
-        if suits[suitIndex].dna.name == 'phouse':
-            suitTrack.append(Func(suits[suitIndex].addPowerhouseRotation, hp + 150))
-        if suits[suitIndex].isSued:
-            suitTrack.append(Func(suits[suitIndex].makeSued, 3))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
-        #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
-            #suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
-        if suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
-        elif not suits[suitIndex].isSkeleton and revives >= 2:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 2:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif not suits[suitIndex].isSkeleton and revives >= 1:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif not suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
@@ -386,41 +367,15 @@ def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, attack, lev
     else:
         return Sequence()
 
-def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, attack, level=0):
+def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
-        value = int(hp / 1.33)
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextSquirt, level, -int(math.ceil(hp / 1.33)), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, 'SOAKED %i ROUNDS' % (ToontownBattleGlobals.AvSoakRounds[level]), openEnded=0))
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, value)
-        soakSuit = Func(suits[suitIndex].makeSoaked, ToontownBattleGlobals.AvSoakRounds[level] - 1)
-        suitTrack.append(Func(suits[suitIndex].setSoaked, 1))
+        value = (hp * 0.75)
         suitTrack.append(Wait(tContact))
-        suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
+        suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level=0))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
-        suitTrack.append(soakSuit)
-        if suits[suitIndex].dna.name == 'sgoat' and suits[suitIndex].isShielding:
-            suitTrack.append(Func(suits[suitIndex].addRageBuilding, hp + 150))
-        if suits[suitIndex].dna.name == 'phouse':
-            suitTrack.append(Func(suits[suitIndex].addPowerhouseRotation, hp + 150))
-        if suits[suitIndex].isSued:
-            suitTrack.append(Func(suits[suitIndex].makeSued, 3))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
-        #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
-            #suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
-        if suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
-        elif not suits[suitIndex].isSkeleton and revives >= 2:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 2:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif not suits[suitIndex].isSkeleton and revives >= 1:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif not suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
@@ -436,41 +391,15 @@ def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
     else:
         return Sequence()
 
-def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, attack, level=0):
+def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         value = (hp / 3)
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextSquirt, level, -int(math.ceil(hp / 3)), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, 'SOAKED %i ROUNDS' % (ToontownBattleGlobals.AvSoakRounds[level]), openEnded=0))
-        soakSuit = Func(suits[suitIndex].makeSoaked, ToontownBattleGlobals.AvSoakRounds[level] - 1)
-        suitTrack.append(Func(suits[suitIndex].setSoaked, 1))
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, value)
         suitTrack.append(Wait(tContact))
-        suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
+        suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
-        suitTrack.append(soakSuit)
-        if suits[suitIndex].dna.name == 'sgoat' and suits[suitIndex].isShielding:
-            suitTrack.append(Func(suits[suitIndex].addRageBuilding, hp + 150))
-        if suits[suitIndex].dna.name == 'phouse':
-            suitTrack.append(Func(suits[suitIndex].addPowerhouseRotation, hp + 150))
-        if suits[suitIndex].isSued:
-            suitTrack.append(Func(suits[suitIndex].makeSued, 3))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
-        #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
-            #suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
-        if suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
-        elif not suits[suitIndex].isSkeleton and revives >= 2:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 2:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif not suits[suitIndex].isSkeleton and revives >= 1:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif not suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
@@ -486,41 +415,15 @@ def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, attack, le
     else:
         return Sequence()
 
-def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, attack, level=0):
+def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
         value = (hp / 3)
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextSquirt, level, -int(math.ceil(hp / 3)), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, 'SOAKED %i ROUNDS' % (ToontownBattleGlobals.AvSoakRounds[level]), openEnded=0))
-        updateHealthBar = Func(suits[suitIndex].updateHealthBar, value)
-        soakSuit = Func(suits[suitIndex].makeSoaked, ToontownBattleGlobals.AvSoakRounds[level] - 1)
-        suitTrack.append(Func(suits[suitIndex].setSoaked, 1))
         suitTrack.append(Wait(tContact))
-        suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
+        suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
-        suitTrack.append(soakSuit)
-        if suits[suitIndex].dna.name == 'sgoat' and suits[suitIndex].isShielding:
-            suitTrack.append(Func(suits[suitIndex].addRageBuilding, hp + 150))
-        if suits[suitIndex].dna.name == 'phouse':
-            suitTrack.append(Func(suits[suitIndex].addPowerhouseRotation, hp + 150))
-        if suits[suitIndex].isSued:
-            suitTrack.append(Func(suits[suitIndex].makeSued, 3))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
-        #if suits[suitIndex].dna.name == 'lit' and not suits[suitIndex].isSoaked:
-           # suitTrack.append(doSnapBellow(attack, suits[suitIndex]))
-        if suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaser, battle))
-        elif not suits[suitIndex].isSkeleton and revives >= 2:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 2:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif suits[suitIndex].isSkeleton and revives >= 1 and not suits[suitIndex].isRevive:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPLaserRevive, battle))
-        elif not suits[suitIndex].isSkeleton and revives >= 1:
-            suitTrack.append(Func(suits[suitIndex].checkCogHPRevive, battle))
-        elif not suits[suitIndex].isVirtual:
-            suitTrack.append(Func(suits[suitIndex].checkCogHP, battle))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
@@ -560,10 +463,14 @@ def __soakSuit(suit, tContact, remove=0):
     if suit.isSkeleton:
         suitBody = [suit]
     else:
-        suitBody = [suit.find('**/body'), suit.find('**/hands')]
+        suitBody = [suit]
     suitInterval = Sequence()
     if suit.style.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetLitigator))
+    if suit.style.name == 'safesupervis' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeWetFirestarter))
+    if suit.style.name == 'fires' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeWetFirestarter))
     for bodyPart in suitBody:
         if bodyPart:
             suitInterval.append(Func(bodyPart.setColor, color))

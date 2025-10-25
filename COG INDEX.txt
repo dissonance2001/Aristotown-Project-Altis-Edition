@@ -28,7 +28,7 @@ enf - Enforcer Level 3-9
 mldr - The Molder Level 5-15
 
 	Field Specialists:
-blh - Blowhard Level 4-12
+blh - Stickler Level 4-12
 bsht - Big Shot Level 6-15
 txl - Toxic Leader Level 7-18
 
@@ -125,7 +125,7 @@ fct - Fat Cat Level 4-12
 shy - Shylock Level 2-8
 sw - The Swindler Level 3-9
 ovt - Overtimer Level 5-15
-trs - Cheapskate Level 6-15
+trs - Cash Cow Level 6-15
 bfh - Big Fish Level 7-18
 
 	Facility Cog:
@@ -205,7 +205,7 @@ cinema - Cinematographer Level 26.mgr
 radiog - Radiographer Level 32.mgr
 racket - Racketeer Level 38.mgr
 ubuster - Union Buster Level 38.mgr
-safesupervis - Safe-ty Supervisor Level 44.mgr
+safesupervis - Pressurizer Level 44.mgr
 
 =============BOARDBOTS:===============
 	Regular Cogs:

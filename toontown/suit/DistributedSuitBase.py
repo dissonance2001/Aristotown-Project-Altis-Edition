@@ -101,7 +101,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             parts = ()
             for thingIndex in xrange(0, actorCollection.getNumPaths()):
                 thing = actorCollection[thingIndex]
-                if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
+                if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
                     thing.setColor(0, 1, 0.063, 1)
                     thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
                     thing.setDepthWrite(False)
@@ -184,7 +184,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def processCog(self):
         if self.isSkelecog:
-            self.maxHP = self.getHP()
+            self.maxHP = int(self.getHP())
         #self.currHP = self.maxHP
 
     def setGovernaught(self, governaught):
@@ -196,7 +196,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.governaught
 
     def processGovernaught(self):
-        self.maxHP = self.getHP()
+        self.maxHP = int(self.getHP())
         #self.currHP = self.maxHP
         self.makeGovernaught()
         nameInfo = self.createNameInfo()
@@ -217,7 +217,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.playRate
 
     def processManager(self):
-        self.maxHP = self.getHP()
+        self.maxHP = int(self.getHP())
         self.makeManager()
         nameInfo = self.createNameInfo()
         self.setDisplayName(nameInfo)
@@ -685,9 +685,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def setHP(self, hp):
         if hp > self.maxHP * self.hardMaxHP:
-            self.currHP = self.maxHP * self.hardMaxHP
+            self.currHP = int(self.maxHP * self.hardMaxHP)
         else:
-            self.currHP = hp
+            self.currHP = int(hp)
         return None
 
     def setHealthForMe(self, health):
@@ -990,6 +990,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
     def setMaxHP(self, hp):
         self.maxHP = int(hp)
         self.currHP = int(hp)
+
+    def setMaxHP2(self, hp):
+        self.maxHP = int(hp)
 			
     def resetNameForElite(self):
         name = self.name

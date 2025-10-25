@@ -173,10 +173,14 @@ def __soakRemoval(suit, remove=0):
     if suit.isSkeleton:
         suitBody = [suit]
     else:
-        suitBody = [suit.find('**/body'), suit.find('**/hands')]
+        suitBody = [suit]
     suitInterval = Sequence()
     if suit.style.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryLitigator))
+    if suit.style.name == 'safesupervis' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeDryFirestarter))
+    if suit.style.name == 'fires' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeDryFirestarter))
     for bodyPart in suitBody:
         if bodyPart:
             suitInterval.append(Func(bodyPart.setColor, color))
@@ -223,9 +227,10 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         zapTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8))
         suitTrack.append(Parallel(MovieUtil.zapCog(suit, anim, .5, 2.0, battle), MovieUtil.createSuitStunInterval(suit, .5, 2.0), deathTracks))
         bonusTrack = Sequence(Wait(tContact))
-        if kbbonus > 0:
+        if kbbonus == 0:
             #suitTrack.append(__createSuitResetPosTrack(suit, battle))
             suitTrack.append(Func(battle.unlureSuit, suit))
+            suitTrack.append(__createSuitResetPosTrack(suit, battle))
         if hpbonus > 0:
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=ZAP_TRACK))
@@ -245,7 +250,8 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         suitTrack.append(Func(battle.unlureSuit, suit))
-        suitTrack.append(createSuitResetPosTrack(suit, battle))
+        suitTrack.append(Func(suit.setDizzy, 0))
+       # suitTrack.append(createSuitResetPosTrack(suit, battle))
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
         suitTrack.append(Parallel(__soakRemoval(suit, 1)))
         suitTrack.append(soakRemoval)
@@ -1248,7 +1254,7 @@ def __doLightning(zap, delay, fShowStun, uberClone = 0, npcs=[]):
         y = suitPos.getY()
         cagePos = [Point3(suitPos.getX(), y, 100.0), suit.getHpr(battle)]
         cagePropTrack = Sequence(
-            getPropAppearTrack(cage, battle, cagePos, 3.5, scaleUpPoint=Point3(2.0, 2.0, 10.0), scaleUpTime=0),
+            getPropAppearTrack(cage, battle, cagePos, 3.5, scaleUpPoint=Point3(5.0, 2.0, 10.0), scaleUpTime=0),
             Parallel(cagePosition),
             Parallel(cage.posInterval(0, Point3(suitPos.getX(), y, 0.1), blendType='easeIn')), Wait(0.5),
             LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),

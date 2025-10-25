@@ -148,7 +148,7 @@ def __showProp(prop, parent, pos):
 def __animProp(props, propName, propType):
     if 'actor' == propType:
         for prop in props:
-            prop.play(propName)
+            prop.loop(propName)
 
     elif 'model' == propType:
         pass
@@ -409,7 +409,7 @@ def __throwPie(throw, delay, hitCount, npcs):
                 suitResponseTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
             if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
                 suitResponseTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
-        showDamage = Sequence(Func(suit.showHpTextThrow, -hp, openEnded=0, attackTrack=THROW_TRACK), Func(suit.showHpString, "MARKED!", openEnded=0))
+        showDamage = Sequence(Func(suit.showHpTextThrow, -hp, openEnded=0, attackTrack=THROW_TRACK), Func(suit.showHpString, "MARKED 2 ROUNDS", openEnded=0))
         #markDamage = Func(showMarkRounds, suit, level)
         value = hp
         #if kbbonus > 0:
@@ -450,6 +450,7 @@ def __throwPie(throw, delay, hitCount, npcs):
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(updateHealthBar)
+        suitResponseTrack.append(Func(suit.makeMarked, 3))
         suitResponseTrack.append(sival)
         #suitResponseTrack.append(Wait(0))
         #suitResponseTrack.append(markDamage)
@@ -477,6 +478,7 @@ def __throwPie(throw, delay, hitCount, npcs):
             suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
+        suitResponseTrack.append(Func(suit.setDizzy, 0))
         suitResponseTrack.append(Func(suit.setNeutralAnimation))
         suitIndex = battle.activeSuits.index(suit)
         if suit.dna.name == 'sgoat' and suit.isShielding:

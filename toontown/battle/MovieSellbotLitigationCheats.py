@@ -164,6 +164,12 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'safesupervis' and attack['name'] == 'RacketeerPeckingOrderRetaliationSoak':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'safesupervis' and attack['name'] == 'SafetyViolation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
 
@@ -191,7 +197,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
     #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     track.append(
-        Func(suit.setNeutralAnimation))
+        Func(suit.setNeutralAnimationDrop))
 
     def returnTrapToSuit(suit = suit, trapStorage = trapStorage):
         return
@@ -228,7 +234,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
         #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
     track.append(
-            Func(suit.setNeutralAnimation))
+            Func(suit.setNeutralAnimationDrop))
     return track
 
 
@@ -677,19 +683,118 @@ def doHeatWaveCalculation(attack):
     suitColorTrack = Sequence(LerpColorScaleInterval(node, duration=3, colorScale=(1, 0, 0, 1),
                                                      blendType='easeInOut'), Wait(1.0),
                               LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
-    baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
-    flameEffect = BattleParticles.createParticleEffect('FiredFlame')
+    baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+    flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
     flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-    BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
-    BattleParticles.setEffectTexture(flameEffect, 'fire')
     BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
     baseFlameTrack = getPartTrack(baseFlameEffect, 0, 5.5, [baseFlameEffect, suit, 0], softStop=-1)
     flameTrack = getPartTrack(flameEffect, 0, 5.5, [flameEffect, suit, 0], softStop=-1)
     flecksTrack = getPartTrack(flecksEffect, 0, 5.5, [flecksEffect, suit, 0], softStop=-1)
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_boilerplate_a.ogg')))
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
-    suitSpeechTrack = Func(suit.setChatAbsolute, "A heat wave is upon us... The heat index has been recorded at %s degrees." % attack['target'][0]['hp'], CFSpeech | CFTimeout)
+    suitSpeechTrack = Func(suit.setChatAbsolute, "Under pressure, things get hot fast... this battlefield now burns at %s degrees and climbing." % attack['target'][0]['hp'], CFSpeech | CFTimeout)
     return Parallel(suitTrack, suitSpeechTrack, baseFlameTrack, suitColorTrack, flameTrack, flecksTrack, soundTrack)
+
+def doOverheat(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    partTracks4 = Parallel()
+    notifyTracks = Parallel()
+    baseFlameTracks = Parallel()
+    flameTracks = Parallel()
+    flecksTracks = Parallel()
+    colorTracks = Parallel()
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        BattleParticles.loadParticles()
+        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+        flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
+        flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
+        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+        baseFlameSmall = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+        flameSmall = BattleParticles.createParticleEffect('FiredFlame2')
+        flecksSmall = BattleParticles.createParticleEffect('SpriteFiredFlecks')
+        BattleParticles.setEffectTexture(flecksSmall, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+        baseFlameSmall.setScale(0.7)
+        flameSmall.setScale(0.7)
+        flecksSmall.setScale(0.7)
+        baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, [baseFlameEffect, toon, 0], softStop=-1)
+        flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, toon, 0], softStop=-1)
+        flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, toon, 0], softStop=-1)
+        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 3.9, [baseFlameSmall, toon, 0], softStop=-1)
+        flameSmallTrack = getPartTrack(flameSmall, 1.0, 3.9, [flameSmall, toon, 0], softStop=-1)
+        flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, [flecksSmall, toon, 0], softStop=-1)
+
+        def changeColor(parts):
+            track = Parallel()
+            for partNum in xrange(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
+
+            return track
+
+        def resetColor(parts):
+            track = Parallel()
+            for partNum in xrange(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(Func(nextPart.clearColorScale))
+
+            return track
+        sprayEffect = BattleParticles.createParticleEffect('FireSpray')
+        sprayEffect2 = BattleParticles.createParticleEffect('FireSpray')
+        partTrack4 = getPartTrack(sprayEffect, 1, 3.25, [sprayEffect2, toon, 0], softStop=-1)
+        notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextCheat, - int(dmg)),
+                               Func(toon.showHpStringSnipe, "BURNED!"))
+        if dmg > 0:
+            partTracks4.append(partTrack4)
+            headParts = toon.getHeadParts()
+            torsoParts = toon.getTorsoParts()
+            legsParts = toon.getLegsParts()
+            colorTrack = Sequence()
+            colorTrack.append(Wait(2.0))
+            colorTrack.append(Func(battle.movie.needRestoreColor))
+            colorTrack.append(changeColor(headParts))
+            colorTrack.append(changeColor(torsoParts))
+            colorTrack.append(changeColor(legsParts))
+            colorTrack.append(Wait(2.5))
+            colorTrack.append(resetColor(headParts))
+            colorTrack.append(resetColor(torsoParts))
+            colorTrack.append(resetColor(legsParts))
+            colorTrack.append(Func(battle.movie.clearRestoreColor))
+            notifyTracks.append(notifyTrack)
+            baseFlameTracks.append(baseFlameTrack)
+            flameTracks.append(flameTrack)
+            flecksTracks.append(flecksTrack)
+            colorTracks.append(colorTrack)
+            baseFlameTracks.append(baseFlameSmallTrack)
+            flameTracks.append(flameSmallTrack)
+            flecksTracks.append(flecksSmallTrack)
+    damageAnims = []
+    damageAnims.append(['cringe',
+                        0.01,
+                        0.7,
+                        0.62])
+    damageAnims.append(['slip-forward',
+                        1e-05,
+                        0.4,
+                        1.2])
+    damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.8, startTime=1.2))
+    suitTrack = Parallel(getSuitTrack(attack), MovieUtil.createSuitFirestarterCigarSmokeInterval2(suit))
+    toonTracks = getToonTracksCheat(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3,
+                                    dodgeAnimNames=['sidestep'])
+    soundTrack = getSoundTrack('SA_boilerplate_a.ogg', delay=1.0, node=suit)
+    if hitAtleastOneToon == True:
+        multiTrackList = Parallel(suitTrack, baseFlameTracks, notifyTracks, flameTracks, partTracks4, flecksTracks,
+                                  toonTracks, colorTracks, soundTrack)
+    else:
+        multiTrackList = Parallel()
+    return multiTrackList
 
 def doHeatWave(attack):
     suit = attack['suit']
@@ -703,11 +808,9 @@ def doHeatWave(attack):
     suitTrack = Sequence(Parallel(Parallel(LerpColorScaleInterval(node, duration=3, colorScale=(1, 0, 0, 1),
                                     blendType='easeInOut')), getSuitAnimTrack(attack)))
     dmg = attack['target'][0]['hp']
-    baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
-    flameEffect = BattleParticles.createParticleEffect('FiredFlame')
+    baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+    flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
     flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-    BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
-    BattleParticles.setEffectTexture(flameEffect, 'fire')
     BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
     baseFlameTrack2 = getPartTrack(baseFlameEffect, 1, 4.9, [baseFlameEffect, suit, 0], softStop=-1)
     flameTrack2 = getPartTrack(flameEffect, 1, 4.9, [flameEffect, suit, 0], softStop=-1)
@@ -716,7 +819,7 @@ def doHeatWave(attack):
                          Func(suit.showHpString, "OVERHEATED!"), Func(suit.setHealthForMe, - (dmg * 3)),
                          Func(suit.updateHealthBar, 0), Parallel(ActorInterval(suit, 'pie-small-react'), LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1),
                                     blendType='easeInOut')),
-                         Func(suit.setNeutralAnimation))
+                         Func(suit.setNeutralAnimationDrop))
     partTrack = getPartTrack(particleEffect, 1.0, 3.9, [particleEffect, suit, 0], softStop=-2.0)
     waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.9, [waterfallEffect, suit, 0], softStop=-2.0)
     partTrack2 = getPartTrack(particleEffect, 1.0, 3.9, [particleEffect, suit, 0])
@@ -746,12 +849,9 @@ def doHeatWave(attack):
         toon = t['toon']
         BattleParticles.loadParticles()
         sprayEffect = BattleParticles.createParticleEffect('HotAir')
-        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
-        flameEffect = BattleParticles.createParticleEffect('FiredFlame')
+        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+        flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
         flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-        BattleParticles.setEffectTexture(sprayEffect, 'fire')
-        BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
-        BattleParticles.setEffectTexture(flameEffect, 'fire')
         BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
         flameDelay = 1.45
         flameDuration = 1.5
@@ -807,25 +907,28 @@ def doPromotion(attack, ind):
     dmg = target[0]['hp']
     targetSuit = battle.activeSuits[ind]
     damageDelay = 1.7
-    sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
-    spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
-    spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
-    spinEffect3 = BattleParticles.createParticleEffect(file='organizeEffect')
-    spinEffect1.reparentTo(targetSuit)
-    spinEffect2.reparentTo(targetSuit)
-    spinEffect3.reparentTo(targetSuit)
-    height1 = targetSuit.getHeight() - (targetSuit.getHeight() / 3)
-    height2 = targetSuit.getHeight() - (targetSuit.getHeight() / 2)
-    height3 = targetSuit.getHeight() - (targetSuit.getHeight() / 1.25)
-    spinEffect1.setPos(0.8, -0.7, height1)
-    spinEffect1.setHpr(0, 0, -random.random() * 10 - 85)
-    spinEffect1.setHpr(spinEffect1, 0, 50, 0)
-    spinEffect2.setPos(0.8, -0.7, height2)
-    spinEffect2.setHpr(0, 0, -random.random() * 10 - 85)
-    spinEffect2.setHpr(spinEffect2, 0, 50, 0)
-    spinEffect3.setPos(0.8, -0.7, height3)
-    spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
-    spinEffect3.setHpr(spinEffect3, 0, 50, 0)
+    BattleParticles.loadParticles()
+    baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+    flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
+    flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
+    BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+    baseFlameSmall = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+    flameSmall = BattleParticles.createParticleEffect('FiredFlame2')
+    flecksSmall = BattleParticles.createParticleEffect('SpriteFiredFlecks')
+    BattleParticles.setEffectTexture(flecksSmall, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+    baseFlameSmall.setScale(0.7)
+    flameSmall.setScale(0.7)
+    flecksSmall.setScale(0.7)
+    baseFlameTrack = getPartTrack(baseFlameEffect, 2.1, 3.9, [baseFlameEffect, targetSuit, 0], softStop=-1)
+    flameTrack = getPartTrack(flameEffect, 2.1, 3.9, [flameEffect, targetSuit, 0], softStop=-1)
+    flecksTrack = getPartTrack(flecksEffect, 2.9, 2.1, [flecksEffect, targetSuit, 0], softStop=-1)
+    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.1, 3.9, [baseFlameSmall, targetSuit, 0], softStop=-1)
+    flameSmallTrack = getPartTrack(flameSmall, 2.1, 3.9, [flameSmall, targetSuit, 0], softStop=-1)
+    flecksSmallTrack = getPartTrack(flecksSmall, 2.9, 2.1, [flecksSmall, targetSuit, 0], softStop=-1)
+
+    sprayEffect = BattleParticles.createParticleEffect('FireSprayPromotion')
+    sprayEffect2 = BattleParticles.createParticleEffect('FireSprayPromotion')
+    partTrack4 = getPartTrack(sprayEffect, 2.1, 3.25, [sprayEffect2, targetSuit, 0], softStop=-1)
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     sinkPos = suit.getPos(battle)
     dropPos = suit.getPos(battle)
@@ -834,10 +937,8 @@ def doPromotion(attack, ind):
     sinkPos.setY(sinkPos.getY() + 12.5)
     sinkPos.setZ(sinkPos.getZ() - 4.5)
     sinkPos2.setY(sinkPos.getY() - 22.5)
-    battle = attack['battle']
     targetPos = targetSuit.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    battle = attack['battle']
     targetPos2 = toon.getPos(battle)
     headsUp2 = Func(suit.headsUp, battle, targetPos2)
     cage = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
@@ -854,30 +955,16 @@ def doPromotion(attack, ind):
                                                                         Point3(suitPos.getX(), 0,
                                                                                0)),
                                  dustCloud.track, Func(dustCloud.detachNode), Wait(1.7), name='dustCloadIval')
-    cagePropTrack = Sequence(Wait(suit.getDuration('walk')),
-                             getPropAppearTrack(cage, battle, cagePos, .5, scaleUpPoint=Point3(1), scaleUpTime=0.1),
-                             Parallel(
-                                 cage.posInterval(0.5, Point3(suitPos.getX(), y, 0.1), blendType='easeIn'),
-                             ),
-                             Wait(4.8),
-                             LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
-                             LerpScaleInterval(cage, .25, MovieUtil.PNT3_ZERO),
-                             Func(MovieUtil.removeProp, cage)
-                             )
-    moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('mob-mentality')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
+    moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('magic3')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
     suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
-    sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
-    spinTrack1 = getPartTrack(spinEffect1, 2.1, 7.7, [spinEffect1, targetSuit, 0], softStop=-2)
-    spinTrack2 = getPartTrack(spinEffect2, 2.1, 7.7, [spinEffect2, targetSuit, 0], softStop=-2)
-    spinTrack3 = getPartTrack(spinEffect3, 2.1, 7.7, [spinEffect3, targetSuit, 0], softStop=-2)
     selfDamageTrack = Sequence(Wait(5.7), Parallel(dustCloudHideIval, ActorInterval(targetSuit, 'slip-forward', startTime=2.43),
                                                    Func(targetSuit.makeIntoCTSManager),
                                                    Func(targetSuit.showHpString, "PROMOTION!"), Func(targetSuit.setMaxHP, 1000), Func(targetSuit.setManager, 1), Func(targetSuit.makeShielding),
                                                    Func(targetSuit.updateHealthBar, 0)),
                                Func(targetSuit.setNeutralAnimation), Func(battle.unSueSuit, targetSuit))
-    soundTrack = getSoundTrack('TL_hypnotize.ogg', delay=2.5, node=suit)
+    soundTrack = getSoundTrack('SA_boilerplate_a.ogg', delay=2.5, node=suit)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=5.7)
-    return Parallel(suitTrack, cagePropTrack, sprayTrack, moveTrack, selfDamageTrack, soundTrack2, soundTrack, spinTrack1, spinTrack2, spinTrack3)
+    return Parallel(baseFlameSmallTrack, flecksTrack, flameTrack, partTrack4, baseFlameTrack, suitTrack, moveTrack, selfDamageTrack, soundTrack2, flecksSmallTrack, flameSmallTrack, soundTrack)
 
 def doViolation(attack):
     suit = attack['suit']
@@ -944,10 +1031,10 @@ def doUnionCalculator(attack):
     calculator.setScale(1.5)
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'), Func(suit.setNeutralAnimationDrop), Wait(2.0))
     if suit.isDesperation:
-        suitSpeechTrack = Func(suit.setChatAbsolute, "You can't stop production; Union Dues have been increased to... %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+        suitSpeechTrack = Func(suit.setChatAbsolute, "You can't stop production; Union Dues have been increased to %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     else:
         suitSpeechTrack = Func(suit.setChatAbsolute,
-                               "You can't stop production; Union Dues have been increased to... %s." %
+                               "You can't stop production; Union Dues have been increased to %s." %
                               int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcPropTrack = Sequence(
@@ -1295,7 +1382,8 @@ def doContractEnforcement(attack):
         )
         knifeTracks.append(knifeTrack)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
-    return Parallel(suitTracks, soundTrack2, liftTracks, knifeTracks)
+    soundTrack = getSoundTrack('LB_toonup.ogg', delay=4)
+    return Parallel(suitTracks, soundTrack2, liftTracks, soundTrack, knifeTracks)
 
 def doProfiteering(attack, ind):
     suit = attack['suit']

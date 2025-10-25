@@ -7,6 +7,7 @@ from toontown.suit import Suit
 from toontown.suit import SuitBase
 from toontown.suit import SuitDialog
 from toontown.suit import SuitTimings
+from toontown.battle import SuitBattleGlobals
 from toontown.battle import MovieUtil
 from toontown.battle import PlayByPlayText
 from direct.directnotify import DirectNotifyGlobal
@@ -28,6 +29,7 @@ from toontown.nametag import NametagGlobals
 from toontown.nametag.NametagGlobals import *
 from toontown.suit.SuitLegList import *
 from toontown.toonbase import ToontownGlobals
+from toontown.toonbase import ToontownBattleGlobals
 
 STAND_OUTSIDE_DOOR = 2.5
 BATTLE_IGNORE_TIME = 6
@@ -62,6 +64,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.absorbDamage = 0
         self.levelDamage = 0
         self.syphonHP = 0
+        self.splashInterval = None
         self.legList = None
         self.initState = None
         self.finalState = None
@@ -914,12 +917,88 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.currHP >= (self.maxHP * self.hardMaxHP):
             self.healInterval = Parallel(Func(self.showHpText, 0), Func(self.showHpString, "REPAIRED!"),
                                          Func(self.updateHealthBar, 0)).start()
-        elif self.currHP + 125 > (self.maxHP * self.hardMaxHP):
+        elif self.currHP + (self.maxHP * 0.35) > (self.maxHP * self.hardMaxHP):
             self.healInterval = Parallel(Func(self.showHpTextCheat, x), Func(self.showHpString, "REPAIRED!"),
                                          Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
         else:
-            self.healInterval = Parallel(Func(self.showHpTextCheat, 125), Func(self.showHpString, "REPAIRED!"),
-                                         Func(self.setHealthForMe, 125), Func(self.updateHealthBar, 0)).start()
+            self.healInterval = Parallel(Func(self.showHpTextCheat, int(self.maxHP * 0.35)), Func(self.showHpString, "REPAIRED!"),
+                                         Func(self.setHealthForMe, int(self.maxHP * 0.35)), Func(self.updateHealthBar, 0)).start()
+
+    def __soakRemoval(self, remove=0):
+        if remove:
+            if self.style.name == 'hydra':
+                color = Point4((0.729, 0.729, 0.729, 1))
+            elif self.style.name == 'charon':
+                color = Point4((0.51, 0.49, 0.467, 1))
+            elif self.style.name == 'nix':
+                color = Point4((0.6, 0.6, 0.6, 1))
+            elif self.style.name == 'styx':
+                color = Point4((0.671, 0.671, 0.671, 1))
+            elif self.style.name == 'kerberos':
+                color = Point4((0.62, 0.659, 0.624, 1))
+            else:
+                color = Point4(1.0, 1.0, 1.0, 1.0)
+        else:
+            color = SoakColor
+        if self.isSkeleton:
+            suitBody = [self]
+        else:
+            suitBody = [self]
+        suitInterval = Sequence()
+        if self.dna.name == 'lgator' and not self.isSkeleton:
+            suitInterval.append(Func(self.makeDryLitigator))
+        if self.style.name == 'safesupervis' and not self.isSkeleton:
+            suitInterval.append(Func(self.makeDryFirestarter))
+        if self.style.name == 'fires' and not self.isSkeleton:
+            suitInterval.append(Func(self.makeDryFirestarter))
+        for bodyPart in suitBody:
+            if bodyPart:
+                suitInterval.append(Func(bodyPart.setColor, color))
+        self.healInterval =  Parallel(suitInterval).start()
+
+    def checkSplashDamage(self, tContact, hp, battle, bonus, attackTrack, level):
+        if self.currHP > 0:
+            revives = self.getSkeleRevives()
+            suitTrack = Sequence()
+            updateHealthBar = Func(self.updateHealthBar, int(math.floor(hp)))
+            if self.dna.name == 'redd':
+                showDamage = Parallel(ActorInterval(self, 'squirt-small-react'), Func(self.showHpTextCheat, -int(math.floor(hp))), updateHealthBar,
+                                      Func(self.showHpString, 'SOAKED 2 ROUNDS'))
+                soakSuit = Func(self.makeSoaked, 1)
+            else:
+                showDamage = Parallel(ActorInterval(self, 'squirt-small-react'), Func(self.showHpTextCheat, -int(math.floor(hp))), updateHealthBar,
+                                      Func(self.showHpString, 'SOAKED 4 ROUNDS'))
+                soakSuit = Func(self.makeSoaked, 3)
+            suitTrack.append(Func(self.setSoaked, 1))
+            suitTrack.append(Parallel(showDamage, soakSuit))
+            suitTrack.append(Func(self.setNeutralAnimationDrop))
+            if self.dna.name == 'sgoat' and self.isShielding:
+                suitTrack.append(Func(self.addRageBuilding, int(math.floor(hp)) + 150))
+            if self.dna.name == 'phouse':
+                suitTrack.append(Func(self.addPowerhouseRotation, int(math.floor(hp)) + 150))
+            if self.isSued:
+                suitTrack.append(Func(self.makeSued, 3))
+            if self.isVirtual:
+                suitTrack.append(Func(self.checkCogHPLaser, battle))
+            elif not self.isSkeleton and revives >= 2:
+                suitTrack.append(Func(self.checkCogHPRevive, battle))
+            elif self.isSkeleton and revives >= 2:
+                suitTrack.append(Func(self.checkCogHPLaserRevive, battle))
+            elif self.isSkeleton and revives >= 1 and not self.isRevive:
+                suitTrack.append(Func(self.checkCogHPLaserRevive, battle))
+            elif not self.isSkeleton and revives >= 1:
+                suitTrack.append(Func(self.checkCogHPRevive, battle))
+            elif not self.isVirtual:
+                suitTrack.append(Func(self.checkCogHP, battle))
+            self.splashInterval = Sequence(suitTrack).start()
+
+    def checkSoakRounds(self):
+        if self.isSoaked == 0 and self.actuallySoaked:
+            self.splashInterval = Sequence(Parallel(ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimationDrop)).start()
+
+    def checkMarkRounds(self):
+        if self.isMarked == 0 and self.actuallyMarked:
+            self.splashInterval = Sequence(Parallel(ActorInterval(self, 'squirt-small-react', startTime=2), Func(self.splatClear), Func(self.makeUnMarked)), Func(self.setNeutralAnimationDrop)).start()
 
     def checkContractEnforcement(self):
         x = int((self.maxHP * self.hardMaxHP) - self.currHP)
@@ -1006,15 +1085,19 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                    Func(racketeer.updateHealthBar, 0)),
                                Func(racketeer.setNeutralAnimation)).start()
 
-    def checkHeadRoller(self, ambassador, battle):
+    def checkHeadRoller(self, battle):
         x = int(self.currHP)
-        self.damageInterval = Sequence(Func(self.showHpTextCheat, -self.currHP), Func(self.showHpStringSacrifice, "OFF WITH YOUR HEAD!"), Func(self.setHealthForMe, - self.currHP),
-                               Func(self.updateHealthBar, 0)).start()
-        self.healInterval = Sequence(Parallel(Func(ambassador.showHpTextCheat, +self.currHP),
-                                                   Func(ambassador.showHpString, "SYPHONED!"),
-                                                   Func(ambassador.setHealthForMe, +self.currHP),
-                                                   Func(ambassador.updateHealthBar, 0)),
-                               Func(ambassador.setNeutralAnimation)).start()
+        if self.currHP > 0:
+            self.damageInterval = Sequence(ActorInterval(self, 'soak', duration = 2.0), Sequence(Parallel(MovieUtil.spawnHeadExplosion(self, battle), Func(self.showHpTextCheat, -self.currHP),
+                                            Func(self.showHpStringSacrifice, "TERMINATED!"),
+                                            Func(self.setHealthForMe, - self.currHP),
+                               Func(self.updateHealthBar, 0)),
+                                           Func(self.setChatAbsolute, "Ouch.", CFSpeech | CFTimeout), Wait(1.0), MovieUtil.createSuitHeadlessDeathTrack(self, battle),
+                                          )).start()
+
+    def checkSkelecogHP(self):
+        x = int(self.currHP)
+        self.damageInterval = Sequence(Func(self.setHealthForMe, 0), Func(self.updateHealthBar, 0)).start()
 
     def checkHeadRoller2(self, ambassador, battle):
         x = int(self.currHP)
@@ -1036,190 +1119,68 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             splat = TextureStage(splatDict[level])
             splat.setMode(TextureStage.MDecal)
             splat.setSavedResult(True)
-            if self.dna.name == 'dsf':
-                self.setTexture(splat, splatTex)
-                self.find('**/body').setTexture(splat, splatTex)
-                self.find('**/necktie-s').setTexture(splat, splatTex)
-                self.find('**/necktie-w').setTexture(splat, splatTex)
-                self.find('**/bowtie').setTexture(splat, splatTex)
-            elif self.dna.name == 'mad':
-                self.find('**/highroller_body').setTexture(splat, splatTex)
-                self.find('**/body').setTexture(splat, splatTex)
-                self.find('**/necktie-s').setTexture(splat, splatTex)
-                self.find('**/necktie-w').setTexture(splat, splatTex)
-                self.find('**/bowtie').setTexture(splat, splatTex)
-            elif self.dna.name == 'crf':
-                self.find('**/highroller_body').setTexture(splat, splatTex)
-                self.find('**/body').setTexture(splat, splatTex)
-                self.find('**/necktie-s').setTexture(splat, splatTex)
-                self.find('**/necktie-w').setTexture(splat, splatTex)
-                self.find('**/bowtie').setTexture(splat, splatTex)
-            elif self.isSkeleton:
-                self.find('**/body').setTexture(splat, splatTex)
-                self.find('**/necktie-s').setTexture(splat, splatTex)
-                self.find('**/necktie-w').setTexture(splat, splatTex)
-                self.find('**/bowtie').setTexture(splat, splatTex)
-            else:
-                self.find('**/body').setTexture(splat, splatTex)
-                self.find('**/necktie-s').setTexture(splat, splatTex)
-                self.find('**/necktie-w').setTexture(splat, splatTex)
-                self.find('**/bowtie').setTexture(splat, splatTex)
-            for headPart in self.headParts:
-                headPart.setTexture(splat, splatTex)
+            actorNode = self.find('**/__Actor_modelRoot')
+            actorCollection = actorNode.findAllMatches('*')
+            parts = ()
+            for thingIndex in xrange(0, actorCollection.getNumPaths()):
+                thing = actorCollection[thingIndex]
+                if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
+                    thing.setTexture(splat, splatTex)
+            #for headPart in self.headParts:
+                #headPart.setTexture(splat, splatTex)
         if clear:
             stages = self.findAllTextureStages()
             for stage in stages:
-                if stage.getName().startswith('splat_wedding'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cream'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_fruit'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cake'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-           # self.clearTexture()
+                actorNode = self.find('**/__Actor_modelRoot')
+                actorCollection = actorNode.findAllMatches('*')
+                parts = ()
+                for thingIndex in xrange(0, actorCollection.getNumPaths()):
+                    thing = actorCollection[thingIndex]
+                    if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'joint_shadow', 'def_nameTag'):
+                        if stage.getName().startswith('splat_wedding'):
+                            thing.clearTexture(stage)
+                        if stage.getName().startswith('splat_cream'):
+                            thing.clearTexture(stage)
+                        if stage.getName().startswith('splat_fruit'):
+                            thing.clearTexture(stage)
+                        if stage.getName().startswith('splat_cake'):
+                            thing.clearTexture(stage)
+            #  for headPart in self.headParts:
+            # if stage.getName().startswith('splat_wedding'):
+            #    headPart.clearTexture(stage)
+            #  if stage.getName().startswith('splat_cream'):
+            #    headPart.clearTexture(stage)
+            # if stage.getName().startswith('splat_fruit'):
+            #   headPart.clearTexture(stage)
+            # if stage.getName().startswith('splat_cake'):
+            #  headPart.clearTexture(stage)
 
     def splatClear(self):
         stages = self.findAllTextureStages()
         for stage in stages:
-            if self.dna.name == 'dsf':
-                if stage.getName().startswith('splat_wedding'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cream'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_fruit'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cake'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-            elif self.dna.name == 'mad':
-                if stage.getName().startswith('splat_wedding'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cream'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_fruit'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cake'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-            elif self.dna.name == 'crf':
-                if stage.getName().startswith('splat_wedding'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cream'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_fruit'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cake'):
-                    self.find('**/highroller_body').clearTexture(stage)
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-            elif self.isSkeleton:
-                if stage.getName().startswith('splat_wedding'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cream'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_fruit'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cake'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-            else:
-                if stage.getName().startswith('splat_wedding'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cream'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_fruit'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-                if stage.getName().startswith('splat_cake'):
-                    self.find('**/body').clearTexture(stage)
-                    self.find('**/necktie-s').clearTexture(stage)
-                    self.find('**/necktie-w').clearTexture(stage)
-                    self.find('**/bowtie').clearTexture(stage)
-            for headPart in self.headParts:
-                if stage.getName().startswith('splat_wedding'):
-                    headPart.clearTexture(stage)
-                if stage.getName().startswith('splat_cream'):
-                    headPart.clearTexture(stage)
-                if stage.getName().startswith('splat_fruit'):
-                    headPart.clearTexture(stage)
-                if stage.getName().startswith('splat_cake'):
-                    headPart.clearTexture(stage)
+            actorNode = self.find('**/__Actor_modelRoot')
+            actorCollection = actorNode.findAllMatches('*')
+            parts = ()
+            for thingIndex in xrange(0, actorCollection.getNumPaths()):
+                thing = actorCollection[thingIndex]
+                if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'joint_shadow', 'def_nameTag'):
+                    if stage.getName().startswith('splat_wedding'):
+                        thing.clearTexture(stage)
+                    if stage.getName().startswith('splat_cream'):
+                        thing.clearTexture(stage)
+                    if stage.getName().startswith('splat_fruit'):
+                        thing.clearTexture(stage)
+                    if stage.getName().startswith('splat_cake'):
+                        thing.clearTexture(stage)
+          #  for headPart in self.headParts:
+               # if stage.getName().startswith('splat_wedding'):
+                #    headPart.clearTexture(stage)
+              #  if stage.getName().startswith('splat_cream'):
+                #    headPart.clearTexture(stage)
+               # if stage.getName().startswith('splat_fruit'):
+                 #   headPart.clearTexture(stage)
+               # if stage.getName().startswith('splat_cake'):
+                  #  headPart.clearTexture(stage)
 
     def checkAmbassadorPhase2(self):
         self.damageInterval = Parallel(Func(self.setHP, self.currHP)).start()
@@ -1230,6 +1191,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def checkVulnerabilityUp(self, num):
         self.damageInterval = Parallel(Func(self.setVulnerability, self.getVulnerability() + num)).start()
 
+    def checkDamageReduction(self, num):
+        self.damageInterval = Parallel(Func(self.setDamageReduction, self.getDamageReduction() + num)).start()
+
     def checkSueDamage(self, battle):
         x = int(self.currHP)
         if self.currHP < (self.maxHP / 4):
@@ -1238,13 +1202,13 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                     Func(self.showHpString, "SUED!"),
                                                     Func(self.setHealthForMe, -x),
                                                     Func(self.updateHealthBar, 0)),
-                                           Func(self.setNeutralAnimation)).start()
+                                           Func(self.setNeutralAnimationDrop)).start()
         else:
             self.damageInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
                                                     Func(self.showHpTextCheat, -(self.maxHP / 4)),
                                                     Func(self.showHpString, "SUED!"),
                                                     Func(self.setHealthForMe, -(self.maxHP / 4)),
-                                                    Func(self.updateHealthBar, 0)),
+                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop)
                                           ).start()
 
 
@@ -1271,6 +1235,15 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                    Func(videog.setHealthForMe, +(self.maxHP / 3)),
                                                    Func(videog.updateHealthBar, 0)),
                                Func(videog.setNeutralAnimation)).start()
+
+    def checkAmbassadorDamageUp(self, videog, battle):
+        destroyedSuits = []
+        for suit in battle.activeSuits:
+            if not suit.dna.name in SuitBattleGlobals.SpecialCogDict and suit.isTarget and suit.currHP > 0:
+                destroyedSuits.append(suit)
+        self.healInterval = Sequence(Func(videog.makeDamageUp), Func(videog.checkDamageUp, + (5 * len(destroyedSuits))), Func(videog.showHpTextCheat, + (100 * len(destroyedSuits))),
+                                     Func(videog.showHpString, "+%s" % (5 * len(destroyedSuits)) + "%" + " Damage!"),
+                                     Func(videog.setHealthForMe, + (100 * len(destroyedSuits))), Func(videog.updateHealthBar, 0)).start()
 
     def checkHighRollerDonation(self, videog, battle):
         x = int(self.currHP)
@@ -1374,6 +1347,81 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)), Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
 
+    def setNeutralAnimationAttack(self):
+        if self.isAngry:
+            for headPart in self.animatedHeadParts: Sequence(
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+            Sequence(Func(self.loop, 'neutral-enraged')
+                     ).start()
+        elif self.isChainsawPhase2:
+            for headPart in self.animatedHeadParts: Sequence(
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+            Sequence(
+                Func(self.loop, 'neutral-overide%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+        elif self.isImmortal and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog' and self.isPhase3:
+            for headPart in self.animatedHeadParts: Sequence(
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+            Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
+                     ).start()
+        elif self.isVulnerable and self.dna.name == 'hroller2':
+            if float(self.currHP) / float(self.maxHP) <= 0.25:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
+                ).start()
+            else:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop,
+                         'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                ).start()
+            Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                     ).start()
+        elif self.dna.name == 'phouse' and self.isVulnerable and not float(self.currHP) / float(self.maxHP) <= 0.25:
+            for headPart in self.animatedHeadParts: Sequence(
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-unstable'), Func(self.loop, 'neutral-unstable')
+                     ).start()
+        elif self.dna.name == 'hrollers':
+            if float(self.currHP) / float(self.maxHP) <= 0.25:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
+                ).start()
+            else:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop,
+                         'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                ).start()
+            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                     ).start()
+        elif self.dna.name == 'hroller':
+            if float(self.currHP) / float(self.maxHP) <= 0.25:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
+                ).start()
+            else:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop,
+                         'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                ).start()
+            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                     ).start()
+        elif float(self.currHP) > float(self.maxHP * 1.5):
+            for headPart in self.animatedHeadParts: Sequence(
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+            Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
+                     ).start()
+        else:
+            for headPart in self.animatedHeadParts: Sequence(
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+            Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                     ).start()
+
     def setNeutralAnimation(self):
         if self.getDizzy():
             if self.dna.name == 'hroller':
@@ -1397,6 +1445,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.dna.name == 'clerk' and self.getActualLevel() == 24:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()
+        elif self.dna.name == 'phouse' and self.isVulnerable and not float(self.currHP) / float(self.maxHP) <= 0.25:
+            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-unstable'), Func(self.loop, 'neutral-unstable')
+                     ).start()
         elif self.dna.name == 'foreman' and self.getActualLevel() == 23:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'rolled'), Func(self.loop, 'rolled')
                      ).start()
@@ -1408,7 +1459,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()
         elif self.isAngry:
-            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
+            Sequence(ActorInterval(self, 'neutral-enraged-return', startTime=self.getDuration('neutral-enraged-return'), endTime=0), Func(self.setPlayRate, self.getPlayRate2(), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
         elif self.isImmortal and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog' and self.isPhase3:
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
@@ -1449,7 +1500,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()
         elif self.isAngry:
-            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
+            Sequence(ActorInterval(self, 'neutral-enraged-return', startTime=self.getDuration('neutral-enraged-return'), endTime=0), Func(self.setPlayRate, self.getPlayRate2(), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
         elif self.isImmortal and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog'and self.isPhase3:
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
@@ -1458,6 +1509,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(
                 Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                 ).start()
+        elif self.dna.name == 'phouse' and self.isVulnerable and not float(self.currHP) / float(self.maxHP) <= 0.25:
+            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-unstable'), Func(self.loop, 'neutral-unstable')
+                     ).start()
         elif float(self.currHP) > float(self.maxHP * 1.5):
             Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
@@ -1522,7 +1576,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             for headPart in self.animatedHeadParts: Sequence(
                 Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
-            Sequence(Func(self.loop, 'neutral-enraged')
+            Sequence(ActorInterval(self, 'neutral-enraged-return', startTime=self.getDuration('neutral-enraged-return'), endTime=0), Func(self.loop, 'neutral-enraged')
                      ).start()
         elif self.isChainsawPhase2:
             for headPart in self.animatedHeadParts: Sequence(
@@ -1548,6 +1602,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                          'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                 ).start()
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                     ).start()
+        elif self.dna.name == 'phouse' and self.isVulnerable and not float(self.currHP) / float(self.maxHP) <= 0.25:
+            for headPart in self.animatedHeadParts: Sequence(
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-unstable'), Func(self.loop, 'neutral-unstable')
                      ).start()
         elif self.dna.name == 'hrollers':
             if float(self.currHP) / float(self.maxHP) <= 0.25:
