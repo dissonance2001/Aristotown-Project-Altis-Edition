@@ -1,5 +1,7 @@
 from pandac.PandaModules import Vec4
 import random
+from direct.task import Task
+import math
 
 from panda3d.core import *
 from direct.gui.DirectGui import DirectFrame, DirectLabel, DirectButton
@@ -14,27 +16,41 @@ class LaffMeter(DirectFrame):
     deathColor = Vec4(0.58039216, 0.80392157, 0.34117647, 1.0)
     flyoutLabelGenerator = TextNode('flyoutLabelGenerator')
 
-    def __init__(self, avdna, hp, maxHp, isLocalHealth = False):
+    def __init__(self, avdna, hp, maxHp, isLocalHealth=False):
         DirectFrame.__init__(self, relief=None, sortOrder=50)
         self.initialiseoptions(LaffMeter)
+
         self.style = avdna
         self.av = None
         self.hp = hp
         self.maxHp = maxHp
         self.flashName = None
         self.flashIval = None
-        self.flashThreshold = 1  # The laff at which the laff meter starts flashing
+        self.flashThreshold = 1
         self.overhead = False
         self.__obscured = 0
         self.isLocalHealth = isLocalHealth
-        self.container = DirectFrame(parent = self, relief = None)
-        
-        if self.style.type == 't':
-            self.isToon = 1
-        else:
-            self.isToon = 0
-        
+        self.container = DirectFrame(parent=self, relief=None)
+
+        self.isToon = 1 if self.style.type == 't' else 0
+
         self.load()
+        self.baseX = self.getX()
+        self.swayAmplitude = 0.01
+        self.swaySpeed = 2.0
+
+        taskMgr.add(self.swayTask, "LaffMeterSwayTask")
+
+    def swayTask(self, task):
+        if self.isEmpty() or self.getParent() is None:
+            return Task.done
+
+        t = task.time
+        tiltAmplitude = 3.0
+        tiltSpeed = 1.2
+        newR = math.sin(t * tiltSpeed) * tiltAmplitude
+        self.setR(newR)
+        return Task.cont
 
     def fixOverhead(self):
         self.container.setDepthTest(1)
