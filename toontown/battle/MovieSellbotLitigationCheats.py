@@ -1656,7 +1656,7 @@ def doHotTake(attack):
     sparks = BattleParticles.createParticleEffect(file='tnt')
     tnt.sparksEffect = sparks
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    suitTrack2 = Sequence(Wait(2.25), Func(suit.showHpTextCheat, - (dmg * 4)), Func(suit.showHpString, "BOMBED!"), Func(suit.setHealthForMe, - (dmg * 4)), Func(suit.updateHealthBar, 0), ActorInterval(suit, 'slip-backward'))
+    suitTrack2 = Sequence(Wait(2.25), Func(suit.showHpTextCheat, - dmg), Func(suit.showHpString, "BOMBED!"), Func(suit.setHealthForMe, - dmg), Func(suit.updateHealthBar, 0), ActorInterval(suit, 'slip-backward'))
     revives = suit.getMaxSkeleRevives() + 1
     if suit.isVirtual and revives > 2:
         suitTrack.append(Func(suit.checkCogHPLaser, battle))

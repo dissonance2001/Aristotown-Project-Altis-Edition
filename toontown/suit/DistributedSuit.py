@@ -940,20 +940,24 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 color = Point4(1.0, 1.0, 1.0, 1.0)
         else:
             color = SoakColor
-        if self.isSkeleton:
-            suitBody = [self]
-        else:
-            suitBody = [self]
         suitInterval = Sequence()
+        actorNode = self.find('**/__Actor_modelRoot')
+        actorCollection = actorNode.findAllMatches('*')
+        texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        parts = ()
+        for thingIndex in xrange(0, actorCollection.getNumPaths()):
+            thing = actorCollection[thingIndex]
+            if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
+                suitInterval.append(Func(thing.setColor, color))
+        if not self.isSkeleton:
+            suitInterval.append(Func(self.find('**/hands').setTexture, texture, 1))
+            suitInterval.append(Func(self.find('**/hands').setColor, self.handColor))
         if self.dna.name == 'lgator' and not self.isSkeleton:
             suitInterval.append(Func(self.makeDryLitigator))
         if self.style.name == 'safesupervis' and not self.isSkeleton:
             suitInterval.append(Func(self.makeDryFirestarter))
         if self.style.name == 'fires' and not self.isSkeleton:
             suitInterval.append(Func(self.makeDryFirestarter))
-        for bodyPart in suitBody:
-            if bodyPart:
-                suitInterval.append(Func(bodyPart.setColor, color))
         self.healInterval =  Parallel(suitInterval).start()
 
     def checkSplashDamage(self, tContact, hp, battle, bonus, attackTrack, level):
@@ -994,11 +998,11 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def checkSoakRounds(self):
         if self.isSoaked == 0 and self.actuallySoaked:
-            self.splashInterval = Sequence(Parallel(ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimationDrop)).start()
+            self.splashInterval = Sequence(Parallel(ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimation)).start()
 
     def checkMarkRounds(self):
         if self.isMarked == 0 and self.actuallyMarked:
-            self.splashInterval = Sequence(Parallel(ActorInterval(self, 'squirt-small-react', startTime=2), Func(self.splatClear), Func(self.makeUnMarked)), Func(self.setNeutralAnimationDrop)).start()
+            self.splashInterval = Sequence(Parallel(ActorInterval(self, 'squirt-small-react', startTime=2), Func(self.splatClear), Func(self.makeUnMarked)), Func(self.setNeutralAnimation)).start()
 
     def checkContractEnforcement(self):
         x = int((self.maxHP * self.hardMaxHP) - self.currHP)
@@ -1202,15 +1206,31 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                     Func(self.showHpString, "SUED!"),
                                                     Func(self.setHealthForMe, -x),
                                                     Func(self.updateHealthBar, 0)),
-                                           Func(self.setNeutralAnimationDrop)).start()
+                                           Func(self.setNeutralAnimation)).start()
         else:
             self.damageInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
                                                     Func(self.showHpTextCheat, -(self.maxHP / 4)),
                                                     Func(self.showHpString, "SUED!"),
                                                     Func(self.setHealthForMe, -(self.maxHP / 4)),
-                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop)
+                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
                                           ).start()
 
+    def checkZapDamage(self, battle):
+        x = int(self.currHP)
+        if self.currHP < self.getZapCondition():
+            self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                    Func(self.showHpTextCheat, -x),
+                                                    Func(self.showHpString, "AFTERSHOCK!"),
+                                                    Func(self.setHealthForMe, -x),
+                                                    Func(self.updateHealthBar, 0)),
+                                           Func(self.setNeutralAnimation)).start()
+        else:
+            self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                    Func(self.showHpTextCheat, -self.getZapCondition()),
+                                                    Func(self.showHpString, "AFTERSHOCK!"),
+                                                    Func(self.setHealthForMe, -self.getZapCondition()),
+                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
+                                          ).start()
 
     def checkBroadcasterDonation(self, videog, battle):
         x = int(self.currHP)
@@ -1470,6 +1490,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.isVulnerable and self.dna.name == 'hroller2':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
+        elif self.isZapped:
+            Sequence(Func(self.loop, 'neutral-unstable')
+                     ).start()
         elif float(self.currHP) > float(self.maxHP * 1.5):
             Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
@@ -1632,6 +1655,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                          'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                 ).start()
             Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                     ).start()
+        elif self.isZapped:
+            Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()
         elif float(self.currHP) > float(self.maxHP * 1.5):
             for headPart in self.animatedHeadParts: Sequence(

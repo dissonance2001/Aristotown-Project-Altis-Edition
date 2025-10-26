@@ -392,7 +392,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         anim = 'flatten'
     else:
         anim = 'drop-react'
-    if died and majorObject:
+    if died and majorObject and not suit.isVirtual:
         suitReact = ActorInterval(suit, anim, endTime=0.55)
     elif not lastDrop:
         suitReact = ActorInterval(suit, anim, endTime=TOON_DROP_DELAY)

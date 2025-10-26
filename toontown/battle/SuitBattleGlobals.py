@@ -7571,6 +7571,7 @@ SuitAttacks = {
  'SoakRemoval': ('nothing', ATK_TGT_SINGLE),
  'MarkRemoval': ('nothing', ATK_TGT_SINGLE),
  'LureRemoval': ('nothing', ATK_TGT_SINGLE),
+ 'ZapMovie': ('nothing', ATK_TGT_SINGLE),
  'SyphonMovie': ('nothing', ATK_TGT_SINGLE),
     # Governaught Movies
  'GovernaughtDeath': ('nothing', ATK_TGT_GROUP),

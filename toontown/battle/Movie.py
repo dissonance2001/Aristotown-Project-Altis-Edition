@@ -307,7 +307,10 @@ class Movie(DirectObject.DirectObject):
             MovieUtil.shotDirection = 'right'
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
-            s.addLuredRounds(s.getLuredRounds() - 1)
+            if s.getLuredRounds() == 1:
+                s.makeUnLured()
+            if not s.getLuredRounds() <= 0:
+                s.addLuredRounds(s.getLuredRounds() - 1)
             if not s.getSoakRounds() <= 0:
                 s.makeSoaked(s.getSoakRounds() - 1)
             if not s.getMarkRounds() <= 0:

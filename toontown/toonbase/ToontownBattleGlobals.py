@@ -762,6 +762,8 @@ ValidStatusConditions = (
     'squirtBoost',
     'nolevel7s',
     'soakToon',
+    'soakedManager',
+    'markedManager',
     'markToon',
     'nolevel6s',
     'nolevel5s',

@@ -816,6 +816,8 @@ def doSuitAttack(attack):
         suitTrack = MovieUniversalCheats.doSueRemoval(attack)
     elif name == 'SueDamage':
         suitTrack = MovieUniversalCheats.doSueDamage(attack)
+    elif name == 'ZapMovie':
+        suitTrack = MovieUniversalCheats.doZapMovie(attack)
     elif name == 'AbilityQueued':
         suitTrack = MovieUniversalCheats.doAbilityQueued(attack)
     elif name == 'AbsorbMovie':
@@ -1011,17 +1013,19 @@ def doSuitAttack(attack):
         #elif name == 'HighRollerNoAttack':
            # resetSuitTrack = Sequence(suitTrack2, unlureSuit)
         elif name == 'SoakRemoval':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SyphonMovie':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'MarkRemoval':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SueApplication':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SueRemoval':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SueDamage':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ZapMovie':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AbilityQueued':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'HighRollerSplashback':

@@ -235,7 +235,7 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             sival = ActorInterval(suit, anim)
         #soakTracks.append(__soakSuit(suit, tContact))
         if suit.dna.name == 'redd':
-            showDamage = Sequence(Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK), Func(suit.showHpString, 'SOAKED 2 ROUNDS', openEnded=0))
+            showDamage = Sequence(Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK), Func(suit.showHpString, 'SOAKED 1 ROUND', openEnded=0))
         else:
             showDamage = Sequence(Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK), Func(suit.showHpString, 'SOAKED 4 ROUNDS', openEnded=0))
         value = hp
@@ -465,16 +465,24 @@ def __soakSuit(suit, tContact, remove=0):
     else:
         suitBody = [suit]
     suitInterval = Sequence()
-    if suit.style.name == 'lgator' and not suit.isSkeleton:
+    actorNode = suit.find('**/__Actor_modelRoot')
+    actorCollection = actorNode.findAllMatches('*')
+    parts = ()
+    texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_soaked.png')
+    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+        thing = actorCollection[thingIndex]
+        if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
+            suitInterval.append(Func(thing.setColor, color))
+    if not suit.isSkeleton:
+        suitInterval.append(Func(suit.find('**/hands').setTexture, texture, 1))
+        suitInterval.append(Func(suit.find('**/hands').setColor, suit.handColor))
+    if suit.dna.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetLitigator))
     if suit.style.name == 'safesupervis' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetFirestarter))
     if suit.style.name == 'fires' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetFirestarter))
-    for bodyPart in suitBody:
-        if bodyPart:
-            suitInterval.append(Func(bodyPart.setColor, color))
-        return suitInterval
+    return suitInterval
 
 
 def __doFlower(squirt, delay, fShowStun):

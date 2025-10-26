@@ -1898,7 +1898,7 @@ def doSoakImmune(attack):
     makeUnShielding3 = Func(suit.makeUnLureImmune)
     suitTrack = Sequence(getSuitAnimTrack(attack), Func(suit.removePowerhouseRotation))
     suitTrack.append(Wait(3.0))
-    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.setNeutralAnimationDrop))
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2.25), Func(suit.setNeutralAnimationDrop))
     return Parallel(suitTrack, makeShielding, makeUnShielding2, suitTrack2, makeUnShielding3, makeUnShielding)
 
 def doSyphon(attack):

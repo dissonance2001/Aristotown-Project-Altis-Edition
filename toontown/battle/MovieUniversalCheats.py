@@ -588,21 +588,25 @@ def __soakRemoval(suit, remove=0):
             color = Point4(1.0, 1.0, 1.0, 1.0)
     else:
         color = SoakColor
-    if suit.isSkeleton:
-        suitBody = [suit]
-    else:
-        suitBody = [suit]
     suitInterval = Sequence()
+    actorNode = suit.find('**/__Actor_modelRoot')
+    actorCollection = actorNode.findAllMatches('*')
+    parts = ()
+    texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+        thing = actorCollection[thingIndex]
+        if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
+            suitInterval.append(Func(thing.setColor, color))
+    if not suit.isSkeleton:
+        suitInterval.append(Func(suit.find('**/hands').setTexture, texture, 1))
+        suitInterval.append(Func(suit.find('**/hands').setColor, suit.handColor))
     if suit.dna.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryLitigator))
     if suit.style.name == 'safesupervis' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryFirestarter))
     if suit.style.name == 'fires' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryFirestarter))
-    for bodyPart in suitBody:
-        if bodyPart:
-            suitInterval.append(Func(bodyPart.setColor, color))
-        return suitInterval
+    return suitInterval
 
 
 def doDesperation(attack):
@@ -862,7 +866,7 @@ def doMarkRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Parallel()
-    suitTrack.append(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2), Func(suit.splatClear), Func(suit.makeUnMarked), Func(suit.setNeutralAnimationDrop)))
+    suitTrack.append(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2.25), Func(suit.splatClear), Func(suit.makeUnMarked), Func(suit.setNeutralAnimationDrop)))
     for suit in battle.activeSuits:
         suitTrack.append(Func(suit.checkMarkRounds))
     return suitTrack
@@ -886,7 +890,7 @@ def doSueRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence()
-    suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Func(battle.unSueSuit, suit)))
+    suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Func(suit.setSued2, 0), Func(battle.unSueSuit, suit)))
     suitTrack.append(Func(suit.removeSued))
     return suitTrack
 
@@ -917,6 +921,14 @@ def doSueDamage(attack):
     selfDamageTrack = Sequence(Func(suit.checkSueDamage, battle), Wait(3.0))
     return Parallel(selfDamageTrack)
 
+def doZapMovie(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    selfDamageTrack = Sequence(Func(suit.checkZapDamage, battle), Func(suit.makeUnZapped), Wait(5.0))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_battery.ogg'), node=suit))
+    return Parallel(selfDamageTrack, soundTrack)
+
 def doDeathCheck(attack):
     name = attack['name']
     suit = attack['suit']
@@ -924,7 +936,9 @@ def doDeathCheck(attack):
     currentBossHealth = -1
     revives = suit.getSkeleRevives()
     suitTrack = Sequence()
-    if suit.isVirtual:
+    if suit.dna.name == 'redd' and not suit.isVirtual:
+        suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
+    elif suit.isVirtual:
         suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
     elif not suit.isSkeleton and revives >= 2:
         suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))

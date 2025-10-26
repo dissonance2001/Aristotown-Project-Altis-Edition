@@ -1129,7 +1129,9 @@ def doBayouBellow(attack):
             Func(suit.setNeutralAnimation))
         suitTrack.append(Func(battle.unSueSuit, suit))
         suitTrack.append(Func(suit.makeSoaked, 0))
+        suitTrack.append(Func(suit.setSued2, 0))
         suitTrack.append(Func(suit.makeUnMarked))
+        suitTrack.append(Func(suit.makeUnZapped))
         suitTrack.append(Func(suit.makeUnDazed))
         suitTracks.append(Wait(0.5))
         suitTracks.append(MovieUtil.createSuitBellowInterval(theSuit))
@@ -1155,17 +1157,25 @@ def __soakRemoval(suit, remove=0):
             color = Point4(1.0, 1.0, 1.0, 1.0)
     else:
         color = SoakColor
-    if suit.isSkeleton:
-        suitBody = [suit]
-    else:
-        suitBody = [suit]
     suitInterval = Sequence()
-    if suit.style.name == 'lgator' and not suit.isSkeleton:
+    actorNode = suit.find('**/__Actor_modelRoot')
+    actorCollection = actorNode.findAllMatches('*')
+    parts = ()
+    texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+        thing = actorCollection[thingIndex]
+        if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
+            suitInterval.append(Func(thing.setColor, color))
+    if not suit.isSkeleton:
+        suitInterval.append(Func(suit.find('**/hands').setTexture, texture, 1))
+        suitInterval.append(Func(suit.find('**/hands').setColor, suit.handColor))
+    if suit.dna.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryLitigator))
-    for bodyPart in suitBody:
-        if bodyPart:
-            suitInterval.append(Func(bodyPart.setColor, color))
-        return suitInterval
+    if suit.style.name == 'safesupervis' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeDryFirestarter))
+    if suit.style.name == 'fires' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeDryFirestarter))
+    return suitInterval
 
 def doBayouBash(attack):
     suit = attack['suit']

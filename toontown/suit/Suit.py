@@ -98,7 +98,7 @@ stg = (('finger-wag', 'finger-wag', 4), ('pen-squirt', 'fountain-pen', 4))
 ym = (('golf-club-swing', 'golf-club-swing', 4), ('rubber-stamp', 'rubber-stamp', 4), ('smile', 'smile', 4))
 enf =  (('roll-o-dex', 'roll-o-dex', 4), ('effort', 'effort', 4), ('smile', 'smile', 4))
 mm = (('speak', 'speak', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4))
-blh = (('pen-squirt', 'fountain-pen', 4), ('cigar-smoke', 'cigar-smoke', 4), ('effort', 'effort', 4), ('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
+blh = (('pen-squirt', 'pen-squirt', 4), ('cigar-smoke', 'cigar-smoke', 4), ('effort', 'effort', 4), ('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
 ds = (('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
 mldr = (('golf-club-swing', 'golf-club-swing', 4), ('effort', 'effort', 4))
 hh = (('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
@@ -1220,6 +1220,7 @@ class Suit(Avatar.Avatar):
         self.isDamageUp = 0
         self.isDamageReduction = 0
         self.isSoaked = 0
+        self.isZapped = 0
         self.actuallySoaked = 0
         self.actuallyMarked = 0
         self.isSyphon = 0
@@ -3434,6 +3435,7 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/necktie-w').hide()
         modelRoot.find('**/bowtie').hide()
         modelRoot.find('**/necktie-s').setTexture(texture, 1)
+        modelRoot.find('**/necktie-w').setTexture(texture, 1)
         if self.style.name == 'wsi':
             modelRoot.find('**/necktie-w').setTexture(texture3, 1)
             modelRoot.find('**/necktie-w').show()
@@ -5458,6 +5460,8 @@ class Suit(Avatar.Avatar):
         self.healthBar = button
         glow = button.find('**/glow')
         glow.reparentTo(self.healthBar)
+        glow.setTransparency(1)
+       # glow.setTwoSided(True)
         if self.style.name == 'fhj':
             glow.setScale(0)
         elif self.style.name == 'hrollers':
@@ -6456,9 +6460,18 @@ class Suit(Avatar.Avatar):
     def getMarkRounds(self):
         return self.isMarked
 
+    def getZapCondition(self):
+        return self.isZapped
+
     def makeSoaked(self, num):
         self.actuallySoaked = 1
         self.isSoaked = num
+
+    def makeZapped(self, num):
+        self.isZapped = num
+
+    def makeUnZapped(self):
+        self.isZapped = 0
 
     def makeUnSoaked(self, elite=False):
         self.actuallySoaked = 0

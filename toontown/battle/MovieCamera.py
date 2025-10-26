@@ -1620,11 +1620,14 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'AbsorbMovie':
         camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
+    elif name == 'ZapMovie':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
     elif name == 'AbsorbMovieLevel':
         camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'SueDamage':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'SyphonMovie':
         camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))

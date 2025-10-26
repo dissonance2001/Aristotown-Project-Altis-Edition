@@ -217,9 +217,12 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
            # zapTracks.append(__zapNearby3(suit, anim, suitIndex + 2, battle.activeSuits, tContact, hp, battle))
            # zapTracks.append(__zapNearby2(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
             #zapTracks.append(__zapNearby3(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
-        showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=ZAP_TRACK)
+        if toon.getTrackBonusLevel(SQUIRT_TRACK) > 1:
+            showDamage = Sequence(Func(suit.showHpTextThrow, -hp, openEnded=0, attackTrack=ZAP_TRACK), Func(suit.showHpString, 'AFTERSHOCK!', openEnded=0), Func(suit.makeZapped, int(math.ceil(hp / 4))), Func(suit.makeSoaked, 0))
+        else:
+            showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=ZAP_TRACK)
         updateHealthBar = Func(suit.updateHealthBar, hp)
-        soakRemoval = Func(suit.makeUnSoaked)
+        soakRemoval = Func(suit.makeZapped)
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
@@ -253,8 +256,8 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         suitTrack.append(Func(suit.setDizzy, 0))
        # suitTrack.append(createSuitResetPosTrack(suit, battle))
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
-        suitTrack.append(Parallel(__soakRemoval(suit, 1)))
-        suitTrack.append(soakRemoval)
+        #suitTrack.append(Parallel(__soakRemoval(suit, 1)))
+        #suitTrack.append(soakRemoval)
         #suitTrack.append(Func(suit.setNeutralAnimation))
         if suit.dna.name == 'sgoat' and suit.isShielding:
             suitTrack.append(Func(suit.addRageBuilding, hp))
