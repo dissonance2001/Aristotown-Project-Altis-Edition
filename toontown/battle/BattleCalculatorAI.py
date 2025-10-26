@@ -3290,7 +3290,7 @@ class BattleCalculatorAI:
                 self.setToonCondition(toon.doId, 'noSOS', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'noFires', 1, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'noSues', 1, 2, 'setBoth')
-                self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')
+                #self.setToonCondition(toon.doId, 'noUnites', 1, 2, 'setBoth')
                 #self.setToonCondition(toon.doId, 'noDamage', 1, 2, 'setBoth')
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'bellowattack', 1, 1, 'setBoth')
