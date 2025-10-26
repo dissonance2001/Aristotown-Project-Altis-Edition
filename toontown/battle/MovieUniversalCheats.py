@@ -911,6 +911,7 @@ def doSueApplication(attack):
     suitTrack = Sequence()
     suitTrack.append(Parallel(ActorInterval(suit, 'pie-small-react'), Func(battle.sueSuit, suit), Func(suit.showHpString, "CEASE AND DESIST!")))
     suitTrack.append(Func(suit.makeSued, 3))
+    suitTrack.append(Func(suit.setNeutralAnimationDrop))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('LB_receive_evidence.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack, explodeTrack)
 

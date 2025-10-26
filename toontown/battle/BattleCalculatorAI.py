@@ -1618,6 +1618,65 @@ class BattleCalculatorAI:
                         self.setSuitCondition(targetId, 'powerhouseRotation', self.getSuitConditionModifier(targetId, 'powerhouseRotation') + (attackDamage * .1), 99, 'setBoth')
                     if suit.dna.name == 'sgoat' and not self.suitHasCondition(targetId, 'enraged'):
                         self.setSuitCondition(targetId, 'rageBuilding', self.getSuitConditionModifier(targetId, 'rageBuilding') + (attackDamage * .1), 99, 'setBoth')
+                    if self.suitHasCondition(targetId, 'immune'):
+                        attackDamage = 0
+                    if self.suitHasCondition(targetId, 'HRdamagereduction'):
+                        attackDamage *= 0.1
+                    if self.suitHasCondition(targetId, 'damageReduction'):
+                        attackDamage *= 0.7
+                    if self.suitHasCondition(targetId, 'enraged') and not self.suitHasCondition(targetId, 'desperation'):
+                        attackDamage *= 0.7
+                    if self.suitHasCondition(targetId, 'vulnerable'):
+                        attackDamage *= 1.3
+                    if self.suitHasCondition(targetId, 'dancesession'):
+                        attackDamage *= .7
+                    if self.suitHasCondition(targetId, 'vulnerablebroadcaster'):
+                        attackDamage *= 2
+                    if self.suitHasCondition(targetId, 'vulnerablesilhouette1'):
+                        attackDamage *= 1.5
+                    if self.suitHasCondition(targetId, 'vulnerablesilhouette2'):
+                        attackDamage *= 2
+                    if self.suitHasCondition(targetId, 'vulnerablesilhouette3'):
+                        attackDamage *= 3
+                    if self.suitHasCondition(targetId, 'marked') and atkTrack is not THROW:
+                        attackDamage *= 1.1
+                    if self.suitHasCondition(targetId, 'markedThrow') and atkTrack == THROW:
+                        attackDamage *= 1.1
+                    if self.suitHasCondition(targetId, 'enraged') and self.suitHasCondition(targetId, 'desperation'):
+                        attackDamage *= 1
+                        # if self.suitHasCondition(targetId, 'enraged') and not self.suitHasCondition(targetId, 'desperation') and atkTrack is not ZAP and atkTrack is not SQUIRT:
+                        # attackDamage *= 0.7
+                    if self.suitHasCondition(targetId, 'soakImmune') and self.suitHasCondition(targetId, 'soaked'):
+                        attackDamage *= 0.4
+                        #   if self.suitHasCondition(targetId, 'vulnerable') and atkTrack is not ZAP and atkTrack is not SQUIRT:
+                        #  attackDamage *= 1.25
+                    if self.toonHasCondition(toonId, 'encore') and atkTrack is not SOUND:
+                        attackDamage *= 1.2
+                    if self.toonHasCondition(toonId, 'encore2') and atkTrack is not SOUND:
+                        attackDamage *= 1.1
+                    if self.toonHasCondition(toonId, 'groupDamageDown') and atkTrack == ZAP:
+                        attackDamage *= 0.5
+                    if self.toonHasCondition(toonId, 'groupDamageDown') and atkTrack == SOUND:
+                        attackDamage *= 0.5
+                    if self.toonHasCondition(toonId, 'groupDamageDown') and atkTrack == SQUIRT:
+                        attackDamage *= 0.5
+                    if self.toonHasCondition(toonId, 'groupDamageDown') and atkTrack == HEAL and atkLevel == 7:
+                        attackDamage *= 0.5
+                    if self.toonHasCondition(toonId, 'groupDamageDown') and atkTrack == HEAL and atkLevel == 5:
+                        attackDamage *= 0.5
+                    if self.toonHasCondition(toonId, 'groupDamageDown') and atkTrack == HEAL and atkLevel == 3:
+                        attackDamage *= 0.5
+                    if self.toonHasCondition(toonId, 'groupDamageDown') and atkTrack == HEAL and atkLevel == 1:
+                        attackDamage *= 0.5
+                    if self.getToonConditionTurns(toonId, 'encore') == 1 and atkTrack == SOUND:
+                        attackDamage *= 1.2
+                    if self.getToonConditionTurns(toonId, 'encore2') == 1 and atkTrack == SOUND:
+                        attackDamage *= 1.1
+                    if self.toonHasCondition(toonId, 'winded') and not self.getToonConditionTurns(toonId, 'encore') == 1 and not self.getToonConditionTurns(toonId,
+                                                                                                                                                            'encore2') == 1 and atkTrack == SOUND:
+                        attackDamage *= 0.5
+                    if self.toonHasCondition(toonId, 'noDamage'):
+                        attackDamage *= 0
                     for s in self.battle.activeSuits:
                         if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(targetId, 'shielding') and not atkTrack == TRAP and not atkTrack == ZAP and not atkTrack == SQUIRT and not atkTrack == FIRE:
                             attackDamage *= .7
@@ -1652,7 +1711,7 @@ class BattleCalculatorAI:
                 else:
                     attackDamage = getAvPropDamage(attackTrack, attackLevel, toon.experience.getExp(attackTrack))
                 suit = self.battle.findSuit(targetId)
-                if atkTrack is not SQUIRT:
+                if atkTrack is not SQUIRT and atkTrack is not ZAP:
                     if self.suitHasCondition(targetId, 'immune'):
                         attackDamage = 0
                     if self.suitHasCondition(targetId, 'HRdamagereduction'):
@@ -8074,11 +8133,11 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'rageBuilding') >= 100 and self.suitHasCondition(suitId, 'lured') and not self.suitHasCondition(suitId, 'sounded') and \
+                if self.getSuitConditionModifier(suitId, 'rageBuilding') >= 95 and self.suitHasCondition(suitId, 'lured') and not self.suitHasCondition(suitId, 'sounded') and \
                         self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'rageBuilding') >= 100 and self.battle.activeSuits[i].currHP > 0:
+                if self.getSuitConditionModifier(suitId, 'rageBuilding') >= 95 and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
@@ -10117,10 +10176,10 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 95 and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.__suitCanAttack(suitId):
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 95 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
@@ -10156,7 +10215,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'desperation') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 95 and self.suitHasCondition(suitId, 'desperation') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'sanctioncalculator') and self.__suitCanAttack(suitId): # doesnt have sanction calculator am removing this cheat for now
@@ -10256,10 +10315,10 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
                     self.setSuitCondition(suitId, 'rotationcalculator', 0, 0, 'setBoth')
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 95 and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'lureImmune') and self.__suitCanAttack(suitId):
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 95 and self.suitHasCondition(suitId, 'lureImmune') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
@@ -10309,7 +10368,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'soakImmune') and self.__suitCanAttack(suitId):
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 95 and self.suitHasCondition(suitId, 'soakImmune') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
@@ -10359,7 +10418,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'syphon') and self.__suitCanAttack(suitId):
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 95 and self.suitHasCondition(suitId, 'syphon') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = random.choice([
@@ -10410,7 +10469,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.suitHasCondition(suitId, 'shielding') and self.__suitCanAttack(suitId):
+                if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 95 and self.suitHasCondition(suitId, 'shielding') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = random.choice([

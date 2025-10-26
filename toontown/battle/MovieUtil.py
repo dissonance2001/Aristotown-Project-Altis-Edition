@@ -1873,7 +1873,7 @@ def createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits):
     soundTrack = base.loadSfx('phase_5/audio/sfx/ENC_cogjump_to_side.ogg')
     suitDodgeList, sidestepAnim = avatarDodge(leftSuits, rightSuits, 'sidestep-left', 'sidestep-right')
     for s in suitDodgeList:
-        suitTracks.append(Sequence(ActorInterval(s, sidestepAnim),  Func(suit.setNeutralAnimationDrop)))
+        suitTracks.append(Sequence(ActorInterval(s, sidestepAnim),  Func(s.setNeutralAnimationDrop)))
 
     suitTracks.append(Sequence(ActorInterval(suit, sidestepAnim), Func(suit.setNeutralAnimationDrop)))
     suitTracks.append(Func(indicateMissed, suit))

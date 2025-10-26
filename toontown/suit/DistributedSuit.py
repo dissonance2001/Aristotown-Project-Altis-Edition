@@ -1497,9 +1497,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
         else:
-            self.setNeutralAnimationHead()
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)), Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
+        self.setNeutralAnimationHead()
 
     def setNeutralAnimationDrop(self):
         if self.getDizzy():
