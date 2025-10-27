@@ -1678,7 +1678,7 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'noDamage'):
                         attackDamage *= 0
                     for s in self.battle.activeSuits:
-                        if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(targetId, 'shielding') and not atkTrack == TRAP and not atkTrack == ZAP and not atkTrack == SQUIRT and not atkTrack == FIRE:
+                        if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(targetId, 'shielding') and not atkTrack == TRAP and not atkTrack == SQUIRT and not atkTrack == FIRE:
                             attackDamage *= .7
                             self.absorbDamage += math.ceil(attackDamage * .45)
                             self.setSuitCondition(s.doId, 'rageBuilding',
@@ -3179,7 +3179,8 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'soaked', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'dazed', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
-                    self.setSuitCondition(suit.doId, 'marked', 0, 0, 'setBoth')
+                    if self.suitHasCondition(suit.doId, 'marked'):
+                        self.setSuitCondition(suit.doId, 'marked', 1, 1, 'setBoth')
                     self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'zapped', 0, 0, 'setBoth')
                     if self.suitHasCondition(suit.doId, 'lured'):
