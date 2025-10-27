@@ -982,8 +982,6 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 suitTrack.append(Func(self.addPowerhouseRotation, int(math.floor(hp)) + 150))
             if self.isSued:
                 suitTrack.append(Func(self.makeSued, 3))
-            if self.dna.name == 'redd' and not self.isVirtual:
-                suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
             suitTrack.append(Func(self.checkDeathCheck, battle))
             self.splashInterval = Sequence(suitTrack).start()
 
@@ -1210,7 +1208,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.damageInterval = Sequence(suitTrack).start()
 
     def checkDeathCheck2(self, suit, battle):
-        if self.currHP <= 0 and not self.isDead and not suit:
+        if self.currHP <= 0 and not self.isDead:
             revives = self.getSkeleRevives()
             suitTrack = Sequence()
             if self.dna.name == 'redd' and not self.isVirtual:
