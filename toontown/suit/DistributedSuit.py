@@ -1434,6 +1434,40 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)), Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
 
+    def setNeutralAnimationHeadTrap(self):
+        if self.dna.name == 'hroller' and (float(self.currHP) / float(self.maxHP) <= 0.25):
+            for headPart in self.animatedHeadParts: Sequence(Func(headPart.loop, 'neutral-hurt', fromFrame=0,
+                                                                      toFrame=22)
+                                                                 ).start()
+        elif self.dna.name == 'hroller2' and (float(self.currHP) / float(self.maxHP) <= 0.25):
+            for headPart in self.animatedHeadParts: Sequence(Func(headPart.loop, 'neutral-hurt', fromFrame=0,
+                                                                      toFrame=22)
+                                                                 ).start()
+        elif self.dna.name == 'hrollers' and (float(self.currHP) / float(self.maxHP) <= 0.25):
+            for headPart in self.animatedHeadParts: Sequence(Func(headPart.loop, 'neutral-hurt', fromFrame=0,
+                                                                      toFrame=22)
+                                                                 ).start()
+        else:
+            for headPart in self.animatedHeadParts: Sequence(Func(headPart.loop, 'neutral%s' % (
+                                                                 '-hurt' if float(self.currHP) / float(
+                                                                     self.maxHP) <= 0.25 else '',))
+                                                                 ).start()
+        if self.dna.name == 'videog':
+            for headPart in self.animatedHeadParts:
+                if float(self.currHP) / float(self.maxHP) <= 0.25:
+                        texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer3.png')
+                        Sequence(Func(headPart.setTexture, texture, 1)).start()
+        if self.dna.name == 'bcaster':
+            for headPart in self.animatedHeadParts:
+                    if float(self.currHP) / float(self.maxHP) <= 0.25:
+                        texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer3.png')
+                        Sequence(Func(headPart.setTexture, texture, 1)).start()
+        for headPart in self.animatedHeadParts: Sequence(
+                Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+        Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)), Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
+
     def setNeutralAnimationAttack(self):
         if self.isAngry:
             for headPart in self.animatedHeadParts: Sequence(
@@ -1690,7 +1724,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
-        self.setNeutralAnimationHead()
+        self.setNeutralAnimationHeadTrap()
 
     def setChatAbsoluteTrap(self, chatString, chatFlags, dialogue=None, interrupt=True):
         searchString = chatString.lower()
