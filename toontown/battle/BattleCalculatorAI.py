@@ -2965,6 +2965,19 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'insured', 1, 99, 'setBoth')
                         self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
                         self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
+                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedLawbotBossAI):
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                boss = do
+                                break
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if len(self.battle.activeSuits) < 4:
+                                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkType['name'] == 'CaseManagerInsurance':
                 for s in self.battle.suits:
                     if s.getManager():
@@ -3005,19 +3018,6 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'bound', 1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'bindingscalculator', 0, 0, 'setBoth')
-                from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedLawbotBossAI):
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                boss = do
-                                break
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                if len(self.battle.activeSuits) < 4:
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'lit')
             elif atkType['name'] == 'CaseManagerLegalBindings2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
