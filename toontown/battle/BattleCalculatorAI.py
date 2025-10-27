@@ -1007,16 +1007,6 @@ class BattleCalculatorAI:
                                # if s.dna.name == 'sgoat' and self.suitHasCondition(s.doId, 'shielding'):
                                    # self.setSuitCondition(s.doId, 'rageBuilding', self.getSuitConditionModifier(s.doId, 'rageBuilding') + 10, 99, 'setBoth')
                                     #self.notify.debug('setSuitCondition() - scapegoat rage building %i' % (self.getSuitConditionModifier(s.doId, 'rageBuilding')))
-                            for s in self.battle.activeSuits:
-                                if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(targetId, 'shielding'):
-                                    attackDamage *= .7
-                                    self.absorbDamage += math.ceil((attackDamage * .45))
-                                    self.setSuitCondition(s.doId, 'rageBuilding', self.getSuitConditionModifier(s.doId, 'rageBuilding') + (attackDamage * .45) * .1, 99, 'setBoth')
-                                    self.notify.debug('setSuitCondition() - scapegoat rage building %i' % (self.getSuitConditionModifier(s.doId, 'rageBuilding')))
-                            if theSuit.dna.name == 'sgoat' and not self.suitHasCondition(targetId, 'enraged'):
-                                self.setSuitCondition(targetId, 'rageBuilding',
-                                                  self.getSuitConditionModifier(targetId, 'rageBuilding') + (
-                                                          attackDamage * .1), 99, 'setBoth')
                             if self.suitHasCondition(targetId, 'vulnerable'):
                                 attackDamage *= 1.3
                             if self.suitHasCondition(targetId, 'enraged') and not self.suitHasCondition(targetId, 'desperation'):
@@ -1027,10 +1017,20 @@ class BattleCalculatorAI:
                                 attackDamage *= 1.1
                             if self.suitHasCondition(targetId, 'soakImmune') and self.suitHasCondition(targetId, 'soaked'):
                                 attackDamage *= 0.4
+                            if theSuit.dna.name == 'sgoat' and not self.suitHasCondition(targetId, 'enraged'):
+                                self.setSuitCondition(targetId, 'rageBuilding',
+                                                  self.getSuitConditionModifier(targetId, 'rageBuilding') + (
+                                                          attackDamage * .1), 99, 'setBoth')
                             if theSuit.dna.name == 'phouse':
                                 self.setSuitCondition(targetId, 'powerhouseRotation',
                                                       self.getSuitConditionModifier(targetId, 'powerhouseRotation') + (
                                                                   attackDamage * .1), 99, 'setBoth')
+                            for s in self.battle.activeSuits:
+                                if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(targetId, 'shielding'):
+                                    attackDamage *= .7
+                                    self.absorbDamage += math.ceil((attackDamage * .45))
+                                    self.setSuitCondition(s.doId, 'rageBuilding', self.getSuitConditionModifier(s.doId, 'rageBuilding') + (attackDamage * .45) * .1, 99, 'setBoth')
+                                    self.notify.debug('setSuitCondition() - scapegoat rage building %i' % (self.getSuitConditionModifier(s.doId, 'rageBuilding')))
                             if self.suitHasCondition(targetId, 'immune'):
                                 validTargetAvail = 0
                             elif self.suitHasCondition(targetId, 'lureImmune'):
@@ -1438,9 +1438,17 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                     if attackDamage > 0:
-                        if self.suitHasCondition(targetId, 'marked') and self.getSuitConditionTurns(targetId, 'marked') == 1:
-                            self.setSuitCondition(targetId, 'markedThrow', 1, 1, 'setBoth')
-                        self.setSuitCondition(targetId, 'marked', 1, 2, 'setBoth')
+                        organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                        if organicBonus:
+                            if self.suitHasCondition(targetId, 'marked2') and self.getSuitConditionTurns(targetId, 'marked2') == 1:
+                                self.setSuitCondition(targetId, 'markedThrow', 1, 1, 'setBoth')
+                            self.setSuitCondition(targetId, 'marked', 1, 2, 'setBoth')
+                            self.setSuitCondition(targetId, 'marked2', 1, 2, 'setBoth')
+                        else:
+                            if self.suitHasCondition(targetId, 'marked2') and self.getSuitConditionTurns(targetId, 'marked2') == 1:
+                                self.setSuitCondition(targetId, 'markedThrow', 1, 1, 'setBoth')
+                            if not self.suitHasCondition(targetId, 'marked'):
+                                self.setSuitCondition(targetId, 'marked', 1, 1, 'setBoth')
                         if self.suitHasCondition(targetId, 'sued'):
                             self.setSuitCondition(targetId, 'sued', 1, 4, 'alternateBoth')
                         if suit.dna.name == 'bkeeper' and self.suitHasCondition(targetId, 'bookkeeping'):
@@ -4024,6 +4032,7 @@ class BattleCalculatorAI:
                 theSuit.setHP(theSuit.currHP - (math.ceil(result) * 3))
                 if theSuit.currHP <= 0:
                     self.setSuitCondition(theSuit.doId, 'deathcheck', 1, 99, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'heatwavecalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'SafetyPromotion':
@@ -4761,11 +4770,13 @@ class BattleCalculatorAI:
                         suit.setHP(math.ceil(suit.currHP - 25))
                         if suit.getHP() <= 0:
                             self.setSuitCondition(suit.doId, 'deathcheck', 1, 1, 'setBoth')
+                            self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                             self.__removeLured(suit.doId)
                     else:
                         suit.setHP(math.ceil(suit.currHP - 250))
                         if suit.getHP() <= 0:
                             self.setSuitCondition(suit.doId, 'deathcheck', 1, 1, 'setBoth')
+                            self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                             self.__removeLured(suit.doId)
                     continue
             elif atkType['name'] == 'HighRollerDiceRouletteEveryone':
@@ -4779,11 +4790,13 @@ class BattleCalculatorAI:
                         suit.setHP(math.ceil(suit.currHP - 25))
                         if suit.getHP() <= 0:
                             self.setSuitCondition(suit.doId, 'deathcheck', 1, 1, 'setBoth')
+                            self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                             self.__removeLured(suit.doId)
                     else:
                         suit.setHP(math.ceil(suit.currHP - 250))
                         if suit.getHP() <= 0:
                             self.setSuitCondition(suit.doId, 'deathcheck', 1, 1, 'setBoth')
+                            self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                             self.__removeLured(suit.doId)
                     if self.suitHasCondition(suit.doId, 'lured'):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
@@ -4799,11 +4812,13 @@ class BattleCalculatorAI:
                         suit.setHP(math.ceil(suit.currHP - 25))
                         if suit.getHP() <= 0:
                             self.setSuitCondition(suit.doId, 'deathcheck', 1, 1, 'setBoth')
+                            self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                             self.__removeLured(suit.doId)
                     else:
                         suit.setHP(math.ceil(suit.currHP - 250))
                         if suit.getHP() <= 0:
                             self.setSuitCondition(suit.doId, 'deathcheck', 1, 1, 'setBoth')
+                            self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                             self.__removeLured(suit.doId)
                     if self.suitHasCondition(suit.doId, 'lured'):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
@@ -4832,6 +4847,7 @@ class BattleCalculatorAI:
                     theSuit.setHP(math.ceil(theSuit.currHP - theSuit.currHP))
                     if theSuit.getHP() <= 0:
                         self.setSuitCondition(theSuit.doId, 'deathcheck', 1, 1, 'setBoth')
+                        self.setSuitCondition(theSuit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                 else:
                     managerTarget.setHP(managerTarget.getHP() + 3000)
                     theSuit.setHP(math.ceil(theSuit.currHP - 3000))
@@ -5485,6 +5501,7 @@ class BattleCalculatorAI:
                             theSuit.setHP(math.ceil(theSuit.currHP - theSuit.currHP))
                             if suit.getHP() <= 0:
                                 self.setSuitCondition(suit.doId, 'deathcheck', 1, 1, 'setBoth')
+                                self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                         else:
                             managerTarget.setHP(managerTarget.currHP + (theSuit.maxHP / 3))
                             theSuit.setHP(math.ceil(theSuit.currHP - (theSuit.maxHP / 3)))
@@ -5613,15 +5630,19 @@ class BattleCalculatorAI:
             elif atkType['name'] == 'DeathCheck':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.__removeLured(theSuit)
-                if not self.suitHasCondition(theSuit.doId, 'dead'):
-                    self.setSuitCondition(theSuit.doId, 'dead', 1, 99, 'setBoth')
+                for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 1, 1, 'setBoth')
+                    if suit.currHP <= 0:
+                        self.__removeLured(suit)
+                        if not self.suitHasCondition(suit.doId, 'dead'):
+                            self.setSuitCondition(suit.doId, 'dead', 1, 99, 'setBoth')
             elif atkType['name'] == 'AbsorbMovie':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(math.ceil(theSuit.currHP - math.ceil(self.absorbDamage)))
                 if theSuit.currHP <= 0:
                     self.setSuitCondition(theSuit.doId, 'deathcheck', 1, 99, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'deadpromotion', 1, 99, 'setBoth')
             elif atkType['name'] == 'AbsorbMovieLevel':
@@ -5635,19 +5656,29 @@ class BattleCalculatorAI:
             elif atkType['name'] == 'SueDamage':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                theSuit.setHP(math.ceil(theSuit.currHP - (theSuit.maxHP / 4)))
-                if theSuit.currHP <= 0:
-                    self.__removeLured(theSuit.doId)
-                    self.setSuitCondition(theSuit.doId, 'deathcheck', 1, 2, 'setBoth')
+                for suit in self.battle.activeSuits:
+                    if self.suitHasCondition(suit.doId, 'suemovie'):
+                        self.setSuitCondition(suit.doId, 'alreadySued', 1, 1, 'setBoth')
+                        suit.setHP(math.ceil(suit.currHP - (suit.maxHP / 4)))
+                        if suit.currHP <= 0:
+                            self.setSuitCondition(suit.doId, 'deathcheck', 1, 2, 'setBoth')
+                            self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
+                            if suit.getSkeleRevives() >= 1:
+                                suit.useSkeleRevive()
+                            self.__removeLured(suit.doId)
             elif atkType['name'] == 'ZapMovie':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                theSuit.setHP(math.ceil(theSuit.currHP - self.getSuitConditionModifier(theSuit.doId, 'zapped')))
-                if theSuit.currHP <= 0:
-                    if theSuit.getSkeleRevives() >= 1:
-                        theSuit.useSkeleRevive()
-                    self.__removeLured(theSuit.doId)
-                    self.setSuitCondition(theSuit.doId, 'deathcheck', 1, 2, 'setBoth')
+                for suit in self.battle.activeSuits:
+                    if self.suitHasCondition(suit.doId, 'zapped'):
+                        self.setSuitCondition(suit.doId, 'alreadyZapped', 1, 1, 'setBoth')
+                        suit.setHP(math.ceil(suit.currHP - self.getSuitConditionModifier(suit.doId, 'zapped')))
+                        if suit.currHP <= 0:
+                            self.setSuitCondition(suit.doId, 'deathcheck', 1, 2, 'setBoth')
+                            self.setSuitCondition(suit.doId, 'alreadyDeathCheck', 0, 0, 'setBoth')
+                            if suit.getSkeleRevives() >= 1:
+                                suit.useSkeleRevive()
+                            self.__removeLured(suit.doId)
             elif atkType['name'] == 'SueRemoval':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -6886,58 +6917,58 @@ class BattleCalculatorAI:
                     elif (x + 3) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
                         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
                 if self.battle.activeSuits[i].currHP <= 2600:
-                    if (x + 4) % 4 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
+                    if (x + 3) % 4 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 4) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
+                    elif (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 4) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                    elif (x + 3) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
                         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
                 if self.battle.activeSuits[i].currHP <= 2100:
-                    if (x + 3) % 3 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
+                    if (x + 3) % 4 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 3) % 3 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
+                    elif (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 3) % 3 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                    elif (x + 3) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
                         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
                 if self.battle.activeSuits[i].currHP <= 1600:
-                    if (x + 2) % 2 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
+                    if (x + 2) % 3 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 2) % 2 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
+                    elif (x + 2) % 3 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 2) % 2 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                    elif (x + 2) % 3 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
                         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
                 if self.battle.activeSuits[i].currHP <= 1100:
-                    if (x + 2) % 2 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
+                    if (x + 2) % 3 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 2) % 2 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
+                    elif (x + 2) % 3 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 2) % 2 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                    elif (x + 2) % 3 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
                         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
                 if self.battle.activeSuits[i].currHP <= 600:
-                    if (x + 1) % 1 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
+                    if (x + 1) % 2 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 1) % 1 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
+                    elif (x + 1) % 2 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 1) % 1 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                    elif (x + 1) % 2 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
                         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
                 if self.battle.activeSuits[i].currHP <= 100:
-                    if (x + 1) % 1 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
+                    if (x + 1) % 2 == 0 and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 1) % 1 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
+                    elif (x + 1) % 2 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0:
                         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
                         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 1) % 1 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                    elif (x + 1) % 2 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
                         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'sgoat':
                 if (x + 1) % 4 == 0:
@@ -15833,7 +15864,7 @@ class BattleCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             attack = self.__getGenericSuitAttack(suitId)
-            if self.suitHasCondition(suitId, 'zapped') and self.getSuitConditionTurns(suitId, 'zapped') == 1 and self.battle.activeSuits[i].currHP > 0:
+            if self.suitHasCondition(suitId, 'zapped') and not self.suitHasCondition(suitId, 'alreadyZapped') and self.getSuitConditionTurns(suitId, 'zapped') == 1 and self.battle.activeSuits[i].currHP > 0:
                 attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                 attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
@@ -15869,7 +15900,7 @@ class BattleCalculatorAI:
                     self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                 attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'sued') and self.suitHasCondition(suitId, 'suemovie') and self.battle.activeSuits[i].currHP > 0:
+            if self.suitHasCondition(suitId, 'sued') and self.suitHasCondition(suitId, 'suemovie') and not self.suitHasCondition(suitId, 'alreadySued') and self.battle.activeSuits[i].currHP > 0:
                 attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                 attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
@@ -15983,7 +16014,7 @@ class BattleCalculatorAI:
                     self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                 attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'deathcheck') and not self.suitHasCondition(suitId, 'dead'):
+            if self.suitHasCondition(suitId, 'deathcheck') and not self.suitHasCondition(suitId, 'dead') and not self.suitHasCondition(suitId, 'alreadyDeathCheck') :
                 attack = getDefaultSuitAttack()
                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                 attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,

@@ -1144,9 +1144,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                  ActorInterval(suit, 'flail', startTime=0.9, duration=0.4, endTime=1.3),
                  LerpPosInterval(suit, 0.3, flyPos),
                  ))
-            else:
-                if not suit.isVirtual:
-                    suitTrack.append(MovieUtil.midairSuitExplodeTrack(suit, battle))
         else:
             suitTrack.append(Parallel(
                  Func(battle.movie.needRestoreColor),

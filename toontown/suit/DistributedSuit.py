@@ -967,7 +967,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             updateHealthBar = Func(self.updateHealthBar, int(math.floor(hp)))
             if self.dna.name == 'redd':
                 showDamage = Parallel(ActorInterval(self, 'squirt-small-react'), Func(self.showHpTextCheat, -int(math.floor(hp))), updateHealthBar,
-                                      Func(self.showHpString, 'SOAKED 2 ROUNDS'))
+                                      Func(self.showHpString, 'SOAKED 1 ROUND'))
                 soakSuit = Func(self.makeSoaked, 1)
             else:
                 showDamage = Parallel(ActorInterval(self, 'squirt-small-react'), Func(self.showHpTextCheat, -int(math.floor(hp))), updateHealthBar,
@@ -982,26 +982,17 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 suitTrack.append(Func(self.addPowerhouseRotation, int(math.floor(hp)) + 150))
             if self.isSued:
                 suitTrack.append(Func(self.makeSued, 3))
-            if self.isVirtual:
-                suitTrack.append(Func(self.checkCogHPLaser, battle))
-            elif not self.isSkeleton and revives >= 2:
-                suitTrack.append(Func(self.checkCogHPRevive, battle))
-            elif self.isSkeleton and revives >= 2:
-                suitTrack.append(Func(self.checkCogHPLaserRevive, battle))
-            elif self.isSkeleton and revives >= 1 and not self.isRevive:
-                suitTrack.append(Func(self.checkCogHPLaserRevive, battle))
-            elif not self.isSkeleton and revives >= 1:
-                suitTrack.append(Func(self.checkCogHPRevive, battle))
-            elif not self.isVirtual:
-                suitTrack.append(Func(self.checkCogHP, battle))
+            if self.dna.name == 'redd' and not self.isVirtual:
+                suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            suitTrack.append(Func(self.checkDeathCheck, battle))
             self.splashInterval = Sequence(suitTrack).start()
 
     def checkSoakRounds(self):
-        if self.isSoaked == 0 and self.actuallySoaked:
+        if self.isSoaked == 0 and self.actuallySoaked and not self.isDead:
             self.splashInterval = Sequence(Parallel(ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimation)).start()
 
     def checkMarkRounds(self):
-        if self.isMarked == 0 and self.actuallyMarked:
+        if self.isMarked == 0 and self.actuallyMarked and not self.isDead:
             self.splashInterval = Sequence(Parallel(ActorInterval(self, 'squirt-small-react', startTime=2), Func(self.splatClear), Func(self.makeUnMarked)), Func(self.setNeutralAnimation)).start()
 
     def checkContractEnforcement(self):
@@ -1198,39 +1189,117 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def checkDamageReduction(self, num):
         self.damageInterval = Parallel(Func(self.setDamageReduction, self.getDamageReduction() + num)).start()
 
+    def checkDeathCheck(self, battle):
+        if self.currHP <= 0 and not self.isDead:
+            revives = self.getSkeleRevives()
+            suitTrack = Sequence(Func(self.makeDead))
+            if self.dna.name == 'redd' and not self.isVirtual:
+                suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            elif self.isVirtual:
+                suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
+            elif not self.isSkeleton and revives >= 2:
+                suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
+            elif self.isSkeleton and revives >= 2:
+                suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
+            elif self.isSkeleton and revives >= 1 and not suit.isRevive:
+                suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
+            elif not self.isSkeleton and revives >= 1:
+                suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
+            elif not self.isVirtual:
+                suitTrack.append(MovieUtil.createSuitDeathTrack(self, battle))
+            self.damageInterval = Sequence(suitTrack).start()
+
+    def checkDeathCheck2(self, suit, battle):
+        if self.currHP <= 0 and not self.isDead and not suit:
+            revives = self.getSkeleRevives()
+            suitTrack = Sequence()
+            if self.dna.name == 'redd' and not self.isVirtual:
+                suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            elif self.isVirtual:
+                suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
+            elif not self.isSkeleton and revives >= 2:
+                suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
+            elif self.isSkeleton and revives >= 2:
+                suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
+            elif self.isSkeleton and revives >= 1 and not suit.isRevive:
+                suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
+            elif not self.isSkeleton and revives >= 1:
+                suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
+            elif not self.isVirtual:
+                suitTrack.append(MovieUtil.createSuitDeathTrack(self, battle))
+            self.damageInterval = Sequence(suitTrack).start()
+
     def checkSueDamage(self, battle):
         x = int(self.currHP)
-        if self.currHP < (self.maxHP / 4):
-            self.damageInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
-                                                    Func(self.showHpTextCheat, -x),
-                                                    Func(self.showHpString, "SUED!"),
-                                                    Func(self.setHealthForMe, -x),
-                                                    Func(self.updateHealthBar, 0)),
-                                           Func(self.setNeutralAnimation)).start()
-        else:
-            self.damageInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
-                                                    Func(self.showHpTextCheat, -(self.maxHP / 4)),
-                                                    Func(self.showHpString, "SUED!"),
-                                                    Func(self.setHealthForMe, -(self.maxHP / 4)),
-                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
-                                          ).start()
+        if self.currHP > 0 and self.isSued:
+            if self.currHP < (self.maxHP / 4):
+                self.damageInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
+                                                        Func(self.showHpTextCheat, -x),
+                                                        Func(self.showHpString, "SUED!"),
+                                                        Func(self.setHealthForMe, -x),
+                                                        Func(self.updateHealthBar, 0)),
+                                               Func(self.setNeutralAnimation)).start()
+            else:
+                self.damageInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
+                                                        Func(self.showHpTextCheat, -(self.maxHP / 4)),
+                                                        Func(self.showHpString, "SUED!"),
+                                                        Func(self.setHealthForMe, -(self.maxHP / 4)),
+                                                        Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
+                                              ).start()
+
+    def checkSueDamage2(self, suit, battle):
+        x = int(self.currHP)
+        if self.currHP > 0 and not suit and self.isSued:
+            if self.currHP < (self.maxHP / 4):
+                self.damageInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
+                                                        Func(self.showHpTextCheat, -x),
+                                                        Func(self.showHpString, "SUED!"),
+                                                        Func(self.setHealthForMe, -x),
+                                                        Func(self.updateHealthBar, 0)),
+                                               Func(self.setNeutralAnimation)).start()
+            else:
+                self.damageInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
+                                                        Func(self.showHpTextCheat, -(self.maxHP / 4)),
+                                                        Func(self.showHpString, "SUED!"),
+                                                        Func(self.setHealthForMe, -(self.maxHP / 4)),
+                                                        Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
+                                              ).start()
 
     def checkZapDamage(self, battle):
         x = int(self.currHP)
-        if self.currHP < self.getZapCondition():
-            self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
-                                                    Func(self.showHpTextCheat, -x),
-                                                    Func(self.showHpString, "AFTERSHOCK!"),
-                                                    Func(self.setHealthForMe, -x),
-                                                    Func(self.updateHealthBar, 0)),
-                                           Func(self.setNeutralAnimation)).start()
-        else:
-            self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
-                                                    Func(self.showHpTextCheat, -self.getZapCondition()),
-                                                    Func(self.showHpString, "AFTERSHOCK!"),
-                                                    Func(self.setHealthForMe, -self.getZapCondition()),
-                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
-                                          ).start()
+        if self.currHP > 0 and self.isZapped:
+            if self.currHP < self.getZapCondition():
+                self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                        Func(self.showHpTextCheat, -x),
+                                                        Func(self.showHpString, "AFTERSHOCK!"),
+                                                        Func(self.setHealthForMe, -x),
+                                                        Func(self.updateHealthBar, 0)),
+                                               Func(self.setNeutralAnimation)).start()
+            else:
+                self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                        Func(self.showHpTextCheat, -self.getZapCondition()),
+                                                        Func(self.showHpString, "AFTERSHOCK!"),
+                                                        Func(self.setHealthForMe, -self.getZapCondition()),
+                                                        Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
+                                              ).start()
+
+    def checkZapDamage2(self, suit, battle):
+        x = int(self.currHP)
+        if self.currHP > 0 and not suit and self.isZapped:
+            if self.currHP < self.getZapCondition():
+                self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                        Func(self.showHpTextCheat, -x),
+                                                        Func(self.showHpString, "AFTERSHOCK!"),
+                                                        Func(self.setHealthForMe, -x),
+                                                        Func(self.updateHealthBar, 0)),
+                                               Func(self.setNeutralAnimation)).start()
+            else:
+                self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                        Func(self.showHpTextCheat, -self.getZapCondition()),
+                                                        Func(self.showHpString, "AFTERSHOCK!"),
+                                                        Func(self.setHealthForMe, -self.getZapCondition()),
+                                                        Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
+                                              ).start()
 
     def checkBroadcasterDonation(self, videog, battle):
         x = int(self.currHP)

@@ -313,6 +313,8 @@ def createSuitReviveTrack(suit, battle):
     suitTrack.append(Func(suit.setSkelecog2, True))
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
+    suitTrack.append(Func(suit.setDizzy, 0))
+    suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(suit.show))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     suitTrack.append(Sequence(Func(suit.showHpText2,
@@ -774,6 +776,8 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
+    suitTrack.append(Func(suit.setDizzy, 0))
+    suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
@@ -1114,6 +1118,8 @@ def createSuitDeathTrack(suit, battle):
             hasAnimatedHead = True
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
+    suitTrack.append(Func(suit.setDizzy, 0))
+    suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
     suitTrack.append(ActorInterval(suit, 'lose'))
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))

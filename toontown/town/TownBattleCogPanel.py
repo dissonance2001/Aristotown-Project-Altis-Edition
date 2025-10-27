@@ -89,6 +89,7 @@ class TownBattleCogPanel(DirectFrame):
         self.suit = None
         self.sued = None
         self.suedRoundsText = None
+        self.sued2RoundsText = None
         self.luredText = None
         self.dazedText = None
         self.extraAttacksText = None
@@ -302,6 +303,8 @@ class TownBattleCogPanel(DirectFrame):
             self.sued2.removeNode()
         if self.suedRoundsText != None:
             self.suedRoundsText.removeNode()
+        if self.sued2RoundsText != None:
+            self.sued2RoundsText.removeNode()
         if self.extraAttacksText != None:
             self.extraAttacksText.removeNode()
         if self.dazed != None:
@@ -2104,7 +2107,7 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isSued:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.sued = status.find('**/sued_icon')
-            self.suedRoundsText = DirectLabel(parent=self.sued, relief=None, text="%s" % self.cog.getSuedRounds(),
+            self.suedRoundsText = DirectLabel(parent=self.sued, relief=None, text="%s" % (self.cog.getSuedRounds() - 1),
                                          text_fg=(1, 1, 1, 1),
                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                          pos=(0.25, 0, -.5),
@@ -2150,6 +2153,12 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isSued:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.sued2 = status.find('**/damage_over_time_icon')
+            self.sued2RoundsText = DirectLabel(parent=self.sued2, relief=None, text="-%s" % int(self.cog.getMaxHP() / 4),
+                                              text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.5)
+            self.sued2RoundsText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.sued2.reparentTo(self.attackIcon)
@@ -2821,7 +2830,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'stg':
             self.suitHead.setPosHprScale(-0.28, 0.5, 0.12, -180, 0, 0, .14, .14, .14)
         elif name == 'blk':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .095, .095, .095)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
         elif name == 'psetter':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
         elif name == 'gld':
@@ -2876,6 +2885,8 @@ class TownBattleCogPanel(DirectFrame):
             self.sued2.removeNode()
         if self.suedRoundsText != None:
             self.suedRoundsText.removeNode()
+        if self.sued2RoundsText != None:
+            self.sued2RoundsText.removeNode()
         if self.extraAttacksText != None:
             self.extraAttacksText.removeNode()
         if self.dazed != None:

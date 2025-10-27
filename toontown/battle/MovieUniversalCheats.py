@@ -910,25 +910,31 @@ def doSueApplication(attack):
     explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
     suitTrack = Sequence()
     suitTrack.append(Parallel(ActorInterval(suit, 'pie-small-react'), Func(battle.sueSuit, suit), Func(suit.showHpString, "CEASE AND DESIST!")))
-    suitTrack.append(Func(suit.makeSued, 3))
+    suitTrack.append(Func(suit.makeSued, 4))
     suitTrack.append(Func(suit.setNeutralAnimationDrop))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('LB_receive_evidence.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack, explodeTrack)
 
 def doSueDamage(attack):
-    suit = attack['suit']
+    theSuit = attack['suit']
     battle = attack['battle']
     target = attack['target']
-    selfDamageTrack = Sequence(Func(suit.checkSueDamage, battle), Wait(3.0))
-    return Parallel(selfDamageTrack)
+    suitTrack = Parallel()
+    selfDamageTrack = Sequence(Func(theSuit.checkSueDamage, battle), Wait(3.0))
+    for suit in battle.activeSuits:
+        suitTrack.append(Parallel(Func(suit.checkSueDamage, battle), Wait(3.0)))
+    return Parallel(suitTrack)
 
 def doZapMovie(attack):
-    suit = attack['suit']
+    theSuit = attack['suit']
     battle = attack['battle']
     target = attack['target']
-    selfDamageTrack = Sequence(Func(suit.checkZapDamage, battle), Func(suit.makeUnZapped), Wait(5.0))
-    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_battery.ogg'), node=suit))
-    return Parallel(selfDamageTrack, soundTrack)
+    suitTrack = Parallel()
+    selfDamageTrack = Sequence(Func(theSuit.checkZapDamage, battle), Func(theSuit.makeUnZapped), Wait(5.0))
+    for suit in battle.activeSuits:
+        suitTrack.append(Parallel(Func(suit.checkZapDamage, battle), Func(suit.makeUnZapped), Wait(5.0)))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_battery.ogg'), node=theSuit))
+    return Parallel(soundTrack, suitTrack)
 
 def doDeathCheck(attack):
     name = attack['name']
@@ -937,6 +943,7 @@ def doDeathCheck(attack):
     currentBossHealth = -1
     revives = suit.getSkeleRevives()
     suitTrack = Sequence()
+    suitTrack2 = Parallel()
     if suit.dna.name == 'redd' and not suit.isVirtual:
         suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
     elif suit.isVirtual:
@@ -951,7 +958,9 @@ def doDeathCheck(attack):
         suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
     elif not suit.isVirtual:
         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-    return suitTrack
+    for s in battle.activeSuits:
+        suitTrack2.append(Sequence(Func(s.checkDeathCheck, battle), Wait(9.0)))
+    return Parallel(suitTrack2)
 
 def doSynergy(attack):
     suit = attack['suit']
