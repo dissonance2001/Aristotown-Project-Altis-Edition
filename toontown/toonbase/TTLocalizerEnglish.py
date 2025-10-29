@@ -4196,6 +4196,8 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseGenerat
                   'ArbitratorThrowBook5',
  'DirectorAction',
  'DirectorActionRetaliation',
+                  'LitigatorSnapBindings',
+                  'StenographerSanctionSuppression',
  'DirectorBackToOnes',
                   'RadiographerDanceSession',
                   'HighRollerRaisingTheAnte',
@@ -4219,7 +4221,7 @@ SuitCheatDescription = {
 'WSICeaseAndDesist': "All cogs gain another attack and Toons go on\ncooldown!",
     # Arbitrator Cheats
 'ArbitratorObjection': "The Scapegoat retaliates when cogs are destroyed!",
-'ArbitratorPaperFiling': "The Case Manager places a Toon on cooldown for\n2 rounds!",
+'ArbitratorPaperFiling': "The Case Manager places Toons on cooldown for\n2 rounds!",
 'ArbitratorWhirlwind': "The Stenographer sends a Toon through a\nstorm of paperwork!",
 'ArbitratorThrowBook': "The Litigator sentences a cog to destruction!",
 'ArbitratorThrowBook2': "The Litigator sentences a cog to destruction!",
@@ -4228,17 +4230,19 @@ SuitCheatDescription = {
 'ArbitratorThrowBook5': "The Litigator sentences a cog to destruction!",
     # Litigator Cheats
 'LitigatorSnapSoak': "The Litigator retaliates when soaked!",
+'LitigatorSnapBindings': "The Litigator retaliates against unbound Toons!",
 'LitigatorSnap': "The Litigator retaliates against the most\ndangerous Toon!",
 'LitigatorBayouBash': "The Litigator absolutely swamps you with cogs!",
 'LitigatorBayouBellow': "The Litigator removes all negative effects from\nthe cogs!",
     # Stenographer Cheats
+'StenographerSanctionSuppression': "The Stenographer retaliates against suppressed toons!",
 'StenographerSanctionBindings': "The Stenographer retaliates against unbound toons!",
 'StenographerSanction': "The Stenographer retaliates against the least\ndangerous toon!",
     # Case Manager Cheats
-'CaseManagerLegalBindings': "The Case Manager legally binds a toon to take\ndamage every turn!",
-'CaseManagerLegalBindings2': "The Case Manager legally binds a toon to take\ndamage every turn!",
-'CaseManagerInsurancePlan':  "The Case Manager ensures that cogs are healed\nevery turn!",
-'CaseManagerLegallyBound': "This toon is legally bound to take 20 damage\nevery turn!",
+'CaseManagerLegalBindings': "The Case Manager legally binds a toon to take\ndamage every round!",
+'CaseManagerLegalBindings2': "The Case Manager legally binds a toon to take\ndamage every round!",
+'CaseManagerInsurancePlan':  "The Case Manager ensures that cogs are healed\nevery round!",
+'CaseManagerLegallyBound': "This toon is legally bound to take 20 damage\nevery round!",
     # Scapegoat Cheats
 'ScapegoatGavel': "The Scapegoat removes a random Toon from battle!",
 'ScapegoatShieldsUp': "The Scapegoat's temperature has cooled and is now\nprotecting cogs again!",
@@ -4258,7 +4262,7 @@ SuitCheatDescription = {
 'PowerhouseSnipeBookkept': "The Powerhouse retaliates against toons who didn't follow the\nBookkeeper's instructions!",
 'PowerhouseSnipeMulligan': "The Powerhouse retaliates against toons who took damage\nfrom Fore!",
 'PowerhouseSnipeCollectCall': "The Powerhouse retaliates against Toons at random!",
-'PowerhouseGeneration': "The Powerhouse becomes stronger every turn he is in\ndesperation!",
+'PowerhouseGeneration': "The Powerhouse becomes stronger every round he is in\ndesperation!",
 'PowerhouseGeneration2': "The Powerhouse becomes stronger after every transition!",
 'PowerhouseBurnDamage': "",
     # Bookkeeper Cheats
@@ -4330,7 +4334,7 @@ SuitCheatDescription = {
 'RacketeerHustling': "The Racketeer requires Toons to use specific gag tracks!",
 'RacketeerRacketeering': "The Racketeer bans your last chosen gag track!",
 'RacketeerPeckingOrderRetaliation': "The Racketeer retaliates against Toons who used banned\ngags!",
-'RacketeerPeckingOrderRetaliationSoak': "The Pressurizer retaliates every turn while soaked!",
+'RacketeerPeckingOrderRetaliationSoak': "The Pressurizer retaliates every round while soaked!",
     # Radiographer Cheats
 'RadiographerRadioInfrequency': "All group attacks have been given a massive debuff!",
 'RadiographerHotTake': "The Radiographer applies a dangerous vulnerability to a\nrandom Toon!",
@@ -4390,7 +4394,7 @@ SuitCheatDescription = {
 'HighRollerDiceRouletteNobody': "The dice will randomly decide who gets damaged!",
 'HighRollerTrickOfTheLight': "The High Roller uses the power of refraction to\nclone himself!",
 'HighRollerAceInTheHole': "The High Roller pulls out his trump card!",
-'HighRollerVulnerable': "The High Roller is now vulnerable for 2 turns!",
+'HighRollerVulnerable': "The High Roller is now vulnerable for 2 rounds!",
 'HighRollerRaisingTheAnte': "The High Roller gives all Toons a massive damage\nboost!",
     # High Roller Silhouette Cheats
 'HighRollerDonation': "The White Silhouette donates part of their health to\nThe High Roller!",
@@ -4607,7 +4611,7 @@ SuitAttackNames = {
     'WSICeaseAndDesist': "Cease And Desist!",
     # Arbitrator Cheats
     'ArbitratorObjection': "Objection!",
-    'ArbitratorPaperFiling': "Paper Filing!",
+    'ArbitratorPaperFiling': "Paperweight!",
     'ArbitratorWhirlwind': "Whirlwind!",
     'ArbitratorThrowBook': "Throw Book!",
     'ArbitratorThrowBook2': "Throw Book!",
@@ -4616,10 +4620,12 @@ SuitAttackNames = {
     'ArbitratorThrowBook5': "Throw Book!",
     # Litigator Cheats
     'LitigatorSnapSoak': "Snap!",
+    'LitigatorSnapBindings': "Snap!",
     'LitigatorSnap': "Snap!",
     'LitigatorBayouBash': "Bayou Bash!",
     'LitigatorBayouBellow': "Bayou Bellow!",
     # Stenographer Cheats
+    'StenographerSanctionSuppression': "Court Sanction!",
     'StenographerSanctionBindings': "Court Sanction!",
     'StenographerSanction': "Court Sanction!",
     'StenographerCourtRecordBan': "Court Record!",
@@ -7031,6 +7037,10 @@ SuitAttackTaunts = {
                         "I've had enough with you!",
                         "These chompers could cut out diamonds!",
                         "My colleagues don't like it when I get snappy."],
+'LitigatorSnapBindings': ["This may hurt a little, but what comes next will hurt a lot.",
+                        "I've had enough with you!",
+                        "These chompers could cut out diamonds!",
+                        "My colleagues don't like it when I get snappy."],
 'LitigatorSnap': ["This may hurt a little, but what comes next will hurt a lot.",
                     "I've had enough with you!",
                     "These chompers could cut out diamonds!",
@@ -7043,6 +7053,9 @@ SuitAttackTaunts = {
 'LitigatorBayouBellow': [""],
                     # stenographer cheats
 'StenographerSanctionBindings': ["I spy with my little eye, a Toon who isn't pulling their weight.",
+                                    "What happened to your little strategy called 'teamwork'?",
+                                    "Someone isn't doing their part around here."],
+'StenographerSanctionSuppression': ["I spy with my little eye, a Toon who isn't pulling their weight.",
                                     "What happened to your little strategy called 'teamwork'?",
                                     "Someone isn't doing their part around here."],
 'StenographerSanction': ["I spy with my little eye, a Toon who isn't pulling their weight.",

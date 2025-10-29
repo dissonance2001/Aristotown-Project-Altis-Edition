@@ -1199,6 +1199,7 @@ class Suit(Avatar.Avatar):
         self.isWaiter = 0
         self.isGovernaught = 0
         self.isInsured = 0
+        self.isInsured2 = 0
         self.isAmbassadorPhase3 = 0
         self.isContracted = 0
         self.isExecutive = 0
@@ -7245,10 +7246,14 @@ class Suit(Avatar.Avatar):
                                          softStopT=softStop))
 
     def makeInsured(self):
-        self.isInsured= 1
+        self.isInsured = 1
 
     def removeInsured(self):
         self.isInsured = 0
+        self.isInsured2 = 0
+
+    def makeInsured2(self):
+        self.isInsured2 = 1
 
     def leaveAfterimageTask(self, task):
         """Create a faded clone of the Cog as an afterimage."""

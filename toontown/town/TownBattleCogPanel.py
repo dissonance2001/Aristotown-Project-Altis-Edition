@@ -90,6 +90,7 @@ class TownBattleCogPanel(DirectFrame):
         self.sued = None
         self.suedRoundsText = None
         self.sued2RoundsText = None
+        self.insuredText = None
         self.luredText = None
         self.dazedText = None
         self.extraAttacksText = None
@@ -343,6 +344,8 @@ class TownBattleCogPanel(DirectFrame):
             self.overcharged.removeNode()
         if self.insured != None:
             self.insured.removeNode()
+        if self.insuredText != None:
+            self.insuredText.removeNode()
         if self.vulnerabilityText != None:
             self.vulnerabilityText.removeNode()
         if self.damageReductionText != None:
@@ -475,7 +478,7 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
                 self.skeleton.show()
-        if self.cog.getManager() or self.cog.isLureResist or self.cog.extraAttack or self.cog.isInsured or self.cog.isContracted or self.cog.healthCondition == 13:
+        if self.cog.getManager() or self.cog.isLureResist or self.cog.extraAttack or self.cog.isInsured or self.cog.isInsured2 or self.cog.isContracted or self.cog.healthCondition == 13:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.luredManager = status.find('**/lured_prestige_icon')
             if (self.cog.isDesperation and self.cog.isAngry) or self.cog.dna.name == 'hroller' or self.cog.isImmortal or (self.cog.getActualLevel() == 25 and self.cog.dna.name == 'hrollers') or self.cog.isLureImmune:
@@ -1938,9 +1941,21 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(1, 0.984, 0, 1)
                 self.syphon.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
-        if self.cog.isInsured:
+        if self.cog.isInsured or self.cog.isInsured2:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.insured = status.find('**/heal_over_time_icon')
+            if self.cog.isInsured2:
+                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+85", text_fg=(0, 1, 0.047, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.5)
+                self.insuredText.show()
+            else:
+                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+50", text_fg=(0, 1, 0.047, 1),
+                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                               pos=(0.25, 0, -.5),
+                                               text_scale=.5)
+                self.insuredText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.insured.reparentTo(self.attackIcon)
@@ -2945,6 +2960,8 @@ class TownBattleCogPanel(DirectFrame):
             self.overcharged.removeNode()
         if self.insured != None:
             self.insured.removeNode()
+        if self.insuredText != None:
+            self.insuredText.removeNode()
         if self.overcharged != None:
             self.overcharged.removeNode()
         if self.lured != None:

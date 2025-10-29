@@ -305,8 +305,23 @@ class Movie(DirectObject.DirectObject):
             MovieUtil.shotDirection = 'left'
         else:
             MovieUtil.shotDirection = 'right'
+        for t in self.battle.activeToons:
+            t.loop('neutral')
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
+            for suit in self.battle.activeSuits:
+                if suit.dna.name == 'sgoat':
+                    currentBossHealth = suit.currHP
+                    if currentBossHealth >= 1:
+                        if s.isInsured:
+                            s.makeInsured2()
+                        if s.isInsured:
+                            s.makeInsured2()
+                    else:
+                        if s.isInsured:
+                            s.makeInsured()
+                        if s.isInsured2:
+                            s.makeInsured()
             if s.getLuredRounds() == 1:
                 s.makeUnLured()
             if not s.getLuredRounds() <= 0:

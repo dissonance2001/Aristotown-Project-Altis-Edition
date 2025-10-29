@@ -7323,11 +7323,13 @@ SuitAttacks = {
  'ArbitratorThrowBook5': ('throw-object', ATK_TGT_SINGLE),
     # Litigator Cheats
  'LitigatorSnapSoak': ('throw-object', ATK_TGT_GROUP),
+ 'LitigatorSnapBindings': ('throw-object', ATK_TGT_GROUP),
  'LitigatorSnap': ('throw-object', ATK_TGT_SINGLE),
  'LitigatorBayouBash': ('none', ATK_TGT_SINGLE),
  'LitigatorBayouBellow': ('bellow', ATK_TGT_SINGLE),
     # Stenographer Cheats
  'StenographerSanctionBindings': ('sanction', ATK_TGT_GROUP),
+ 'StenographerSanctionSuppression': ('sanction', ATK_TGT_GROUP),
  'StenographerSanction': ('sanction', ATK_TGT_SINGLE),
  'StenographerCourtRecordBan': ('nothing', ATK_TGT_GROUP),
     # Case Manager Cheats

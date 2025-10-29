@@ -373,7 +373,7 @@ def doSuitAttack(attack):
     elif name == 'ArbitratorObjection':
         suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord2(attack)
     elif name == 'ArbitratorPaperFiling':
-        suitTrack = MovieLawbotLitigationCheats.doPaperRain(attack)
+        suitTrack = MovieLawbotLitigationCheats.doPaperweight(attack)
     elif name == 'ArbitratorWhirlwind':
         suitTrack = MovieLawbotLitigationCheats.doWhirlwind(attack)
     elif name == 'ArbitratorThrowBook':
@@ -388,7 +388,9 @@ def doSuitAttack(attack):
         suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 5)
     #litigator cheats
     elif name == 'LitigatorSnapSoak':
-        suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
+        suitTrack = MovieLawbotLitigationCheats.doSnap2(attack, suit)
+    elif name == 'LitigatorSnapBindings':
+        suitTrack = MovieLawbotLitigationCheats.doSnap2(attack, suit)
     elif name == 'LitigatorSnap':
         suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
     elif name == 'LitigatorBayouBash':
@@ -397,6 +399,8 @@ def doSuitAttack(attack):
         suitTrack = MovieLawbotLitigationCheats.doBayouBellow(attack)
     #stenographer cheats
     elif name == 'StenographerSanctionBindings':
+        suitTrack = MovieLawbotLitigationCheats.doCourtSanctionBindings(attack)
+    elif name == 'StenographerSanctionSuppression':
         suitTrack = MovieLawbotLitigationCheats.doCourtSanctionBindings(attack)
     elif name == 'StenographerSanction':
         suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack)
@@ -413,7 +417,7 @@ def doSuitAttack(attack):
     elif name == 'CaseManagerLegalBindings':
         suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
     elif name == 'CaseManagerLegalBindings2':
-        suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
+        suitTrack = MovieLawbotLitigationCheats.doLegalBindings2(attack)
     elif name == 'CaseManagerLegallyBound':
         suitTrack = MovieLawbotLitigationCheats.doLegallyBound(attack)
     elif name == 'CaseManagerCourtRecordBan':

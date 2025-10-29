@@ -856,7 +856,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ArbitratorObjection':
         camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 2)))
     elif name == 'ArbitratorPaperFiling':
-        camTrack.append(heldShot(0.0, -17.5, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2.5, attackDuration=2.5),
+                                 heldShot(5, 0, .5, 155, 35, 0, attackDuration - 2.5)))
     elif name == 'ArbitratorWhirlwind':
         camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
     elif name == 'ArbitratorThrowBook':
@@ -887,6 +888,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         # litigator cheats
     elif name == 'LitigatorSnapSoak':
         camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'LitigatorSnapBindings':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'LitigatorSnap':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'LitigatorBayouBash':
@@ -896,6 +899,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5)))
         # stenographer cheats
     elif name == 'StenographerSanctionBindings':
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=0.5))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
+    elif name == 'StenographerSanctionSuppression':
         if attackDuration > 2:
             camTrack.append(defaultCamera(openShotDuration=0.5))
         else:
