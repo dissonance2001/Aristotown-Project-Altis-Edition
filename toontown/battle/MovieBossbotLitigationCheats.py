@@ -1808,7 +1808,7 @@ def doGeneration2(attack):
     cage = loader.loadModel('phase_5/models/props/lightning')
     suitTrack2 = Sequence(Wait(1.0), Parallel(Func(suit.showHpText2, '+5% Vulnerable', 2), Func(suit.showHpStringLureManager2, '+5% Damage')))
     cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
-    cagePos = [Point3(suitPos.getX(), y, 100.0), targetSuit.getHpr(battle)]
+    cagePos = [Point3(suitPos.getX(), y + 1, 100.0), targetSuit.getHpr(battle)]
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()
@@ -1848,7 +1848,7 @@ def doGeneration(attack):
     cage = loader.loadModel('phase_5/models/props/lightning')
     suitTrack2 = Sequence(Wait(1.0), Parallel(Func(suit.showHpText2, '+5% Vulnerable', 2), Func(suit.showHpStringLureManager2, '+5% Damage')))
     cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
-    cagePos = [Point3(suitPos.getX(), y, 100.0), targetSuit.getHpr(battle)]
+    cagePos = [Point3(suitPos.getX(), y + 1, 100.0), targetSuit.getHpr(battle)]
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()

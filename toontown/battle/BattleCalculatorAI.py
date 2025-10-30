@@ -952,6 +952,8 @@ class BattleCalculatorAI:
                                 if theSuit.dna.name == 'redd':
                                     self.setSuitCondition(targetId, 'lured', lureKBValue / 2, self.NumRoundsLured[atkLevel],
                                                           'setBoth')
+                                    self.setSuitCondition(targetId, 'unlureSuit', 1, 10,
+                                                          'setBoth')
                                 if self.suitHasCondition(targetId, 'immune'):
                                     self.setSuitCondition(targetId, 'lured', 0,
                                                           0,
@@ -967,6 +969,8 @@ class BattleCalculatorAI:
                                 else:
                                     self.setSuitCondition(targetId, 'lured', lureKBValue, self.NumRoundsLured[atkLevel],
                                                       'setBoth')
+                                    self.setSuitCondition(targetId, 'unlureSuit', 1, 10,
+                                                          'setBoth')
                                 wakeupChance = 100 - atkAcc * 2
                                 npcLurer = attack[TOON_TRACK_COL] == NPCSOS
                                 currLureId = self.__addLuredSuitInfo(targetId, -1, rounds, wakeupChance, toonId,
@@ -3216,6 +3220,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'unlureSuit', 0, 0, 'setBoth')
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'soaked', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'dazed', 0, 0, 'setBoth')
@@ -3226,6 +3231,7 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'zapped', 0, 0, 'setBoth')
                     if self.suitHasCondition(suit.doId, 'lured'):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
+                        self.setSuitCondition(theSuit.doId, 'unlureSuit', 1, 1, 'setBoth')
                     continue
                 for suit in self.currentlyLuredSuits.keys():
                     self.setSuitCondition(suit, 'bellowattack', 1, 1, 'setBoth')
@@ -5728,6 +5734,7 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'unlureSuit', 0, 0, 'setBoth')
                 self.__removeLured(theSuit.doId)
             elif atkType['name'] == 'SoakRemoval':
                 result = 0
@@ -8254,7 +8261,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionModifier(suitId, 'rageBuilding') >= 95 and self.suitHasCondition(suitId, 'lured') and not self.suitHasCondition(suitId, 'sounded') and \
+                if self.getSuitConditionModifier(suitId, 'rageBuilding') >= 95 and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and \
                         self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
@@ -15715,7 +15722,7 @@ class BattleCalculatorAI:
                     self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                 attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'bellowattack') and self.suitHasCondition(suitId, 'lured') and not self.suitHasCondition(suitId, 'sounded') and self.battle.activeSuits[i].currHP > 0:
+            if self.suitHasCondition(suitId, 'bellowattack') and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getLureRemoval(suitId)
                 self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'bellowattack') and self.battle.activeSuits[i].currHP > 0 and not self.battle.activeSuits[i].dna.name == 'ambass' and not self.suitHasCondition(suitId, 'sued'):
@@ -16063,7 +16070,7 @@ class BattleCalculatorAI:
                     self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                 attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'sued') and not self.suitHasCondition(suitId, 'sounded') and self.getSuitConditionTurns(suitId, 'lured') == 1 and \
+            if self.suitHasCondition(suitId, 'sued') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and \
                     self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getLureRemoval(suitId)
                 self.battle.suitAttacks.append(attack)
@@ -16176,7 +16183,7 @@ class BattleCalculatorAI:
                 attack[SUIT_BEFORE_TOONS_COL] = 0
                 self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'radiog': # radiographer
-                if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'lured') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'soakedcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -16301,7 +16308,7 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'redd': #redd heir wing
-                if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'lured') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'soakedcalculator') and self.__suitCanAttack(suitId):
@@ -16341,7 +16348,7 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'lgator': # litigator
-                if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'lured') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'soakedcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -16392,7 +16399,7 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'safesupervis':
-                if self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'lured') and self.battle.activeSuits[i].currHP > 0:
+                if self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
                 if not self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'soaked') and self.battle.activeSuits[i].currHP > 0:
@@ -16533,7 +16540,7 @@ class BattleCalculatorAI:
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
-                if self.suitHasCondition(suitId, 'lured') and not self.suitHasCondition(suitId, 'sounded') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
@@ -16572,7 +16579,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'lured') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'soakedcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -16672,7 +16679,7 @@ class BattleCalculatorAI:
             x = self.TurnsElapsed
             #attack = self.__getGenericSuitAttack(suitId)
             # Managers Attack Before Cogs
-            if self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'lured') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+            if self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getLureRemoval(suitId)
                 self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.__suitCanAttack(suitId) and not self.battle.activeSuits[i].dna.name == 'hrollers':
@@ -16773,7 +16780,7 @@ class BattleCalculatorAI:
                     continue
                # attack = self.__getGenericSuitAttack(suitId)
                 # Grunt Cog Attacks
-                if not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'lured') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                if not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
                 if not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict:

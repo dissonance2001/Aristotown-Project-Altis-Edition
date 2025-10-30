@@ -1370,9 +1370,9 @@ def doContractEnforcement(attack):
         hitPoint.setY(hitPoint.getY() + 0.5)
         knife = globalPropPool.getProp('shredder-paper')
         knifeTrack = Sequence(
-            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 0.5, VBase3(1, 1, 1),
+            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 0.75, VBase3(1, 1, 1),
                                scaleUpTime=0.25),
-            Wait(1.3),
+            Wait(0.95),
             Parallel(
                 getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),

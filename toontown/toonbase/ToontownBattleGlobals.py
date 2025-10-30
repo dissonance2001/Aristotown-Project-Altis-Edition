@@ -676,6 +676,7 @@ ValidStatusConditions = (
     'frozen',
     'soaked',
     'lured',
+    'unlureSuit',
     'marked',
     'markedThrow',
     'alreadyZapped',

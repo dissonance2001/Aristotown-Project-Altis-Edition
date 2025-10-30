@@ -6011,8 +6011,8 @@ def doEvictionNotice(attack):
     for t in targets:
         toon = t['toon']
         paper = globalPropPool.getProp('shredder-paper')
-        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
-        propTrack.append(Wait(1.3))
+        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+        propTrack.append(Wait(1.05))
         hitPoint = __toonFacePoint(toon, parent=battle)
         hitPoint.setX(hitPoint.getX() - 1.4)
         missPoint = __toonGroundPoint(attack, toon, 0.5, parent=battle)
@@ -6746,9 +6746,8 @@ def doRestrainingOrder(attack):
         toon = t['toon']
         dmg = t['hp']
         paper = globalPropPool.getProp('shredder-paper')
-        propTrack = Sequence(
-            getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
-        propTrack.append(Wait(1.3))
+        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+        propTrack.append(Wait(1.05))
         hitPoint = __toonFacePoint(toon, parent=battle)
         hitPoint.setX(hitPoint.getX() - 1.4)
         missPoint = __toonGroundPoint(attack, toon, 0.7, parent=battle)

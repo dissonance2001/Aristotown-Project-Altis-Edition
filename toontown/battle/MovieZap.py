@@ -1260,7 +1260,7 @@ def __doLightning(zap, delay, fShowStun, uberClone = 0, npcs=[]):
         cagePropTrack = Sequence(
             getPropAppearTrack(cage, battle, cagePos, 3.5, scaleUpPoint=Point3(5.0, 2.0, 10.0), scaleUpTime=0),
             Parallel(cagePosition),
-            Parallel(cage.posInterval(0, Point3(suitPos.getX(), y, 0.1), blendType='easeIn')), Wait(0.5),
+            Parallel(cage.posInterval(0, Point3(suitPos.getX(), y + 1, 0.1), blendType='easeIn')), Wait(0.5),
             LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
             Func(MovieUtil.removeProp, cage)
             )

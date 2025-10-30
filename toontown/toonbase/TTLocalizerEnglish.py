@@ -2913,9 +2913,9 @@ SuitFaceoffTaunts = {
             "I'm suspending this well, Toon.",
             "This will be a spinning success.",
             "You seem to be getting a bit dizzy."],
-'mplayer': ["Caught the blues, baby?"
-            "Time to face the music and dance, Tune."
-            "Let's tango-ago-go!"
+'mplayer': ["Caught the blues, baby?",
+            "Time to face the music and dance, Tune.",
+            "Let's tango-ago-go!",
             "Skibidobabadadoo!"],
 'fires': ["Hope you know how to stop, drop and roll.",
             "Didn't your guardians tell you to not play with fire?",
@@ -2925,9 +2925,9 @@ SuitFaceoffTaunts = {
             "Isn't it past your bedtime?",
             "This battle will be your worst nightmare.",
             "I'm an undercover agent."],
-'mplayer2': ["Caught the blues, baby?"
-            "Time to face the music and dance, Tune."
-            "Let's tango-ago-go!"
+'mplayer2': ["Caught the blues, baby?",
+            "Time to face the music and dance, Tune.",
+            "Let's tango-ago-go!",
             "Skibidobabadadoo!"],
 'chainsaw': ["ENTERING EMPLOYEE TERMINATION MODE.",
             "If you worked for this company, you'd be out in a cannon.",
@@ -4286,7 +4286,7 @@ SuitCheatDescription = {
 'AmbassadorHeadRoller3': "The Ambassador becomes stronger for every cog he\nsacrifices!",
 'AmbassadorHeadRoller4': "The Ambassador becomes stronger for every cog he\nsacrifices!",
 'AmbassadorHeadRoller5': "The Ambassador becomes stronger for every cog he\nsacrifices!",
-'AmbassadorAdvancement': "The Ambassador marks cogs for destruction!",
+'AmbassadorAdvancement': "The Ambassador marks cogs for termination!",
 'AmbassadorAdvancement2': "The Ambassador marks a cog for destruction!",
 'AmbassadorAdvancement3': "The Ambassador marks a cog for destruction!",
 'AmbassadorAdvancement4': "The Ambassador marks a cog for destruction!",
@@ -7720,7 +7720,7 @@ SuitAttackTaunts = {
 'FilmmakerCameraRewind': ["Cut! Let's take it from the top.",
                             "I don't allow damage in my final cut.",
                             "You can't hurt what I can edit out."],
-'FilmmakerBudgetCuts': ["The note wasn't in your script.",
+'FilmmakerBudgetCuts': ["This note wasn't in your script.",
                             "You'll pay for that performance.",
                             "Final edit; you're out of the scene."],
     # Director Cheats

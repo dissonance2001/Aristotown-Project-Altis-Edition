@@ -1272,7 +1272,7 @@ def doElectricShock(attack, ind):
     toonPos = toon.getPos(battle)
     y = suitPos.getY()
     x = int((targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP)
-    cagePos = [Point3(suitPos.getX(), y, 100.0), targetSuit.getHpr(battle)]
+    cagePos = [Point3(suitPos.getX(), y + 1, 100.0), targetSuit.getHpr(battle)]
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()
@@ -2324,9 +2324,8 @@ def doExplodingDocument(attack):
     paper = globalPropPool.getProp('shredder-paper')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     posPoints = [Point3(.675, -1.5, -0.075), VBase3(10, 250, -10)]
-    propTrack = Sequence(
-        getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0))
-    propTrack.append(Wait(1.5))
+    propTrack = Sequence(getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.75, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+    propTrack.append(Wait(1.05))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)
     missPoint = __toonGroundPoint(attack, toon, 3.1, parent=battle)

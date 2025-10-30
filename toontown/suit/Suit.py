@@ -1501,7 +1501,7 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'mplayer':
             self.scale = 7.3 / aSize
             self.handColor = VBase4(1, 1, 1, 1)
-            self.generateBody()
+            self.generateMajorPlayerBody()
             self.makeMajorPlayer()
             self.generateHead3('majorplayer', animated=True)
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_majorplayer.png')
@@ -1533,8 +1533,8 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'choreo':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.835, 0.843, 0.847, 1)
-            self.generateBody()
+            self.handColor = VBase4(0.608, 0.525, 0.431, 1)
+            self.generateMajorPlayerBody()
             self.makeVideographer2()
             self.generateHead2('skeleskull_A')
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_c_exe.png')
@@ -2250,7 +2250,7 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'mh2':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.918, 0.886, 0.875, 1)
-            self.generateBody()
+            self.generateMajorPlayerBody()
             self.makeExecutive()
             self.generateHead2('yesman')
             texture = loader.loadTexture('phase_4/maps/mr_hollywood.jpg')
@@ -2281,8 +2281,8 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'cinema':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.835, 0.843, 0.847, 1)
-            self.generateBody()
+            self.handColor = VBase4(0.647, 0.486, 0.663, 1)
+            self.generateMajorPlayerBody()
             self.makeVideographer2()
             self.generateHead2('skeleskull_A')
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
@@ -2529,8 +2529,8 @@ class Suit(Avatar.Avatar):
             self.setHeight(9)
         elif dna.name == 'fmaker':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.835, 0.843, 0.847, 1)
-            self.generateBody()
+            self.handColor = VBase4(0.451, 0.561, 0.549, 1)
+            self.generateMajorPlayerBody()
             self.makeVideographer2()
             self.generateHead2('skeleskull_A')
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_g_exe.png')
@@ -2954,8 +2954,8 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.5)
         elif dna.name == 'director':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.835, 0.843, 0.847, 1)
-            self.generateBody()
+            self.handColor = VBase4(0.788, 0.522, 0.522, 1)
+            self.generateMajorPlayerBody()
             self.makeVideographer2()
             self.generateHead2('skeleskull_A')
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_p_exe.png')
@@ -2966,8 +2966,8 @@ class Suit(Avatar.Avatar):
             self.makeShielding()
         elif dna.name == 'bcaster':
             self.scale = 7.5 / aSize
-            self.handColor = VBase4(0.835, 0.843, 0.847, 1)
-            self.generateBody()
+            self.handColor = VBase4(0.322, 0.325, 0.325, 1)
+            self.generateMajorPlayerBody()
             self.makeVideographer2()
             self.generateHead3('multislacker', animated=True)
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
@@ -2980,7 +2980,7 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'std2':
             self.scale = 6.75 / aSize
             self.handColor = VBase4(1, 0.973, 0.969, 1)
-            self.generateBody()
+            self.generateMajorPlayerBody()
             self.generateHead2('yesman')
             texture = loader.loadTexture('phase_3.5/maps/stuntdouble.jpg')
             for headPart in self.headParts:
@@ -2990,8 +2990,8 @@ class Suit(Avatar.Avatar):
             self.setHeight(9.0)
         elif dna.name == 'videog':
             self.scale = 7.5 / aSize
-            self.handColor = VBase4(0.835, 0.843, 0.847, 1)
-            self.generateBody()
+            self.handColor = VBase4(0.322, 0.325, 0.325, 1)
+            self.generateMajorPlayerBody()
             self.makeVideographer()
             self.generateHead3('multislacker', animated=True)
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
@@ -3352,6 +3352,21 @@ class Suit(Avatar.Avatar):
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         self.setBlend(frameBlend=base.wantSmoothAnims)
 
+    def generateMajorPlayerBody(self):
+        animDict = self.generateAnimDict()
+        filePrefix, bodyPhase = ModelDict[self.style.body]
+        if base.config.GetBool('want-new-cogs', 0):
+            if cogExists(filePrefix + 'zero.bam'):
+                self.loadModel('phase_3.5' + filePrefix + 'zero')
+            else:
+                self.loadModel('phase_3.5' + filePrefix + 'open-mod')
+        else:
+            self.loadModel('phase_3.5' + filePrefix + 'open-mod')
+        self.loadAnims(animDict)
+        self.setSuitClothes()
+        self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
+        self.setBlend(frameBlend=base.wantSmoothAnims)
+
     def generateAnimDict(self):
         animDict = {}
         filePrefix, bodyPhase = ModelDict[self.style.body]
@@ -3444,29 +3459,45 @@ class Suit(Avatar.Avatar):
         if self.style.dept == 'l' and not self.style.name == 'wsi':
             modelRoot.find('**/bowtie').show()
         elif self.style.name == 'videog':
-            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').show()
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_videog.png')
+            modelRoot.find('**/highroller_body').setTexture(texture2, 1)
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'mh2':
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_hollywood.png')
+            modelRoot.find('**/highroller_body').setTexture(texture2, 1)
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'std2':
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_hollywood.png')
+            modelRoot.find('**/highroller_body').setTexture(texture2, 1)
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'bcaster':
-            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').show()
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_bcaster.png')
+            modelRoot.find('**/highroller_body').setTexture(texture2, 1)
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'fmaker':
-            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').show()
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_fmaker.png')
+            modelRoot.find('**/highroller_body').setTexture(texture2, 1)
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'director':
-            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').show()
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_director.png')
+            modelRoot.find('**/highroller_body').setTexture(texture2, 1)
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'cinema':
-            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').show()
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_cinema.png')
+            modelRoot.find('**/highroller_body').setTexture(texture2, 1)
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'choreo':
-            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').setTexture(texture3, 1)
-            modelRoot.find('**/necktie-s').show()
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_choreo.png')
+            modelRoot.find('**/highroller_body').setTexture(texture2, 1)
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'key':
             modelRoot.find('**/necktie-s').show()
         elif self.style.dept == 's':
@@ -3487,6 +3518,9 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'hroller':
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'mplayer':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'erfit':
