@@ -12883,8 +12883,7 @@ class BattleCalculatorAI:
                     self.battle.suitAttacks.append(attack)
                 if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId,
                                                                                         'killedbyvideo') and not self.suitHasCondition(suitId,
-                                                                                        'dead') and not self.__suitCanAttack(
-                    suitId):
+                                                                                        'dead'):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
@@ -13277,10 +13276,6 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.battle.activeSuits[i].currHP < self.battle.activeSuits[i].maxHP and not self.__suitCanAttack(suitId) and \
-                        self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    self.battle.suitAttacks.append(attack)
                 if self.battle.activeSuits[i].currHP < self.battle.activeSuits[i].maxHP and self.__suitCanAttack(
                         suitId):
                     attack = getDefaultSuitAttack()
@@ -13404,7 +13399,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'directorcalculator') and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
-                    if self.battle.activeSuits > 4:
+                    if self.battle.activeSuits == 6:
                         attack[SUIT_ATK_COL] = random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
                                                            'name': 'DirectorAction',
                                                            'animName': 'nothing',
