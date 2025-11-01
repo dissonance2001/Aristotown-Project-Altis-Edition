@@ -651,8 +651,7 @@ def doPaperCut(attack):
         origPos, origHpr = battle.getActorPosHpr(suit)
         partTrack = getPartTrack(particleEffect, .5, 3.5, [particleEffect, toon, 0], softStop=-2)
         toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
-        notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextCheat, - int(dmg)),
-                           Func(toon.showHpString, "VULNERABLE!"))
+        notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
             partTracks.append(partTrack)
@@ -679,8 +678,7 @@ def doPaperCutMulti(attack):
         origPos, origHpr = battle.getActorPosHpr(suit)
         partTrack = getPartTrack(particleEffect, .5, 3.5, [particleEffect, toon, 0], softStop=-2)
         toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
-        notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpString, "VULNERABLE!"))
+        notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
             partTracks.append(partTrack)
@@ -740,7 +738,7 @@ def doExplodingDocument(attack):
     toonTrack = getToonTrackCheat(attack, 2.5, ['slip-forward'], 3.4, ['struggle'])
    # toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2.5, ['slip-forward'])
     soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
-    notifyTrack = Sequence(Wait(2.5), Func(toon.showHpTextCheat, - int(dmg)), Func(toon.showHpString, "GAG DEBUFF!"))
+    notifyTrack = Sequence(Wait(2.5), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
     return Parallel(explodeTracks, suitTrack, toonTrack, soundTrack, propTrack, notifyTrack, explosionTrack)
 
 def doBookkeepingRetaliation(attack):
@@ -756,8 +754,7 @@ def doBookkeepingRetaliation(attack):
         dmg = t['hp']
         suitTrack = Sequence(getSuitAnimTrack(attack))
         suitTrack2 = Sequence(ActorInterval(suit, 'effort', duration=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimationDrop))
-        notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpString, "GAG DEBUFF!"))
+        notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
         soundTrack1 = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
         soundTrack2 = Sequence(Wait(3.4), SoundInterval(globalBattleSoundCache.getSound('SA_haymaker.ogg')))
         soundTrack = Parallel(soundTrack1, soundTrack2)
@@ -869,8 +866,7 @@ def doCollectCall(attack):
     soundTrack = Parallel(soundTrack1, soundTrack2, soundTrack3, soundTrack4)
     toonTrack = Sequence(Wait(1.0), ActorInterval(toon, 'takePhone', duration=3.75))
     toonTrack.append(getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 0, ['conked']))
-    notifyTrack = Sequence(Wait(4.75), Func(toon.showHpTextCheat, - int(dmg)),
-                           Func(toon.showHpString, "DUES INCREASED!"))
+    notifyTrack = Sequence(Wait(4.75), Func(toon.showHpTextNew, -int(dmg), text="DUES INCREASED!", colorCode=1))
     return Parallel(explodeTracks, suitTrack, cagePropTracks, toonTrack, notifyTrack, soundTrack, explosionTrack, propTrack)
 
 def doAdvancement(attack):
@@ -1028,8 +1024,7 @@ def doBusySignal(attack):
     soundTrack = Parallel(soundTrack1, soundTrack2, soundTrack3, soundTrack4)
     toonTrack = Sequence(Wait(1.0), ActorInterval(toon, 'takePhone', duration=3.75))
     toonTrack.append(getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 0, ['conked']))
-    notifyTrack = Sequence(Wait(4.75), Func(toon.showHpTextCheat, - int(dmg)),
-                           Func(toon.showHpString, "CONFUSED!"))
+    notifyTrack = Sequence(Wait(4.75), Func(toon.showHpTextNew, -int(dmg), text="CONFUSED!", colorCode=1))
     return Parallel(explodeTracks, suitTrack, cagePropTracks, toonTrack, notifyTrack, soundTrack, explosionTrack)
 
 
@@ -1078,7 +1073,7 @@ def doWiretapped(attack):
                          LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO),
                          Func(MovieUtil.removeProps, [receiver, phone]))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=0.2, node=suit)
-    selfDamageTrack = Sequence(Wait(4), Func(suit.showHpTextCheat, +int(dmg * 4)), Func(suit.showHpString, "SYPHONED!", openEnded=0), Func(suit.setHealthForMe, +int(dmg * 4)), Func(suit.updateHealthBar, 0), soundTrack2)
+    selfDamageTrack = Sequence(Wait(4), Func(suit.showHpTextNew, +int(dmg * 4), text="SYPHONED!", colorCode=1), Func(suit.setHealthForMe, +int(dmg * 4)), Func(suit.updateHealthBar, 0), soundTrack2)
     #propTrack = Sequence(Wait(0.3), Func(__showProp, phone, suit.getLeftHand(), phonePosPoints[0], phonePosPoints[1]), Func(__showProp, receiver, suit.getLeftHand(), receiverPosPoints[0], receiverPosPoints[1]), LerpScaleInterval(phone, 0.5, scaleUpPoint, MovieUtil.PNT3_NEARZERO), Wait(pickupDelay), Func(receiver.wrtReparentTo, suit.getRightHand()), LerpScaleInterval(receiver, 0.01, receiverAdjustScale), LerpPosHprInterval(receiver, 0.0001, Point3(-0.53, 0.21, -0.54), VBase3(-99.49, -35.27, 1.84)), Wait(dialDuration), Func(receiver.wrtReparentTo, phone), Wait(finalPhoneDelay), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProps, [receiver, phone]))
     toonTracks = getToonTracks(attack, 2.8, ['slip-backward'], 4.7, ['jump'])
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=0.5, node=suit)
@@ -1189,12 +1184,10 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpText, 0))
                     suitTrack.append(Func(suit.showHpString, "REFINED!"))
                 elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
-                    suitTrack.append(Func(suit.showHpTextCheat, x))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
-                    suitTrack.append(Func(suit.setHealthForMe, 350))
+                    suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
+                    suitTrack.append(Func(suit.setHealthForMe, x))
                 else:
-                    suitTrack.append(Func(suit.showHpTextCheat, 350))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 350, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, 350))
             else:
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
@@ -1202,12 +1195,10 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpText, 0))
                     suitTrack.append(Func(suit.showHpString, "REFINED!"))
                 elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
-                    suitTrack.append(Func(suit.showHpTextCheat, x))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, x))
                 else:
-                    suitTrack.append(Func(suit.showHpTextCheat, 200))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 200, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, 200))
             suitTrack.append(Func(suit.updateHealthBar, 0))
             if not suit.dna.name == 'ambass':
@@ -1222,12 +1213,10 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpText, 0))
                     suitTrack.append(Func(suit.showHpString, "REFINED!"))
                 elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
-                    suitTrack.append(Func(suit.showHpTextCheat, x))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
-                    suitTrack.append(Func(suit.setHealthForMe, 350))
+                    suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
+                    suitTrack.append(Func(suit.setHealthForMe, x))
                 else:
-                    suitTrack.append(Func(suit.showHpTextCheat, 350))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 350, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, 350))
             else:
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
@@ -1235,12 +1224,10 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpText, 0))
                     suitTrack.append(Func(suit.showHpString, "REFINED!"))
                 elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
-                    suitTrack.append(Func(suit.showHpTextCheat, x))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, x))
                 else:
-                    suitTrack.append(Func(suit.showHpTextCheat, 200))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 200, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, 200))
             suitTrack.append(Func(suit.updateHealthBar, 0))
             if not suit.dna.name == 'ambass':
@@ -1255,12 +1242,10 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpText, 0))
                     suitTrack.append(Func(suit.showHpString, "REFINED!"))
                 elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
-                    suitTrack.append(Func(suit.showHpTextCheat, x))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
-                    suitTrack.append(Func(suit.setHealthForMe, 350))
+                    suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
+                    suitTrack.append(Func(suit.setHealthForMe, x))
                 else:
-                    suitTrack.append(Func(suit.showHpTextCheat, 350))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 350, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, 350))
             else:
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
@@ -1268,12 +1253,10 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpText, 0))
                     suitTrack.append(Func(suit.showHpString, "REFINED!"))
                 elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
-                    suitTrack.append(Func(suit.showHpTextCheat, x))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, x))
                 else:
-                    suitTrack.append(Func(suit.showHpTextCheat, 200))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 200, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, 200))
             suitTrack.append(Func(suit.updateHealthBar, 0))
             if not suit.dna.name == 'ambass':
@@ -1479,7 +1462,7 @@ def doDamageUp1(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0)
     makeImmune =  Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 5))
-    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextCheat, + 100), Func(theSuit.showHpString, "+5%" + " Damage!"), Func(theSuit.setHealthForMe, + 100), Func(theSuit.updateHealthBar, 0), Wait(3.0))
+    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextNew, 100, text="+5%" + " Damage!", colorCode=1), Func(theSuit.setHealthForMe, + 100), Func(theSuit.updateHealthBar, 0), Wait(3.0))
     return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doDamageUp2(attack):
@@ -1488,7 +1471,7 @@ def doDamageUp2(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0)
     makeImmune =  Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 10))
-    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextCheat, + 200), Func(theSuit.showHpString, "+10%" + " Damage!"), Func(theSuit.setHealthForMe, + 200), Func(theSuit.updateHealthBar, 0), Wait(3.0))
+    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextNew, 200, text="+10%" + " Damage!", colorCode=1), Func(theSuit.setHealthForMe, + 200), Func(theSuit.updateHealthBar, 0), Wait(3.0))
     return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doDamageUp3(attack):
@@ -1497,7 +1480,7 @@ def doDamageUp3(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0)
     makeImmune =  Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 15))
-    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextCheat, + 300), Func(theSuit.showHpString, "+15%" + " Damage!"), Func(theSuit.setHealthForMe, + 300), Func(theSuit.updateHealthBar, 0), Wait(3.0))
+    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextNew, 300, text="+15%" + " Damage!", colorCode=1), Func(theSuit.setHealthForMe, + 300), Func(theSuit.updateHealthBar, 0), Wait(3.0))
     return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doDamageUp4(attack):
@@ -1506,7 +1489,7 @@ def doDamageUp4(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0)
     makeImmune =  Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 20))
-    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextCheat, + 400), Func(theSuit.showHpString, "+20%" + " Damage!"), Func(theSuit.setHealthForMe, + 400), Func(theSuit.updateHealthBar, 0), Wait(3.0))
+    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextNew, 400, text="+20%" + " Damage!", colorCode=1), Func(theSuit.setHealthForMe, + 400), Func(theSuit.updateHealthBar, 0), Wait(3.0))
     return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doDamageUp5(attack):
@@ -1515,7 +1498,7 @@ def doDamageUp5(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0)
     makeImmune =  Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 25))
-    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextCheat, + 500), Func(theSuit.showHpString, "+25%" + " Damage!"), Func(theSuit.setHealthForMe, + 500), Func(theSuit.updateHealthBar, 0), Wait(3.0))
+    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextNew, 500, text="+25%" + " Damage!", colorCode=1), Func(theSuit.setHealthForMe, + 500), Func(theSuit.updateHealthBar, 0), Wait(3.0))
     return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doCollectCallDamage(attack):
@@ -2063,8 +2046,7 @@ def doLiquidateGROUP(attack):
         cloud = globalPropPool.getProp('stormcloud')
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 30)
-        notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpString, "GAG DEBUFF!"))
+        notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
         if t['hp'] != 0:
             notifyTracks.append(notifyTrack)
         cloudPropTrack = Sequence(
@@ -2132,8 +2114,7 @@ def doPaperRain(attack):
         cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 30)
-        notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpString, "GAG DEBUFF!"))
+        notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
         cloudPropTrack.append(Wait(0.6))
@@ -2306,8 +2287,7 @@ def doOverheat(attack):
         BattleParticles.setEffectTexture(sprayEffect2, 'fire')
         BattleParticles.setEffectTexture(sprayEffect, 'fire')
         partTrack4 = getPartTrack(sprayEffect, 1, 3.25, [sprayEffect2, toon, 0], softStop=-1)
-        notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpStringSnipe, "BURNED!"))
+        notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="BURNED!", colorCode=4))
         if dmg > 0:
             partTracks4.append(partTrack4)
             headParts = toon.getHeadParts()
@@ -2402,8 +2382,7 @@ def doSnipe(attack):
             if dmg > 0:
                 rightKnifeTracks.append(rightTrack)
 
-        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpStringSnipe, "SNIPED!"))
+        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, -int(dmg), text="SNIPED!", colorCode=4))
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5)
         suitTrack = Sequence(getSuitTrack(attack))

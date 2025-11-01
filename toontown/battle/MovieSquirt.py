@@ -235,9 +235,9 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             sival = ActorInterval(suit, anim)
         #soakTracks.append(__soakSuit(suit, tContact))
         if suit.dna.name == 'redd':
-            showDamage = Sequence(Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK), Func(suit.showHpString, 'SOAKED 1 ROUND', openEnded=0))
+            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 1 ROUND", attackTrack=SQUIRT_TRACK, colorCode=1))
         else:
-            showDamage = Sequence(Func(suit.showHpTextSquirt, level, -hp, openEnded=0, attackTrack=SQUIRT_TRACK), Func(suit.showHpString, 'SOAKED 4 ROUNDS', openEnded=0))
+            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 4 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
         value = hp
         #if kbbonus > 0:
             #value += kbbonus

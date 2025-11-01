@@ -907,8 +907,7 @@ def doCut(attack):
     posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(3.0), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
     toonTrack = getToonTrackCheat(attack, 4.0, ['cringe'], 0, ['duck'])
-    notifyTrack = Sequence(Wait(4.0), Func(toon.showHpTextCheat, - int(dmg)),
-                           Func(toon.showHpString, "DAMAGE CUT!"))
+    notifyTrack = Sequence(Wait(4.0), Func(toon.showHpTextNew, -int(dmg), text="DAMAGE CUT!", colorCode=3))
     return Parallel(suitTrack, toonTrack, notifyTrack, throwTrack, suitTrack2, sprayTrack)
 
 def doSingingBluesMegaphone(attack):
@@ -939,8 +938,7 @@ def doSingingBluesMegaphone(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        notifyTrack = Sequence(Wait(4.0), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpString, "WINDED!"))
+        notifyTrack = Sequence(Wait(4.0), Func(toon.showHpTextNew, -int(dmg), text="WINDED!", colorCode=1))
         notifyTracks.append(notifyTrack)
     suitTrack2 = Sequence(ActorInterval(suit, 'glower', endTime=1.5), Wait(3.0), ActorInterval(suit, 'glower', startTime=1.5), Func(suit.setNeutralAnimation))
     posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
@@ -1003,8 +1001,7 @@ def doCameraFlash(attack):
     posPoints = [Point3(-0.25, -.25, 1), VBase3(-90, 0, 0)]
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=1.0), Wait(suit.getDuration('glower') - 1.5), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
     toonTrack = getToonTrackCheat(attack, 1.0, ['conked'], 0, ['duck'])
-    notifyTrack = Sequence(Wait(1.0), Func(toon.showHpTextCheat, - int(dmg)),
-                           Func(toon.showHpString, "FLASHED!"))
+    notifyTrack = Sequence(Wait(1.0), Func(toon.showHpTextNew, -int(dmg), text="FLASHED!", colorCode=1))
     oldcolor = render.getColorScale()
     soundTrack2 = getSoundTrack('Photo_shutter.ogg', delay=1.0, node=suit)
     lightingTrack = Sequence(Wait(1), LerpColorScaleInterval(render, 0.5, (0, 0, 0, 0)),
@@ -1272,7 +1269,7 @@ def doElectricShock(attack, ind):
     toonPos = toon.getPos(battle)
     y = suitPos.getY()
     x = int((targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP)
-    cagePos = [Point3(suitPos.getX(), y + 1, 100.0), targetSuit.getHpr(battle)]
+    cagePos = [Point3(suitPos.getX(), y + 2, 100.0), targetSuit.getHpr(battle)]
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()
@@ -1452,8 +1449,7 @@ def doSplashback(attack):
             ),
             Func(MovieUtil.removeProp, knife)
         )
-        notifyTrack = Sequence(Wait(4.0), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpString, "SOAKED?!"))
+        notifyTrack = Sequence(Wait(4.0), Func(toon.showHpTextNew, - int(dmg), text="SOAKED?!", colorCode=1))
         soundTrack = getSoundTrack('SA_watercooler_spray_only.ogg', delay=4.0, node=suit)
         if dmg > 0:
             knifeTracks.append(knifeTrack)
@@ -1521,8 +1517,7 @@ def doSnipe(attack):
             if dmg > 0:
                 rightKnifeTracks.append(rightTrack)
 
-        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpStringSnipe, "SNIPED!"))
+        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="SNIPED!", colorCode=4))
         #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
@@ -1588,8 +1583,7 @@ def doSnipeCut(attack):
             if dmg > 0:
                 rightKnifeTracks.append(rightTrack)
 
-        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpStringSnipe, "SNIPED!"))
+        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="SNIPED!", colorCode=4))
         #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
@@ -1657,8 +1651,7 @@ def doSnipeDamageReduction(attack): #UNUSED
 
         damageAnims = [['slip-backward', 0.01, 0.35]]
         toonTrack = getToonTracksCheat(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
-        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextCheat, - int(dmg)),
-                               Func(toon.showHpStringSnipe, "GAG DEBUFF!"))
+        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="GAG DEBUFF!", colorCode=1))
         #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
@@ -1742,7 +1735,7 @@ def doSyphon(attack):
     suitTrack.append(Wait(2.0))
     toonTrack = getToonTracks(attack, 0.6, ['slip-forward'], 0.01, ['applause'])
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=0.2, node=suit)
-    selfDamageTrack = Sequence(Wait(2), Func(suit.showHpTextCheat, +((dmg * 4) * len(battle.activeToons))), Func(suit.showHpString, "SYPHONED!", openEnded=0), Func(suit.updateHealthBar, 0), soundTrack2)
+    selfDamageTrack = Sequence(Wait(2), Func(suit.showHpTextNew,  +((dmg * 4) * len(battle.activeToons)), text="SYPHONED!", colorCode=1), Func(suit.updateHealthBar, 0), soundTrack2)
     multiTrackList = Parallel(suitTrack, toonTrack, selfDamageTrack)
     if dmg > 0:
         soundTrack = getSoundTrack('AA_drop_safe_miss.ogg', delay=0.2, node=suit)
@@ -2177,8 +2170,7 @@ def doAceInTheHoleOLD(attack):
         Wait(8.5),
         Parallel(
             Func(toon.enterFlattened),
-            Func(toon.showHpTextCheat, - int(dmg)),
-            Func(toon.showHpStringSnipe, "VULNERABLE!"),
+            Func(toon.showHpTextNew,  - int(dmg), text="VULNERABLE!", colorCode=4),
             Func(__doDamageCheat, toon, dmg, t['died'])
         ),
         Wait(1.0),
@@ -2240,8 +2232,7 @@ def doAceInTheHole(attack):
             Wait(8.5),
             Parallel(
                 Func(toon.enterFlattened),
-                Func(toon.showHpTextCheat, - int(dmg)),
-                Func(toon.showHpStringSnipe, "VULNERABLE!"),
+                Func(toon.showHpTextNew,  - int(dmg), text="VULNERABLE!", colorCode=4),
                 Func(__doDamageCheat, toon, dmg, tgt['died'])
             ),
             Wait(1.0),
@@ -2975,8 +2966,7 @@ def doDamageReduction(attack):
         Wait(1.75),
         Parallel(
             Func(toon.enterFlattened),
-            Func(toon.showHpTextCheat, - int(dmg)),
-            Func(toon.showHpString, "DAZED?!"),
+            Func(toon.showHpTextNew,  - int(dmg), text="DAZED?!", colorCode=1),
             #Func(__doDamageCheat, toon, dmg, t['died'])
         ),
         Wait(1.75),
@@ -3145,7 +3135,7 @@ def doGameTimeCog2(attack, ind):
                                   Func(targetSuit.setChatAbsolute,
                                        "Crush Organics until Green and Sad!", CFSpeech | CFTimeout), Wait(7.0),
                                   Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
-    selfDamageTrack = Sequence(Wait(14), Func(targetSuit.showHpTextCheat, - targetSuit.currHP), Func(targetSuit.showHpString, "WRONG ANSWER!"),
+    selfDamageTrack = Sequence(Wait(14), Func(targetSuit.showHpTextNew,  - targetSuit.currHP, text="DAZED?!", colorCode=3),
                                Func(targetSuit.setHealthForMe, - targetSuit.currHP),
                                Func(targetSuit.updateHealthBar, 0))
     suitTrack = random.choice((Parallel(managerTrackQuestion, suitTrackQuestion), Parallel(managerTrackQuestion2, suitTrackQuestion2), Parallel(managerTrackQuestion3, suitTrackQuestion3)
@@ -3307,7 +3297,7 @@ def doGameTimeCog(attack, ind):
                                        "Coal, Oil, and Gas Syndicate!", CFSpeech | CFTimeout), Wait(7.0),
                                   ActorInterval(targetSuit, 'large-zap')
                                   , Func(targetSuit.setNeutralAnimation))
-    selfDamageTrack = Sequence(Wait(16), Func(targetSuit.showHpTextCheat, + x), Func(targetSuit.showHpString, "OVERCHARGED!"),
+    selfDamageTrack = Sequence(Wait(16), Func(targetSuit.showHpTextNew, x, text="OVERCHARGED!", colorCode=1),
                                Func(targetSuit.setHealthForMe, int(targetSuit.maxHP)), Func(targetSuit.setHP,  int(targetSuit.maxHP * 2)), Func(targetSuit.makeExtraAttacks, targetSuit.getExtraAttacks() + 1),
                                Func(targetSuit.updateHealthBar, 0), Wait(2.0), Func(targetSuit.showHpTextWhite, '+ 1 ATTACK!'))
     suitTrack = random.choice((Parallel(managerTrackQuestion, suitTrackQuestion), Parallel(managerTrackQuestion2, suitTrackQuestion2), Parallel(managerTrackQuestion3, suitTrackQuestion3)

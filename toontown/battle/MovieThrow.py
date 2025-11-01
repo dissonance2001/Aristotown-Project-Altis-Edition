@@ -409,7 +409,7 @@ def __throwPie(throw, delay, hitCount, npcs):
                 suitResponseTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
             if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
                 suitResponseTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
-        showDamage = Sequence(Func(suit.showHpTextThrow, -hp, openEnded=0, attackTrack=THROW_TRACK), Func(suit.showHpString, "MARKED!", openEnded=0))
+        showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="MARKED!", attackTrack=THROW_TRACK, colorCode=1))
         #markDamage = Func(showMarkRounds, suit, level)
         value = hp
         #if kbbonus > 0:

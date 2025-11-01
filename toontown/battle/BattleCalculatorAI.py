@@ -954,17 +954,23 @@ class BattleCalculatorAI:
                                                           'setBoth')
                                     self.setSuitCondition(targetId, 'unlureSuit', 1, 10,
                                                           'setBoth')
-                                if self.suitHasCondition(targetId, 'immune'):
+                                elif self.suitHasCondition(targetId, 'immune'):
                                     self.setSuitCondition(targetId, 'lured', 0,
                                                           0,
                                                           'setBoth')
-                                if self.suitHasCondition(targetId, 'lureImmune'):
+                                    self.setSuitCondition(targetId, 'unlureSuit', 0, 0,
+                                                          'setBoth')
+                                elif self.suitHasCondition(targetId, 'lureImmune'):
                                     self.setSuitCondition(targetId, 'lured', 0,
                                                           0,
                                                           'setBoth')
-                                if self.suitHasCondition(targetId, 'enraged') and self.suitHasCondition(targetId, 'desperation'):
+                                    self.setSuitCondition(targetId, 'unlureSuit', 0, 0,
+                                                          'setBoth')
+                                elif self.suitHasCondition(targetId, 'enraged') and self.suitHasCondition(targetId, 'desperation'):
                                     self.setSuitCondition(targetId, 'lured', 0,
                                                           0,
+                                                          'setBoth')
+                                    self.setSuitCondition(targetId, 'unlureSuit', 0, 0,
                                                           'setBoth')
                                 else:
                                     self.setSuitCondition(targetId, 'lured', lureKBValue, self.NumRoundsLured[atkLevel],
@@ -1011,6 +1017,7 @@ class BattleCalculatorAI:
                                # if s.dna.name == 'sgoat' and self.suitHasCondition(s.doId, 'shielding'):
                                    # self.setSuitCondition(s.doId, 'rageBuilding', self.getSuitConditionModifier(s.doId, 'rageBuilding') + 10, 99, 'setBoth')
                                     #self.notify.debug('setSuitCondition() - scapegoat rage building %i' % (self.getSuitConditionModifier(s.doId, 'rageBuilding')))
+                            self.setSuitCondition(targetId, 'unlureSuit', 0, 0, 'setBoth')
                             if self.suitHasCondition(targetId, 'vulnerable'):
                                 attackDamage *= 1.3
                             if self.suitHasCondition(targetId, 'enraged') and not self.suitHasCondition(targetId, 'desperation'):
@@ -1187,6 +1194,7 @@ class BattleCalculatorAI:
                         self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
                     attackDamage = getAvPropDamage(attackTrack, attackLevel, toon.experience.getExp(attackTrack))
                     suit = self.battle.findSuit(targetId)
+                    self.setSuitCondition(targetId, 'unlureSuit', 0, 0, 'setBoth')
                     if self.suitHasCondition(targetId, 'vulnerablevideographer'):
                         attackDamage *= (1.0 + (self.getSuitConditionModifier(suit.doId, 'vulnerablevideographer') * 0.01))
                     if self.toonHasCondition(toonId, 'allGagBoost'):
@@ -1432,6 +1440,7 @@ class BattleCalculatorAI:
                         self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
                     self.setToonCondition(toon.doId, 'markToon', 1, 5, 'setBoth')
                     suit = self.battle.findSuit(targetId)
+                    self.setSuitCondition(targetId, 'unlureSuit', 0, 0, 'setBoth')
                     attackDamage = getAvPropDamage(attackTrack, attackLevel, toon.experience.getExp(attackTrack))
                     if self.toonHasCondition(toonId, 'throwBoost'):
                         attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'throwBoost') * 0.01)
@@ -1491,6 +1500,7 @@ class BattleCalculatorAI:
                     attackDamage = getAvPropDamage(attackTrack, attackLevel, toon.experience.getExp(attackTrack))
                     self.__removeLured(suit.doId)
                     self.setSuitCondition(suit.doId, 'sounded', 1, 1, 'setBoth')
+                    self.setSuitCondition(suit.doId, 'unlureSuit', 0, 0, 'setBoth')
                     if self.suitHasCondition(targetId, 'sued'):
                         self.setSuitCondition(targetId, 'sued', 1, 4, 'alternateBoth')
                     if self.toonHasCondition(toonId, 'soundBoost'):
@@ -3231,7 +3241,7 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'zapped', 0, 0, 'setBoth')
                     if self.suitHasCondition(suit.doId, 'lured'):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
-                        self.setSuitCondition(theSuit.doId, 'unlureSuit', 1, 1, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'unlureSuit', 0, 0, 'setBoth')
                     continue
                 for suit in self.currentlyLuredSuits.keys():
                     self.setSuitCondition(suit, 'bellowattack', 1, 1, 'setBoth')
@@ -14415,7 +14425,7 @@ class BattleCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
-                if self.suitHasCondition(suitId, 'hollywoodcalculator') and not self.suitHasCondition(suitId, 'electricshockcalculator') and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'hollywoodcalculator') and self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'electricshockcalculator') and self.__suitCanAttack(suitId):
                                 attack = getDefaultSuitAttack()
                                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                                 attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
@@ -14453,7 +14463,7 @@ class BattleCalculatorAI:
                                 attack[SUIT_BEFORE_TOONS_COL] = 0
                                 self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'electricshockcalculator') and self.__suitCanAttack(
-                                    suitId) and self.suitHasCondition(suitId, 'phase3'):
+                                    suitId):
                                 attack = getDefaultSuitAttack()
                                 attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                                 attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
@@ -17514,7 +17524,7 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'HRdamagereduction', 0, 0, 'setBoth')
                 if suit.dna.name == 'videog' and len(self.battle.activeSuits) == 2:
                     self.setSuitCondition(suit.doId, 'immune', 0, 0, 'setBoth')
-                    self.setSuitCondition(suit.doId, 'spawncalculator', 1, 2, 'setBoth')
+                    self.setSuitCondition(suit.doId, 'spawncalculator', 1, 10, 'setBoth')
                     currentBossHealth = -1
                     currentBossHealth2 = -1
                     currentBossHealth3 = -1

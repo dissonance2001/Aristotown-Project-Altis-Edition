@@ -25,6 +25,7 @@ class DistributedAvatar(DistributedActor, Avatar):
         DistributedActor.__init__(self, cr)
         self.hpText = None
         self.hp = None
+        self.hpTextInterval2 = None
         self.hpTextInterval = None
         self.maxHp = None
 
@@ -219,6 +220,12 @@ class DistributedAvatar(DistributedActor, Avatar):
                     g = 0
                     b = 0
                     a = 1
+                if self.hpTextInterval:
+                    self.hpTextInterval.finish()
+                    self.hpTextInterval = None
+                if self.hpTextInterval2:
+                    self.hpTextInterval2.finish()
+                    self.hpTextInterval2 = None
                 self.HpTextGenerator.setTextColor(r, g, b, a)
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
@@ -273,6 +280,12 @@ class DistributedAvatar(DistributedActor, Avatar):
                     g = 1
                     b = 1
                     a = 1
+                if self.hpTextInterval:
+                    self.hpTextInterval.finish()
+                    self.hpTextInterval = None
+                if self.hpTextInterval2:
+                    self.hpTextInterval2.finish()
+                    self.hpTextInterval2 = None
                 self.HpTextGenerator.setTextColor(r, g, b, a)
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
@@ -327,6 +340,12 @@ class DistributedAvatar(DistributedActor, Avatar):
                     g = 0.9
                     b = 0
                     a = 1
+                if self.hpTextInterval:
+                    self.hpTextInterval.finish()
+                    self.hpTextInterval = None
+                if self.hpTextInterval2:
+                    self.hpTextInterval2.finish()
+                    self.hpTextInterval2 = None
                 self.HpTextGenerator.setTextColor(r, g, b, a)
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
@@ -336,6 +355,100 @@ class DistributedAvatar(DistributedActor, Avatar):
                 self.hpText.setPos(0, 0, self.height / 2)
                 self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.5), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Sequence(Wait(0.8), Func(self.hideHpText)))
                 self.hpTextInterval.start()
+
+    def showHpTextNew(self, number, text=None, bonus=0, scale=1, attackTrack=-1, colorCode=0):
+        if self.HpTextEnabled and not self.ghostMode:
+            if number != 0:
+                if self.hpText:
+                    self.hideHpText()
+                self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+                if number < 0:
+                    self.HpTextGenerator.setText(str(number))
+                elif type(number) in [int, float]:
+                    self.HpTextGenerator.setText('+' + str(number))
+                else:
+                    self.HpTextGenerator.setText(str(number))
+                self.HpTextGenerator.clearShadow()
+                self.HpTextGenerator.setAlign(TextNode.ACenter)
+                if bonus == 1:
+                    r = 1.0
+                    g = 1.0
+                    b = 0
+                    a = 1
+                elif bonus == 2:
+                    r = 1.0
+                    g = 0.5
+                    b = 0
+                    a = 1
+                elif bonus == 3:
+                    r = 0.6
+                    g = 0.2
+                    b = 0.8
+                    a = 1.0
+                    scale = 0.9
+                elif bonus == 4:
+                    r = 0.93
+                    g = 0.51
+                    b = 0.93
+                    a = 1.0
+                    scale = 0.9
+                elif number < 0:
+                    r = 0.9
+                    g = 0
+                    b = 0
+                    a = 1
+                else:
+                    r = 0
+                    g = 0.9
+                    b = 0
+                    a = 1
+                if self.hpTextInterval:
+                    self.hpTextInterval.finish()
+                    self.hpTextInterval = None
+                if self.hpTextInterval2:
+                    self.hpTextInterval2.finish()
+                    self.hpTextInterval2 = None
+                self.HpTextGenerator.setTextColor(r, g, b, a)
+                self.hpTextNode = self.HpTextGenerator.generate()
+                self.hpText = self.attachNewNode(self.hpTextNode)
+                self.hpText.setScale(scale)
+                self.hpText.setBillboardAxis()
+                self.hpText.setBin('fixed', 100)
+                self.hpText.setPos(0, 0, self.height / 2)
+                if text != None:
+                    self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+                    self.hpTextInterval.start()
+                else:
+                    self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0),
+                                                   LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+                    self.hpTextInterval.start()
+
+        if text != None:
+            self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+            self.HpTextGenerator.setText(text)
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            r = a = 1.0
+            g = b = 0.0
+            if colorCode == 0:
+                self.HpTextGenerator.setTextColor(1, 0, 0, 1) # Red
+            if colorCode == 1:
+                self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1) # Default Cheat Color
+            if colorCode == 3:
+                self.HpTextGenerator.setTextColor(1, 0.953, 0, 1) # Yellow
+            if colorCode == 4:
+                self.HpTextGenerator.setTextColor(1, 0.561, 0, 1) # Orange
+            if colorCode == 5:
+                self.HpTextGenerator.setTextColor(0.851, 0, 1, 1) # Purple
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText2 = self.attachNewNode(self.hpTextNode)
+            self.hpText2.setScale(scale)
+            self.hpText2.setBillboardAxis()
+            self.hpText2.setBin('fixed', 99)
+            self.hpText2.setPos(0, 0, self.height / 2)
+            self.hpTextInterval2 = Sequence(self.hpText2.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText2, .25, Vec4(0, 0, 0, 0)),
+                                           Func(self.hideHpText))
+            self.hpTextInterval2.start()
 
     def showHpTextCheat(self, number, bonus = 0, scale = 1):
         if self.HpTextEnabled and not self.ghostMode:
@@ -381,6 +494,12 @@ class DistributedAvatar(DistributedActor, Avatar):
                     g = 0.9
                     b = 0
                     a = 1
+                if self.hpTextInterval:
+                    self.hpTextInterval.finish()
+                    self.hpTextInterval = None
+                if self.hpTextInterval2:
+                    self.hpTextInterval2.finish()
+                    self.hpTextInterval2 = None
                 self.HpTextGenerator.setTextColor(r, g, b, a)
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
@@ -435,6 +554,12 @@ class DistributedAvatar(DistributedActor, Avatar):
                     g = 0.9
                     b = 0
                     a = 1
+                if self.hpTextInterval:
+                    self.hpTextInterval.finish()
+                    self.hpTextInterval = None
+                if self.hpTextInterval2:
+                    self.hpTextInterval2.finish()
+                    self.hpTextInterval2 = None
                 self.HpTextGenerator.setTextColor(r, g, b, a)
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
@@ -449,6 +574,12 @@ class DistributedAvatar(DistributedActor, Avatar):
 
     def showHpString(self, text, duration = 0.85, scale = 1):
         if self.HpTextEnabled and not self.ghostMode:
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
             self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
             self.HpTextGenerator.setText(text)
             self.HpTextGenerator.clearShadow()
@@ -467,6 +598,12 @@ class DistributedAvatar(DistributedActor, Avatar):
 
     def showHpStringSnipe(self, text, duration = 0.85, scale = 1):
         if self.HpTextEnabled and not self.ghostMode:
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
             self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
             self.HpTextGenerator.setText(text)
             self.HpTextGenerator.clearShadow()
@@ -485,6 +622,12 @@ class DistributedAvatar(DistributedActor, Avatar):
 
     def showHpStringViral(self, text, duration = 0.85, scale = 1):
         if self.HpTextEnabled and not self.ghostMode:
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
             self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
             self.HpTextGenerator.setText(text)
             self.HpTextGenerator.clearShadow()
@@ -504,6 +647,12 @@ class DistributedAvatar(DistributedActor, Avatar):
 
     def showHpStringMissed(self, text, duration = 0.85, scale = 1):
         if self.HpTextEnabled and not self.ghostMode:
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
             self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
             self.HpTextGenerator.setText(text)
             self.HpTextGenerator.clearShadow()

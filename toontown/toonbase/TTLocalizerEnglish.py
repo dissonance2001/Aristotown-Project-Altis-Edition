@@ -4316,7 +4316,7 @@ SuitCheatDescription = {
 'UnionBusterUnionBust': "The Union Buster sacrifices cogs who are not contracted!",
 'UnionBusterUnionBuster': "The Union Buster forces a random Toon to take damage\nevery round!",
 'UnionBusterUnionBusterDamage': "Busted toons are forced to take damage every round!",
-'UnionBusterUnionWages': "The Union Buster gets stronger for every cog that is\nsacrificed!",
+'UnionBusterUnionWages': "The Union Buster becomes stronger for every cog that\n is sacrificed!",
 'UnionBusterBreachOfContract': "The Union Buster applies a damage debuff to the least\ndangerous Toon!",
 'UnionBusterBreachOfContract2': "The Union Buster retaliates against Toons who were\nburned!",
 'UnionBusterBreachOfContract3': "The Union Buster retaliates against Toons with existing\nvulnerabilities!",
