@@ -218,7 +218,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
            # zapTracks.append(__zapNearby2(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
             #zapTracks.append(__zapNearby3(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
         if toon.getTrackBonusLevel(SQUIRT_TRACK) > 1:
-            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.makeZapped, int(math.ceil(hp / 4))), Func(suit.makeSoaked, 0))
+            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.makeZapped, +int(math.ceil(hp / 4))), Func(suit.makeSoaked, 0))
         else:
             showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=ZAP_TRACK)
         updateHealthBar = Func(suit.updateHealthBar, hp)

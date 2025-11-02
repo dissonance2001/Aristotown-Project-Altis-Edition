@@ -1217,6 +1217,7 @@ class Suit(Avatar.Avatar):
         self.isStormCell = 0
         self.isOilRain = 0
         self.isFrozen = 0
+        self.isSkelecogDialogue = 0
         self.isImmune = 0
         self.isDamageUp = 0
         self.isDamageReduction = 0
@@ -1320,6 +1321,8 @@ class Suit(Avatar.Avatar):
         self.isAbsorbing = 0
         self.isDamageUp = 0
         self.isSoaked = 0
+        self.isFemale = 0
+        self.isFemaleSkelecog = 0
         self.isVirtual = 0
         self.isBookkeeping = 0
         self.headInterval = None
@@ -1480,6 +1483,7 @@ class Suit(Avatar.Avatar):
             self.makeExecutive()
             self.generateHead3('clubpresident', animated=True)
             self.setHeight(8.7)
+            self.isSkelecogDialogue = 1
         elif dna.name == 'derrman':
             self.scale = 4.5 / aSize
             self.handColor = VBase4(0.573, 0.384, 0.204, 1)
@@ -1542,6 +1546,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
             self.setHeight(9.0)
+            self.isSkelecogDialogue = 1
         elif dna.name == 'chainsaw':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
@@ -1953,14 +1958,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(7.2)
         elif dna.name == 'trs':
-            self.scale = 6.5 / cSize
-            self.handColor = VBase4(0.722, 0.816, 0.706, 1)
-            self.generateFemaleBody()
-            self.generateHead2('root')
-            texture = loader.loadTexture('phase_14/maps/cashCow.png')
+            self.scale = 6.5 / aSize
+            self.handColor = VBase4(0.592, 0.663, 0.627, 1)
+            self.generateBody()
+            self.generateHead2('yesman')
+            texture = loader.loadTexture('phase_3.5/maps/cheapskate.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(9.0)
+            self.setHeight(8.5)
         elif dna.name == 'ls':
             self.scale = 6.5 / bSize
             self.handColor = SuitDNA.moneyPolyColor
@@ -2290,6 +2295,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
             self.setHeight(9.0)
+            self.isSkelecogDialogue = 1
         elif dna.name == 'radiog':
             self.scale = 6.8 / aSize
             self.handColor = VBase4(0.612, 0.376, 0.608, 1)
@@ -2538,6 +2544,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
             self.setHeight(9.0)
+            self.isSkelecogDialogue = 1
         elif dna.name == 'jgd':
             self.scale = 7.3 / aSize
             self.handColor = VBase4(1, 1, 1, 1)
@@ -2963,6 +2970,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
             self.setHeight(9.0)
+            self.isSkelecogDialogue = 1
             self.makeShielding()
         elif dna.name == 'bcaster':
             self.scale = 7.5 / aSize
@@ -3259,6 +3267,8 @@ class Suit(Avatar.Avatar):
             self.loadModel('phase_3.5' + filePrefix + 'f-mod')
         self.loadAnims(animDict)
         self.setSuitClothes()
+        self.isFemale = 1
+        self.isFemaleSkelecog = 1
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         self.setBlend(frameBlend=base.wantSmoothAnims)
 
@@ -4776,8 +4786,6 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_14/models/char/tf_new')
         if headType == 'root' and self.style.name == 'blh':
             headModel = loader.loadModel('phase_14/models/char/stickler')
-        if headType == 'root' and self.style.name == 'trs':
-            headModel = loader.loadModel('phase_14/models/char/CashCow')
         if headType == 'root' and self.style.name == 'dc':
             headModel = loader.loadModel('phase_14/models/char/doublecross')
         if headType == 'root' and self.style.name == 'fct':
@@ -5026,10 +5034,6 @@ class Suit(Avatar.Avatar):
                 headPart.setX(-.03)
                 headPart.setZ(.1)
                 headPart.setY(.1)
-            if self.style.name == 'trs':
-                headPart.setScale(.009)
-                headPart.setY(.15)
-                headPart.setZ(-.05)
             if self.style.name == 'p':
                 headPart.setX(.03)
             if self.style.name == 'dc':
@@ -5172,33 +5176,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
-        elif self.style.name == 'nn':
+        elif self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.corpMedallion.setZ(.2)
-        elif self.style.name == 'dhr':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'mm':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'bfh':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'bfh2':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'trs':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'judy':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'ang':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'ddiver':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'sh':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'gld':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'mouthp':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'shb':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'hck':
             self.corpMedallion.setZ(.2)
         icons.removeNode()
 
@@ -5245,33 +5224,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
-        elif self.style.name == 'nn':
+        elif self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.corpMedallion.setZ(.2)
-        elif self.style.name == 'dhr':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'mm':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'bfh':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'trs':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'bfh2':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'judy':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'ang':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'ddiver':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'sh':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'gld':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'mouthp':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'shb':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'hck':
             self.corpMedallion.setZ(.2)
         icons.removeNode()
 
@@ -5335,13 +5289,15 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setTexture(texture, 1)
         self.corpMedallion.setH(180.0)
         self.corpMedallion.setColor(self.medallionColors[dept])
-        if self.style.body == 'a':
+        if self.style.body == 'a' and not self.isFemale:
             self.corpMedallion.setY(-.1125)
+            self.corpMedallion.setZ(-.1)
+        if self.style.body == 'a' and self.isFemale:
+            self.corpMedallion.setY(-0.075)
             self.corpMedallion.setZ(-.1)
         if self.style.body == 'b':
             self.corpMedallion.setY(-.025)
-        if self.style.body == 'c' and not self.style.name == 'nn' and not self.style.name == 'mm'\
-                and not self.style.name == 'bfh' and not self.style.name == 'bfh2' and not self.style.name == 'trs':
+        if self.style.body == 'c' and not self.isFemale:
             self.corpMedallion.setY(.05)
        # if self.style.body == 'a':
           #  self.corpMedallion.setY(-.1)
@@ -5366,31 +5322,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
-        elif self.style.name == 'nn':
+        elif self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.corpMedallion.setZ(.2)
-        elif self.style.name == 'dhr':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'mm':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'bfh':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'trs':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'bfh2':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'judy':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'ang':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'ddiver':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'sh':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'gld':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'mouthp':
-            self.corpMedallion.setZ(.2)
-        elif self.style.name == 'hck':
             self.corpMedallion.setZ(.2)
         icons.removeNode()
         icons2.removeNode()
@@ -5433,39 +5366,18 @@ class Suit(Avatar.Avatar):
             self.hpBase.setScale(0)
         else:
             self.hpBase.setScale(1.175)
-        if self.style.name == 'nn':
+        if self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.hpBase.setZ(.2)
-        elif self.style.name == 'mm':
             self.hpBase.setZ(.2)
-        elif self.style.name == 'judy':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'ddiver':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'sh':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'gld':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'bfh':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'trs':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'dhr':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'mouthp':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'ang':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'bfh2':
-            self.hpBase.setZ(.2)
-        elif self.style.name == 'hck':
-            self.hpBase.setZ(.2)
-        if self.style.body == 'c' and not self.style.name == 'nn' and not self.style.name == 'mm'\
-                and not self.style.name == 'bfh' and not self.style.name == 'bfh2' and not self.style.name == 'trs':
+        if self.style.body == 'c' and not self.isFemale:
             self.hpBase.setY(.05)
        # if self.style.body == 'c':
             #self.hpBase.setY()
-        if self.style.body == 'a':
+        if self.style.body == 'a' and not self.isFemale:
             self.hpBase.setY(-.1125)
+            self.hpBase.setZ(-.1)
+        if self.style.body == 'a' and self.isFemale:
+            self.hpBase.setY(-0.075)
             self.hpBase.setZ(-.1)
         if self.style.body == 'b':
             self.hpBase.setY(-.025)
@@ -5515,46 +5427,23 @@ class Suit(Avatar.Avatar):
         self.healthCondition = 0
         self.healthBar.hide()
         #self.healthBarGlow.hide()
-        if self.style.body == 'a':
+        if self.style.body == 'a' and not self.isFemale:
             self.healthBar.setY(-.1125)
+            self.healthBar.setZ(-.1)
+        if self.style.body == 'a' and self.isFemale:
+            self.healthBar.setY(-0.075)
             self.healthBar.setZ(-.1)
         if self.style.body == 'b':
             self.healthBar.setY(-.025)
-        if self.style.body == 'c' and not self.style.name == 'nn' and not self.style.name == 'mm'\
-                and not self.style.name == 'bfh' and not self.style.name == 'bfh2' and not self.style.name == 'trs':
+        if self.style.body == 'c' and not self.isFemale:
             self.healthBar.setY(.05)
        # if self.style.body == 'c':
             #self.healthBar.setY(.05)
        # if self.style.body == 'a':
            # self.healthBar.setY(-.1)
            # self.healthBar.setZ(-.1)
-        if self.style.name == 'bfh':
+        if self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.healthBar.setZ(.2)
-        elif self.style.name == 'bfh2':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'trs':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'ang':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'hck':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'mm':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'nn':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'judy':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'dhr':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'ddiver':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'sh':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'gld':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'bdb':
-            self.healthBar.setZ(.2)
-        elif self.style.name == 'mouthp':
             self.healthBar.setZ(.2)
 
     def generateSkeletonHealthBar(self, modelRoot=None):
@@ -6503,7 +6392,7 @@ class Suit(Avatar.Avatar):
         self.isSoaked = num
 
     def makeZapped(self, num):
-        self.isZapped = num
+        self.isZapped += num
 
     def makeUnZapped(self):
         self.isZapped = 0
@@ -7743,250 +7632,163 @@ class Suit(Avatar.Avatar):
         return []
 
     def getDialogueArray(self):
-        if self.style.name == 'clubpres':
-            loadDialog(1)
-            return SkelecogDialogArray
         if self.style.name == 'derrman' and not self.isSkeleton:
             loadDialog(1)
             return DerrickManDialogArray
-        if self.style.name == 'derrhand' and not self.isSkeleton:
+        elif self.style.name == 'derrhand' and not self.isSkeleton:
             loadDialog(1)
             return DerrickHandDialogArray
-        if self.style.name == 'derrhand' and self.isSkeleton:
+        elif self.style.name == 'derrhand' and self.isSkeleton:
             loadDialog(1)
             return DerrickSkeleDialogArray
-        if self.style.name == 'fires' and not self.isSkeleton:
+        elif self.style.name == 'fires' and not self.isSkeleton:
             loadDialog(1)
             return FirestarterDialogArray
-        if self.style.name == 'fbed' and not self.isSkeleton:
+        elif self.style.name == 'fbed' and not self.isSkeleton:
             loadDialog(1)
             return FeatherbedderDialogArray
-        if self.style.name == 'mplayer' and not self.isSkeleton:
+        elif self.style.name == 'mplayer' and not self.isSkeleton:
             loadDialog(1)
             return MajorPlayerDialogArray
-        if self.style.name == 'mplayer2' and not self.isSkeleton:
-            loadDialog(1)
-            return MajorPlayerDialogArray
-        if self.style.name == 'chainsaw' and not self.isSkeleton:
+        elif self.style.name == 'chainsaw' and not self.isSkeleton:
             loadDialog(1)
             return ChainsawDialogArray
-        if self.style.name == 'chainsaw2' and not self.isSkeleton:
+        elif self.style.name == 'chainsaw2' and not self.isSkeleton:
             loadDialog(1)
             return ChainsawORDialogArray
-        if self.style.name == 'phouse' and not self.isSkeleton:
+        elif self.style.name == 'phouse' and not self.isSkeleton:
             loadDialog(1)
             return DerrickHandDialogArray
-        if self.style.name == 'bkeeper' and not self.isSkeleton:
+        elif self.style.name == 'bkeeper' and not self.isSkeleton:
             loadDialog(1)
             return CaseManagerDialogArray
-        if self.style.name == 'wtapper' and not self.isSkeleton:
+        elif self.style.name == 'wtapper' and not self.isSkeleton:
             loadDialog(1)
             return StenographerDialogArray
-        if self.style.name == 'ambass' and not self.isSkeleton:
+        elif self.style.name == 'ambass' and not self.isSkeleton:
             loadDialog(1)
             return PrethinkerDialogArray
-        if self.style.name == 'ambass' and self.isSkeleton:
+        elif self.style.name == 'ambass' and self.isSkeleton:
             loadDialog(1)
             return PrethinkerDialogArray
-        if self.style.name == 'mm' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'dhr' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'nn' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'sh' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'gld' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'mouthp' and not self.isSkeleton:
+        elif self.style.name == 'mouthp' and not self.isSkeleton:
             loadDialog(1)
             return MouthpieceDialogArray
-        if self.style.name == 'whunter' and not self.isSkeleton:
+        elif self.style.name == 'whunter' and not self.isSkeleton:
             loadDialog(1)
             return WitchHunterDialogArray
-        if self.style.name == 'erfit' and not self.isSkeleton:
+        elif self.style.name == 'erfit' and not self.isSkeleton:
             loadDialog(1)
             return CountErfitDialogArray
-        if self.style.name == 'erclaim' and not self.isSkeleton:
+        elif self.style.name == 'erclaim' and not self.isSkeleton:
             loadDialog(1)
             return CountErfitDialogArray
-        if self.style.name == 'rainmake' and not self.isSkeleton:
+        elif self.style.name == 'rainmake' and not self.isSkeleton:
             loadDialog(1)
             return RainmakerDialogArray
-        if self.style.name == 'redd' and not self.isSkeleton:
+        elif self.style.name == 'redd' and not self.isSkeleton:
             loadDialog(1)
             return ReddDialogArray
-        if self.style.name == 'sgoat' and not self.isSkeleton:
+        elif self.style.name == 'sgoat' and not self.isSkeleton:
             loadDialog(1)
             return ScapegoatDialogArray
-        if self.style.name == 'caseman' and not self.isSkeleton:
+        elif self.style.name == 'caseman' and not self.isSkeleton:
             loadDialog(1)
             return CaseManagerDialogArray
-        if self.style.name == 'stenog' and not self.isSkeleton:
+        elif self.style.name == 'stenog' and not self.isSkeleton:
             loadDialog(1)
             return StenographerDialogArray
-        if self.style.name == 'lgator' and not self.isSkeleton:
+        elif self.style.name == 'lgator' and not self.isSkeleton:
             loadDialog(1)
             return LitigatorDialogArray
-        if self.style.name == 'nc' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'arbit' and not self.isSkeleton:
+        elif self.style.name == 'arbit' and not self.isSkeleton:
             loadDialog(1)
             return CLODialogArray
-        if self.style.name == 'arbit' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'ang' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'ang' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'whistleb' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'whistleb' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'bfh' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'bfh' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'trs' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'trs' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'shb' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'shb' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'hck' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'hck' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'ksp' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'ksp' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'duckshfl' and not self.isSkeleton:
+        elif self.style.name == 'duckshfl' and not self.isSkeleton:
             loadDialog(1)
             return DuckShufflerDialogArray
-        if self.style.name == 'treek' and not self.isSkeleton:
+        elif self.style.name == 'treek' and not self.isSkeleton:
             loadDialog(1)
             return TreekillerDialogArray
-        if self.style.name == 'pcrat' and not self.isSkeleton:
+        elif self.style.name == 'pcrat' and not self.isSkeleton:
             loadDialog(1)
             return PlutocratDialogArray
-        if self.style.name == 'hroller' and not self.isSkeleton:
+        elif self.style.name == 'hroller' and not self.isSkeleton:
             loadDialog(1)
             return HighRollerDialogArray
-        if self.style.name == 'hrollers' and not self.isSkeleton:
+        elif self.style.name == 'hrollers' and not self.isSkeleton:
             loadDialog(1)
             return HighRollerDialogArray
-        if self.style.name == 'hroller2' and not self.isSkeleton:
+        elif self.style.name == 'hroller2' and not self.isSkeleton:
             loadDialog(1)
             return HighRollerDialogArray
-        if self.style.name == 'nd' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'm' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'dopr':
+        elif self.style.name == 'dopr':
             loadDialog(1)
             return DOPRDialogArray
-        if self.style.name == 'dopa':
+        elif self.style.name == 'dopa':
             loadDialog(1)
             return DOPADialogArray
-        if self.style.name == 'bellring' and not self.isSkeleton:
+        elif self.style.name == 'bellring' and not self.isSkeleton:
             loadDialog(1)
             return BellringerDialogArray
-        if self.style.name == 'erfit' and not self.isSkeleton:
+        elif self.style.name == 'erfit' and not self.isSkeleton:
             loadDialog(1)
             return CountErfitDialogArray
-        if self.style.name == 'prethink' and not self.isSkeleton:
+        elif self.style.name == 'prethink' and not self.isSkeleton:
             loadDialog(1)
             return PrethinkerDialogArray
-        if self.style.name == 'mslacker' and not self.isSkeleton:
+        elif self.style.name == 'mslacker' and not self.isSkeleton:
             loadDialog(1)
             return MultislackerDialogArray
-        if self.style.name == 'videog' and not self.isSkeleton:
+        elif self.style.name == 'videog' and not self.isSkeleton:
             loadDialog(1)
             return PacesetterDialogArray
-        if self.style.name == 'bcaster' and not self.isSkeleton:
+        elif self.style.name == 'bcaster' and not self.isSkeleton:
             loadDialog(1)
             return PacesetterDialogArray
-        if self.style.name == 'radiog':
+        elif self.style.name == 'radiog':
             loadDialog(1)
             return DOPADialogArray
-        if self.style.name == 'racket' and not self.isSkeleton:
+        elif self.style.name == 'racket' and not self.isSkeleton:
             loadDialog(1)
             return ReddDialogArray
-        if self.style.name == 'ubuster':
+        elif self.style.name == 'ubuster':
             loadDialog(1)
             return DOPRDialogArray
-        if self.style.name == 'safesupervis' and not self.isSkeleton:
+        elif self.style.name == 'safesupervis' and not self.isSkeleton:
             loadDialog(1)
             return FirestarterDialogArray
-        if self.style.name == 'psetter' and not self.isSkeleton:
+        elif self.style.name == 'psetter' and not self.isSkeleton:
             loadDialog(1)
             return PacesetterDialogArray
-        if self.style.name == 'ddiver' and not self.isSkeleton:
+        elif self.style.name == 'ddiver' and not self.isSkeleton:
             loadDialog(1)
             return DeepDiverDialogArray
-        if self.style.name == 'gatekeep' and not self.isSkeleton:
+        elif self.style.name == 'gatekeep' and not self.isSkeleton:
             loadDialog(1)
             return GatekeeperDialogArray
-        if self.style.name == 'dola' and not self.isSkeleton:
+        elif self.style.name == 'dola' and not self.isSkeleton:
             loadDialog(1)
             return DOLADialogArray
-        if self.style.name == 'dold' and not self.isSkeleton:
+        elif self.style.name == 'dold' and not self.isSkeleton:
             loadDialog(1)
             return DOLDDialogArray
-        if self.style.name == 'ghd' and not self.isSkeleton:
+        elif self.style.name == 'ghd' and not self.isSkeleton:
             loadDialog(1)
             return HighRollerDialogArray
-        if self.style.name == 'fmaker':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'director':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'cinema':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'choreo':
-            loadDialog(1)
-            return SkelecogDialogArray
-        if self.style.name == 'jgd' and not self.isSkeleton:
+        elif self.style.name == 'jgd' and not self.isSkeleton:
             loadDialog(1)
             return FeatherbedderDialogArray
-        if self.style.name == 'bby' and not self.isSkeleton:
+        elif self.style.name == 'bby' and not self.isSkeleton:
             loadDialog(1)
             return ChairmanDialogArray
-        if self.style.name == 'dking' and not self.isSkeleton:
+        elif self.style.name == 'dking' and not self.isSkeleton:
             loadDialog(1)
             return ReddDialogArray
-        if self.style.name == 'ottoman' and not self.isSkeleton:
+        elif self.style.name == 'ottoman' and not self.isSkeleton:
             loadDialog(1)
             return OttomanDialogArray
-        if self.style.name == 'crystal' and not self.isSkeleton:
+        elif self.style.name == 'crystal' and not self.isSkeleton:
             loadDialog(1)
             if self.isChainsawPhase2:
                 return ChainsawORDialogArray
@@ -7994,78 +7796,18 @@ class Suit(Avatar.Avatar):
                 return ChainsawDialogArray
             else:
                 return ChainsawDialogArray
-        if self.style.name == 'wrt' and not self.isSkeleton:
-            loadDialog(1)
-            return StenographerDialogArray
-        if self.style.name == 'dar' and not self.isSkeleton:
-            loadDialog(1)
-            return WitchHunterDialogArray
-        if self.style.name == 'nhy' and not self.isSkeleton:
-            loadDialog(1)
-            return DOLDDialogArray
-        if self.style.name == 'auh' and not self.isSkeleton:
-            loadDialog(1)
-            return PlutocratDialogArray
-        if self.style.name == 'chairman' and not self.isSkeleton:
+        elif self.style.name == 'chairman' and not self.isSkeleton:
             loadDialog(1)
             return ChairmanDialogArray
-        if self.style.name == 'judy' and not self.isSkeleton:
+        elif self.isSkelecogDialogue:
+            loadDialog(1)
+            return SkelecogDialogArray
+        elif self.isFemaleSkelecog and self.isSkeleton:
+            loadDialog(1)
+            return SkelecogDialogFemaleArray
+        elif self.isFemale and not self.isSkeleton:
             loadDialog(1)
             return FemaleDialogArray
-        if self.style.name == 'judy' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'bfh2' and not self.isSkeleton:
-            loadDialog(1)
-            return FemaleDialogArray
-        if self.style.name == 'bfh2' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'mm' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'wtapper' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'nn' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'sh' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'gld' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'rainmake' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'stenog' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'mouthp' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'nc' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'nd' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'm' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'crystal' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'yuh' and not self.isSkeleton:
-            loadDialog(1)
-            return DeskJockeyDialogArray
-        if self.style.name == 'phs' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
-        if self.style.name == 'wrt' and self.isSkeleton:
-            loadDialog(1)
-            return SkelecogDialogFemaleArray
         elif self.isSkeleton:
             loadSkelDialog()
             return SkelSuitDialogArray

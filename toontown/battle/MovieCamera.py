@@ -1578,12 +1578,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     #director cheats
     elif name == 'DirectorCut':
-        camTrack.append(defaultCamera(openShotDuration=4.0))
+        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
     elif name == 'DirectorAction':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
     elif name == 'DirectorActionRetaliation':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'DirectorBackToOnes':
+        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
+    elif name == 'DirectorProductionBudget':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'DirectorBudgetExpansion':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     #universal cheats
     elif name == 'Desperation':

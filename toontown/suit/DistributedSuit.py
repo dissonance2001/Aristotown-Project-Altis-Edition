@@ -1364,25 +1364,25 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.healInterval = None
         x = int(self.currHP)
         if self.currHP < 1111:
-            self.damageInterval = Sequence(Parallel(ActorInterval(self, 'mob-mentality', endTime=1), Wait(5.0),
+            self.damageInterval = Sequence(ActorInterval(self, 'mob-mentality', endTime=1), Wait(5.0),
                                                    Func(self.showHpText, -x),
                                                    Func(self.setHealthForMe, -x),
-                                                   Func(self.updateHealthBar, 0)),
+                                                   Func(self.updateHealthBar, 0), ActorInterval(self, 'mob-mentality', startTime=1, endTime=0),
                                Func(self.setNeutralAnimation)).start()
-            self.healInterval = Sequence(Parallel(ActorInterval(videog, 'mob-mentality', endTime=1), Wait(5.0),
+            self.healInterval = Sequence(ActorInterval(videog, 'mob-mentality', endTime=1), Wait(5.0),
                                                   Func(videog.showHpText, +x),
                                                   Func(videog.setHealthForMe, +x),
-                                                  Func(videog.updateHealthBar, 0)),
+                                                  Func(videog.updateHealthBar, 0), ActorInterval(videog, 'mob-mentality', startTime=1, endTime=0),
                                          Func(videog.setNeutralAnimation)).start()
         else:
-            self.damageInterval = Sequence(Parallel(ActorInterval(self, 'mob-mentality', endTime=1), Wait(5.0),
+            self.damageInterval = Sequence(ActorInterval(self, 'mob-mentality', endTime=1), Wait(5.0),
                                                   Func(self.showHpText, -(self.maxHP / 3)),
                                                   Func(self.setHealthForMe, -(self.maxHP / 3)),
-                                                  Func(self.updateHealthBar, 0)),
+                                                  Func(self.updateHealthBar, 0), ActorInterval(self, 'mob-mentality', startTime=1, endTime=0),
                                          Func(self.setNeutralAnimation)).start()
-            self.healInterval = Sequence(Parallel(ActorInterval(videog, 'mob-mentality', endTime=1), Wait(5.0), Func(videog.showHpText, +(self.maxHP / 3)),
+            self.healInterval = Sequence(ActorInterval(videog, 'mob-mentality', endTime=1), Wait(5.0), Func(videog.showHpText, +(self.maxHP / 3)),
                                                    Func(videog.setHealthForMe, +(self.maxHP / 3)),
-                                                   Func(videog.updateHealthBar, 0)),
+                                                   Func(videog.updateHealthBar, 0), ActorInterval(videog, 'mob-mentality', startTime=1, endTime=0),
                                Func(videog.setNeutralAnimation)).start()
 
     def checkAmbassadorDamageUp(self, videog, battle):

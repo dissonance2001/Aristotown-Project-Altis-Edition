@@ -80,7 +80,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.stenographer.setPickable(0)
         self.stenographer.hideName()
         self.stenographer.doId = 0
-        self.stenographer.loop('neutral')
+        self.stenographer.play('neutral')
         self.litigator = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('lgator')
@@ -88,7 +88,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.litigator.setPickable(0)
         self.litigator.hideName()
         self.litigator.doId = 0
-        self.litigator.loop('neutral')
+        self.litigator.play('neutral')
         self.casemanager = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('caseman')
@@ -96,7 +96,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.casemanager.setPickable(0)
         self.casemanager.hideName()
         self.casemanager.doId = 0
-        self.casemanager.loop('neutral')
+        self.casemanager.play('neutral')
         self.scapegoat = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('sgoat')
@@ -104,7 +104,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.scapegoat.setPickable(0)
         self.scapegoat.hideName()
         self.scapegoat.doId = 0
-        self.scapegoat.loop('neutral')
+        self.scapegoat.play('neutral')
         self.wsi = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('redd')
@@ -112,7 +112,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.wsi.setPickable(0)
         self.wsi.hideName()
         self.wsi.doId = 0
-        self.wsi.loop('neutral')
+        self.wsi.play('neutral')
         self.chainsaw = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('chainsaw')
@@ -120,7 +120,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.chainsaw.setPickable(0)
         self.chainsaw.hideName()
         self.chainsaw.doId = 0
-        self.chainsaw.loop('neutral')
+        self.chainsaw.play('neutral')
         self.firestarter = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('fires')
@@ -128,7 +128,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.firestarter.setPickable(0)
         self.firestarter.hideName()
         self.firestarter.doId = 0
-        self.firestarter.loop('neutral')
+        self.firestarter.play('neutral')
         self.pacesetter = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('psetter')
@@ -136,7 +136,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.pacesetter.setPickable(0)
         self.pacesetter.hideName()
         self.pacesetter.doId = 0
-        self.pacesetter.loop('neutral2')
+        self.pacesetter.play('neutral2')
         self.treekiller = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('treek')
@@ -144,7 +144,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.treekiller.setPickable(0)
         self.treekiller.hideName()
         self.treekiller.doId = 0
-        self.treekiller.loop('neutral')
+        self.treekiller.play('neutral')
         self.majorplayer = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('mplayer')
@@ -160,7 +160,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.dopa.setPickable(0)
         self.dopa.hideName()
         self.dopa.doId = 0
-        self.dopa.loop('neutral')
+        self.dopa.play('neutral')
         self.dold = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('dold')
@@ -168,7 +168,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.dold.setPickable(0)
         self.dold.hideName()
         self.dold.doId = 0
-        self.dold.loop('neutral')
+        self.dold.play('neutral')
         self.dola = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('dola')
@@ -176,7 +176,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.dola.setPickable(0)
         self.dola.hideName()
         self.dola.doId = 0
-        self.dola.loop('neutral')
+        self.dola.play('neutral')
         self.derrman = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('derrman')
@@ -184,7 +184,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.derrman.setPickable(0)
         self.derrman.hideName()
         self.derrman.doId = 0
-        self.derrman.loop('neutral')
+        self.derrman.play('neutral')
         self.dopr = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('dopr')
@@ -192,7 +192,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.dopr.setPickable(0)
         self.dopr.hideName()
         self.dopr.doId = 0
-        self.dopr.loop('neutral')
+        self.dopr.play('neutral')
         self.derrhand = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('derrhand')
@@ -200,7 +200,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.derrhand.setPickable(0)
         self.derrhand.hideName()
         self.derrhand.doId = 0
-        self.derrhand.loop('neutral')
+        self.derrhand.play('neutral')
         self.duckshuffler = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('duckshfl')
@@ -224,7 +224,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.ambassador.setPickable(0)
         self.ambassador.hideName()
         self.ambassador.doId = 0
-        self.ambassador.loop('neutral')
+        self.ambassador.play('neutral')
         self.wiretapper = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('wtapper')
@@ -232,7 +232,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.wiretapper.setPickable(0)
         self.wiretapper.hideName()
         self.wiretapper.doId = 0
-        self.wiretapper.loop('neutral')
+        self.wiretapper.play('neutral')
         self.bookkeeper = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('bkeeper')
@@ -240,7 +240,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.bookkeeper.setPickable(0)
         self.bookkeeper.hideName()
         self.bookkeeper.doId = 0
-        self.bookkeeper.loop('neutral')
+        self.bookkeeper.play('neutral')
         self.powerhouse = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('phouse')
@@ -248,7 +248,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.powerhouse.setPickable(0)
         self.powerhouse.hideName()
         self.powerhouse.doId = 0
-        self.powerhouse.loop('neutral')
+        self.powerhouse.play('neutral')
         self.radiographer = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('radiog')
@@ -256,7 +256,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.radiographer.setPickable(0)
         self.radiographer.hideName()
         self.radiographer.doId = 0
-        self.radiographer.loop('neutral')
+        self.radiographer.play('neutral')
         self.unionbuster = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('ubuster')
@@ -264,7 +264,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.unionbuster.setPickable(0)
         self.unionbuster.hideName()
         self.unionbuster.doId = 0
-        self.unionbuster.loop('neutral')
+        self.unionbuster.play('neutral')
         self.racketeer = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('racket')
@@ -272,7 +272,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.racketeer.setPickable(0)
         self.racketeer.hideName()
         self.racketeer.doId = 0
-        self.racketeer.loop('neutral')
+        self.racketeer.play('neutral')
         self.safesupervisor = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('safesupervis')
@@ -280,7 +280,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.safesupervisor.setPickable(0)
         self.safesupervisor.hideName()
         self.safesupervisor.doId = 0
-        self.safesupervisor.loop('neutral')
+        self.safesupervisor.play('neutral')
         self.featherbedder = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('clubpres')
@@ -288,7 +288,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.featherbedder.setPickable(0)
         self.featherbedder.hideName()
         self.featherbedder.doId = 0
-        self.featherbedder.loop('neutral')
+        self.featherbedder.play('neutral')
         self.witchhunter = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('ottoman')
@@ -296,7 +296,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.witchhunter.setPickable(0)
         self.witchhunter.hideName()
         self.witchhunter.doId = 0
-        self.witchhunter.loop('neutral')
+        self.witchhunter.play('neutral')
         self.plutocrat = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('chairman')
@@ -304,7 +304,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.plutocrat.setPickable(0)
         self.plutocrat.hideName()
         self.plutocrat.doId = 0
-        self.plutocrat.loop('neutral')
+        self.plutocrat.play('neutral')
         self.mrhollywood = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('mh2')

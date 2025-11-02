@@ -2672,10 +2672,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .16, .16, .16)
         elif name == 'mldr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'mh' or name == 'ym' or name == 'chairp' or name == 'std2' or name == 'bsht' or name == 'std' or name == 'enf' or name == 'rb' or name == 'mh2' or name == 'cnd' or name == 'vpr':
+        elif name == 'mh' or name == 'ym' or name == 'trs' or name == 'chairp' or name == 'std2' or name == 'bsht' or name == 'std' or name == 'enf' or name == 'rb' or name == 'mh2' or name == 'cnd' or name == 'vpr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .105, .105, .105)
-        elif name == 'trs':
-            self.suitHead.setPosHprScale(-0.285, 0.5, 0.125, -180, 0, 0, .095, .095, .095)
         elif name == 'dc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .11, .11, .11)
         elif name == 'pyc':

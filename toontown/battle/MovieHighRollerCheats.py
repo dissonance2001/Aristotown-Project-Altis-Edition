@@ -888,6 +888,74 @@ def __getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs, sof
         worldRelative = 1
     return Sequence(Wait(startDelay), ParticleInterval(pEffect, parent, worldRelative, duration=durationDelay, cleanup=True, softStopT=softStop))
 
+def doSynergy(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    damageDelay = 1.7
+    hitAtleastOneToon = 0
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = 1
+
+    particleEffect = BattleParticles.createParticleEffect('Synergy')
+    waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
+    partTrack = getPartTrack(particleEffect, 1.0, 3.4, [particleEffect, suit, 0], softStop=-2)
+    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.4, [waterfallEffect, suit, 0], softStop=-2)
+    damageAnims = [['slip-forward']]
+    dodgeAnims = []
+    dodgeAnims.append(['jump',
+     0.01,
+     0,
+     0.6])
+    target = attack['target']
+    dmg = target[0]['hp']
+    suitTrack = Sequence(ActorInterval(attack['suit'], 'magic3'), Func(suit.setNeutralAnimationDrop))
+    if dmg > 80:
+        suitSpeechTrack = Func(suit.setChatAbsolute,
+                           "This isn't just a movie, it's an event! $%s in total impact!" %
+                           int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+    elif dmg > 60:
+        suitSpeechTrack = Func(suit.setChatAbsolute,
+                           "It's official, this film's a mega-production! Estimated $%s on release!" %
+                           int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+    elif dmg > 40:
+        suitSpeechTrack = Func(suit.setChatAbsolute,
+                           "The studio's investing heavily; expect $%s on release!" %
+                           int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+    else:
+        suitSpeechTrack = Func(suit.setChatAbsolute,
+                               "The premiere begins now... projected gross: $%s." %
+                               int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+    dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
+    dodgeAnims.append(['jump', 0, 0.91])
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['slip-forward'], dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
+    synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('SA_synergy.ogg'), node=suit))
+    if hitAtleastOneToon > 0:
+        fallingSoundTrack = Sequence(Wait(damageDelay + 0.5), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
+        return Parallel(suitTrack, suitSpeechTrack, partTrack, waterfallTrack, synergySoundTrack, fallingSoundTrack, toonTracks)
+    else:
+        return Parallel(suitTrack, suitSpeechTrack, partTrack, waterfallTrack, synergySoundTrack, toonTracks)
+
+def doBudgetExpansion(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    calculator = globalPropPool.getProp('calculator')
+    calculator.setTwoSided(True)
+    calculator.setScale(1.5)
+    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculator', playRate=1.25), Func(suit.setNeutralAnimationDrop), Wait(2.0))
+    suitSpeechTrack = Func(suit.setChatAbsolute,
+                               "Every fallen producer funds the finale... we're sitting at $%s in damage!" %
+                              int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcPropTrack = Sequence(
+        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
+        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(MovieUtil.removeProp, calculator)
+    )
+    soundTrack = getSoundTrack('SA_audit.ogg', delay=1.3, node=suit)
+    return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
+
 def doCut(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -2354,7 +2422,7 @@ def doExplodingDocument(attack):
         rightTrack.append(getPropThrowTrack(attack, rightKnives[i], hitPointNames=['face'], missPointNames=['miss'],
                                                 hitDuration=0.3, missDuration=0.3))
         rightKnifeTracks.append(rightTrack)
-    return Parallel(explodeTracks, suitTrack, toonTrack, soundTrack, propTrack, notifyTrack, explosionTrack, leftKnifeTracks, rightKnifeTracks)
+    return Parallel(explodeTracks, suitTrack, toonTrack, soundTrack, propTrack, notifyTrack, explosionTrack)
 
 
 def doViralSensation(attack):

@@ -789,6 +789,10 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doSnipe(attack)
     elif name == 'DirectorBackToOnes':
         suitTrack = MovieHighRollerCheats.doBackToOnes(attack)
+    elif name == 'DirectorProductionBudget':
+        suitTrack = MovieHighRollerCheats.doSynergy(attack)
+    elif name == 'DirectorBudgetExpansion':
+        suitTrack = MovieHighRollerCheats.doBudgetExpansion(attack)
     #universal cheats
     elif name == 'TargetCheck':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
@@ -1038,6 +1042,10 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'HighRollerBust':
             resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'DirectorProductionBudget':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'DirectorBudgetExpansion':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'UnionBusterUnionBusterDamage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AmbassadorMulligan':
@@ -1157,13 +1165,13 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         'suitName'] == 'nothing':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
-    elif attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+    elif attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
-    elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+    elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
-    elif attack['suitName'] == 'safesupervis' and attack['name'] == 'CigarSmoke':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+    elif attack['suitName'] == 'safesupervis' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     else:
@@ -1177,11 +1185,11 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     if splicedAnims:
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
-        if attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke':
+        if attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:
             track.append(ActorInterval(suit, 'headhoncho-cigar-smoke', playRate=playRate))
-        elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke':
+        elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:
             track.append(ActorInterval(suit, 'firestarter-cigar-smoke', playRate=playRate))
-        elif attack['suitName'] == 'safesupervis' and attack['name'] == 'CigarSmoke':
+        elif attack['suitName'] == 'safesupervis' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:
             track.append(ActorInterval(suit, 'firestarter-cigar-smoke', playRate=playRate))
         else:
             track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
