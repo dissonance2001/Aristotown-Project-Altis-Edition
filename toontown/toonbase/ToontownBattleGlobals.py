@@ -699,6 +699,7 @@ ValidStatusConditions = (
     'thirdtrick',
     'fourthtrick',
     'silhouettespawn',
+    'deadproducer',
     'vulnerablebroadcaster',
     'vulnerablesilhouette1',
     'vulnerablesilhouette2',

@@ -5486,6 +5486,7 @@ class BattleCalculatorAI:
                 attack[SUIT_HP_COL][targetIndex] = result
                 managerTarget = None
                 for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'deadproducer', 1, 99, 'setBoth')
                     if suit.dna.name == 'videog':
                         managerTarget = suit
                         if managerTarget == None:
@@ -5663,15 +5664,16 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'snapped', 1.25, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'choreocalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'DirectorProductionBudget':
-                self.costsMultiplier += 2
-                self.costsCalculatorMultiplier += 2
+                if self.toonHasCondition(toon.doId, 'silhouettespawn'):
+                    self.costsMultiplier += 2
+                    self.costsCalculatorMultiplier += 2
                 result = self.costsMultiplier
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'DirectorBudgetExpansion':
-                self.costsMultiplier += 20
-                self.costsCalculatorMultiplier += 20
-                result = self.costsCalculatorMultiplier
+                self.costsMultiplier += (20 * self.deadSuits)
+                self.costsCalculatorMultiplier += (20 * self.deadSuits)
+                result = self.costsMultiplier
                 toon.setHp(toon.hp + result)
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'DirectorCut':
@@ -6849,7 +6851,7 @@ class BattleCalculatorAI:
                     currentBossHealth3 = s.currHP
             if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId,
                                                                      'silhouettespawn') and self.suitHasCondition(
-                    theSuit.doId, 'phase3') and len(self.battle.activeSuits) < 5:
+                    theSuit.doId, 'phase3') and len(self.battle.activeSuits) < 6:
                 self.setSuitCondition(theSuit.doId, 'silhouettespawn', 1, 1, 'setBoth')
             if currentBossHealth2 >= 1 and (x + 1) % 3 == 0:
                 self.setSuitCondition(theSuit.doId, 'hollywoodcalculator', 1, 1, 'setBoth')
@@ -12795,7 +12797,7 @@ class BattleCalculatorAI:
                         self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'directorcalculator') and len(self.battle.activeSuits) == 6 and not self.deadSuits > 0 and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'directorcalculator') and not self.suitHasCondition(suitId, 'deadproducer') and len(self.battle.activeSuits) == 6 and not self.deadSuits > 0 and self.__suitCanAttack(suitId):
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
@@ -13499,7 +13501,7 @@ class BattleCalculatorAI:
                         self.__applySuitAttackDamages(attack, self.battle.findSuit(attack[SUIT_ID_COL]))
                     attack[SUIT_BEFORE_TOONS_COL] = 0
                     self.battle.suitAttacks.append(attack)
-                if self.deadSuits > 0:
+                if self.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0:
                     attack = getDefaultSuitAttack()
                     attack[SUIT_ID_COL] = self.battle.activeSuits[i].doId
                     attack[SUIT_ATK_COL] = {'suitName': self.battle.activeSuits[i].dna.name,
