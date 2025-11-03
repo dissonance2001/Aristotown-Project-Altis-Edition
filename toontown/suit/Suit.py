@@ -5322,6 +5322,16 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
+        elif self.style.name == 'videog':
+            self.corpMedallion.setScale(0)
+        elif self.style.name == 'fmaker':
+            self.corpMedallion.setScale(0)
+        elif self.style.name == 'cinema':
+            self.corpMedallion.setScale(0)
+        elif self.style.name == 'choreo':
+            self.corpMedallion.setScale(0)
+        elif self.style.name == 'director':
+            self.corpMedallion.setScale(0)
         elif self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.corpMedallion.setZ(.2)
             self.corpMedallion.setZ(.2)
@@ -5364,6 +5374,16 @@ class Suit(Avatar.Avatar):
             self.hpBase.setScale(0)
         elif self.style.name == 'bcaster':
             self.hpBase.setScale(0)
+        elif self.style.name == 'videog':
+            self.hpBase.setScale(0)
+        elif self.style.name == 'fmaker':
+            self.hpBase.setScale(0)
+        elif self.style.name == 'cinema':
+            self.hpBase.setScale(0)
+        elif self.style.name == 'choreo':
+            self.hpBase.setScale(0)
+        elif self.style.name == 'director':
+            self.hpBase.setScale(0)
         else:
             self.hpBase.setScale(1.175)
         if self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
@@ -5398,6 +5418,16 @@ class Suit(Avatar.Avatar):
             button.setScale(0)
         elif self.style.name == 'hroller2':
             button.setScale(0)
+        elif self.style.name == 'videog':
+            button.setScale(0)
+        elif self.style.name == 'fmaker':
+            button.setScale(0)
+        elif self.style.name == 'cinema':
+            button.setScale(0)
+        elif self.style.name == 'choreo':
+            button.setScale(0)
+        elif self.style.name == 'director':
+            button.setScale(0)
         else:
             button.setScale(1.175)
         button.setH(180.0)
@@ -5412,6 +5442,16 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'fhj':
             glow.setScale(0)
         elif self.style.name == 'hrollers':
+            glow.setScale(0)
+        elif self.style.name == 'videog':
+            glow.setScale(0)
+        elif self.style.name == 'fmaker':
+            glow.setScale(0)
+        elif self.style.name == 'cinema':
+            glow.setScale(0)
+        elif self.style.name == 'choreo':
+            glow.setScale(0)
+        elif self.style.name == 'director':
             glow.setScale(0)
         elif self.style.name == 'bcaster':
             glow.setScale(0)

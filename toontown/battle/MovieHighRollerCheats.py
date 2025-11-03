@@ -1359,7 +1359,7 @@ def doElectricShock(attack, ind):
         )
     cagePropTracks.append(cagePropTrack)
     selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + 1), Parallel(ActorInterval(targetSuit, 'large-zap'), Func(targetSuit.setHealthForMe, int(targetSuit.maxHP)), Func(targetSuit.setHP, int(targetSuit.maxHP * 2)),
-            Func(targetSuit.showHpString, "OVERCHARGED!"), Func(targetSuit.updateHealthBar, 0)),
+            Func(targetSuit.showHpTextNew, 0, text="OVERCHARGED!", colorCode=5), Func(targetSuit.updateHealthBar, 0)),
                                Func(targetSuit.setNeutralAnimation))
     return Parallel(suitTrack, cagePropTracks, smokeTrack, moveTrack, selfDamageTrack)
 
