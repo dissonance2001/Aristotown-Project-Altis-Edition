@@ -47,19 +47,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.soaked = 0
         self.isSkelecog = 0
         self.battleDetectName = None
-        self.stars = BattleProps.globalPropPool.getProp('stun')
-        self.stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
-        self.stars.loop('stun')
-        self.stars.setBlend(frameBlend=base.wantSmoothAnims)
-        self.stars.adjustAllPriorities(100)
-        texture = loader.loadTexture('phase_5/maps/battle/ttcc_fx_battleParticles_palette_2.png')
-        self.suedstars = BattleProps.globalPropPool.getProp('stun')
-        self.suedstars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
-        self.suedstars.setScale(1.5)
-        self.suedstars.loop('stun')
-        self.suedstars.setTexture(texture, 1)
-        self.suedstars.setBlend(frameBlend=base.wantSmoothAnims)
-        self.suedstars.adjustAllPriorities(100)
+        self.stars = None
+        if self.stars != None:
+            self.stars.loop('stun')
+        self.suedstars = None
+        if self.suedstars != None:
+            self.suedstars.loop('stun')
         self.cRay = None
         self.cRayNode = None
         self.cRayNodePath = None
@@ -124,28 +117,44 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.vulnerabilityMult
 
     def setDizzy(self, dizzy):
-        head = self.find('**/to_head')
-        #head = self.getHeadParts()[0]
-
-
         self.dizzy = dizzy
         if dizzy:
+            if self.stars != None:
+                self.stars.cleanup()
+            self.stars = BattleProps.globalPropPool.getProp('stun')
+            self.stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+            self.stars.loop('stun')
+            self.stars.setBlend(frameBlend=base.wantSmoothAnims)
+            self.stars.adjustAllPriorities(100)
+            head = self.find('**/to_head')
             self.stars.reparentTo(head)
         else:
-            self.stars.detachNode()
+            if self.stars != None:
+                self.stars.cleanup()
+            self.stars = None
 
     def getDizzy(self):
         return self.dizzy
 
     def setSued2(self, sued):
-        head = self.find('**/to_head')
-        # head = self.getHeadParts()[0]
-
         self.sued = sued
         if sued:
+            if self.suedstars != None:
+                self.suedstars.cleanup()
+            texture = loader.loadTexture('phase_5/maps/battle/ttcc_fx_battleParticles_palette_2.png')
+            self.suedstars = BattleProps.globalPropPool.getProp('stun')
+            self.suedstars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+            self.suedstars.setScale(1.5)
+            self.suedstars.loop('stun')
+            self.suedstars.setTexture(texture, 1)
+            self.suedstars.setBlend(frameBlend=base.wantSmoothAnims)
+            self.suedstars.adjustAllPriorities(100)
+            head = self.find('**/to_head')
             self.suedstars.reparentTo(head)
         else:
-            self.suedstars.detachNode()
+            if self.suedstars != None:
+                self.suedstars.cleanup()
+            self.suedstars = None
 
     def getSued2(self):
         return self.sued

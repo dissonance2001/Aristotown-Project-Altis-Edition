@@ -875,7 +875,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         hasAnimatedHead = True
     if suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
-        suitTrack.append(Func(insertDeathSuit, suit, deathSuit, battle, suitPos, suitHpr))
+        suitTrack.append(Func(insertDeathSuit, suit, deathSuit, battle))
         suitTrack.append(Parallel(ActorInterval(suit, 'mplayer-kneel-into')))
         deathSound = base.loadSfx('phase_11/audio/sfx/LB_capacitor_discharge_3.ogg')
         suitTrack.append(Parallel(Func(suit.loop, 'mplayer-kneel-neutral'), LerpColorScaleInterval(suit, duration=1.25, colorScale=(0, 0, 0, 0),
@@ -886,7 +886,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(suit.makeDead))
     else:
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
-        suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
+        suitTrack.append(Func(insertDeathSuit, suit, suit, battle))
         suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2), headInterval))
         deathSound = base.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
         suitTrack.append(Parallel(ActorInterval(suit, 'slip-forward', duration=2),
@@ -933,7 +933,7 @@ def createSuitDeathTrack(suit, battle):
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setDizzy, 0))
     suitTrack.append(Func(suit.setSued2, 0))
-    suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
+    suitTrack.append(Func(insertDeathSuit, suit, suit, battle))
     suitTrack.append(ActorInterval(suit, 'lose'))
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
     suitTrack.append(Func(suit.hide))
@@ -2248,70 +2248,29 @@ def createSuitFirestarterCigarSmokeInterval2(suit):
         return stunInterval
 
 def createSuitStunInterval(suit, before, after):
-    p1 = Point3(0)
-    p2 = Point3(0)
-    stars = globalPropPool.getProp('stun')
-    stars.setColor(1, 1, 1, 1)
-    stars.adjustAllPriorities(100)
-    stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
-    stars.setBlend(frameBlend=base.wantSmoothAnims)
-    head = suit.find('**/to_head')
-    head.calcTightBounds(p1, p2)
     hasAnimatedHead = False
     updateTrack = Parallel(Func(suit.setNeutralAnimationHead))
     if suit.style.name == 'hroller2':
         for headPart in suit.animatedHeadParts:
             headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
-            if suit.isLured:
-                headLoop = Func(headPart.loop,
-                            'neutral-lured', fromFrame=0, toFrame=22)
-            else:
-                headLoop = Func(headPart.loop,
-                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
-                                fromFrame=0, toFrame=22)
             hasAnimatedHead = True
     if suit.style.name == 'hrollers':
         for headPart in suit.animatedHeadParts:
             headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
-            if suit.isLured:
-                headLoop = Func(headPart.loop,
-                                'neutral-lured', fromFrame=0, toFrame=22)
-            else:
-                headLoop = Func(headPart.loop,
-                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
-                                fromFrame=0, toFrame=22)
             hasAnimatedHead = True
     if suit.style.name == 'hroller':
         for headPart in suit.animatedHeadParts:
             headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
-            if suit.isLured:
-                headLoop = Func(headPart.loop,
-                                'neutral-lured', fromFrame=0, toFrame=22)
-            else:
-                headLoop = Func(headPart.loop,
-                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
-                                fromFrame=0, toFrame=22)
             hasAnimatedHead = True
     else:
         for headPart in suit.animatedHeadParts:
             headInterval = Func(headPart.loop, 'stun')
-            if suit.isLured:
-                headLoop = Func(headPart.loop,
-                                'neutral-lured', fromFrame=0, toFrame=22)
-            else:
-                headLoop = Func(headPart.loop,
-                                'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''),
-                                fromFrame=0, toFrame=22)
             hasAnimatedHead = True
     if hasAnimatedHead:
-        return Sequence(Wait(before), Func(stars.reparentTo, head),
-                            Func(stars.loop, 'stun'), headInterval, Wait(after), updateTrack,
-                            Func(stars.cleanup),
-                            Func(stars.removeNode))
+        return Sequence(Wait(before), Func(suit.setDizzy, 1), headInterval, Wait(after), updateTrack,
+                            Func(suit.setDizzy, 0))
     else:
-        return Sequence(Wait(before), Func(stars.reparentTo, head),
-                        Func(stars.loop, 'stun'), Wait(after), Func(stars.cleanup),
-                        Func(stars.removeNode))
+        return Sequence(Wait(before), Func(suit.setDizzy, 1), Wait(after), Func(suit.setDizzy, 0))
 
 
 def createSuitStunIntervalFired(suit, before, after):

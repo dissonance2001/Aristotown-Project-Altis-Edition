@@ -3226,7 +3226,7 @@ SuitFaceoffTaunts = {
         "Let's do crunch.",
         "Where would you like to have your crunch today?",
         "You've given me something to crunch on.",
-        "This will not be smoooth.",
+        "This will not be smooth.",
         "Go ahead, try and take a number.",
         "I could do with a nice crunch about now."],
 'ovt': ["Your Toons persistence has me working double overtime!"],

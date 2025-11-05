@@ -337,6 +337,13 @@ class Movie(DirectObject.DirectObject):
             if s.isDazed:
                 s.makeUnDazed()
 
+        for a in self.suitAttackDicts:
+            battle = a['battle']
+            for s in battle.activeSuits:
+                if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'choreo' or s.dna.name == 'cinema' or s.dna.name == 'director' or s.dna.name == 'fmaker':
+                    ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.updateHealthBar, 0, forceUpdate=1)))
+                else:
+                    ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.updateHealthBar, 0, forceUpdate=1)))
         tattacks, tcam = self.__doToonAttacks()
         if tattacks:
             ptrack.append(tattacks)

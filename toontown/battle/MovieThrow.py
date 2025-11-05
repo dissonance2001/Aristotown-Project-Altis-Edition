@@ -463,11 +463,8 @@ def __throwPie(throw, delay, hitCount, npcs):
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=THROW_TRACK))
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
-        if kbbonus == 0 and level <= 5:
+        if kbbonus == 0:
             suitResponseTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
-        if kbbonus == 0 and level > 5:
-            suitResponseTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle),
-                                       Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         if suit.dna.name == 'redd' and revived != 0:
             suitResponseTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:

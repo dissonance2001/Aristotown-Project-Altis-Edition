@@ -725,24 +725,29 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.cleanUpSoundList()
 
     def checkCogLured(self, battle):
-        if self.getDizzy():
+        if self.isLured:
             ival = self.__createSuitResetPosTrack(battle)
             ival.start()
         else:
             pass
 
+    def checkCogThrowPos(self, item, battle, duration):
+        hitPoint = self.getPos(battle)
+        hitPoint.setZ(self.height + 2)
+        hitPoint.setY(hitPoint.getY() + 0.5)
+        Sequence(LerpPosInterval(item, duration, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10))).start()
+
     def __createSuitResetPosTrack(self, battle):
         resetPos, resetHpr = battle.getActorPosHpr(self)
         moveDist = Vec3(self.getPos(battle) - resetPos).length()
-        moveDuration = 0
-        neutralTrack = Func(self.setNeutralAnimation)
+        moveDuration = 0.5
+        neutralTrack = Func(self.setNeutralAnimationTrap)
         unluredTrack = Func(battle.unlureSuit, self)
         unlureSuit = Func(self.makeUnLured)
         updateTrack = Parallel(Func(self.setChatAbsolute,
                                     '',
                                     CFSpeech | CFTimeout))
-        walkTrack = Sequence(Func(self.setHpr, battle, resetHpr),
-                             neutralTrack)
+        walkTrack = Sequence(Func(self.setHpr, battle, resetHpr), ActorInterval(self, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(self.setNeutralAnimationTrap))
         moveTrack = LerpPosInterval(self, moveDuration, resetPos, other=battle)
         return Parallel(unluredTrack, unlureSuit, walkTrack, moveTrack)
 

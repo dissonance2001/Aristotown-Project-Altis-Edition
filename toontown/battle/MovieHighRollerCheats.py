@@ -1386,12 +1386,12 @@ def doVideoStatic(attack):
                 headTrack.append(Wait(theSuit.getDuration('throttletwo') - 4.25))
                 headTrack.append(Parallel(Func(headPart.setTexture, texture, 1), soundTrack4, Func(headPart.loop, 'neutral')))
             if suit.dna.name == 'bcaster':
-                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
+                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react-nt', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
                                                    '+ 25% Vulnerable',
                                                    2), Func(theSuit.showHpStringLureManager2,
                                                             '+ 25% Damage'), Func(theSuit.makeDamageUp), Func(theSuit.makeVulnerable), Func(theSuit.setNeutralAnimation), Func(theSuit.checkDamageUp, + 25), Func(theSuit.checkVulnerabilityUp, + 25), Wait(2.0))
             else:
-                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
+                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react-nt', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
                                                    '+ 10% Vulnerable',
                                                    2), Func(theSuit.showHpStringLureManager2,
                                                             '+ 10% Damage'), Func(theSuit.makeDamageUp), Func(theSuit.makeVulnerable), Func(theSuit.setNeutralAnimation), Func(theSuit.checkDamageUp, + 10), Func(theSuit.checkVulnerabilityUp, + 10), Wait(2.0))

@@ -185,6 +185,30 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 elif suit.style.name == 'hrollers':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
                                               MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'videog':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'bcaster':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'fmaker':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'cinema':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'director':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'choreo':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'mh2':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
+                elif suit.style.name == 'std2':
+                    suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
+                                              MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
                 elif suit.style.name == 'hroller2':
                     suitTrack.append(Parallel(ActorInterval(suit, 'sound-react-nt'),
                                               MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
@@ -215,8 +239,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 else:
                     suitTrack.append(
                         Parallel(ActorInterval(suit, 'sound-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
-            suitTrack.append(__createSuitResetPosTrack(suit, battle))
-            suitTrack.append(Func(battle.unlureSuit, suit))
+            suitTrack.append(Func(suit.checkCogLured, battle))
             suitTrack.append(Func(suit.setDizzy, 0))
             bonusTrack = None
             if hpBonus > 0:
@@ -249,9 +272,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 tracks.append(Func(suit.showHpTextWhite, 'IMMUNE!'))
         elif totalDamage[targetIndex] <= 0 and not suit.isImmortal:
             battle = sound['battle']
-            tracks.append(__createSuitResetPosTrack(suit, battle))
-            tracks.append(Func(battle.unlureSuit, suit))
-            tracks.append(Func(suit.setNeutralAnimationTrap))
+            tracks.append(Func(suit.checkCogLured, battle))
             tracks.append(MovieUtil.createSuitTeaseMultiTrackSound(suit, battle, tSuitReact))
             tracks.append(Func(suit.setNeutralAnimationTrap))
         elif totalDamage[targetIndex] <= 0 and suit.isImmortal:
@@ -371,8 +392,7 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
         newPos = Point3(oldPos)
         newPos.setY(newPos.getY() - DISTANCE_TO_WALK_BACK)
     retval = Sequence(Wait(delay))
-    if DISTANCE_TO_WALK_BACK and hasLuredSuits and not isNPC:
-        retval.append(Parallel(ActorInterval(toon, 'walk', startTime=1, duration=TIME_TO_WALK_BACK, endTime=0.0001), LerpPosInterval(toon, TIME_TO_WALK_BACK, newPos, other=battle)))
+    retval.append(Parallel(ActorInterval(toon, 'walk', startTime=1, duration=TIME_TO_WALK_BACK, endTime=0.0001), LerpPosInterval(toon, TIME_TO_WALK_BACK, newPos, other=battle)))
     if operaInstrument:
         sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
         sprayEffect.setDepthWrite(0)
@@ -385,8 +405,7 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
         retval.append(ActorInterval(toon, 'sound', playRate=1.0, startTime=I1))
     else:
         retval.append(ActorInterval(toon, 'sound'))
-    if DISTANCE_TO_WALK_BACK and hasLuredSuits and not isNPC:
-        retval.append(Parallel(ActorInterval(toon, 'walk', startTime=0.0001, duration=TIME_TO_WALK_BACK, endTime=1), LerpPosInterval(toon, TIME_TO_WALK_BACK, oldPos, other=battle)))
+    retval.append(Parallel(ActorInterval(toon, 'walk', startTime=0.0001, duration=TIME_TO_WALK_BACK, endTime=1), LerpPosInterval(toon, TIME_TO_WALK_BACK, oldPos, other=battle)))
     retval.append(Func(toon.loop, 'neutral'))
     return retval
 
@@ -442,8 +461,7 @@ def __doKazoo(sound, delay, toon, level):
     attackTrack = Parallel(Sequence(stretchInstr, backInstr), Sequence(stretchMega, backMega))
     hasLuredSuits = __hasLuredSuits(sound)
     delayTime = delay
-    if hasLuredSuits:
-        delayTime += TIME_TO_WALK_BACK
+    delayTime += TIME_TO_WALK_BACK
     megaphoneTrack = Sequence(Wait(delayTime), megaphoneShow, Wait(1.0), instrumentAppear, Wait(3.0), megaphoneHide)
     tracks.append(megaphoneTrack)
     toonTrack = __createToonInterval(sound, delay, toon)
@@ -452,8 +470,7 @@ def __doKazoo(sound, delay, toon, level):
     instrumentshrink = getScaleIntervals(instruments, duration=0.1, startScale=instrMax, endScale=instrMin)
     if soundEffect:
         delayTime = delay + tSound
-        if hasLuredSuits:
-            delayTime += TIME_TO_WALK_BACK
+        delayTime += TIME_TO_WALK_BACK
         soundTrack = Sequence(Wait(delayTime), Parallel(attackTrack, SoundInterval(soundEffect, node=toon)), Wait(0.2),
                               instrumentshrink)
         tracks.append(soundTrack)
@@ -495,8 +512,7 @@ def __doBikehorn(sound, delay, toon, level):
     attackTrack = Parallel(Sequence(stretchInstr, backInstr), Sequence(stretchMega, backMega))
     hasLuredSuits = __hasLuredSuits(sound)
     delayTime = delay
-    if hasLuredSuits:
-        delayTime += TIME_TO_WALK_BACK
+    delayTime += TIME_TO_WALK_BACK
     megaphoneTrack = Sequence(Wait(delayTime), megaphoneShow, Wait(1.0), instrumentAppear, Wait(3.0), megaphoneHide)
     tracks.append(megaphoneTrack)
     toonTrack = __createToonInterval(sound, delay, toon)
@@ -505,8 +521,7 @@ def __doBikehorn(sound, delay, toon, level):
     instrumentshrink = getScaleIntervals(instruments, duration=0.1, startScale=instrMax, endScale=instrMin)
     if soundEffect:
         delayTime = delay + tSound
-        if hasLuredSuits:
-            delayTime += TIME_TO_WALK_BACK
+        delayTime += TIME_TO_WALK_BACK
         soundTrack = Sequence(Wait(delayTime), Parallel(attackTrack, SoundInterval(soundEffect, node=toon)), Wait(0.2), instrumentshrink)
         tracks.append(soundTrack)
     return tracks
@@ -545,8 +560,7 @@ def __doWhistle(sound, delay, toon, level):
     attackTrack = Sequence(stretchInstr, backInstr)
     hasLuredSuits = __hasLuredSuits(sound)
     delayTime = delay
-    if hasLuredSuits:
-        delayTime += TIME_TO_WALK_BACK
+    delayTime += TIME_TO_WALK_BACK
     megaphoneTrack = Sequence(Wait(delayTime), megaphoneShow, Wait(1.0), instrumentAppear, Wait(3.0), megaphoneHide)
     tracks.append(megaphoneTrack)
     toonTrack = __createToonInterval(sound, delay, toon)
@@ -555,8 +569,7 @@ def __doWhistle(sound, delay, toon, level):
     instrumentshrink = getScaleIntervals(instruments, duration=0.1, startScale=instrMax, endScale=instrMin)
     if soundEffect:
         delayTime = delay + tSound
-        if hasLuredSuits:
-            delayTime += TIME_TO_WALK_BACK
+        delayTime += TIME_TO_WALK_BACK
         soundTrack = Sequence(Wait(delayTime), Parallel(attackTrack, SoundInterval(soundEffect, node=toon)), Wait(0.2), instrumentshrink)
         tracks.append(soundTrack)
     return tracks
@@ -607,8 +620,7 @@ def __doBugle(sound, delay, toon, level):
     instrumentAppear = Sequence(grow, Wait(0), Func(longshake, instruments, 5))
     hasLuredSuits = __hasLuredSuits(sound)
     delayTime = delay
-    if hasLuredSuits:
-        delayTime += TIME_TO_WALK_BACK
+    delayTime += TIME_TO_WALK_BACK
     soundEffect = globalBattleSoundCache.getSound(soundFiles[level])
     megaphoneTrack = Parallel(Sequence(Wait(delay + 1.7), SoundInterval(soundEffect, node=toon)), Sequence(Wait(delayTime), megaphoneShow, Wait(1.7), instrumentAppear, Wait(1), instrumentshrink, Wait(1.5), megaphoneHide))
     tracks.append(megaphoneTrack)
@@ -616,8 +628,7 @@ def __doBugle(sound, delay, toon, level):
     tracks.append(toonTrack)
     if soundEffect:
         delayTime = delay + tSound
-        if hasLuredSuits:
-            delayTime += TIME_TO_WALK_BACK
+        delayTime += TIME_TO_WALK_BACK
         soundTrack = Wait(delayTime)
         tracks.append(soundTrack)
     return tracks
@@ -656,8 +667,7 @@ def __doAoogah(sound, delay, toon, level):
     attackTrack = Sequence(stretchInstr, Wait(1), backInstr)
     hasLuredSuits = __hasLuredSuits(sound)
     delayTime = delay
-    if hasLuredSuits:
-        delayTime += TIME_TO_WALK_BACK
+    delayTime += TIME_TO_WALK_BACK
     megaphoneTrack = Sequence(Wait(delayTime), megaphoneShow, Wait(1.0), instrumentAppear, Wait(3.0), megaphoneHide)
     tracks.append(megaphoneTrack)
     toonTrack = __createToonInterval(sound, delay, toon)
@@ -666,8 +676,7 @@ def __doAoogah(sound, delay, toon, level):
     instrumentshrink = getScaleIntervals(instruments, duration=0.1, startScale=instrMax, endScale=instrMin)
     if soundEffect:
         delayTime = delay + tSound
-        if hasLuredSuits:
-            delayTime += TIME_TO_WALK_BACK
+        delayTime += TIME_TO_WALK_BACK
         soundTrack = Sequence(Wait(delayTime), Parallel(attackTrack, SoundInterval(soundEffect, node=toon), Sequence(Wait(1.5), instrumentshrink)))
         tracks.append(soundTrack)
     return tracks
@@ -713,8 +722,7 @@ def __doElephant(sound, delay, toon, level):
     attackTrack = Sequence(stretchInstr, Wait(1), backInstr)
     hasLuredSuits = __hasLuredSuits(sound)
     delayTime = delay
-    if hasLuredSuits:
-        delayTime += TIME_TO_WALK_BACK
+    delayTime += TIME_TO_WALK_BACK
     megaphoneTrack = Sequence(Wait(delayTime), megaphoneShow, Wait(1.0), instrumentAppear, Wait(3.0), megaphoneHide)
     tracks.append(megaphoneTrack)
     toonTrack = __createToonInterval(sound, delay, toon)
@@ -723,8 +731,7 @@ def __doElephant(sound, delay, toon, level):
     instrumentshrink = getScaleIntervals(instruments, duration=0.1, startScale=instrMax2, endScale=instrMin)
     if soundEffect:
         delayTime = delay + tSound
-        if hasLuredSuits:
-            delayTime += TIME_TO_WALK_BACK
+        delayTime += TIME_TO_WALK_BACK
         soundTrack = Sequence(Wait(delayTime), Parallel(attackTrack, SoundInterval(soundEffect, node=toon), Sequence(Wait(1.5), instrumentshrink)))
         tracks.append(soundTrack)
     return tracks
@@ -769,8 +776,7 @@ def __doFoghorn(sound, delay, toon, level):
     attackTrack = Parallel(Sequence(Wait(0.2), spinInstr), Sequence(stretchInstr, Wait(0.5), backInstr))
     hasLuredSuits = __hasLuredSuits(sound)
     delayTime = delay
-    if hasLuredSuits:
-        delayTime += TIME_TO_WALK_BACK
+    delayTime += TIME_TO_WALK_BACK
     megaphoneTrack = Sequence(Wait(delayTime), megaphoneShow, Wait(1.0), instrumentAppear, Wait(3.0), megaphoneHide)
     tracks.append(megaphoneTrack)
     toonTrack = __createToonInterval(sound, delay, toon)
@@ -778,8 +784,7 @@ def __doFoghorn(sound, delay, toon, level):
     soundEffect = globalBattleSoundCache.getSound(soundFiles[level])
     if soundEffect:
         delayTime = delay + tSound
-        if hasLuredSuits:
-            delayTime += TIME_TO_WALK_BACK
+        delayTime += TIME_TO_WALK_BACK
         soundTrack = Sequence(Wait(delayTime), Parallel(attackTrack, SoundInterval(soundEffect, node=toon)))
         tracks.append(soundTrack)
     return tracks
@@ -825,8 +830,7 @@ def __doOpera(sound, delay, toon, level):
     instrumentAppear = Parallel(Sequence(grow1, grow2, Wait(6.0), shrink2), Sequence(Wait(0.0), SoundInterval(instrumentAppearSfx, node=toon)))
     hasLuredSuits = __hasLuredSuits(sound)
     delayTime = delay
-    if hasLuredSuits:
-        delayTime += TIME_TO_WALK_BACK
+    delayTime += TIME_TO_WALK_BACK
     megaphoneTrack = Sequence(Wait(delayTime), megaphoneShow, Wait(1.0), instrumentAppear, Wait(2.0), megaphoneHide)
     tracks.append(megaphoneTrack)
     toonTrack = __createToonInterval(sound, delay, toon, operaInstrument=instrument)
@@ -834,8 +838,7 @@ def __doOpera(sound, delay, toon, level):
     soundEffect = globalBattleSoundCache.getSound(soundFiles[level])
     if soundEffect:
         delayTime = delay + tSound - 0.3
-        if hasLuredSuits:
-            delayTime += TIME_TO_WALK_BACK
+        delayTime += TIME_TO_WALK_BACK
         soundTrack = Sequence(Wait(delayTime), SoundInterval(soundEffect, node=toon))
         tracks.append(Sequence(Wait(0)))
         tracks.append(soundTrack)

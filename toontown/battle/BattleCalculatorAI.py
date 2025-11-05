@@ -2360,7 +2360,7 @@ class BattleCalculatorAI:
                         if self.suitHasCondition(suit, 'lured'):
                             lureKBValue = self.getSuitConditionModifier(suit, 'lured') * 0.01
                             self.setSuitCondition(suit, 'lured', 0, 0, 'none')
-                        attack[TOON_KBBONUS_COL][tgtPos] = totalDmgs * (lureKBValue / 2)
+                        attack[TOON_KBBONUS_COL][tgtPos] = math.ceil(totalDmgs * (lureKBValue / 2))
                         if self.notify.getDebug():
                             self.notify.debug(
                                 'Applying kb bonus to track ' + str(attack[TOON_TRACK_COL]) + ' of ' + str(
