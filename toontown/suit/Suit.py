@@ -68,7 +68,7 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
+AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('summon-cog', 'summon-cog'), ('sacrifice-cog', 'sacrifice-cog'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
             ('falling-knife', 'falling-knife'), ('throw-object', 'throw-object'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),
             ('throw-paper', 'throw-paper'), ('mob-mentality', 'mob-mentality'), ('neutral', 'neutral'), ('neutral2', 'neutral'), ('magnet', 'magnet'), ('neutral2-hurt', 'neutral-hurt'),
             ('neutral-hurt', 'neutral-hurt'), ('neutral-unstable', 'neutral-unstable'), ('neutral-enraged-return', 'neutral-enraged-return'), ('ottoman-sit-loop', 'ottoman-sit-loop'),
@@ -1322,6 +1322,7 @@ class Suit(Avatar.Avatar):
         self.isDamageUp = 0
         self.isSoaked = 0
         self.isFemale = 0
+        self.isBuff = 0
         self.isFemaleSkelecog = 0
         self.isVirtual = 0
         self.isBookkeeping = 0
@@ -1847,6 +1848,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.294, 0.208, 0.149, 1)
             self.generateBody()
             self.makeExecutive()
+            self.makeLitigationManager()
             self.generateHead3('casemanager', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_casemanager.png')
             for headPart in self.headParts:
@@ -2063,12 +2065,9 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'erfit':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(1, 1, 1, 1.0)
-            self.generateBody()
+            self.generateCounterFitBody()
             self.makeCountErfit()
-            self.generateHead3('counterclaim', animated=True)
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_counterclaim.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+            self.generateHead3('counterfit', animated=True)
             self.setHeight(10)
         elif dna.name == 'hrollers':
             self.scale = 7.5 / aSize
@@ -3298,7 +3297,13 @@ class Suit(Avatar.Avatar):
         else:
             self.loadModel('phase_3.5' + filePrefix + 'erfit-mod')
         self.loadAnims(animDict)
-        self.setSuitClothes()
+        #self.setSuitClothes()
+        self.find('**/hands').setColor(self.handColor)
+        self.shadowJoint = self.find('**/joint_shadow')
+        self.nametagJoint = self.find('**/joint_nameTag')
+        self.leftHand = self.find('**/joint_Lhold')
+        self.rightHand = self.find('**/joint_Rhold')
+        self.isBuff = 1
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         self.setBlend(frameBlend=base.wantSmoothAnims)
 
@@ -5119,7 +5124,7 @@ class Suit(Avatar.Avatar):
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
         anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
-                 'stun', 'enraged', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup',
+                 'stun', 'enraged', 'sacrifice-cog', 'summon-cog', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup',
                  'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive', 'bust',
                  'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'gsnap', 'overclocked',
                  'come-on', 'zero' ]
@@ -5176,6 +5181,9 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
+        elif self.isBuff:
+            self.corpMedallion.setY(.05)
+            self.corpMedallion.setZ(-.2)
         elif self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.corpMedallion.setZ(.2)
             self.corpMedallion.setZ(.2)
@@ -5224,6 +5232,9 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
+        elif self.isBuff:
+            self.corpMedallion.setY(.05)
+            self.corpMedallion.setZ(-.2)
         elif self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.corpMedallion.setZ(.2)
             self.corpMedallion.setZ(.2)
@@ -5289,9 +5300,12 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setTexture(texture, 1)
         self.corpMedallion.setH(180.0)
         self.corpMedallion.setColor(self.medallionColors[dept])
-        if self.style.body == 'a' and not self.isFemale:
+        if self.style.body == 'a' and not self.isFemale and not self.isBuff:
             self.corpMedallion.setY(-.1125)
             self.corpMedallion.setZ(-.1)
+        if self.isBuff:
+            self.corpMedallion.setY(.05)
+            self.corpMedallion.setZ(-.2)
         if self.style.body == 'a' and self.isFemale:
             self.corpMedallion.setY(-0.075)
             self.corpMedallion.setZ(-.1)
@@ -5320,7 +5334,7 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
-        elif self.style.name == 'hroller':
+        elif self.style.name == 'hrollers':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'videog':
             self.corpMedallion.setScale(0)
@@ -5332,6 +5346,9 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'director':
             self.corpMedallion.setScale(0)
+        elif self.isBuff:
+            self.corpMedallion.setY(.05)
+            self.corpMedallion.setZ(-.2)
         elif self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.corpMedallion.setZ(.2)
             self.corpMedallion.setZ(.2)
@@ -5389,11 +5406,14 @@ class Suit(Avatar.Avatar):
         if self.isFemale and (self.style.body == 'c' or self.style.body == 'b'):
             self.hpBase.setZ(.2)
             self.hpBase.setZ(.2)
+        if self.isBuff:
+            self.hpBase.setY(.05)
+            self.hpBase.setZ(-.2)
         if self.style.body == 'c' and not self.isFemale:
             self.hpBase.setY(.05)
        # if self.style.body == 'c':
             #self.hpBase.setY()
-        if self.style.body == 'a' and not self.isFemale:
+        if self.style.body == 'a' and not self.isFemale and not self.isBuff:
             self.hpBase.setY(-.1125)
             self.hpBase.setZ(-.1)
         if self.style.body == 'a' and self.isFemale:
@@ -5467,7 +5487,7 @@ class Suit(Avatar.Avatar):
         self.healthCondition = 0
         self.healthBar.hide()
         #self.healthBarGlow.hide()
-        if self.style.body == 'a' and not self.isFemale:
+        if self.style.body == 'a' and not self.isFemale and not self.isBuff:
             self.healthBar.setY(-.1125)
             self.healthBar.setZ(-.1)
         if self.style.body == 'a' and self.isFemale:
@@ -5477,6 +5497,9 @@ class Suit(Avatar.Avatar):
             self.healthBar.setY(-.025)
         if self.style.body == 'c' and not self.isFemale:
             self.healthBar.setY(.05)
+        if self.isBuff:
+            self.healthBar.setY(.05)
+            self.healthBar.setZ(-.2)
        # if self.style.body == 'c':
             #self.healthBar.setY(.05)
        # if self.style.body == 'a':
@@ -7109,7 +7132,40 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         self.isGovernaught = 1
         try:
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_counterfit.png')
+            texture = loader.loadTexture('phase_10/maps/ttcc_ene_suittex_erfit.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
+
+    def makeBuffHighRoller(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isGovernaught = 1
+        try:
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_hroller_buff.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
+
+    def makeBuffLitigator(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isGovernaught = 1
+        try:
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_lgator_buff.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
+
+    def makeBuffCaseManager(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isGovernaught = 1
+        try:
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_suittex_caseman_buff.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
                 'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')

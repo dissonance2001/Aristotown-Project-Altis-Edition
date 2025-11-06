@@ -2267,8 +2267,8 @@ def createSuitStunInterval(suit, before, after):
             headInterval = Func(headPart.loop, 'stun')
             hasAnimatedHead = True
     if hasAnimatedHead:
-        return Sequence(Wait(before), Func(suit.setDizzy, 1), headInterval, Wait(after), updateTrack,
-                            Func(suit.setDizzy, 0))
+        return Sequence(Wait(before), Func(suit.setDizzy, 1), headInterval, Wait(after),
+                            Func(suit.setDizzy, 0), updateTrack)
     else:
         return Sequence(Wait(before), Func(suit.setDizzy, 1), Wait(after), Func(suit.setDizzy, 0))
 
