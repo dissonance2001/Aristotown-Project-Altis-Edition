@@ -8877,6 +8877,17 @@ class BattleCalculatorAI:
                      'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
 
+    def __calculateSuitAttacksFaceTheFamily(self):
+        # Primary Cheats
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
+
+        # Secondary Cheats
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
+
+
+
     def __calculateSuitAttacksHighRoller(self):
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
@@ -10738,11 +10749,84 @@ class BattleCalculatorAI:
         self.__updateEnragedTimeouts()
         self.__calculateSuitConditions()
         self.__calculateSuitAttacks()
-        self.__calculateSuitAttacksBossbotLitigation()
-        self.__calculateSuitAttacksHighRoller()
-        self.__calculateSuitAttacksSellbotLitigation()
-        self.__calculateSuitAttacksWitnessStandIn()
-        self.__calculateSuitAttacksLawbotLitigation()
+        currentBossHealth = 0
+        for s in self.battle.suits:
+            if s.dna.name == 'clerk':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'clubpres':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'supervis':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'foreman':
+                currentBossHealth = s.currHP
+        if currentBossHealth > 0:
+            self.__calculateSuitAttacksFaceTheFamily()
+        currentBossHealth = 0
+        for s in self.battle.suits:
+            if s.dna.name == 'bkeeper':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'phouse':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'wtapper':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'ambass':
+                currentBossHealth = s.currHP
+        if currentBossHealth > 0:
+            self.__calculateSuitAttacksBossbotLitigation()
+        currentBossHealth = 0
+        for s in self.battle.suits:
+            if s.dna.name == 'director':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'fmaker':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'choreo':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'cinema':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'videog':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'bcaster':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'hrollers':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'hroller2':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'hroller':
+                currentBossHealth = s.currHP
+        if currentBossHealth > 0:
+            self.__calculateSuitAttacksHighRoller()
+        currentBossHealth = 0
+        for s in self.battle.suits:
+            if s.dna.name == 'safesupervis':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'ubuster':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'radiog':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'racket':
+                currentBossHealth = s.currHP
+        if currentBossHealth > 0:
+            self.__calculateSuitAttacksSellbotLitigation()
+        currentBossHealth = 0
+        for s in self.battle.suits:
+            if s.dna.name == 'redd':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'wsi':
+                currentBossHealth = s.currHP
+        if currentBossHealth > 0:
+            self.__calculateSuitAttacksWitnessStandIn()
+        currentBossHealth = 0
+        for s in self.battle.suits:
+            if s.dna.name == 'lgator':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'stenog':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'caseman':
+                currentBossHealth = s.currHP
+            elif s.dna.name == 'sgoat':
+                currentBossHealth = s.currHP
+        if currentBossHealth > 0:
+            self.__calculateSuitAttacksLawbotLitigation()
         self.__calculateEndOfRoundAttacks()
         if self.roundsToonsHit > 0:
             self.roundsToonsHit -= 1

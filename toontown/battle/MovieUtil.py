@@ -886,7 +886,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(suit.makeDead))
     else:
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
-        suitTrack.append(Func(insertDeathSuit, suit, suit, battle))
+        suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
         suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2), headInterval))
         deathSound = base.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
         suitTrack.append(Parallel(ActorInterval(suit, 'slip-forward', duration=2),
@@ -933,7 +933,7 @@ def createSuitDeathTrack(suit, battle):
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setDizzy, 0))
     suitTrack.append(Func(suit.setSued2, 0))
-    suitTrack.append(Func(insertDeathSuit, suit, suit, battle))
+    suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
     suitTrack.append(ActorInterval(suit, 'lose'))
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
     suitTrack.append(Func(suit.hide))
@@ -2267,10 +2267,10 @@ def createSuitStunInterval(suit, before, after):
             headInterval = Func(headPart.loop, 'stun')
             hasAnimatedHead = True
     if hasAnimatedHead:
-        return Sequence(Wait(before), Func(suit.setDizzy, 1), headInterval, Wait(after),
-                            Func(suit.setDizzy, 0), updateTrack)
+        return Sequence(Wait(before), Func(suit.setDizzy2, 1), headInterval, Wait(after),
+                            Func(suit.setDizzy2, 0), updateTrack)
     else:
-        return Sequence(Wait(before), Func(suit.setDizzy, 1), Wait(after), Func(suit.setDizzy, 0))
+        return Sequence(Wait(before), Func(suit.setDizzy2, 1), Wait(after), Func(suit.setDizzy2, 0))
 
 
 def createSuitStunIntervalFired(suit, before, after):

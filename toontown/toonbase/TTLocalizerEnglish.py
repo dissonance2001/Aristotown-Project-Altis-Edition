@@ -4591,6 +4591,7 @@ SuitAttackNames = {
     'Sacked': "Sacked!",
     'SandTrap': 'Sand Trap!',
     'Schmooze': "Schmooze!",
+    'TestSchmooze': "Schmooze!",
     'Shake': "Shake!",
     'ShortSqueeze': "Short Squeeze!",
     'Shred': "Shred!",

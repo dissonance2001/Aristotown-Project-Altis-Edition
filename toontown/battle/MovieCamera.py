@@ -809,6 +809,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Schmooze':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'TestSchmooze':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Shake':
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5),
                                  Func(taskMgr.add, shake_camera_tremor, 'camera_shake'), Wait(attackDuration - 2.0),
@@ -1589,6 +1591,134 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'DirectorBudgetExpansion':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    #face the family
+    elif name == 'ForemanSnipe':
+        camTrack.append(defaultCamera(openShotDuration=1.0))
+    elif name == 'ForemanRedTape':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'ForemanContractor':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(2), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 2))
+        return camTrack2
+    elif name == 'ForemanBurning':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ForemanBurningDamage':
+        if attackDuration > 2:
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc('Smoked Toons take 15% of their max laff in\ndamage!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Smoked!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
+    elif name == 'ForemanSleepyOvercharge':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name == 'ForemanExplosion':
+        camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
+    elif name == 'ForemanCompensation':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ForemanCompensation2':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ForemanCompensation3':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ForemanCompensation4':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ForemanCompensation5':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintLifeInsurance':
+        camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+    elif name == 'MintPolicyTerminated':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name == 'MintFraudulentDamage':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name == 'MintAbacusAbove15':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintAbacusBelow15':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintAccountant1':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintAccountant2':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintAccountant3':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintApprove':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name == 'MintDisapprove':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name == 'MintSynergy':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'AttorneyObjection':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'AttorneyObjectionSustained':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'AttorneyObjectionOverruled':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'AttorneyChrono':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 heldRelativeShot(suit, 0.0, 6.8096, 8, -180, -10.0, 0.0, attackDuration)))
+    elif name == 'AttorneyRushJob':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 heldRelativeShot(suit, 0.0, 6.8096, 8, -180, -10.0, 0.0, attackDuration)))
+    elif name == 'AttorneyHurrySickness':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'PresidentTargetCheck':
+        camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
+    elif name == 'PresidentExtraTip':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+    elif name == 'PresidentExtraTip2':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+    elif name == 'PresidentExtraTip3':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+    elif name == 'PresidentExtraTip4':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+    elif name == 'PresidentExtraTip5':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+    elif name == 'PresidentSnap':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'PresidentSyphon':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name == 'PresidentBayouBellow':
+        camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5)))
+    elif name == 'PresidentSnipe':
+        camTrack.append(defaultCamera(openShotDuration=1.0))
+    elif name == 'PresidentDeepFreeze':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'PresidentFrozenDeath':
+        camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
+    elif name == 'PresidentPuzzling':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(2), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 2))
+        return camTrack2
+    elif name == 'PresidentDriver':
+        camTrack.append(defaultCamera(openShotDuration=3.0))
+    elif name == 'PresidentMulligan':
+        camTrack.append(defaultCamera(openShotDuration=2.25))
+    elif name == 'PresidentHighStakes':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     #universal cheats
     elif name == 'Desperation':
         camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)
@@ -1930,6 +2060,82 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'BanZapDrop':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanSoundDrop':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableToonupTrap':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableToonupLure':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableToonupThrow':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableToonupSquirt':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableToonupZap':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableToonupSound':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableToonupDrop':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableTrapLure':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableTrapThrow':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableTrapSquirt':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableTrapZap':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableTrapSound':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableTrapDrop':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLureThrow':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLureSquirt':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLureZap':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLureSound':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLureDrop':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableThrowSquirt':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableThrowZap':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableThrowSound':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableThrowDrop':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableSquirtZap':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableSquirtSound':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableSquirtDrop':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableZapSound':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableZapDrop':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableSoundDrop':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel45':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel46':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel47':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel48':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel56':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel57':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel58':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel67':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel68':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'DisableLevel78':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     else:
         notify.warning('unknown attack id in chooseSuitShot: %d using default cam' % name)

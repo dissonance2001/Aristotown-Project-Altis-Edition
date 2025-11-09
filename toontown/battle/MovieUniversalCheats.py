@@ -1022,3 +1022,11 @@ def doCourtRecord(attack):
     suitTrack.append(Wait(1.0))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack)
+
+def doCourtMandate(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack.append(Wait(1.0))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_objection.ogg'), node=suit))
+    return Parallel(suitTrack, soundTrack)
