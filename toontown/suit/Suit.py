@@ -137,7 +137,7 @@ m = (('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4))
 ksp = (('speak', 'speak', 4), ('smile', 'smile', 4))
 mh = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4))
 watchm = (('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4))
-foreman = (('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4))
+foreman = (('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4), ('magic3-alt', 'magic3-alt', 4))
 dopr = (('effort', 'effort', 4), ('glower', 'glower', 4), ('speak', 'speak', 4))
 dopa = (('speak', 'speak', 4), ('effort', 'effort', 4))
 bellring = (('roll-o-dex', 'roll-o-dex', 4), ('quick-jump', 'jump', 4))
@@ -1205,6 +1205,8 @@ class Suit(Avatar.Avatar):
         self.isExecutive = 0
         self.isSued = 0
         self.isAngry = 0
+        self.isAlreadySleepy = 0
+        self.isAlreadyExplosive = 0
         self.isRevived = 0
         self.isLaserRevived = 0
         self.isDanceSession = 0
@@ -1230,6 +1232,8 @@ class Suit(Avatar.Avatar):
         self.isEnraged = 0
         self.isAbsorbing = 0
         self.isRental = 0
+        self.isSleepy = 0
+        self.isExplosive = 0
         self.isLureResist = 0
         self.isTarget = 0
         self.splats = set()
@@ -1483,7 +1487,7 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead3('clubpresident', animated=True)
-            self.setHeight(8.7)
+            self.setHeight(9.0)
             self.isSkelecogDialogue = 1
         elif dna.name == 'derrman':
             self.scale = 4.5 / aSize
@@ -5815,10 +5819,14 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'foreman':
             if self.getActualLevel() == 20:
                 self.setDisplayName(self.createNameInfoSleepy())
+                if not self.isAlreadySleepy:
+                    self.makeSleepy(3)
             elif self.getActualLevel() == 21:
                 self.setDisplayName(self.createNameInfoBurning())
             elif self.getActualLevel() == 22:
                 self.setDisplayName(self.createNameInfoExplosive())
+                if not self.isAlreadyExplosive:
+                    self.makeExplosive(3)
             elif self.getActualLevel() == 23:
                 self.setDisplayName(self.createNameInfoContractor())
             elif self.getActualLevel() == 24:
@@ -6321,7 +6329,6 @@ class Suit(Avatar.Avatar):
         dropShadow.setColor(0.0, 0.0, 0.0, 0.5)
         dropShadow.reparentTo(self.shadowJoint)
         self.find('**/emblem_healthmeter').show()
-
         self.isSkeleton = 1
 
     def makeSkeleton2(self, elite=False):
@@ -6449,6 +6456,23 @@ class Suit(Avatar.Avatar):
 
     def getZapCondition(self):
         return self.isZapped
+
+    def makeSleepy(self, num):
+        self.isSleepy = num
+        self.isAlreadySleepy = 1
+
+    def getSleepyCondition(self):
+        return self.isSleepy
+
+    def makeUnSleepy(self):
+        self.isSleepy = 0
+
+    def makeExplosive(self, num):
+        self.isExplosive = num
+        self.isAlreadyExplosive = 1
+
+    def getExplosiveCondition(self):
+        return self.isExplosive
 
     def makeSoaked(self, num):
         self.actuallySoaked = 1

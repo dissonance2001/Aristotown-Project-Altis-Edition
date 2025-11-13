@@ -1710,7 +1710,7 @@ def doFore(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.75))
     club = globalPropPool.getProp('golf-club')
     clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
-    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 3, Point3(1.1, 1.1, 1.1))
+    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 2.25, Point3(1.1, 1.1, 1.1))
     ballPosPoints = [Point3(5.1, 4.0, 0.1)]
     ballPropTracks = Parallel()
     for t in targets:

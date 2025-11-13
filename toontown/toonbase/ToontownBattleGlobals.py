@@ -453,6 +453,13 @@ def getUberFlagSafe(flagMask, index):
 
 ValidStatusConditions = (
     # Manager Calculators
+    'alreadyContracted',
+    'partnered',
+    'smoked',
+    'sleepy',
+    'explosive',
+    'alreadySleepy',
+    'alreadyExplosive',
     'rageBuilding',
     'powerhouseRotation',
     'groundbreakercalculator',

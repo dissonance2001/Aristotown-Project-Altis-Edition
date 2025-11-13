@@ -346,7 +346,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         return self.currHP
 
     def setHP(self, hp):
-        if hp > self.maxHP * self.hardMaxHP:
+        if hp > self.maxHP * self.hardMaxHP and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres' and not self.dna.name == 'clerk' and not self.dna.name == 'supervis':
             self.currHP = self.maxHP * self.hardMaxHP
         else:
             self.currHP = hp

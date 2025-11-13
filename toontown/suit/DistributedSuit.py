@@ -725,7 +725,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.cleanUpSoundList()
 
     def checkCogLured(self, battle):
-        if self.isLured:
+        if self.getDizzy():
             ival = self.__createSuitResetPosTrack(battle)
             ival.start()
         else:
@@ -758,6 +758,15 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval.start()
         else:
             self.playByPlayInterval = pbpText.getShowInterval(displayName, attackDuration)
+            self.playByPlayInterval.start()
+
+    def checkPlayByPlayTextCheat(self, pbpText, displayName, attackDuration):
+        pbpText = pbpText
+        if float(self.currHP) > float(self.maxHP * 1.5):
+            self.playByPlayInterval = pbpText.getShowIntervalCheatOvercharged(displayName, attackDuration)
+            self.playByPlayInterval.start()
+        else:
+            self.playByPlayInterval = pbpText.getShowIntervalCheatRed(displayName, attackDuration)
             self.playByPlayInterval.start()
 
     def checkCogHP(self, battle):
@@ -1465,8 +1474,38 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             self.healInterval = Parallel(Func(self.showHpTextNew, 50, text="INSURANCE!", colorCode=1), Func(self.setHealthForMe, 50), Func(self.updateHealthBar, 0)).start()
 
+    def checkCompensation(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        self.healInterval = Parallel(Func(self.showHpTextNew, 225, text="+35% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 35), Func(self.setHealthForMe, 225), Func(self.updateHealthBar, 0)).start()
+
+    def checkCompensation2(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        self.healInterval = Parallel(Func(self.showHpTextNew, 450, text="+70% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 70), Func(self.setHealthForMe, 450), Func(self.updateHealthBar, 0)).start()
+
+    def checkCompensation3(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        self.healInterval = Parallel(Func(self.showHpTextNew, 675, text="+105% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 105), Func(self.setHealthForMe, 675), Func(self.updateHealthBar, 0)).start()
+
+    def checkCompensation4(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        self.healInterval = Parallel(Func(self.showHpTextNew, 900, text="+140% Damage!", colorCode=1), Func(self.setHealthForMe, 900), Func(self.makeDamageUp), Func(self.checkDamageUp, + 140), Func(self.updateHealthBar, 0)).start()
+
+    def checkCompensation5(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        self.healInterval = Parallel(Func(self.showHpTextNew, 1125, text="+175% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 175), Func(self.setHealthForMe, 1125), Func(self.updateHealthBar, 0)).start()
+
     def setNeutralAnimationHead(self):
-        if self.getDizzy():
+        if self.getDizzy() or self.isSleepy or self.isSued:
             if self.dna.name == 'hroller':
                 for headPart in self.animatedHeadParts: Sequence(
                     Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
@@ -1479,12 +1518,15 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 for headPart in self.animatedHeadParts: Sequence(
                     Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
                     ).start()
+            elif self.isSleepy:
+                Func(self.setChatAbsoluteSpecial, '. . . Z Z Z . . .', CFThought).start()
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-lured')
+                    ).start()
             else:
                 for headPart in self.animatedHeadParts: Sequence(
                     Func(headPart.loop, 'neutral-lured')
                     ).start()
-            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'lured'), Func(self.setPlayRate, self.getPlayRate2(), 'lured2'), Func(self.loop, 'lured')
-                     ).start()
         else:
             if self.dna.name == 'hroller' and (float(self.currHP) / float(self.maxHP) <= 0.25):
                 for headPart in self.animatedHeadParts: Sequence(Func(headPart.loop, 'neutral-hurt', fromFrame=0,
@@ -1518,7 +1560,17 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             ).start()
 
     def setNeutralAnimationHeadTrap(self):
-        if self.dna.name == 'hroller' and (float(self.currHP) / float(self.maxHP) <= 0.25):
+        if self.isSleepy or self.isSued:
+            if self.isSleepy:
+                Func(self.setChatAbsoluteSpecial, '. . . Z Z Z . . .', CFThought).start()
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-lured')
+                    ).start()
+            else:
+                for headPart in self.animatedHeadParts: Sequence(
+                    Func(headPart.loop, 'neutral-lured')
+                ).start()
+        elif self.dna.name == 'hroller' and (float(self.currHP) / float(self.maxHP) <= 0.25):
             for headPart in self.animatedHeadParts: Sequence(Func(headPart.loop, 'neutral-hurt', fromFrame=0,
                                                                       toFrame=22)
                                                                  ).start()
@@ -1626,7 +1678,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.setNeutralAnimationHead()
 
     def setNeutralAnimationDrop(self):
-        if self.getDizzy():
+        if self.isSleepy:
+            Func(self.setChatAbsoluteSpecial, '. . . Z Z Z . . .', CFThought).start()
+            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)),
+                     Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                     ).start()
+        elif self.getDizzy():
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'lured'),
                      Func(self.setPlayRate, self.getPlayRate2(), 'lured2'), Func(self.loop, 'lured')
                      ).start()
@@ -1732,6 +1789,25 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def setChatAbsolute(self, chatString, chatFlags, dialogue=None, interrupt=True):
         searchString = chatString.lower()
+        if chatFlags & CFQuicktalker:
+            self.nametag.setChatType(NametagGlobals.SPEEDCHAT)
+        else:
+            self.nametag.setChatType(NametagGlobals.CHAT)
+
+        if chatFlags & CFThought:
+            self.nametag.setChatBalloonType(NametagGlobals.THOUGHT_BALLOON)
+        else:
+            self.nametag.setChatBalloonType(NametagGlobals.CHAT_BALLOON)
+
+        if chatFlags & CFPageButton:
+            self.nametag.setChatButton(NametagGlobals.pageButton)
+        else:
+            self.nametag.setChatButton(NametagGlobals.noButton)
+
+        if chatFlags & CFReversed:
+            self.nametag.setChatReversed(True)
+        else:
+            self.nametag.setChatReversed(False)
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             self.animHead = 'murmur'
         elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
@@ -1752,7 +1828,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
-        if self.animHead == None and self.getDizzy():
+        if self.animHead == None and (self.getDizzy() or self.isSleepy or self.isSued):
             if self.dna.name == 'hroller':
                 for headPart in self.animatedHeadParts: Sequence(
                     Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
@@ -1786,7 +1862,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 for headPart in self.animatedHeadParts: Sequence(
                     Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                     ).start()
-        elif self.getDizzy():
+        elif self.getDizzy() or self.isSleepy or self.isSued:
             if self.dna.name == 'hroller':
                 for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
@@ -1823,6 +1899,25 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def setChatAbsoluteSpecial(self, chatString, chatFlags, dialogue=None, interrupt=True):
         searchString = chatString.lower()
+        if chatFlags & CFQuicktalker:
+            self.nametag.setChatType(NametagGlobals.SPEEDCHAT)
+        else:
+            self.nametag.setChatType(NametagGlobals.CHAT)
+
+        if chatFlags & CFThought:
+            self.nametag.setChatBalloonType(NametagGlobals.THOUGHT_BALLOON)
+        else:
+            self.nametag.setChatBalloonType(NametagGlobals.CHAT_BALLOON)
+
+        if chatFlags & CFPageButton:
+            self.nametag.setChatButton(NametagGlobals.pageButton)
+        else:
+            self.nametag.setChatButton(NametagGlobals.noButton)
+
+        if chatFlags & CFReversed:
+            self.nametag.setChatReversed(True)
+        else:
+            self.nametag.setChatReversed(False)
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             self.animHead = 'murmur'
         elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:

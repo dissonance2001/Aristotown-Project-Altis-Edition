@@ -852,13 +852,13 @@ def doSuitAttack(attack):
     elif name == 'ForemanCompensation':
         suitTrack = MovieFaceTheFamilyCheats.doCompensation(attack)
     elif name == 'ForemanCompensation2':
-        suitTrack = MovieFaceTheFamilyCheats.doCompensation(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doCompensation2(attack)
     elif name == 'ForemanCompensation3':
-        suitTrack = MovieFaceTheFamilyCheats.doCompensation(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doCompensation3(attack)
     elif name == 'ForemanCompensation4':
-        suitTrack = MovieFaceTheFamilyCheats.doCompensation(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doCompensation4(attack)
     elif name == 'ForemanCompensation5':
-        suitTrack = MovieFaceTheFamilyCheats.doCompensation(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doCompensation5(attack)
     elif name == 'MintLifeInsurance':
         suitTrack = MovieFaceTheFamilyCheats.doLifeInsurance(attack)
     elif name == 'MintPolicyTerminated':
@@ -873,12 +873,12 @@ def doSuitAttack(attack):
         suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
     elif name == 'MintAccountant2':
         suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
+    elif name == 'MintAccountant3':
+        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
     elif name == 'MintApprove':
         suitTrack = MovieFaceTheFamilyCheats.doApprove(attack)
     elif name == 'MintDisapprove':
         suitTrack = MovieFaceTheFamilyCheats.doDisapprove(attack)
-    elif name == 'MintAccountant3':
-        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
     elif name == 'MintSynergy':
         suitTrack = doSynergy(attack)
     elif name == 'AttorneyObjection':
@@ -1231,6 +1231,14 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'UnionBusterUnionCalculator':
             resetSuitTrack = Sequence(suitTrack)
+        elif name == 'ForemanBurningDamage':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ForemanSleepyOvercharge':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ForemanExplosion':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ForemanContractor':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'WiretapperGagBan':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'WiretapperCollectCall2':

@@ -1593,11 +1593,21 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     #face the family
     elif name == 'ForemanSnipe':
+        if attackDuration > 2:
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc('The Factory Foreman doubles down damage on Toons\nwho are on cooldown!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'ForemanRedTape':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'ForemanContractor':
-        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(2), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 2))
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(3), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 3))
         return camTrack2
     elif name == 'ForemanBurning':
         camTrack.append(defaultCamera(openShotDuration=1.5))
@@ -1606,7 +1616,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = pbpDc.getShowIntervalDesc('Smoked Toons take 15% of their max laff in\ndamage!', attackDuration - 2)
+            pbpDesc = pbpDc.getShowIntervalDesc("Smoked Toons take damage every round!", attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Smoked!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1714,7 +1724,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(2), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 2))
         return camTrack2
     elif name == 'PresidentDriver':
-        camTrack.append(defaultCamera(openShotDuration=3.0))
+        camTrack.append(defaultCamera(openShotDuration=2.25))
     elif name == 'PresidentMulligan':
         camTrack.append(defaultCamera(openShotDuration=2.25))
     elif name == 'PresidentHighStakes':
@@ -2144,8 +2154,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
     if attack['name'] in TTLocalizer.SuitCheatNames:
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
-        pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 2)
+        if name == 'ForemanRedTape' or name == 'ForemanBurning' or name == 'PresidentDriver':
+            pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
+            pbpTrack = Func(suit.checkPlayByPlayTextCheat, pbpText, displayName, attackDuration - 2)
+        else:
+            pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 2)
         return Parallel(camTrack, pbpTrack, pbpDesc)
     else:
         pbpTrack = Func(suit.checkPlayByPlayText, pbpText, displayName, attackDuration - 2)

@@ -49,14 +49,14 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.battleDetectName = None
         self.stars = BattleProps.globalPropPool.getProp('stun')
         self.stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
-        self.stars.loop('stun')
+        #self.stars.loop('stun')
         self.stars.setBlend(frameBlend=base.wantSmoothAnims)
         self.stars.adjustAllPriorities(100)
         texture = loader.loadTexture('phase_5/maps/battle/ttcc_fx_battleParticles_palette_2.png')
         self.suedstars = BattleProps.globalPropPool.getProp('stun')
         self.suedstars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
         self.suedstars.setScale(1.5)
-        self.suedstars.loop('stun')
+        #self.suedstars.loop('stun')
         self.suedstars.setTexture(texture, 1)
         self.suedstars.setBlend(frameBlend=base.wantSmoothAnims)
         self.suedstars.adjustAllPriorities(100)
@@ -74,7 +74,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.propOutSound = None
         self.reparentTo(hidden)
         self.isOvercharged = 0
-        self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+        #self.loop('neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
         self.skeleRevives = 0
         self.dmgMult = 1.0
         self.vulnerabilityMult = 1.0
@@ -129,8 +129,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.dizzy = dizzy
         if dizzy:
             self.stars.reparentTo(head)
+            self.stars.loop('stun')
         else:
-            self.stars.detachNode()
+           self.stars.detachNode()
+           self.stars.loop('nothing')
 
     def getDizzy(self):
         return self.dizzy
@@ -140,10 +142,13 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.dizzy2 = dizzy2
         if self.dizzy:
             self.stars.reparentTo(head)
+            self.stars.loop('stun')
         elif dizzy2:
             self.stars.reparentTo(head)
+            self.stars.loop('stun')
         else:
             self.stars.detachNode()
+            self.stars.loop('nothing')
 
     def getDizzy2(self):
         return self.dizzy2
@@ -153,8 +158,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.sued = sued
         if sued:
             self.suedstars.reparentTo(head)
+            self.suedstars.loop('stun')
         else:
             self.suedstars.detachNode()
+            self.suedstars.loop('nothing')
 
     def getSued2(self):
         return self.sued
@@ -694,7 +701,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.maxHP
 
     def setHP(self, hp):
-        if hp > self.maxHP * self.hardMaxHP:
+        if hp > self.maxHP * self.hardMaxHP and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres' and not self.dna.name == 'clerk' and not self.dna.name == 'supervis':
             self.currHP = int(self.maxHP * self.hardMaxHP)
         else:
             self.currHP = int(hp)

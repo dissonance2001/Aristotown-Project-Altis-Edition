@@ -720,3 +720,240 @@ def doOverheat(attack):
     else:
         multiTrackList = Parallel()
     return multiTrackList
+
+def doRedTape(attack):
+    suit = attack['suit']
+    targets = attack['target']
+    tape = globalPropPool.getProp('redtape')
+    tape.setColor(0.129, 0, 0.329, 1)
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+    tubes = []
+    tapePosPoints = [Point3(-0.25, 0, -0.25), VBase3(0, 0, 0)]
+    tapeScaleUpPoint = Point3(1, 1, 0.74)
+    propTracks = Parallel()
+    toonTracks = Parallel()
+    allTubeTracks = Parallel()
+    notifyTracks = Parallel()
+    battle = attack['battle']
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        tape = globalPropPool.getProp('redtape')
+        tubes = []
+        for i in xrange(0, 3):
+            tubes.append(globalPropPool.getProp('redtape-tube'))
+
+        propTrack = Sequence(getPropAppearTrack(tape, suit.getRightHand(), tapePosPoints, 0.25, tapeScaleUpPoint, scaleUpTime=0.25))
+        propTrack.append(Wait(1.55))
+        hitPoint = lambda toon=toon: __toonTorsoPoint(toon)
+        propTrack.append(getPropThrowTrack(attack, tape, [hitPoint], [__toonGroundPoint(attack, toon, 0)], .25, target=t))
+        propTracks.append(propTrack)
+        hips = toon.getHipsParts()
+        animal = toon.style.getAnimal()
+        scale = ToontownGlobals.toonBodyScales[animal]
+        legs = toon.style.legs
+        torso = toon.style.torso
+        torso = torso[0]
+        animal = animal[0]
+        tubeHeight = -0.8
+        if torso == 's':
+            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
+        elif torso == 'm':
+            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
+        elif torso == 'l':
+            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 1.11)
+        if animal == 'h' or animal == 'd':
+            tubeHeight = -0.87
+            scaleUpPoint = Point3(scale * 1.69, scale * 1.69, scale * 0.67)
+        tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
+        tubeTracks = Parallel()
+        tubeTracks.append(Func(battle.movie.needRestoreHips))
+        for partNum in xrange(0, hips.getNumPaths()):
+            nextPart = hips.getPath(partNum)
+            tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
+
+        tubeTracks.append(Func(battle.movie.clearRestoreHips))
+        damageAnims = [['nothing', 0.01, 0.35]]
+        notifyTracks.append(Sequence(Wait(2.4), Parallel(Func(toon.showHpTextNew, -int(dmg), text="COOLDOWN!", colorCode=1))))
+        allTubeTracks.append(tubeTracks)
+        toonTracks.append(Sequence(Wait(2.4), ActorInterval(toon, 'struggle')))
+    soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.75, node=suit)
+    toonDamageTrack = getToonTracksCheat(attack, damageDelay=2.4, splicedDamageAnims=damageAnims, dodgeDelay=2.4, dodgeAnimNames=['neutral'])
+    return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks, notifyTracks, toonDamageTrack)
+
+def doExplosion(attack):
+    theSuit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTracks = Parallel()
+    for suit in battle.activeSuits:
+        suitTrack = Sequence(Func(theSuit.setChatAbsolute, "My people need me.",
+                          CFSpeech | CFTimeout))
+        suitTrack.append(Wait(3.0))
+        suitTrack.append(Parallel(MovieUtil.createSuitDeathTrackExplosiveForeman(theSuit, battle), Func(suit.setHealthForMe, - (50 * len(battle.activeToons))), Func(suit.showHpTextNew, - int(50 * len(battle.activeToons))), Func(suit.updateHealthBar, 0), Func(suit.checkCogHPBomb, battle), ActorInterval(suit, 'slip-backward')))
+        suitTracks.append(suitTrack)
+        suitTrack.append(Func(suit.setNeutralAnimationDrop))
+    damageAnims = [['slip-forward', 0.01, 0.4]]
+    toonTracks = getToonTracks(attack, damageDelay=3.0, splicedDamageAnims=damageAnims, dodgeDelay=3.1, dodgeAnimNames=['sidestep'])
+    soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=3.0)
+    return Parallel(suitTracks, toonTracks, soundTrack1)
+
+def doContractor(attack):
+    theSuit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    suitTrack = Sequence(Func(theSuit.setChatAbsolute, "Please fill out paperwork with me.",
+                          CFSpeech | CFTimeout))
+    toonTrack = Sequence(Wait(3.0), Func(toon.setChatAbsolute, "I am compelled to fill out paperwork with you.",
+                          CFSpeech | CFTimeout), Wait(3.0))
+    return Parallel(suitTrack, toonTrack)
+
+def doSleepyOvercharge(attack):
+    theSuit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTracks = Parallel()
+    suitTrack = Sequence()
+    suitTrack.append(Parallel(Func(theSuit.setHealthForMe, + 900), Func(theSuit.showHpTextNew, + 900, text="NAP OVER!", colorCode=1), Func(theSuit.updateHealthBar, 0)))
+    suitTrack.append(Func(theSuit.makeUnSleepy))
+    suitTracks.append(suitTrack)
+    soundTrack1 = getSoundTrack('LB_toonup.ogg')
+    return Parallel(suitTracks, soundTrack1)
+
+def doCompensation(attack):
+    suit = attack['suit']
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    suitTrack = Parallel(getSuitAnimTrack(attack), Wait(2.0))
+    suitTrack.append(Sequence(Wait(2.0), Func(suit.checkCompensation), healSound))
+    return Parallel(suitTrack)
+
+def doCompensation2(attack):
+    suit = attack['suit']
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    suitTrack = Parallel(getSuitAnimTrack(attack), Wait(2.0))
+    suitTrack.append(Sequence(Wait(2.0), Func(suit.checkCompensation2), healSound))
+    return Parallel(suitTrack)
+
+def doCompensation3(attack):
+    suit = attack['suit']
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    suitTrack = Parallel(getSuitAnimTrack(attack), Wait(2.0))
+    suitTrack.append(Sequence(Wait(2.0), Func(suit.checkCompensation3), healSound))
+    return Parallel(suitTrack)
+
+def doCompensation4(attack):
+    suit = attack['suit']
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    suitTrack = Parallel(getSuitAnimTrack(attack), Wait(2.0))
+    suitTrack.append(Sequence(Wait(2.0), Func(suit.checkCompensation4), healSound))
+    return Parallel(suitTrack)
+
+def doCompensation5(attack):
+    suit = attack['suit']
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    suitTrack = Parallel(getSuitAnimTrack(attack), Wait(2.0))
+    suitTrack.append(Sequence(Wait(2.0), Func(suit.checkCompensation5), healSound))
+    return Parallel(suitTrack)
+
+def doMulligan(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    club = globalPropPool.getProp('golf-club')
+    ball = globalPropPool.getProp('golf-ball')
+    tauntIndex = attack['taunt']
+    battle = attack['battle']
+    toon = target[0]['toon']
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.75))
+
+    clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
+    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 2.5, Point3(1.1, 1.1, 1.1))
+    suitName = attack['suitName']
+    ballPosPoints = [Point3(5.1, 4.0, 0.1)]
+    ballPropTrack = Sequence(getPropAppearTrack(ball, suit, ballPosPoints, 1.2, Point3(1.5, 1.5, 1.5)),
+                             Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),
+                             Wait(0.75))
+    missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
+    ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], .1))
+    ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
+    dodgeDelay = suitTrack.getDuration()
+    toonTrack = getToonTrack(attack, 2.5, ['slip-backward'], 1, ['duck'],
+                             showMissedExtraTime=1.7)
+    soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2, node=suit)
+    return Parallel(suitTrack, toonTrack, clubPropTrack, ballPropTrack, soundTrack)
+
+def doDriver(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.75))
+    club = globalPropPool.getProp('golf-club')
+    clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
+    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 2.25, Point3(1.1, 1.1, 1.1))
+    ballPosPoints = [Point3(5.1, 4.0, 0.1)]
+    ballPropTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        ball = loader.loadModel('phase_6/models/golf/golf_ball')
+        ball.setColorScale(0.75, 0.75, 0.75, 0.5)
+        ball.setTransparency(1)
+        ballScale = 2.5
+        ball.setScale(ballScale)
+        ball2 = loader.loadModel('phase_6/models/golf/golf_ball')
+        ball2.setColorScale(0.75, 0.75, 0.75, 0.5)
+        ball2.setTransparency(1)
+        ball2.setScale(ballScale)
+        ball3 = loader.loadModel('phase_6/models/golf/golf_ball')
+        ball3.setColorScale(0.75, 0.75, 0.75, 0.5)
+        ball3.setTransparency(1)
+        ball3.setScale(ballScale)
+        ball4 = loader.loadModel('phase_6/models/golf/golf_ball')
+        ball4.setColorScale(0.75, 0.75, 0.75, 0.5)
+        ball4.setTransparency(1)
+        ball4.setScale(ballScale)
+        ball5 = loader.loadModel('phase_6/models/golf/golf_ball')
+        ball5.setColorScale(0.75, 0.75, 0.75, 0.5)
+        ball5.setTransparency(1)
+        ball5.setScale(ballScale)
+        ballPropTrack = Sequence(Wait(1.25), getPropAppearTrack(ball, suit, ballPosPoints, 0, ballScale),
+                                 Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),
+                                 Wait(0.75))
+        missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
+        ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], .1, target=t))
+        ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
+        ballPropTrack2 = Sequence(Wait(1.35), getPropAppearTrack(ball2, suit, ballPosPoints, 0, ballScale),
+                                 Func(battle.movie.needRestoreRenderProp, ball2), Func(ball2.wrtReparentTo, render),
+                                 Wait(0.75))
+        missPoint = lambda ball2=ball2, toon=toon: __toonMissPoint(ball2, toon)
+        ballPropTrack2.append(getPropThrowTrack(attack, ball2, [__toonFacePoint(toon)], [missPoint], .1, target=t))
+        ballPropTrack2.append(Func(battle.movie.clearRenderProp, ball2))
+        ballPropTrack3 = Sequence(Wait(1.45), getPropAppearTrack(ball3, suit, ballPosPoints, 0, ballScale),
+                                 Func(battle.movie.needRestoreRenderProp, ball3), Func(ball3.wrtReparentTo, render),
+                                 Wait(0.75))
+        missPoint = lambda ball3=ball3, toon=toon: __toonMissPoint(ball3, toon)
+        ballPropTrack3.append(getPropThrowTrack(attack, ball3, [__toonFacePoint(toon)], [missPoint], .1, target=t))
+        ballPropTrack3.append(Func(battle.movie.clearRenderProp, ball3))
+        ballPropTrack4 = Sequence(Wait(1.55), getPropAppearTrack(ball4, suit, ballPosPoints, 0, ballScale),
+                                 Func(battle.movie.needRestoreRenderProp, ball4), Func(ball4.wrtReparentTo, render),
+                                 Wait(0.75))
+        missPoint = lambda ball4=ball4, toon=toon: __toonMissPoint(ball4, toon)
+        ballPropTrack4.append(getPropThrowTrack(attack, ball4, [__toonFacePoint(toon)], [missPoint], .1, target=t))
+        ballPropTrack4.append(Func(battle.movie.clearRenderProp, ball4))
+        ballPropTrack5 = Sequence(Wait(1.65), getPropAppearTrack(ball5, suit, ballPosPoints, 0, ballScale),
+                                 Func(battle.movie.needRestoreRenderProp, ball5), Func(ball5.wrtReparentTo, render),
+                                 Wait(0.75))
+        missPoint = lambda ball5=ball5, toon=toon: __toonMissPoint(ball5, toon)
+        ballPropTrack5.append(getPropThrowTrack(attack, ball5, [__toonFacePoint(toon)], [missPoint], .1, target=t))
+        ballPropTrack5.append(Func(battle.movie.clearRenderProp, ball5))
+        ballPropTracks.append(ballPropTrack)
+        ballPropTracks.append(ballPropTrack2)
+        ballPropTracks.append(ballPropTrack3)
+        ballPropTracks.append(ballPropTrack4)
+        ballPropTracks.append(ballPropTrack5)
+    toonTracks = getToonTracks(attack, 2.5, ['slip-backward'], 1, ['duck'],
+                               showMissedExtraTime=1.7)
+    soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2, node=suit)
+    return Parallel(suitTrack, ballPropTracks, toonTracks, soundTrack, clubPropTrack)

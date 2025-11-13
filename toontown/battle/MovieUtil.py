@@ -1091,6 +1091,49 @@ def createSuitDeathTrack(suit, battle):
         returnval.append(headInterval)
     return returnval
 
+def createSuitDeathTrackExplosiveForeman(suit, battle):
+    suitTrack = Sequence()
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    removeTrainTrack(suit, battle, suitTrack)
+    deathSuit = suit
+    deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
+    hasAnimatedHead = False
+    suitTrack.append(Func(battle.unlureSuit, suit))
+    suitTrack.append(Func(battle.unSueSuit, suit))
+    suitTrack.append(Func(suit.setDizzy, 0))
+    suitTrack.append(Func(suit.setSued2, 0))
+    suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
+    suitTrack.append(ActorInterval(suit, 'lose', startTime=6))
+    suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
+    suitTrack.append(Func(suit.hide))
+    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
+    BattleParticles.loadParticles()
+    smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
+    singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
+    smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
+    bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
+    gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
+    smallGears.setPos(gearPoint)
+    singleGear.setPos(gearPoint)
+    smallGears.setDepthWrite(False)
+    singleGear.setDepthWrite(False)
+    smallGearExplosion.setPos(gearPoint)
+    bigGearExplosion.setPos(gearPoint)
+    smallGearExplosion.setDepthWrite(False)
+    bigGearExplosion.setDepthWrite(False)
+    explosionTrack = Sequence()
+    explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
+    gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+    gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+    toonMTrack = Parallel(name='toonMTrack')
+    for mtoon in battle.toons:
+        toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
+    returnval = Parallel(suitTrack, deathSoundTrack, explosionTrack)
+    if hasAnimatedHead:
+        returnval.append(headInterval)
+    return returnval
+
 def __HighRollerAbsorb(suitIndex, suits, hp, battle):
     if len(suits) > suitIndex >= 0 and suits[suitIndex].dna.name == 'hroller':
         showDamage = Sequence(Func(suits[suitIndex].addLevelDamage, suits[suitIndex], int(hp)))

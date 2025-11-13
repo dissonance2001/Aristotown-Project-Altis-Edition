@@ -238,7 +238,7 @@ class Movie(DirectObject.DirectObject):
 
         for suit in self.battle.activeSuits:
             if suit._Actor__animControlDict != None:
-                suit.setNeutralAnimation()
+                #suit.setNeutralAnimation()
                 suit.battleTrapIsFresh = 0
                 origPos, origHpr = self.battle.getActorPosHpr(suit)
                 suit.setPosHpr(self.battle, origPos, origHpr)
@@ -305,8 +305,6 @@ class Movie(DirectObject.DirectObject):
             MovieUtil.shotDirection = 'left'
         else:
             MovieUtil.shotDirection = 'right'
-        for t in self.battle.activeToons:
-            t.loop('neutral')
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
             for suit in self.battle.activeSuits:
@@ -326,6 +324,10 @@ class Movie(DirectObject.DirectObject):
                 s.makeUnLured()
             if not s.getLuredRounds() <= 0:
                 s.addLuredRounds(s.getLuredRounds() - 1)
+            if not s.getExplosiveCondition() <= 0:
+                s.makeExplosive(s.getExplosiveCondition() - 1)
+            if not s.getSleepyCondition() <= 0:
+                s.makeSleepy(s.getSleepyCondition() - 1)
             if not s.getSoakRounds() <= 0:
                 s.makeSoaked(s.getSoakRounds() - 1)
             if not s.getMarkRounds() <= 0:
@@ -336,18 +338,12 @@ class Movie(DirectObject.DirectObject):
                 s.makeAngry(s.getEnrageCounter() - 1)
             if s.isDazed:
                 s.makeUnDazed()
-
-        for a in self.suitAttackDicts:
-            battle = a['battle']
-            for s in battle.activeSuits:
-                if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'choreo' or s.dna.name == 'cinema' or s.dna.name == 'director' or s.dna.name == 'fmaker':
-                    ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.updateHealthBar, 0, forceUpdate=1)))
-                else:
-                    ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.updateHealthBar, 0, forceUpdate=1)))
         tattacks, tcam = self.__doToonAttacks()
         if tattacks:
             ptrack.append(tattacks)
             camtrack.append(tcam)
+            for t in self.battle.activeToons:
+                t.loop('neutral')
         sattacks, scam = self.__doSuitAttacks()
         if sattacks:
             ptrack.append(sattacks)
@@ -361,9 +357,14 @@ class Movie(DirectObject.DirectObject):
                                                                              '',
                                                                              CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
                     else:
-                        ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
-                                                                                       '',
-                                                                                       CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
+                        if s.isSleepy:
+                            ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsoluteSpecial,
+                                                                                           '. . . Z Z Z . . .',
+                                                                                       CFThought), Func(s.updateHealthBar, 0, forceUpdate=1)))
+                        else:
+                            ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
+                                                                                     '',
+                                                                                     CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
         ptrack.append(Func(callback))
         self._deleteTrack()
         self.track = Sequence(ptrack, name='movie-track-%d' % self.battle.doId)
