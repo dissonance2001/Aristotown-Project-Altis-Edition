@@ -22,7 +22,6 @@ class DistributedPizzeriaInterior(DistributedObject.DistributedObject):
         cSphereNode.addSolid(cSphere)
         self.cSphereNodePath = self.interior.attachNewNode(cSphereNode)
         cSphereNode.setCollideMask(ToontownGlobals.WallBitmask)
-        self.cSphereNodePath.show()
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
