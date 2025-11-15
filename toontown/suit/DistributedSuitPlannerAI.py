@@ -125,7 +125,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     SUIT_HOOD_INFO_HEIGHTS = 10
     SUIT_HOOD_INFO_ECHANCE = 11
     MAX_SUIT_TYPES = 11
-    MAX_SUIT_TYPES_HQ = 14
+    MAX_SUIT_TYPES_HQ = 16
     HQ_SKELE_CHANCE = .15
     HQ_VIRTUAL_CHANCE = 0
     POP_UPKEEP_DELAY = 10
@@ -451,7 +451,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         newSuit.setCog(1)
         if skelecog:
             newSuit.setSkelecog(skelecog)
-        if self.skeleChance == 1 and not newSuit.getManager():
+        if self.skeleChance == 1 and not newSuit.getManager() and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'chairp':
             newSuit.setSkelecog(1)
         if newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
             newSuit.setManager(1)
@@ -467,8 +467,6 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'watchm':
             newSuit.setExecutive(1)
-        if newSuit.dna.name == 'ovt':
-            newSuit.setExecutive(1)
         if newSuit.dna.name == 'ant':
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'mh2':
@@ -477,9 +475,9 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setExecutive(1)
         if executive and not newSuit.getManager():
             newSuit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'whistleb' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'ovt' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'whistleb' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
             newSuit.setExecutive(1)
-        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'whistleb' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'djockey' and not newSuit.dna.name == 'ovt' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'whistleb' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'djockey' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
             newSuit.setGovernaught(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         if revives is not None:
@@ -1223,7 +1221,7 @@ def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
         return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
     elif name == 'hrollers' and revives > 0:
         return "Unable to spawn %s with revives."  % suitFullName
-    elif (name == 'autocad' or name == 'clerk' or name == 'wsi' or name == 'maudit' or name == 'supervis' or name == 'styx' or name == 'nix' or name == 'hydra' or name == 'kerberos' or name == 'charon' \
+    elif (name == 'autocad' or name == 'clerk' or name == 'wsi' or name == 'ovt' or name == 'supervis' or name == 'styx' or name == 'nix' or name == 'hydra' or name == 'kerberos' or name == 'charon' \
         or name == 'watchm' or name == 'foreman' or name == 'chairp' or name == 'bdirector' or name == 'ant' or name == 'sya') and revives > 1:
         return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
     elif name == 'derrhand':

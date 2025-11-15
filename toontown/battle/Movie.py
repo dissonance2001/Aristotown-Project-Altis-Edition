@@ -307,6 +307,8 @@ class Movie(DirectObject.DirectObject):
             MovieUtil.shotDirection = 'right'
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
+            if s.dna.name == 'clubpres' and s.getActualLevel() == 21:
+                s.makeExtraAttacks(s.getExtraAttacks() + 1)
             for suit in self.battle.activeSuits:
                 if suit.dna.name == 'sgoat':
                     currentBossHealth = suit.currHP
@@ -386,6 +388,10 @@ class Movie(DirectObject.DirectObject):
         self.track.start(ts, playRate=playRate)
         for s in self.battle.suits:
             if s.dna.name == 'psetter':
+                theSuit = s
+                self.setTrackPlayRate(self.track, theSuit.getPlayRate())
+                self.track.start(ts, playRate=theSuit.getPlayRate())
+            elif s.dna.name == 'clerk' and s.getActualLevel() == 24:
                 theSuit = s
                 self.setTrackPlayRate(self.track, theSuit.getPlayRate())
                 self.track.start(ts, playRate=theSuit.getPlayRate())

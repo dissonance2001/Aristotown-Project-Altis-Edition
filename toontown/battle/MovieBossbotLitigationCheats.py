@@ -1073,7 +1073,7 @@ def doWiretapped(attack):
                          LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO),
                          Func(MovieUtil.removeProps, [receiver, phone]))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=0.2, node=suit)
-    selfDamageTrack = Sequence(Wait(4), Func(suit.showHpTextNew, +int(dmg * 4), text="SYPHONED!", colorCode=1), Func(suit.setHealthForMe, +int(dmg * 4)), Func(suit.updateHealthBar, 0), soundTrack2)
+    selfDamageTrack = Sequence(Wait(4), Func(suit.showHpTextNew, +int(200 * len(battle.activeToons)), text="SYPHONED!", colorCode=1), Func(suit.setHealthForMe, +int(200 * len(battle.activeToons))), Func(suit.updateHealthBar, 0), soundTrack2)
     #propTrack = Sequence(Wait(0.3), Func(__showProp, phone, suit.getLeftHand(), phonePosPoints[0], phonePosPoints[1]), Func(__showProp, receiver, suit.getLeftHand(), receiverPosPoints[0], receiverPosPoints[1]), LerpScaleInterval(phone, 0.5, scaleUpPoint, MovieUtil.PNT3_NEARZERO), Wait(pickupDelay), Func(receiver.wrtReparentTo, suit.getRightHand()), LerpScaleInterval(receiver, 0.01, receiverAdjustScale), LerpPosHprInterval(receiver, 0.0001, Point3(-0.53, 0.21, -0.54), VBase3(-99.49, -35.27, 1.84)), Wait(dialDuration), Func(receiver.wrtReparentTo, phone), Wait(finalPhoneDelay), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProps, [receiver, phone]))
     toonTracks = getToonTracks(attack, 2.8, ['slip-backward'], 4.7, ['jump'])
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=0.5, node=suit)

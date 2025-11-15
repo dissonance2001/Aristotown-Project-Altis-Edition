@@ -816,6 +816,22 @@ def doAbsorbMovie(attack):
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
 
+def doAccountantRequirement(attack):
+    suit = attack['suit']
+    calculator = globalPropPool.getProp('calculator')
+    calculator.setTwoSided(True)
+    calculator.setScale(1.5)
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'calculator', playRate=1.25), Func(suit.setNeutralAnimationDrop), Wait(2.0))
+    calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+    calcPropTrack = Sequence(
+        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
+        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(MovieUtil.removeProp, calculator)
+    )
+    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    return Parallel(suitTrack, calcPropTrack, suitTrack2, soundTrack)
+
 def doSyphonMovie(attack):
     theSuit = attack['suit']
     notifyTracks = Sequence()
@@ -1026,7 +1042,7 @@ def doCourtRecord(attack):
 def doCourtMandate(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack.append(Wait(1.0))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=0.75))
+    suitTrack.append(Wait(2.0))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_objection.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack)

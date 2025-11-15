@@ -107,7 +107,7 @@ cr = (('glower', 'glower', 4), ('effort', 'effort', 4), ('pickpocket', 'pickpock
 txl = (('effort', 'effort', 4), ('glower', 'glower', 4), ('effort', 'effort', 4), ('cigar-smoke', 'cigar-smoke', 4))
 tbc = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('cigar-smoke', 'cigar-smoke', 4))
 autocad = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
-clubpres = (('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
+clubpres = (('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
 derrman = (('pen-squirt', 'fountain-pen', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 derrhand = (('pen-squirt', 'fountain-pen', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('summon', 'summon', 4))
 mplayer = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
@@ -137,7 +137,7 @@ m = (('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4))
 ksp = (('speak', 'speak', 4), ('smile', 'smile', 4))
 mh = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4))
 watchm = (('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4))
-foreman = (('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4), ('magic3-alt', 'magic3-alt', 4))
+foreman = (('finger-wag', 'finger-wag', 4), ('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4), ('magic3-alt', 'magic3-alt', 4))
 dopr = (('effort', 'effort', 4), ('glower', 'glower', 4), ('speak', 'speak', 4))
 dopa = (('speak', 'speak', 4), ('effort', 'effort', 4))
 bellring = (('roll-o-dex', 'roll-o-dex', 4), ('quick-jump', 'jump', 4))
@@ -166,8 +166,8 @@ trs = (('watercooler', 'watercooler', 4), ('effort', 'effort', 4), ('pickpocket'
 ls = (('hold-pencil', 'hold-pencil', 4), ('pen-squirt', 'fountain-pen', 4))
 bfh = (('watercooler', 'watercooler', 4), ('pickpocket', 'pickpocket', 4))
 rb = (('cigar-smoke', 'cigar-smoke', 4), ('pickpocket', 'pickpocket', 4), ('golf-club-swing', 'golf-club-swing', 4))
-ovt = (('cigar-smoke', 'cigar-smoke', 4), ('effort', 'effort', 4))
-supervis = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+ovt = (('finger-wag', 'finger-wag', 4), ('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4), ('frustrated', 'frustrated', 4), ('objection', 'objection', 4))
+supervis = (('finger-wag', 'finger-wag', 4), ('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 duckshfl = (('cigar-smoke', 'cigar-smoke', 4), ('sit-dock', 'sit-dock', 4))
 treek = (('shredder', 'shredder', 4), ('pen-squirt', 'fountain-pen', 4))
 styx = (('watercooler', 'watercooler', 4), ('glower', 'glower', 4))
@@ -197,7 +197,7 @@ le = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
 br = (('quick-jump', 'jump', 4), ('glower', 'glower', 4))
 bw = (('finger-wag', 'fingerwag', 4), ('cigar-smoke', 'cigar-smoke', 4))
 whistleb = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
-clerk = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
+clerk = (('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('pace', 'pace', 4), ('finger-wag', 'finger-wag', 4), ('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4), ('frustrated', 'frustrated', 4), ('objection', 'objection', 4))
 arbit = (('effort', 'effort', 4), ('speak', 'speak', 4), ('cease', 'cease3', 4), ('sanction', 'sanction3', 4))
 judy = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 mouthp = (('roll-o-dex', 'roll-o-dex', 4), ('finger-wag', 'finger-wag', 4))
@@ -1482,12 +1482,16 @@ class Suit(Avatar.Avatar):
             self.makeSkeletonManager()
             self.setHeight(6.0)
         elif dna.name == 'clubpres':
-            self.scale = 7.0 / aSize
+            self.scale = 7.2 / aSize
             self.handColor = VBase4(0.608, 0.525, 0.431, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead3('clubpresident', animated=True)
-            self.setHeight(9.0)
+            self.generateHead2('skeleskull_A')
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_c_exe.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.generateHead3('autocaddie', animated=True)
+            self.setHeight(9.2)
             self.isSkelecogDialogue = 1
         elif dna.name == 'derrman':
             self.scale = 4.5 / aSize
@@ -1997,20 +2001,15 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.95)
         elif dna.name == 'ovt':
-            self.scale = 6.0 / aSize
-            self.handColor = VBase4(0.125, 0.125, 0.125, 1)
-            self.generateBody()
-            self.generateHead2('overtime')
-            self.makeExecutive()
-            texture = loader.loadTexture('phase_3.5/maps/ttoff_t_ene_overtime_palette_4amlc_1.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.9)
+            self.scale = 7.2 / bSize
+            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
+            self.makeSkeletonManager()
+            self.setHeight(8.7)
         elif dna.name == 'supervis':
-            self.scale = 7.0 / cSize
+            self.scale = 8.0 / cSize
             self.handColor = VBase4(0.286, 0.29, 0.286, 1)
             self.makeSkeletonManager()
-            self.setHeight(9.0)
+            self.setHeight(10.0)
         elif dna.name == 'duckshfl':
             self.scale = 5.0 / bSize
             self.handColor = VBase4(0.714, 0.118, 0.055, 1)
@@ -2229,10 +2228,10 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(7.9)
         elif dna.name == 'foreman':
-            self.scale = 7.0 / aSize
+            self.scale = 7.2 / aSize
             self.handColor = VBase4(1, 0.486, 0, 1)
             self.makeSkeletonManager()
-            self.setHeight(9.0)
+            self.setHeight(9.2)
         elif dna.name == 'dopr':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(1, 1, 1, 1.0)
@@ -3474,6 +3473,8 @@ class Suit(Avatar.Avatar):
         if self.style.name == 'wsi':
             modelRoot.find('**/necktie-w').setTexture(texture3, 1)
             modelRoot.find('**/necktie-w').show()
+        if self.style.name == 'ovt':
+            modelRoot.find('**/bowtie').show()
         modelRoot.find('**/bowtie').setTexture(texture, 1)
         if self.style.dept == 'l' and not self.style.name == 'wsi':
             modelRoot.find('**/bowtie').show()
@@ -3560,6 +3561,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'wsi':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/bowtie').hide()
+        elif self.style.name == 'ovt':
+            modelRoot.find('**/bowtie').show()
         else:
             modelRoot.find('**/necktie-w').show()
         modelRoot.find('**/body').setTexture(texture, 1)
@@ -3856,6 +3859,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'wsi':
             modelRoot.find('**/bowtie').hide()
             modelRoot.find('**/necktie-s').hide()
+        elif self.style.name == 'ovt':
+            modelRoot.find('**/bowtie').show()
         else:
             modelRoot.find('**/necktie-w').show()
         modelRoot.find('**/body').setTexture(texture, 1)
@@ -4245,11 +4250,6 @@ class Suit(Avatar.Avatar):
                 textureGlass = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker_glass.png')
                 headModel.find('**/glass').setTexture(textureGlass, 1)
                 headModel.find('**/brain').hide()
-            elif headType == 'autocaddie' and not self.style.name == 'fmaker' and not self.style.name == 'director' and not self.style.name == 'cinema' and not self.style.name == 'choreo':
-                textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_c_exe.png')
-                textureGlass2 = loader.loadTexture('phase_12/maps/cc_t_ene_ceo.png')
-                headModel.find('**/head').setTexture(textureGlass, 1)
-                headModel.setTexture(textureGlass2, 1)
             elif headType == 'autocaddie' and self.style.name == 'director':
                 headModel.setZ(.25)
                 headModel.setY(-.2)
@@ -4274,6 +4274,9 @@ class Suit(Avatar.Avatar):
                 textureGlass2 = loader.loadTexture('phase_12/maps/cc_t_ene_ceo.png')
                 headModel.find('**/head').setTexture(textureGlass, 1)
                 headModel.setTexture(textureGlass2, 1)
+            elif headType == 'autocaddie' and self.style.name == 'clubpres' and not self.isSkeleton:
+                headModel.setZ(.25)
+                headModel.setY(-.2)
             elif headType == 'autocaddie' and self.style.name == 'cinema':
                 headModel.setZ(.25)
                 headModel.setY(-.2)
@@ -4934,6 +4937,12 @@ class Suit(Avatar.Avatar):
             headModel.setZ(-.1)
             headModel.setY(-.2)
             textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_g_exe.png')
+            headModel.setTexture(textureGlass, 1)
+        if headType == 'skeleskull_A' and self.style.name == 'clubpres':
+            headModel = loader.loadModel('phase_5/models/char/skullbase')
+            headModel.setZ(-.1)
+            headModel.setY(-.2)
+            textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_c_exe.png')
             headModel.setTexture(textureGlass, 1)
         if headType == 'ear01':
             headModel = loader.loadModel('phase_4/models/char/mole_cog')
@@ -5786,6 +5795,8 @@ class Suit(Avatar.Avatar):
                 self.setDisplayName(self.createNameInfoShivering())
             else:
                 pass
+        if self.style.name == 'ovt':
+            self.setDisplayName(self.createNameInfoConfusedReal())
         if self.style.name == 'supervis':
             if self.getActualLevel() == 20:
                 self.setDisplayName(self.createNameInfoAbacus())
@@ -5797,6 +5808,7 @@ class Suit(Avatar.Avatar):
                 self.setDisplayName(self.createNameInfoAccountant())
             elif self.getActualLevel() == 24:
                 self.setDisplayName(self.createNameInfoSpongy())
+                self.makeShielding()
             elif self.getActualLevel() == 25:
                 self.setDisplayName(self.createNameInfoFraudulent())
             else:
@@ -7364,8 +7376,12 @@ class Suit(Avatar.Avatar):
     def makeExtraAttacks(self, num):
         self.extraAttack = num
         if self.extraAttack == 1:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack = Parallel(
@@ -7391,8 +7407,12 @@ class Suit(Avatar.Avatar):
         )
             self.knifeTrack.loop()
         if self.extraAttack == 2:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack2 = Parallel(
@@ -7418,8 +7438,12 @@ class Suit(Avatar.Avatar):
         )
             self.knifeTrack2.loop()
         if self.extraAttack == 3:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack3 = Parallel(
@@ -7445,8 +7469,12 @@ class Suit(Avatar.Avatar):
         )
             self.knifeTrack3.loop()
         if self.extraAttack == 4:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack4 = Parallel(
@@ -7472,8 +7500,12 @@ class Suit(Avatar.Avatar):
         )
             self.knifeTrack4.loop()
         if self.extraAttack == 5:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack5 = Parallel(
@@ -7499,8 +7531,12 @@ class Suit(Avatar.Avatar):
         )
             self.knifeTrack5.loop()
         if self.extraAttack == 6:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack6 = Parallel(
@@ -7526,8 +7562,12 @@ class Suit(Avatar.Avatar):
         )
             self.knifeTrack6.loop()
         if self.extraAttack == 7:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack7 = Parallel(
@@ -7553,8 +7593,12 @@ class Suit(Avatar.Avatar):
         )
             self.knifeTrack7.loop()
         if self.extraAttack == 8:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack8 = Parallel(
@@ -7580,8 +7624,12 @@ class Suit(Avatar.Avatar):
         )
             self.knifeTrack8.loop()
         if self.extraAttack == 9:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack9 = Parallel(
@@ -7607,8 +7655,43 @@ class Suit(Avatar.Avatar):
         )
             self.knifeTrack9.loop()
         if self.extraAttack == 10:
-            knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-            knife.setScale(0.5)
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack10 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack10.loop()
+        if self.extraAttack == 11:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
             self.knifeTrack10 = Parallel(

@@ -407,6 +407,8 @@ def __throwPie(throw, delay, hitCount, npcs):
         for s in battle.activeSuits:
             if s.dna.name == 'hrollers' and s.getActualLevel() == 25:
                 suitResponseTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
+            if s.dna.name == 'clerk' and s.getActualLevel() == 20:
+                suitResponseTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
             if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
                 suitResponseTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
         showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="MARKED!", attackTrack=THROW_TRACK, colorCode=1))

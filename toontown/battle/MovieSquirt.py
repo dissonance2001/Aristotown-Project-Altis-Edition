@@ -180,6 +180,8 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         for s in battle.activeSuits:
             if s.dna.name == 'hrollers' and s.getActualLevel() == 25:
                 suitTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
+            if s.dna.name == 'clerk' and s.getActualLevel() == 20:
+                suitTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
             if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
                 suitTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
         soakTracks = Parallel()
@@ -351,6 +353,7 @@ def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, atta
         suitTrack.append(Wait(tContact))
         suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level=0))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
+        suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
@@ -375,6 +378,7 @@ def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
         suitTrack.append(Wait(tContact))
         suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level=0))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
+        suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
@@ -399,6 +403,7 @@ def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
         suitTrack.append(Wait(tContact))
         suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
+        suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
@@ -423,6 +428,7 @@ def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
         suitTrack.append(Wait(tContact))
         suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
+        suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))

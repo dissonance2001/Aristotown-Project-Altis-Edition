@@ -2085,7 +2085,7 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(1, 0.984, 0, 1)
                 self.insured.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
-        if self.cog.isContracted:
+        if self.cog.isContracted or self.cog.dna.name == 'supervis' or self.cog.dna.name == 'ovt':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.insured = status.find('**/insured_icon')
             self.statusEffects += 1
@@ -2830,7 +2830,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .0675, .0675, .0675)
         elif name == 'safesupervis':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .0675, .0675, .0675)
-        elif name == 'ovt' or name == 'watchm':
+        elif name == 'watchm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
         elif name == 'mplayer' or name == 'mplayer2':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
@@ -2864,7 +2864,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
         elif name == 'mslacker' or name == 'videog' or name == 'bcaster':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .06, .06, .06)
-        elif name == 'wsi' or name == 'maudit' or name == 'kerberos' or name == 'charon' or name == 'bdirector' or name == 'sya' or name == 'pbl' or name == 'foreman':
+        elif name == 'wsi' or name == 'kerberos' or name == 'charon' or name == 'bdirector' or name == 'sya' or name == 'pbl' or name == 'foreman':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .12, .12, .12)
         elif name == 'shw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .00001, .00001, .00001)
@@ -2872,8 +2872,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .125, .125, .125)
         elif name == 'hydra' or name == 'styx' or name == 'supervis':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .3, .3, .3)
-        elif name == 'clerk' or name == 'ant' or name == 'nix' or name == 'jls':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .2, .2, .2)
+        elif name == 'clerk' or name == 'ovt' or name == 'ant' or name == 'nix' or name == 'jls':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .2, .2, .2)
         elif name == 'judy':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
         elif name == 'bf':

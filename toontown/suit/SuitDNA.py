@@ -37,7 +37,7 @@ suitATypes = [
     # Lawbots
 'dt', 'cv', 'le', 'br', 'bw', 'whistleb', 'arbit', 'whunter', 'wsi', 'caseman', 'stenog', 'lgator',
     # Cashbots
-'pp', 'sw', 'nc', 'trs', 'rb', 'ovt', 'kerberos', 'charon', 'hroller', 'erfit', 'hrollers', 'hroller2',
+'pp', 'sw', 'nc', 'trs', 'rb', 'kerberos', 'charon', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
 'nd', 'dc', 'fcs', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'ubuster', 'safesupervis',
     # Boardbots
@@ -53,7 +53,7 @@ suitBTypes = [
     # Lawbots
 'b', 'pf', 'ac', 'bs', 'sd', 'sh', 'clerk', 'mouthp', 'rainmake', 'erclaim', 'redd', 'sgoat',
     # Cashbots
-'shy', 'bc', 'gld', 'ls', 'duckshfl', 'nix',
+'shy', 'bc', 'gld', 'ls', 'ovt', 'duckshfl', 'nix',
     # Sellbots
 'tm', 'cn', 'ms', 'bellring', 'prethink', 'racket', 'psetter',
     # Boardbots

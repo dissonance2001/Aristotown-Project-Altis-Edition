@@ -62,6 +62,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.currentLeg = -1
         self.pathStartTime = 0.0
         self.absorbDamage = 0
+        self.fraudulentDamage = 0
         self.levelDamage = 0
         self.syphonHP = 0
         self.splashInterval = None
@@ -854,6 +855,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def removeAbsorbDamage(self):
         self.absorbDamage  = 0
 
+    def addFraudulentDamage(self, absorbingCog, damage):
+        absorbingCog.fraudulentDamage += damage
+
+    def removeFraudulentDamage(self):
+        self.fraudulentDamage  = 0
+
     def addSyphonHP(self, absorbingCog, damage):
         absorbingCog.syphonHP += damage
 
@@ -913,6 +920,13 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                          Func(self.setHealthForMe, - self.absorbDamage),
                          Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
                 Func(self.removeAbsorbDamage)).start()
+
+    def checkFraudulentDamage(self):
+        self.absorbInterval = Sequence(
+                Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                         Func(self.showHpTextNew, - 158),
+                         Func(self.setHealthForMe, - 158),
+                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)).start()
 
     def checkLevelDamage(self):
         self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
@@ -983,11 +997,11 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             suitTrack = Sequence()
             updateHealthBar = Func(self.updateHealthBar, int(math.floor(hp)))
             if self.dna.name == 'redd':
-                showDamage = Parallel(ActorInterval(self, 'squirt-small-react'), Func(self.showHpTextNew, - int(math.floor(hp)), text="SOAKED 1 ROUND", attackTrack=attackTrack, colorCode=1), updateHealthBar,
+                showDamage = Parallel(Func(self.showHpTextNew, - int(math.floor(hp)), text="SOAKED 1 ROUND", attackTrack=attackTrack, colorCode=1), updateHealthBar,
                                       )
                 soakSuit = Func(self.makeSoaked, 1)
             else:
-                showDamage = Parallel(ActorInterval(self, 'squirt-small-react'), Func(self.showHpTextNew, -int(math.floor(hp)), text="SOAKED 4 ROUNDS", attackTrack=attackTrack, colorCode=1), updateHealthBar,
+                showDamage = Parallel(Func(self.showHpTextNew, -int(math.floor(hp)), text="SOAKED 4 ROUNDS", attackTrack=attackTrack, colorCode=1), updateHealthBar,
                                     )
                 soakSuit = Func(self.makeSoaked, 3)
             suitTrack.append(Func(self.setSoaked, 1))
@@ -999,7 +1013,6 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 suitTrack.append(Func(self.addPowerhouseRotation, int(math.floor(hp)) + 150))
             if self.isSued:
                 suitTrack.append(Func(self.makeSued, 3))
-            suitTrack.append(Func(self.checkDeathCheck, battle))
             self.splashInterval = Sequence(suitTrack).start()
 
     def checkSoakRounds(self):
@@ -1474,6 +1487,29 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             self.healInterval = Parallel(Func(self.showHpTextNew, 50, text="INSURANCE!", colorCode=1), Func(self.setHealthForMe, 50), Func(self.updateHealthBar, 0)).start()
 
+
+    def checkLifeInsurance(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int(self.maxHP - self.currHP)
+        if self.getActualLevel() == 25:
+            if self.currHP >= (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="+10% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 10), Func(self.updateHealthBar, 0)).start()
+            elif self.currHP + 225 > self.maxHP:
+                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="+10% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 10), Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+            else:
+                self.healInterval = Parallel(Func(self.showHpTextNew, 225, text="+10% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 10), Func(self.setHealthForMe, 225), Func(self.updateHealthBar, 0)).start()
+        else:
+            if self.currHP >= (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="+5% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 5), Func(self.updateHealthBar, 0)).start()
+            elif self.currHP + 225 > self.maxHP:
+                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="+5% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 5), Func(self.setHealthForMe, x),
+                                             Func(self.updateHealthBar, 0)).start()
+            else:
+                self.healInterval = Parallel(Func(self.showHpTextNew, 225, text="+5% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 5), Func(self.setHealthForMe, 225),
+                                             Func(self.updateHealthBar, 0)).start()
+
     def checkCompensation(self):
         if self.healInterval:
             self.healInterval.finish()
@@ -1638,7 +1674,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.getDizzy():
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'lured'), Func(self.setPlayRate, self.getPlayRate2(), 'lured2'), Func(self.loop, 'lured')
                      ).start()
-        elif self.dna.name == 'clerk' and self.getActualLevel() == 24:
+        elif self.dna.name == 'clerk' and (self.getActualLevel() == 24 or self.getActualLevel() == 25):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()
         elif self.dna.name == 'phouse' and self.isVulnerable and not float(self.currHP) / float(self.maxHP) <= 0.25:
@@ -1687,7 +1723,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'lured'),
                      Func(self.setPlayRate, self.getPlayRate2(), 'lured2'), Func(self.loop, 'lured')
                      ).start()
-        elif self.dna.name == 'clerk' and self.getActualLevel() == 24:
+        elif self.dna.name == 'clerk' and (self.getActualLevel() == 24 or self.getActualLevel() == 25):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()
         elif self.dna.name == 'foreman' and self.getActualLevel() == 23:

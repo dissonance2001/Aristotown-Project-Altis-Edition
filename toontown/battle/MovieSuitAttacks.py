@@ -866,20 +866,30 @@ def doSuitAttack(attack):
     elif name == 'MintFraudulentDamage':
         suitTrack = MovieFaceTheFamilyCheats.doFraudulentDamage(attack)
     elif name == 'MintAbacusAbove15':
-        suitTrack = MovieFaceTheFamilyCheats.doAbacusRequirement(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
     elif name == 'MintAbacusBelow15':
-        suitTrack = MovieFaceTheFamilyCheats.doAbacusRequirement(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
     elif name == 'MintAccountant1':
         suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
     elif name == 'MintAccountant2':
         suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
     elif name == 'MintAccountant3':
         suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
+    elif name == 'MintAccountant4':
+        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
+    elif name == 'MintAccountant5':
+        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
     elif name == 'MintApprove':
-        suitTrack = MovieFaceTheFamilyCheats.doApprove(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doApproveDisapprove(attack)
     elif name == 'MintDisapprove':
-        suitTrack = MovieFaceTheFamilyCheats.doDisapprove(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doApproveDisapprove(attack)
+    elif name == 'MintHurrySickness':
+        suitTrack = MovieFaceTheFamilyCheats.doHurrySickness(attack)
+    elif name == 'MintMovingGoalposts':
+        suitTrack = MovieFaceTheFamilyCheats.doRolled(attack)
     elif name == 'MintSynergy':
+        suitTrack = doSynergy(attack)
+    elif name == 'MintCompoundingInterest':
         suitTrack = doSynergy(attack)
     elif name == 'AttorneyObjection':
         suitTrack = MovieFaceTheFamilyCheats.doObjection(attack)
@@ -889,6 +899,8 @@ def doSuitAttack(attack):
         suitTrack = MovieFaceTheFamilyCheats.doObjectionOverruled(attack)
     elif name == 'AttorneyChrono':
         suitTrack = MovieFaceTheFamilyCheats.doComeOn(attack)
+    elif name == 'AttorneyOverseer':
+        suitTrack = MovieFaceTheFamilyCheats.doOverseer(attack)
     elif name == 'AttorneyRushJob':
         suitTrack = MovieFaceTheFamilyCheats.doRushJob(attack)
     elif name == 'AttorneyHurrySickness':
@@ -1193,6 +1205,8 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SyphonMovie':
             resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintFraudulentDamage':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'MarkRemoval':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SueApplication':
@@ -1238,6 +1252,26 @@ def doSuitAttack(attack):
         elif name == 'ForemanExplosion':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ForemanContractor':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintPolicyTerminated':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintAbacusAbove15':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintAbacusBelow15':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintAccountant1':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintAccountant2':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintAccountant3':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintApprove':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintDisapprove':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintAccountant4':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'MintAccountant5':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'WiretapperGagBan':
             resetSuitTrack = Sequence(suitTrack2)
@@ -1580,8 +1614,13 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
         if currentBossHealth == -1:
             animTrack.append(Func(suit.removeInsured))
         syphonSuitTrack = Parallel(Sequence(Func(suit.addSyphonHP, suit, +dmg)))
+        fraudulentSuitTrack = Parallel(Sequence(Func(suit.addFraudulentDamage, suit, +(dmg * 3))))
     if suit:
-        if dmg > 0 and suit.isSyphon:
+        if dmg > 0 and suit.dna.name == 'supervis' and suit.getActualLevel() == 25:
+            animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
+            animTrack.append(fraudulentSuitTrack)
+            return Parallel(animTrack, indicatorTracks)
+        elif dmg > 0 and suit.isSyphon:
             animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
             animTrack.append(syphonSuitTrack)
             return Parallel(animTrack, indicatorTracks)

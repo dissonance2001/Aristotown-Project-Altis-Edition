@@ -896,7 +896,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
         suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
         suitTrack.append(Func(suit.makeDead))
-    suitTrack.append(Func(suit.hide))
+    #suitTrack.append(Func(suit.hide))
     returnval = Parallel()
     multiTrack = Parallel(suitTrack, returnval)
     if hasAnimatedHead:
@@ -936,7 +936,7 @@ def createSuitDeathTrack(suit, battle):
     suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
     suitTrack.append(ActorInterval(suit, 'lose'))
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
-    suitTrack.append(Func(suit.hide))
+    #suitTrack.append(Func(suit.hide))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:

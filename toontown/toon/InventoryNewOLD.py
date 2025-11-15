@@ -1472,6 +1472,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                             self.makeDamageDownPressable(button, track, level)
                         if 'noGags' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
                             self.makeBannablePressable(button, track, level)
+                        if track == DROP_TRACK and 'noDropGags' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track,
+                                              level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeBannablePressable(button, track, level)
                         if track == HEAL_TRACK and 'useToonUp' in base.localAvatar.battleConditions and not \
                                 (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
                             self.makeRushJobPressable(button, track, level)
@@ -1566,6 +1570,42 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                             self.makeUnpressable(button, track, level)
                         if track == LURE_TRACK and 'confused' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
                                 track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'disableToonUp' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if track == TRAP_TRACK and 'disableTrap' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'disableLure' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if track == SOUND_TRACK and 'disableSound' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if track == THROW_TRACK and 'disableThrow' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if track == SQUIRT_TRACK and 'disableSquirt' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if track == ZAP_TRACK and 'disableZap' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if level == 7 and 'disable8s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if level == 3 and 'disable4s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if level == 4 and 'disable5s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if level == 5 and 'disable6s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
+                            self.makeUnpressable(button, track, level)
+                        if level == 6 and 'disable7s' in base.localAvatar.battleConditions and not \
+                                (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
                             self.makeUnpressable(button, track, level)
                         if 'noDamage' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
                             self.makeUnpressable(button, track, level)

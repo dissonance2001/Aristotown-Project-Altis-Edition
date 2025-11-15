@@ -391,6 +391,15 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return nameInfo
 
     def createNameInfoConfused(self):
+        name = 'Compounding Mint Supervisor'
+        dept = 'Cashbot'
+        level = '22.mgr'
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoConfusedReal(self):
         name = 'Confused Mint Supervisor'
         dept = 'Cashbot'
         level = '22.mgr'

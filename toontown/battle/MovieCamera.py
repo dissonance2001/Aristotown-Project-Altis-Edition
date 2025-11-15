@@ -1603,7 +1603,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
-        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'ForemanRedTape':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'ForemanContractor':
@@ -1638,6 +1637,19 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ForemanCompensation5':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintMovingGoalposts':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'MintHurrySickness':
+        if attackDuration > 2:
+            camTrack2 = defaultCamera(openShotDuration=1.5)
+            pbpText = attack['playByPlayText']
+            pbpDc = PlayByPlayText.PlayByPlayText()
+            pbpDesc = pbpDc.getShowIntervalDesc("The Mint Supervisor punishes Toons who chose banned\ngags!", attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Hurry Sickness!', attackDuration - 2)
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == 'MintLifeInsurance':
         camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'MintPolicyTerminated':
@@ -1646,6 +1658,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'MintFraudulentDamage':
         camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
+    elif name == 'MintCompoundingInterest':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'MintAbacusAbove15':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'MintAbacusBelow15':
@@ -1655,6 +1669,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'MintAccountant2':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'MintAccountant3':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintAccountant4':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintAccountant5':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'MintApprove':
         camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
@@ -1666,6 +1684,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'AttorneyObjection':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'AttorneyOverseer':
+        camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'AttorneyObjectionSustained':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'AttorneyObjectionOverruled':
@@ -2154,7 +2174,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
     if attack['name'] in TTLocalizer.SuitCheatNames:
         pbpDc = PlayByPlayText.PlayByPlayText()
-        if name == 'ForemanRedTape' or name == 'ForemanBurning' or name == 'PresidentDriver':
+        if name == 'ForemanRedTape' or name == 'ForemanBurning' or name == 'MintCompoundingInterest' or name == 'PresidentDriver':
             pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
             pbpTrack = Func(suit.checkPlayByPlayTextCheat, pbpText, displayName, attackDuration - 2)
         else:

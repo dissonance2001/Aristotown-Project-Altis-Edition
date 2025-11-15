@@ -1252,6 +1252,7 @@ def doBayouBellow(attack):
         suitTrack.append(Func(battle.unSueSuit, suit))
         suitTrack.append(Func(suit.makeSoaked, 0))
         suitTrack.append(Func(suit.setSued2, 0))
+        suitTrack.append(Func(suit.setDizzy, 0))
         suitTrack.append(Func(suit.makeUnMarked))
         suitTrack.append(Func(suit.makeUnZapped))
         suitTrack.append(Func(suit.makeUnDazed))
@@ -1378,7 +1379,7 @@ def doGavelCourtRecord2(attack):
     propTracks = Parallel()
     toonTracks = Parallel()
     nothingTrack = Sequence(Wait(1.0))
-    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=0.75))
     for t in targets:
         toon = t['toon']
         gavel = globalPropPool.getProp('LB_gavel')
