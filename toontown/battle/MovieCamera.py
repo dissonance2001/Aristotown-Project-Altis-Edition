@@ -1682,6 +1682,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         return camTrack2
     elif name == 'MintSynergy':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'WhistleCompensation':
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'AttorneyObjection':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AttorneyOverseer':
@@ -1726,11 +1728,15 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+    elif name == 'PresidentExtraTip6':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == 'PresidentSnap':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PresidentSyphon':
-        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
-        return camTrack2
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'PresidentBayouBellow':
         camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5)))
     elif name == 'PresidentSnipe':

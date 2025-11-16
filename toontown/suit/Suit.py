@@ -107,7 +107,7 @@ cr = (('glower', 'glower', 4), ('effort', 'effort', 4), ('pickpocket', 'pickpock
 txl = (('effort', 'effort', 4), ('glower', 'glower', 4), ('effort', 'effort', 4), ('cigar-smoke', 'cigar-smoke', 4))
 tbc = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('cigar-smoke', 'cigar-smoke', 4))
 autocad = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
-clubpres = (('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
+clubpres = (('bellow', 'bellow', 4), ('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
 derrman = (('pen-squirt', 'fountain-pen', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 derrhand = (('pen-squirt', 'fountain-pen', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('summon', 'summon', 4))
 mplayer = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
@@ -136,7 +136,7 @@ ppl = (('speak', 'speak', 4), ('smile', 'smile', 4), ('golf-club-swing', 'golf-c
 m = (('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4))
 ksp = (('speak', 'speak', 4), ('smile', 'smile', 4))
 mh = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4))
-watchm = (('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4))
+watchm = (('effort', 'effort', 4), ('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4))
 foreman = (('finger-wag', 'finger-wag', 4), ('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4), ('magic3-alt', 'magic3-alt', 4))
 dopr = (('effort', 'effort', 4), ('glower', 'glower', 4), ('speak', 'speak', 4))
 dopa = (('speak', 'speak', 4), ('effort', 'effort', 4))
@@ -196,7 +196,7 @@ sh = (('hold-eraser', 'hold-eraser', 4), ('pen-squirt', 'fountain-pen', 4))
 le = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
 br = (('quick-jump', 'jump', 4), ('glower', 'glower', 4))
 bw = (('finger-wag', 'fingerwag', 4), ('cigar-smoke', 'cigar-smoke', 4))
-whistleb = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
+whistleb = (('cease', 'cease3', 4), ('finger-wag', 'finger-wag', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
 clerk = (('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('pace', 'pace', 4), ('finger-wag', 'finger-wag', 4), ('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4), ('frustrated', 'frustrated', 4), ('objection', 'objection', 4))
 arbit = (('effort', 'effort', 4), ('speak', 'speak', 4), ('cease', 'cease3', 4), ('sanction', 'sanction3', 4))
 judy = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -1491,7 +1491,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
-            self.setHeight(9.2)
+            self.setHeight(9.5)
             self.isSkelecogDialogue = 1
         elif dna.name == 'derrman':
             self.scale = 4.5 / aSize
@@ -1751,7 +1751,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.69)
         elif dna.name == 'whistleb':
-            self.scale = 4.5 / aSize
+            self.scale = 5.0 / aSize
             self.handColor = VBase4(0.722, 0.757, 0.784, 1)
             self.generateFemaleBody()
             self.generateHead2('root')
@@ -1759,7 +1759,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.makeExecutive()
-            self.setHeight(6.0)
+            self.setHeight(6.6)
         elif dna.name == 'clerk':
             self.scale = 7.2 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -2212,7 +2212,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.918, 0.886, 0.875, 1)
             self.generateBody()
             self.generateHead2('yesman')
-            texture = loader.loadTexture('phase_4/maps/mr_hollywood.jpg')
+            texture = loader.loadTexture('phase_4/maps/m~r_hollywood.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead2('shades')
@@ -2223,7 +2223,7 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead2('overtime')
-            texture = loader.loadTexture('phase_3.5/maps/ttoff_t_ene_overtime_palette_4amlc_12.png')
+            texture = loader.loadTexture('phase_3.5/maps/ttoff_t_ene_overtime_palette_4amlc_1.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(7.9)

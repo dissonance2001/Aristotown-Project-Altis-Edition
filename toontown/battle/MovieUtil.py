@@ -2173,6 +2173,13 @@ def createSuitBellowInterval(suit):
             headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
             hasAnimatedHead = True
         return Parallel(headInterval, suitInterval, headLoop)
+    elif suit.style.name == 'clubpres':
+        suitInterval = ActorInterval(suit, 'bellow')
+        for headPart in suit.animatedHeadParts:
+            headInterval = ActorInterval(headPart, 'bellow')
+            headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+            hasAnimatedHead = True
+        return Parallel(headInterval, suitInterval, headLoop)
     else:
         return stunInterval
 

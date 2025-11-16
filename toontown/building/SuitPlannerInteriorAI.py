@@ -150,8 +150,6 @@ class SuitPlannerInteriorAI:
            # suit.setSkeleRevives(1)
         if suit.dna.name == 'autocad':
             suit.setExecutive(1)
-        if suit.dna.name == 'whistleb':
-            suit.setExecutive(1)
         if suit.dna.name == 'chairp':
             suit.setExecutive(1)
         if suit.dna.name == 'watchm':
@@ -164,9 +162,9 @@ class SuitPlannerInteriorAI:
             suit.setExecutive(1)
         if suit.dna.name == 'std2':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'autocad' and not suit.dna.name == 'ant' and not suit.dna.name == 'whistleb' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'autocad' and not suit.dna.name == 'ant' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'djockey' and not suit.dna.name == 'autocad' and not suit.dna.name == 'whistleb' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
+        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'djockey' and not suit.dna.name == 'autocad' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
             suit.setGovernaught(1)
         return flags
 

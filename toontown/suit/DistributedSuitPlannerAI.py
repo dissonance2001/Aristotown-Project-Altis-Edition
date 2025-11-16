@@ -451,7 +451,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         newSuit.setCog(1)
         if skelecog:
             newSuit.setSkelecog(skelecog)
-        if self.skeleChance == 1 and not newSuit.getManager() and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'chairp':
+        if self.skeleChance == 1 and not (newSuit.dna.name in SuitBattleGlobals.SpecialCogDict) and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'chairp':
             newSuit.setSkelecog(1)
         if newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
             newSuit.setManager(1)
@@ -460,8 +460,6 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         #if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and newSuit.isSkeleton:
          #   newSuit.setSkeleRevives(1)
         if newSuit.dna.name == 'autocad':
-            newSuit.setExecutive(1)
-        if newSuit.dna.name == 'whistleb':
             newSuit.setExecutive(1)
         if newSuit.dna.name == 'chairp':
             newSuit.setExecutive(1)
@@ -475,9 +473,9 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setExecutive(1)
         if executive and not newSuit.getManager():
             newSuit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'whistleb' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
             newSuit.setExecutive(1)
-        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'whistleb' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'djockey' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'djockey' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
             newSuit.setGovernaught(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         if revives is not None:

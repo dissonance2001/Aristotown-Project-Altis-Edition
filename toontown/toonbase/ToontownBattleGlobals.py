@@ -821,9 +821,11 @@ ValidStatusConditions = (
     'nolevel6s',
     'nolevel5s',
     'nolevel8s',
+    'selfTarget',
     'noSquirtGags',
     'zapBoost',
     'noZapGags',
+    'target7',
     'dropBoost',
     'noDropGags',
     'noFires',
@@ -838,4 +840,6 @@ ValidStatusConditions = (
     'busted',
     'collectcalled',
     'govDamageBoost',
+    'rpm',
+    'shivering',
 )

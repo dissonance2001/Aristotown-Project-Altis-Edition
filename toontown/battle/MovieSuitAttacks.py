@@ -891,6 +891,8 @@ def doSuitAttack(attack):
         suitTrack = doSynergy(attack)
     elif name == 'MintCompoundingInterest':
         suitTrack = doSynergy(attack)
+    elif name == 'WhistleCompensation':
+        suitTrack = MovieLawbotLitigationCheats.doCompensation(attack)
     elif name == 'AttorneyObjection':
         suitTrack = MovieFaceTheFamilyCheats.doObjection(attack)
     elif name == 'AttorneyObjectionSustained':
@@ -908,15 +910,17 @@ def doSuitAttack(attack):
     elif name == 'PresidentTargetCheck':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'PresidentExtraTip':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 2)
+        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 1)
     elif name == 'PresidentExtraTip2':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 3)
+        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 2)
     elif name == 'PresidentExtraTip3':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 4)
+        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 3)
     elif name == 'PresidentExtraTip4':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 5)
+        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 4)
     elif name == 'PresidentExtraTip5':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 6)
+        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 5)
+    elif name == 'PresidentExtraTip6':
+        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 0)
     elif name == 'PresidentSnap':
         suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
     elif name == 'PresidentSyphon':
@@ -1206,6 +1210,10 @@ def doSuitAttack(attack):
         elif name == 'SyphonMovie':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'MintFraudulentDamage':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'PresidentTargetCheck':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'PresidentPuzzling':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'MarkRemoval':
             resetSuitTrack = Sequence(suitTrack2)

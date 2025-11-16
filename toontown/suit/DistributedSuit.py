@@ -1487,6 +1487,18 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             self.healInterval = Parallel(Func(self.showHpTextNew, 50, text="INSURANCE!", colorCode=1), Func(self.setHealthForMe, 50), Func(self.updateHealthBar, 0)).start()
 
+    def checkExtraTip(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.currHP >= (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="+10% Damage!", colorCode=1), Func(self.updateHealthBar, 0)).start()
+        elif self.currHP + 225 > (self.maxHP * self.hardMaxHP) and not self.dna.name == 'supervis' and not self.dna.name == 'clubpres' and not self.dna.name == 'foreman' and not self.dna.name == 'attorney':
+            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="+10% Damage!", colorCode=1), Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        else:
+            self.healInterval = Parallel(Func(self.showHpTextNew, 225, text="+10% Damage!", colorCode=1), Func(self.setHealthForMe, 225), Func(self.updateHealthBar, 0)).start()
+
 
     def checkLifeInsurance(self):
         if self.healInterval:
@@ -1510,7 +1522,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 self.healInterval = Parallel(Func(self.showHpTextNew, 225, text="+5% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 5), Func(self.setHealthForMe, 225),
                                              Func(self.updateHealthBar, 0)).start()
 
-    def checkCompensation(self):
+    def checkCompensationForeman(self):
         if self.healInterval:
             self.healInterval.finish()
             self.healInterval = None

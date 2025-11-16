@@ -237,11 +237,11 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
             self.maxHP = random.randint(100, 700)
             self.currHP = self.maxHP
         if self.dna.name == 'autocad' or self.dna.name == 'watchm' \
-                or self.dna.name == 'ant':
-            self.maxHP = int((self.maxHP * random.uniform(.75, 1.25)) * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
+                or self.dna.name == 'ant' or self.dna.name == 'jls' or self.dna.name == 'chairp':
+            self.maxHP = int(self.maxHP * random.uniform(.75, 1.25))
             self.currHP = self.maxHP
         if self.executive and not self.dna.name == 'mh2' and not self.dna.name == 'std2' and not self.dna.name == 'autocad' and not self.dna.name == 'watchm'  \
-                and not self.dna.name == 'ant':
+                and not self.dna.name == 'ant' and not self.dna.name == 'jls' and not self.dna.name == 'chairp':
             self.maxHP = int(self.maxHP * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
             self.currHP = self.maxHP
 

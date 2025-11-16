@@ -125,13 +125,10 @@ def getResetTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
-    updateTrack = Parallel(Func(suit.setChatAbsolute,
-                                '',
-                                CFSpeech | CFTimeout))
     unluredTrack = Func(battle.unlureSuit, suit)
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=1e-05), (Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))))
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=1e-05), (Func(suit.setNeutralAnimationTrap)))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(unluredTrack, updateTrack, walkTrack, moveTrack)
+    return Parallel(unluredTrack, walkTrack, moveTrack)
 
 
 def __makeCancelledNodePath():
@@ -1592,6 +1589,20 @@ def doLegalBindings(attack):
         toonTracks.append(Sequence(Wait(2.4), ActorInterval(toon, 'struggle')))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.75, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks, notifyTracks)
+
+def doCompensation(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTracks = Parallel(getSuitAnimTrack(attack, playRate=1.25))
+    suitTracks.append(Wait(5.0))
+    soundTrack = getSoundTrack('SA_sanction.ogg', node=suit)
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    for suit in battle.activeSuits:
+        suitTrack = Parallel()
+        if not suit.dna.name == 'whistleb':
+            suitTrack.append(Sequence(Parallel(Func(suit.checkCompensation), healSound)))
+            suitTracks.append(suitTrack)
+    return Parallel(suitTracks, soundTrack)
 
 def doCaseInsurance(attack):
     suit = attack['suit']

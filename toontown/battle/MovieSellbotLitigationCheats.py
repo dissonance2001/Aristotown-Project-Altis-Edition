@@ -1503,7 +1503,7 @@ def doCompensation(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTracks = Parallel(getSuitAnimTrack(attack, playRate=1.25))
-    suitTracks.append(Wait(3.0))
+    suitTracks.append(Wait(5.0))
     soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     for suit in battle.activeSuits:

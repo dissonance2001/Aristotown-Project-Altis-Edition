@@ -2697,7 +2697,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'mg':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .115, .115, .115)
         elif name == 'whistleb':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .0775, .0775, .0775)
         elif name == 'ksp':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
         elif name == 'ppl':
@@ -2795,7 +2795,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'sdb':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0675, .0675, .0675)
         elif name == 'ds':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0825, .0825, .0825)
         elif name == 'cn':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
         elif name == 'bs':

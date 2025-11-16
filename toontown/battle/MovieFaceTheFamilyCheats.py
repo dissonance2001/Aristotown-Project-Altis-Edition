@@ -121,19 +121,6 @@ def __throwBouncePoint(startPoint, endPoint):
     return Point3(midPoint)
 
 
-def getResetTrack(suit, battle):
-    resetPos, resetHpr = battle.getActorPosHpr(suit)
-    moveDist = Vec3(suit.getPos(battle) - resetPos).length()
-    moveDuration = 0.5
-    updateTrack = Parallel(Func(suit.setChatAbsolute,
-                                '',
-                                CFSpeech | CFTimeout))
-    unluredTrack = Func(battle.unlureSuit, suit)
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=1e-05), (Func(suit.loop,  'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))))
-    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(unluredTrack, updateTrack, walkTrack, moveTrack)
-
-
 def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
@@ -875,6 +862,58 @@ def doRedTape(attack):
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=2.4, splicedDamageAnims=damageAnims, dodgeDelay=2.4, dodgeAnimNames=['neutral'])
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks, notifyTracks, toonDamageTrack)
 
+def getResetTrack(suit, battle):
+    resetPos, resetHpr = battle.getActorPosHpr(suit)
+    moveDist = Vec3(suit.getPos(battle) - resetPos).length()
+    moveDuration = 0.5
+    unluredTrack = Func(battle.unlureSuit, suit)
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=1e-05), (Func(suit.setNeutralAnimationTrap)))
+    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
+    return Parallel(unluredTrack, walkTrack, moveTrack)
+
+def doExtraTip(attack, ind):
+    theSuit = attack['suit']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[ind]
+
+    suitTracks = Parallel()
+    suitTrack = Sequence()
+    suitTrack.append(Wait(4.0))
+    suitTrack.append(Func(targetSuit.checkExtraTip))
+    suitTrack.append(Parallel(Func(targetSuit.makeDamageUp), Func(targetSuit.checkDamageUp, + 10)))
+    suitTrack.append(Func(targetSuit.updateHealthBar, 0))
+    suitTrack.append(Func(targetSuit.setDizzy, 0))
+    suitTrack.append(Func(targetSuit.setChatAbsolute,
+                                               random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
+                                               CFSpeech | CFTimeout))
+    suitTrack.append(getResetTrack(targetSuit, battle))
+    suitTrack.append(Wait(2.0))
+    suitTracks.append(suitTrack)
+    knifeTracks = Parallel()
+    hitPoint = targetSuit.getPos(battle)
+    hitPoint.setZ(targetSuit.height + 2)
+    hitPoint.setY(hitPoint.getY() + 0.5)
+    can = globalPropPool.getProp('bounced-check')
+    texture = loader.loadTexture('phase_5/maps/battle/ttcc_suitprops_palette_1_alt.png')
+    can.setTexture(texture, 1)
+    posPoints = [Point3(-0.25, -0.425, 0), VBase3(-180, 0, 0)]
+    knifeTrack = Sequence(
+            getPropAppearTrack(can, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
+                               scaleUpTime=0.5),
+            Wait(1.0),
+            Parallel(
+                getThrowTrack(can, hitPoint, 1.5, battle, -30.288),
+                LerpHprInterval(can, 0.8, VBase3(0, 0, 0)), LerpScaleInterval(can, 0, VBase3(8.5, 8.5, 8.5))),
+        Parallel(LerpPosInterval(can, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)), Sequence(Wait(0.25), LerpScaleInterval(can, 0.5, VBase3(0, 0, 0)))),
+            Func(MovieUtil.removeProp, can)
+        )
+    knifeTracks.append(knifeTrack)
+    suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
+    soundTrack1 = getSoundTrack('SA_extra_tip.ogg', delay=2)
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=4)
+    multiTrack = Parallel(soundTrack1, soundTrack2)
+    return Parallel(suitTrackAnim, suitTracks, multiTrack, knifeTracks)
+
 def doExplosion(attack):
     theSuit = attack['suit']
     battle = attack['battle']
@@ -903,6 +942,17 @@ def doContractor(attack):
                           CFSpeech | CFTimeout), Wait(3.0))
     return Parallel(suitTrack, toonTrack)
 
+def doPuzzling(attack):
+    theSuit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    suitTrack = Sequence(Func(theSuit.setChatAbsolute, random.choice(("Your combat skills are laughable.", "You can't outsmart me!", "Prepare to be mind-meddled!")),
+                          CFSpeech | CFTimeout))
+    toonTrack = Sequence(Wait(3.0), Func(toon.setChatAbsolute, random.choice(("Your wish is my command.", "As you desire, Mr. President.", "As you wish.")),
+                          CFSpeech | CFTimeout), Wait(3.0))
+    return Parallel(suitTrack, toonTrack)
+
 def doSleepyOvercharge(attack):
     theSuit = attack['suit']
     battle = attack['battle']
@@ -923,11 +973,95 @@ def doFraudulentDamage(attack):
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
 
+def doSyphon(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    partTracks = Parallel()
+    partTracks4 = Parallel()
+    toonAnimTracks = Parallel()
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    selfDamageTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        BattleParticles.loadParticles()
+        sprayEffect = BattleParticles.createParticleEffect('DemotionSpray2')
+        sprayEffect2 = BattleParticles.createParticleEffect('DemotionSpray2')
+        freezeEffect = BattleParticles.createParticleEffect('DemotionFreeze2')
+        unFreezeEffect = BattleParticles.createParticleEffect(file='demotionUnFreeze2')
+        BattleParticles.setEffectTexture(sprayEffect, 'snow-particle')
+        BattleParticles.setEffectTexture(freezeEffect, 'snow-particle')
+        BattleParticles.setEffectTexture(unFreezeEffect, 'snow-particle')
+        BattleParticles.setEffectTexture(sprayEffect2, 'snow-particle',
+                                         color=Vec4(1, 0, 0, 1))
+        facePoint = __toonFacePoint(toon)
+        freezeEffect.setPos(0, 0, facePoint.getZ())
+        unFreezeEffect.setPos(0, 0, facePoint.getZ())
+        partTrack4 = getPartTrack(sprayEffect, 1, 5.0, [sprayEffect2, toon, 0], softStop=-1)
+        partTracks4.append(partTrack4)
+        toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.5)
+        toonAnimTracks.append(toonAnimTrack)
+        suitTrack.append(Sequence(Func(suit.setHealthForMe, + dmg), Func(suit.updateHealthBar, 0)))
+        selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, +dmg))
+        selfDamageTracks.append(selfDamageTrack)
+    dodgeAnims = [['duck', 1e-06, 0.8]]
+    damageAnims = []
+    damageAnims.append(['cringe',
+                        0.01,
+                        0,
+                        0.5])
+    damageAnims.extend(getSplicedLerpAnims('cringe', 0.4, 0.5, startTime=0.5))
+    damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.5, startTime=0.9))
+    damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.6, startTime=1.2))
+    damageAnims.append(['cringe', 2.6, 1.5])
+    toonTrack = getToonTracks(attack, 1, ['nothing'], 0, ['neutral'])
+    multiTrackList = Parallel(suitTrack, toonTrack, toonAnimTracks, selfDamageTracks, partTracks4)
+    soundTrack = getSoundTrack('SA_ink_drain.ogg', delay=0, node=suit)
+    multiTrackList.append(soundTrack)
+    return multiTrackList
+
+def doDeepFreeze(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    damageDelay = 1.7
+    hitAtleastOneToon = 0
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = 1
+
+    sprayEffect = BattleParticles.createParticleEffect('WaterSpray')
+    suitName = suit.getStyleName()
+    sprayEffect.setPos(Point3(-5.2, 10.6, 6.7))
+    waterfallEffect = BattleParticles.createParticleEffect(file='snowWaterfall')
+    suitTrack = getSuitAnimTrack(attack)
+    partTrack = getPartTrack(sprayEffect, 1.0, 5.9, [sprayEffect, suit, 0], softStop=1)
+    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 5.9, [waterfallEffect, suit, 0], softStop=1)
+    sprayTrack = getPartTrack(sprayEffect, 1.0, 5.9, [sprayEffect, suit, 0], softStop=1)
+    damageAnims = [['cringe']]
+    dodgeAnims = []
+    dodgeAnims.append(['jump',
+                       0.01,
+                       0,
+                       0.6])
+    dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
+    dodgeAnims.append(['jump', 0, 0.91])
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['cringe'], dodgeDelay=0.91,
+                               splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
+    synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('SA_freeze.ogg')))
+    makeFrozen = Func(suit.makeFrozen)
+    if hitAtleastOneToon > 0:
+        soundTrack1 = Sequence(Wait(1), SoundInterval(globalBattleSoundCache.getSound('SA_freeze.ogg'), node=suit))
+        return Parallel(suitTrack, partTrack, sprayTrack, makeFrozen, waterfallTrack, synergySoundTrack, toonTracks, soundTrack1)
+    else:
+        return Parallel(suitTrack, partTrack, sprayTrack, waterfallTrack, synergySoundTrack, toonTracks)
+
 def doCompensation(attack):
     suit = attack['suit']
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     suitTrack = Parallel(getSuitAnimTrack(attack), Wait(2.0))
-    suitTrack.append(Sequence(Wait(2.0), Func(suit.checkCompensation), healSound))
+    suitTrack.append(Sequence(Wait(2.0), Func(suit.checkCompensationForeman), healSound))
     return Parallel(suitTrack)
 
 def doLifeInsurance(attack):
