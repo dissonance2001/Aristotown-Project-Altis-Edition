@@ -1663,7 +1663,7 @@ def doHotTake(attack):
     toonTrack = getToonTrackCheat(attack, 2.25, ['slip-forward'], 0.5, ['jump'])
     soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
     notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextNew, -int(dmg), text="BOMBED!", colorCode=3))
-    return Parallel(explodeTracks, suitTrack, toonTrack, suitTrack2, notifyTrack, soundTrack, propTrack, explosionTrack, explosionTrack2)
+    return Parallel(explodeTracks, suitTrack, toonTrack, notifyTrack, soundTrack, propTrack, explosionTrack, explosionTrack2)
 
 def doOvermodulated(attack, ind):
     suit = attack['suit']
