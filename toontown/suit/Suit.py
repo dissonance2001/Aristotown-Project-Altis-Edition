@@ -196,7 +196,7 @@ sh = (('hold-eraser', 'hold-eraser', 4), ('pen-squirt', 'fountain-pen', 4))
 le = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
 br = (('quick-jump', 'jump', 4), ('glower', 'glower', 4))
 bw = (('finger-wag', 'fingerwag', 4), ('cigar-smoke', 'cigar-smoke', 4))
-whistleb = (('cease', 'cease3', 4), ('finger-wag', 'finger-wag', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
+whistleb = (('effort', 'effort', 4), ('cease', 'cease3', 4), ('finger-wag', 'finger-wag', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
 clerk = (('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('pace', 'pace', 4), ('finger-wag', 'finger-wag', 4), ('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4), ('frustrated', 'frustrated', 4), ('objection', 'objection', 4))
 arbit = (('effort', 'effort', 4), ('speak', 'speak', 4), ('cease', 'cease3', 4), ('sanction', 'sanction3', 4))
 judy = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -2212,7 +2212,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.918, 0.886, 0.875, 1)
             self.generateBody()
             self.generateHead2('yesman')
-            texture = loader.loadTexture('phase_4/maps/m~r_hollywood.jpg')
+            texture = loader.loadTexture('phase_4/maps/mr_hollywood.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead2('shades')
@@ -5893,6 +5893,12 @@ class Suit(Avatar.Avatar):
                         self.virtualize(condition)
                 self.__changeColor()
             self.healthCondition = condition
+
+    def checkDeath(self):
+        if self.healthCondition == 11:
+            return 1
+        else:
+            return 0
 
     def __blinkRed(self, task):
         if not self.virtual:

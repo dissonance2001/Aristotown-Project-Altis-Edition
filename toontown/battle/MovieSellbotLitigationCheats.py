@@ -1651,18 +1651,6 @@ def doHotTake(attack):
     sparks = BattleParticles.createParticleEffect(file='tnt')
     tnt.sparksEffect = sparks
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    suitTrack2 = Sequence(Wait(2.25), Func(suit.showHpTextNew, -dmg, text="BOMBED!", colorCode=3), Func(suit.setHealthForMe, - dmg), Func(suit.updateHealthBar, 0), ActorInterval(suit, 'slip-backward'))
-    revives = suit.getMaxSkeleRevives() + 1
-    if suit.isVirtual and revives > 2:
-        suitTrack.append(Func(suit.checkCogHPLaser, battle))
-    elif suit.isSkeleton and revives > 2:
-        suitTrack.append(Func(suit.checkCogHPLaserRevive, battle))
-    elif not suit.isSkeleton and revives > 1:
-        suitTrack.append(Func(suit.checkCogHPRevive, battle))
-    elif suit.isVirtual:
-        suitTrack.append(Func(suit.checkCogHPLaser, battle))
-    elif not suit.isVirtual:
-        suitTrack.append(Func(suit.checkCogHPBomb, battle))
     posPoints = [Point3(-0.65, 0, -0.35), VBase3(0, 0, 90)]
     propTrack = Sequence(getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
     propTrack.append(Func(sparks.start, tip))

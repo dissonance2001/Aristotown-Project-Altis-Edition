@@ -346,7 +346,7 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
     suitResponseTrack = Sequence()
     reactIval = Sequence()
     if showCannon and hitSuit:
-        showDamage = Sequence(Func(suit.showHpTextTrap, -hp, openEnded=0), Func(suit.showHpString, "FIRED!", openEnded=0))
+        showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="FIRED!", colorCode=1))
         updateHealthBar = Func(suit.updateHealthBar, hp)
         cannon = loader.loadModel('phase_4/models/minigames/toon_cannon')
         barrel = cannon.find('**/cannon')
