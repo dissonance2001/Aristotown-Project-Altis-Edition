@@ -68,7 +68,7 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('summon-cog', 'summon-cog'), ('sacrifice-cog', 'sacrifice-cog'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
+AllSuits = (('walk', 'walk'), ('reanimated', 'reanimated'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('summon-cog', 'summon-cog'), ('sacrifice-cog', 'sacrifice-cog'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
             ('falling-knife', 'falling-knife'), ('throw-object', 'throw-object'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),
             ('throw-paper', 'throw-paper'), ('mob-mentality', 'mob-mentality'), ('neutral', 'neutral'), ('neutral2', 'neutral'), ('magnet', 'magnet'), ('neutral2-hurt', 'neutral-hurt'),
             ('neutral-hurt', 'neutral-hurt'), ('neutral-unstable', 'neutral-unstable'), ('neutral-enraged-return', 'neutral-enraged-return'), ('ottoman-sit-loop', 'ottoman-sit-loop'),
@@ -107,7 +107,7 @@ cr = (('glower', 'glower', 4), ('effort', 'effort', 4), ('pickpocket', 'pickpock
 txl = (('effort', 'effort', 4), ('glower', 'glower', 4), ('effort', 'effort', 4), ('cigar-smoke', 'cigar-smoke', 4))
 tbc = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('cigar-smoke', 'cigar-smoke', 4))
 autocad = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
-clubpres = (('bellow', 'bellow', 4), ('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
+clubpres = (('snap', 'snap', 4), ('bellow', 'bellow', 4), ('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
 derrman = (('pen-squirt', 'fountain-pen', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 derrhand = (('pen-squirt', 'fountain-pen', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('summon', 'summon', 4))
 mplayer = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
@@ -119,7 +119,7 @@ chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-j
 phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4),('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
 bkeeper = (('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
 wtapper = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('snap', 'snap', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
-ambass = (('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap', 4))
+ambass = (('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap', 4))
 
 # Sellbots
 cc = (('speak', 'speak', 4), ('glower', 'glower', 4))

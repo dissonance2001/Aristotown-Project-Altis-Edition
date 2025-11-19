@@ -1133,7 +1133,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'WiretapperCollectCallDamage':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'WiretapperBusySignal':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=3.5), randomActorShot(suit, battle, attackDuration - 3.5, 'suit')))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=3.5), heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 3.5)))
     elif name == 'WiretapperGagBan':
         if attackDuration > 2:
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
@@ -1172,10 +1172,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'AmbassadorHeadRollerGroup':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'AmbassadorAdvancement':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0.5, attackDuration=0.5), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
-                                 Func(taskMgr.add, shake_camera_advancement, 'camera_shake'), Wait(2.0),
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
+                                 Func(taskMgr.add, shake_camera_advancement, 'camera_shake'), Wait(0.5),
                                  Func(taskMgr.remove, 'camera_shake'),
-                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 2.5)))
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 2)))
     elif name == 'AmbassadorAdvancement2':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
@@ -1197,15 +1197,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == 'AmbassadorRefinement':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
-                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
-                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 3.5))
     elif name == 'AmbassadorRefinementManager':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
-                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
-                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 3.5))
     elif name == 'AmbassadorGhostMentality':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'AmbassadorPhase2':
@@ -1754,7 +1748,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PresidentMulligan':
         camTrack.append(defaultCamera(openShotDuration=2.25))
     elif name == 'PresidentHighStakes':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     #universal cheats
     elif name == 'Desperation':
         camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)

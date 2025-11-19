@@ -1417,7 +1417,7 @@ def doExtortion(attack):
         facePoint = __toonFacePoint(toon)
         freezeEffect.setPos(0, 0, facePoint.getZ())
         unFreezeEffect.setPos(0, 0, facePoint.getZ())
-        partTrack4 = getPartTrack(sprayEffect, 1, 5.0, [sprayEffect2, toon, 0], softStop=-1)
+        partTrack4 = getPartTrack(sprayEffect, 1, 4.0, [sprayEffect2, toon, 0], softStop=-1)
         partTracks4.append(partTrack4)
         toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.5)
         toonAnimTracks.append(toonAnimTrack)
@@ -1466,7 +1466,7 @@ def doExtortion2(attack):
         facePoint = __toonFacePoint(toon)
         freezeEffect.setPos(0, 0, facePoint.getZ())
         unFreezeEffect.setPos(0, 0, facePoint.getZ())
-        partTrack4 = getPartTrack(sprayEffect, 1, 5.0, [sprayEffect2, toon, 0], softStop=-1)
+        partTrack4 = getPartTrack(sprayEffect, 1, 4.0, [sprayEffect2, toon, 0], softStop=-1)
         suitTrack = Sequence(getSuitAnimTrack(attack))
         suitTrack.append(Sequence(Func(suit.setHealthForMe, + (dmg * 2)), Func(suit.updateHealthBar, 0)))
         selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, + ((dmg * 2))),
@@ -1487,7 +1487,7 @@ def doExtortion2(attack):
 
 def doRacketeering(attack):
     suit = attack['suit']
-    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=0.75))
     suitTrack.append(Wait(3.0))
     soundTrack = getSoundTrack('SA_objection.ogg', node=suit)
     return Parallel(suitTrack, soundTrack)

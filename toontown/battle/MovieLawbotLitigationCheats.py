@@ -686,7 +686,7 @@ def doPaperweight(attack):
     throwDuration = 2.0
     paper2 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_twist_stacks')
     paper = paper2.find('**/paper_stack_1')
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5))
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     posPoints = [Point3(-0.5, -0.25, 0), VBase3(0, 0, 180)]
     propTracks = Parallel()
     for t in targets:
@@ -1244,8 +1244,6 @@ def doBayouBellow(attack):
         suitTrack.append(resetTrack)
         suitTrack.append(Wait(1.0))
         suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
-        suitTrack.append(
-            Func(suit.setNeutralAnimation))
         suitTrack.append(Func(battle.unSueSuit, suit))
         suitTrack.append(Func(suit.makeSoaked, 0))
         suitTrack.append(Func(suit.setSued2, 0))
@@ -1253,6 +1251,8 @@ def doBayouBellow(attack):
         suitTrack.append(Func(suit.makeUnMarked))
         suitTrack.append(Func(suit.makeUnZapped))
         suitTrack.append(Func(suit.makeUnDazed))
+        suitTrack.append(
+            Func(suit.setNeutralAnimation))
         suitTracks.append(Wait(0.5))
         suitTracks.append(MovieUtil.createSuitBellowInterval(theSuit))
         suitTracks.append(Wait(4.0))

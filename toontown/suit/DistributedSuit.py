@@ -871,19 +871,19 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         x = int((self.maxHP * self.hardMaxHP) - self.currHP)
         if self.currHP >= (self.maxHP * self.hardMaxHP):
             self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextCheat, + 0), Func(self.showHpString, "SYPHONED!"),
+                Parallel(Func(self.showHpTextNew, 0, text="SYPHONED!", colorCode=1),
                          Func(self.setHealthForMe, + 0),
                          Func(self.updateHealthBar, 0)),
                 Func(self.removeSyphonHP)).start()
         elif self.currHP + self.syphonHP > (self.maxHP * self.hardMaxHP):
             self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextCheat, + x), Func(self.showHpString, "SYPHONED!"),
+                Parallel(Func(self.showHpTextNew, + x, text="SYPHONED!", colorCode=1),
                          Func(self.setHealthForMe, + x),
                          Func(self.updateHealthBar, 0)),
                 Func(self.removeSyphonHP)).start()
         else:
             self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextCheat, + self.syphonHP), Func(self.showHpString, "SYPHONED!"),
+                Parallel(Func(self.showHpTextNew, + self.syphonHP, text="SYPHONED!", colorCode=1),
                          Func(self.setHealthForMe, + self.syphonHP),
                          Func(self.updateHealthBar, 0)),
                 Func(self.removeSyphonHP)).start()
@@ -1073,6 +1073,36 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             self.healInterval = Parallel(Func(self.showHpTextNew, 175, text="REFINED!", colorCode=1),
                                          Func(self.setHealthForMe, 175), Func(self.updateHealthBar, 0)).start()
+
+    def checkRefinementManager(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.currHP >= (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="REFINED!", colorCode=1),
+                                         Func(self.updateHealthBar, 0)).start()
+        elif self.currHP + 200 > (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REFINED!", colorCode=1),
+                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        else:
+            self.healInterval = Parallel(Func(self.showHpTextNew, 200, text="REFINED!", colorCode=1),
+                                         Func(self.setHealthForMe, 200), Func(self.updateHealthBar, 0)).start()
+
+    def checkRefinementPowerhouseManager(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.currHP >= (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="REFINED!", colorCode=1),
+                                         Func(self.updateHealthBar, 0)).start()
+        elif self.currHP + 350 > (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REFINED!", colorCode=1),
+                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        else:
+            self.healInterval = Parallel(Func(self.showHpTextNew, 350, text="REFINED!", colorCode=1),
+                                         Func(self.setHealthForMe, 350), Func(self.updateHealthBar, 0)).start()
 
     def checkCameraRewind(self):
         if self.healInterval:
@@ -1665,9 +1695,6 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.isVulnerable and self.dna.name == 'hroller2':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
-        elif self.dna.name == 'phouse' and self.isVulnerable and not float(self.currHP) / float(self.maxHP) <= 0.25:
-            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-unstable'), Func(self.loop, 'neutral-unstable')
-                     ).start()
         elif self.dna.name == 'hrollers':
             Sequence(Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
@@ -1688,9 +1715,6 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                      ).start()
         elif self.dna.name == 'clerk' and (self.getActualLevel() == 24 or self.getActualLevel() == 25):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
-                     ).start()
-        elif self.dna.name == 'phouse' and self.isVulnerable and not float(self.currHP) / float(self.maxHP) <= 0.25:
-            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-unstable'), Func(self.loop, 'neutral-unstable')
                      ).start()
         elif self.dna.name == 'foreman' and self.getActualLevel() == 23:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'rolled'), Func(self.loop, 'rolled')
@@ -1761,9 +1785,6 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(
                 Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                 ).start()
-        elif self.dna.name == 'phouse' and self.isVulnerable and not float(self.currHP) / float(self.maxHP) <= 0.25:
-            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-unstable'), Func(self.loop, 'neutral-unstable')
-                     ).start()
         elif float(self.currHP) > float(self.maxHP * 1.5):
             Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
@@ -1794,9 +1815,6 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                      ).start()
         elif self.isVulnerable and self.dna.name == 'hroller2':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-                     ).start()
-        elif self.dna.name == 'phouse' and self.isVulnerable and not float(self.currHP) / float(self.maxHP) <= 0.25:
-            Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral-unstable'), Func(self.loop, 'neutral-unstable')
                      ).start()
         elif self.isZapped:
             Sequence(Func(self.loop, 'neutral-unstable')

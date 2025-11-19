@@ -973,6 +973,71 @@ def doFraudulentDamage(attack):
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
 
+def doHighStakes(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    propTracks = Parallel()
+    toonTracks = Parallel()
+    smokeTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        smokeTrack = Sequence(Wait(1.75), Func(smoke.reparentTo, toon),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
+        piano = globalPropPool.getProp('piano')
+        safe = globalPropPool.getProp('safe')
+        boulder = globalPropPool.getProp('boulder')
+        gavel = loader.loadModel('phase_5/models/props/cc_m_bat_prp_dice')
+        toonPos = toon.getPos(battle)
+        toonHpr = battle.getActorPosHpr(toon)
+        y = toonPos.getY()
+        propPos = Point3(toonPos.getX(), y, 30)
+        gavelPos = Point3(toonPos.getX(), y, 30)
+        soundTrack2 = getSoundTrack('AA_drop_bigweight.ogg', delay=1.75, duration=2.0, node=suit)
+        propTrack = Sequence(
+            getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
+                               scaleUpPoint=Point3(1), scaleUpTime=1.5),
+            LerpPosInterval(gavel, 0.25, Point3(toonPos.getX(), y, 1)),
+            LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y, 2)),
+            LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y, 1)), Sequence(
+                Wait(1.5),
+                LerpScaleInterval(gavel, .25, MovieUtil.PNT3_ZERO)
+            ))
+        propTracks.append(Parallel(propTrack, soundTrack2))
+        toonTrack = Sequence(
+        Wait(1.75),
+        Parallel(
+            Func(toon.enterFlattened),
+            Func(toon.showHpTextNew, 0, text="?!", colorCode=1),
+            #Func(__doDamageCheat, toon, dmg, t['died'])
+        ),
+        Wait(1.75),
+        Parallel(
+            Sequence(
+                Wait(.5),
+                Func(toon.exitFlattened)
+            ),
+            getSoundTrack('toon_decompress.ogg', node=toon),
+            Sequence(
+                ActorInterval(toon, 'jump'),
+                Func(toon.loop, 'neutral')
+            )
+        )
+        )
+        toonTracks.append(toonTrack)
+        smokeTracks.append(smokeTrack)
+    soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
+    toonDamageTrack = getToonTracksCheat(attack, 1.75, ['nothing'], 0, ['neutral'])
+    return Parallel(suitTrack, toonDamageTrack, smokeTracks, toonTracks, soundTrack, propTracks)
+
 def doSyphon(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -998,7 +1063,7 @@ def doSyphon(attack):
         facePoint = __toonFacePoint(toon)
         freezeEffect.setPos(0, 0, facePoint.getZ())
         unFreezeEffect.setPos(0, 0, facePoint.getZ())
-        partTrack4 = getPartTrack(sprayEffect, 1, 5.0, [sprayEffect2, toon, 0], softStop=-1)
+        partTrack4 = getPartTrack(sprayEffect, 1, 4.0, [sprayEffect2, toon, 0], softStop=-1)
         partTracks4.append(partTrack4)
         toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.5)
         toonAnimTracks.append(toonAnimTrack)

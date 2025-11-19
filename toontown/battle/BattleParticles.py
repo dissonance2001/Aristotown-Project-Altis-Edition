@@ -124,6 +124,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('shiftSpray.ptf')
     elif name == 'PoisonSpray':
         return loadParticleFile('poisonSpray.ptf')
+    elif name == 'oilRain':
+        return loadParticleFile('oilRain.ptf')
     elif name == 'PoisonLift':
         return __makePoisonLift()
     elif name == 'SprayLift':

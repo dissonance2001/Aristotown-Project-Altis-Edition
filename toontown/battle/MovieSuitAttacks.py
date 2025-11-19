@@ -526,9 +526,9 @@ def doSuitAttack(attack):
     elif name == 'AmbassadorHeadRollerGroup':
         suitTrack = MovieBossbotLitigationCheats.doHeadRollerGroup(attack)
     elif name == 'AmbassadorRefinement':
-        suitTrack = MovieBossbotLitigationCheats.doRefinement(attack)
+        suitTrack = MovieBossbotLitigationCheats.doOilRainHeal(attack)
     elif name == 'AmbassadorRefinementManager':
-        suitTrack = MovieBossbotLitigationCheats.doRefinementManager(attack)
+        suitTrack = MovieBossbotLitigationCheats.doOilRainHealManager(attack)
     elif name == 'AmbassadorPhase2':
         suitTrack = MovieBossbotLitigationCheats.doAmbassadorPhase2(attack)
     elif name == 'AmbassadorDamageUp':
@@ -4026,7 +4026,7 @@ def doGlowerPower(attack):
     battle = attack['battle']
     targets = attack['target']
 
-    suitTrack = getSuitTrack(attack, playRate=1.25)
+    suitTrack = getSuitTrack(attack)
     suitName = suit.getStyleName()
     leftPosPoints = [Point3(0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
     rightPosPoints = [Point3(-0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
@@ -4042,21 +4042,21 @@ def doGlowerPower(attack):
         for i in xrange(0, 3):
             knifeDelay = 0.11
             leftTrack = Sequence()
-            leftTrack.append(Wait(0.6))
+            leftTrack.append(Wait(1.1))
             leftTrack.append(Wait(i * knifeDelay))
             leftTrack.append(getPropAppearTrack(leftKnives[i], suit, leftPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
             leftTrack.append(getPropThrowTrack(attack, leftKnives[i], hitPointNames=['face'], missPointNames=['miss'], hitDuration=0.3, missDuration=0.3, target=t))
             leftKnifeTracks.append(leftTrack)
             rightTrack = Sequence()
-            rightTrack.append(Wait(0.6))
+            rightTrack.append(Wait(1.1))
             rightTrack.append(Wait(i * knifeDelay))
             rightTrack.append(getPropAppearTrack(rightKnives[i], suit, rightPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
             rightTrack.append(getPropThrowTrack(attack, rightKnives[i], hitPointNames=['face'], missPointNames=['miss'], hitDuration=0.3, missDuration=0.3, target=t))
             rightKnifeTracks.append(rightTrack)
 
     damageAnims = [['slip-backward', 0.01, 0.35]]
-    toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.25, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_glower_power.ogg', delay=0.6, node=suit)
+    toonTracks = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['sidestep'])
+    soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
     return Parallel(suitTrack, toonTracks, soundTrack, leftKnifeTracks, rightKnifeTracks)
 
 

@@ -2598,7 +2598,7 @@ def doBust(attack):
         gavelPos = Point3(toonPos.getX(), y, 30)
         propTrack = Sequence(Wait(5.0),
             getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
-                               scaleUpPoint=Point3(1.5), scaleUpTime=1.5),
+                               scaleUpPoint=Point3(1), scaleUpTime=1.5),
             LerpPosInterval(gavel, 0.25, Point3(toonPos.getX(), y, 2.01)),
             LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y, 3)),
             LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y, 2.01)), Sequence(

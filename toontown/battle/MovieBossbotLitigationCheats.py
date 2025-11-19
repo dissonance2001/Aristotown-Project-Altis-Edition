@@ -769,6 +769,171 @@ def doBookkeepingRetaliation(attack):
                                    dodgeAnimNames=['neutral'])
     return Parallel(suitTracks, makeDamageUp, toonDamageTrack, soundTracks, toonTracks, notifyTracks)
 
+def doOilRainHeal(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    dmg = target[0]['hp']
+    puddleTracks = Parallel()
+    moveTracks = Parallel()
+    cloudPropTracks = Parallel()
+    managerHealTracks = Parallel()
+    animTracks = Parallel()
+    for s in battle.activeSuits:
+        currentBossHealth = -1
+        if s.dna.name == 'phouse':
+            currentBossHealth = s.currHP
+        if currentBossHealth >= 1:
+            if s.dna.name == 'ambass':
+                managerHealTracks.append(Func(s.checkRefinementPowerhouse))
+        else:
+            if s.dna.name == 'ambass':
+                managerHealTracks.append(Func(s.checkRefinement))
+        if not s.dna.name == 'ambass':
+            BattleParticles.loadParticles()
+            cloud = globalPropPool.getProp('stormcloud')
+            rainEffect = BattleParticles.createParticleEffect(file='oilRain')
+            rainEffect2 = BattleParticles.createParticleEffect(file='oilRain')
+            rainEffect3 = BattleParticles.createParticleEffect(file='oilRain')
+            rainEffect.setColor(0.259, 0.259, 0.259, 1)
+            rainEffect2.setColor(0.259, 0.259, 0.259, 1)
+            rainEffect3.setColor(0.259, 0.259, 0.259, 1)
+            initialCloudHeight = s.height + 3
+            cloudPosPoints = [Point3(0, 0, initialCloudHeight), VBase3(180, 0, 0)]
+            cloudPropTrack = Sequence()
+            cloudPropTrack.append(Func(cloud.pose, 'stormcloud', 0))
+            cloudPropTrack.append(getPropAppearTrack(cloud, s, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.25))
+            cloudPropTrack.append(Func(battle.movie.needRestoreRenderProp, cloud))
+            cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
+            cloudPropTrack.append(Wait(0.6))
+            cloudPropTrack.append(Parallel(
+                Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=3.1, cleanup=True, softStopT=-1)),
+                Sequence(Wait(0.1), ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=3.0, cleanup=True, softStopT=-1)),
+                Sequence(Wait(0.1), ParticleInterval(rainEffect3, cloud, worldRelative=0, duration=3.0, cleanup=True, softStopT=-1)),
+                Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=2.3))))
+            cloudPropTrack.append(Wait(0.4))
+            cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
+            cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
+            cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
+            cloudPropTracks.append(cloudPropTrack)
+            puddle = globalPropPool.getProp('quicksand')
+            puddle.setColor(Vec4(0, 0, 0, 1))
+            puddle.setHpr(Point3(120, 0, 0))
+            puddle.setScale(0.01)
+            puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle),
+                                   Func(puddle.reparentTo, battle), Func(puddle.setPos, s.getPos(battle)),
+                                   LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7),
+                                                     startScale=MovieUtil.PNT3_NEARZERO), Wait(6.2),
+                                   LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
+                                   Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
+            sinkPos1 = s.getPos(battle)
+            sinkPos2 = s.getPos(battle)
+            dropPos = s.getPos(battle)
+            landPos = s.getPos(battle)
+            sinkPos1.setZ(sinkPos1.getZ() - 3.1)
+            sinkPos2.setZ(sinkPos2.getZ() - 9.1)
+            dropPos.setZ(dropPos.getZ())
+            landPos.setY(dropPos.getY())
+            if currentBossHealth >= 1:
+                moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, sinkPos1, other=battle),
+                                     LerpPosInterval(s, 0.4, sinkPos2, other=battle),
+                                     Func(s.checkRefinementPowerhouse))
+            else:
+                moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, sinkPos1, other=battle),
+                                 LerpPosInterval(s, 0.4, sinkPos2, other=battle),
+                                 Func(s.checkRefinement))
+            animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75),
+                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
+                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25), Func(s.setPos, battle, dropPos), LerpPosInterval(s, 0, landPos, other=battle),
+                                 Func(s.wrtReparentTo, battle), ActorInterval(s, 'reanimated'), Func(s.setDizzy, 0), Func(s.makeUnLured), Func(battle.unlureSuit, s), Func(s.setNeutralAnimation))
+            animTracks.append(animTrack)
+            moveTracks.append(moveTrack)
+            puddleTracks.append(puddleTrack)
+
+    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0), ActorInterval(suit, 'summon-cog'), Func(suit.setNeutralAnimation))
+    soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
+    return Parallel(suitTrack, moveTracks, animTracks, managerHealTracks, cloudPropTracks, soundTrack, puddleTracks)
+
+def doOilRainHealManager(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    dmg = target[0]['hp']
+    puddleTracks = Parallel()
+    moveTracks = Parallel()
+    managerHealTracks = Parallel()
+    cloudPropTracks = Parallel()
+    animTracks = Parallel()
+    for s in battle.activeSuits:
+        if s.getManager() and not s.dna.name == 'ambass':
+            BattleParticles.loadParticles()
+            cloud = globalPropPool.getProp('stormcloud')
+            rainEffect = BattleParticles.createParticleEffect(file='liquidate')
+            rainEffect2 = BattleParticles.createParticleEffect(file='liquidate')
+            rainEffect3 = BattleParticles.createParticleEffect(file='liquidate')
+            rainEffect.setColor(0.259, 0.259, 0.259, 1)
+            rainEffect2.setColor(0.259, 0.259, 0.259, 1)
+            rainEffect3.setColor(0.259, 0.259, 0.259, 1)
+            initialCloudHeight = s.height + 3
+            cloudPosPoints = [Point3(0, 0, initialCloudHeight), VBase3(180, 0, 0)]
+            cloudPropTrack = Sequence()
+            cloudPropTrack.append(Func(cloud.pose, 'stormcloud', 0))
+            cloudPropTrack.append(getPropAppearTrack(cloud, s, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.25))
+            cloudPropTrack.append(Func(battle.movie.needRestoreRenderProp, cloud))
+            cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
+            cloudPropTrack.append(Wait(0.6))
+            cloudPropTrack.append(Parallel(
+                Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=3.1, cleanup=True, softStopT=-1)),
+                Sequence(Wait(0.1), ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=3.0, cleanup=True, softStopT=-1)),
+                Sequence(Wait(0.1), ParticleInterval(rainEffect3, cloud, worldRelative=0, duration=3.0, cleanup=True, softStopT=-1)),
+                Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=2.3))))
+            cloudPropTrack.append(Wait(0.4))
+            cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
+            cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
+            cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
+            cloudPropTracks.append(cloudPropTrack)
+            puddle = globalPropPool.getProp('quicksand')
+            puddle.setColor(Vec4(0.259, 0.259, 0.25, 1))
+            puddle.setHpr(Point3(120, 0, 0))
+            puddle.setScale(0.01)
+            puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle),
+                                   Func(puddle.reparentTo, battle), Func(puddle.setPos, s.getPos(battle)),
+                                   LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7),
+                                                     startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2),
+                                   LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
+                                   Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
+            sinkPos1 = s.getPos(battle)
+            sinkPos2 = s.getPos(battle)
+            dropPos = s.getPos(battle)
+            landPos = s.getPos(battle)
+            sinkPos1.setZ(sinkPos1.getZ() - 3.1)
+            sinkPos2.setZ(sinkPos2.getZ() - 9.1)
+            dropPos.setZ(dropPos.getZ())
+            landPos.setY(dropPos.getY())
+            currentBossHealth = -1
+            for s in battle.suits:
+                if s.dna.name == 'phouse':
+                    currentBossHealth = s.currHP
+            if currentBossHealth >= 1:
+                moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, sinkPos1, other=battle),
+                                     LerpPosInterval(s, 0.4, sinkPos2, other=battle),
+                                     Func(s.checkRefinementPowerhouseManager))
+            else:
+                moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, sinkPos1, other=battle),
+                                     LerpPosInterval(s, 0.4, sinkPos2, other=battle),
+                                     Func(s.checkRefinementManager))
+            animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75),
+                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
+                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25), Func(s.setNeutralAnimation))
+            animTracks.append(animTrack)
+            moveTracks.append(moveTrack)
+            puddleTracks.append(puddleTrack)
+
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=4.2, node=suit)
+    return Parallel(suitTrack, moveTracks, animTracks, cloudPropTracks, soundTrack2, soundTrack, puddleTracks)
+
 def doCollectCall(attack):
     suit = attack['suit']
     target = attack['target']
@@ -814,11 +979,14 @@ def doCollectCall(attack):
     cage = loader.loadModel('phase_5.5/models/estate/prop_phone-mod')
     cage2 = loader.loadModel('phase_5.5/models/estate/phoneMount-mod')
     toonPos = toon.getPos(battle)
+    toonHpr = battle.getActorPosHpr(toon)
+    y = toonPos.getY()
+    propPos = Point3(toonPos.getX(), y, 30)
     x = toonPos.getX() - 5
     if dmg == 0:
         x -= 10
-    cagePos = [Point3(toonPos.getX(), toonPos.getY() + 12.5, 30.0), toon.getHpr(battle)]
-    cagePos2 = [Point3(toonPos.getX(), toonPos.getY() + 12.5, 30.0), toon.getHpr(battle)]
+    cagePos = [Point3(toonPos.getX(), toonPos.getY() + 7.5, 30.0)]
+    cagePos2 = [Point3(toonPos.getX(), toonPos.getY() + 7.5, 30.0)]
     cagePropTrack = Sequence(
             getPropAppearTrack(cage, battle, cagePos, 0.01, scaleUpPoint=Point3(1.0), scaleUpTime=1.0),
             Parallel(
@@ -876,19 +1044,15 @@ def doAdvancement(attack):
     suitTracks = Parallel()
     liftTracks = Parallel()
     suitTrack3 = getSuitAnimTrack(attack)
-    suitTrack2 = Sequence(ActorInterval(suit, 'bellow2'), Func(suit.setNeutralAnimation))
+    suitTrack2 = Sequence(ActorInterval(suit, 'sacrifice-cog', startTime=2.25), Func(suit.setNeutralAnimationDrop))
     for targetSuit in battle.activeSuits:
-        liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
-        liftEffect.setPos(targetSuit.getPos(battle))
-        liftEffect.setZ(liftEffect.getZ() - 1.3)
-        suitTrack = Sequence(Wait(0.5), Func(targetSuit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitMarkedPhrases), CFSpeech | CFTimeout), ActorInterval(targetSuit, 'slip-forward'),
+        suitTrack = Sequence(Wait(1.5), Func(targetSuit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitMarkedPhrases), CFSpeech | CFTimeout), ActorInterval(targetSuit, 'slip-forward'),
                              Func(targetSuit.makeTarget), Func(targetSuit.setNeutralAnimationDrop))
         if not targetSuit.dna.name == 'ambass':
             if not targetSuit.isManager:
                 suitTracks.append(suitTrack)
-                liftTracks.append(getPartTrack(liftEffect, 2.5, 3.0, [liftEffect, battle, 0], softStop=-1))
-    soundTrack2 = getSoundTrack('ENC_cogjump_to_side2.ogg', delay=0, node=theSuit)
-    return Parallel(suitTracks, soundTrack2, liftTracks, suitTrack3, suitTrack2)
+    soundTrack2 = getSoundTrack('ENC_cogjump_to_side2.ogg', delay=1, node=theSuit)
+    return Parallel(suitTracks, soundTrack2, suitTrack3, suitTrack2)
 
 def doBrokenConnection(attack):
     suit = attack['suit']
@@ -988,8 +1152,8 @@ def doBusySignal(attack):
     x = toonPos.getX() - 5
     if dmg == 0:
         x -= 10
-    cagePos = [Point3(toonPos.getX(), toonPos.getY() + 12.5, 30.0), toon.getHpr(battle)]
-    cagePos2 = [Point3(toonPos.getX(), toonPos.getY() + 12.5, 30.0), toon.getHpr(battle)]
+    cagePos = [Point3(toonPos.getX(), toonPos.getY() + 7.5, 30.0)]
+    cagePos2 = [Point3(toonPos.getX(), toonPos.getY() + 7.5, 30.0)]
     cagePropTrack = Sequence(
         getPropAppearTrack(cage, battle, cagePos, 0.01, scaleUpPoint=Point3(1.0), scaleUpTime=1.0),
         Parallel(
@@ -2440,6 +2604,7 @@ def doGroundbreakerRevert(attack):
     puddleTracks = Parallel()
     soundTracks = Parallel()
     suitTracks = Parallel()
+    toonDamageTrack = getToonTracksCheat(attack, 0, ['nothing'], 0, ['neutral'])
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -2455,5 +2620,5 @@ def doGroundbreakerRevert(attack):
             puddleTracks.append(moveTrack)
             soundTracks.append(getSoundTrack('Toon_bodyfall_synergy.ogg', delay=0.5, duration=0.67 if dmg == 0 else 0.0, node=toon))
 
-    return Parallel(soundTracks, suitTracks, puddleTracks)
+    return Parallel(soundTracks, toonDamageTrack, suitTracks, puddleTracks)
 
