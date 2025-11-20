@@ -1738,7 +1738,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'freq': (30, 35, 40, 45, 50),
         'acc': (45, 50, 55, 60, 65),
         'attacks':
-            (SuitAttack('ClipOnTie',
+            (SuitAttack('PowerTie',
                         hp=(1, 1, 1, 1, 1),
                         acc=(70, 70, 70, 70, 70),
                         freq=(20, 20, 20, 20, 20)),
@@ -7240,7 +7240,7 @@ SuitAttacks = {
  'GoldRush': ('magic3', ATK_TGT_GROUP),
  'GlowerPower': ('glower', ATK_TGT_SINGLE),
  'GuiltTrip': ('magic1', ATK_TGT_GROUP),
- 'HalfWindsor': ('throw-paper', ATK_TGT_SINGLE),
+ 'HalfWindsor': ('throw-object', ATK_TGT_SINGLE),
  'HangUp': ('phone', ATK_TGT_SINGLE),
  'HeadShrink': ('magic1', ATK_TGT_SINGLE),
  'HostileTakeover': ('effort', ATK_TGT_GROUP),

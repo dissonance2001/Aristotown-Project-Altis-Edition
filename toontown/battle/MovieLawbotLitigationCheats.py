@@ -1734,7 +1734,7 @@ def doCaseInsurancePlanInsurance(attack):
         suitTracks.append(tauntInterval)
         suitTracks.append(Sequence(MovieUtil.createSuitInsuranceInterval(theSuit), Func(suit.setNeutralAnimation)))
         suitTracks.append(Wait(6.5))
-    posPoints = [Point3(0.375, -1.25, .75), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.4775687409551388, -1.3458755426917506, 0.4775687409551388), VBase3(171.40376266280748, -44.02315484804629, 153.69030390738055)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
         theSuit = attack['suit']
@@ -1743,7 +1743,7 @@ def doCaseInsurancePlanInsurance(attack):
         hitPoint.setY(hitPoint.getY() + 0.5)
         knife = globalPropPool.getProp('shredder-paper')
         knifeTrack = Sequence(
-            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(0.9, 0.9, 0.9),
+            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(0.8, 0.8, 0.8),
                                scaleUpTime=0.1),
             Wait(2.3),
             Parallel(
@@ -1801,7 +1801,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
         suitTracks.append(tauntInterval)
         suitTracks.append(Sequence(ActorInterval(theSuit, 'throw-paper'), Func(suit.setNeutralAnimation)))
         suitTracks.append(Wait(6.5))
-    posPoints = [Point3(.675, -1.5, -0.075), VBase3(10, 250, -10)]
+    posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
         theSuit = attack['suit']
@@ -1810,7 +1810,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
         hitPoint.setY(hitPoint.getY() + 0.5)
         knife = globalPropPool.getProp('shredder-paper')
         knifeTrack = Sequence(
-            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 1, VBase3(1, 1, 1),
+            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 1, VBase3(1.2, 1.2, 1.2),
                                scaleUpTime=0.25),
             Wait(1.75),
             Parallel(

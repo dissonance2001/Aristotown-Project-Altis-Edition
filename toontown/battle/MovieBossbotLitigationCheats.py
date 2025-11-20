@@ -845,7 +845,7 @@ def doOilRainHeal(attack):
             animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75),
                                  ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
                                  ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25), Func(s.setPos, battle, dropPos), LerpPosInterval(s, 0, landPos, other=battle),
-                                 Func(s.wrtReparentTo, battle), ActorInterval(s, 'reanimated'), Func(s.setDizzy, 0), Func(s.makeUnLured), Func(battle.unlureSuit, s), Func(s.setNeutralAnimation))
+                                 Func(s.wrtReparentTo, battle), ActorInterval(s, 'reanimated'), Func(s.checkCogLured, battle), Func(s.makeUnLured), Func(battle.unlureSuit, s), Func(s.setDizzy, 0), Func(s.setNeutralAnimation))
             animTracks.append(animTrack)
             moveTracks.append(moveTrack)
             puddleTracks.append(puddleTrack)
@@ -865,12 +865,15 @@ def doOilRainHealManager(attack):
     cloudPropTracks = Parallel()
     animTracks = Parallel()
     for s in battle.activeSuits:
+        currentBossHealth = -1
+        if s.dna.name == 'phouse':
+            currentBossHealth = s.currHP
         if s.getManager() and not s.dna.name == 'ambass':
             BattleParticles.loadParticles()
             cloud = globalPropPool.getProp('stormcloud')
-            rainEffect = BattleParticles.createParticleEffect(file='liquidate')
-            rainEffect2 = BattleParticles.createParticleEffect(file='liquidate')
-            rainEffect3 = BattleParticles.createParticleEffect(file='liquidate')
+            rainEffect = BattleParticles.createParticleEffect(file='oilRain')
+            rainEffect2 = BattleParticles.createParticleEffect(file='oilRain')
+            rainEffect3 = BattleParticles.createParticleEffect(file='oilRain')
             rainEffect.setColor(0.259, 0.259, 0.259, 1)
             rainEffect2.setColor(0.259, 0.259, 0.259, 1)
             rainEffect3.setColor(0.259, 0.259, 0.259, 1)
@@ -893,13 +896,13 @@ def doOilRainHealManager(attack):
             cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
             cloudPropTracks.append(cloudPropTrack)
             puddle = globalPropPool.getProp('quicksand')
-            puddle.setColor(Vec4(0.259, 0.259, 0.25, 1))
+            puddle.setColor(Vec4(0, 0, 0, 1))
             puddle.setHpr(Point3(120, 0, 0))
             puddle.setScale(0.01)
             puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle),
                                    Func(puddle.reparentTo, battle), Func(puddle.setPos, s.getPos(battle)),
                                    LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7),
-                                                     startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2),
+                                                     startScale=MovieUtil.PNT3_NEARZERO), Wait(6.2),
                                    LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
                                    Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
             sinkPos1 = s.getPos(battle)
@@ -910,10 +913,6 @@ def doOilRainHealManager(attack):
             sinkPos2.setZ(sinkPos2.getZ() - 9.1)
             dropPos.setZ(dropPos.getZ())
             landPos.setY(dropPos.getY())
-            currentBossHealth = -1
-            for s in battle.suits:
-                if s.dna.name == 'phouse':
-                    currentBossHealth = s.currHP
             if currentBossHealth >= 1:
                 moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, sinkPos1, other=battle),
                                      LerpPosInterval(s, 0.4, sinkPos2, other=battle),
@@ -924,7 +923,8 @@ def doOilRainHealManager(attack):
                                      Func(s.checkRefinementManager))
             animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75),
                                  ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
-                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25), Func(s.setNeutralAnimation))
+                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25), Func(s.setPos, battle, dropPos), LerpPosInterval(s, 0, landPos, other=battle),
+                                 Func(s.wrtReparentTo, battle), ActorInterval(s, 'reanimated'), Func(s.checkCogLured, battle), Func(s.makeUnLured), Func(battle.unlureSuit, s), Func(s.setDizzy, 0), Func(s.setNeutralAnimation))
             animTracks.append(animTrack)
             moveTracks.append(moveTrack)
             puddleTracks.append(puddleTrack)

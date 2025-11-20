@@ -192,7 +192,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     else:
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
-    track.append(Func(suit.setHpr, battle, origHpr))
+    track.append(Parallel(ActorInterval(suit, random.choice(('shuffle-left', 'shuffle-right'))), Sequence(Wait(.175), Func(suit.setHpr, battle, origHpr))))
     # if suit.dna.name == 'scg' and suit.isAngry:
     #     track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
     #     track.append(Func(suit.loop, 'neutral-enraged'))
@@ -2382,8 +2382,8 @@ def doExplodingDocument(attack):
     tnt = globalPropPool.getProp('shredder-paper')
     paper = globalPropPool.getProp('shredder-paper')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(.675, -1.5, -0.075), VBase3(10, 250, -10)]
-    propTrack = Sequence(getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.75, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+    posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
+    propTrack = Sequence(getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.75, Point3(1.2, 1.2, 1.2), scaleUpTime=0.25))
     propTrack.append(Wait(1.05))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)

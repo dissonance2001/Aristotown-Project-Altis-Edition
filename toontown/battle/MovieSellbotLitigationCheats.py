@@ -637,7 +637,7 @@ def doHighPressure(attack):
         suitTracks.append(suitTrack)
         revives = suit.getMaxSkeleRevives() + 1
         suitTrack.append(Func(suit.setNeutralAnimation))
-    posPoints = [Point3(-0.65, 0, -0.35), VBase3(0, 0, 90)]
+    posPoints = [Point3(-0.4109589, -0.0821917, -0.0821917), VBase3(-10.849315, 0, 113.42465753424653)]
     knifeTracks = Parallel()
     sparkTracks = Parallel()
     suitPos, suitHpr = battle.getActorPosHpr(theSuit)
@@ -657,7 +657,7 @@ def doHighPressure(attack):
         sparks = BattleParticles.createParticleEffect(file='tnt')
         knife.sparksEffect = sparks
         knifeTrack = Sequence(
-            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 0, scaleUpPoint=Point3(.9), scaleUpTime=0.25),
+            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 0, scaleUpPoint=Point3(.7), scaleUpTime=0.25),
             Func(sparks.start, tip),
             Wait(1.3),
             Parallel(
@@ -936,8 +936,8 @@ def doPromotion(attack, ind):
     sinkPos2.setY(sinkPos.getY() - 22.5)
     targetPos = targetSuit.getPos(battle)
     headsUp = Func(suit.headsUp, battle, targetPos)
-    targetPos2 = toon.getPos(battle)
-    headsUp2 = Func(suit.headsUp, battle, targetPos2)
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    headsUp2 = Func(suit.setHpr, battle, origHpr)
     cage = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
     toonPos = toon.getPos(battle)
     suitPos = targetSuit.getPos(battle)
@@ -1356,7 +1356,7 @@ def doContractEnforcement(attack):
         suitTrack.append(Func(battle.unSueSuit, suit))
         suitTracks.append(Sequence(getSuitAnimTrack(attack, playRate=1.5), Func(suit.setNeutralAnimation)))
         suitTracks.append(Wait(6.5))
-    posPoints = [Point3(.675, -1.5, -0.075), VBase3(10, 250, -10)]
+    posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
         theSuit = attack['suit']
@@ -1365,7 +1365,7 @@ def doContractEnforcement(attack):
         hitPoint.setY(hitPoint.getY() + 0.5)
         knife = globalPropPool.getProp('shredder-paper')
         knifeTrack = Sequence(
-            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 0.75, VBase3(1, 1, 1),
+            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 0.75, VBase3(1.2, 1.2, 1.2),
                                scaleUpTime=0.25),
             Wait(0.95),
             Parallel(
@@ -1651,8 +1651,8 @@ def doHotTake(attack):
     sparks = BattleParticles.createParticleEffect(file='tnt')
     tnt.sparksEffect = sparks
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(-0.65, 0, -0.35), VBase3(0, 0, 90)]
-    propTrack = Sequence(getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.25, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+    posPoints = [Point3(-0.4109589, -0.0821917, -0.0821917), VBase3(-10.849315, 0, 113.42465753424653)]
+    propTrack = Sequence(getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.25, Point3(0.7, 0.7, 0.7), scaleUpTime=0.25))
     propTrack.append(Func(sparks.start, tip))
     propTrack.append(Wait(1.5))
     hitPoint = __toonFacePoint(toon, parent=battle)
@@ -1684,7 +1684,8 @@ def doOvermodulated(attack, ind):
     headsUp = Func(suit.headsUp, battle, targetPos)
     battle = attack['battle']
     targetPos2 = toon.getPos(battle)
-    headsUp2 = Func(suit.headsUp, battle, targetPos2)
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    headsUp2 = Func(suit.setHpr, battle, origHpr)
     moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('sanction')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
     suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
     selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + .5), Parallel(ActorInterval(targetSuit, 'slip-backward'),

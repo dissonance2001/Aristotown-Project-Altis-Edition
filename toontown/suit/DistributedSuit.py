@@ -867,26 +867,23 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def removeSyphonHP(self):
         self.syphonHP  = 0
 
-    def checkSyphonHP(self):
+    def checkSyphonHP(self, syphonHp):
         x = int((self.maxHP * self.hardMaxHP) - self.currHP)
         if self.currHP >= (self.maxHP * self.hardMaxHP):
             self.absorbInterval = Sequence(
                 Parallel(Func(self.showHpTextNew, 0, text="SYPHONED!", colorCode=1),
                          Func(self.setHealthForMe, + 0),
-                         Func(self.updateHealthBar, 0)),
-                Func(self.removeSyphonHP)).start()
-        elif self.currHP + self.syphonHP > (self.maxHP * self.hardMaxHP):
+                         Func(self.updateHealthBar, 0))).start()
+        elif self.currHP + syphonHp > (self.maxHP * self.hardMaxHP):
             self.absorbInterval = Sequence(
                 Parallel(Func(self.showHpTextNew, + x, text="SYPHONED!", colorCode=1),
                          Func(self.setHealthForMe, + x),
-                         Func(self.updateHealthBar, 0)),
-                Func(self.removeSyphonHP)).start()
+                         Func(self.updateHealthBar, 0))).start()
         else:
             self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, + self.syphonHP, text="SYPHONED!", colorCode=1),
-                         Func(self.setHealthForMe, + self.syphonHP),
-                         Func(self.updateHealthBar, 0)),
-                Func(self.removeSyphonHP)).start()
+                Parallel(Func(self.showHpTextNew, + syphonHp, text="SYPHONED!", colorCode=1),
+                         Func(self.setHealthForMe, + syphonHp),
+                         Func(self.updateHealthBar, 0))).start()
 
     def addLevelDamage(self, absorbingCog, damage):
         absorbingCog.levelDamage += damage

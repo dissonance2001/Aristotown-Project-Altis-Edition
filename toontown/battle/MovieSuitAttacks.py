@@ -2119,7 +2119,13 @@ def doClipOnTie(attack):
     damageDelay = 2
     dodgeDelay = 1
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(-1, 1, -.25), VBase3(0, 0, 0)]
+    suitType = getSuitBodyType(attack['suitName'])
+    if suitType == 'a':
+        posPoints = [Point3(0.082191780, 1.0684931506849296, -0.08219178082191902), VBase3(-28.60273972602738, -26.13698630136986, 6.904109589041127)]
+        scale = Point3(1.2, 1.2, 1.2)
+    else:
+        posPoints = [Point3(-0.24657534246575352, 0.7397260273972606, -0.08219178082191902), VBase3(-28.60273972602738, -26.13698630136986, 6.904109589041127)]
+        scale = Point3(1.0, 1.0, 1.0)
     splatName = 'dust'
     splat = globalPropPool.getProp('dust')
     hitPoint = toon.getPos(battle)
@@ -2137,7 +2143,7 @@ def doClipOnTie(attack):
     if dmg > 0:
         explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
         tiePropTrack = Sequence(
-            getPropAppearTrack(tie, suit.getRightHand(), posPoints, 0.5, Point3(1.5, 1.5, 1.5), scaleUpTime=0.25))
+            getPropAppearTrack(tie, suit.getRightHand(), posPoints, 0.5, scale, scaleUpTime=0.25))
         tiePropTrack.append(ActorInterval(tie, 'clip-on-tie', duration=throwDelay, startTime=1.1))
         tiePropTrack.append(Func(tie.setBillboardPointEye))
         tiePropTrack.append(
@@ -3299,7 +3305,7 @@ def doTeeOff(attack):
         ballPropTracks.append(ballPropTrack)
 
     dodgeDelay = suitTrack.getDuration()
-    toonTracks = getToonTracks(attack, suitTrack.getDuration() - 1.75, ['slip-backward'], 1.5, ['duck'],
+    toonTracks = getToonTracks(attack, 3, ['slip-backward'], 1.5, ['duck'],
                                showMissedExtraTime=1.7)
     soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2.5, node=suit)
     return Parallel(suitTrack, toonTracks, clubPropTrack, ballPropTracks, soundTrack)
@@ -3847,7 +3853,13 @@ def doPinkSlip(attack):
         dmg = t['hp']
         throwDelay = 2.43
         throwDuration = 0.5
-        posPoints = [Point3(-0.25, -0.35, 0), VBase3(-180, 0, 0)]
+        suitType = getSuitBodyType(attack['suitName'])
+        if suitType == 'c':
+            posPoints = [Point3(-.1, -0.390738060781473, 0.02), VBase3(-4.688856729377676, 176.3531114327062, 176.61360347322716)]
+        elif suitType == 'b':
+            posPoints = [Point3(-0.13024602026049337, -0.390738060781473, -0.3039073806078143), VBase3(-5.73082489146168, -157.0767004341534, 173.48769898697537)]
+        else:
+            posPoints = [Point3(-0.3039073806078143, -0.390738060781473, -0.390738060781473), VBase3(-7.814761215629517, -156.55571635311145, -183.90738060781476)]
         paper = globalPropPool.getProp('pink-slip')
         paperAppearTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.8, Point3(8, 8, 8), scaleUpTime=0.25))
         paperAppearTrack.append(Wait(0.93))
@@ -4068,7 +4080,13 @@ def doHalfWindsor(attack):
     damageDelay = 2.25
     dodgeDelay = 1
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(-1, 0.5, -.1), VBase3(99, -90, -108.2)]
+    suitType = getSuitBodyType(attack['suitName'])
+    if suitType == 'c':
+        posPoints = [Point3(0.04341534008683112, -1.0853835021707674, -0.04341534008683112), VBase3(87.00434153400869, 176.3531114327062, 176.61360347322716)]
+    elif suitType == 'b':
+        posPoints = [Point3(-0.04341534008683112, -1.0853835021707674, 0.04341534008683112), VBase3(87.00434153400869, -180.0, -257.88712011577422)]
+    else:
+        posPoints = [Point3(-0.13024602026049337, -1.2590448625180883, 0.04341534008683112), VBase3(87.00434153400869, -180.0, -257.88712011577422)]
     tiePropTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -4440,7 +4458,12 @@ def doPowerTie(attack):
     damageDelay = 2
     dodgeDelay = 1
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(-0.8, 0.5, -0.25), VBase3(90, 90, 0)]
+    if suitType == 'a':
+        posPoints = [Point3(0.10380622837370268, 0.7266435986159152, -1.0380622837370233), VBase3(90, -6.228373702422147, 0)]
+    elif suitType == 'b':
+        posPoints = [Point3(-0.04341534008683112, 0.6512301013024597, -0.9117221418234465), VBase3(90, 0, 0)]
+    else:
+        posPoints = [Point3(-0.13024602026049337, 0.5643994211287975, -0.9985528219971052), VBase3(90, 11.201157742402302, 0)]
     tiePropTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -5245,9 +5268,11 @@ def doBounceCheck(attack):
     check = globalPropPool.getProp('bounced-check')
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'c':
-        checkPosPoints = [Point3(0, -0.5, 0), VBase3(-90, 90, 0)]
+        checkPosPoints = [Point3(-.1, -0.390738060781473, 0.02), VBase3(-4.688856729377676, 176.3531114327062, 176.61360347322716)]
+    elif suitType == 'b':
+        checkPosPoints = [Point3(-0.13024602026049337, -0.390738060781473, -0.3039073806078143), VBase3(-5.73082489146168, -157.0767004341534, 173.48769898697537)]
     else:
-        checkPosPoints = [Point3(-0.25, -0.425, 0), VBase3(-180, 0, 0)]
+        checkPosPoints = [Point3(-0.3039073806078143, -0.390738060781473, -0.390738060781473), VBase3(-7.814761215629517, -156.55571635311145, -183.90738060781476)]
     bounce1Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'one')
     bounce2Point = lambda suit = suit, toon = toon, battle = battle: getThrowEndPoint(suit, toon, battle, 'two')
     bounce3Point = lambda suit=suit, toon=toon, battle=battle: getThrowEndPoint(suit, toon, battle, 'three')
@@ -6236,14 +6261,16 @@ def doEvictionNotice(attack):
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        posPoints = [Point3(.675, -1.5, -0.075), VBase3(10, 250, -10)]
+        posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
+        scale = Point3(1.2, 1.2, 1.2)
     else:
-        posPoints = [Point3(.825, -1.5, -0.05), VBase3(10, 250, -10)]
+        posPoints = [Point3(.78, -1.89, -.17), VBase3(10, 250, -10)]
+        scale = Point3(1, 1, 1)
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
         paper = globalPropPool.getProp('shredder-paper')
-        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, scale, scaleUpTime=0.25))
         propTrack.append(Wait(1.05))
         hitPoint = __toonFacePoint(toon, parent=battle)
         hitPoint.setX(hitPoint.getX() - 1.4)
@@ -6632,7 +6659,7 @@ def doBlueChip(attack):
     chipTrack.append(Func(battle.movie.needRestoreRenderProp, chip))
     chipTrack.append(Func(chip.wrtReparentTo, battle))
     chipTrack.append(getThrowTrack(chip, hitPoint, duration=throwDuration, parent=battle, gravity=-64.288))
-    chipTrack.append(Effects.createZBounce(chip, 3, movePoint, 0.5, 1.0))
+    chipTrack.append(Parallel(Effects.createZBounce(chip, 3, movePoint, 0.5, 1.0)))
     chipTrack.append(LerpPosInterval(chip, 0.4, movePoint))
     spinTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpHprInterval(chip, throwDuration, Point3(0, 810, 0)))
     #spinTrack2 = Sequence(Wait(propDelay + suitDelay + 1.45), LerpHprInterval(chip, throwDuration, Point3(0, 0, 90)))
@@ -6970,15 +6997,17 @@ def doRestrainingOrder(attack):
         #suitTrack.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        posPoints = [Point3(.675, -1.5, -0.075), VBase3(10, 250, -10)]
+        posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
+        scale = Point3(1.2, 1.2, 1.2)
     else:
-        posPoints = [Point3(.825, -1.5, -0.05), VBase3(10, 250, -10)]
+        posPoints = [Point3(.78, -1.89, -.17), VBase3(10, 250, -10)]
+        scale = Point3(1, 1, 1)
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         paper = globalPropPool.getProp('shredder-paper')
-        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, scale, scaleUpTime=0.25))
         propTrack.append(Wait(1.05))
         hitPoint = __toonFacePoint(toon, parent=battle)
         hitPoint.setX(hitPoint.getX() - 1.4)

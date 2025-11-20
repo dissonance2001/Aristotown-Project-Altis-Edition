@@ -896,7 +896,7 @@ def doExtraTip(attack, ind):
     can = globalPropPool.getProp('bounced-check')
     texture = loader.loadTexture('phase_5/maps/battle/ttcc_suitprops_palette_1_alt.png')
     can.setTexture(texture, 1)
-    posPoints = [Point3(-0.25, -0.425, 0), VBase3(-180, 0, 0)]
+    posPoints = [Point3(-0.3039073806078143, -0.390738060781473, -0.390738060781473), VBase3(-7.814761215629517, -156.55571635311145, -183.90738060781476)]
     knifeTrack = Sequence(
             getPropAppearTrack(can, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
                                scaleUpTime=0.5),

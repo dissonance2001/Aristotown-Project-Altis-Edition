@@ -1340,9 +1340,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RadiographerRadioInfrequency':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RadiographerHotTake':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=2.25), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 2.25)))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'RadiographerHotTakeRetaliation':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=2.25), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 2.25)))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'RadiographerOvermodulated':
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
