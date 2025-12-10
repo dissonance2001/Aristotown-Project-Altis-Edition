@@ -93,8 +93,6 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                 self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
             elif self.avatar.dna.name == 'bfh2' and not avatar.isSkeleton:
                 self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
-            elif self.avatar.dna.name == 'racket' and not avatar.isSkeleton:
-                self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
             elif self.avatar.dna.name == 'redd' and not avatar.isSkeleton:
                 self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
             elif self.avatar.dna.name == 'rainmake' and not avatar.isSkeleton:
@@ -961,18 +959,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                 d = p2 - p1
                 biggest = max(d[0], d[1], d[2])
                 s = 0.3 / biggest
-                if self.avatar.dna.name == 'racket' and not self.avatar.isSkeleton:
-                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
-                                                     Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
-                                            Wait(0.05), Func(copyPart.removeNode))
-                    headInterval.start()
-
-                elif self.avatar.dna.name == 'rainmake' and not self.avatar.isSkeleton:
-                    headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
-                                                     Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
-                                            Wait(0.05), Func(copyPart.removeNode))
-                    headInterval.start()
-                elif self.avatar.dna.name == 'racket' and not self.avatar.isSkeleton:
+                if self.avatar.dna.name == 'rainmake' and not self.avatar.isSkeleton:
                     headInterval = Sequence(Parallel(Func(copyPart.setDepthTest, 1), Func(copyPart.setDepthWrite, 1),
                                                      Func(copyPart.setPosHprScale, 0, 0, 0.09, 180, 0, 0, s, s, s)),
                                             Wait(0.05), Func(copyPart.removeNode))

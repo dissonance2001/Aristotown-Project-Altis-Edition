@@ -1163,7 +1163,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                   Func(self.setHealthForMe, -(self.maxHP / 4)),
                                                   Func(self.updateHealthBar, 0)),
                                          Func(self.setNeutralAnimation)).start()
-        self.healInterval = Sequence(Parallel(Func(racketeer.showHpTextNew, +(self.maxHP / 4), text="SYPHONED!", colorCode=1),
+        self.healInterval = Sequence(Parallel(Func(racketeer.showHpTextNew, +(self.maxHP / 4), text="+5% Damage!", colorCode=1), Func(racketeer.makeDamageUp), Func(racketeer.checkDamageUp, + 5),
                                                    Func(racketeer.setHealthForMe, +(self.maxHP / 4)),
                                                    Func(racketeer.updateHealthBar, 0)),
                                Func(racketeer.setNeutralAnimation)).start()

@@ -237,6 +237,14 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack[
+        'name'] == 'HighRollerGameTimeSpawn':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'HighRollerCommercialBreak':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack[
         'name'] == 'HighRollerDiceRouletteNobody':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
@@ -1788,9 +1796,10 @@ def doGameTimeSpawn(attack):
     battle = attack['battle']
     target = attack['target']
     suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack2 = Sequence(MovieUtil.createSuitSnapInterval(suit), Func(suit.setNeutralAnimationDrop))
     suitTrack.append(Wait(3.0))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
-    return Parallel(suitTrack, soundTrack)
+    return Parallel(suitTrack, soundTrack, suitTrack2)
 
 def doSyphon(attack):
     suit = attack['suit']
@@ -2883,6 +2892,7 @@ def doCommercialBreak(attack):
     toon = attack['target']
     suitTracks = Parallel()
     suitTrackHighRoller = Sequence(getSuitAnimTrack(attack))
+    suitTrack2 = Sequence(MovieUtil.createSuitSnapInterval(theSuit), Func(theSuit.setNeutralAnimationDrop))
     suitTrackHighRoller.append(Wait(3.0))
     soundTrack = getSoundTrack('SA_bash.ogg')
     for suit in battle.activeSuits:
@@ -2891,7 +2901,7 @@ def doCommercialBreak(attack):
             suitTrack.append(Wait(1.0))
             suitTrack.append(Parallel(ActorInterval(suit, 'soak', endTime=1), MovieUtil.shortCircuitTrack2(suit, battle)))
         suitTracks.append(suitTrack)
-    return Parallel(suitTracks, soundTrack, suitTrackHighRoller)
+    return Parallel(suitTracks, suitTrack2, soundTrack, suitTrackHighRoller)
 
 def doDiceRouletteToons(attack):
     suit = attack['suit']
@@ -3203,7 +3213,7 @@ def doGameTimeCog2(attack, ind):
                                   Func(targetSuit.setChatAbsolute,
                                        "Crush Organics until Green and Sad!", CFSpeech | CFTimeout), Wait(7.0),
                                   Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
-    selfDamageTrack = Sequence(Wait(14), Func(targetSuit.showHpTextNew,  - targetSuit.currHP, text="DAZED?!", colorCode=3),
+    selfDamageTrack = Sequence(Wait(14), Func(targetSuit.showHpTextNew,  - targetSuit.currHP, text="WRONG ANSWER!", colorCode=3),
                                Func(targetSuit.setHealthForMe, - targetSuit.currHP),
                                Func(targetSuit.updateHealthBar, 0))
     suitTrack = random.choice((Parallel(managerTrackQuestion, suitTrackQuestion), Parallel(managerTrackQuestion2, suitTrackQuestion2), Parallel(managerTrackQuestion3, suitTrackQuestion3)

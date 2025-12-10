@@ -686,7 +686,7 @@ def doSuitAttack(attack):
     elif name == 'RacketeerExtortion':
         suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
     elif name == 'RacketeerExtortion2':
-        suitTrack = MovieSellbotLitigationCheats.doExtortion2(attack)
+        suitTrack = MovieSellbotLitigationCheats.doPeckingOrderGroup(attack)
     elif name == 'RacketeerCompensation':
         suitTrack = MovieSellbotLitigationCheats.doCompensation(attack)
     elif name == 'RacketeerHustling':
@@ -1377,17 +1377,17 @@ def doSuitAttack(attack):
         elif name == 'ScapegoatBarnyardBash':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseSnipeVulnerable':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseGroundbreakerRevert':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseSnipeGagBan':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseSnipeBookkept':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseSnipeCollectCall':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseSnipeMulligan':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseBurnDamage':
             resetSuitTrack = Sequence(suitTrack2)
         else:

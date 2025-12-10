@@ -1487,9 +1487,10 @@ def doExtortion2(attack):
 
 def doRacketeering(attack):
     suit = attack['suit']
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=0.75))
-    suitTrack.append(Wait(3.0))
-    soundTrack = getSoundTrack('SA_objection.ogg', node=suit)
+    battle = attack['battle']
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack.append(Wait(1.0))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack)
 
 def doHustling(attack):
@@ -1502,7 +1503,8 @@ def doHustling(attack):
 def doCompensation(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTracks = Parallel(getSuitAnimTrack(attack, playRate=1.25))
+    suitTracks = Parallel(getSuitAnimTrack(attack, playRate=1.25), Sequence(ActorInterval(suit, 'sacrifice-cog', endTime=.75), ActorInterval(suit, 'sacrifice-cog', startTime=.75, endTime=0),
+                          Func(suit.setNeutralAnimationDrop)))
     suitTracks.append(Wait(5.0))
     soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))

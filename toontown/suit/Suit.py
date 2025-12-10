@@ -146,7 +146,7 @@ prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 cinema = (('snap', 'snap', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
-racket = (('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
+racket = (('quick-jump', 'jump', 4), ('taunt', 'taunt', 4), ('smile', 'smile', 4), ('cease', 'cease', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
 ubuster = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
 safesupervis = (('summon', 'summon', 4), ('cigar-smoke', 'cigar-smoke', 4), ('firestarter-cigar-smoke', 'firestarter-cigar-smoke', 4), ('cease', 'cease', 4), ('snap', 'snap', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
 psetter = (('quick-jump', 'jump', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4), ('neutral2', 'neutral', 4))
@@ -2311,12 +2311,12 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.7)
             self.setTransparency(1)
         elif dna.name == 'racket':
-            self.scale = 7.0 / bSize
-            self.handColor = VBase4(0.173, 0.173, 0.173, 1)
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(0.169, 0.169, 0.169, 1)
             self.generateBody()
-            self.generateHead3('redd', animated=True)
+            self.generateHead3('magnate', animated=True)
             self.makeExecutive()
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_racket.png')
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_racket.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(9.0)
@@ -4101,7 +4101,7 @@ class Suit(Avatar.Avatar):
             elif headType == 'chairman-a':
                 headModel.setScale(.7)
                 headModel.setY(-.2)
-            elif headType == 'magnate' and self.style.name == 'mg' :
+            elif headType == 'magnate':
                 headModel.setZ(-.1)
             elif headType == 'bagholder' and self.style.name == 'bgh' :
                 headModel.setZ(.5)
@@ -7965,7 +7965,7 @@ class Suit(Avatar.Avatar):
             return DOPADialogArray
         elif self.style.name == 'racket' and not self.isSkeleton:
             loadDialog(1)
-            return ReddDialogArray
+            return FeatherbedderDialogArray
         elif self.style.name == 'ubuster':
             loadDialog(1)
             return DOPRDialogArray

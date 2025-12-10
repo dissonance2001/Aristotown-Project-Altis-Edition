@@ -4655,6 +4655,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target4', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target3', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
+                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
                 theSuit.setHP(math.ceil(theSuit.currHP + (targetSuit.maxHP / 4)))
                 targetSuit.setHP(math.ceil(targetSuit.currHP - (targetSuit.maxHP / 4)))
                 if targetSuit.currHP <= 0:
@@ -4670,6 +4671,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target4', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target3', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
+                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
                 theSuit.setHP(math.ceil(theSuit.currHP + (targetSuit.maxHP / 4)))
                 targetSuit.setHP(math.ceil(targetSuit.currHP - (targetSuit.maxHP / 4)))
                 if targetSuit.currHP <= 0:
@@ -4685,6 +4687,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target4', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target3', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
+                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
                 theSuit.setHP(math.ceil(theSuit.currHP + (targetSuit.maxHP / 4)))
                 targetSuit.setHP(math.ceil(targetSuit.currHP - (targetSuit.maxHP / 4)))
                 if targetSuit.currHP <= 0:
@@ -4700,6 +4703,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target4', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target3', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
+                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
                 theSuit.setHP(math.ceil(theSuit.currHP + (targetSuit.maxHP / 4)))
                 targetSuit.setHP(math.ceil(targetSuit.currHP - (targetSuit.maxHP / 4)))
                 if targetSuit.currHP <= 0:
@@ -4715,6 +4719,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'target4', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target3', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'target2', 0, 0, 'setBoth')
+                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
                 theSuit.setHP(math.ceil(theSuit.currHP + (targetSuit.maxHP / 4)))
                 targetSuit.setHP(math.ceil(targetSuit.currHP - (targetSuit.maxHP / 4)))
                 if targetSuit.currHP <= 0:
@@ -8239,9 +8244,9 @@ class BattleCalculatorAI:
                 if (x + 1) % 4 == 0:
                     self.setSuitCondition(suitId, 'breachcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'racket': #racketeer
-                if (x + 1) % 2 == 0:
+                if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'profiteeringcalculator', 1, 10, 'setBoth')
-                if (x + 1) % 4 == 0:
+                if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'extortioncalculator', 1, 10, 'setBoth')
                 if (x + 2) % 4 == 0:
                     self.setSuitCondition(suitId, 'hustlingcalculator', 1, 10, 'setBoth')
@@ -9745,7 +9750,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target2'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'RacketeerProfiteering', # Profiteering
-                     'animName': 'come-on',
+                     'animName': 'summon-cog',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
@@ -9754,7 +9759,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target3'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'RacketeerProfiteering2',  # Profiteering
-                                                            'animName': 'come-on',
+                                                            'animName': 'summon-cog',
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
@@ -9763,7 +9768,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target4'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'RacketeerProfiteering3',  # Profiteering
-                                                            'animName': 'come-on',
+                                                            'animName': 'summon-cog',
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
@@ -9772,7 +9777,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target5'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'RacketeerProfiteering4',  # Profiteering
-                                                            'animName': 'come-on',
+                                                            'animName': 'summon-cog',
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
@@ -9781,7 +9786,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'target6'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'RacketeerProfiteering5',  # Profiteering
-                                                            'animName': 'come-on',
+                                                            'animName': 'summon-cog',
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
@@ -9790,7 +9795,7 @@ class BattleCalculatorAI:
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'RacketeerCompensation', # Compensation
-                     'animName': 'rush-job',
+                     'animName': 'nothing',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
@@ -9803,7 +9808,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'extortioncalculator2') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'RacketeerExtortion2', # Extortion Retaliation
-                     'animName': 'magic3',
+                     'animName': 'throw-object',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
@@ -10020,7 +10025,7 @@ class BattleCalculatorAI:
                         suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'RacketeerRacketeering', # Racketeering
-                     'animName': 'objection',
+                     'animName': 'cease',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
@@ -10033,7 +10038,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'hustlingcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'RacketeerHustling', # Hustling
-                     'animName': 'come-on',
+                     'animName': 'taunt',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,

@@ -39,7 +39,7 @@ suitATypes = [
     # Cashbots
 'pp', 'sw', 'nc', 'trs', 'rb', 'kerberos', 'charon', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
-'nd', 'dc', 'fcs', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'ubuster', 'safesupervis',
+'nd', 'dc', 'fcs', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'racket', 'ubuster', 'safesupervis',
     # Boardbots
 'mdm', 'cbr', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'gatekeep', 'fmaker', 'dold', 'dking', 'crystal', 'chairman', 'trainer',
     # Techbots
@@ -55,7 +55,7 @@ suitBTypes = [
     # Cashbots
 'shy', 'bc', 'gld', 'ls', 'ovt', 'duckshfl', 'nix',
     # Sellbots
-'tm', 'cn', 'ms', 'bellring', 'prethink', 'racket', 'psetter',
+'tm', 'cn', 'ms', 'bellring', 'prethink', 'psetter',
     # Boardbots
 'pph', 'ins', 'ang', 'dola', 'ottoman',
     # Techbots

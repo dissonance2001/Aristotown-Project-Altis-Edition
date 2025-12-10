@@ -345,7 +345,7 @@ def createSuitReviveTrack(suit, battle):
     elif suit.style.name == 'whunter' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'chairman' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'ottoman' and not deathSuit.isSkeleton:
@@ -417,7 +417,7 @@ def createSuitReviveTrack(suit, battle):
     elif suit.style.name == 'pcrat' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'redd' and not deathSuit.isSkeleton:
@@ -708,7 +708,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     elif suit.style.name == 'whunter' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'chairman' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'ottoman' and not deathSuit.isSkeleton:
@@ -780,7 +780,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     elif suit.style.name == 'pcrat' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'redd' and not deathSuit.isSkeleton:
@@ -956,7 +956,7 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'whunter' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'chairman' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'ottoman' and not deathSuit.isSkeleton:
@@ -1028,7 +1028,7 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'pcrat' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'redd' and not deathSuit.isSkeleton:
@@ -2204,6 +2204,17 @@ def createSuitSnapInterval(suit):
             suitInterval = ActorInterval(suit, 'snap2')
         for headPart in suit.animatedHeadParts:
             headInterval = Sequence(ActorInterval(headPart, 'gsnap'), Func(headPart.loop,
+                        'neutral'))
+            headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
+            hasAnimatedHead = True
+        return Parallel(headInterval, suitInterval, headLoop)
+    elif suit.style.name == 'hroller':
+        if suit.isSkeleton:
+            suitInterval = ActorInterval(suit, 'snap')
+        else:
+            suitInterval = ActorInterval(suit, 'snap2')
+        for headPart in suit.animatedHeadParts:
+            headInterval = Sequence(ActorInterval(headPart, 'wheelspin', startTime=2.5, endTime=4.5), Func(headPart.loop,
                         'neutral'))
             headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
             hasAnimatedHead = True

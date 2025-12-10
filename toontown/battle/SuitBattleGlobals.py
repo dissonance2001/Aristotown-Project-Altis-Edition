@@ -2481,7 +2481,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             acc=(85,),
                             freq=(15,),
                             groupStatus=ATK_TGT_DOUBLE),
-                 SuitAttack('Tremor',
+             SuitAttack('Quake',
                             hp=(34,),
                             acc=(90,),
                             freq=(15,)),
