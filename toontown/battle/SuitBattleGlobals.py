@@ -4139,7 +4139,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                            acc=(75, 75, 75, 75, 75, 75),
                            freq=(15, 15, 15, 15, 15, 15)),
                 SuitAttack('RedTape',
-                           hp=(33, 33, 33, 33, 33, 3),
+                           hp=(33, 33, 33, 33, 33, 33),
                            acc=(85, 85, 85, 85, 85, 85),
                            freq=(25, 25, 25, 25, 25, 25)))},
  'arbit': {'name': 'Arbitrator',
