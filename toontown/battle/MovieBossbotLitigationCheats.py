@@ -754,7 +754,7 @@ def doBookkeepingRetaliation(attack):
         dmg = t['hp']
         suitTrack = Sequence(getSuitAnimTrack(attack))
         suitTrack2 = Sequence(ActorInterval(suit, 'effort', duration=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimationDrop))
-        notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
+        notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFFs!", colorCode=1))
         soundTrack1 = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
         soundTrack2 = Sequence(Wait(3.4), SoundInterval(globalBattleSoundCache.getSound('SA_haymaker.ogg')))
         soundTrack = Parallel(soundTrack1, soundTrack2)
