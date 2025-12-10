@@ -237,9 +237,9 @@ fmaker = (('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swin
 jgd = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 bby = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 dking = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-ottoman = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-crystal = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-chairman = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+ottoman = (('effort', 'effort', 4), ('hold-pencil', 'hold-pencil', 4), ('pen-squirt', 'fountain-pen', 4))
+crystal = (('shot5', 'shot5', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('defense', 'defense', 4))
+chairman = (('pickpocket', 'pickpocket', 4), ('sanction', 'sanction', 4), ('frustrated', 'frustrated', 4), ('snap', 'snap', 4), ('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 
 # Techbots
 skd = (('speak', 'speak', 4), ('shredder', 'shredder', 4))
@@ -2571,7 +2571,7 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeBoardbotManager()
             self.generateHead3('redd', animated=True)
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_redd.png')
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_dking.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.4)
@@ -2589,14 +2589,14 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
         elif dna.name == 'crystal':
             self.scale = 7.25 / aSize
-            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
-            self.generateBody()
+            self.handColor = VBase4(0.353, 0.353, 0.353, 1)
+            self.generateFemaleBody()
             self.makeBoardbotManager()
-            self.generateHead3('chainsaw', animated=True)
-            texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
+            self.generateHead3('stenographer', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_crystalline.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(9.8)
+            self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'chairman':
             self.scale = 7.5 / aSize
@@ -5852,6 +5852,7 @@ class Suit(Avatar.Avatar):
 
         if self.healthCondition != condition or forceUpdate:
             if condition <= 9:
+                taskMgr.remove(self.uniqueName('pulse-task'))
                 taskMgr.remove(self.uniqueName('blink-task'))
                 if not self.virtual:
                     self.healthBar.setColor(1, 1, 1, 1)
@@ -5862,6 +5863,7 @@ class Suit(Avatar.Avatar):
                         self.virtualize(condition)
                 self.__changeColor()
             elif condition == 10:
+                taskMgr.remove(self.uniqueName('pulse-task'))
                 taskMgr.remove(self.uniqueName('blink-task'))
                 if not self.virtual:
                     self.healthBar.setColor(1, 1, 1, 1)
@@ -5869,6 +5871,7 @@ class Suit(Avatar.Avatar):
                 blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray), Task.pause(0.1))
                 taskMgr.add(blinkTask, self.uniqueName('blink-task'))
             elif condition == 11:
+                taskMgr.remove(self.uniqueName('pulse-task'))
                 taskMgr.remove(self.uniqueName('blink-task'))
                 if not self.virtual:
                     self.healthBar.setColor(1, 1, 1, 1)
@@ -5876,6 +5879,7 @@ class Suit(Avatar.Avatar):
                 blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray), Task.pause(0.1))
                 taskMgr.add(blinkTask, self.uniqueName('blink-task'))
             elif condition == 13:
+                taskMgr.remove(self.uniqueName('blink-task'))
                 taskMgr.remove(self.uniqueName('pulse-task'))
                 if not self.virtual:
                     self.healthBar.setColor(1, 1, 1, 1)
@@ -5883,6 +5887,7 @@ class Suit(Avatar.Avatar):
                 blinkTask = Task.loop(Task(self.__pulsePurple), Task.pause(1), Task(self.__pulsePurpleColor), Task.pause(3))
                 taskMgr.add(blinkTask, self.uniqueName('pulse-task'))
             else:
+                taskMgr.remove(self.uniqueName('pulse-task'))
                 taskMgr.remove(self.uniqueName('blink-task'))
                 if not self.virtual:
                     self.healthBar.setColor(1, 1, 1, 1)
@@ -7998,13 +8003,7 @@ class Suit(Avatar.Avatar):
             loadDialog(1)
             return OttomanDialogArray
         elif self.style.name == 'crystal' and not self.isSkeleton:
-            loadDialog(1)
-            if self.isChainsawPhase2:
-                return ChainsawORDialogArray
-            elif self.isChainsawPhase3:
-                return ChainsawDialogArray
-            else:
-                return ChainsawDialogArray
+            return StenographerDialogArray
         elif self.style.name == 'chairman' and not self.isSkeleton:
             loadDialog(1)
             return ChairmanDialogArray

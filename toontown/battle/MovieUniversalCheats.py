@@ -810,8 +810,9 @@ def doAbilityQueued(attack):
 
 def doAbsorbMovie(attack):
     theSuit = attack['suit']
+    dmg = attack['target'][0]['hp']
     notifyTracks = Sequence()
-    notifyTrack = Sequence(Func(theSuit.checkAbsorbDamage))
+    notifyTrack = Sequence(Func(theSuit.checkAbsorbDamage, dmg))
     cameraTrack = Wait(3.0)
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
@@ -847,7 +848,8 @@ def doSyphonMovie(attack):
 def doAbsorbMovieLevel(attack):
     theSuit = attack['suit']
     notifyTracks = Sequence()
-    notifyTrack = Sequence(Func(theSuit.checkLevelDamage))
+    dmg = attack['target'][0]['hp']
+    notifyTrack = Sequence(Func(theSuit.checkLevelDamage, dmg))
     cameraTrack = Wait(3.0)
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
@@ -909,7 +911,7 @@ def doSueRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence()
-    suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Func(suit.setSued2, 0), Func(battle.unSueSuit, suit)))
+    suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Func(suit.setSued2, 0), Func(battle.unSueSuit, suit), Func(suit.setNeutralAnimation)))
     suitTrack.append(Func(suit.removeSued))
     return suitTrack
 

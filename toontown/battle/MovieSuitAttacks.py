@@ -1,6 +1,7 @@
 from toontown.battle import MovieCamera
 from toontown.battle import MovieLawbotLitigationCheats
 from toontown.battle import MovieBossbotLitigationCheats
+from toontown.battle import MovieBoardbotLitigationCheats
 from toontown.battle import MovieSellbotLitigationCheats
 from toontown.battle import MovieHighRollerCheats
 from toontown.battle import MovieDirectorsCheats
@@ -541,6 +542,94 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doFore(attack)
     elif name == 'AmbassadorGhostMentality':
         suitTrack = MovieBossbotLitigationCheats.doGhostMentality(attack)
+        # dividend king
+    elif name == 'DividendAccountRollover':
+        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover(attack)
+    elif name == 'DividendAccountRollover2':
+        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover2(attack)
+    elif name == 'DividendAccountRollover3':
+        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover3(attack)
+    elif name == 'DividendAccountRollover4':
+        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover4(attack)
+    elif name == 'DividendAccountRollover5':
+        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover5(attack)
+    elif name == 'DividendLiquidationEvent':
+        suitTrack = MovieBoardbotLitigationCheats.doLiquidationEvent(attack)
+    elif name == 'DividendLiquidationEventDamage':
+        suitTrack = MovieBoardbotLitigationCheats.doLiquidationEventDamage(attack)
+    elif name == 'DividendTotalMarketMeltdown':
+        suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown(attack)
+    elif name == 'DividendPeckingOrder':
+        suitTrack = MovieBoardbotLitigationCheats.doPeckingOrder(attack)
+    elif name == 'DividendPeckingOrderZapped':
+        suitTrack = MovieBoardbotLitigationCheats.doPeckingOrderGroup(attack)
+        # ottoman cheats
+    elif name == 'OttomanRevisedDraft':
+        suitTrack = MovieBoardbotLitigationCheats.doWhirlwind(attack)
+    elif name == 'OttomanRedPenReview':
+        suitTrack = MovieBoardbotLitigationCheats.doRedPenReview(attack)
+    elif name == 'OttomanFootnoteOverload':
+        suitTrack = MovieBoardbotLitigationCheats.doFootnoteOverload(attack)
+    elif name == 'OttomanPerformanceReview':
+        suitTrack = MovieBoardbotLitigationCheats.doPerformanceReview(attack)
+    elif name == 'OttomanPerformanceReviewRevert':
+        suitTrack = MovieBoardbotLitigationCheats.doPerformanceReviewRevert(attack)
+        # crystalline cheats
+    elif name == 'CrystalShatteringClarity':
+        suitTrack = MovieBoardbotLitigationCheats.doShatteringClarity(attack)
+    elif name == 'CrystalRefractDamage':
+        suitTrack = MovieBoardbotLitigationCheats.doRefractDamage(attack)
+    elif name == 'CrystalRefractDamageRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doRefractDamageRetaliation(attack)
+    elif name == 'CrystalFracturedLimitsOffensive':
+        suitTrack = MovieBoardbotLitigationCheats.doFracturedLimits(attack)
+    elif name == 'CrystalFracturedLimitsDefensive':
+        suitTrack = MovieBoardbotLitigationCheats.doFracturedLimits(attack)
+    elif name == 'CrystalFracturedLimitsRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doFracturedLimitsRetaliation(attack)
+    elif name == 'CrystalPrismaticDistortion':
+        suitTrack = MovieBoardbotLitigationCheats.doPrismaticDistortion(attack)
+        # chairman cheats
+    elif name == 'ChairmanTrapRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doTrapRetaliation(attack)
+    elif name == 'ChairmanLureRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doLureRetaliation(attack)
+    elif name == 'ChairmanThrowRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doThrowRetaliation(attack)
+    elif name == 'ChairmanSquirtRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doSquirtRetaliation(attack)
+    elif name == 'ChairmanZapRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doZapRetaliation(attack)
+    elif name == 'ChairmanSoundRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doSoundRetaliation(attack)
+    elif name == 'ChairmanDropRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doDropRetaliation(attack)
+    elif name == 'ChairmanCage':
+        suitTrack = MovieBoardbotLitigationCheats.doCage(attack)
+    elif name == 'ChairmanPhase2':
+        suitTrack = MovieBoardbotLitigationCheats.doPhase2(attack)
+    elif name == 'ChairmanOvertime':
+        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 1)
+    elif name == 'ChairmanOvertime2':
+        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 2)
+    elif name == 'ChairmanOvertime3':
+        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 3)
+    elif name == 'ChairmanOvertime4':
+        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 4)
+    elif name == 'ChairmanOvertime5':
+        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 5)
+    elif name == 'ChairmanHostileLiquidation':
+        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 1)
+    elif name == 'ChairmanHostileLiquidation2':
+        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 2)
+    elif name == 'ChairmanHostileLiquidation3':
+        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 3)
+    elif name == 'ChairmanHostileLiquidation4':
+        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 4)
+    elif name == 'ChairmanHostileLiquidation5':
+        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 5)
+    elif name == 'ChairmanSnipe':
+        suitTrack = MovieBoardbotLitigationCheats.doSnipe(attack)
         # safety supervisor
     elif name == 'SafetyHighPressure':
         suitTrack = MovieSellbotLitigationCheats.doHighPressure(attack)

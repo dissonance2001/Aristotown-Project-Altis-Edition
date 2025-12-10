@@ -125,7 +125,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
     SUIT_HOOD_INFO_HEIGHTS = 10
     SUIT_HOOD_INFO_ECHANCE = 11
     MAX_SUIT_TYPES = 11
-    MAX_SUIT_TYPES_HQ = 16
+    MAX_SUIT_TYPES_HQ = 14
     HQ_SKELE_CHANCE = .15
     HQ_VIRTUAL_CHANCE = 0
     POP_UPKEEP_DELAY = 10

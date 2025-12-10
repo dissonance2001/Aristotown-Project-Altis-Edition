@@ -936,11 +936,13 @@ def doSuppression(attack):
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        posPoints = [Point3(.675, -1.5, -0.075), VBase3(10, 250, -10)]
+        posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
+        scale = Point3(1.2, 1.2, 1.2)
     else:
-        posPoints = [Point3(.825, -1.5, -0.05), VBase3(10, 250, -10)]
+        posPoints = [Point3(.78, -1.89, -.17), VBase3(10, 250, -10)]
+        scale = Point3(1, 1, 1)
     propTrack = Sequence(
-        getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0.25))
+        getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, scale, scaleUpTime=0.25))
     propTrack.append(Wait(1.2))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)

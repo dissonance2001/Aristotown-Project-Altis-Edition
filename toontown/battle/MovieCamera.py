@@ -1365,6 +1365,120 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
     elif name == 'RadiographerDanceSession':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        #dividend king
+    elif name == 'DividendAccountRollover':
+        camTrack.append(Parallel(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+    elif name == 'DividendAccountRollover2':
+        camTrack.append(Parallel(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+    elif name == 'DividendAccountRollover3':
+        camTrack.append(Parallel(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+    elif name == 'DividendAccountRollover4':
+        camTrack.append(Parallel(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+    elif name == 'DividendAccountRollover5':
+        camTrack.append(Parallel(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+    elif name == 'DividendLiquidationEvent':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'DividendLiquidationEventDamage':
+        camTrack.append(heldShot(10, 0, 10, 115, -30, 0, attackDuration))
+    elif name == 'DividendTotalMarketMeltdown':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'DividendPeckingOrder':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'DividendPeckingOrderZapped':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+        # ottoman cheats
+    elif name == 'OttomanRevisedDraft':
+        camTrack.append(defaultCamera(openShotDuration=0.75))
+    elif name == 'OttomanRedPenReview':
+        camTrack.append(defaultCamera(openShotDuration=2.5))
+    elif name == 'OttomanFootnoteOverload':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'OttomanPerformanceReview':
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'OttomanPerformanceReviewRevert':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+        # crystalline cheats
+    elif name == 'CrystalShatteringClarity':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'CrystalRefractDamage':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'CrystalRefractDamageRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'CrystalFracturedLimitsOffensive':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'CrystalFracturedLimitsDefensive':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'CrystalFracturedLimitsRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=0.5))
+    elif name == 'CrystalPrismaticDistortion':
+        camTrack.append(defaultCamera(openShotDuration=0.5))
+        # chairman cheats
+    elif name == 'ChairmanTrapRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ChairmanLureRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=0.5))
+    elif name == 'ChairmanThrowRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ChairmanSquirtRetaliation':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2, attackDuration=2),
+                                 heldShot(5, 0, .5, 155, 35, 0, attackDuration - 2)))
+    elif name == 'ChairmanZapRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=0.75))
+    elif name == 'ChairmanSoundRetaliation':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 15, 5, -180, 0.0, 0.0, 0, suit), Wait(4)))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=attackDuration - 4)))
+    elif name == 'ChairmanDropRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ChairmanCage':
+        camTrack.append(defaultCamera(openShotDuration=1.0))
+    elif name == 'ChairmanPhase2':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ChairmanOvertime':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanOvertime2':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanOvertime3':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanOvertime4':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanOvertime5':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanHostileLiquidation':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanHostileLiquidation2':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanHostileLiquidation3':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanHostileLiquidation4':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanHostileLiquidation5':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'ChairmanSnipe':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'ErclaimLaffSteal':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'ErclaimRiseFromTheScrap':

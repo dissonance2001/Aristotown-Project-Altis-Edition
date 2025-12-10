@@ -6352,8 +6352,9 @@ class BattleCalculatorAI:
                             self.deadSuits += 1
                             self.setSuitCondition(suit.doId, 'dead', 1, 99, 'setBoth')
             elif atkType['name'] == 'AbsorbMovie':
-                result = 0
+                result = math.ceil(self.absorbDamage)
                 attack[SUIT_HP_COL][targetIndex] = result
+                toon.setHp(toon.hp + math.ceil(result))
                 theSuit.setHP(math.ceil(theSuit.currHP - math.ceil(self.absorbDamage)))
                 if theSuit.currHP <= 0:
                     self.setSuitCondition(theSuit.doId, 'deathcheck', 1, 99, 'setBoth')
@@ -6361,8 +6362,9 @@ class BattleCalculatorAI:
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'deadpromotion', 1, 99, 'setBoth')
             elif atkType['name'] == 'AbsorbMovieLevel':
-                result = 0
+                result = math.ceil(self.levelDamage)
                 attack[SUIT_HP_COL][targetIndex] = result
+                toon.setHp(toon.hp + math.ceil(result))
                 theSuit.setHP(math.ceil(theSuit.currHP - math.ceil(self.levelDamage)))
             elif atkType['name'] == 'SueApplication':
                 result = 0
