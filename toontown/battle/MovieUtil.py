@@ -879,13 +879,13 @@ def createVirtualSuitDeathTrack(suit, battle):
         hasAnimatedHead = True
     if suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
-        suitTrack.append(Func(insertDeathSuit, suit, deathSuit, battle))
+        suitTrack.append(Func(insertDeathSuit, suit, suit, battle))
         suitTrack.append(Parallel(ActorInterval(suit, 'mplayer-kneel-into')))
         deathSound = base.loadSfx('phase_11/audio/sfx/LB_capacitor_discharge_3.ogg')
         suitTrack.append(Parallel(Func(suit.loop, 'mplayer-kneel-neutral'), LerpColorScaleInterval(suit, duration=1.25, colorScale=(0, 0, 0, 0),
                                    blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
         suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
-        suitTrack.append(Func(removeDeathSuit, suit, deathSuit, name='remove-death-suit'))
+        suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
         suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
         suitTrack.append(Func(suit.makeDead))
     else:
@@ -938,7 +938,7 @@ def createSuitDeathTrack(suit, battle):
     suitTrack.append(Func(suit.setDizzy, 0))
     suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
-    suitTrack.append(ActorInterval(suit, 'lose'))
+    suitTrack.append(ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
     #suitTrack.append(Func(suit.hide))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:

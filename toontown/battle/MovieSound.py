@@ -241,6 +241,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                         Parallel(ActorInterval(suit, 'sound-react'), MovieUtil.createSuitStunInterval(suit, 0.5, 1.8)))
             suitTrack.append(Func(suit.checkCogLured, battle))
             suitTrack.append(Func(suit.setDizzy, 0))
+            suitTrack.append(Wait(2.0))
             bonusTrack = None
             if hpBonus > 0:
                 bonusTrack = Sequence(Wait(tSuitReact + 0.75 + uberDelay),

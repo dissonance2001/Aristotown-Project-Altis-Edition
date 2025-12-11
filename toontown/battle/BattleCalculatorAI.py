@@ -5213,7 +5213,7 @@ class BattleCalculatorAI:
             elif atkType['name'] == 'AttorneyRushJob':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'laborious', 1, 1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'laborious', 1, 2, 'setBoth')
                 for t in self.battle.activeToons:
                     self.setToonCondition(t, random.choice(
                         ('useToonUp','useTrap', 'useLure', 'useThrow', 'useSquirt', 'useZap', 'useSound', 'useDrop',)), 1, 2, 'setBoth')
@@ -11944,7 +11944,7 @@ class BattleCalculatorAI:
                      'freq': 0,
                      'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'ovt':  # Mint Supervisor Life Insurance
+            if self.battle.activeSuits[i].dna.name == 'ovt' and self.battle.activeSuits[i].currHP > 0:  # Mint Supervisor Life Insurance
                 if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit'):
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
@@ -12076,7 +12076,7 @@ class BattleCalculatorAI:
                 if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit'):
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'laborious'):
+                if self.suitHasCondition(suitId, 'laborious') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'AttorneyHurrySickness',
                                                             'animName': 'finger-wag',
