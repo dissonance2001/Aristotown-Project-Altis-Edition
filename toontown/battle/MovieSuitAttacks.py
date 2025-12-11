@@ -686,7 +686,7 @@ def doSuitAttack(attack):
     elif name == 'RacketeerExtortion':
         suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
     elif name == 'RacketeerExtortion2':
-        suitTrack = MovieSellbotLitigationCheats.doPeckingOrderGroup(attack)
+        suitTrack = MovieSellbotLitigationCheats.doExtortion2(attack)
     elif name == 'RacketeerCompensation':
         suitTrack = MovieSellbotLitigationCheats.doCompensation(attack)
     elif name == 'RacketeerHustling':
@@ -703,7 +703,7 @@ def doSuitAttack(attack):
     elif name == 'RadiographerHotTake':
         suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
     elif name == 'RadiographerHotTakeRetaliation':
-        suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
+        suitTrack = MovieSellbotLitigationCheats.doPeckingOrderGroup(attack)
     elif name == 'RadiographerOvermodulated':
         suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 1)
     elif name == 'RadiographerOvermodulated2':

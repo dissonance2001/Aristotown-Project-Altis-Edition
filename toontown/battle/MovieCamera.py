@@ -174,11 +174,12 @@ def cameraActorShot(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
         Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
         Wait(remainTime),
         Func(camera.reparentTo, previousParent),
-        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
+        Func(camera.setPosHpr, 0.0, -10.0, 10.0, 0, -20, 0),
         Func(cameraActor.cleanup),
         name=name
     )
     return track
+
 
 def cameraActorShotHighRoller(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
     previousParent = camera.getParent()
@@ -192,8 +193,7 @@ def cameraActorShotHighRoller(parent, anim, remainTime = 0.0, name = 'cameraActo
         ActorInterval(cameraActor, anim),
         Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
         Wait(remainTime),
-        Func(camera.reparentTo, previousParent),
-        Func(camera.setPosHpr, node.getX(), node.getY(), node.getZ(), *node.getHpr()),
+        Func(camera.setPosHpr, 0.0, -10.0, 10.0, 0, -20, 0),
         Func(cameraActor.cleanup),
         name=name
     )
@@ -1301,20 +1301,20 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
         # racketeer
     elif name == 'RacketeerProfiteering':
-        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
     elif name == 'RacketeerProfiteering2':
-        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
     elif name == 'RacketeerProfiteering3':
-        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
     elif name == 'RacketeerProfiteering4':
-        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
     elif name == 'RacketeerProfiteering5':
-        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
     elif name == 'RacketeerExtortion':
-        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', 0), Wait(attackDuration)))
     elif name == 'RacketeerExtortion2':
         if attackDuration > 2:
-            camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+            camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', 0), Wait(attackDuration)))
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2

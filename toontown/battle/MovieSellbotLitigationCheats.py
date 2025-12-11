@@ -1387,7 +1387,7 @@ def doProfiteering(attack, ind):
     toon = target[0]['toon']
     dmg = target[0]['hp']
     targetSuit = battle.activeSuits[ind]
-    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     selfDamageTrack = Sequence(Wait(2.0), Func(targetSuit.checkProfiteering, suit, battle), Wait(4.0))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=2.0)
     return Parallel(suitTrack, selfDamageTrack, soundTrack2)
@@ -1417,12 +1417,12 @@ def doExtortion(attack):
         facePoint = __toonFacePoint(toon)
         freezeEffect.setPos(0, 0, facePoint.getZ())
         unFreezeEffect.setPos(0, 0, facePoint.getZ())
-        partTrack4 = getPartTrack(sprayEffect, 1, 4.0, [sprayEffect2, toon, 0], softStop=-1)
+        partTrack4 = getPartTrack(sprayEffect, 4, 3.0, [sprayEffect2, toon, 0], softStop=-1)
         partTracks4.append(partTrack4)
-        toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.5)
+        toonAnimTrack = Sequence(Wait(4), ActorInterval(toon, 'slip-forward', playRate=.5))
         toonAnimTracks.append(toonAnimTrack)
         suitTrack.append(Sequence(Func(suit.setHealthForMe, + dmg), Func(suit.updateHealthBar, 0)))
-        selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, +dmg))
+        selfDamageTrack = Sequence(Wait(4), Func(suit.showHpText, +dmg))
         selfDamageTracks.append(selfDamageTrack)
     dodgeAnims = [['duck', 1e-06, 0.8]]
     damageAnims = []
@@ -1434,9 +1434,9 @@ def doExtortion(attack):
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.5, startTime=0.9))
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.6, startTime=1.2))
     damageAnims.append(['cringe', 2.6, 1.5])
-    toonTrack = getToonTracks(attack, 1, ['nothing'], 0, ['neutral'])
+    toonTrack = getToonTracks(attack, 4, ['nothing'], 0, ['neutral'])
     multiTrackList = Parallel(suitTrack, toonTrack, toonAnimTracks, selfDamageTracks, partTracks4)
-    soundTrack = getSoundTrack('SA_ink_drain.ogg', delay=0, node=suit)
+    soundTrack = getSoundTrack('SA_gains_from_the_scrap.ogg', delay=0, node=suit)
     multiTrackList.append(soundTrack)
     return multiTrackList
 
@@ -1466,13 +1466,16 @@ def doExtortion2(attack):
         facePoint = __toonFacePoint(toon)
         freezeEffect.setPos(0, 0, facePoint.getZ())
         unFreezeEffect.setPos(0, 0, facePoint.getZ())
-        partTrack4 = getPartTrack(sprayEffect, 1, 4.0, [sprayEffect2, toon, 0], softStop=-1)
+        partTrack4 = getPartTrack(sprayEffect, 4, 3.0, [sprayEffect2, toon, 0], softStop=-1)
+        partTracks4.append(partTrack4)
+        toonAnimTrack = Sequence(Wait(4), ActorInterval(toon, 'slip-forward', playRate=.5))
+        toonAnimTracks.append(toonAnimTrack)
         suitTrack = Sequence(getSuitAnimTrack(attack))
-        suitTrack.append(Sequence(Func(suit.setHealthForMe, + (dmg * 2)), Func(suit.updateHealthBar, 0)))
-        selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, + ((dmg * 2))),
-                                   Func(suit.updateHealthBar, 0))
-        notifyTrack = Sequence(Wait(1), Func(toon.showHpText, - int(dmg)))
-        soundTrack = getSoundTrack('SA_ink_drain.ogg', delay=0, node=suit)
+        suitTrack.append(Sequence(Func(suit.setHealthForMe, + dmg), Func(suit.updateHealthBar, 0)))
+        selfDamageTrack = Sequence(Wait(4), Func(suit.showHpText, +dmg))
+        selfDamageTracks.append(selfDamageTrack)
+        notifyTrack = Sequence(Wait(4), Func(toon.showHpText, - int(dmg)))
+        soundTrack = getSoundTrack('SA_gains_from_the_scrap.ogg', delay=0, node=suit)
         toonAnimTrack = ActorInterval(toon, 'cringe', playRate=.5)
         if dmg > 0:
             partTracks4.append(partTrack4)
@@ -1481,16 +1484,16 @@ def doExtortion2(attack):
             soundTracks.append(soundTrack)
             toonAnimTracks.append(toonAnimTrack)
             notifyTracks.append(notifyTrack)
-    toonTrack = getToonTracksCheat(attack, 1, ['nothing'], 0, ['neutral'])
-    multiTrackList = Parallel(suitTracks, toonAnimTracks, toonTrack, notifyTracks, selfDamageTracks, partTracks4)
+    toonTrack = getToonTracksCheat(attack, 4, ['nothing'], 0, ['neutral'])
+    multiTrackList = Parallel(suitTracks, toonAnimTracks, toonTrack, notifyTracks, soundTracks, selfDamageTracks, partTracks4)
     return multiTrackList
 
 def doRacketeering(attack):
     suit = attack['suit']
-    battle = attack['battle']
-    suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack.append(Wait(1.0))
-    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
+    suitTrack = Parallel(getSuitAnimTrack(attack), Sequence(ActorInterval(suit, 'smile'),
+                                                            Func(suit.setNeutralAnimationDrop)))
+    suitTrack.append(Wait(3.0))
+    soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
     return Parallel(suitTrack, soundTrack)
 
 def doHustling(attack):
@@ -1530,6 +1533,7 @@ def doPeckingOrderGroup(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        soundTrack = getSoundTrack('tt_s_ara_cfg_eagleCry.ogg', delay=2, node=suit)
         for i in xrange(0, numBirds):
             next = globalPropPool.getProp('bird')
             #next.setScale(0.01)
@@ -1546,14 +1550,14 @@ def doPeckingOrderGroup(attack):
                                  Func(next.wrtReparentTo, battle), Func(next.setHpr, Point3(90, 20, 0)),
                                  LerpPosInterval(next, 0.5, hitPoint))
             scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(next, 0.5, Point3(9, 9, 9)), LerpScaleInterval(next, .5, Point3(0, 0, 0)))
-            soundTrack = getSoundTrack('tt_s_ara_cfg_eagleCry.ogg', delay=2, node=suit)
-            suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-            notifyTrack = Sequence(Wait(2.5), Func(toon.showHpText, - int(dmg)))
             if dmg > 0:
-                soundTracks.append(soundTrack)
-                suitTracks.append(suitTrack)
-                notifyTracks.append(notifyTrack)
                 birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(MovieUtil.removeProp, next)))
+        suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+        notifyTrack = Sequence(Wait(2.5), Func(toon.showHpText, - int(dmg)))
+        if dmg > 0:
+            soundTracks.append(soundTrack)
+            suitTracks.append(suitTrack)
+            notifyTracks.append(notifyTrack)
     damageAnims = []
     damageAnims.append(['cringe',
      0.01,
