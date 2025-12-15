@@ -107,7 +107,7 @@ cr = (('glower', 'glower', 4), ('effort', 'effort', 4), ('pickpocket', 'pickpock
 txl = (('effort', 'effort', 4), ('glower', 'glower', 4), ('effort', 'effort', 4), ('cigar-smoke', 'cigar-smoke', 4))
 tbc = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('cigar-smoke', 'cigar-smoke', 4))
 autocad = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
-clubpres = (('snap', 'snap', 4), ('bellow', 'bellow', 4), ('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
+clubpres = (('snap', 'snap2', 4), ('bellow', 'bellow', 4), ('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
 derrman = (('pen-squirt', 'fountain-pen', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 derrhand = (('pen-squirt', 'fountain-pen', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('summon', 'summon', 4))
 mplayer = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
@@ -118,8 +118,8 @@ chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-ju
 chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('neutral', 'neutral-override', 4))
 phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4),('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
 bkeeper = (('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
-wtapper = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('snap', 'snap', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
-ambass = (('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap', 4))
+wtapper = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('snap', 'snap2', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
+ambass = (('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap2', 4))
 
 # Sellbots
 cc = (('speak', 'speak', 4), ('glower', 'glower', 4))
@@ -144,11 +144,11 @@ bellring = (('roll-o-dex', 'roll-o-dex', 4), ('quick-jump', 'jump', 4))
 mh2 = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-cinema = (('snap', 'snap', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
+cinema = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
 racket = (('smile', 'smile', 4), ('layoffs', 'layoffs', 4), ('quick-jump', 'jump', 4), ('taunt', 'taunt', 4), ('smile', 'smile', 4), ('cease', 'cease', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
 ubuster = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
-safesupervis = (('summon', 'summon', 4), ('cigar-smoke', 'cigar-smoke', 4), ('firestarter-cigar-smoke', 'firestarter-cigar-smoke', 4), ('cease', 'cease', 4), ('snap', 'snap', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
+safesupervis = (('rubber-stamp', 'rubber-stamp', 4), ('summon', 'summon', 4), ('cigar-smoke', 'cigar-smoke', 4), ('firestarter-cigar-smoke', 'firestarter-cigar-smoke', 4), ('cease', 'cease', 4), ('snap', 'snap2', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
 psetter = (('quick-jump', 'jump', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4), ('neutral2', 'neutral', 4))
 
 # Cashbots
@@ -1212,6 +1212,8 @@ class Suit(Avatar.Avatar):
         self.isDanceSession = 0
         self.isImmortal = 0
         self.isSoakImmune = 0
+        self.isZapImmune = 0
+        self.isDropImmune = 0
         self.isShielding = 0
         self.isManager = 0
         self.isHeavyRain = 0
@@ -1222,7 +1224,9 @@ class Suit(Avatar.Avatar):
         self.isSkelecogDialogue = 0
         self.isImmune = 0
         self.isDamageUp = 0
+        self.damageDownMult = 0
         self.isDamageReduction = 0
+        self.isDamageDown = 0
         self.isSoaked = 0
         self.isZapped = 0
         self.actuallySoaked = 0
@@ -2301,14 +2305,14 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'radiog':
             self.scale = 6.8 / aSize
             self.handColor = VBase4(0.612, 0.376, 0.608, 1)
-            self.generateBody()
+            self.generateMajorPlayerBody()
+            self.makeExecutive()
             self.generateHead2('skeleskull_A')
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead3('dopa', animated=True)
-            self.makeExecutive()
-            self.setHeight(8.7)
+            self.setHeight(9.5)
             self.setTransparency(1)
         elif dna.name == 'racket':
             self.scale = 7.2 / aSize
@@ -2320,7 +2324,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_14/maps/ttcc_ene_racket.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(9.0)
+            self.setHeight(9.2)
         elif dna.name == 'ubuster':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.604, 0.463, 0.62, 1)
@@ -2342,7 +2346,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_firestarter_2.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(10.0)
+            self.setHeight(10.5)
             self.setTransparency(1)
         elif dna.name == 'psetter':
             self.scale = 6.2 / bSize
@@ -3514,6 +3518,11 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+        elif self.style.name == 'radiog':
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_radiog.png')
+            modelRoot.find('**/highroller_body').setTexture(texture2, 1)
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'choreo':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_choreo.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
@@ -3999,6 +4008,8 @@ class Suit(Avatar.Avatar):
         else:
             headModel = loader.loadModel('phase_' + str(phase) + filePrefix + 'heads')'''
         if animated:
+            animDict = self.generateAnimDict()
+            self.loadAnims(animDict)
             if headType == 'skelecog' or headType == 'overwhelmingauthorizer' or headType == 'executioner':
                 if headType == 'overwhelmingauthorizer':
                     headModel = Actor.Actor('phase_14/models/char/ttcc_ene_%s%s-zero' % (
@@ -6564,6 +6575,18 @@ class Suit(Avatar.Avatar):
     def makeUnSoakResistant(self, elite=False):
         self.isSoakImmune = 0
 
+    def makeZapResistant(self, elite=False):
+        self.isZapImmune = 1
+
+    def makeUnZapResistant(self, elite=False):
+        self.isZapImmune = 0
+
+    def makeDropResistant(self, elite=False):
+        self.isDropImmune = 1
+
+    def makeUnDropResistant(self, elite=False):
+        self.isDropImmune = 0
+
     def makeSyphon(self, battle):
         self.isSyphon = 1
 
@@ -6676,6 +6699,12 @@ class Suit(Avatar.Avatar):
     def getDamageUp(self):
         return self.damageMult
 
+    def setDamageDown(self, num):
+        self.damageDownMult = num
+
+    def getDamageDown(self):
+        return self.damageDownMult
+
     def makeUnVulnerable(self):
         self.isVulnerable = 0
         if self.suitColorTrack != None:
@@ -6704,6 +6733,12 @@ class Suit(Avatar.Avatar):
 
     def makeUnDamageUp(self, elite=False):
         self.isDamageUp = 0
+
+    def makeDamageDown(self):
+        self.isDamageDown = 1
+
+    def makeUnDamageDown(self, elite=False):
+        self.isDamageDown = 0
 
     def makeDamageReduction(self, elite=False):
         self.isDamageReduction = 1
@@ -7884,7 +7919,7 @@ class Suit(Avatar.Avatar):
             return ChainsawORDialogArray
         elif self.style.name == 'phouse' and not self.isSkeleton:
             loadDialog(1)
-            return DerrickHandDialogArray
+            return DerrickSkeleDialogArray
         elif self.style.name == 'bkeeper' and not self.isSkeleton:
             loadDialog(1)
             return CaseManagerDialogArray
@@ -8015,6 +8050,7 @@ class Suit(Avatar.Avatar):
             loadDialog(1)
             return OttomanDialogArray
         elif self.style.name == 'crystal' and not self.isSkeleton:
+            loadDialog(1)
             return StenographerDialogArray
         elif self.style.name == 'chairman' and not self.isSkeleton:
             loadDialog(1)

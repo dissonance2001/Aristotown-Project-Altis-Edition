@@ -379,7 +379,7 @@ def createSuitReviveTrack(suit, battle):
     elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'hroller' and not deathSuit.isSkeleton:
@@ -742,7 +742,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'hroller' and not deathSuit.isSkeleton:
@@ -879,7 +879,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         hasAnimatedHead = True
     if suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
-        suitTrack.append(Func(insertDeathSuit, suit, suit, battle))
+        suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
         suitTrack.append(Parallel(ActorInterval(suit, 'mplayer-kneel-into')))
         deathSound = base.loadSfx('phase_11/audio/sfx/LB_capacitor_discharge_3.ogg')
         suitTrack.append(Parallel(Func(suit.loop, 'mplayer-kneel-neutral'), LerpColorScaleInterval(suit, duration=1.25, colorScale=(0, 0, 0, 0),
@@ -990,7 +990,7 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'hroller' and not deathSuit.isSkeleton:

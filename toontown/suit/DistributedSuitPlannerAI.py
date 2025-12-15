@@ -1207,6 +1207,68 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         return (level, type, track)
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
+def oftfset():
+    av = spellbook.getInvoker()
+    zoneId = av.getLocation()[1]
+    sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
+    pointmap = sp.streetPointList
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
+    return "Spawned a random Overclocked Face The Family set in current zone."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
+def lblit():
+    av = spellbook.getInvoker()
+    zoneId = av.getLocation()[1]
+    sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
+    pointmap = sp.streetPointList
+    sp.createNewSuit([], pointmap, suitName='lgator', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='stenog', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='caseman', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='sgoat', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    return "Spawned the Lawbot Litigation Team in current zone."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
+def bblit():
+    av = spellbook.getInvoker()
+    zoneId = av.getLocation()[1]
+    sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
+    pointmap = sp.streetPointList
+    sp.createNewSuit([], pointmap, suitName='ambass', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='wtapper', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='bkeeper', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='phouse', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    return "Spawned the Bossbot Litigation Team in current zone."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
+def sblit():
+    av = spellbook.getInvoker()
+    zoneId = av.getLocation()[1]
+    sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
+    pointmap = sp.streetPointList
+    sp.createNewSuit([], pointmap, suitName='safesupervis', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='ubuster', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='racket', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='radiog', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    return "Spawned the Sellbot Litigation Team in current zone."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
+def bdlit():
+    av = spellbook.getInvoker()
+    zoneId = av.getLocation()[1]
+    sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
+    pointmap = sp.streetPointList
+    sp.createNewSuit([], pointmap, suitName='chairman', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='crystal', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='ottoman', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='dking', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    return "Spawned the Boardbot Litigation Team in current zone."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
 def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
     suitFullName = SuitBattleGlobals.SuitAttributes[name]['name']
     av = spellbook.getInvoker()

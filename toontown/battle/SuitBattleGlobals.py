@@ -236,13 +236,13 @@ def getActualFromRelativeLevel(name, relLevel):
     elif name == 'mslacker':
         actualLevel = relLevel + 23
     elif name == 'radiog':
-        actualLevel = relLevel + 31
+        actualLevel = relLevel + 34
     elif name == 'racket':
-        actualLevel = relLevel + 37
+        actualLevel = relLevel + 39
     elif name == 'ubuster':
-        actualLevel = relLevel + 37
+        actualLevel = relLevel + 39
     elif name == 'safesupervis':
-        actualLevel = relLevel + 43
+        actualLevel = relLevel + 44
     elif name == 'psetter':
         actualLevel = relLevel + 65
     # Boardbots
@@ -1351,7 +1351,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Powerhouse',
         'pluralname': 'Powerhouse',
         'level': 24,
-        'hp':(5200,),
+        'hp':(6250,),
         'def':(60,),
         'freq':(0,),
         'acc':(75,),
@@ -2390,11 +2390,11 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             acc=(100,),
                             freq=(0,)),
                  SuitAttack('Schmooze',
-                            hp=(42,),
+                            hp=(36,),
                             acc=(85,),
                             freq=(15,)),
                  SuitAttack('SongAndDance',
-                            hp=(34,),
+                            hp=(28,),
                             acc=(85,),
                             freq=(15,)),
                  SuitAttack('DoubleTalk',
@@ -2402,16 +2402,16 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             acc=(90,),
                             freq=(15,)),
                  SuitAttack('RazzleDazzle',
-                            hp=(36,),
+                            hp=(30,),
                             acc=(90,),
                             freq=(20,),
                             groupStatus=ATK_TGT_GROUP),
                  SuitAttack('BuzzWord',
-                            hp=(39,),
+                            hp=(35,),
                             acc=(85,),
                             freq=(15,)),
                  SuitAttack('Beguile',
-                            hp=(36,),
+                            hp=(29,),
                             acc=(95,),
                             freq=(20,)),
                  SuitAttack('RadiographerRadioInfrequency',
@@ -2471,7 +2471,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             hp=(0,),
                             acc=(100,),
                             freq=(0,)),
-                 SuitAttack('Liquidate',
+                 SuitAttack('ShortSqueeze',
                             hp=(32,),
                             acc=(85,),
                             freq=(20,),

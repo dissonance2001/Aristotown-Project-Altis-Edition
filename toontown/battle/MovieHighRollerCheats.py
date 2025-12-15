@@ -192,7 +192,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     else:
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
-    track.append(Parallel(ActorInterval(suit, random.choice(('shuffle-left', 'shuffle-right'))), Sequence(Wait(.175), Func(suit.setHpr, battle, origHpr))))
+    track.append(Func(suit.setHpr, battle, origHpr))
     # if suit.dna.name == 'scg' and suit.isAngry:
     #     track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
     #     track.append(Func(suit.loop, 'neutral-enraged'))
@@ -2393,13 +2393,13 @@ def doExplodingDocument(attack):
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
     propTrack = Sequence(getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.75, Point3(1.2, 1.2, 1.2), scaleUpTime=0.25))
-    propTrack.append(Wait(1.05))
+    propTrack.append(Wait(.95))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)
     missPoint = __toonGroundPoint(attack, toon, 3.1, parent=battle)
     missPoint.setX(missPoint.getX() - 1.1)
     propTrack.append(getPropThrowTrack(attack, tnt, [hitPoint], [missPoint], .25, parent=battle))
-    toonTrack = getToonTrackCheat(attack, 2.5, ['slip-forward'], 3.4, ['struggle'])
+    toonTrack = getToonTrackCheat(attack, 2.2, ['slip-forward'], 3.4, ['struggle'])
    # toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2.5, ['slip-forward'])
     soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
     notifyTrack = Sequence(Wait(2.5), Func(toon.showHpText, - int(dmg)))

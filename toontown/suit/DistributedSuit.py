@@ -931,6 +931,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                          Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
                                            Func(self.removeLevelDamage)).start()
 
+    def checkDamage(self, levelDamage):
+        self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                         Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
+                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                           Func(self.removeLevelDamage)).start()
+
     def checkCogOvercharge(self):
         if float(self.currHP) > float(self.maxHP * 1.5):
             self.isOvercharged = 1
@@ -1016,7 +1022,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.splashInterval:
             self.splashInterval.finish()
             self.splashInterval = None
-        if self.isSoaked == 0 and self.actuallySoaked and not self.isDead:
+        if (self.isSoaked == 0 and self.actuallySoaked and not self.isDead) or self.dna.name == 'phouse':
             self.splashInterval = Sequence(Parallel(ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimation)).start()
 
     def checkMarkRounds(self):
@@ -1305,6 +1311,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.damageInterval.finish()
             self.damageInterval = None
         self.damageInterval = Parallel(Func(self.setDamageUp, self.getDamageUp() + num)).start()
+
+    def checkDamageDown(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.setDamageDown, self.getDamageDown() + num)).start()
 
     def checkVulnerabilityUp(self, num):
         if self.damageInterval:

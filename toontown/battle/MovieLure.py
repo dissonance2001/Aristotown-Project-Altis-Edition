@@ -203,6 +203,10 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                elif suit.isImmortal and suit.dna.name == 'wtapper':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
                 elif suit.isImmortal and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
                     suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
                     suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
@@ -323,6 +327,10 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
                 elif suit.isImmortal and suit.dna.name == 'hroller':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                elif suit.isImmortal and suit.dna.name == 'wtapper':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
@@ -457,6 +465,10 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
                 elif suit.isImmortal and suit.dna.name == 'videog':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                elif suit.isImmortal and suit.dna.name == 'wtapper':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
@@ -1489,6 +1501,10 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
+                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                elif suit.isImmortal and suit.dna.name == 'wtapper':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
                 elif suit.isImmortal and suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (

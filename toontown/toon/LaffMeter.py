@@ -258,10 +258,10 @@ class LaffMeter(DirectFrame):
              0.5,
              0.666666,
              0.833333]
-            if self.isLocalHealth: # Embed a little invisible button to show gags when clicking on the laff
-                self.showDetailsButton = DirectButton(relief = None, parent = self.container, image = 'phase_3/maps/android/tui_move_l.png', scale = (1), command = self.showDetailsPopup)
-                self.showDetailsButton.setTransparency(1)
-                self.showDetailsButton.setColorScale(1, 1, 1, 0) # Make it invisible - it still recognizes clicks
+            #if self.isLocalHealth: # Embed a little invisible button to show gags when clicking on the laff
+               # self.showDetailsButton = DirectButton(relief = None, parent = self.container, image = 'phase_3/maps/android/tui_move_l.png', scale = (1), command = self.showDetailsPopup)
+                #self.showDetailsButton.setTransparency(1)
+               # self.showDetailsButton.setColorScale(1, 1, 1, 0) # Make it invisible - it still recognizes clicks
         gui.removeNode()
 
     def destroy(self):

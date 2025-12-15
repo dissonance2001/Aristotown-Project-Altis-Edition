@@ -100,6 +100,7 @@ class TownBattleCogPanel(DirectFrame):
         self.zappedRoundsText = None
         self.vulnerabilityText = None
         self.damageReductionText = None
+        self.damageMultText2 = None
         self.damageMultText = None
         self.rageBuildingText = None
         self.enrageCountText = None
@@ -296,6 +297,8 @@ class TownBattleCogPanel(DirectFrame):
             self.luredText.removeNode()
         if self.damageMultText != None:
             self.damageMultText.removeNode()
+        if self.damageMultText2 != None:
+            self.damageMultText2.removeNode()
         if self.extraAttacks != None:
             self.extraAttacks.removeNode()
         if self.sued != None:
@@ -748,7 +751,7 @@ class TownBattleCogPanel(DirectFrame):
                                                 text="%s" % self.cog.getPowerhouseRotation() + "%", text_fg=(1, 0, 0, 1),
                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                 pos=(0.25, 0, -.5),
-                                                text_scale=.5)
+                                                text_scale=.4)
             self.rageBuildingText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -941,8 +944,8 @@ class TownBattleCogPanel(DirectFrame):
                 self.extraAttacks.setColor(1, 1, 1, 1)
                 self.attackIcon5.show()
             if self.statusEffects == 7:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.extraAttacks.reparentTo(self.healthNode)
+                self.extraAttacks.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
                 self.pulseTask = Sequence(
                     LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 0, 0, 1),
                                            blendType='easeInOut'),
@@ -958,7 +961,7 @@ class TownBattleCogPanel(DirectFrame):
                                            blendType='easeInOut'),
                     LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0.56, 0, 1, 1),
                                            blendType='easeInOut')).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
                 self.attackIcon6.show()
             if self.statusEffects == 8:
                 self.extraAttacks.reparentTo(self.healthNode)
@@ -1212,7 +1215,7 @@ class TownBattleCogPanel(DirectFrame):
                                                 text="%s" % self.cog.getRageBuilding() + "%", text_fg=(1, 0, 0, 1),
                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                 pos=(0.25, 0, -.5),
-                                                text_scale=.5)
+                                                text_scale=.4)
             self.rageBuildingText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -1291,6 +1294,86 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(1, 0.984, 0, 1)
                 self.absorbing.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+        if self.cog.isDropImmune:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/duck_drop_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.enraged.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.enraged.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.enraged.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.enraged.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.enraged.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.enraged.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.enraged.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.enraged.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isZapImmune:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/fizzle_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.enraged.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.enraged.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.enraged.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.enraged.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.enraged.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.enraged.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.enraged.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.enraged.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if self.cog.isLureImmune and not self.cog.dna.name == 'hrollers':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.lureImmune = status.find('**/cashback_icon')
@@ -1334,11 +1417,6 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/schadenfreude_icon')
-            self.damageMultText = DirectLabel(parent=self.immortal, relief=None, text="1", text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.5)
-            self.damageMultText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.immortal.reparentTo(self.healthNode)
@@ -1419,11 +1497,11 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isBookkeeping:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/backfire_icon')
-            self.damageMultText = DirectLabel(parent=self.immortal, relief=None, text="1", text_fg=(1, 0, 0, 1),
+            self.damageMultText2 = DirectLabel(parent=self.immortal, relief=None, text="1", text_fg=(1, 0, 0, 1),
                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                               pos=(0.25, 0, -.5),
                                               text_scale=.5)
-            self.damageMultText.show()
+            self.damageMultText2.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.immortal.reparentTo(self.healthNode)
@@ -1732,7 +1810,7 @@ class TownBattleCogPanel(DirectFrame):
             self.damageMultText = DirectLabel(parent=self.damageUp, relief=None, text="%s" % self.cog.getDamageUp() + "%", text_fg=(1, 0, 0, 1),
                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                               pos=(0.25, 0, -.5),
-                                              text_scale=.5)
+                                              text_scale=.4)
             self.damageMultText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -1811,6 +1889,91 @@ class TownBattleCogPanel(DirectFrame):
                                            blendType='easeInOut'), Wait(1)).loop()
                 self.damageUp.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+        if self.cog.isDamageDown:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.damageUp = status.find('**/suit_damage_down_icon')
+            self.damageMultText2 = DirectLabel(parent=self.damageUp, relief=None, text="%s" % self.cog.getDamageDown() + "%", text_fg=(0, 1, 0.047, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.4)
+            self.damageMultText2.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.damageUp.reparentTo(self.healthNode)
+                self.damageUp.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
+                self.pulseTask = Sequence(
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.027, 1, 0, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
+                                           blendType='easeInOut'), Wait(1)).loop()
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if self.cog.isVulnerable and not self.cog.dna.name == 'hroller2':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.vulnerable = status.find('**/broken_shield_icon')  # third slot vulnerability icon
@@ -1820,14 +1983,14 @@ class TownBattleCogPanel(DirectFrame):
                                                  text_fg=(0, 1, 0.047, 1),
                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                  pos=(0.25, 0, -.5),
-                                                 text_scale=.5)
+                                                 text_scale=.4)
             else:
                 self.vulnerabilityText = DirectLabel(parent=self.vulnerable, relief=None,
                                                      text="%s" % self.cog.getVulnerability() + "%",
                                                      text_fg=(0, 1, 0.047, 1),
                                                      text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                      pos=(0.25, 0, -.5),
-                                                     text_scale=.5)
+                                                     text_scale=.4)
             self.vulnerabilityText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -1914,7 +2077,7 @@ class TownBattleCogPanel(DirectFrame):
                                                      text_fg=(1, 0, 0, 1),
                                                      text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                      pos=(0.25, 0, -.5),
-                                                     text_scale=.5)
+                                                     text_scale=.4)
             self.vulnerabilityText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -2040,13 +2203,13 @@ class TownBattleCogPanel(DirectFrame):
                 self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+85", text_fg=(0, 1, 0.047, 1),
                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                               pos=(0.25, 0, -.5),
-                                              text_scale=.5)
+                                              text_scale=.4)
                 self.insuredText.show()
             else:
                 self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+50", text_fg=(0, 1, 0.047, 1),
                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                pos=(0.25, 0, -.5),
-                                               text_scale=.5)
+                                               text_scale=.4)
                 self.insuredText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -2264,7 +2427,7 @@ class TownBattleCogPanel(DirectFrame):
                                               text_fg=(1, 0, 0, 1),
                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                               pos=(0.25, 0, -.5),
-                                              text_scale=.5)
+                                              text_scale=.4)
             self.sued2RoundsText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -2355,7 +2518,7 @@ class TownBattleCogPanel(DirectFrame):
             self.zappedRoundsText = DirectLabel(parent=self.zapped, relief=None, text="-%s" % self.cog.getZapCondition(),
                                          text_fg=(1, 0, 0, 1),
                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                         pos=(0.25, 0, -.5),
+                                         pos=(0.25, 0, -.4),
                                          text_scale=.5)
             self.zappedRoundsText.show()
             self.statusEffects += 1
@@ -2702,7 +2865,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
         elif name == 'ppl':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'stenog':
+        elif name == 'stenog' or name == 'stenog':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0725, .0725, .0725)
         elif name == 'clubpres':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
@@ -2982,6 +3145,8 @@ class TownBattleCogPanel(DirectFrame):
             self.luredText.removeNode()
         if self.damageMultText != None:
             self.damageMultText.removeNode()
+        if self.damageMultText2 != None:
+            self.damageMultText2.removeNode()
         if self.extraAttacks != None:
             self.extraAttacks.removeNode()
         if self.sued != None:
@@ -3122,6 +3287,7 @@ class TownBattleCogPanel(DirectFrame):
         del self.luredManager
         del self.insured
         del self.damageUp
+        del self.damageDown
         del self.skeleton
         del self.virtual
         del self.immortal

@@ -942,8 +942,8 @@ def doSuppression(attack):
         posPoints = [Point3(.78, -1.89, -.17), VBase3(10, 250, -10)]
         scale = Point3(1, 1, 1)
     propTrack = Sequence(
-        getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, scale, scaleUpTime=0.25))
-    propTrack.append(Wait(1.2))
+        getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, scale, scaleUpTime=0.25))
+    propTrack.append(Wait(0.95))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)
     missPoint = __toonGroundPoint(attack, toon, 0.7, parent=battle)
@@ -986,11 +986,11 @@ def doSuppression(attack):
                                      dustCloud.track, Func(dustCloud.detachNode))
 
         toonTrack.append(Sequence(
-            Wait(2.0),
+            Wait(2.2),
             Parallel(hideParts(headParts), hideParts(torsoParts), hideParts(legsParts), dustCloudHideIval), Func(toon.hide),
             Wait(1.7)))
 
-    toonTrack.append(getToonTrack(attack, 2.0, ['conked'], 2.5, ['jump']))
+    toonTrack.append(getToonTrack(attack, 2.2, ['conked'], 2.5, ['jump']))
 
     return Parallel(suitTrack, toonTrack, propTrack)
 

@@ -190,20 +190,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
     track.append(Func(suit.setHpr, battle, origHpr))
-    if suit.dna.name == 'scg' and suit.isAngry:
-        track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'neutral-enraged'))
-    elif suit.isImmortal and suit.dna.name == 'dsf':
-        track.append(
-            Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isVulnerable and suit.dna.name == 'crf':
-        track.append(
-            Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal:
-        track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
-    else:
-        track.append(
+    track.append(
             Func(suit.setNeutralAnimationDrop))
 
     def returnTrapToSuit(suit = suit, trapStorage = trapStorage):
@@ -228,20 +215,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
-    if suit.dna.name == 'scg' and suit.isAngry:
-        track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'neutral-enraged'))
-    elif suit.isImmortal and suit.dna.name == 'dsf':
-        track.append(
-            Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isVulnerable and suit.dna.name == 'crf':
-        track.append(
-            Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-    elif suit.isImmortal:
-        track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
-        track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
-    else:
-        track.append(
+    track.append(
             Func(suit.setNeutralAnimationDrop))
     return track
 
@@ -843,6 +817,18 @@ def doSyphonMovie(attack):
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     cameraTrack = Wait(3.0)
     notifyTracks.append(Parallel(notifyTrack, healSound))
+    return Sequence(notifyTracks)
+
+def doDamageMovie(attack):
+    theSuit = attack['suit']
+    notifyTracks = Sequence()
+    dmg = attack['target'][0]['hp']
+    #notifyTrack = Sequence(Func(theSuit.showHpTextNew, +dmg), Func(theSuit.setHealthForMe, +dmg),
+                           #  Func(theSuit.updateHealthBar, 0))
+    notifyTrack = Sequence(Func(theSuit.checkDamage, dmg))
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    cameraTrack = Wait(3.0)
+    notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
 
 def doAbsorbMovieLevel(attack):

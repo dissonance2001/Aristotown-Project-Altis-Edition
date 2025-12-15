@@ -453,6 +453,10 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doLureImmune(attack)
     elif name == 'PowerhouseSyphon':
         suitTrack = MovieBossbotLitigationCheats.doSyphon(attack)
+    elif name == 'PowerhouseZapImmune':
+        suitTrack = MovieBossbotLitigationCheats.doZapImmune(attack)
+    elif name == 'PowerhouseDropImmune':
+        suitTrack = MovieBossbotLitigationCheats.doDropImmune(attack)
     elif name == 'PowerhouseSyphonDesperation':
         suitTrack = MovieBossbotLitigationCheats.doSyphonDesperation(attack)
     elif name == 'PowerhouseSnipeVulnerable':
@@ -466,9 +470,9 @@ def doSuitAttack(attack):
     elif name == 'PowerhouseSnipeMulligan':
         suitTrack = MovieBossbotLitigationCheats.doOverheat(attack)
     elif name == 'PowerhouseSnipeCollectCall':
-        suitTrack = MovieBossbotLitigationCheats.doOverheat(attack)
-    elif name == 'PowerhouseGeneration':
         suitTrack = MovieBossbotLitigationCheats.doGeneration(attack)
+    elif name == 'PowerhouseGeneration':
+        suitTrack = MovieBossbotLitigationCheats.doGeneration3(attack)
     elif name == 'PowerhouseGeneration2':
         suitTrack = MovieBossbotLitigationCheats.doGeneration2(attack)
     elif name == 'PowerhouseBurnDamage':
@@ -502,7 +506,7 @@ def doSuitAttack(attack):
     elif name == 'WiretapperGagBan':
         suitTrack = MovieBossbotLitigationCheats.doCloseTheLoopNew(attack)
     elif name == 'WiretapperBusySignal':
-        suitTrack = MovieBossbotLitigationCheats.doBusySignal(attack)
+        suitTrack = MovieBossbotLitigationCheats.doCollectCallDamage(attack)
     #ambassador cheats
     elif name == 'AmbassadorHeadRoller':
         suitTrack = MovieBossbotLitigationCheats.doDamageUp1(attack)
@@ -910,6 +914,8 @@ def doSuitAttack(attack):
         suitTrack = MovieUniversalCheats.doLureRemoval(attack)
     elif name == 'SyphonMovie':
         suitTrack = MovieUniversalCheats.doSyphonMovie(attack)
+    elif name == 'DamageMovie':
+        suitTrack = MovieUniversalCheats.doDamageMovie(attack)
     elif name == 'SueApplication':
         suitTrack = MovieUniversalCheats.doSueApplication(attack)
     elif name == 'SueRemoval':
@@ -1056,25 +1062,55 @@ def doSuitAttack(attack):
         else:
             suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel45':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel46':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel47':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel48':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel56':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel57':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel58':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel67':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel68':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanLevel78':
-        suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+        else:
+            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
     elif name == 'BanToonup':
         if suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
@@ -1283,6 +1319,8 @@ def doSuitAttack(attack):
         elif name == 'CaseManagerInsurance':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CalculatingFees':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'WiretapperCollectCall':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'Desperation':
             resetSuitTrack = Sequence(suitTrack2)
@@ -3020,10 +3058,10 @@ def doRubberStamp(attack):
         padPosPoints = [Point3(-0.75, 0, -0.125), VBase3(90, 0, 180)]
     if suitType == 'c':
         padPosPoints = [Point3(-0.25, 0.25, -0.125), VBase3(90, 0, 180)]
-    stampPosPoints = [Point3(-0.25, -0.5, -0.25), VBase3(0, -90, 0)]
+    stampPosPoints = [Point3(-0.08219178082191902, -0.7397260273972606, -0.125), VBase3(90, 0, 90)]
     padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 1e-06, 3.2)
     missPoint = lambda cancelled = cancelled, toon = toon: __toonMissPoint(cancelled, toon)
-    propTrack = Sequence(Func(__showProp, stamp, suit.getRightHand(), stampPosPoints[0], stampPosPoints[1]), LerpScaleInterval(stamp, 0.5, MovieUtil.PNT3_ONE), Wait(2.6), Func(battle.movie.needRestoreRenderProp, cancelled), Func(cancelled.reparentTo, render), Func(cancelled.setScale, 0.6), Func(cancelled.setPosHpr, stamp, 0.81, -1.11, -0.16, 0, 0, 90), Func(cancelled.setP, 0), Func(cancelled.setR, 0))
+    propTrack = Sequence(Func(__showProp, stamp, suit.getRightHand(), stampPosPoints[0], stampPosPoints[1]), LerpScaleInterval(stamp, 0.5, Point3(1.2, 1.2, 1.2)), Wait(2.6), Func(battle.movie.needRestoreRenderProp, cancelled), Func(cancelled.reparentTo, render), Func(cancelled.setScale, 0.6), Func(cancelled.setPosHpr, stamp, 0.81, -1.11, -0.16, 0, 0, 90), Func(cancelled.setP, 0), Func(cancelled.setR, 0))
     propTrack.append(getPropThrowTrack(attack, cancelled, [__toonFacePoint(toon)], [missPoint]))
     propTrack.append(Func(MovieUtil.removeProp, cancelled))
     propTrack.append(Func(battle.movie.clearRenderProp, cancelled))
@@ -3031,7 +3069,7 @@ def doRubberStamp(attack):
     propTrack.append(LerpScaleInterval(stamp, 0.5, MovieUtil.PNT3_NEARZERO))
     propTrack.append(Func(MovieUtil.removeProp, stamp))
     toonTrack = getToonTrack(attack, 3.4, ['conked'], 1.9, ['sidestep'])
-    soundTrack = getSoundTrack('SA_rubber_stamp.ogg', delay=1.3, duration=1.1, node=suit)
+    soundTrack = getSoundTrack('SA_rubber_stamp.ogg', delay=0.5, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, padPropTrack, soundTrack)
 
 
@@ -6360,7 +6398,7 @@ def doEvictionNotice(attack):
         toon = t['toon']
         paper = globalPropPool.getProp('shredder-paper')
         propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, scale, scaleUpTime=0.25))
-        propTrack.append(Wait(1.05))
+        propTrack.append(Wait(0.95))
         hitPoint = __toonFacePoint(toon, parent=battle)
         hitPoint.setX(hitPoint.getX() - 1.4)
         missPoint = __toonGroundPoint(attack, toon, 0.5, parent=battle)
@@ -6382,7 +6420,7 @@ def doEvictionNotice(attack):
         propTrack.append(Parallel(explodeTrack, soundTrack))
         propTracks.append(propTrack)
 
-    toonTracks = getToonTracks(attack, 2.3, ['conked'], 2, ['jump'])
+    toonTracks = getToonTracks(attack, 2.2, ['conked'], 2, ['jump'])
     return Parallel(suitTrack, toonTracks, propTracks)
 
 
@@ -7097,7 +7135,7 @@ def doRestrainingOrder(attack):
         dmg = t['hp']
         paper = globalPropPool.getProp('shredder-paper')
         propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, scale, scaleUpTime=0.25))
-        propTrack.append(Wait(1.05))
+        propTrack.append(Wait(0.95))
         hitPoint = __toonFacePoint(toon, parent=battle)
         hitPoint.setX(hitPoint.getX() - 1.4)
         missPoint = __toonGroundPoint(attack, toon, 0.7, parent=battle)
@@ -7122,7 +7160,7 @@ def doRestrainingOrder(attack):
       0.01,
       0.3,
       0.2], ['struggle', 0.01, 0.2]]
-    toonTracks = getToonTracks(attack, damageDelay=2.3, splicedDamageAnims=damageAnims, dodgeDelay=1.7, dodgeAnimNames=['sidestep'])
+    toonTracks = getToonTracks(attack, damageDelay=2.2, splicedDamageAnims=damageAnims, dodgeDelay=1.7, dodgeAnimNames=['sidestep'])
     return Parallel(suitTrack, toonTracks, propTracks)
 
 def doBreakthrough(attack):

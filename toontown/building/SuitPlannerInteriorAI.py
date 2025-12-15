@@ -154,8 +154,6 @@ class SuitPlannerInteriorAI:
             suit.setExecutive(1)
         if suit.dna.name == 'watchm':
             suit.setExecutive(1)
-        if suit.dna.name == 'ovt':
-            suit.setExecutive(1)
         if suit.dna.name == 'ant':
             suit.setExecutive(1)
         if suit.dna.name == 'mh2':

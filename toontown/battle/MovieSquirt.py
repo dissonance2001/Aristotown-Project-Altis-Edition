@@ -253,8 +253,6 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         suitTrack.append(Func(suit.setSoaked, 1))
         if suit.dna.name == 'sgoat' and suit.isShielding:
             suitTrack.append(Func(suit.addRageBuilding, hp + 150))
-        if suit.dna.name == 'phouse':
-            suitTrack.append(Func(suit.addPowerhouseRotation, hp + 150))
         if suit.isSued:
             suitTrack.append(Func(suit.makeSued, 3))
         suitTrack.append(Wait(tContact))
@@ -1061,7 +1059,7 @@ def __doGeyser(squirt, delay, fShowStun, uberClone = 0):
     BattleParticles.loadParticles()
     geyserHeight = battle.getH()
     geyserPosPoint = Point3(0, 0, geyserHeight)
-    scaleUpPoint = Point3(1.8, 1.8, 1.8)
+    scaleUpPoint = Point3(1.1, 1.1, 2.0)
     rainEffects = []
     rainDelay = 2.5
     effectDelay = 0.3
