@@ -1,0 +1,300 @@
+group "sewer" [
+ visgroup "14100" [
+  vis [   "14100"   ]
+  prop "linktunnel_se_14000_DNARoot" [
+   code [ "prop_cog_tunnel" ]
+   pos [ -68.38 -202.64 -3.58 ]
+   nhpr [ -31 0 0 ]
+   sign [
+    pos [ 0 -1.5 -0.9 ]
+    baseline [
+     code [ "suit" ]
+     scale [ 1.5 1.5 1.5 ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "U" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "P" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "S" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+    ]
+    baseline [
+     code [ "suit" ]
+     pos [ 0 0.7 -0.81 ]
+     text [
+      letters [ "C" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "G" ]
+     ]
+     text [
+      letters [ " " ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+     text [
+      letters [ "A" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "I" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+    ]
+   ]
+  ]
+  prop "suit_sewer_5_DNARoot" [
+   code [ "suit_sewer_5" ]
+   pos [ 0 0 0 ]
+   nhpr [ 180 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ -0.39 90.2 0 ]
+   nhpr [ -180 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ -0.16 180 0 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_2_DNARoot" [
+   code [ "suit_sewer_2" ]
+   pos [ 0.16 275 19.8 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ 110.5 289.88 0 ]
+   nhpr [ 90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ 205.87 289.88 -19.8 ]
+   nhpr [ 90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_2_DNARoot" [
+   code [ "suit_sewer_2" ]
+   pos [ 295.8 289.1 -19.8 ]
+   nhpr [ -90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 310.45 184.1 -19.8 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 310.45 94.4 -19.8 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_3_DNARoot" [
+   code [ "suit_sewer_3" ]
+   pos [ 310 5.5 -19.8 ]
+   nhpr [ 180 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ 416 -10.4 -19.8 ]
+   nhpr [ -90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 508 -10.2 0 ]
+   nhpr [ -90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 598 -10.2 0 ]
+   nhpr [ -90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 688 -10.2 0 ]
+   nhpr [ -90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 778 -10.2 0 ]
+   nhpr [ -90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_3_DNARoot" [
+   code [ "suit_sewer_3" ]
+   pos [ 866.9 -10.625 0 ]
+   nhpr [ -90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ 882.807 94.9994 -4.76837e-007 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 882.594 189.999 19.8125 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_2_DNARoot" [
+   code [ "suit_sewer_2" ]
+   pos [ 883.163 279.749 19.8125 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_3_DNARoot" [
+   code [ "suit_sewer_3" ]
+   pos [ 986.794 293.999 19.8125 ]
+   nhpr [ -90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_2_DNARoot" [
+   code [ "suit_sewer_2" ]
+   pos [ 1003.04 399.399 19.8125 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_3_DNARoot" [
+   code [ "suit_sewer_3" ]
+   pos [ 1123.39 398.399 19.8125 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ 1123.21 304.399 0.0325 ]
+   nhpr [ -0 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ 1122.75 214.618 0.00600004 ]
+   nhpr [ 180 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_2_DNARoot" [
+   code [ "suit_sewer_2" ]
+   pos [ 1122.4 30.572 19.819 ]
+   nhpr [ -180 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 1122.96 119.947 19.819 ]
+   nhpr [ 0 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ 922.395 16.0963 39.569 ]
+   nhpr [ 90 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ 1017.52 16.1275 19.819 ]
+   nhpr [ 90 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 737.114 15.8775 59.365 ]
+   nhpr [ 90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 827.051 15.8775 59.365 ]
+   nhpr [ 90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_2_DNARoot" [
+   code [ "suit_sewer_2" ]
+   pos [ 618.364 496.44 59.3025 ]
+   nhpr [ -90 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 633.02 211.44 59.3025 ]
+   nhpr [ 0 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 633.02 391.44 59.3025 ]
+   nhpr [ 0 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_2_DNARoot" [
+   code [ "suit_sewer_2" ]
+   pos [ 647.69 16.44 59.3025 ]
+   nhpr [ 90 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 633.02 301.44 59.3025 ]
+   nhpr [ 0 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 528.364 497.003 59.3025 ]
+   nhpr [ -90 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_1_DNARoot" [
+   code [ "suit_sewer_1" ]
+   pos [ 633.02 121.44 59.3025 ]
+   nhpr [ 0 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_6_DNARoot" [
+   code [ "suit_sewer_6" ]
+   pos [ 438.614 496.94 59.3025 ]
+   nhpr [ -90 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+ ]
+]

@@ -242,15 +242,11 @@ gatekeep - Gatekeeper Level 10.mgr
 dola - Director Of Land Acquisition Level 12.mgr
 dold - Director Of Land Development Level 25.mgr
 
-	Videographer Manager:
-fmaker - Filmmaker Level 26.mgr
-
-	Count Erclaim/Erfit Manager:
-trainer - NOTHING Level N/A.mgr
-
-	Nothing:
-jgd - NOTHING Level N/A.mgr
-bby - NOTHING Level N/A.mgr
+	Boardbot 'Litigation' Team:
+liquid - Liquidator Level 56.mgr
+rkeeper - Bookkeeper Level 60.mgr
+cbutcher - Corporate Butcherer Level 60.mgr
+cdirector - Contingency Director Level 66.mgr
 
 	Boardbot 'Litigation' Team:
 dking - Dividend King Level 65.mgr (unfinished)
@@ -289,8 +285,10 @@ sya - Senior Developer Level 20.mgr
 djockey - Desk Jockey Level 3-10 (No .gov Variant)
 ptjockey - Desk Jockey Level 3-10 (Prethinker)(not yet implemented)
 
+	Videographer Manager:
+fmaker - Filmmaker Level 26.mgr
+
 	Nothing:
-jas - PLACEHOLDER Level N/A.mgr
 tas - PLACEHOLDER Level N/A.mgr
 fhu - PLACEHOLDER Level N/A.mgr
 fsh - PLACEHOLDER Level N/A.mgr

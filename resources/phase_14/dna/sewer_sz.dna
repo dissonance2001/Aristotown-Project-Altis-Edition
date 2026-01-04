@@ -1,0 +1,272 @@
+group "sewer" [
+ visgroup "14000:safe_zone" [
+  vis [   "14000:safe_zone"   ]
+  prop "outpost_DNARoot" [
+   code [ "outpost" ]
+   pos [ 0 0 0 ]
+   nhpr [ 0 0 0 ]
+   scale [ 1 1 1 ]
+  ]
+  prop "prop_construction_sign_DNARoot" [
+   code [ "prop_construction_sign" ]
+   pos [ -1.18021e-005 138 -0.5 ]
+   nhpr [ 0 0 0 ]
+   scale [ 1 1 1 ]
+  ]
+  prop "bossbotBoss-legs-zero_DNARoot" [
+   code [ "bossbotBoss-legs-zero" ]
+   pos [ 18.738 -68.631 0.025 ]
+   nhpr [ -235 30 0 ]
+   scale [ 1 1 1 ]
+  ]
+  prop "CashBotLocomotive_DNARoot" [
+   code [ "CashBotLocomotive" ]
+   pos [ 20.951 117.441 0.000 ]
+   nhpr [ 18 35 10 ]
+   scale [ 0.7 0.7 0.7 ]
+  ]
+  prop "tt_m_ara_ccg_safesB_DNARoot" [
+   code [ "tt_m_ara_ccg_safesB" ]
+   pos [ 130.119 -89.548 0.000 ]
+   nhpr [ 220.7 0 0 ]
+   scale [ 1 1 1 ]
+  ]
+  prop "CashBotSafe_DNARoot" [
+   code [ "CashBotSafe" ]
+   pos [ 129.407 -63.105 0.025 ]
+   nhpr [ 0 -70 15 ]
+   scale [ 0.5 0.5 0.5 ]
+  ]
+  prop "suitC-mod_DNARoot" [
+   code [ "suitC-mod" ]
+   pos [ 52.983 -91.628 0.325 ]
+   nhpr [ 3 55 -50 ]
+   scale [ 1.7 1.7 1.7 ]
+  ]
+  prop "FactoryGearB_DNARoot" [
+   code [ "FactoryGearB" ]
+   pos [ -15.831 -58.65 0.325 ]
+   nhpr [ 0 0 0 ]
+   scale [ 1.7 1.7 1.7 ]
+  ]
+  prop "donalds_boat_DNARoot" [
+   code [ "donalds_boat" ]
+   pos [ -53.439 120.912 3.025 ]
+   nhpr [ 230 -35 -10 ]
+   scale [ 2 2 2 ]
+  ]
+  prop "CBWoodCrate_DNARoot" [
+   code [ "CBWoodCrate" ]
+   pos [ -61.531 57.829 0.025 ]
+   nhpr [ -220 0 0 ]
+   scale [ 1 1 1 ]
+  ]
+  prop "CBWoodCrate2_DNARoot" [
+   code [ "CBWoodCrate" ]
+   pos [ -93.719 35.357 0.025 ]
+   nhpr [ 142 0 0 ]
+   scale [ 0.9 0.9 0.9 ]
+  ]
+  prop "boiler_A2_DNARoot" [
+   code [ "boiler_A2" ]
+   pos [ 60.561 20.958 0.025 ]
+   nhpr [ 138.6 0 0 ]
+   scale [ 1 1 1 ]
+  ]
+  prop "LB_couchA_DNARoot" [
+   code [ "LB_couchA" ]
+   pos [ -112.766 -65.737 0.025 ]
+   nhpr [ -19 -15 2 ]
+   scale [ 1 1 1 ]
+  ]
+  prop "JuryBoxChair_DNARoot" [
+   code [ "JuryBoxChair" ]
+   pos [ -100.044 -84.781 -1.525 ]
+   nhpr [ -56 15 0 ]
+   scale [ 0.5 0.5 0.5 ]
+  ]
+  prop "JuryBoxChair2_DNARoot" [
+   code [ "JuryBoxChair" ]
+   pos [ -105.218 -92.930 -3.025 ]
+   nhpr [ -24 15 0 ]
+   scale [ 0.5 0.5 0.5 ]
+  ]
+  prop "JuryBoxChair3_DNARoot" [
+   code [ "JuryBoxChair" ]
+   pos [ -95.363 -56.824 -2.025 ]
+   nhpr [ -134 15 0 ]
+   scale [ 0.5 0.5 0.5 ]
+  ]
+  prop "JuryBoxChair4_DNARoot" [
+   code [ "JuryBoxChair" ]
+   pos [ -129.929 -48.587 0.000 ]
+   nhpr [ -267 15 0 ]
+   scale [ 0.5 0.5 0.5 ]
+  ]
+  prop "prop_cog_tunnel_DNARoot" [
+   code [ "prop_cog_tunnel" ]
+   pos [ 0 137.7 -0.5 ]
+   nhpr [ 180 0 0 ]
+   sign [
+    pos [ 0 -1.5 -0.9 ]
+    baseline [
+     code [ "suit" ]
+     scale [ 1.5 1.5 1.5 ]
+     color [ 1 1 1 1 ]
+     text [
+      letters [ "C" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "G" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "R" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "P" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "L" ]
+     ]
+     text [
+      letters [ "I" ]
+     ]
+     text [
+      letters [ "S" ]
+     ]
+    ]
+    baseline [
+     code [ "suit" ]
+     pos [ -0.3 0.7 -0.81 ]
+     scale [ 1 1 1 ]
+     color [ 1 1 1 1 ]
+     text [
+      letters [ "C" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "G" ]
+     ]
+     text [
+      letters [ " " ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+     text [
+      letters [ "A" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "I" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+    ]
+   ]
+  ]
+  prop "linktunnel_se_14100_DNARoot" [
+   code [ "prop_cog_tunnel" ]
+   pos [ 0 -97.7 -0.5 ]
+   nhpr [ 0 0 0 ]
+   scale [ 1 1 1 ]
+   color [ 1 1 1 1 ]
+   sign [
+    pos [ 0 -1.5 -0.9 ]
+    baseline [
+     code [ "suit" ]
+     scale [ 1.5 1.5 1.5 ]
+     color [ 1 1 1 1 ]
+     text [
+      letters [ "S" ]
+     ]
+     text [
+      letters [ "E" ]
+     ]
+     text [
+      letters [ "W" ]
+     ]
+     text [
+      letters [ "E" ]
+     ]
+     text [
+      letters [ "R" ]
+     ]
+    ]
+    baseline [
+     code [ "suit" ]
+     pos [ 0 0.7 -0.81 ]
+     scale [ 1 1 1 ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "W" ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+     text [
+      letters [ " " ]
+     ]
+     text [
+      letters [ "C" ]
+     ]
+     text [
+      letters [ "E" ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "R" ]
+     ]
+     text [
+      letters [ "A" ]
+     ]
+     text [
+      letters [ "L" ]
+     ]
+    ]
+   ]
+  ]
+ ]
+]

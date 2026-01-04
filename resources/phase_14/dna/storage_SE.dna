@@ -1,0 +1,76 @@
+
+place_model "phase_14/models/modules/suit_sewer_1" [
+	store_node [ "prop" "suit_sewer_1" ""  ]
+	]
+
+place_model "phase_14/models/modules/suit_sewer_2" [
+	store_node [ "prop" "suit_sewer_2" ""  ]
+	]
+
+place_model "phase_14/models/modules/suit_sewer_3" [
+	store_node [ "prop" "suit_sewer_3" ""  ]
+	]
+
+place_model "phase_14/models/modules/suit_sewer_4" [
+	store_node [ "prop" "suit_sewer_4" ""  ]
+	]
+
+place_model "phase_14/models/modules/suit_sewer_5" [
+	store_node [ "prop" "suit_sewer_5" ""  ]
+	]
+
+place_model "phase_14/models/modules/suit_sewer_6" [
+	store_node [ "prop" "suit_sewer_6" ""  ]
+	]
+
+place_model "phase_14/models/neighborhoods/outpost" [
+	store_node [ "prop" "outpost" ""  ]
+	]
+
+place_model "phase_6/models/cogHQ/Cog_Tunnel" [
+	store_node [ "prop" "prop_cog_tunnel" "" ]
+	]
+
+place_model "phase_12/models/char/bossbotBoss-legs-zero" [
+	store_node [ "prop" "bossbotBoss-legs-zero" "" ]
+	]
+
+place_model "phase_10/models/cogHQ/CashBotLocomotive" [
+	store_node [ "prop" "CashBotLocomotive" "" ]
+	]
+
+place_model "phase_5/models/cogdominium/tt_m_ara_ccg_safesB" [
+	store_node [ "prop" "tt_m_ara_ccg_safesB" "" ]
+	]
+
+place_model "phase_10/models/cashbotHQ/CashBotSafe" [
+	store_node [ "prop" "CashBotSafe" "" ]
+	]
+
+place_model "phase_3.5/models/char/suitC-mod" [
+	store_node [ "prop" "suitC-mod" "" ]
+	]
+
+place_model "phase_9/models/cogHQ/FactoryGearB" [
+	store_node [ "prop" "FactoryGearB" "" ]
+	]
+
+place_model "phase_6/models/modules/donalds_boat" [
+	store_node [ "prop" "donalds_boat" "" ]
+	]
+
+place_model "phase_10/models/cashbotHQ/CBWoodCrate" [
+	store_node [ "prop" "CBWoodCrate" "" ]
+	]
+
+place_model "phase_10/models/cashbotHQ/boiler_A2" [
+	store_node [ "prop" "boiler_A2" "" ]
+	]
+
+place_model "phase_11/models/lawbotHQ/LB_couchA" [
+	store_node [ "prop" "LB_couchA" "" ]
+	]
+
+place_model "phase_11/models/lawbotHQ/JuryBoxChair" [
+	store_node [ "prop" "JuryBoxChair" "" ]
+	]

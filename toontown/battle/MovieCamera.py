@@ -1136,7 +1136,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'WiretapperCollectCall2':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'WiretapperCollectCallDamage':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == 'WiretapperBusySignal':
         camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)))
     elif name == 'WiretapperGagBan':
@@ -1336,18 +1336,14 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     elif name == 'RacketeerPeckingOrderRetaliationSoak':
-        if attackDuration > 2:
-            camTrack.append(defaultCamera(openShotDuration=1.5))
-        else:
-            camTrack2 = defaultCamera(openShotDuration=0)
-            return camTrack2
+        camTrack.append(defaultCamera(openShotDuration=5.0))
         # radiographer
     elif name == 'RadiographerRadioInfrequency':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RadiographerHotTake':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'RadiographerHotTakeRetaliation':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=6.75))
     elif name == 'RadiographerOvermodulated':
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
@@ -1483,6 +1479,98 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
     elif name == 'ChairmanSnipe':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+        # liquidator cheats
+    elif name == 'LiquidatorOilRain':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'LiquidatorOilRainDamage':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'LiquidatorFreezingRain':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'LiquidatorHeavyRain':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'LiquidatorHeavyRainDamage':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'LiquidatorStormCell':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'LiquidatorStormCellDamage':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'LiquidatorInversion':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'LiquidatorMonsoon':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+        # record keeper
+    elif name == 'RecordkeeperMinutesTaken':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'RecordkeeperMinutesTakenDamage':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'RecordkeeperPaperTrail':
+        camTrack.append(defaultCamera(openShotDuration=6.75))
+    elif name == 'RecordkeeperRevisedFiling':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'RecordkeeperRedlinedClause':
+        camTrack.append(defaultCamera(openShotDuration=0.5))
+    elif name == 'RecordkeeperAuditCycle':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        # corporate butcherer
+    elif name == 'ButcherOverride':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherOverrideRemoval':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherRevvingUp':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherRevvingUpWhipsaw':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherKickback':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherMarkedWood':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherOffboarding':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherOffboarding2':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherOffboarding3':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherOffboarding4':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherOffboarding5':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherAggrandize':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherAggrandize2':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherAggrandize3':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherAggrandize4':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherAggrandize5':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherSparkPlug':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherSparkPlugDamage':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherScabbard':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ButcherLayoffs':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+        # contingency director
+    elif name == 'ContingencyFailsafeProtocol':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ContingencyRiskThresholdBreach75':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ContingencyRiskThresholdBreach50':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ContingencyRiskThresholdBreach25':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ContingencyContingencyClause':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ContingencyContingencyClauseRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=0.5))
+    elif name == 'ContingencyRedundantAuthority':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ContingencyOperationalFreeze':
+        camTrack.append(defaultCamera(openShotDuration=3.0))
+    elif name == 'ContingencyForecastCollapse':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'ErclaimLaffSteal':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))

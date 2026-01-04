@@ -484,6 +484,7 @@ def __soakSuit(suit, tContact, remove=0):
         suitInterval.append(Func(suit.makeWetLitigator))
     if suit.style.name == 'safesupervis' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetFirestarter))
+        suitInterval.append(Parallel(Func(suit.makeDamageDown), Func(suit.checkDamageDown, + 25)))
     if suit.style.name == 'fires' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetFirestarter))
     return suitInterval

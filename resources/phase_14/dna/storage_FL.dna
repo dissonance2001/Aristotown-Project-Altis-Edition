@@ -1,0 +1,11 @@
+place_model "phase_14/models/neighborhoods/sellbot-scrapyard" [
+	store_node [ "prop" "prop_scrapyard" ""  ]
+	]
+	
+hood_model "phase_14/models/modules/resistance_hall_worn" [
+	store_node [ "toon_landmark" "toon_landmark_FL_A1" ""  ]
+	]
+	
+hood_model "phase_14/models/modules/resistance_hall" [
+	store_node [ "toon_landmark" "toon_landmark_FL_A2" ""  ]
+	]

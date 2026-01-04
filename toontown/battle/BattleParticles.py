@@ -66,6 +66,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('demotionFreeze.ptf')
     elif name == 'FireSpray':
         return loadParticleFile('FireSpray.ptf')
+    elif name == 'FireSprayCan':
+        return loadParticleFile('FireSprayCan.ptf')
     elif name == 'FireSprayPromotion':
         return loadParticleFile('FireSprayPromotion.ptf')
     elif name == 'BurnSpray':

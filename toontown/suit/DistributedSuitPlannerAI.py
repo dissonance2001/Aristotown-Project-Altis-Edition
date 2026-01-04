@@ -1269,6 +1269,18 @@ def bdlit():
     return "Spawned the Boardbot Litigation Team in current zone."
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
+def bdlit2():
+    av = spellbook.getInvoker()
+    zoneId = av.getLocation()[1]
+    sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
+    pointmap = sp.streetPointList
+    sp.createNewSuit([], pointmap, suitName='cdirector', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='cbutcher', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='liquid', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='rkeeper', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    return "Spawned the Boardbot Litigation Team in current zone."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
 def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
     suitFullName = SuitBattleGlobals.SuitAttributes[name]['name']
     av = spellbook.getInvoker()

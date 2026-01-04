@@ -496,7 +496,7 @@ def doSuitAttack(attack):
     elif name == 'WiretapperCollectCall2':
         suitTrack = MovieBossbotLitigationCheats.doVoicemail(attack)
     elif name == 'WiretapperCollectCallDamage':
-        suitTrack = MovieUniversalCheats.doSynergy(attack)
+        suitTrack = MovieBossbotLitigationCheats.doCollectCallDues(attack)
     elif name == 'WiretapperWiretapped':
         suitTrack = MovieBossbotLitigationCheats.doWiretapped(attack)
     elif name == 'WiretapperVoicemail':
@@ -546,6 +546,98 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doFore(attack)
     elif name == 'AmbassadorGhostMentality':
         suitTrack = MovieBossbotLitigationCheats.doGhostMentality(attack)
+        # liquidator
+    elif name == 'LiquidatorOilRain':
+        suitTrack = MovieBoardbotLitigationCheats.doOilRain(attack)
+    elif name == 'LiquidatorOilRainDamage':
+        suitTrack = MovieBoardbotLitigationCheats.doOilRainDamage(attack)
+    elif name == 'LiquidatorFreezingRain':
+        suitTrack = MovieBoardbotLitigationCheats.doFreezingRain(attack)
+    elif name == 'LiquidatorHeavyRain':
+        suitTrack = MovieBoardbotLitigationCheats.doHeavyRain(attack)
+    elif name == 'LiquidatorHeavyRainDamage':
+        suitTrack = MovieBoardbotLitigationCheats.doHeavyRainDamage(attack)
+    elif name == 'LiquidatorStormCell':
+        suitTrack = MovieBoardbotLitigationCheats.doStormCell(attack)
+    elif name == 'LiquidatorStormCellDamage':
+        suitTrack = MovieBoardbotLitigationCheats.doStormCellDamage(attack)
+    elif name == 'LiquidatorInversion':
+        suitTrack = MovieBoardbotLitigationCheats.doInversion(attack)
+    elif name == 'LiquidatorMonsoon':
+        suitTrack = MovieBoardbotLitigationCheats.doMonsoon(attack)
+        # record keeper
+    elif name == 'RecordkeeperMinutesTaken':
+        suitTrack = MovieBoardbotLitigationCheats.doMinutesTaken(attack)
+    elif name == 'RecordkeeperMinutesTakenDamage':
+        suitTrack = MovieBoardbotLitigationCheats.doMinutesTakenDamage(attack)
+    elif name == 'RecordkeeperPaperTrail':
+        suitTrack = MovieBoardbotLitigationCheats.doShadowToon(attack)
+    elif name == 'RecordkeeperRevisedFiling':
+        suitTrack = MovieBoardbotLitigationCheats.doRevisedFiling(attack)
+    elif name == 'RecordkeeperRedlinedClause':
+        suitTrack = MovieBoardbotLitigationCheats.doRedlinedClause(attack)
+    elif name == 'RecordkeeperAuditCycle':
+        suitTrack = MovieBoardbotLitigationCheats.doAuditCycle(attack)
+        # corporate butcherer
+    elif name == 'ButcherOverride':
+        suitTrack = MovieBoardbotLitigationCheats.doOverride(attack)
+    elif name == 'ButcherOverrideRemoval':
+        suitTrack = MovieBoardbotLitigationCheats.doOverrideRemoval(attack)
+    elif name == 'ButcherRevvingUp':
+        suitTrack = MovieBoardbotLitigationCheats.doRevvingUp(attack)
+    elif name == 'ButcherRevvingUpWhipsaw':
+        suitTrack = MovieBoardbotLitigationCheats.doRevvingUpWhipsaw(attack)
+    elif name == 'ButcherKickback':
+        suitTrack = MovieBoardbotLitigationCheats.doKickback(attack)
+    elif name == 'ButcherMarkedWood':
+        suitTrack = MovieBoardbotLitigationCheats.doMarkedWood(attack)
+    elif name == 'ButcherOffboarding':
+        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 1)
+    elif name == 'ButcherOffboarding2':
+        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 2)
+    elif name == 'ButcherOffboarding3':
+        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 3)
+    elif name == 'ButcherOffboarding4':
+        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 4)
+    elif name == 'ButcherOffboarding5':
+        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 5)
+    elif name == 'ButcherAggrandize':
+        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 1)
+    elif name == 'ButcherAggrandize2':
+        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 2)
+    elif name == 'ButcherAggrandize3':
+        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 3)
+    elif name == 'ButcherAggrandize4':
+        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 4)
+    elif name == 'ButcherAggrandize5':
+        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 5)
+    elif name == 'ButcherSparkPlug':
+        suitTrack = MovieBoardbotLitigationCheats.doSparkPlug(attack)
+    elif name == 'ButcherSparkPlugDamage':
+        suitTrack = MovieBoardbotLitigationCheats.doSparkPlugDamage(attack)
+    elif name == 'ButcherScabbard':
+        suitTrack = MovieBoardbotLitigationCheats.doScabbard(attack)
+    elif name == 'ButcherLayoffs':
+        suitTrack = MovieBoardbotLitigationCheats.doLayoffs(attack)
+        # contingency director
+    elif name == 'ContingencyFailsafeProtocol':
+        suitTrack = MovieBoardbotLitigationCheats.doFailsafeProtocol(attack)
+    elif name == 'ContingencyRiskThresholdBreach75':
+        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach75(attack)
+    elif name == 'ContingencyRiskThresholdBreach50':
+        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach50(attack)
+    elif name == 'ContingencyRiskThresholdBreach25':
+        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach25(attack)
+    elif name == 'ContingencyContingencyClause':
+        suitTrack = MovieBoardbotLitigationCheats.doContingencyClause(attack)
+    elif name == 'ContingencyContingencyClauseRetaliation':
+        suitTrack = MovieBoardbotLitigationCheats.doContingencyClauseRetaliation(attack)
+    elif name == 'ContingencyRedundantAuthority':
+        suitTrack = MovieBoardbotLitigationCheats.doRedundantAuthority(attack)
+    elif name == 'ContingencyOperationalFreeze':
+        suitTrack = MovieBoardbotLitigationCheats.doOperationalFreeze(attack)
+    elif name == 'ContingencyForecastCollapse':
+        suitTrack = MovieBoardbotLitigationCheats.doForecastCollapse(attack)
         # dividend king
     elif name == 'DividendAccountRollover':
         suitTrack = MovieBoardbotLitigationCheats.doAccountRollover(attack)
@@ -700,14 +792,14 @@ def doSuitAttack(attack):
     elif name == 'RacketeerPeckingOrderRetaliation':
         suitTrack = MovieSellbotLitigationCheats.doPeckingOrderGroup(attack)
     elif name == 'RacketeerPeckingOrderRetaliationSoak':
-        suitTrack = MovieSellbotLitigationCheats.doOverheat(attack)
+        suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
         # radiographer
     elif name == 'RadiographerRadioInfrequency':
         suitTrack = MovieSellbotLitigationCheats.doRadioInfrequency(attack)
     elif name == 'RadiographerHotTake':
         suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
-    elif name == 'RadiographerHotTakeRetaliation':
-        suitTrack = MovieSellbotLitigationCheats.doPeckingOrderGroup(attack)
+    elif name == 'RadiographerHotTakeRetaliation': # Pressurizer Rise From The Ashes
+        suitTrack = MovieSellbotLitigationCheats.doShadowToon(attack)
     elif name == 'RadiographerOvermodulated':
         suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 1)
     elif name == 'RadiographerOvermodulated2':

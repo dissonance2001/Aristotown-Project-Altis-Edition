@@ -790,6 +790,92 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(1, 0.984, 0, 1)
                 self.extraAttacks.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+        if self.cog.dna.name == 'cbutcher':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/chainsaw_icon')
+            self.rageBuildingText = DirectLabel(parent=self.extraAttacks, relief=None,
+                                                text="%s" % self.cog.getRPM() + "K", text_fg=(1, 1, 1, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.4)
+            self.rageBuildingText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.extraAttacks.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.extraAttacks.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.extraAttacks.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.extraAttacks.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.extraAttacks.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.extraAttacks.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.extraAttacks.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.extraAttacks.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.dna.name == 'cbutcher' and self.cog.isVulnerable:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/kickback_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.extraAttacks.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.extraAttacks.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.extraAttacks.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.extraAttacks.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.extraAttacks.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.extraAttacks.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.extraAttacks.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.extraAttacks.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if self.cog.dna.name == 'hroller':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.extraAttacks = status.find('**/insured_icon')
@@ -2858,14 +2944,14 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'ls':
             self.suitHead.setPosHprScale(-0.26, 0.5, 0.12, -90, 0, 0, .085, .085, .085)
         elif name == 'mg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .115, .115, .115)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .115, .115, .115)
         elif name == 'whistleb':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .0775, .0775, .0775)
         elif name == 'ksp':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
         elif name == 'ppl':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'stenog' or name == 'stenog':
+        elif name == 'stenog' or name == 'crystal' or name == 'rkeeper':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0725, .0725, .0725)
         elif name == 'clubpres':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
@@ -2997,7 +3083,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
         elif name == 'mplayer' or name == 'mplayer2':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'chainsaw' or name == 'chainsaw2':
+        elif name == 'chainsaw' or name == 'chainsaw2' or name == 'cbutcher':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0875, .0875, .0875)
         elif name == 'duckshfl':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .075, .075, .075)
@@ -3018,7 +3104,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'dking':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.145, -180, 0, 0, .08, .08, .08)
         elif name == 'racket':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .115, .115, .115)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .115, .115, .115)
         elif name == 'redd':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.145, -180, 0, 0, .08, .08, .08)
         elif name == 'chairman':
@@ -3043,7 +3129,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .11, .11, .11)
         elif name == 'whunter':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0575, .0575, .0575)
-        elif name == 'rainmake':
+        elif name == 'rainmake' or name == 'liquid':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.155, -180, 0, 0, .07, .07, .07)
         elif name == 'erfit' or name == 'erclaim':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .075, .075, .075)
@@ -3103,8 +3189,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
         elif name == 'gld':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1075, .1075, .1075)
-        elif name == 'arbit':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .085, .085, .085)
+        elif name == 'arbit' or name == 'cdirector':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .09, .09, .09)
         else:
             self.suitHead.setPos(-0.27, 0.5, 0.13)
 

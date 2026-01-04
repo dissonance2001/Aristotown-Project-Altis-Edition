@@ -482,7 +482,7 @@ class SuitPlannerInteriorAI:
             suit = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
             reserveSuits.append(suit)
         if specialCode == 'fmaker':
-            suit = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)
+            suit = self.__genSuitObject(self.zoneId, 19, 't', 19, 0)
             reserveSuits.append(suit)
         if specialCode == 'director':
             suit = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)
@@ -493,7 +493,7 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(random.choice((suit, suit4)))
         if specialCode == 'videog3':
             suit2 = self.__genSuitObject(self.zoneId, 17, 'p', 17, 0)
-            suit3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)
+            suit3 = self.__genSuitObject(self.zoneId, 19, 't', 19, 0)
             suit = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)
             suit4 = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
             reserveSuits.append(suit3)

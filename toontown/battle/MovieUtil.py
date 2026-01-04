@@ -297,7 +297,11 @@ def createSuitReviveTrack(suit, battle):
         for headPart in suit.animatedHeadParts:
             headInterval = Func(headPart.loop, 'murmur')
             hasAnimatedHead = True
-    elif suit.style.name == 'arbit':
+    elif suit.style.name == 'cdirector':
+        for headPart in suit.animatedHeadParts:
+            headInterval = Func(headPart.loop, 'murmur')
+            hasAnimatedHead = True
+    elif suit.style.name == 'liquid':
         for headPart in suit.animatedHeadParts:
             headInterval = Func(headPart.loop, 'murmur')
             hasAnimatedHead = True
@@ -921,6 +925,14 @@ def createSuitDeathTrack(suit, battle):
             headInterval = Func(headPart.loop, 'murmur')
             hasAnimatedHead = True
     elif suit.style.name == 'rainmake':
+        for headPart in suit.animatedHeadParts:
+            headInterval = Func(headPart.loop, 'murmur')
+            hasAnimatedHead = True
+    elif suit.style.name == 'cdirector':
+        for headPart in suit.animatedHeadParts:
+            headInterval = Func(headPart.loop, 'murmur')
+            hasAnimatedHead = True
+    elif suit.style.name == 'liquid':
         for headPart in suit.animatedHeadParts:
             headInterval = Func(headPart.loop, 'murmur')
             hasAnimatedHead = True

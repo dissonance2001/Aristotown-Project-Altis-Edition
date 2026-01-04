@@ -21,10 +21,10 @@ suitHeadTypes = [
 'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'cinema',
 'radiog', 'racket', 'ubuster', 'safesupervis', 'psetter',
     # Boardbots
-'bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'trainer', 'fmaker',
-'jgd', 'bby', 'dking', 'ottoman', 'crystal', 'chairman',
+'bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'liquid', 'rkeeper',
+'cbutcher', 'cdirector', 'dking', 'ottoman', 'crystal', 'chairman',
     # Techbots
-'skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'ant', 'sya', 'djockey', 'ptjockey', 'jas', 'tas', 'fhu', 'fsh', 'fhj',
+'skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'ant', 'sya', 'djockey', 'ptjockey', 'fmaker', 'tas', 'fhu', 'fsh', 'fhj',
 'kdh', 'dar', 'nhy', 'wrt', 'auh',
     # Pressbots
 'ppb', 'shb', 'bsd', 'gms', 'sbg', 'hck', 'ath', 'ghw', 'dcw', 'gzt', 'wnk', 'nsh', 'std', 'anc', 'jls', 'pbl', 'director', 'bcaster', 'std2', 'videog', 'prt', 'pla', 'plk', 'plh',
@@ -41,9 +41,9 @@ suitATypes = [
     # Sellbots
 'nd', 'dc', 'fcs', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'racket', 'ubuster', 'safesupervis',
     # Boardbots
-'mdm', 'cbr', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'gatekeep', 'fmaker', 'dold', 'dking', 'crystal', 'chairman', 'trainer',
+'mdm', 'cbr', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'gatekeep', 'dold', 'dking', 'crystal', 'chairman', 'rkeeper', 'cbutcher', 'cdirector',
     # Techbots
-'vpr', 'brn', 'key', 'sfs', 'pyc', 'itn', 'rus', 'sya',
+'vpr', 'brn', 'key', 'sfs', 'pyc', 'itn', 'rus', 'sya', 'fmaker',
     # Pressbots
 'ghw', 'dcw', 'gzt', 'nsh', 'std', 'anc', 'pbl', 'director', 'bcaster', 'std2', 'videog',
 ]
@@ -57,7 +57,7 @@ suitBTypes = [
     # Sellbots
 'tm', 'cn', 'ms', 'bellring', 'prethink', 'psetter',
     # Boardbots
-'pph', 'ins', 'ang', 'dola', 'ottoman',
+'pph', 'ins', 'ang', 'dola', 'ottoman', 'liquid',
     # Techbots
 'kbc', 'blk', 'inw', 'ant',
     # Pressbots

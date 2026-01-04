@@ -826,6 +826,10 @@ def doDamageMovie(attack):
     #notifyTrack = Sequence(Func(theSuit.showHpTextNew, +dmg), Func(theSuit.setHealthForMe, +dmg),
                            #  Func(theSuit.updateHealthBar, 0))
     notifyTrack = Sequence(Func(theSuit.checkDamage, dmg))
+    if theSuit.dna.name == 'safesupervis':
+        node = theSuit.getGeomNode().getChild(0)
+        notifyTrack.append(Parallel(LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1),
+                                        blendType='easeInOut')))
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     cameraTrack = Wait(3.0)
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
@@ -844,7 +848,10 @@ def doSoakRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Parallel()
-    suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1), Func(suit.makeUnSoaked)))
+    if suit.dna.name == 'safesupervis':
+        suitTrack.append(Parallel(Func(suit.makeUnDamageDown), Func(suit.checkDamageDown, - 25), ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1), Func(suit.makeUnSoaked)))
+    else:
+        suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1), Func(suit.makeUnSoaked)))
     for suit in battle.activeSuits:
         suitTrack.append(Func(suit.checkSoakRounds))
     if suit.isVirtual and suit.dna.name == 'redd':

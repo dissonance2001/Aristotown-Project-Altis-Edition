@@ -1,0 +1,106 @@
+group "bank" [
+ visgroup "61000" [
+  vis [   "61000"   ]
+  prop "prop_tt_dg_moneybin_area_DNARoot" [
+   code [ "prop_tt_dg_moneybin_area" ]
+   pos [ 0 0 0 ]
+   nhpr [ -90 0 0 ]
+   scale [ 1 1 1 ]
+  ]
+  prop "linktunnel_odg_21000_DNARoot" [
+   code [ "prop_safe_zone_tunnel" ]
+   pos [ -384 57.6 -4.9 ]
+   nhpr [ -90 0 0 ]
+   sign [
+    code [ "tunnel_sign_green" ]
+    pos [ 0 0 0.53 ]
+    scale [ 1.39066 1 1.61989 ]
+    baseline [
+     code [ "mickey" ]
+     width [ 34.4253 ]
+     height [ 34.4253 ]
+     flags [ d ]
+     scale [ 1.87057 1 1.51598 ]
+     color [ 1 1 0 1 ]
+     pos [ -0.17 0 -0.62297 ]
+     text [
+      letters [ "P" ]
+     ]
+     text [
+      letters [ "A" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "H" ]
+     ]
+     text [
+      letters [ " " ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+    ]
+    baseline [
+     code [ "mickey" ]
+     width [ 35.468 ]
+     height [ 35.468 ]
+     flags [ d ]
+     scale [ 0.95104 1 0.902303 ]
+     color [ 1 1 0 1 ]
+     pos [ 0 0 -1.73655 ]
+     text [
+      letters [ "D" ]
+     ]
+     text [
+      letters [ "A" ]
+     ]
+     text [
+      letters [ "I" ]
+     ]
+     text [
+      letters [ "S" ]
+     ]
+     text [
+      letters [ "Y" ]
+     ]
+     text [
+      letters [ " " ]
+     ]
+     text [
+      letters [ "G" ]
+     ]
+     text [
+      letters [ "A" ]
+     ]
+     text [
+      letters [ "R" ]
+     ]
+     text [
+      letters [ "D" ]
+     ]
+     text [
+      letters [ "E" ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+     text [
+      letters [ "S" ]
+     ]
+    ]
+    baseline [
+     pos [ 0 0 1.706 ]
+     scale [ 2.34951 1 1.88988 ]
+     graphic [
+      code [ "daisySZ" ]
+     ]
+    ]
+   ]
+  ]
+ ]
+]

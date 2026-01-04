@@ -669,6 +669,7 @@ def doPaperCutMulti(attack):
     toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
     partTracks = Parallel()
     notifyTracks = Parallel()
+    moveTracks = Sequence()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -680,15 +681,18 @@ def doPaperCutMulti(attack):
         toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
         notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
         if dmg > 0:
+            moveTracks.append(Func(suit.headsUp, battle, targetPos))
+            moveTracks.append(Sequence(ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2),
+                                       Func(suit.setNeutralAnimationDrop)))
+            moveTracks.append(Func(suit.setHpr, battle, origHpr))
             notifyTracks.append(notifyTrack)
             partTracks.append(partTrack)
     suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2),
-                          Func(suit.setHpr, battle, origHpr),
                           Func(suit.setNeutralAnimationDrop))
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5))
     soundTrack = getSoundTrack('SA_shred.ogg', delay=.5, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
-    return Parallel(suitTrack, partTracks, notifyTracks, suitTrack2, toonTrack, soundTrack)
+    return Parallel(suitTrack, partTracks, moveTracks, notifyTracks, suitTrack2, toonTrack, soundTrack)
 
 def doExplodingDocument(attack):
     suit = attack['suit']
@@ -752,6 +756,8 @@ def doBookkeepingRetaliation(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        targetPos = toon.getPos(battle)
+        origPos, origHpr = battle.getActorPosHpr(suit)
         suitTrack = Sequence(getSuitAnimTrack(attack))
         suitTrack2 = Sequence(ActorInterval(suit, 'effort', duration=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimationDrop))
         notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextNew, -int(dmg), text="NO GAGS!", colorCode=1))
@@ -759,9 +765,10 @@ def doBookkeepingRetaliation(attack):
         soundTrack2 = Sequence(Wait(3.4), SoundInterval(globalBattleSoundCache.getSound('SA_haymaker.ogg')))
         soundTrack = Parallel(soundTrack1, soundTrack2)
         if dmg > 0:
+            headsUp = Func(suit.headsUp, battle, targetPos)
             soundTracks.append(soundTrack)
             suitTracks.append(suitTrack)
-            suitTracks.append(suitTrack2)
+            suitTracks.append(Sequence(Parallel(suitTrack2, headsUp), Func(suit.setHpr, battle, origHpr)))
             notifyTracks.append(notifyTrack)
     damageAnims = [['conked']]
     makeDamageUp = Func(suit.removeBookkeeping)
@@ -1570,6 +1577,80 @@ def doAmbassadorFlyMove(attack):
     battle = attack['battle']
     suitTrackAnim = Sequence(Func(theSuit.beginSupaFlyMove, theSuit.getPos(battle), ))
     return Parallel(suitTrackAnim)
+
+def doCollectCallDues(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+
+    whirlSeq = Parallel()
+    tornadoTrack = Parallel()
+    toonSpinTracks = Parallel()
+    toonLiftTracks = Parallel()
+    damageAnims = []
+    damageAnims.append(['duck',
+                        0.01,
+                        0.01,
+                        1.1])
+    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
+    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 2.1, startTime=2.26))
+    damageAnims.append(['slip-forward'])
+    for t in targets:
+        toon = t['toon']
+        whirlSfx = loader.loadSfx('phase_5/audio/sfx/tt_s_ara_cfg_whirlwind.ogg')
+        tornadoNode = NodePath("tornadoNode")
+        tornadoNode.reparentTo(battle)
+        tornadoNode.setPos(0, 3, 1)
+        tornadoNode.setScale(0.2)
+        whirlSfx.setLoop(True)
+        sinkPos = toon.getPos(battle)
+        sinkPos.setZ(sinkPos.getZ() + 25)
+        toonSpinTracks.append(Sequence(Wait(0.9), LerpHprInterval(toon, 5.5, Point3(10800, 0, 0)),
+                                 LerpHprInterval(toon, 0.5, toon.getHpr()), Wait(0.5)))
+        toonLiftTracks.append(Sequence(Wait(0.9), LerpPosInterval(toon, 5.5, Point3(toon.getX(), toon.getY(), toon.getZ() + 50)),
+                                      LerpPosInterval(toon, 0.5, toon.getPos()), Wait(0.5)))
+        for x in range(40):
+            tornadoNode.attachNewNode("billNode" + str(x))
+            bill = loader.loadModel('phase_10/models/cashbotHQ/MoneyStack')
+            bill.setTwoSided(True)
+            bill.setPosHprScale(0, 0, 0, random.randint(0, 360), 0, random.randint(0, 360), 3.0 - (x * 0.03),
+                                            3.0 - (x * 0.03), 3.0 - (x * 0.03))
+            bill.reparentTo(tornadoNode.find('**/billNode' + str(x)))
+            bill.hide()
+            originalBillZ = tornadoNode.find('**/billNode' + str(x)).getZ()
+            originalBillH = bill.getH()
+            originalBillR = bill.getR()
+            seq = Sequence(
+                        Parallel(
+                            Sequence(
+                                tornadoNode.find('**/billNode' + str(x)).posInterval(0.5, (0, 0, random.randint(-10, 10))),
+                                tornadoNode.find('**/billNode' + str(x)).posInterval(0.5, (0, 0, originalBillZ))
+                            ),
+                            Sequence(
+                                bill.hprInterval(0.5, (random.randint(-360, 360), 0, random.randint(-360, 360))),
+                                bill.hprInterval(0.5, (originalBillH, 0, originalBillR))
+                            ),
+                            tornadoNode.find('**/billNode' + str(x)).hprInterval(1, (-360, 0, 0))
+                        )
+                    )
+            whirlSeq.append(Sequence(
+                        Wait(x * 0.1),
+                        Func(bill.show),
+                        Func(seq.loop),
+                        bill.posInterval(0.5, (30 - x / 2, 0, 75 - (x ** 1.3))),
+                        Wait(4.0),
+                        Func(bill.removeNode)
+                    ))
+        tornadoTrack.append(Parallel(
+                        Sequence(Func(whirlSfx.play), Func(tornadoNode.wrtReparentTo, render), tornadoNode.posInterval(0.5, toon.getPos()),
+                            Wait(6.25), Func(whirlSfx.stop), Func(tornadoNode.removeNode)
+                        )
+                    ))
+
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    toonTrack = getToonTracks(attack, damageDelay=.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['sidestep'], showDamageExtraTime=6, showMissedExtraTime=1.0)
+
+    return Parallel(suitTrack, toonTrack, toonLiftTracks, toonSpinTracks, whirlSeq, tornadoTrack)
 
 def doMulligan(attack):
     suit = attack['suit']

@@ -838,6 +838,8 @@ def doWhirlwind(attack):
     # for t in attack['target']:
     # toon = t['toon']
     # dmg = t['hp']
+    whirlSfx = loader.loadSfx('phase_5/audio/sfx/tt_s_ara_cfg_whirlwind.ogg')
+    whirlSfx.setLoop(True)
     cage = loader.loadModel('phase_5/models/cogdominium/tt_m_ara_cfg_whirlwind')
     cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
     # cage.setH(90)
@@ -848,7 +850,7 @@ def doWhirlwind(attack):
     if dmg == 0:
         y -= 5
     cagePos = [Point3(suitPos.getX(), y + 15, suitPos.getZ()), toon.getHpr(battle)]
-    spinTrack = Sequence(LerpHprInterval(cage, 5.5, Point3(-10800, 0, 0)))
+    spinTrack = Sequence(Func(whirlSfx.play), LerpHprInterval(cage, 5.5, Point3(-10800, 0, 0)), Func(whirlSfx.stop))
     cagePropTrack = Sequence(
         Parallel(cagePosition),
         Parallel(getPropAppearTrack(cage, battle, cagePos, 0.25, scaleUpPoint=Point3(2.0), scaleUpTime=1.0),
@@ -870,14 +872,13 @@ def doWhirlwind(attack):
     damageAnims.append(['slip-forward'])
     sinkPos = toon.getPos(battle)
     sinkPos.setZ(sinkPos.getZ() + 25)
-    soundTrack = getSoundTrack('tt_s_ara_cfg_whirlwind.ogg', delay=0)
     notifyTrack = Sequence(Wait(5.9), Func(toon.showHpTextNew, -int(dmg), text="CONFUSED!", colorCode=1))
     toonTrack = getToonTrackCheat(attack, damageDelay=.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91,
                              dodgeAnimNames=['sidestep'], showDamageExtraTime=5, showMissedExtraTime=1.0)
     toonSpinTrack = Sequence(Wait(0.9), LerpHprInterval(toon, 4.5, Point3(10800, 0, 0)),
                                  LerpHprInterval(toon, 0.5, toon.getHpr()), Wait(0.5))
     toonLiftTrack = Sequence(Wait(0.9), LerpPosInterval(toon, 4.5, Point3(toon.getX(), toon.getY(), toon.getZ() + 50)), LerpPosInterval(toon, 0.5, toon.getPos()), Wait(0.5))
-    return Parallel(suitTrack, cagePropTracks, toonTrack, notifyTrack, soundTrack, toonLiftTrack, toonSpinTrack)
+    return Parallel(suitTrack, cagePropTracks, toonTrack, notifyTrack, toonLiftTrack, toonSpinTrack)
 
 def doPeckingOrder(attack):
     suit = attack['suit']
@@ -1087,6 +1088,7 @@ def doSnap2(attack, suit):
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5))
+    moveTracks = Sequence()
     notifyTracks = Parallel()
     posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
     propTracks = Parallel()
@@ -1100,9 +1102,10 @@ def doSnap2(attack, suit):
         teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
         if dmg > 0:
             targetPos = toon.getPos(battle)
-            suitTrack.append(Func(suit.headsUp, battle, targetPos))
+            moveTracks.append(Func(suit.headsUp, battle, targetPos))
+            moveTracks.append(ActorInterval(suit, 'throw-object', playRate=1.5))
             origPos, origHpr = battle.getActorPosHpr(suit)
-            suitTrack.append(Func(suit.setHpr, battle, origHpr))
+            moveTracks.append(Func(suit.setHpr, battle, origHpr))
             notifyTrack = Sequence(Wait(3.1),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1),)
             notifyTracks.append(notifyTrack)
             x = toon.getX(battle)
@@ -1140,7 +1143,7 @@ def doSnap2(attack, suit):
     soundTrack = getSoundTrack('SA_bite.ogg', delay=2, node=suit)
     toonTracks = getToonTracksCheat(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
                                dodgeAnimNames=['neutral'], showDamageExtraTime=1.4)
-    return Parallel(suitTrack, toonTracks, soundTrack, propTracks, notifyTracks)
+    return Parallel(suitTrack, toonTracks, moveTracks, soundTrack, propTracks, notifyTracks)
 
 def doSnap(attack, suit):
     #suit = attack['suit']
@@ -1242,8 +1245,8 @@ def doBayouBellow(attack):
         suitTrack = Sequence()
         suitTrack.append(Wait(4.0))
         resetTrack = getResetTrack(suit, battle)
+        suitTrack.append(Func(suit.checkCogLured, battle))
         suitTrack.append(Func(battle.unlureSuit, suit))
-        suitTrack.append(resetTrack)
         suitTrack.append(Wait(1.0))
         suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
         suitTrack.append(Func(battle.unSueSuit, suit))
@@ -1256,7 +1259,7 @@ def doBayouBellow(attack):
         suitTrack.append(
             Func(suit.setNeutralAnimation))
         suitTracks.append(Wait(0.5))
-        suitTracks.append(MovieUtil.createSuitBellowInterval(theSuit))
+        suitTracks.append(Func(theSuit.createSuitBellowInterval))
         suitTracks.append(Wait(4.0))
         suitTracks.append(suitTrack)
         suitTracks.append(Func(suit.setNeutralAnimation))
@@ -1303,8 +1306,8 @@ def doBayouBash(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack2 = Sequence(MovieUtil.createSuitSnapInterval(suit), Func(suit.setNeutralAnimationDrop))
-    suitTrack2.append(Wait(1.25))
+    suitTrack2 = Sequence(Func(suit.createSuitSnapInterval), Func(suit.setNeutralAnimationDrop))
+    suitTrack2.append(Wait(5.0))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     return Parallel(suitTrack, suitTrack2, soundTrack)
 
@@ -1347,6 +1350,8 @@ def doCourtSanctionBindings(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        targetPos = toon.getPos(battle)
+        origPos, origHpr = battle.getActorPosHpr(suit)
         sanctioned = __makeSanctionedNodePath()
         missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
         propTrack = Sequence(
@@ -1364,8 +1369,9 @@ def doCourtSanctionBindings(attack):
         soundTrack = getSoundTrack('SA_sanction.ogg', delay=.5, node=suit)
         notifyTrack = Sequence(Wait(.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
         if dmg > 0:
+            headsUp = Func(suit.headsUp, battle, targetPos)
             propTracks.append(propTrack)
-            suitTracks.append(suitTrack)
+            suitTracks.append(Sequence(Parallel(suitTrack, headsUp), Func(suit.setHpr, battle, origHpr)))
             soundTracks.append(soundTrack)
             notifyTracks.append(notifyTrack)
     toonDamageTrack = getToonTracksCheat(attack, 0.8, ['conked'], 0, ['neutral'])

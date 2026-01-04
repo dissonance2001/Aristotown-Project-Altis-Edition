@@ -1,0 +1,99 @@
+group "sewer" [
+ visgroup "14200" [
+  vis [   "14200"   ]
+  prop "linktunnel_se_14000_DNARoot" [
+   code [ "prop_cog_tunnel" ]
+   pos [ -68.38 -202.64 -3.58 ]
+   nhpr [ -31 0 0 ]
+   sign [
+    pos [ 0 -1.5 -0.9 ]
+    baseline [
+     code [ "suit" ]
+     scale [ 1.5 1.5 1.5 ]
+     color [ 1 1 1 1 ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "U" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "P" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "S" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+    ]
+    baseline [
+     code [ "suit" ]
+     color [ 1 1 1 1 ]
+     scale [ 1 1 1 ]
+     pos [ 0 0.7 -0.81 ]
+     text [
+      letters [ "C" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "G" ]
+     ]
+     text [
+      letters [ " " ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+     text [
+      letters [ "A" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "I" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+    ]
+   ]
+  ]
+  prop "suit_sewer_5_DNARoot" [
+   code [ "suit_sewer_5" ]
+   pos [ 0 0 0 ]
+   nhpr [ -180 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ -0.16 89.8 0 ]
+   nhpr [ 0 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_4_DNARoot" [
+   code [ "suit_sewer_4" ]
+   pos [ -0.60 190.17 0 ]
+   nhpr [ -180 0 0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+  prop "suit_sewer_6_DNARoot" [
+   code [ "suit_sewer_6" ]
+   pos [ -0.39 369.57 0 ]
+   nhpr [ -180 0 -0 ]
+   scale [ 0.18 0.18 0.18 ]
+  ]
+ ]
+]

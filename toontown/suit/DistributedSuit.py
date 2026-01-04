@@ -65,6 +65,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.fraudulentDamage = 0
         self.levelDamage = 0
         self.syphonHP = 0
+        self.rpmIncrease2 = 0
         self.splashInterval = None
         self.legList = None
         self.initState = None
@@ -891,6 +892,18 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def removeLevelDamage(self):
         self.levelDamage = 0
 
+    def addRPMIncrease(self, damage):
+        self.rpmIncrease2 += damage
+
+    def addRPM(self):
+        self.damageInterval = Parallel(Func(self.showHpTextNew, text="+%s RPM!" % self.getRPMIncrease() + "000", colorCode=1), Func(self.setRPM, self.getRPM() + self.getRPMIncrease())).start()
+
+    def addRPMWhipsaw(self):
+        self.damageInterval = Parallel(Func(self.showHpTextNew, text="+%s RPM!" % self.getRPMIncrease() + 4000, colorCode=1), Func(self.setRPM, self.getRPM() + (self.getRPMIncrease() + 4))).start()
+
+    def removeRPM(self, damage):
+        self.damageInterval = Parallel(Func(self.setRPM, self.getRPM() - damage)).start()
+
     def addRageBuilding(self, damage):
         self.damageInterval = Parallel(Func(self.setRageBuilding, self.getRageBuilding() + int(damage * .1))).start()
 
@@ -932,9 +945,15 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                            Func(self.removeLevelDamage)).start()
 
     def checkDamage(self, levelDamage):
-        self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
-                                         Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
+        if self.dna.name == 'safesupervis':
+            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                         Func(self.showHpTextNew, - levelDamage, text="OVERHEATED!", colorCode=5), Func(self.setHealthForMe, - levelDamage),
                                          Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                           Func(self.removeLevelDamage)).start()
+        else:
+            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                    Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
+                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
                                            Func(self.removeLevelDamage)).start()
 
     def checkCogOvercharge(self):
@@ -1018,12 +1037,33 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 suitTrack.append(Func(self.makeSued, 3))
             self.splashInterval = Sequence(suitTrack).start()
 
+    def createSuitBellowInterval(self):
+        if self.style.name == 'lgator':
+            suitInterval = Sequence(ActorInterval(self, 'bellow'), Func(self.setNeutralAnimationDrop))
+            for headPart in self.animatedHeadParts:
+                headInterval = Sequence(ActorInterval(headPart, 'bellow'), Func(headPart.loop,
+                                                                                'neutral'), Func(self.setNeutralAnimationDrop))
+                hasAnimatedHead = True
+                Parallel(headInterval, suitInterval).start()
+
+    def createSuitSnapInterval(self):
+        if self.style.name == 'lgator':
+            suitInterval = Sequence(ActorInterval(self, 'snap2'), Func(self.setNeutralAnimationDrop))
+            for headPart in self.animatedHeadParts:
+                headInterval = Sequence(ActorInterval(headPart, 'gsnap'), Func(headPart.loop,
+                                                                                'neutral'), Func(self.setNeutralAnimationDrop))
+                hasAnimatedHead = True
+                Parallel(headInterval, suitInterval).start()
+
     def checkSoakRounds(self):
         if self.splashInterval:
             self.splashInterval.finish()
             self.splashInterval = None
         if (self.isSoaked == 0 and self.actuallySoaked and not self.isDead) or self.dna.name == 'phouse':
-            self.splashInterval = Sequence(Parallel(ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimation)).start()
+            if self.dna.name == 'safesupervis':
+                self.splashInterval = Sequence(Parallel(Func(self.makeUnDamageDown), Func(self.checkDamageDown, - 25), ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimation)).start()
+            else:
+                self.splashInterval = Sequence(Parallel(ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimation)).start()
 
     def checkMarkRounds(self):
         if self.splashInterval:
@@ -1764,7 +1804,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.isAngry:
             Sequence(Func(self.loop, 'neutral-enraged')
                      ).start()
-        elif self.isChainsawPhase2:
+        elif self.isVulnerable and self.dna.name == 'cbutcher':
             Sequence(
                 Func(self.loop, 'neutral-overide%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
@@ -1798,10 +1838,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.dna.name == 'foreman' and self.getActualLevel() == 23:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'rolled'), Func(self.loop, 'rolled')
                      ).start()
-        elif self.isChainsawPhase2:
+        elif self.isVulnerable and self.dna.name == 'cbutcher':
             Sequence(
-                Func(self.setPlayRate, self.getPlayRate2(), 'neutral-override%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)), Func(self.loop, 'neutral-override%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-                ).start()
+                Func(self.loop, 'neutral-overide%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+            ).start()
         elif self.isOttomanPhase2:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()
@@ -1844,12 +1884,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.dna.name == 'foreman' and self.getActualLevel() == 23:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'rolled'), Func(self.loop, 'rolled')
                      ).start()
-        elif self.isChainsawPhase2:
+        elif self.isVulnerable and self.dna.name == 'cbutcher':
             Sequence(
-                Func(self.setPlayRate, self.getPlayRate2(),
-                     'neutral-override%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)),
-                Func(self.loop,
-                     'neutral-override%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                Func(self.loop, 'neutral-overide%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
             ).start()
         elif self.isOttomanPhase2:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
@@ -1885,10 +1922,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.isAngry:
             Sequence(ActorInterval(self, 'neutral-enraged-return', startTime=self.getDuration('neutral-enraged-return'), endTime=0), Func(self.loop, 'neutral-enraged')
                      ).start()
-        elif self.isChainsawPhase2:
+        elif self.isVulnerable and self.dna.name == 'cbutcher':
             Sequence(
                 Func(self.loop, 'neutral-overide%s' % ('-glitched' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-                ).start()
+            ).start()
         elif self.isImmortal and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog'and self.isPhase3:
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
@@ -1910,10 +1947,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         searchString = chatString.lower()
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             self.animHead = 'murmur'
-        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
-            self.animHead = 'grunt'
         elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
             self.animHead = 'question'
+        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
+            self.animHead = 'grunt'
         else:
             stringLength = len(chatString)
             if stringLength <= 1:
@@ -1955,10 +1992,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.nametag.setChatReversed(False)
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             self.animHead = 'murmur'
-        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
-            self.animHead = 'grunt'
         elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
             self.animHead = 'question'
+        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
+            self.animHead = 'grunt'
         else:
             stringLength = len(chatString)
             if stringLength <= 1:
@@ -2021,7 +2058,14 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                     Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
                 ).start()
             else:
-                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
+                if self.dna.name == 'cbutcher':
+                    texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
+                    texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
+                    for headPart in self.animatedHeadParts: Sequence(Func(headPart.setTexture, texture2, 1), ActorInterval(headPart, self.animHead), Func(headPart.setTexture, texture, 1),
+                                                                     Func(headPart.loop, 'neutral-lured')
+                                                                         ).start()
+                else:
+                    for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral-lured')
                 ).start()
         else:
@@ -2038,7 +2082,14 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                     Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
                     ).start()
             else:
-                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
+                if self.dna.name == 'cbutcher':
+                    texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
+                    texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
+                    for headPart in self.animatedHeadParts: Sequence(Func(headPart.setTexture, texture2, 1), ActorInterval(headPart, self.animHead), Func(headPart.setTexture, texture, 1),
+                                                                         Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
+                                                                         ).start()
+                else:
+                    for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                     ).start()
 
@@ -2065,10 +2116,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.nametag.setChatReversed(False)
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             self.animHead = 'murmur'
-        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
-            self.animHead = 'grunt'
         elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
             self.animHead = 'question'
+        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
+            self.animHead = 'grunt'
         else:
             stringLength = len(chatString)
             if stringLength <= 1:

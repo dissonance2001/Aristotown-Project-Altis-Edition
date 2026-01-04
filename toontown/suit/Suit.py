@@ -118,7 +118,7 @@ chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-ju
 chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('neutral', 'neutral-override', 4))
 phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4),('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
 bkeeper = (('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
-wtapper = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('snap', 'snap2', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
+wtapper = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
 ambass = (('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap2', 4))
 
 # Sellbots
@@ -147,7 +147,7 @@ mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4)
 cinema = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
 racket = (('smile', 'smile', 4), ('layoffs', 'layoffs', 4), ('quick-jump', 'jump', 4), ('taunt', 'taunt', 4), ('smile', 'smile', 4), ('cease', 'cease', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
-ubuster = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
+ubuster = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction3', 4))
 safesupervis = (('rubber-stamp', 'rubber-stamp', 4), ('summon', 'summon', 4), ('cigar-smoke', 'cigar-smoke', 4), ('firestarter-cigar-smoke', 'firestarter-cigar-smoke', 4), ('cease', 'cease', 4), ('snap', 'snap2', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
 psetter = (('quick-jump', 'jump', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4), ('neutral2', 'neutral', 4))
 
@@ -232,10 +232,10 @@ ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dola = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-trainer = (('snap', 'snap', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
-fmaker = (('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
-jgd = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-bby = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+liquid = (('speak', 'speak', 4), ('stomp', 'stomp', 4), ('effort', 'effort', 4))
+rkeeper = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
+cbutcher = (('roll-o-dex', 'roll-o-dex', 4), ('effort', 'effort', 4), ('glower', 'glower', 4))
+cdirector = (('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
 dking = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 ottoman = (('effort', 'effort', 4), ('hold-pencil', 'hold-pencil', 4), ('pen-squirt', 'fountain-pen', 4))
 crystal = (('shot5', 'shot5', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('defense', 'defense', 4))
@@ -260,7 +260,7 @@ ant = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4))
 sya = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4))
 djockey = (('pen-squirt', 'fountain-pen', 4), ('shredder', 'shredder', 4))
 ptjockey = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-jas = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+fmaker = (('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 tas = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 fhu = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 fsh = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -1195,6 +1195,9 @@ class Suit(Avatar.Avatar):
         self.healthBar = None
         self.healthBarDisplay = None
         self.healthCondition = 0
+        self.rpm = 10
+        self.rpmIncrease = 0
+        self.isKickback = 0
         self.isDisguised = 0
         self.isWaiter = 0
         self.isGovernaught = 0
@@ -2530,46 +2533,45 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setTransparency(1)
             self.setHeight(9.31)
-        elif dna.name == 'trainer':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(1, 1, 1, 1.0)
-            self.generateBody()
-            self.makeCountErfitTrainer()
-            self.generateHead3('bloodsucker', animated=True)
-            texture = loader.loadTexture('phase_11/maps/ttcc_ene_bloodsucker.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(9)
-        elif dna.name == 'fmaker':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.451, 0.561, 0.549, 1)
-            self.generateMajorPlayerBody()
-            self.makeVideographer2()
-            self.generateHead2('skeleskull_A')
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_g_exe.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.generateHead3('autocaddie', animated=True)
-            self.setHeight(9.0)
-            self.isSkelecogDialogue = 1
-        elif dna.name == 'jgd':
-            self.scale = 7.3 / aSize
-            self.handColor = VBase4(1, 1, 1, 1)
-            self.generateBody()
-            self.makeExecutive()
-            self.generateHead3('majorplayer', animated=True)
-            texture = loader.loadTexture('phase_12/maps/ttcc_ene_majorplayer.png')
+        elif dna.name == 'liquid':
+            self.scale = 6.5 / bSize
+            self.handColor = VBase4(0.714, 0.725, 0.773, 1.0)
+            self.generateLongcoatBody()
+            self.generateHead3('rainmaker', animated=True)
+            self.setHeight(8.5)
+        elif dna.name == 'rkeeper':
+            self.scale = 7.1 / aSize
+            self.handColor = VBase4(0.341, 0.341, 0.341, 1)
+            self.generateFemaleBody()
+            self.makeBoardbotManager()
+            self.generateHead3('stenographer', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_stenographer_boardbot.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(10.0)
             self.setTransparency(1)
-        elif dna.name == 'bby':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.generateSkeletonBody()
-            self.makeExecutive()
+        elif dna.name == 'cbutcher':
+            self.scale = 7.5 / aSize
+            self.handColor = VBase4(0.4, 0.4, 0.4, 1)
+            self.generateChainsawBody()
+            self.makeBoardbotManager2()
+            self.generateHead3('chainsaw_c', animated=True)
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(11.0)
             self.setTransparency(1)
-            self.setHeight(8.5)
+        elif dna.name == 'cdirector':
+            self.scale = 7.5 / aSize
+            self.handColor = VBase4(0.486, 0.678, 0.671, 1)
+            self.generateFemaleBody()
+            self.makeBoardbotManager()
+            self.generateHead3('clo', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_clo_board.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(10.5)
+            #self.setTransparency(1)
         elif dna.name == 'dking':
             self.scale = 6.5 / aSize
             self.handColor = VBase4(0.173, 0.173, 0.173, 1)
@@ -2759,11 +2761,18 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.0)
-        elif dna.name == 'jas':
-            self.scale = 7.0 / bSize
-            self.handColor = VBase4(0.337, 0.392, 0.6, 1)
-            self.makeSkeletonManager()
-            self.setHeight(8.0)
+        elif dna.name == 'fmaker':
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(0.565, 0.29, 0.467, 1)
+            self.generateMajorPlayerBody()
+            self.makeVideographer2()
+            self.generateHead2('skeleskull_A')
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_t_exe.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.generateHead3('autocaddie', animated=True)
+            self.setHeight(9.0)
+            self.isSkelecogDialogue = 1
         elif dna.name == 'tas':
             self.scale = 7.0 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
@@ -3375,6 +3384,21 @@ class Suit(Avatar.Avatar):
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         self.setBlend(frameBlend=base.wantSmoothAnims)
 
+    def generateChainsawBody(self):
+        animDict = self.generateAnimDict()
+        filePrefix, bodyPhase = ModelDict[self.style.body]
+        if base.config.GetBool('want-new-cogs', 0):
+            if cogExists(filePrefix + 'zero.bam'):
+                self.loadModel('phase_3.5' + filePrefix + 'zero')
+            else:
+                self.loadModel('phase_3.5' + filePrefix + 'chainsaw_hw-mod')
+        else:
+            self.loadModel('phase_3.5' + filePrefix + 'chainsaw_hw-mod')
+        self.loadAnims(animDict)
+        self.setSuitClothes()
+        self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
+        self.setBlend(frameBlend=base.wantSmoothAnims)
+
     def generateMajorPlayerBody(self):
         animDict = self.generateAnimDict()
         filePrefix, bodyPhase = ModelDict[self.style.body]
@@ -3504,7 +3528,7 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'fmaker':
-            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_fmaker.png')
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_fmaker2.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
@@ -3815,6 +3839,10 @@ class Suit(Avatar.Avatar):
             modelRoot.setColor((0.62, 0.659, 0.624, 1))
             modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
         elif self.style.name == 'rainmake':
+            modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').hide()
+            modelRoot.find('**/necktie-s').hide()
+        elif self.style.name == 'liquid':
             modelRoot.find('**/necktie-w').hide()
             modelRoot.find('**/bowtie').hide()
             modelRoot.find('**/necktie-s').hide()
@@ -4139,12 +4167,12 @@ class Suit(Avatar.Avatar):
             elif self.style.name == 'sgoat':
                 headModel.setTwoSided(True)
             elif headType == 'clo':
-                headModel.setZ(-.1)
-                #headModel.setY(-.1)
+                headModel.setZ(0)
+                headModel.setY(.1)
                 headModel.setX(0)
                 headModel.setR(-90)
                 headModel.setH(90)
-                headModel.setScale(.45)
+                headModel.setScale(.4175)
             elif self.style.name == 'videog':
                 headModel.setY(-.2)
             elif self.style.name == 'bcaster':
@@ -4229,6 +4257,10 @@ class Suit(Avatar.Avatar):
                 headModel.setY(-.2)
                 texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
                 headModel.setTexture(texture, 1)
+            elif headType == 'bellringer' and self.style.name == 'cdirector':
+                headModel.setScale(1.05)
+                headModel.setZ(-0.15)
+                headModel.setY(-.125)
             elif headType == 'boiler':
                 headModel.setScale(.09)
                 headModel.setZ(-.3)
@@ -4274,7 +4306,7 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(.25)
                 headModel.setY(-.2)
                 headModel.setColor(1, 1, 1, 1)
-                textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_g_exe.png')
+                textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_t_exe.png')
                 textureGlass2 = loader.loadTexture('phase_12/maps/cc_t_ene_ceo.png')
                 headModel.find('**/head').setTexture(textureGlass, 1)
                 headModel.setTexture(textureGlass2, 1)
@@ -4555,12 +4587,12 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(-.05)
                 headModel.setY(-.3)
             elif headType == 'clo':
-                headModel.setZ(-.1)
-                headModel.setY(-.1)
+                headModel.setZ(-.05)
+                headModel.setY(-.05)
                 headModel.setX(0)
                 headModel.setR(-90)
                 headModel.setH(90)
-                headModel.setScale(.4)
+                headModel.setScale(.325)
             elif headType == 'ceo':
                 headModel.setZ(-.1)
                 headModel.setY(-.1)
@@ -6684,6 +6716,24 @@ class Suit(Avatar.Avatar):
     def getRageBuilding(self):
         return self.rageBuilding
 
+    def makeKickback(self):
+        self.isKickback = 1
+
+    def makeUnKickback(self):
+        self.isKickback = 0
+
+    def setRPM(self, num):
+        self.rpm = num
+
+    def getRPM(self):
+        return self.rpm
+
+    def setRPMIncrease(self, num):
+        self.rpmIncrease = num
+
+    def getRPMIncrease(self):
+        return self.rpmIncrease
+
     def setPowerhouseRotation(self, num):
         self.powerhouseRotation = num
 
@@ -6788,19 +6838,211 @@ class Suit(Avatar.Avatar):
                 headPart.find('**/fire4').show()
                 headPart.find('**/fire5').show()
 
+    def generateHeadLitigator(self, headType, headColor=None, headTexture=None, modelOverride=None, pathOverride=None,
+                     extraArgs={}, animated=False, additionalAnims=[]):
+        if base.config.GetBool('want-new-cogs', False):
+            filePrefix, phase = HeadModelDict[self.style.body]
+        else:
+            filePrefix, phase = ModelDict[self.style.body]
+        '''if modelOverride:
+            headModel = loader.loadModel(modelOverride)
+        else:
+            headModel = loader.loadModel('phase_' + str(phase) + filePrefix + 'heads')'''
+        if animated:
+            animDict = self.generateAnimDict()
+            self.loadAnims(animDict)
+            if headType == 'skelecog' or headType == 'overwhelmingauthorizer' or headType == 'executioner':
+                if headType == 'overwhelmingauthorizer':
+                    headModel = Actor.Actor('phase_14/models/char/ttcc_ene_%s%s-zero' % (
+                    headType, '_exe' if self.isExecutive or self.isManager else ''))
+                elif headType == 'executioner':
+                    headModel = Actor.Actor('phase_14/models/char/ttcc_ene_executioner-zero')
+                else:
+                    headModel = Actor.Actor(
+                        'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-zero')
+                self.generateHeadAnims(
+                    'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-',
+                    headModel, additionalAnims)
+                self.animatedHeadParts.append(headModel)
+                if headType != 'overwhelmingauthorizer':
+                    if headTexture:
+                        try:
+                            texture = loader.loadTexture('phase_5/maps/' + headTexture)
+                        except:
+                            texture = loader.loadTexture('phase_14/maps/' + headTexture)
+                    else:
+                        if self.style.dept == None:
+                            texture = loader.loadTexture('phase_14/maps/ttcc_ene_skelecog_unemployed.png')
+                        else:
+                            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s%s.png' % (
+                            self.style.dept, '_exe' if self.isExecutive or self.isManager else '',))
+                    for headPart in self.animatedHeadParts:
+                        headPart.setTexture(texture, 1)
+            else:
+                headModel = Actor.Actor('phase_14/models/char/ttcc_ene_' + headType + '-zero')
+                self.generateHeadAnims('phase_14/models/char/ttcc_ene_' + headType + '-', headModel,
+                                           additionalAnims)
+                self.animatedHeadParts.append(headModel)
+            headModel.reparentTo(self.find('**/joint_head'))
+            headModel.setBlend(frameBlend=base.wantSmoothAnims)
+            if 'x' in extraArgs:
+                if extraArgs['x'] != None:
+                    headModel.setX(extraArgs['x'])
+            if 'y' in extraArgs:
+                if extraArgs['y'] != None:
+                    headModel.setY(extraArgs['y'])
+            if 'z' in extraArgs:
+                if extraArgs['z'] != None:
+                    headModel.setZ(extraArgs['z'])
+            if 'h' in extraArgs:
+                if extraArgs['h'] != None:
+                    headModel.setH(extraArgs['h'])
+            if 'p' in extraArgs:
+                if extraArgs['p'] != None:
+                    headModel.setP(extraArgs['p'])
+            if 'r' in extraArgs:
+                if extraArgs['r'] != None:
+                    headModel.setR(extraArgs['r'])
+            if 'scale' in extraArgs:
+                if extraArgs['scale'] != None:
+                    headModel.setScale(*extraArgs['scale'])
+            self.headParts.append(headModel)
+        else:
+            if headType == 'skelecog':
+                if base.config.GetBool('want-clash-assets', False):
+                    headModel = loader.loadModel(
+                        'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-zero')
+                    headReferences = headModel.findAllMatches('**/skeleskull_' + string.upper(self.style.body))
+                else:
+                    headModel = loader.loadModel(
+                        'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-head')
+                    headReferences = headModel.findAllMatches('**/suit' + string.upper(self.style.body))
+            else:
+                if pathOverride:
+                    headModel = loader.loadModel(pathOverride + headType)
+                else:
+                    if modelOverride:
+                        headModel = loader.loadModel(modelOverride)
+                        headReferences = headModel.findAllMatches('**/' + headType)
+                    else:
+                        try:
+                            headModel = loader.loadModel('phase_' + str(phase) + '/models/char/' + headType)
+                            headReferences = headModel.findAllMatches('**/' + headType + '.egg')
+                        except:
+                            headModel = loader.loadModel('phase_' + str(phase) + filePrefix + 'heads')
+                            headReferences = headModel.findAllMatches('**/' + headType)
+            if pathOverride:
+                if headTexture:
+                    pass
+                if headColor:
+                    headModel.setColor(headColor)
+                if 'x' in extraArgs:
+                    if extraArgs['x'] != None:
+                        headModel.setX(extraArgs['x'])
+                if 'y' in extraArgs:
+                    if extraArgs['y'] != None:
+                        headModel.setY(extraArgs['y'])
+                if 'z' in extraArgs:
+                    if extraArgs['z'] != None:
+                        headModel.setZ(extraArgs['z'])
+                if 'h' in extraArgs:
+                    if extraArgs['h'] != None:
+                        headModel.setH(extraArgs['h'])
+                if 'p' in extraArgs:
+                    if extraArgs['p'] != None:
+                        headModel.setP(extraArgs['p'])
+                if 'r' in extraArgs:
+                    if extraArgs['r'] != None:
+                        headModel.setR(extraArgs['r'])
+                if 'scale' in extraArgs:
+                    if extraArgs['scale'] != None:
+                        headModel.setScale(*extraArgs['scale'])
+                self.headParts.append(headModel)
+            else:
+                for i in range(0, headReferences.getNumPaths()):
+                    if self.style.body == 'a' or self.style.body == 'b':
+                        headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'to_head')
+                    else:
+                        headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'joint_head')
+                    if headTexture:
+                        try:
+                            headTex = loader.loadTexture('phase_' + str(phase) + '/maps/' + headTexture)
+                        except:
+                            try:  # Will work on a more viable replacement for specific phases later.
+                                headTex = loader.loadTexture('phase_5/maps/' + headTexture)
+                            except:
+                                try:
+                                    headTex = loader.loadTexture('phase_11/maps/' + headTexture)
+                                except:
+                                    headTex = loader.loadTexture('phase_14/maps/' + headTexture)
+                        headPart.setTexture(headTex, 1)
+                    if headColor:
+                        headPart.setColor(headColor)
+                    if 'x' in extraArgs:
+                        if extraArgs['x'] != None:
+                            headPart.setX(extraArgs['x'])
+                    if 'y' in extraArgs:
+                        if extraArgs['y'] != None:
+                            headPart.setY(extraArgs['y'])
+                    if 'z' in extraArgs:
+                        if extraArgs['z'] != None:
+                            headPart.setZ(extraArgs['z'])
+                    if 'h' in extraArgs:
+                        if extraArgs['h'] != None:
+                            headPart.setH(extraArgs['h'])
+                    if 'p' in extraArgs:
+                        if extraArgs['p'] != None:
+                            headPart.setP(extraArgs['p'])
+                    if 'r' in extraArgs:
+                        if extraArgs['r'] != None:
+                            headPart.setR(extraArgs['r'])
+                    if 'scale' in extraArgs:
+                        if extraArgs['scale'] != None:
+                            headPart.setScale(*extraArgs['scale'])
+                    if headType == 'suitA' or headType == 'suitB' or headType == 'suitC':
+                        headPart.setZ(headPart.getZ() + {
+                            'suitA': -6.05,
+                            'suitB': -5.09477996826172,
+                            'suitC': -4.15
+                        }[headType])
+                        if self.isExecutive or self.isManager:
+                            if self.style.name == 'mbr':
+                                headPart.setColor(VBase4(0.825, 0.6, 0.425, 1.0))
+                            else:
+                                if headColor == None:
+                                    headPart.setColor({
+                                                          'c': SuitDNA.corpPolyColor,
+                                                          'l': SuitDNA.legalPolyColor,
+                                                          'm': SuitDNA.moneyPolyColor,
+                                                          's': SuitDNA.salesPolyColor,
+                                                          'g': SuitDNA.boardPolyColor,
+                                                          None: VBase4(0.5, 0.5, 0.5, 1.0)
+                                                      }[SuitDNA.getSuitDept(self.style.name)])
+                        else:
+                            if self.style.name == 'mbr':
+                                headPart.setColor(VBase4(1.0, 0.25, 0.0, 1.0))
+                    self.headParts.append(headPart)
+                headModel.removeNode()
+
     def makeWetLitigator(self, elite=False):
         anims = self.generateAnimDict()
-        texture2 = loader.loadTexture('phase_11/maps/ttcc_ene_litigator_nf.png')
         for headPart in self.headParts:
-            if not self.isSkeleton:
-                headPart.setTexture(texture2, 1)
+            headPart.removeNode()
+        self.headParts = []
+        self.generateHeadLitigator('litigator-nf', animated=True)
+        texture = loader.loadTexture('phase_11/maps/ttcc_ene_litigator.png')
+        for headPart in self.headParts:
+            headPart.setTexture(texture, 1)
 
     def makeDryLitigator(self, elite=False):
         anims = self.generateAnimDict()
-        texture2 = loader.loadTexture('phase_11/maps/ttcc_ene_litigator.png')
         for headPart in self.headParts:
-            if not self.isSkeleton:
-                headPart.setTexture(texture2, 1)
+            headPart.removeNode()
+        self.headParts = []
+        self.generateHeadLitigator('litigator', animated=True)
+        texture = loader.loadTexture('phase_11/maps/ttcc_ene_litigator.png')
+        for headPart in self.headParts:
+            headPart.setTexture(texture, 1)
 
     def makeChainsawPhase2(self, elite=False):
         for headPart in self.headParts:
@@ -6973,6 +7215,17 @@ class Suit(Avatar.Avatar):
         self.isManager = 1
         try:
             texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_g_e.png')
+        except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
+            texture = loader.loadTexture(
+                'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
+        modelRoot.find('**/body').setTexture(texture, 1)
+
+    def makeBoardbotManager2(self, modelRoot=None):
+        if not modelRoot:
+            modelRoot = self
+        self.isManager = 1
+        try:
+            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_g_e2.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
                 'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
@@ -7926,6 +8179,18 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'wtapper' and not self.isSkeleton:
             loadDialog(1)
             return StenographerDialogArray
+        elif self.style.name == 'rkeeper' and not self.isSkeleton:
+            loadDialog(1)
+            return StenographerDialogArray
+        elif self.style.name == 'liquid' and not self.isSkeleton:
+            loadDialog(1)
+            return RainmakerDialogArray
+        elif self.style.name == 'cdirector' and not self.isSkeleton:
+            loadDialog(1)
+            return CLODialogArray
+        elif self.style.name == 'cbutcher' and not self.isSkeleton:
+            loadDialog(1)
+            return ChainsawORDialogArray
         elif self.style.name == 'ambass' and not self.isSkeleton:
             loadDialog(1)
             return PrethinkerDialogArray

@@ -404,7 +404,10 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         suitTrack.append(updateHealthBar)
         suitGettingHit = Parallel(suitReact)
     else:
-        suitGettingHit = Parallel()
+        if lastDrop:
+            suitGettingHit = Parallel(suitReact)
+        else:
+            suitGettingHit = Parallel()
     if level == UBER_GAG_LEVEL_INDEX:
         gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
         suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
