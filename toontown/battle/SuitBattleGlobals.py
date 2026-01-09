@@ -1218,6 +1218,8 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'def':(60,),
            'freq':(0,),
            'acc':(75,),
+           'initEffects': [StatusEffects.LureResistance(1),
+                           StatusEffects.Pyromaniac()],
            'attacks':
                (SuitAttack('SoakRemoval',
                            hp=(0,),
@@ -1247,6 +1249,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
           'def':(60,),
           'freq':(0,),
           'acc':(75,),
+          'initEffects': [StatusEffects.LureResistance(2),
+                          StatusEffects.Overhire(),
+                          StatusEffects.PeacefulSlumber()],
           'attacks':
               (SuitAttack('SoakRemoval',
                           hp=(0,),
@@ -3445,6 +3450,8 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'def':(60,),
            'freq':(0,),
            'acc':(75,),
+           'initEffects': [StatusEffects.LureResistance(1),
+                           StatusEffects.MarketBubble()],
            'attacks':
                (SuitAttack('SoakRemoval',
                            hp=(0,),
@@ -3571,6 +3578,8 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'def':(60,),
            'freq':(0,),
            'acc':(75,),
+           'initEffects': [StatusEffects.LureResistance(2),
+                           StatusEffects.Ripped()],
            'attacks':
                (SuitAttack('SoakRemoval',
                            hp=(0,),

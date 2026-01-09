@@ -21,6 +21,14 @@ def isTrack(variable):
 def getIcon(node, fromPath = DEFAULT_STATUS_ICON_PATH):
     return loader.loadModel(fromPath).find('**/' + node)
 
+def convertMultToPercentDifference(number):
+    '''
+    Depending on the instance, we may want to list percentages rather than multipliers, though it is purely for display.
+    
+    :param number: The number, preferably one with a decimal.
+    '''
+    return (1.0 - number) * 100.0
+
 class StatusEffect:
     '''
     All status effects shall inherit this class, with basic functionalities.
@@ -28,15 +36,15 @@ class StatusEffect:
 
     def __init__(self, roundsLeft, good, name = 'Status Effect', desc = 'A status effect.', icon = None, iconPath = DEFAULT_STATUS_ICON_PATH, damageMod = 1.0, defenseMod = 1.0, targetable = True, tenured = False, hidden = False):
         '''
-        roundsLeft: An int that determines how many rounds of the status effect remain.  -1 for it to be permanent unless cleared.
-        good: A boolean that determines if this status effect is good or bad, which is supposed to be for the circle behind icon.
-        name: The name of the status effect.  Really, it's the header and can have some status things in it if desired, like Scapegoat's rage or Chainsaw Consultant's RPM.
-        desc: The description of the status effect that describes what it does.
-        icon: The icon node of the status effect based on the given path.
-        iconPath: For when we might want a different collection of model nodes for the icon (e.g. the Glass of Water for the Hydrated status effect).
-        damageMod: The damage modifier.  It can either be an int which will offer a flat damage change, or a float which will be a multiplier.
-        defenseMod: The defense modifier.  It can either be an int which will offer a flat damage change, or a float which will be a multiplier.  NOTE: For int, negative means the combatant will take less damage, while positive will make them take more damage.  For float, of course, incoming damage is multiplied.
-        hidden: Whether or not this status effect is hidden (e.g. the 340% damage vulnerability Count Erfit gets from maxing out his arms).
+        :param roundsLeft: An int that determines how many rounds of the status effect remain.  -1 for it to be permanent unless cleared.
+        :param good: A boolean that determines if this status effect is good or bad, which is supposed to be for the circle behind icon.
+        :param name: The name of the status effect.  Really, it's the header and can have some status things in it if desired, like Scapegoat's rage or Chainsaw Consultant's RPM.
+        :param desc: The description of the status effect that describes what it does.
+        :param icon: The icon node of the status effect based on the given path.
+        :param iconPath: For when we might want a different collection of model nodes for the icon (e.g. the Glass of Water for the Hydrated status effect).
+        :param damageMod: The damage modifier.  It can either be an int which will offer a flat damage change, or a float which will be a multiplier.
+        :param defenseMod: The defense modifier.  It can either be an int which will offer a flat damage change, or a float which will be a multiplier.  NOTE: For int, negative means the combatant will take less damage, while positive will make them take more damage.  For float, of course, incoming damage is multiplied.
+        :param hidden: Whether or not this status effect is hidden (e.g. the 340% damage vulnerability Count Erfit gets from maxing out his arms).
         '''
         self.roundsLeft = roundsLeft + 1 # At the end of the round it is applied, all status effects will be ticked down, which will give it one round less.  To counteract it, add one.
         if self.roundsLeft < 1: # However, we will undo what we just did if self.roundsLeft is -1 because the status effect will go away the next turn.
@@ -83,9 +91,9 @@ class DamageModifier(StatusEffect):
     def __init__(self, roundsLeft, damageMod, hidden = False):
         good = damageMod >= 0.0
         if isinstance(damageMod, float):
-            desc = "This combatant's attacks are %sx as powerful." % damageMod
+            desc = "This combatant's attacks are {}x as powerful.".format(damageMod)
         else:
-            desc = 'This combatant is dealing %s %s damage.' % (abs(damageMod), 'more' if good else 'less')
+            desc = 'This combatant is dealing {} {} damage.'.format(abs(damageMod), 'more' if good else 'less')
         StatusEffect.__init__(self, roundsLeft, good, name='Damage %s' % ('Up' if good else 'Down'), desc=desc, icon='toon_damage_%s_icon' % ('up' if good else 'down'), damageMod=damageMod, hidden=hidden) # For the icon, I did not yet know how I would distinguish between a Cog and a Toon, but I think that is some BattleCalculatorAI.py stuff that can be resolved later.
 
 class DefenseModifier(StatusEffect):
@@ -96,9 +104,9 @@ class DefenseModifier(StatusEffect):
     def __init__(self, roundsLeft, defenseMod, hidden = False):
         good = defenseMod <= 0.0
         if isinstance(defenseMod, float):
-            desc = 'This combatant is taking %sx as much damage.' % defenseMod
+            desc = 'This combatant is taking {}x as much damage.'.format(defenseMod)
         else:
-            desc = 'This combatant is taking %s %s damage.' % (abs(defenseMod), 'less' if good else 'more')
+            desc = 'This combatant is taking {} {} damage.'.format(abs(defenseMod), 'less' if good else 'more')
         StatusEffect.__init__(self, roundsLeft, good, name='Damage Reduction' if good else 'Vulnerable', desc=desc, icon='%sshield_icon' % ('' if good else '_broken'), defenseMod=defenseMod, hidden=hidden)
 
 class DamageOverTime(StatusEffect):
@@ -112,7 +120,7 @@ class DamageOverTime(StatusEffect):
         attack: The attack that plays for the damage over time. It should not be a method where a Cog is needed for it to function.
         '''
         good = hpPerRound < 0
-        desc = 'This combatant is %s %s HP per round.' % ('gaining' if good else 'losing', abs(hpPerRound))
+        desc = 'This combatant is {} {} HP per round.'.format('gaining' if good else 'losing', abs(hpPerRound))
         StatusEffect.__init__(self, roundsLeft, good, '%s Over Time' % ('Heal' if good else 'Damage'), desc=desc, icon='%s_over_time_icon' % ('heal' if good else 'damage'))
         self.hpPerRound = hpPerRound
         self.attack = attack
@@ -127,7 +135,7 @@ class AccuracyModifier(StatusEffect):
         accuracyMod: The amount of accuracy to increase or decrease.
         '''
         good = accuracyMod >= 0.0
-        StatusEffect.__init__(self, roundsLeft, good, name='Accuracy %s' % ('Up' if good else 'Down'), desc="This combatant's attacks are %s\u0025 %s accurate." % (str(accuracyMod), 'more' if good else 'less'), icon='toon_accuracy_%s_icon' % ('up' if good else 'down'), hidden=hidden)
+        StatusEffect.__init__(self, roundsLeft, good, name='Accuracy {}'.format('Up' if good else 'Down'), desc="This combatant's attacks are %s\u0025 %s accurate." % (str(accuracyMod), 'more' if good else 'less'), icon='toon_accuracy_%s_icon' % ('up' if good else 'down'), hidden=hidden)
         self.accuracyMod = accuracyMod
     
     def updateEffect(self):
@@ -135,8 +143,8 @@ class AccuracyModifier(StatusEffect):
         Should the accuracy ever change, be sure that the icons are up to date.
         '''
         self.good = self.accuracyMod >= 0.0
-        self.desc = u"This combatant's attacks are %s\u0025 %s accurate." % (str(abs(self.accuracyMod)), 'more' if self.good else 'less')
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/toon_accuracy_%s_icon' % 'up' if self.good else 'down')
+        self.desc = u"This combatant's attacks are {}\u0025 {} accurate.".format(str(abs(self.accuracyMod)), 'more' if self.good else 'less')
+        # self.icon = getIcon('toon_accuracy_{}_icon'.format('up' if self.good else 'down'))
 
 class DamageAbsorption(StatusEffect):
     '''
@@ -145,9 +153,13 @@ class DamageAbsorption(StatusEffect):
 
     def __init__(self, roundsLeft, intercepting, hidden = False):
         '''
-        intercepting: How much HP will be intercepted.  If an int, a flat number of damage, but if a float, then a multiplier (e.g. if it is set to 0.25, another Cog will take 0.75 of the damage while this Cog takes the rest).
+        :param intercepting: How much HP will be intercepted.  If an int, a flat number of damage, but if a float, then a multiplier (e.g. if it is set to 0.25, another Cog will take 0.75 of the damage while this Cog takes the rest).
         '''
-        StatusEffect.__init__(self, roundsLeft, True, name='Damage Absorption', desc='This Cog will endure %sx the damage the other Cogs take.' % intercepting, icon='damage_absorb_icon', hidden=hidden)
+        StatusEffect.__init__(self, roundsLeft, True, name='Damage Absorption', icon='damage_absorb_icon', hidden=hidden)
+        if isinstance(intercepting, float):
+            self.desc = 'This Cog will endure {}x the damage the other Cogs take.'.format(intercepting)
+        else:
+            self.desc = 'This Cog will endure up to {} damage for each Cog.'.format(intercepting)
         self.intercepting = intercepting
 
 class Siphon(DamageModifier):
@@ -162,20 +174,20 @@ class Siphon(DamageModifier):
         DamageModifier.__init__(self, roundsLeft, damageMod, hidden=hidden)
         self.stealHp = stealHp
         self.name = 'Siphon'
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/ink_drain_icon')
+        # self.icon = getIcon('ink_drain_icon')
         self.updateEffect()
     
     def updateEffect(self):
         self.desc = 'This Cog is ready to siphon your Laff! It '
         if isinstance(self.damageMod, float):
-            self.desc += 'does %sx damage%s ' % (self.damageMod, ', but' if self.damageMod < 0.0 else ' and')
+            self.desc += 'does {}x damage{} '.format(self.damageMod, ', but' if self.damageMod < 0.0 else ' and')
         else:
-            self.desc += 'does %s %s damage%s ' % (abs(self.damageMod), 'less' if self.damageMod < 0 else 'more', ', but' if self.damageMod < 0 else ' and')
+            self.desc += 'does {} {} damage{} '.format(abs(self.damageMod), 'less' if self.damageMod < 0 else 'more', ', but' if self.damageMod < 0 else ' and')
         self.desc += 'will heal '
         if isinstance(self.stealHp, float):
-            self.desc += 'for %sx the damage it deals!' % self.stealHp
+            self.desc += 'for {}x the damage it deals!'.format(self.stealHp)
         else:
-            self.desc += '%s HP for each Toon it successfully hits!' % self.stealHp
+            self.desc += '{} HP for each Toon it successfully hits!'.format(self.stealHp)
 
 # Toons' status effects.
 class UniteCooldown(StatusEffect):
@@ -211,8 +223,8 @@ class Cheer(AccuracyModifier):
         '''
         AccuracyModifier.__init__(self, roundsLeft, 10.0)
         self.name = 'Cheer'
-        self.desc = u"This Toon's attack accuracy is increased by %s\u0025." % self.accuracyMod
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/cheer_icon')
+        self.desc = u"This Toon's attack accuracy is increased by {}\u0025.".format(self.accuracyMod)
+        # self.icon = getIcon('cheer_icon')
 
 class MarkedForLaugh(DefenseModifier):
     '''
@@ -223,7 +235,7 @@ class MarkedForLaugh(DefenseModifier):
         DefenseModifier.__init__(self, 0, 1.1)
         self.name = 'Marked for Laugh'
         self.desc = u'This Cog is more vulnerable, and will take 10\u0025 more damage.'
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/marked_icon')
+        # self.icon = getIcon('marked_icon')
 
 # Cogs' status effects.
 # General.
@@ -234,9 +246,9 @@ class ExtraAttacks(StatusEffect):
 
     def __init__(self, extraAttacks, roundsLeft = -1, hidden = False):
         '''
-        roundsLeft: I have no clue why this would be used, but I'm thinking of if a grunt Cog would use this for some reason?  I'll keep this parameter just in case we have ideas.
+        :param roundsLeft: I have no clue why this would be used, but I'm thinking of if a grunt Cog would use this for some reason?  I'll keep this parameter just in case we have ideas.
         '''
-        desc = 'This Cog has gained %s extra attack%s!' % (extraAttacks, '' if extraAttacks == abs(1) else 's')
+        desc = 'This Cog has gained {} extra attack{}!'.format(extraAttacks, '' if extraAttacks == abs(1) else 's')
         StatusEffect.__init__(self, roundsLeft, True, name='Additional Attack', desc=desc, icon='extra_attacks_icon', hidden=hidden)
         self.extraAttacks = extraAttacks
 
@@ -247,12 +259,12 @@ class LureResistance(StatusEffect):
 
     def __init__(self, maxLureRounds, roundsLeft = -1, hidden = False):
         '''
-        hidden: It's a Witch Hunter thing.
+        :param hidden: It's a Witch Hunter thing.
         '''
         if maxLureRounds == 0:
             desc = 'This Cog is entirely immune to being LURED.'
         else:
-            desc = 'This Cog will stay LURED for %s %s.' % (maxLureRounds, '' if abs(maxLureRounds) == 1 else 's')
+            desc = 'This Cog will stay LURED for {} round{}.'.format(maxLureRounds, '' if abs(maxLureRounds) == 1 else 's')
         StatusEffect.__init__(self, roundsLeft, True, name='Lure Resistance', desc=desc, icon=None)
         self.maxLureRounds = maxLureRounds
         self.hidden = hidden
@@ -285,8 +297,8 @@ class BanGags(StatusEffect):
 
     def __init__(self, roundsLeft, bannedGags, pickable = True):
         '''
-        bannedGags: A list of tuples with two indices, the first being the track and the second being the level (e.g. bannedGags = [(SOUND_TRACK, 8), (DROP_TRACK, 6)]).  Gag levels are the actual (non-programatic) Gag levels, so keep this in mind.
-        pickable: Whether or not the banned Gags are pickable, which can result in a punishment.  TODO: Figure out how to do it.
+        :param bannedGags: A list of tuples with two indices, the first being the track and the second being the level (e.g. bannedGags = [(SOUND_TRACK, 8), (DROP_TRACK, 6)]).  Gag levels are the actual (non-programatic) Gag levels, so keep this in mind.
+        :param pickable: Whether or not the banned Gags are pickable, which can result in a punishment.  TODO: Figure out how to do it.
         '''
         from toontown.toonbase.TTLocalizer import BattleGlobalAvPropStrings # Get all of the Gag names.
         for bannedGag in bannedGags:
@@ -309,8 +321,8 @@ class GagBans(StatusEffect):
 
     def __init__(self, roundsLeft, bannedLevels = ([], True), bannedTracks = ([], True)):
         '''
-        bannedLevels: A tuple with two indices; the first is a list of the banned levels, while the second is whether or not they can be chosen.  TODO: Penalty.
-        bannedTracks: A tuple with two indices; the first is a list of the banned tracks, while the second is whether or not they can be chosen.  TODO: Penalty.
+        :param bannedLevels: A tuple with two indices; the first is a list of the banned levels, while the second is whether or not they can be chosen.  TODO: Penalty.
+        :param bannedTracks: A tuple with two indices; the first is a list of the banned tracks, while the second is whether or not they can be chosen.  TODO: Penalty.
         '''
         StatusEffect.__init__(self, roundsLeft, False, name='Gag Ban', desc='A status effect.', icon='backfire_icon')
         self.bannedLevels = bannedLevels
@@ -323,7 +335,7 @@ class BanGagLevels(StatusEffect):
 
     def __init__(self, bannedLevels, roundsLeft, pickable = True):
         '''
-        bannedLevels: A list of Gag levels that will be forbidden to use.
+        :param bannedLevels: A list of Gag levels that will be forbidden to use.
         '''
         StatusEffect.__init__(self, roundsLeft, False, name='Gag Level Prohibition', icon='backfire_icon')
         self.bannedLevels = bannedLevels
@@ -350,7 +362,7 @@ class BanGagTracks(StatusEffect):
 
     def __init__(self, roundsLeft, bannedTracks, pickable = True):
         '''
-        bannedTracks: A list of Gag tracks that will be forbidden to use.  Use only the imports to keep track of the tracks.
+        :param bannedTracks: A list of Gag tracks that will be forbidden to use.  Use only the imports to keep track of the tracks.
         '''
         for bannedTrack in bannedTracks:
             if not isTrack(bannedTrack): # Check to make sure we are using the constant.
@@ -381,13 +393,14 @@ class Pyromaniac(DamageModifier, DefenseModifier):
     '''
 
     def __init__(self):
-        DamageModifier.__init__(self, -1, 5, hidden=False)
-        self.defenseMod = 0.92
+        DamageModifier.__init__(self, -1, 0, hidden=True)
+        self.defenseMod = 1.0
         self.name = 'Pyromaniac'
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/pyromaniac_icon')
+        # self.icon = getIcon('pyromaniac_icon')
     
     def updateEffect(self):
-        self.desc = u'The Firestarter is taking %s\u0025 less damage and dealing %s more damage!' % (1.0 - self.defenseMod, self.damageMod)
+        self.hidden = self.damageMod > 0
+        self.desc = u'The Firestarter is taking {}\u0025 less damage and dealing {} more damage!' % (1.0 - self.defenseMod, self.damageMod)
 
 # Featherbedder
 class Overhire(DamageModifier, DefenseModifier):
@@ -397,6 +410,22 @@ class Overhire(DamageModifier, DefenseModifier):
 
     def __init__(self):
         pass
+
+class PowerNap(DamageModifier, DefenseModifier):
+    '''
+    Cogs that join in the battle will be sleepy and weak, but as they wake, the damage and defense deficits become lesser.
+    '''
+
+    def __init__(self):
+        DefenseModifier.__init__(self, 2, 0.1)
+        self.damageMod = 0.0
+        self.name = 'Power Nap'
+        self.updateEffect()
+    
+    def updateEffect(self):
+        self.defenseMod += 0.2
+        self.damageMod += 0.2
+        self.desc = u'This Cog is taking a power nap, and will take time to wake up. Currently, they will take {}\u0025 less damage and deal {}\u0025 less damage.'.format((1.0 - self.defenseMod) * 100, (1.0 - self.damageMod) * 100)
 
 class PeacefulSlumber(DefenseModifier):
     '''
@@ -413,6 +442,24 @@ class PeacefulSlumber(DefenseModifier):
         self.desc = u'The Featherbedder is taking %s\u0025 less damage.\n\nEvery round that they are alone, they will gain a 25\u0025 damage resistance.' % str((1.0 - self.defenseMod) * 100)
 
 # Major Player
+class RisingStarSuit(DamageModifier, ManagerBeneficiary):
+    '''
+    The Major Player's buff for his rising stars.
+    '''
+
+    def __init__(self, damageMod = 25):
+        '''
+        :param damageMod: The initial damage modifier for the Rising Stars.  Should be changeable due to differences in phases (phase 1 is an initial 30 damage buff, while phase 2 is 15).  Have a -5 difference due to updateEffect() causing an additional +5 damage boost.
+        '''
+        DamageModifier.__init__(self, -1, damageMod)
+        self.name = 'Rising Star'
+        self.tenured = True
+        self.updateEffect()
+    
+    def updateEffect(self):
+        self.damageMod += 5
+        self.desc = 'This Cog is a Rising Star! Alongside a health boost, they will deal {} more damage (growing every turn). They also receive the same benefits as Manager Cogs.'.format(self.damageMod)
+
 class LastTap(DamageModifier):
     '''
     The Major Player's slowly-increasing damage buff.
@@ -473,7 +520,7 @@ class RevvingUp(StatusEffect):
 
         self.damageMod = float(self.rpm) * 0.1
         # Formula for defense mod is yet undetermined.
-        self.name = 'Revved-Up: %s,000 RPM' % self.rpm
+        self.name = 'Revved-Up: {},000 RPM'.format(self.rpm)
         self.desc = 'The Chainsaw Consultant is '
         if self.rpm > 10:
             self.desc += 'revving up!'
@@ -482,12 +529,12 @@ class RevvingUp(StatusEffect):
         if self.reforesting:
             self.desc += ' He will take %s %s damage!'
         elif self.rpm > 10:
-            self.desc += u' He will deal %s\u0025 more damage!' % str((self.damageMod - 1.0) * 100)
+            self.desc += u' He will deal {}\u0025 more damage!'.format(str((self.damageMod - 1.0) * 100))
         self.desc += '\n'
         for milestone in self.abilities[self.reforesting].keys():
-            self.desc += '\nAt %s,000 RPM: ' % milestone
+            self.desc += '\nAt {},000 RPM: '.format(milestone)
             if self.milestonesReached[self.reforesting][milestone]:
-                self.desc += "Can use '%s'" % self.abilities[self.reforesting][milestone]
+                self.desc += "Can use '{}'".format(self.abilities[self.reforesting][milestone])
             else:
                 self.desc += '?????'
 
@@ -506,7 +553,7 @@ class MarkedWoodSuit(StatusEffect):
 
     def __init__(self, targetId):
         '''
-        targetId: The Toon he will target next.
+        :param targetId: The Toon he will target next.
         '''
         StatusEffect.__init__(self, 1, True, name='Marked Wood', desc='This Cog will retaliate against the last Toon who hits them or the Toon they marked if not hit.\n\nCurrent target: %s' % targetId, icon='marked_wood_icon', hidden=True)
         self.whoIWillTarget = targetId
@@ -519,8 +566,33 @@ class SparkPlug(DamageOverTime):
     def __init__(self, attack):
         DamageOverTime.__init__(self, 2, 20, attack)
         self.name = 'Spark Plug'
-        self.desc = 'This Toon will take %s damage per round.' % self.hpPerRound
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/sparkplug_icon')
+        self.desc = 'This Toon will take {} damage per round.'.format(self.hpPerRound)
+        # self.icon = getIcon('**/sparkplug_icon')
+
+# Bossbot Litigation Team
+class TankMentality(Siphon, DamageAbsorption, LureResistance):
+    '''
+    The Powerhouse's perpetually changing status effect.
+    '''
+
+    def __init__(self):
+        StatusEffect.__init__(self, -1, True, name='Tank Mentality', desc='The Powerhouse has no additional strengths at the moment.', icon=None)
+        self.mode = None # Tank Mentality starts with nothing.
+        self.stealHp = 0.0
+    
+    def updateEffect(self):
+        '''
+        Effects and what is shown will change depending on the mode it is set to.
+        '''
+        if not self.mode:
+            self.icon = None
+            self.desc = 'The Powerhouse has no additional strengths at the moment.'
+        elif self.mode == 'absorbing':
+            # self.icon = getIcon('damage_absorb_icon')
+            self.desc = 'The Powerhouse is absorbing damage.'
+        elif self.mode == 'lureimmune':
+            self.maxLureRounds = 0
+            self.desc = 'The Powerhouse is immune to being Lured.'
 
 # Witch Hunter
 class WillOfThePeople(DefenseModifier):
@@ -553,6 +625,19 @@ class ScopeCreep(DefenseModifier):
         self.desc = u"The Count's damage resistance is creeping up, taking {}\u0025 less damage.".format((1.0 - self.defenseMod) * 100)
 
 # Litigation Team
+class Overconfidence(DamageModifier):
+    '''
+    However much less damage they deal due to overconfidence, probably as a result of them being altogether, and strength in numbers.
+    '''
+
+    def __init__(self):
+        DamageModifier.__init__(self, -1, 0.6, hidden=False)
+        self.name = 'Overconfidence'
+        self.updateEffect()
+    
+    def updateEffect(self):
+        self.desc = 'The Litigation Team overestimates their chances. They deal {} less damage with their attacks'.format((1.0 - self.defenseMod) * 100)
+
 class Snapped(DefenseModifier):
     '''
     Glorified vulnerability for the Litigator's Snap.
@@ -563,8 +648,8 @@ class Snapped(DefenseModifier):
         defenseMod: Allow this to be variate for various cases: 1. the Litigator snaps normally (1.2x damage taken), 2. the Litigator retaliates when soaked (1.1x damage taken), 3. the Litigator snaps with the Stenographer (1.4x damage taken), or 4. Chip Fan Club President snaps (1.25x damage taken).
         '''
         DefenseModifier.__init__(self, 2, defenseMod)
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/vulnerable_icon')
-        self.desc = u'This Toon takes %s\u0025 more damage while vulnerable.' % str((defenseMod - 1.0) * 100)
+        # self.icon = getIcon('vulnerable_icon')
+        self.desc = u'This Toon takes {}\u0025 more damage while vulnerable.'.format(str((defenseMod - 1.0) * 100))
 
 class Sanctioned(DamageModifier):
     '''
@@ -590,18 +675,17 @@ class Insurance(DamageOverTime, LureResistance, ManagerBeneficiary, DamageModifi
     The Case Manager's heal over time effect for his Insurance Plan as well as other perks.
     '''
 
-    def __init__(self, attack, roundsLeft = 2, hpPerRound = -50, damageMod = 1.0):
+    def __init__(self, attack, hpPerRound = -50, damageMod = 1.0):
         '''
-        roundsLeft: This is probably a matter to concern ourselves with later, as we do not have functionality for a random Cog to be chosen, at least not to my (Professor Control's) knowledge, but the Case Manager gets Insurance only for one round.  Let the number here be variate to account for that scenario when we cross that bridge.
         hpPerRound: Allow this to be variate for when the Case Manager uses this while alone (-50) or when he is paired with the Scapegoat (-85).
         damageMod: If the Case Manager is paired with the Scapegoat, then his Insurance grants a 15% damage boost, or a 1.15x damage multiplier.
         '''
-        DamageOverTime.__init__(self, roundsLeft, hpPerRound, attack)
+        DamageOverTime.__init__(self, 2, hpPerRound, attack)
         self.maxLureRounds = 2
         self.tenured = True
         self.damageMod = damageMod
         self.name = 'Insurance'
-        self.desc = 'This Cog is insured! While insured, they have high Lure resistance, heal %s health every round, and receive the same benefits as Manager Cogs.' % (abs(self.hpPerRound) * -1)
+        self.desc = 'This Cog is insured! While insured, they have high Lure resistance, heal {} health every round, and receive the same benefits as Manager Cogs.'.format(abs(self.hpPerRound) * -1)
 
 class LegallyBound(DamageOverTime):
     '''
@@ -614,7 +698,7 @@ class LegallyBound(DamageOverTime):
         '''
         DamageOverTime.__init__(self, 2, hpPerRound, 'CaseManagerLegallyBound')
         self.name = 'Legally Bound'
-        self.desc = 'While legally bound, this Toon will take 20 damage per round.'
+        self.desc = 'While legally bound, this Toon will take {} damage per round.'.format(self.hpPerRound)
 
 class CourtRecordCaseManager(BanGagTracks):
 
@@ -630,8 +714,8 @@ class RageBuilding(DamageAbsorption):
     def __init__(self):
         DamageAbsorption.__init__(self, -1, 0.3)
         self.rage = 0.0 # Every 10 damage is 1 rage, so every 1 damage is 0.1 rage; we can still do ints, we just have to do a little more conversion.
-        self.desc = u"Scapegoat's rage is building...\n\nScapegoat will absorb 30\u0025 of the damage dealt to other Cogs while in this mode!"
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/defense_mode_icon')
+        self.desc = u"Scapegoat's rage is building...\n\nScapegoat will absorb {}\u0025 of the damage dealt to other Cogs while in this mode!".format(self.intercepting * 100)
+        # self.icon = getIcon('defense_mode_icon')
         self.updateEffect()
     
     def updateEffect(self):
@@ -652,8 +736,16 @@ class Enraged(DamageModifier, DefenseModifier):
         DamageModifier.__init__(self, 2, 1.3)
         self.defenseMod = defenseMod
         self.name = 'Enraged'
-        self.desc = u"The Scapegoat is enraged!\n\nScapegoat will deal %s\u0025 more damage while in this mode!" % ((self.damageMod - 1.0) * 100)
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/rage_mode_icon')
+        self.desc = u"The Scapegoat is enraged!\n\nScapegoat will deal {}\u0025 more damage while in this mode!".format((self.damageMod - 1.0) * 100)
+        # self.icon = getIcon('rage_mode_icon')
+
+class EvidenceSuppression(StatusEffect):
+    '''
+    The Scapegoat's means of hiding a Toon.
+    '''
+    
+    def __init__(self):
+        pass
 
 # Mint Supervisor
 class InsurancePolicy(StatusEffect):
@@ -672,7 +764,7 @@ class GhostPayroll(DamageModifier):
     def __init__(self):
         DamageModifier.__init__(self, -1, 1.3)
         self.name = 'Ghost Payroll'
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/ghost_payroll_icon')
+        # self.icon = getIcon('ghost_payroll_icon')
         self.updateEffect()
 
     def updateEffect(self):
@@ -685,8 +777,8 @@ class SlushFund(DefenseModifier):
 
     def __init__(self):
         DefenseModifier.__init__(self, 2, 0.8)
-        self.desc = 'This Cog will take %s\u0025 %s damage!' % (str((1.0 - self.defenseMod) * 100), 'less' if self.good else 'more')
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/slush_fund_icon')
+        self.desc = u'This Cog will take {}\u0025 {} damage!'.format(str((1.0 - self.defenseMod) * 100), 'less' if self.good else 'more')
+        # self.icon = getIcon('slush_fund_icon')
 
 class MarketBubble(DamageModifier, DefenseModifier):
     '''
@@ -736,7 +828,16 @@ class Hydrated(AccuracyModifier):
         self.updateEffect()
     
     def updateEffect(self):
-        self.desc = u'This combatant is hydrated, and their accuracy is %s by %s\u0025.' % ('increased' if self.good else 'decreased', abs(self.accuracyMod))
+        self.desc = u'This combatant is hydrated, and their accuracy is {} by {}\u0025.'.format('increased' if self.good else 'decreased', abs(self.accuracyMod))
+
+class DriedOut(AccuracyModifier):
+    '''
+    At first glance it appears to be a glorified accuracy deficit, but when paired with hydration, it causes something extra (Energized).
+    '''
+
+    def __init__(self):
+        AccuracyModifier.__init__(self, 3, -50.0)
+        self.desc = u'This toon has been wrung dry and has {}\u0025 accuracy!'.format(self.accuracyMod)
 
 # High Roller
 class RaisingTheAnte(DamageModifier):
@@ -750,8 +851,8 @@ class RaisingTheAnte(DamageModifier):
         '''
         DamageModifier.__init__(self, -1, damageMod, hidden=False)
         self.name = 'Raising the Ante'
-        self.desc = 'The stakes are much higher, and so are your Gag damages! Gags are %sx more powerful!' % self.damageMod
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/raise_the_ante_icon')
+        self.desc = 'The stakes are much higher, and so are your Gag damages! Gags are {}x more powerful!'.format(self.damageMod)
+        # self.icon = getIcon('raise_the_ante_icon')
 
 class HarmoniousColors(DefenseModifier):
     '''
@@ -762,7 +863,7 @@ class HarmoniousColors(DefenseModifier):
         DefenseModifier.__init__(self, -1, 0.0)
         self.name = 'Harmonious Colors'
         self.desc = 'The colors, they are so pretty... High Roller is currently INVINCIBLE!!'
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/harmonious_colors_icon')
+        # self.icon = getIcon('harmonious_colors_icon')
     
     def updateEffect(self):
         '''
@@ -770,7 +871,7 @@ class HarmoniousColors(DefenseModifier):
         '''
         if self.defenseMod < 0.05:
             self.defenseMod = 0.05
-        self.desc = u"The colors, they are so pretty... High Roller's Silhouettes are causing him to take %s\u0025 less damage." % str((1.0 - self.defenseMod) * 100)
+        self.desc = u"The colors, they are so pretty... High Roller's Silhouettes are causing him to take {}\u0025 less damage.".format(str((1.0 - self.defenseMod) * 100))
 
 class RefractionBarrier(DefenseModifier):
     '''
@@ -779,7 +880,7 @@ class RefractionBarrier(DefenseModifier):
 
     def __init__(self):
         DefenseModifier.__init__(self, -1, -222)
-        self.desc = 'This silhouette is a strange being of light! Attacks will do %s %s damage on it!' % (abs(self.defenseMod), 'less' if self.good else 'more')
+        self.desc = 'This silhouette is a strange being of light! Attacks will do {} {} damage on it!'.format(abs(self.defenseMod), 'less' if self.good else 'more')
 
 class DisruptiveAdvertisement(StatusEffect):
     '''
@@ -806,7 +907,7 @@ class OffTheClock(DefenseModifier):
     def __init__(self):
         DefenseModifier.__init__(self, -1, 0.3)
         self.name = 'Off the Clock'
-        self.desc = u'While other Cogs are in battle, the Multislacker takes %s\u0025 less damage!' % str((1.0 - self.defenseMod) * 100)
+        self.desc = u'While other Cogs are in battle, the Multislacker takes {}\u0025 less damage!'.format(str((1.0 - self.defenseMod) * 100))
 
 # Pacesetter
 class RushJob(StatusEffect):
@@ -841,8 +942,8 @@ class HurrySickness(DamageModifier):
     def __init__(self):
         DamageModifier.__init__(self, 2, 0.6)
         self.name = 'Hurry Sickness'
-        self.desc = u"This Toon couldn't keep up with the Pacesetter and thus will deal %s\u0025 less damage." % str((1.0 - self.damageMod) * 100)
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/hurry_sickness_icon')
+        self.desc = u"This Toon couldn't keep up with the Pacesetter and thus will deal {}\u0025 less damage.".format(str((1.0 - self.damageMod) * 100))
+        # self.icon = getIcon('hurry_sickness_icon')
 
 class MovingGoalposts(BanGags):
     '''
@@ -885,7 +986,7 @@ class Hustling(StatusEffect):
         else:
             raise ValueError('trackToUse is not any track constant (see toontown/battle/StatusEffects.py for more info)!')
         StatusEffect.__init__(self, 1, False, name='Hustling')
-        self.desc = 'The Racketeer has ordered this Toon to use the'
+        self.desc = 'The Racketeer has ordered this Toon to use the {} Track!'.format(TRACK_2_CONSTANT[self.trackToUse])
 
 class Contracted(StatusEffect):
     '''
@@ -907,10 +1008,10 @@ class InkDrain(DamageModifier):
         '''
         DamageModifier.__init__(self, 2, damageMod=damageMod)
         self.name = 'Ink Drain'
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/ink_drain_icon')
+        # self.icon = getIcon('ink_drain_icon')
     
     def updateEffect(self):
-        self.desc = u'All gags are %s\u0025 %s effective.' % ((1.0 - self.damageMod) * 100, 'more' if self.good else 'less')
+        self.desc = u'All gags are {}\u0025 {} effective.'.format((1.0 - self.damageMod) * 100, 'more' if self.good else 'less')
 
 # Gatekeeper
 class CoreCompetency(DamageModifier, LureResistance):
@@ -925,4 +1026,4 @@ class CoreCompetency(DamageModifier, LureResistance):
         Every turn, use this method to add 3 more damage to the buff.
         '''
         self.damageMod += 3
-        self.desc = 'This Cog has a +100 health bonus! Additionally, the Cog is dealing %s more damage, gaining more every round. Destroy this Cog to steal their damage bonus!' % self.damageMod
+        self.desc = 'This Cog has a +100 health bonus! Additionally, the Cog is dealing {} {} damage, gaining more every round. Destroy this Cog to steal their damage bonus!'.format(self.damageMod, 'less' if self.damageMod < 0 else 'more')

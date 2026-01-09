@@ -426,13 +426,13 @@ def decodeUber(flagMask):
         workPower -= 1
 
     endList = len(trackList)
-    foundOne = 0
+    foundOne = False
     while not foundOne:
         if trackList[endList - 1] == 0:
             trackList.pop(endList - 1)
             endList -= 1
         else:
-            foundOne = 1
+            foundOne = True
 
     return trackList
 
@@ -843,7 +843,6 @@ ValidStatusConditions = (
     'encore',
     'winded',
     'cheer',
-    'corruption',
     'redlinedcalculator',
     'groupDamageDown',
     'noDamage',

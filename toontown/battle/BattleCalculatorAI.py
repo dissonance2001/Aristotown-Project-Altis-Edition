@@ -16,6 +16,7 @@ from toontown.toon import NPCToons
 from toontown.pets import PetTricks, DistributedPetProxyAI
 from toontown.hood import ZoneUtil
 from toontown.toonbase.ToonPythonUtil import lerp
+import StatusEffects
 
 class BattleCalculatorAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleCalculatorAI')
@@ -101,18 +102,17 @@ class BattleCalculatorAI:
         # the dictionary holds all four toons, so a possible dictionary could be
         # { 10000000: { 'corruption': {'modifier': 2, 'turnsRemaining': -1} } }
         self.toonStatusConditions = {}
+        self.toonStatusConditionsNew = {}
 
         self.suitStatusConditions = {}
+        self.suitStatusConditionsNew = {}
 
     def toonHasCondition(self, toonId, condition):
         #self.notify.debug('toonHasCondition() - checking for \'%s\' on toonId %i' % (condition, toonId))
         if toonId not in self.toonStatusConditions:
             return False
 
-        if condition in self.toonStatusConditions[toonId]:
-            return True
-        else:
-            return False
+        return condition in self.toonStatusConditions[toonId]
 
     def getToonConditionModifier(self, toonId, condition):
         if not self.toonHasCondition(toonId, condition):
@@ -199,10 +199,7 @@ class BattleCalculatorAI:
         if suitId not in self.suitStatusConditions:
             return False
 
-        if condition in self.suitStatusConditions[suitId]:
-            return True
-        else:
-            return False
+        return condition in self.suitStatusConditions[suitId]
 
     def getSuitConditionModifier(self, suitId, condition):
         if not self.suitHasCondition(suitId, condition):
@@ -314,6 +311,49 @@ class BattleCalculatorAI:
                     del self.suitStatusConditions[suit][condition]
             if not self.suitStatusConditions[suit].keys():
                 del self.suitStatusConditions[suit]
+        
+        # Similar to the system above, check all Toons and Cogs for their status effects.
+        for toonId in self.toonStatusConditionsNew.keys():
+            for i in range(len(self.toonStatusConditionsNew[toonId])): # Do it like this so that we can go back later and check the effect in the list.
+                self.toonStatusConditionsNew[toonId][i].subtractRound() # The included method that will allow for a round to be subtracted, along with any additional modifications to the status effect as needed (e.g. Rising Star damage boost).
+                if self.toonStatusConditionsNew[toonId][i].roundsLeft == 0: # Are we out of rounds, and is it not a constantly-remaining status effect (-1 rounds left)?
+                    self.toonStatusConditionsNew[toonId][i] = None # Turn the status effect into nothing.
+        
+            # Now, find all conditions that were turned into None and remove them from the list.
+            # TODO: Find a better way to handle removing status effects.
+            while None in self.toonStatusConditionsNew[toonId]:
+                self.toonStatusConditionsNew[toonId].remove(None)
+        
+        # Repeat the process, but for Cogs.
+        for suitId in self.suitStatusConditionsNew.keys():
+            for i in range(len(self.suitStatusConditionsNew[suitId])):
+                self.suitStatusConditionsNew[suitId][i].subtractRound()
+                if self.suitStatusConditionsNew[suitId][i].roundsLeft == 0:
+                    self.suitStatusConditionsNew[suitId][i] = None
+            
+            while None in self.suitStatusConditionsNew[suitId]:
+                self.suitStatusConditionsNew[suitId].remove(None)
+    
+    def getAllRelevantConditions(self, avId, conditionType, toon = True):
+        '''
+        Return a list of all status effects that match and inherit the condition type.
+
+        :param avId: The ID of who is being checked.
+        :param conditionType: The type of the effect that is being searched, as well as any effects that inherit it (e.g. Snapped will be included if checking for DefenseModifier, but not vice versa)
+        :param toon: Whether or not the avatar is a Toon, which determines which dict we check from.
+        '''
+        conditions = []
+        if toon:
+            for condition in self.toonStatusConditionsNew[avId]:
+                if isinstance(condition, conditionType):
+                    conditions.append(condition)
+        
+        else:
+            for condition in self.suitStatusConditionsNew[avId]:
+                if isinstance(condition, conditionType):
+                    conditions.append(condition)
+
+        return conditions
 
     def printToonConditions(self):
         self.notify.debug('printToonConditions() *********************************************')
@@ -948,7 +988,7 @@ class BattleCalculatorAI:
             if atkTrack == SUE:
                 suit = self.battle.findSuit(targetId)
                 toon = self.battle.getToon(toonId)
-                if not suit.getManager() and suit.currHP <= (suit.maxHP * 1.5) and not self.suitHasCondition(targetId, 'insured') and not self.suitHasCondition(targetId, 'extraAttack'):
+                if not suit.getManager() and suit.currHP <= (suit.maxHP * 1.5) and not self.suitHasCondition(targetId, 'insured') and len(self.getAllRelevantConditions(targetId, StatusEffects.ExtraAttacks, toon=False)) == 0:
                     self.setSuitCondition(targetId, 'sued', 1, 4, 'setBoth')
                     self.setToonCondition(toonId, 'noSOS', 1, 3, 'setBoth')
                     self.setToonCondition(toonId, 'noFires', 1, 3, 'setBoth')
@@ -3337,8 +3377,6 @@ class BattleCalculatorAI:
                     result *= self.getSuitConditionModifier(theSuit.doId, 'enraged')
                 if self.toonHasCondition(toonId, 'snapped'):
                     result *= self.getToonConditionModifier(toonId, 'snapped')
-                if self.toonHasCondition(toonId, 'corruption'):
-                    result *= self.getToonConditionModifier(toonId, 'corruption')
                 if theSuit.getDamageMultiplier() > 1:
                     result *= theSuit.getDamageMultiplier()
                 #if self.toonHasCondition(toonId, 'heavyRainDamageToon'):
@@ -5135,26 +5173,36 @@ class BattleCalculatorAI:
                     self.setSuitCondition(targetSuit.doId, 'sued', 1, 1, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'overmodulatedcalculator', 0, 0, 'setBoth')
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
             elif atkType['name'] == 'RadiographerOvermodulated2':
                 result = 0
@@ -5170,35 +5218,45 @@ class BattleCalculatorAI:
                     self.setSuitCondition(targetSuit.doId, 'sued', 1, 1, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'overmodulatedcalculator', 0, 0, 'setBoth')
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
             elif atkType['name'] == 'RadiographerOvermodulated3':
                 result = 0
@@ -5214,35 +5272,45 @@ class BattleCalculatorAI:
                     self.setSuitCondition(targetSuit.doId, 'sued', 1, 1, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'overmodulatedcalculator', 0, 0, 'setBoth')
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
             elif atkType['name'] == 'RadiographerOvermodulated4':
                 result = 0
@@ -5258,35 +5326,45 @@ class BattleCalculatorAI:
                     self.setSuitCondition(targetSuit.doId, 'sued', 1, 1, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'overmodulatedcalculator', 0, 0, 'setBoth')
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
             elif atkType['name'] == 'RadiographerOvermodulated5':
                 result = 0
@@ -5302,35 +5380,45 @@ class BattleCalculatorAI:
                     self.setSuitCondition(targetSuit.doId, 'sued', 1, 1, 'setBoth')
                 if not self.suitHasCondition(targetSuit.doId, 'dead'):
                     self.setSuitCondition(theSuit.doId, 'overmodulatedcalculator', 0, 0, 'setBoth')
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
             elif atkType['name'] == 'RecordkeeperPaperTrail': # Recordkeeper
                 self.setSuitCondition(theSuit.doId, 'papertrailcalculator', 0, 0, 'setBoth')
@@ -5610,35 +5698,45 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'monsoon', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'heavyRain', 0, 0, 'setBoth')
                 theSuit.setHP(theSuit.currHP + 250)
-                if not self.suitHasCondition(theSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(theSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        theSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(theSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        theSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(theSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        theSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(theSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        theSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(theSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        theSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(theSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        theSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(theSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        theSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(theSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        theSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(theSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        theSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(theSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(theSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(theSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         theSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(theSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         theSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(theSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         theSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(theSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         theSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(theSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         theSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(theSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         theSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(theSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         theSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(theSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         theSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(theSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         theSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(theSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                
+                # Check to see if the Liquidator already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Do they have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # They do not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
             elif atkType['name'] == 'LiquidatorStormCell':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -6338,35 +6436,45 @@ class BattleCalculatorAI:
                 targetSuit = self.battle.activeSuits[1]
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
                 targetSuit.setHP(math.ceil(targetSuit.currHP + x))
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
                 self.setSuitCondition(targetSuit.doId, 'bellowattack', 1, 1, 'setBoth')
             elif atkType['name'] == 'HighRollerGameTimeCog2':
@@ -6390,35 +6498,45 @@ class BattleCalculatorAI:
                 targetSuit = self.battle.activeSuits[2]
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
                 targetSuit.setHP(math.ceil(targetSuit.currHP + x))
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
                 self.setSuitCondition(targetSuit.doId, 'bellowattack', 1, 1, 'setBoth')
             elif atkType['name'] == 'HighRollerGameTimeCog4':
@@ -6447,35 +6565,45 @@ class BattleCalculatorAI:
                 targetSuit = self.battle.activeSuits[3]
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
                 targetSuit.setHP(math.ceil(targetSuit.currHP + x))
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
                 self.setSuitCondition(targetSuit.doId, 'bellowattack', 1, 1, 'setBoth')
             elif atkType['name'] == 'HighRollerGameTimeCog6':
@@ -6504,35 +6632,45 @@ class BattleCalculatorAI:
                 targetSuit = self.battle.activeSuits[4]
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
                 targetSuit.setHP(math.ceil(targetSuit.currHP + x))
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
                 self.setSuitCondition(targetSuit.doId, 'bellowattack', 1, 1, 'setBoth')
             elif atkType['name'] == 'HighRollerGameTimeCog8':
@@ -6561,35 +6699,45 @@ class BattleCalculatorAI:
                 targetSuit = self.battle.activeSuits[5]
                 x = (targetSuit.maxHP * targetSuit.hardMaxHP) - targetSuit.currHP
                 targetSuit.setHP(math.ceil(targetSuit.currHP + x))
-                if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack2'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack3'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack4'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack5'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack6'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack7'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack8'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack9'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
-                elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
-                        targetSuit.doId, 'extraAttack10'):
-                    self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                # if not self.suitHasCondition(targetSuit.doId, 'extraAttack'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack2'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack2', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack2') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack3'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack3', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack3') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack4'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack4', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack4') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack5'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack5', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack5') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack6'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack6', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack6') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack7'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack7', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack7') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack8'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack8', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack8') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack9'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack9', 1, 99, 'setBoth')
+                # elif self.suitHasCondition(targetSuit.doId, 'extraAttack9') and not self.suitHasCondition(
+                #         targetSuit.doId, 'extraAttack10'):
+                #     self.setSuitCondition(targetSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
+                
+                # Check to see if the target Cog already has extra attacks.
+                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Does this Cog have any extra attacks?
+                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                        break # Stop the loop so that we do not go down to else.
+
+                # The Cog does not have any extra attacks, so give them one.
+                else:
+                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
                 self.setSuitCondition(targetSuit.doId, 'bellowattack', 1, 1, 'setBoth')
             elif atkType['name'] == 'HighRollerGameTimeCog10':
@@ -8293,8 +8441,6 @@ class BattleCalculatorAI:
                         result *= (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))
                     if theSuit.getDamageMultiplier() > 1:
                         result *= theSuit.getDamageMultiplier()
-                    if self.toonHasCondition(toonId, 'corruption'):
-                        result *= self.getToonConditionModifier(toonId, 'corruption')
                     if self.toonHasCondition(toon.doId, 'collectcalled'):
                         result *= 2
                     attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
@@ -8303,8 +8449,6 @@ class BattleCalculatorAI:
                         result *= (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))
                     if theSuit.getDamageMultiplier() > 1:
                         result *= theSuit.getDamageMultiplier()
-                    if self.toonHasCondition(toonId, 'corruption'):
-                        result *= self.getToonConditionModifier(toonId, 'corruption')
                     attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
                 else:
                     if theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
@@ -8322,8 +8466,6 @@ class BattleCalculatorAI:
                         result *= self.getSuitConditionModifier(theSuit.doId, 'enraged')
                     if self.toonHasCondition(toonId, 'snapped'):
                         result *= self.getToonConditionModifier(toonId, 'snapped')
-                    if self.toonHasCondition(toonId, 'corruption'):
-                        result *= self.getToonConditionModifier(toonId, 'corruption')
                     if theSuit.getDamageMultiplier() > 1:
                         result *= theSuit.getDamageMultiplier()
                     if self.suitHasCondition(theSuit.doId, 'soaked') and theSuit.dna.name == 'redd':
@@ -8355,8 +8497,6 @@ class BattleCalculatorAI:
                     result *= self.getSuitConditionModifier(theSuit.doId, 'enraged')
                 if self.toonHasCondition(toonId, 'snapped'):
                     result *= self.getToonConditionModifier(toonId, 'snapped')
-                if self.toonHasCondition(toonId, 'corruption'):
-                    result *= self.getToonConditionModifier(toonId, 'corruption')
                 if theSuit.getDamageMultiplier() > 1:
                     result *= theSuit.getDamageMultiplier()
                 if self.suitHasCondition(theSuit.doId, 'soaked') and theSuit.dna.name == 'redd':
@@ -13949,126 +14089,142 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].getSkeleRevives() == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getGenericSuitAttack(suitId)
                     self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack2') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack2')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack3') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack3')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack4') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack4')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack5') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack5')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack6') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack6')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack7') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack7')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack8') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack8')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack9') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack9')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'extraAttack10') and self.__suitCanAttack(suitId):
-                attack = self.__getGenericSuitAttack(suitId)
-                self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack10')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'SyphonMovie',  # Syphon Movie
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack2') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack2')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack3') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack3')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack4') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack4')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack5') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack5')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack6') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack6')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack7') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack7')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack8') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack8')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack9') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack9')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'extraAttack10') and self.__suitCanAttack(suitId):
+            #     attack = self.__getGenericSuitAttack(suitId)
+            #     self.battle.suitAttacks.append(attack)
+            # if self.suitHasCondition(suitId, 'syphon') and self.suitHasCondition(suitId, 'extraAttack10')  and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                             'name': 'SyphonMovie',  # Syphon Movie
+            #                                             'animName': 'nothing',
+            #                                             'hp': 0,
+            #                                             'acc': 100,
+            #                                             'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+            #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #     self.battle.suitAttacks.append(attack)
+            
+            # First, let's get all status effects that are the extra attacks.
+            for condition in self.getAllRelevantConditions(suitId, StatusEffects.ExtraAttacks, toon=False):
+                for j in range(condition.extraAttacks): # Loop for how many times this is an extra attack.
+                    attack = self.__getGenericSuitAttack(suitId)
+                    self.battle.suitAttacks.append(attack)
+                    # Syphon if necessary.
+                    if self.suitHasCondition(suitId, 'syphon') and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'SyphonMovie',  # Syphon Movie
+                                                                'animName': 'nothing',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                                                                'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        self.battle.suitAttacks.append(attack)
 
 
     def __updateLureTimeouts(self):

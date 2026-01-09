@@ -502,6 +502,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def addSuit(self, suit):
         self.newSuits.append(suit)
         self.suits.append(suit)
+        self.battleCalc.suitStatusConditionsNew[suit.doId] = SuitBattleGlobals.SuitAttributes[suit.getStyleName()].get('initEffects', []) # Add a Cog's initial status effects, if there are any.
         suit.battleTrap = NO_TRAP
         self.numSuitsEver += 1
 
@@ -608,6 +609,8 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.toonOrigQuests[avId] = flattenedQuests
         if avId not in self.toonItems:
             self.toonItems[avId] = ([], [])
+        if avId not in self.battleCalc.toonStatusConditionsNew: # Adding this to be consistent with the above conditions.
+            self.battleCalc.toonStatusConditionsNew[avId] = []
         return 1
 
     def __joinToon(self, avId, pos):
@@ -729,6 +732,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.absorbingSuits.remove(suit)
         if self.soakedSuits.count(suit) == 1:
             self.soakedSuits.remove(suit)
+        del self.battleCalc.suitStatusConditionsNew[suit.doId]
         self.suitGone = 1
 
     def __removeToon(self, toonId, userAborted = 0):
@@ -751,6 +755,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 else:
                     self.notify.warning("suitAttacks %d doesn't have an HP column for active toon index %d" % (i, activeToonIdx))
 
+            del self.battleCalc.toonStatusConditionsNew[toonId]
             self.activeToons.remove(toonId)
         if self.runningToons.count(toonId) == 1:
             self.runningToons.remove(toonId)
