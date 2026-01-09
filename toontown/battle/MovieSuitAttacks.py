@@ -565,6 +565,8 @@ def doSuitAttack(attack):
         suitTrack = MovieBoardbotLitigationCheats.doInversion(attack)
     elif name == 'LiquidatorMonsoon':
         suitTrack = MovieBoardbotLitigationCheats.doMonsoon(attack)
+    elif name == 'LiquidatorTornado':
+        suitTrack = MovieBoardbotLitigationCheats.doTornado(attack)
         # record keeper
     elif name == 'RecordkeeperMinutesTaken':
         suitTrack = MovieBoardbotLitigationCheats.doMinutesTaken(attack)
@@ -590,7 +592,7 @@ def doSuitAttack(attack):
     elif name == 'ButcherKickback':
         suitTrack = MovieBoardbotLitigationCheats.doKickback(attack)
     elif name == 'ButcherMarkedWood':
-        suitTrack = MovieBoardbotLitigationCheats.doMarkedWood(attack)
+        suitTrack = MovieBoardbotLitigationCheats.do7000RPM(attack)
     elif name == 'ButcherOffboarding':
         suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 1)
     elif name == 'ButcherOffboarding2':
@@ -612,7 +614,7 @@ def doSuitAttack(attack):
     elif name == 'ButcherAggrandize5':
         suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 5)
     elif name == 'ButcherSparkPlug':
-        suitTrack = MovieBoardbotLitigationCheats.doSparkPlug(attack)
+        suitTrack = MovieBoardbotLitigationCheats.do2000RPMSparkPlug(attack)
     elif name == 'ButcherSparkPlugDamage':
         suitTrack = MovieBoardbotLitigationCheats.doSparkPlugDamage(attack)
     elif name == 'ButcherScabbard':
@@ -1412,6 +1414,10 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CalculatingFees':
             resetSuitTrack = Sequence(suitTrack)
+        elif name == 'ButcherRevvingUp':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'ButcherRevvingUpWhipsaw':
+            resetSuitTrack = Sequence(suitTrack)
         elif name == 'WiretapperCollectCall':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'Desperation':
@@ -1465,6 +1471,10 @@ def doSuitAttack(attack):
         elif name == 'AbsorbMovie':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'AbsorbMovieLevel':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'ButcherSparkPlugDamage':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'RecordkeeperMinutesTaken':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'SafetyHeatWaveCalculation':
             resetSuitTrack = Sequence(suitTrack)

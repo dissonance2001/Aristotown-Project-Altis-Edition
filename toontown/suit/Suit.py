@@ -232,10 +232,10 @@ ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dola = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-liquid = (('speak', 'speak', 4), ('stomp', 'stomp', 4), ('effort', 'effort', 4))
+liquid = (('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
 rkeeper = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
-cbutcher = (('roll-o-dex', 'roll-o-dex', 4), ('effort', 'effort', 4), ('glower', 'glower', 4))
-cdirector = (('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
+cbutcher = (('roll-o-dex', 'roll-o-dex', 4), ('revvedup', 'revvedup', 4), ('sparkplug', 'sparkplug', 4), ('effort', 'effort', 4), ('glower', 'glower', 4))
+cdirector = (('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('cease', 'cease3', 4), ('defense', 'defense', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
 dking = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 ottoman = (('effort', 'effort', 4), ('hold-pencil', 'hold-pencil', 4), ('pen-squirt', 'fountain-pen', 4))
 crystal = (('shot5', 'shot5', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('defense', 'defense', 4))
@@ -1223,6 +1223,9 @@ class Suit(Avatar.Avatar):
         self.isFreezingRain = 0
         self.isStormCell = 0
         self.isOilRain = 0
+        self.isMonsoon = 0
+        self.stormCellDamage = 60
+        self.heavyRainDamage = 0
         self.isFrozen = 0
         self.isSkelecogDialogue = 0
         self.isImmune = 0
@@ -3710,6 +3713,10 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/bowtie').show()
         elif self.style.dept == 's' and not self.style.name == 'racket':
             modelRoot.find('**/necktie-s').show()
+        elif self.style.name == 'liquid':
+            modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').hide()
+            modelRoot.find('**/necktie-s').hide()
         elif self.style.name == 'psetter':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
@@ -6622,55 +6629,64 @@ class Suit(Avatar.Avatar):
     def makeSyphon(self, battle):
         self.isSyphon = 1
 
+    def removeStormCellDamage(self, num):
+        self.stormCellDamage = num
+
+    def getStormCellDamage(self):
+        return self.stormCellDamage
+
+    def addHeavyRainDamageReal(self, num):
+        self.heavyRainDamage = num
+
+    def getHeavyRainDamage(self):
+        return self.heavyRainDamage
+
+    def makeUnHeavyRain(self, elite=False):
+        self.isHeavyRain = 0
+        self.heavyRainDamage = 0
+
     def makeInversion(self, elite=False):
-        for headPart in self.headParts:
-            headPart.removeNode()
-        self.headParts = []
-        self.generateHead3('rainmaker', animated=True)
         self.isHeavyRain = 0
         self.isFreezingRain = 0
         self.isStormCell = 0
+        self.isMonsoon = 0
         self.isOilRain = 0
 
     def makeHeavyRain(self, elite=False):
-        for headPart in self.headParts:
-            headPart.removeNode()
-        self.headParts = []
-        self.generateHead3('rainmaker2', animated=True)
         self.isHeavyRain = 1
         self.isFreezingRain = 0
         self.isStormCell = 0
         self.isOilRain = 0
+        self.stormCellDamage = 60
+        self.isMonsoon = 0
 
     def makeFreezingRain(self, elite=False):
-        for headPart in self.headParts:
-            headPart.removeNode()
-        self.headParts = []
-        self.generateHead3('rainmaker3', animated=True)
         self.isHeavyRain = 0
         self.isFreezingRain = 1
         self.isStormCell = 0
         self.isOilRain = 0
+        self.isMonsoon = 0
 
     def makeOilRain(self, elite=False):
-        for headPart in self.headParts:
-            headPart.removeNode()
-        self.headParts = []
-        self.generateHead3('rainmaker4', animated=True)
         self.isHeavyRain = 0
         self.isFreezingRain = 0
         self.isStormCell = 0
         self.isOilRain = 1
+        self.isMonsoon = 0
+
+    def makeMonsoon(self, elite=False):
+        self.isHeavyRain = 0
+        self.isFreezingRain = 0
+        self.isStormCell = 0
+        self.isOilRain = 0
+        self.isMonsoon = 1
 
     def makeStormCell(self, elite=False):
-        for headPart in self.headParts:
-            headPart.removeNode()
-        self.headParts = []
-        self.generateHead3('rainmaker5', animated=True)
         self.isHeavyRain = 0
         self.isFreezingRain = 0
         self.isStormCell = 1
         self.isOilRain = 0
+        self.isMonsoon = 0
 
     def makeAmbassadorPhase3(self, elite=False):
         for headPart in self.headParts:

@@ -272,6 +272,10 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                             suitTrack.append(Func(suit.addRageBuilding, hp))
                         if suit.dna.name == 'phouse':
                             suitTrack.append(Func(suit.addPowerhouseRotation, hp))
+                        if suit.dna.name == 'liquid' and suit.isStormCell:
+                            suitTrack.append(Func(suit.addStormCellDamage))
+                        if suit.isHeavyRain:
+                            suitTrack.append(Func(suit.addHeavyRainDamage, hp))
                         if suit.isSued:
                             suitTrack.append(Func(suit.makeSued, 3))
                     tracks.append(suitTrack)
@@ -402,6 +406,10 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                             suitTrack.append(Func(suit.addRageBuilding, hp))
                         if suit.dna.name == 'phouse':
                             suitTrack.append(Func(suit.addPowerhouseRotation, hp))
+                        if suit.dna.name == 'liquid' and suit.isStormCell:
+                            suitTrack.append(Func(suit.addStormCellDamage))
+                        if suit.isHeavyRain:
+                            suitTrack.append(Func(suit.addHeavyRainDamage, hp))
                         if suit.isSued:
                             suitTrack.append(Func(suit.makeSued, 3))
                     tracks.append(suitTrack)
@@ -531,6 +539,10 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                             suitTrack.append(Func(suit.addRageBuilding, hp))
                         if suit.dna.name == 'phouse':
                             suitTrack.append(Func(suit.addPowerhouseRotation, hp))
+                        if suit.dna.name == 'liquid' and suit.isStormCell:
+                            suitTrack.append(Func(suit.addStormCellDamage))
+                        if suit.isHeavyRain:
+                            suitTrack.append(Func(suit.addHeavyRainDamage, hp))
                         if suit.isSued:
                             suitTrack.append(Func(suit.makeSued, 3))
                     tracks.append(suitTrack)
@@ -1573,6 +1585,10 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                             suitTrack.append(Func(suit.addRageBuilding, hp))
                         if suit.dna.name == 'phouse':
                             suitTrack.append(Func(suit.addPowerhouseRotation, hp))
+                        if suit.dna.name == 'liquid' and suit.isStormCell:
+                            suitTrack.append(Func(suit.addStormCellDamage))
+                        if suit.isHeavyRain:
+                            suitTrack.append(Func(suit.addHeavyRainDamage, hp))
                         if suit.isSued:
                             suitTrack.append(Func(suit.makeSued, 3))
                     tracks.append(suitTrack)

@@ -1294,6 +1294,218 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(1, 0.984, 0, 1)
                 self.enraged.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+        if self.cog.isStormCell:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/stormcell_icon')
+            self.enrageCountText = DirectLabel(parent=self.enraged, relief=None,
+                                              text="-%s" % self.cog.getStormCellDamage(), text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.4)
+            self.enrageCountText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.enraged.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.enraged.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.enraged.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.enraged.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.enraged.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.enraged.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.enraged.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.enraged.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isHeavyRain:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/heavyrain_icon')
+            self.enrageCountText = DirectLabel(parent=self.enraged, relief=None,
+                                              text="-%s" % self.cog.getHeavyRainDamage(), text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.4)
+            self.enrageCountText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.enraged.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.enraged.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.enraged.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.enraged.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.enraged.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.enraged.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.enraged.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.enraged.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isMonsoon:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/monsoon_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.enraged.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.enraged.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.enraged.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.enraged.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.enraged.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.enraged.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.enraged.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.enraged.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isFreezingRain:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/frozen_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.enraged.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.enraged.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.enraged.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.enraged.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.enraged.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.enraged.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.enraged.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.enraged.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if self.cog.isOilRain:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/oilrain_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.enraged.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.enraged.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.enraged.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.enraged.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.enraged.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.enraged.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.enraged.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.enraged.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.enraged.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if self.cog.isShielding and self.cog.dna.name == 'sgoat':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.absorbing = status.find('**/defense_mode_icon')
@@ -2605,7 +2817,7 @@ class TownBattleCogPanel(DirectFrame):
                                          text_fg=(1, 0, 0, 1),
                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                          pos=(0.25, 0, -.4),
-                                         text_scale=.5)
+                                         text_scale=.4)
             self.zappedRoundsText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:

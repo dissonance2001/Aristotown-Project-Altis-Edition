@@ -2888,7 +2888,7 @@ def FireSpray(self):
 def FireSprayCan(self):
     self.reset()
     self.setPos(0.000, 5.500, 5.000)
-    self.setHpr(180.000, -40.000, 0.000)
+    self.setHpr(180.000, -60.000, 0.000)
     self.setScale(1.000, 1.000, 1.000)
     p0 = Particles.Particles('particles-1')
     # Particles parameters

@@ -253,6 +253,10 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 suitTrack.append(Func(suit.addRageBuilding, totalDamage[targetIndex]))
             if suit.dna.name == 'phouse':
                 suitTrack.append(Func(suit.addPowerhouseRotation, totalDamage[targetIndex]))
+            if suit.dna.name == 'liquid' and suit.isStormCell:
+                suitTrack.append(Func(suit.addStormCellDamage))
+            if suit.isHeavyRain:
+                suitTrack.append(Func(suit.addHeavyRainDamage, totalDamage[targetIndex]))
             if suit.isSued:
                 suitTrack.append(Func(suit.makeSued, 3))
             if not suit.isShielding:

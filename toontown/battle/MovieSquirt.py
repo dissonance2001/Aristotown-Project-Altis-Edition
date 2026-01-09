@@ -253,6 +253,12 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         suitTrack.append(Func(suit.setSoaked, 1))
         if suit.dna.name == 'sgoat' and suit.isShielding:
             suitTrack.append(Func(suit.addRageBuilding, hp + 150))
+        if suit.dna.name == 'phouse':
+            suitTrack.append(Func(suit.addPowerhouseRotation, hp + 150))
+        if suit.dna.name == 'liquid' and suit.isStormCell:
+            suitTrack.append(Func(suit.addStormCellDamage))
+        if suit.isHeavyRain:
+            suitTrack.append(Func(suit.addHeavyRainDamage, hp))
         if suit.isSued:
             suitTrack.append(Func(suit.makeSued, 3))
         suitTrack.append(Wait(tContact))
@@ -353,6 +359,10 @@ def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, atta
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
         suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
+        if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell:
+            suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
+        if suits[suitIndex].isHeavyRain:
+            suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
@@ -378,6 +388,10 @@ def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
         suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
+        if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell:
+            suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
+        if suits[suitIndex].isHeavyRain:
+            suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
@@ -403,6 +417,10 @@ def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
         suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
+        if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell:
+            suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
+        if suits[suitIndex].isHeavyRain:
+            suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
@@ -428,6 +446,10 @@ def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
         suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
         suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
+        if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell:
+            suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
+        if suits[suitIndex].isHeavyRain:
+            suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
         if not suits[suitIndex].isShielding:
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
             suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))

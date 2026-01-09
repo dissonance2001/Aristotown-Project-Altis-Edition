@@ -1609,12 +1609,12 @@ def doCollectCallDues(attack):
                                  LerpHprInterval(toon, 0.5, toon.getHpr()), Wait(0.5)))
         toonLiftTracks.append(Sequence(Wait(0.9), LerpPosInterval(toon, 5.5, Point3(toon.getX(), toon.getY(), toon.getZ() + 50)),
                                       LerpPosInterval(toon, 0.5, toon.getPos()), Wait(0.5)))
-        for x in range(40):
+        for x in range(80):
             tornadoNode.attachNewNode("billNode" + str(x))
-            bill = loader.loadModel('phase_10/models/cashbotHQ/MoneyStack')
+            bill = globalPropPool.getProp('10dollar')
             bill.setTwoSided(True)
-            bill.setPosHprScale(0, 0, 0, random.randint(0, 360), 0, random.randint(0, 360), 3.0 - (x * 0.03),
-                                            3.0 - (x * 0.03), 3.0 - (x * 0.03))
+            bill.setPosHprScale(0, 0, 0, random.randint(0, 360), 0, random.randint(0, 360), 10.0 - (x * 0.03),
+                                            10.0 - (x * 0.03), 10.0 - (x * 0.03))
             bill.reparentTo(tornadoNode.find('**/billNode' + str(x)))
             bill.hide()
             originalBillZ = tornadoNode.find('**/billNode' + str(x)).getZ()
@@ -1623,21 +1623,21 @@ def doCollectCallDues(attack):
             seq = Sequence(
                         Parallel(
                             Sequence(
-                                tornadoNode.find('**/billNode' + str(x)).posInterval(0.5, (0, 0, random.randint(-10, 10))),
-                                tornadoNode.find('**/billNode' + str(x)).posInterval(0.5, (0, 0, originalBillZ))
+                                tornadoNode.find('**/billNode' + str(x)).posInterval(0.25, (0, 0, random.randint(-10, 10))),
+                                tornadoNode.find('**/billNode' + str(x)).posInterval(0.25, (0, 0, originalBillZ))
                             ),
                             Sequence(
-                                bill.hprInterval(0.5, (random.randint(-360, 360), 0, random.randint(-360, 360))),
-                                bill.hprInterval(0.5, (originalBillH, 0, originalBillR))
+                                bill.hprInterval(0.25, (random.randint(-360, 360), 0, random.randint(-360, 360))),
+                                bill.hprInterval(0.25, (originalBillH, 0, originalBillR))
                             ),
-                            tornadoNode.find('**/billNode' + str(x)).hprInterval(1, (-360, 0, 0))
+                            tornadoNode.find('**/billNode' + str(x)).hprInterval(.5, (-360, 0, 0))
                         )
                     )
             whirlSeq.append(Sequence(
                         Wait(x * 0.1),
                         Func(bill.show),
                         Func(seq.loop),
-                        bill.posInterval(0.5, (30 - x / 2, 0, 75 - (x ** 1.3))),
+                        bill.posInterval(0.25, (30 - x / 2, 0, 75 - (x ** 1.3))),
                         Wait(4.0),
                         Func(bill.removeNode)
                     ))

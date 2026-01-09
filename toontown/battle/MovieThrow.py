@@ -484,6 +484,10 @@ def __throwPie(throw, delay, hitCount, npcs):
             suitResponseTrack.append(Func(suit.addRageBuilding, hp))
         if suit.dna.name == 'phouse':
             suitResponseTrack.append(Func(suit.addPowerhouseRotation, hp))
+        if suit.dna.name == 'liquid' and suit.isStormCell:
+            suitResponseTrack.append(Func(suit.addStormCellDamage))
+        if suit.isHeavyRain:
+            suitResponseTrack.append(Func(suit.addHeavyRainDamage, hp))
         if suit.isSued:
             suitResponseTrack.append(Func(suit.makeSued, 3))
         if not suit.isShielding:

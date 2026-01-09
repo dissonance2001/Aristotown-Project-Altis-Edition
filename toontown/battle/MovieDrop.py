@@ -459,6 +459,10 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         suitTrack.append(Func(suit.addRageBuilding, hp))
     if suit.dna.name == 'phouse':
         suitTrack.append(Func(suit.addPowerhouseRotation, hp))
+    if suit.dna.name == 'liquid' and suit.isStormCell:
+        suitTrack.append(Func(suit.addStormCellDamage))
+    if suit.isHeavyRain:
+        suitTrack.append(Func(suit.addHeavyRainDamage, hp))
     if suit.isSued:
         suitTrack.append(Func(suit.makeSued, 3))
     if not suit.isShielding:
