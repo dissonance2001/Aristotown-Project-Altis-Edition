@@ -54,7 +54,6 @@ class StatusEffect:
         self.desc = desc
         # Professor Control: I don't know if this will work or if I am missing something.
         # if icon:
-        #     self.icon = loader.loadModel(iconPath).find('**/%s' % icon)
         #     self.icon = getIcon(icon, fromPath=iconPath)
         self.damageMod = damageMod
         self.defenseMod = defenseMod
@@ -135,7 +134,7 @@ class AccuracyModifier(StatusEffect):
         accuracyMod: The amount of accuracy to increase or decrease.
         '''
         good = accuracyMod >= 0.0
-        StatusEffect.__init__(self, roundsLeft, good, name='Accuracy {}'.format('Up' if good else 'Down'), desc="This combatant's attacks are %s\u0025 %s accurate." % (str(accuracyMod), 'more' if good else 'less'), icon='toon_accuracy_%s_icon' % ('up' if good else 'down'), hidden=hidden)
+        StatusEffect.__init__(self, roundsLeft, good, name='Accuracy {}'.format('Up' if good else 'Down'), desc=u"This combatant's attacks are {}\u0025 {} accurate.".format(str(accuracyMod), 'more' if good else 'less'), icon='toon_accuracy_%s_icon' % ('up' if good else 'down'), hidden=hidden)
         self.accuracyMod = accuracyMod
     
     def updateEffect(self):
@@ -343,7 +342,7 @@ class BanGagLevels(StatusEffect):
         if len(bannedLevels) == 1:
             listBannedGags = str(bannedLevels[0])
         elif len(bannedLevels) == 2:
-            listBannedGags = '%s or %s' % (bannedLevels[0], bannedLevels[1])
+            listBannedGags = '{} or {}'.format(bannedLevels[0], bannedLevels[1])
         else:
             listBannedGags = str(bannedLevels[0])
             for i in range(1, len(bannedLevels) - 1):
@@ -351,9 +350,9 @@ class BanGagLevels(StatusEffect):
 
             listBannedGags = ', or ' + str(bannedLevels[len(bannedLevels) - 1])
         if self.pickable:
-            self.desc = 'This Toon will face a punishment if they use level %s Gags.' % listBannedGags
+            self.desc = 'This Toon will face a punishment if they use level {} Gags.'.format(listBannedGags)
         else:
-            self.desc = "This Toon's level %s Gags have been disabled." % listBannedGags
+            self.desc = "This Toon's level {} Gags have been disabled.".format(listBannedGags)
 
 class BanGagTracks(StatusEffect):
     '''
@@ -382,9 +381,9 @@ class BanGagTracks(StatusEffect):
 
             listBannedGags = ', or ' + TRACK_2_CONSTANT[bannedTracks[len(bannedTracks) - 1]]
         if self.pickable:
-            self.desc = 'This Toon will face a punishment if they use %s Gags.' % listBannedGags
+            self.desc = 'This Toon will face a punishment if they use {} Gags.'.format(listBannedGags)
         else:
-            self.desc = "This Toon's %s Gags have been disabled." % listBannedGags
+            self.desc = "This Toon's {} Gags have been disabled.".format(listBannedGags)
 
 # Firestarter
 class Pyromaniac(DamageModifier, DefenseModifier):
@@ -439,7 +438,7 @@ class PeacefulSlumber(DefenseModifier):
     
     def updateEffect(self):
         self.hidden = self.defenseMod <= 1.0
-        self.desc = u'The Featherbedder is taking %s\u0025 less damage.\n\nEvery round that they are alone, they will gain a 25\u0025 damage resistance.' % str((1.0 - self.defenseMod) * 100)
+        self.desc = u'The Featherbedder is taking {}\u0025 less damage.\n\nEvery round that they are alone, they will gain a 25\u0025 damage resistance.'.format(str((1.0 - self.defenseMod) * 100))
 
 # Major Player
 class RisingStarSuit(DamageModifier, ManagerBeneficiary):
@@ -468,12 +467,12 @@ class LastTap(DamageModifier):
     def __init__(self):
         DamageModifier.__init__(self, -1, 4)
         self.name = 'Last Tap!'
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/last_tap_icon')
+        # self.icon = getIcon('last_tap_icon')
         self.updateEffect()
     
     def updateEffect(self):
         self.damageMod += 1
-        self.desc = 'The Major Player is going in for a grand finale! He will be dealing %s more damage.' % self.damageMod
+        self.desc = 'The Major Player is going in for a grand finale! He will be dealing {} more damage.'.format(self.damageMod)
 
 # Chainsaw Consultant
 class RevvingUp(StatusEffect):
@@ -527,7 +526,7 @@ class RevvingUp(StatusEffect):
         else:
             self.desc += 'operating under normal conditions.'
         if self.reforesting:
-            self.desc += ' He will take %s %s damage!'
+            self.desc += ' He will take {} {} damage!'
         elif self.rpm > 10:
             self.desc += u' He will deal {}\u0025 more damage!'.format(str((self.damageMod - 1.0) * 100))
         self.desc += '\n'
@@ -555,7 +554,7 @@ class MarkedWoodSuit(StatusEffect):
         '''
         :param targetId: The Toon he will target next.
         '''
-        StatusEffect.__init__(self, 1, True, name='Marked Wood', desc='This Cog will retaliate against the last Toon who hits them or the Toon they marked if not hit.\n\nCurrent target: %s' % targetId, icon='marked_wood_icon', hidden=True)
+        StatusEffect.__init__(self, 1, True, name='Marked Wood', desc='This Cog will retaliate against the last Toon who hits them or the Toon they marked if not hit.\n\nCurrent target: {}'.format(targetId), icon='marked_wood_icon', hidden=True)
         self.whoIWillTarget = targetId
 
 class SparkPlug(DamageOverTime):
@@ -567,7 +566,7 @@ class SparkPlug(DamageOverTime):
         DamageOverTime.__init__(self, 2, 20, attack)
         self.name = 'Spark Plug'
         self.desc = 'This Toon will take {} damage per round.'.format(self.hpPerRound)
-        # self.icon = getIcon('**/sparkplug_icon')
+        # self.icon = getIcon('sparkplug_icon')
 
 # Bossbot Litigation Team
 class TankMentality(Siphon, DamageAbsorption, LureResistance):
@@ -636,7 +635,7 @@ class Overconfidence(DamageModifier):
         self.updateEffect()
     
     def updateEffect(self):
-        self.desc = 'The Litigation Team overestimates their chances. They deal {} less damage with their attacks'.format((1.0 - self.defenseMod) * 100)
+        self.desc = u'The Litigation Team overestimates their chances. They deal {}\u0025 less damage with their attacks'.format((1.0 - self.defenseMod) * 100)
 
 class Snapped(DefenseModifier):
     '''
@@ -809,12 +808,12 @@ class Ripped(DamageModifier):
     def __init__(self):
         DamageModifier.__init__(self, -1, 0, hidden=True)
         self.name = 'Ripped'
-        # self.icon = loader.loadModel(DEFAULT_STATUS_ICON_PATH).find('**/ripped_icon')
+        # self.icon = getIcon('ripped_icon')
         self.updateEffect()
     
     def updateEffect(self):
         self.hidden = self.damageMod > 0
-        self.desc = 'Count Erfit is getting ripped! All of his attacks will deal %s %s damage.' % (abs(self.damageMod), 'more' if self.good else 'less')
+        self.desc = 'Count Erfit is getting ripped! All of his attacks will deal {} {} damage.'.format(abs(self.damageMod), 'more' if self.good else 'less')
 
 class Hydrated(AccuracyModifier):
     '''
@@ -824,7 +823,7 @@ class Hydrated(AccuracyModifier):
     def __init__(self, roundsLeft = 2):
         AccuracyModifier.__init__(self, roundsLeft, 15)
         self.name = 'Hydrated'
-        # self.icon = loader.loadModel('phase_3.5/models/gui/inventory_icons').find('**/inventory_glass_of_water')
+        # self.icon = getIcon('inventory_glass_of_water', fromPath='phase_3.5/models/gui/inventory_icons')
         self.updateEffect()
     
     def updateEffect(self):
@@ -926,10 +925,10 @@ class RushJob(StatusEffect):
         self.roundsLeft = -1
         self.good = True
         self.name = 'Rush Job'
-        self.desc = 'The Pacesetter will punish ALL Toons if you do not use %s on this Cog!! This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit.' % TRACK_2_CONSTANT[self.trackToUse]
+        self.desc = 'The Pacesetter will punish ALL Toons if you do not use {} on this Cog!! This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit.'.format(TRACK_2_CONSTANT[self.trackToUse])
         if True: # TODO: Figure out a proper way to check whether or not the Cog that has the Rush Job is the Pacesetter.
             self.defenseMod = 0.6 # This class does not inherit the DefenseModifier class, so it should not really matter for now.
-            self.desc += u'\n\nThe wrong Gag will deal %s\u0025 less damage.' % ((1.0 - self.defenseMod) * 100)
+            self.desc += u'\n\nThe wrong Gag will deal {}\u0025 less damage.'.format((1.0 - self.defenseMod) * 100)
         else:
             self.defenseMod = 1.0
         # self.icon = None
