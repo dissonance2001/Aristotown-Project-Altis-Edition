@@ -732,7 +732,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.absorbingSuits.remove(suit)
         if self.soakedSuits.count(suit) == 1:
             self.soakedSuits.remove(suit)
-        del self.battleCalc.suitStatusConditionsNew[suit.doId]
+       # del self.battleCalc.suitStatusConditionsNew[suit]
         self.suitGone = 1
 
     def __removeToon(self, toonId, userAborted = 0):

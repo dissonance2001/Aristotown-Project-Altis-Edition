@@ -81,8 +81,6 @@ def showLureRounds(suit, battle, level):
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.isAngry and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.extraAttack > 0 and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.isBookkeeping and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.getManager() and not trapProp:

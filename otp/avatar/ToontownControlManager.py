@@ -63,7 +63,7 @@ class ToontownControlManager(ControlManager.ControlManager):
                 inputState.watch('turnRight', 'mouse-look_right', 'mouse-look_right-done'),
                 inputState.watch('turnRight', 'force-turnRight', 'force-turnRight-stop')
             ))
-            
+
 
         if self.currentControls:
             self.currentControls.enableAvatarControls()

@@ -63,7 +63,7 @@ class OrbitalCamera(FSM, NodePath, ParamObj):
         NodePath.remove_node(self)
         ParamObj.destroy(self)
     
-    def initializeCollisions(self):
+    def initializeCollisions(self) -> None:
         self.cTravOnFloor = CollisionTraverser("CamMode.cTravOnFloor")
         self.camFloorRayNode = self.attachNewNode("camFloorRayNode")
         self.ccRay2 = CollisionRay(0.0, 0.0, 0.0, 0.0, 0.0, -1.0)
@@ -84,7 +84,7 @@ class OrbitalCamera(FSM, NodePath, ParamObj):
             self.ccRay2NodePath, self.camFloorCollisionBroadcaster
         )
     
-    def destroyCollisions(self):
+    def destroyCollisions(self) -> None:
         del self.cTravOnFloor
         del self.ccRay2
         del self.ccRay2Node
@@ -124,12 +124,8 @@ class OrbitalCamera(FSM, NodePath, ParamObj):
         if not pressed:
             return
 
-        if not base.CAM_TOGGLE_LOCK:
-            # FIXME: Unless the user interacts with anything that untoggles mouse control
-            # (i.e. hopping onto a crane, taking damage, opening book),
-            # the user is permanently stuck in this state
-            self.ignore("InputState-RMB")
-            self.accept("InputState-RMB", self.disableMouseControl)
+        self.ignore("InputState-RMB")
+        self.accept("InputState-RMB", self.disableMouseControl)
 
         if self.oobeEnabled:
             return
@@ -170,7 +166,7 @@ class OrbitalCamera(FSM, NodePath, ParamObj):
 
         self.subject.controlManager.setTurn(1)
     
-    def setCursor(self, cursor=bool):
+    def setCursor(self, cursor: bool) -> None:
         wp = WindowProperties()
         wp.setCursorHidden(cursor)
         base.win.requestProperties(wp)
@@ -253,13 +249,13 @@ class OrbitalCamera(FSM, NodePath, ParamObj):
         self.ignore("page_down")
         self._resetWheel()
     
-    def acceptTab(self):
+    def acceptTab(self) -> None:
         self.accept("tab", self.toggleFirstPerson)
     
-    def ignoreTab(self):
+    def ignoreTab(self) -> None:
         self.ignore("tab")
     
-    def toggleFirstPerson(self):
+    def toggleFirstPerson(self) -> None:
         self.firstPerson = not self.firstPerson
         if self.firstPerson:
             self._handleSetWheel(0)
@@ -269,7 +265,7 @@ class OrbitalCamera(FSM, NodePath, ParamObj):
             self.setPresetPos(0, transition=False)
             # self.disableMouseControl(True)
     
-    def _handleSetWheel(self, y=int):
+    def _handleSetWheel(self, y: int) -> None:
         self._collSolid.setPointB(0, y + 1, 0)
         self.camOffset.setY(y)
         t = (-14 - y) / -12
@@ -490,5 +486,5 @@ class OrbitalCamera(FSM, NodePath, ParamObj):
         return self.state == "Active"
     
     @property
-    def oobeEnabled(self):
+    def oobeEnabled(self) -> bool:
         return hasattr(base, "oobeMode") and base.oobeMode

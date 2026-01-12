@@ -1102,7 +1102,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1133,15 +1133,15 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.HpTextGenerator.setTextColor(1, 0.561, 0, 1) # Orange
             if colorCode == 5:
                 self.HpTextGenerator.setTextColor(0.851, 0, 1, 1) # Purple
-            self.hpTextNode = self.HpTextGenerator.generate()
-            self.hpText2 = self.attachNewNode(self.hpTextNode)
+            self.hpTextNode2 = self.HpTextGenerator.generate()
+            self.hpText2 = self.hpText.attachNewNode(self.hpTextNode2)
             self.hpText2.setScale(scale)
-            self.hpText2.setBillboardAxis()
+            self.hpText2.setBillboardPointEye()
             self.hpText2.setBin('fixed', 99)
-            self.hpText2.setPos(0, 0, self.height / 2)
-            self.hpTextInterval2 = Sequence(self.hpText2.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText2, .25, Vec4(0, 0, 0, 0)),
-                                           Func(self.hideHpText))
-            self.hpTextInterval2.start()
+            self.hpText2.setPos(0, 0, -1)
+            #self.hpTextInterval2 = Sequence(self.hpText2.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText2, .25, Vec4(0, 0, 0, 0)),
+                              #             Func(self.hideHpText))
+            #self.hpTextInterval2.start()
 
     def showHpText(self, number, bonus = 0, scale = 1, attackTrack = -1):
         if self.HpTextEnabled and not self.ghostMode:
@@ -1206,7 +1206,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1278,7 +1278,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1350,7 +1350,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1422,7 +1422,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1499,7 +1499,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1573,7 +1573,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1648,7 +1648,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1724,7 +1724,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1798,7 +1798,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1872,7 +1872,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextNode = self.HpTextGenerator.generate()
                 self.hpText = self.attachNewNode(self.hpTextNode)
                 self.hpText.setScale(scale)
-                self.hpText.setBillboardAxis()
+                self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 if self.sillySurgeText:
                     self.nametag3d.setDepthTest(0)
@@ -1900,7 +1900,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -1924,7 +1924,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -1948,7 +1948,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -1966,29 +1966,60 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
             self.hpTextInterval.start()
 
-    def showHpStringDesperation(self, text, duration = 0.85, scale = 1): # damage string
+    def showHpStringDesperation(self): # damage string
         if self.HpTextEnabled and not self.ghostMode:
-            self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
-            self.HpTextGenerator.setText(text)
+            self.HpTextGenerator.setText("Desperation!")
             self.HpTextGenerator.clearShadow()
             self.HpTextGenerator.setAlign(TextNode.ACenter)
-            r = a = 1.0
-            g = b = 0.0
-            self.HpTextGenerator.setTextColor(0.466, 0.474, 1.0, 1.0)
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
+            self.HpTextGenerator.setTextColor(1, 0.561, 0, 1)
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
-            self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setScale(0.75)
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 100)
             self.hpText.setPos(0, 0, self.height / 2)
-            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0),
+                                                   LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
             self.hpTextInterval.start()
+
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("+1 Lure Resistance")
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode2 = self.HpTextGenerator.generate()
+        self.hpText2 = self.hpText.attachNewNode(self.hpTextNode2)
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.hpText2.setScale(.7)
+        self.hpText2.setBillboardPointEye()
+        self.hpText2.setBin('fixed', 99)
+        self.hpText2.setPos(0, 0, -0.75)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("+40% Damage!")
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode3 = self.HpTextGenerator.generate()
+        self.hpText3 = self.hpText.attachNewNode(self.hpTextNode3)
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.hpText3.setScale(.7)
+        self.hpText3.setBillboardPointEye()
+        self.hpText3.setBin('fixed', 99)
+        self.hpText3.setPos(0, 0, -1.5)
+            # self.hpTextInterval2 = Sequence(self.hpText2.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText2, .25, Vec4(0, 0, 0, 0)),
+            #             Func(self.hideHpText))
+            # self.hpTextInterval2.start()
 
     def showHpStringAbility(self, text, duration = 0.85, scale = 1):
         if self.HpTextEnabled and not self.ghostMode:
@@ -2008,7 +2039,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.5), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -2026,7 +2057,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -2044,7 +2075,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -2062,7 +2093,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -2080,7 +2111,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -2098,7 +2129,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -2116,7 +2147,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 100)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
@@ -2134,7 +2165,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
-            self.hpText.setBillboardAxis()
+            self.hpText.setBillboardPointEye()
             self.hpText.setBin('fixed', 99)
             self.hpText.setPos(0, 0, self.height / 2)
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))

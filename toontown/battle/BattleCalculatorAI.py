@@ -2591,6 +2591,10 @@ class BattleCalculatorAI:
                         attack[SUIT_REVIVE_COL] = attack[SUIT_REVIVE_COL] | 1 << position
                     else:
                         if not self.suitHasCondition(currTarget.doId, 'dead'):
+                            for s in self.battle.activeSuits:
+                                if s.dna.name == 'cbutcher':
+                                    self.setSuitCondition(s.doId, 'rpmincrease', self.getSuitConditionModifier(s.doId, 'rpmincrease') + 1, 99, 'setBoth')
+                                    self.setSuitCondition(s.doId, 'rpmcalculator', 1, 10, 'setBoth')
                             self.setSuitCondition(currTarget.doId, 'dead', 1, 2, 'setBoth')
                             self.deadSuits += 1
                             if currTarget.getExecutive():
@@ -5763,7 +5767,7 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'rpmcalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'ButcherRevvingUpWhipsaw':
                 self.setSuitCondition(theSuit.doId, 'rpm', self.getSuitConditionModifier(theSuit.doId, 'rpm') + (self.getSuitConditionModifier(theSuit.doId, 'rpmincrease') + 4), 1, 'setBoth')
-                result = self.getSuitConditionModifier(theSuit.doId, 'rpmincrease')
+                result = self.getSuitConditionModifier(theSuit.doId, 'rpmincrease') + 4
                 self.setSuitCondition(theSuit.doId, 'rpmincrease', 0, 0, 'setBoth')
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'rpmcalculator', 0, 0, 'setBoth')
@@ -14214,17 +14218,18 @@ class BattleCalculatorAI:
             for condition in self.getAllRelevantConditions(suitId, StatusEffects.ExtraAttacks, toon=False):
                 for j in range(condition.extraAttacks): # Loop for how many times this is an extra attack.
                     attack = self.__getGenericSuitAttack(suitId)
-                    self.battle.suitAttacks.append(attack)
-                    # Syphon if necessary.
-                    if self.suitHasCondition(suitId, 'syphon') and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'SyphonMovie',  # Syphon Movie
-                                                                'animName': 'nothing',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if self.__suitCanAttack(suitId):
                         self.battle.suitAttacks.append(attack)
+                    # Syphon if necessary.
+                        if self.suitHasCondition(suitId, 'syphon') and not self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.syphonHP > 0:
+                            attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'SyphonMovie',  # Syphon Movie
+                                                                    'animName': 'nothing',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,  # Professor Control: I do not know how relevant attack frequency is, but keep it anyway.
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                            self.battle.suitAttacks.append(attack)
 
 
     def __updateLureTimeouts(self):

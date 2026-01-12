@@ -481,7 +481,7 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(0.722, 0.722, 0.722, 1)
                 self.skeleton.setColor(1, 1, 1, 1)
                 self.skeleton.show()
-        if self.cog.getManager() or self.cog.isLureResist or self.cog.extraAttack or self.cog.isInsured or self.cog.isInsured2 or self.cog.isContracted or self.cog.healthCondition == 13:
+        if self.cog.getManager() or self.cog.isLureResist or self.cog.isInsured or self.cog.isInsured2 or self.cog.isContracted or self.cog.healthCondition == 13:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.luredManager = status.find('**/lured_prestige_icon')
             if (self.cog.isDesperation and self.cog.isAngry) or self.cog.dna.name == 'hroller' or self.cog.isImmortal or (self.cog.getActualLevel() == 25 and self.cog.dna.name == 'hrollers') or self.cog.isLureImmune:
@@ -492,8 +492,8 @@ class TownBattleCogPanel(DirectFrame):
                                                     pos=(0.25, 0, -.5),
                                                     text_scale=.5)
             elif self.cog.isDesperation or self.cog.dna.name == 'hroller2' or self.cog.dna.name == 'videog' or self.cog.dna.name == 'fires' or self.cog.dna.name == 'fbed' or self.cog.dna.name == 'mouthp' \
-                    or self.cog.dna.name == 'rainmake' or self.cog.dna.name == 'whunter' or self.cog.extraAttack or self.cog.dna.name == 'wsi' or self.cog.dna.name == 'redd' or self.cog.dna.name == 'duckshfl' or self.cog.dna.name == 'treek' \
-                    or self.cog.dna.name == 'bellring' or self.cog.dna.name == 'ddiver' or self.cog.dna.name == 'gatekeep' or self.cog.isAngry or (self.cog.isVulnerable and not self.cog.dna.name == 'phouse') or self.cog.extraAttack:
+                    or self.cog.dna.name == 'rainmake' or self.cog.dna.name == 'whunter' or self.cog.dna.name == 'wsi' or self.cog.dna.name == 'redd' or self.cog.dna.name == 'duckshfl' or self.cog.dna.name == 'treek' \
+                    or self.cog.dna.name == 'bellring' or self.cog.dna.name == 'ddiver' or self.cog.dna.name == 'gatekeep' or self.cog.isAngry or (self.cog.isVulnerable and not self.cog.dna.name == 'phouse'):
                 self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
                                                 text="1",
                                                 text_fg=(1, 0, 0, 1),
