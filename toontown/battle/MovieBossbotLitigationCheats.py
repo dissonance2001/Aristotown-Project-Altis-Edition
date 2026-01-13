@@ -1353,7 +1353,7 @@ def doRefinementManager(attack):
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpText, 0))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 0, text="REFINED!", colorCode=1))
                 elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, x))
@@ -1364,7 +1364,7 @@ def doRefinementManager(attack):
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpText, 0))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 0, text="REFINED!", colorCode=1))
                 elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, x))
@@ -1382,7 +1382,7 @@ def doRefinementManager(attack):
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpText, 0))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 0, text="REFINED!", colorCode=1))
                 elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, x))
@@ -1393,7 +1393,7 @@ def doRefinementManager(attack):
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpText, 0))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 0, text="REFINED!", colorCode=1))
                 elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, x))
@@ -1411,7 +1411,7 @@ def doRefinementManager(attack):
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpText, 0))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 0, text="REFINED!", colorCode=1))
                 elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, x))
@@ -1422,7 +1422,7 @@ def doRefinementManager(attack):
                 x = int((suit.maxHP * suit.hardMaxHP) - suit.currHP)
                 if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpText, 0))
-                    suitTrack.append(Func(suit.showHpString, "REFINED!"))
+                    suitTrack.append(Func(suit.showHpTextNew, 0, text="REFINED!", colorCode=1))
                 elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
                     suitTrack.append(Func(suit.showHpTextNew, x, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, x))
@@ -2540,7 +2540,7 @@ def doBudgetCutsOLD(attack):
         propTrack.append(Func(MovieUtil.removeProp, stamp))
         toonTrack = Parallel(getToonTrackCheat(attack, 3.4, ['conked'], 3.4, ['conked']))
         toonTrack.append(Sequence(Wait(3.4), ActorInterval(toon, 'conked')))
-        notifyTrack = Sequence(Wait(3.4), Func(toon.showHpStringSnipe, "BUDGET CUTS!", 10))
+        notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextNew, 0, text="BUDGET CUTS!", colorCode=1))
         propTracks.append(propTrack)
         toonTracks.append(toonTrack)
         notifyTracks.append(notifyTrack)

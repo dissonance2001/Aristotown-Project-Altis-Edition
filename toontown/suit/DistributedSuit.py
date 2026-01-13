@@ -1051,19 +1051,41 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def createSuitBellowInterval(self):
         if self.style.name == 'lgator':
-            suitInterval = Sequence(ActorInterval(self, 'bellow'), Func(self.setNeutralAnimationDrop))
+            suitInterval = Sequence(ActorInterval(self, 'bellow'))
             for headPart in self.animatedHeadParts:
-                headInterval = Sequence(ActorInterval(headPart, 'bellow'), Func(headPart.loop,
-                                                                                'neutral'), Func(self.setNeutralAnimationDrop))
+                headInterval = Sequence(ActorInterval(headPart, 'bellow'), Func(self.setNeutralAnimation))
+                hasAnimatedHead = True
+                Parallel(headInterval, suitInterval).start()
+
+    def createSuitRevvingUpInterval(self):
+        if self.style.name == 'cbutcher':
+            suitInterval = Sequence(ActorInterval(self, 'revvedup'))
+            for headPart in self.animatedHeadParts:
+                headInterval = Sequence(ActorInterval(headPart, 'revvedup'), Func(self.setNeutralAnimation))
+                hasAnimatedHead = True
+                Parallel(headInterval, suitInterval).start()
+
+    def createSuitSparkPlugInterval(self):
+        if self.style.name == 'cbutcher':
+            suitInterval = Sequence(ActorInterval(self, 'sparkplug'))
+            for headPart in self.animatedHeadParts:
+                headInterval = Sequence(ActorInterval(headPart, 'sparkplug'), Func(self.setNeutralAnimation))
+                hasAnimatedHead = True
+                Parallel(headInterval, suitInterval).start()
+
+    def createSuitScabbardInterval(self):
+        if self.style.name == 'cbutcher':
+            suitInterval = Sequence(ActorInterval(self, 'scabbard'))
+            for headPart in self.animatedHeadParts:
+                headInterval = Sequence(ActorInterval(headPart, 'scabbard'), Func(self.setNeutralAnimation))
                 hasAnimatedHead = True
                 Parallel(headInterval, suitInterval).start()
 
     def createSuitSnapInterval(self):
         if self.style.name == 'lgator':
-            suitInterval = Sequence(ActorInterval(self, 'snap2'), Func(self.setNeutralAnimationDrop))
+            suitInterval = Sequence(ActorInterval(self, 'snap2'))
             for headPart in self.animatedHeadParts:
-                headInterval = Sequence(ActorInterval(headPart, 'gsnap'), Func(headPart.loop,
-                                                                                'neutral'), Func(self.setNeutralAnimationDrop))
+                headInterval = Sequence(ActorInterval(headPart, 'gsnap'), Func(self.setNeutralAnimation))
                 hasAnimatedHead = True
                 Parallel(headInterval, suitInterval).start()
 
@@ -1606,6 +1628,28 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             pass
 
+    def checkScabbard(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.currHP >= (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="CHARGED!", colorCode=5),
+                                         Func(self.updateHealthBar, 0)).start()
+        elif self.currHP > self.maxHP:
+            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="CHARGED!", colorCode=5),
+                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        else:
+            self.healInterval = Parallel(Func(self.showHpTextNew, self.maxHP, text="CHARGED!", colorCode=5),
+                                         Func(self.setHealthForMe, self.maxHP), Func(self.updateHealthBar, 0)).start()
+
+    def checkLayoffs(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        self.healInterval = Parallel(Func(self.showHpTextNew, -self.currHP, text="FIRED!", colorCode=4),
+                                         Func(self.setHealthForMe, -self.currHP), Func(self.updateHealthBar, 0)).start()
+
     def checkInsuranceScapegoatHP(self):
         if self.healInterval:
             self.healInterval.finish()
@@ -1861,7 +1905,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.isAngry and not self.dna.name == 'cbutcher':
             Sequence(Func(self.loop, 'neutral-enraged')
                      ).start()
-        elif self.dna.name == 'cbutcher' and self.isAngry:
+        elif self.dna.name == 'cbutcher' and self.isChainsawPhase2:
             Sequence(
                 Func(self.loop, 'neutral-override')
             ).start()
@@ -1895,7 +1939,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.dna.name == 'foreman' and self.getActualLevel() == 23:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'rolled'), Func(self.loop, 'rolled')
                      ).start()
-        elif self.dna.name == 'cbutcher' and self.isAngry:
+        elif self.dna.name == 'cbutcher' and self.isChainsawPhase2:
             Sequence(
                 Func(self.loop, 'neutral-override')
             ).start()
@@ -1941,7 +1985,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif self.dna.name == 'foreman' and self.getActualLevel() == 23:
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'rolled'), Func(self.loop, 'rolled')
                      ).start()
-        elif self.dna.name == 'cbutcher' and self.isAngry:
+        elif self.dna.name == 'cbutcher' and self.isChainsawPhase2:
             Sequence(
                 Func(self.loop, 'neutral-override')
             ).start()
@@ -1979,7 +2023,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.isAngry and not self.dna.name == 'cbutcher':
             Sequence(ActorInterval(self, 'neutral-enraged-return', startTime=self.getDuration('neutral-enraged-return'), endTime=0), Func(self.loop, 'neutral-enraged')
                      ).start()
-        elif self.dna.name == 'cbutcher' and self.isAngry:
+        elif self.dna.name == 'cbutcher' and self.isChainsawPhase2:
             Sequence(
                 Func(self.loop, 'neutral-override')
             ).start()
@@ -2115,14 +2159,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                     Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
                 ).start()
             else:
-                if self.dna.name == 'cbutcher' and not self.isAngry:
-                    texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
-                    texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
-                    for headPart in self.animatedHeadParts: Sequence(Func(headPart.setTexture, texture2, 1), ActorInterval(headPart, self.animHead), Func(headPart.setTexture, texture, 1),
-                                                                     Func(headPart.loop, 'neutral-lured')
-                                                                         ).start()
-                else:
-                    for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
+                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral-lured')
                 ).start()
         else:
@@ -2139,14 +2176,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                     Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
                     ).start()
             else:
-                if self.dna.name == 'cbutcher' and not self.isAngry:
-                    texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
-                    texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
-                    for headPart in self.animatedHeadParts: Sequence(Func(headPart.setTexture, texture2, 1), ActorInterval(headPart, self.animHead), Func(headPart.setTexture, texture, 1),
-                                                                         Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
-                                                                         ).start()
-                else:
-                    for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
+                for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                     ).start()
 

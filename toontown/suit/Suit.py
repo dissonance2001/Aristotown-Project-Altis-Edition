@@ -234,7 +234,7 @@ dola = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 liquid = (('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
 rkeeper = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
-cbutcher = (('roll-o-dex', 'roll-o-dex', 4), ('revvedup', 'revvedup', 4), ('sparkplug', 'sparkplug', 4), ('effort', 'effort', 4), ('glower', 'glower', 4))
+cbutcher = (('roll-o-dex', 'roll-o-dex', 4), ('revvedup', 'revvedup', 4), ('sparkplug', 'sparkplug', 4), ('snap', 'snap-override', 4),  ('scabbard', 'scabbard', 4), ('layoffs', 'layoffs', 4), ('throttle', 'throttle', 4), ('throttletwo', 'throttletwo', 4), ('effort', 'effort', 4), ('glower', 'glower', 4))
 cdirector = (('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('cease', 'cease3', 4), ('defense', 'defense', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
 dking = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 ottoman = (('effort', 'effort', 4), ('hold-pencil', 'hold-pencil', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -7061,41 +7061,54 @@ class Suit(Avatar.Avatar):
             headPart.setTexture(texture, 1)
 
     def makeChainsawPhase2(self, elite=False):
+        self.isChainsawPhase2 = 1
+        anims = self.generateAnimDict()
         for headPart in self.headParts:
             headPart.removeNode()
         self.headParts = []
         self.generateHead3('chainsaw_b', animated=True)
         texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
-        self.isChainsawPhase2 = 1
         for headPart in self.headParts:
-            if not self.isSkeleton:
-                headPart.setTexture(texture2, 1)
+            headPart.setTexture(texture2, 1)
+
+    def makeChainsawPhase4(self, elite=False):
+        self.isChainsawPhase2 = 1
+        anims = self.generateAnimDict()
+        for headPart in self.headParts:
+            headPart.removeNode()
+        self.headParts = []
+        self.generateHead3('chainsaw_b', animated=True)
+        texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
+        for headPart in self.headParts:
+            headPart.setTexture(texture2, 1)
+            headPart.find('**/bulbLeft').hide()
 
     def makeChairmanPhase2(self, elite=False):
+        anims = self.generateAnimDict()
         for headPart in self.headParts:
             headPart.removeNode()
         self.headParts = []
         self.generateHead3('chairman-a', animated=True)
-        self.isChairmanPhase2 = 1
+        self.generateHeadLitigator = 1
         texture2 = loader.loadTexture('phase_14/maps/ttcc_ene_chairman.png')
         for headPart in self.headParts:
-            if not self.isSkeleton:
-                headPart.setTexture(texture2, 1)
+            headPart.setTexture(texture2, 1)
 
     def makeOttomanPhase2(self, elite=False):
         self.isOttomanPhase2 = 1
 
     def makeChainsawPhase3(self, elite=False):
-        for headPart in self.headParts:
-            headPart.removeNode()
         self.isChainsawPhase2 = 0
         self.isChainsawPhase3 = 1
+        anims = self.generateAnimDict()
+        for headPart in self.headParts:
+            headPart.removeNode()
         self.headParts = []
-        self.generateHead3('chainsaw', animated=True)
+        self.generateHead3('chainsaw_c', animated=True)
         texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
         for headPart in self.headParts:
-            if not self.isSkeleton:
-                headPart.setTexture(texture2, 1)
+            headPart.setTexture(texture2, 1)
+            headPart.find('**/bulbLeft').hide()
 
     def makeExecutive(self, modelRoot=None):
         if not modelRoot:
@@ -7612,6 +7625,10 @@ class Suit(Avatar.Avatar):
     def makeIntoCTSManager(self, modelRoot=None):
         if not modelRoot:
             modelRoot = self
+        if self.style.name == 'hho':
+            texture = loader.loadTexture('phase_14/maps/cc_t_ene_headhoncho_exe.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
         texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_%s_e.png' % self.style.dept)
         if not self.isSkeleton:
             modelRoot.find('**/body').setTexture(texture, 1)

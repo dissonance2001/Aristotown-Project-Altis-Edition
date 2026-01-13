@@ -804,7 +804,7 @@ def doLiquidationEvent(attack):
             puddle.setScale(0.01)
             puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Wait(damageDelay - 0.7), Func(puddle.reparentTo, battle), Func(puddle.setPos, toon.getPos(battle)), LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
             puddleTracks.append(puddleTrack)
-            notifyTrack = Sequence(Wait(damageDelay + 2), Func(toon.showHpString, "LIQUIDATED!"))
+            notifyTrack = Sequence(Wait(damageDelay + 2), Func(toon.showHpTextNew, "LIQUIDATED!", colorCode=1))
             notifyTracks.append(notifyTrack)
     soundTrack1 = getSoundTrack('SA_liquidate.ogg', delay=1.0, node=suit)
     soundTrack = Parallel(soundTrack1)
@@ -860,7 +860,7 @@ def doLiquidationEventDamage(attack):
             puddle.setScale(0.01)
             puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Wait(damageDelay - 0.7), Func(puddle.reparentTo, battle), Func(puddle.setPos, toon.getPos(battle)), LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
             puddleTracks.append(puddleTrack)
-            notifyTrack = Sequence(Wait(damageDelay + 2), Func(toon.showHpString, "LIQUIDATED!"))
+            notifyTrack = Sequence(Wait(damageDelay + 2), Func(toon.showHpTextNew, 0, text="LIQUIDATED!", colorCode=1))
             notifyTracks.append(notifyTrack)
     soundTrack1 = getSoundTrack('SA_liquidate.ogg', delay=1.0, node=suit)
     soundTrack = Parallel(soundTrack1)
@@ -1633,7 +1633,7 @@ def doOvertime(attack, ind):
     selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + 3), Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                 "As you desire, Mr. Chairman.",
                                 CFSpeech | CFTimeout),
-                                                   Func(targetSuit.showHpString, "+ 1 ATTACK!"), Func(targetSuit.makeExtraAttacks, targetSuit.getExtraAttacks() + 1)), Func(targetSuit.setNeutralAnimation))
+                                                  Func(targetSuit.showHpTextNew, 0, text="+1 Attack!", colorCode=1), Func(targetSuit.makeExtraAttacks, targetSuit.getExtraAttacks() + 1)), Func(targetSuit.setNeutralAnimation))
     return Parallel(suitTrack, moveTrack, selfDamageTrack)
 
 def doTotalMarketMeltdown(attack):
@@ -2193,7 +2193,7 @@ def doRevisedFiling(attack):
 
     suitTrack = Parallel(getSuitAnimTrack(attack), Sequence(Func(bookshelf.setH, bookshelf.getH() + 180), Func(bookshelf.wrtReparentTo, battle),
                          Sequence(
-                             Wait(.3), bookshelf.posInterval(0, (0, 0, 0)), bookshelf.hprInterval(0, (0, 0, 0)), bookshelf.scaleInterval(.75, (.9, .9, .9)), Sequence(
+                             Wait(1.0), bookshelf.posInterval(0, (0, -50, 0)), bookshelf.hprInterval(0, (180, 0, 0)), bookshelf.scaleInterval(1.0, (2.0, 2.0, 2.0)), Sequence(
                                  Parallel(throwBook(attack, targets, bookshelf, throwSfx, end=True), ActorInterval(bookshelf, 'LB_AttackShelf')), Sequence(bookshelf.scaleInterval(.5, (.01, .01, .01)))),
                                  Sequence(Func(bookshelf.wrtReparentTo, suit), bookshelf.hprInterval(.5, (180, 0, 0)),
 
@@ -2635,7 +2635,7 @@ def doForecastCollapse(attack):
     for s in battle.activeSuits:
         if s.getManager() and not s.dna.name == 'cdirector':
             selfDamageTrack = Sequence(Wait(5.0), Parallel(ActorInterval(s, 'mob-mentality'), Func(s.setChatAbsolute, "I won't let you down, Ma'am.", CFSpeech | CFTimeout),
-                                                           Func(s.showHpString, "+40% Damage!")),
+                                                           Func(s.showHpTextNew, 0, text="+40% Damage!", colorCode=1)),
                                                            Func(s.setNeutralAnimationDrop), Func(s.makeDamageUp), Func(s.checkDamageUp, + 40))
             selfDamageTracks.append(selfDamageTrack)
     resetPos, resetHpr = battle.getActorPosHpr(suit)
@@ -2659,7 +2659,7 @@ def doForecastCollapse(attack):
 def doFailsafeProtocol(attack):
     suit = attack['suit']
     selfDamageTracks = Parallel()
-    selfDamageTrack = Sequence(Wait(3.0), Parallel(Func(suit.showHpString, "+5% Defense!")), Func(suit.makeDamageReduction), Func(suit.checkDamageReduction, + 5))
+    selfDamageTrack = Sequence(Wait(3.0), Parallel(Func(suit.showHpTextNew, 0, text="+5% Defense!", colorCode=1)), Func(suit.makeDamageReduction), Func(suit.checkDamageReduction, + 5))
     selfDamageTracks.append(selfDamageTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0))
     soundTrack2 = getSoundTrack('SA_cease_and_desist.ogg')
@@ -3221,9 +3221,8 @@ def doRevvingUp(attack):
     dmg = target[0]['hp']
     toon = target[0]['toon']
     selfDamageTracks = Parallel()
-    for headPart in suit.animatedHeadParts:
-        selfDamageTracks.append(Sequence(ActorInterval(headPart, 'revvedup'), Func(headPart.loop, 'neutral-hurt')))
-    selfDamageTrack = Sequence(Wait(2.0), Parallel(Func(suit.addRPM, dmg), Func(suit.showHpString, "+%s,000 RPM!" % dmg)))
+    selfDamageTracks.append(Sequence(Func(suit.createSuitRevvingUpInterval)))
+    selfDamageTrack = Sequence(Wait(2.0), Parallel(Func(suit.addRPM, dmg), Func(suit.showHpTextNew, 0, text="+%s,000 RPM" % dmg, colorCode=1)))
     selfDamageTracks.append(selfDamageTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0))
     soundTrack2 = getSoundTrack('SA_revving_up.ogg')
@@ -3235,9 +3234,8 @@ def doRevvingUpWhipsaw(attack):
     dmg = target[0]['hp']
     toon = target[0]['toon']
     selfDamageTracks = Parallel()
-    for headPart in suit.animatedHeadParts:
-        selfDamageTracks.append(Sequence(ActorInterval(headPart, 'revvedup'), Func(headPart.loop, 'neutral-hurt')))
-    selfDamageTrack = Sequence(Wait(2.0), Parallel(Func(suit.addRPM, dmg), Func(suit.showHpString, "+%s,000 RPM!" % dmg)))
+    selfDamageTracks.append(Sequence(Func(suit.createSuitRevvingUpInterval)))
+    selfDamageTrack = Sequence(Wait(2.0), Parallel(Func(suit.addRPM, dmg), Func(suit.showHpTextNew, 0, text="+%s,000 RPM" % dmg, colorCode=1)))
     selfDamageTracks.append(selfDamageTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0))
     soundTrack2 = getSoundTrack('SA_revving_up.ogg')
@@ -3249,9 +3247,31 @@ def do2000RPMSparkPlug(attack):
     dmg = target[0]['hp']
     toon = target[0]['toon']
     selfDamageTracks = Parallel()
-    selfDamageTrack = Sequence(Parallel(Func(suit.addRPM, - 2), Func(suit.showHpString, "-2,000 RPM!")))
+    selfDamageTrack = Sequence(Parallel(Func(suit.addRPM, - 2), Func(suit.showHpTextNew, 0, text="-2,000 RPM", colorCode=1)))
     selfDamageTracks.append(selfDamageTrack)
     suitTrack = Sequence(Wait(2.0), doSparkPlug(attack))
+    return Parallel(suitTrack, selfDamageTracks)
+
+def do2000RPMOffboarding(attack, ind):
+    suit = attack['suit']
+    target = attack['target']
+    dmg = target[0]['hp']
+    toon = target[0]['toon']
+    selfDamageTracks = Parallel()
+    selfDamageTrack = Sequence(Parallel(Func(suit.addRPM, - 2), Func(suit.showHpTextNew, 0, text="-2,000 RPM", colorCode=1)))
+    selfDamageTracks.append(selfDamageTrack)
+    suitTrack = Sequence(Wait(2.0), doOffboarding(attack, ind))
+    return Parallel(suitTrack, selfDamageTracks)
+
+def do3000RPMAggrandize(attack, ind):
+    suit = attack['suit']
+    target = attack['target']
+    dmg = target[0]['hp']
+    toon = target[0]['toon']
+    selfDamageTracks = Parallel()
+    selfDamageTrack = Sequence(Parallel(Func(suit.addRPM, - 3), Func(suit.showHpTextNew, 0, text="-3,000 RPM", colorCode=1)))
+    selfDamageTracks.append(selfDamageTrack)
+    suitTrack = Sequence(Wait(2.0), doAggrandize(attack, ind))
     return Parallel(suitTrack, selfDamageTracks)
 
 def do7000RPM(attack):
@@ -3260,9 +3280,31 @@ def do7000RPM(attack):
     dmg = target[0]['hp']
     toon = target[0]['toon']
     selfDamageTracks = Parallel()
-    selfDamageTrack = Sequence(Parallel(Func(suit.addRPM, - 7), Func(suit.showHpString, "-7,000 RPM!")))
+    selfDamageTrack = Sequence(Parallel(Func(suit.addRPM, - 7), Func(suit.showHpTextNew, 0, text="-7,000 RPM", colorCode=1)))
     selfDamageTracks.append(selfDamageTrack)
     suitTrack = Sequence(Wait(2.0), doMarkedWood(attack))
+    return Parallel(suitTrack, selfDamageTracks)
+
+def do7000RPMScabbard(attack):
+    suit = attack['suit']
+    target = attack['target']
+    dmg = target[0]['hp']
+    toon = target[0]['toon']
+    selfDamageTracks = Parallel()
+    selfDamageTrack = Sequence(Parallel(Func(suit.addRPM, - 7), Func(suit.showHpTextNew, 0, text="-7,000 RPM", colorCode=1)))
+    selfDamageTracks.append(selfDamageTrack)
+    suitTrack = Sequence(Wait(2.0), doScabbard(attack))
+    return Parallel(suitTrack, selfDamageTracks)
+
+def do10000RPM(attack):
+    suit = attack['suit']
+    target = attack['target']
+    dmg = target[0]['hp']
+    toon = target[0]['toon']
+    selfDamageTracks = Parallel()
+    selfDamageTrack = Sequence(Parallel(Func(suit.addRPM, - 10), Func(suit.showHpTextNew, 0, text="-10,000 RPM", colorCode=1)))
+    selfDamageTracks.append(selfDamageTrack)
+    suitTrack = Sequence(Wait(2.0), doLayoffs(attack))
     return Parallel(suitTrack, selfDamageTracks)
 
 def doMarkedWood(attack):
@@ -3326,8 +3368,7 @@ def doSparkPlug(attack):
         return p
     selfDamageTracks = Parallel()
     sprayTrack = Sequence(Wait(4.0), MovieUtil.getZapTrack(battle, Point4(1.0, 1.0, 0, 1.0), getSprayStartPos, targetPoint, .1, .1, .1, horizScale=.1, vertScale=.1))
-    for headPart in suit.animatedHeadParts:
-        selfDamageTracks.append(Sequence(ActorInterval(headPart, 'sparkplug'), Func(headPart.loop, 'neutral-hurt')))
+    selfDamageTracks.append(Sequence(Func(suit.createSuitSparkPlugInterval)))
     suitTrack = Sequence(getSuitTrack(attack), Wait(2.0))
     soundTrack2 = getSoundTrack('SA_sparkplug.ogg')
     toonTrack = getToonTrack(attack, 4.0, ['slip-backward'], 2, ['jump'])
@@ -3415,5 +3456,360 @@ def doSparkPlugDamage(attack):
             flameTracks.append(flameTrack)
             flecksTracks.append(flecksTrack)
             colorTracks.append(colorTrack)
-    toonDamageTrack = getToonTracksCheat(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep'])
+    toonDamageTrack = getToonTracksCheat(attack, 1.5, ['slip-backward'], 1.3, ['sidestep'])
     return Parallel(notifyTracks, toonDamageTrack, soundTracks)
+
+def doOverride(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+
+    phase2 = Func(suit.makeChainsawPhase2)
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 30))
+    ceaseTrack = ActorInterval(suit, 'rake-react')
+    ceaseSpeechTrack = Sequence(Func(suit.makeChainsawPhase2), Func(suit.setChatAbsolute,
+                                     "PERSONALITY OVERRIDE ACTIVATED.",
+                                     CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
+                                     "PLEASE WAIT.",
+                                     CFSpeech | CFTimeout), ActorInterval(suit, 'lured'), ActorInterval(suit, 'lured'), Func(suit.setNeutralAnimation), Func(suit.setChatAbsolute,
+                                     "PERSONALITY OVERRIDE COMPLETE.",
+                                     CFSpeech | CFTimeout), Wait(3.0),  Func(suit.setChatAbsolute,
+                                     "ADDITIONAL ENTITIES IDENTIFIED. TERMINATION SEQUENCE IN PROGRESS.", CFSpeech | CFTimeout), ActorInterval(suit, 'neutral-override'), Func(suit.setNeutralAnimation))
+    ceaseSpeechTrack.append(Wait(2.0))
+    return Parallel(phase2, ceaseTrack, makeImmune, ceaseSpeechTrack)
+
+def doOverridePhase3(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+
+    phase2 = Func(suit.makeChainsawPhase2)
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 30))
+    ceaseTrack = ActorInterval(suit, 'rake-react')
+    ceaseSpeechTrack = Sequence(Func(suit.makeChainsawPhase4), Func(suit.setChatAbsolute,
+                                     "PERSONALITY OVERRIDE ACTIVATED.",
+                                     CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
+                                     "ADDITIONAL ENTITIES IDENTIFIED. TERMINATION SEQUENCE IN PROGRESS.", CFSpeech | CFTimeout), ActorInterval(suit, 'neutral-override'), Func(suit.setNeutralAnimation))
+    ceaseSpeechTrack.append(Wait(2.0))
+    return Parallel(ceaseTrack, makeImmune, ceaseSpeechTrack)
+
+def doOverrideRemoval(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    phase3 = Func(suit.makeChainsawPhase3)
+    ceaseTrack = ActorInterval(suit, 'throttle')
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 20))
+   # for headPart in suit.animatedHeadParts:
+       # headInterval = ActorInterval(headPart, 'throttle')
+    ceaseSoundTrack = Parallel(SoundInterval(globalBattleSoundCache.getSound('SA_throttle_break.ogg'), node=suit))
+    ceaseSpeechTrack = Sequence(Func(suit.setChatAbsolute,
+                                     "DAMAGE TO- help- TO- help- TO OVER- me- OVERRIDE DE- toons- DETECTED.",
+                                     CFSpeech | CFTimeout), Wait(3.0), ActorInterval(suit, 'lured'), ActorInterval(suit, 'lured'), Func(suit.setChatAbsolute,
+                                                                            "ENTERING- i'm- ENTER- trying to- RECOVERY MO- resist it- MODE.",
+                                                                            CFSpeech | CFTimeout), Func(suit.setNeutralAnimation), Wait(3.0),
+                                Func(suit.setChatAbsolute,
+                                     "ACTIVATING- i don't- TEMP- know- TEMPORARY- if i- REFOREST- can- REFORESTATION MODE.",
+                                     CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
+                                     "OVERRIDE- it- SEVERE- hurts- SEVERELY DAMA- let- DAMAGED. ATTEMPT- me- ATTEMPTING- OUT!! FINAL FALLBACK PROCEDURE.",
+                                     CFSpeech | CFTimeout), Parallel(ceaseTrack, ceaseSoundTrack, Sequence(Wait(3.75), Func(suit.makeChainsawPhase3))),
+                                Func(suit.setNeutralAnimation))
+    ceaseSpeechTrack.append(Wait(2.0))
+    return Parallel(makeImmune, ceaseSpeechTrack)
+
+def doOverrideRemovalPhase3(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    phase3 = Func(suit.makeChainsawPhase3)
+    ceaseTrack = ActorInterval(suit, 'throttletwo')
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, - 30))
+   # for headPart in suit.animatedHeadParts:
+     #   headInterval = ActorInterval(headPart, 'throttle2')
+    ceaseSoundTrack = Parallel(SoundInterval(globalBattleSoundCache.getSound('SA_throttle_hit.ogg'), node=suit))
+    ceaseSpeechTrack = Sequence(Func(suit.setChatAbsolute,
+                                     "DAMAGE TO- help- TO- help- TO OVER- me- OVERRIDE DE- toons- DETECTED.",
+                                     CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
+                                     "OVERRIDE- it- SEVERE- hurts- SEVERELY DAMA- let- DAMAGED. ATTEMPT- me- ATTEMPTING- OUT!! FINAL FALLBACK PROCEDURE.",
+                                     CFSpeech | CFTimeout), Parallel(ceaseTrack, ceaseSoundTrack, Sequence(Wait(3.75), Func(suit.makeChainsawPhase3))),
+                                Func(suit.setNeutralAnimation))
+    ceaseSpeechTrack.append(Wait(2.0))
+    return Parallel(ceaseSpeechTrack, makeImmune)
+
+def doScabbard(attack):
+    BattleParticles.loadParticles()
+    theSuit = attack['suit']
+    battle = attack['battle']
+    suitTracks = Parallel()
+    liftTracks = Parallel()
+    selfDamageTracks = Parallel()
+    selfDamageTracks.append(Sequence(Func(theSuit.createSuitScabbardInterval)))
+    for s in battle.activeSuits:
+        liftEffect = BattleParticles.createParticleEffect('SyphonLift')
+        liftEffect.setPos(s.getPos(battle))
+        liftEffect.setZ(liftEffect.getZ() - 1.3)
+        liftTracks.append(getPartTrack(liftEffect, 0, 5.1, [liftEffect, battle, 0], softStop=-1))
+        suitTrack = Sequence()
+        suitTrack.append(Wait(3))
+        if not s.getManager():
+            suitTrack.append(Func(s.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout))
+            suitTrack.append(Func(s.checkScabbard))
+        suitTrack.append(Func(s.setNeutralAnimationDrop))
+        suitTracks.append(suitTrack)
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack.append(Wait(3.0))
+    soundTrack1 = getSoundTrack('SA_scabbard.ogg', node=theSuit)
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3, node=theSuit)
+    makeNotImmune2 = Sequence(Func(theSuit.makeUnVulnerable), Func(theSuit.checkVulnerabilityUp, - 30))
+    return Parallel(suitTrack, makeNotImmune2, selfDamageTracks, suitTracks, soundTrack2, liftTracks, soundTrack1)
+
+def doKickback(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence(ActorInterval(suit, 'pie-small-react'), Func(suit.setNeutralAnimationDrop))
+    suitTrack.append(Wait(3.0))
+    makeImmune = Func(suit.makeVulnerable)
+    makeDamageUp = Parallel(Func(suit.checkVulnerabilityUp, + 50))
+    selfDamageTrack = Func(suit.showHpTextNew, 0, text="KICKBACK!", colorCode=4)
+    return Parallel(suitTrack, makeImmune, makeDamageUp, selfDamageTrack)
+
+def doLayoffs(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    damageDelay = 1.7
+    suitTrack2 = getSuitAnimTrack(attack)
+    suitTrack = Sequence(ActorInterval(suit, 'layoffs', endTime=1.875), Wait(2), ActorInterval(suit, 'layoffs', startTime=1.875), Func(suit.setNeutralAnimationDrop))
+    suitResponseTracks = Parallel()
+    for targetSuit in battle.activeSuits:
+        if not targetSuit.getManager():
+            suitResponseTrack = Sequence()
+            showDamage = Sequence(Func(targetSuit.showHpTextNew, -targetSuit.currHP, text="FIRED!", colorCode=1), Func(targetSuit.checkLayoffs))
+            cannon = loader.loadModel('phase_5/models/props/cannon_cog')
+            barrel = cannon.find('**/cannon')
+            barrel.setHpr(0, 90, 0)
+            cannonHolder = render.attachNewNode('CannonHolder')
+            cannon.reparentTo(cannonHolder)
+            cannon.setPos(0, 0, -8.6)
+            cannonHolder.setPos(targetSuit.getPos(render))
+            cannonHolder.setHpr(targetSuit.getHpr(render))
+            cannonAttachPoint = barrel.attachNewNode('CannonAttach')
+            kapowAttachPoint = barrel.attachNewNode('kapowAttach')
+            scaleFactor = 1.6
+            iScale = 1 / scaleFactor
+            barrel.setScale(scaleFactor, 1, scaleFactor)
+            cannonAttachPoint.setScale(iScale, 1, iScale)
+            cannonAttachPoint.setPos(0, 6.7, 0)
+            kapowAttachPoint.setPos(0, -0.5, 1.9)
+            suitLevel = targetSuit.getActualLevel()
+            if suitLevel > 12:
+                suitLevel = 12
+            deep = 2.5 + suitLevel * 0.2
+            suitScale = 0.9
+            import math
+            suitScale = 0.9 - math.sqrt(suitLevel) * 0.1
+            sival = []
+            posInit = cannonHolder.getPos()
+            posFinal = Point3(posInit[0] + 0.0, posInit[1] + 0.0, posInit[2] + 7.0)
+            kapow = globalPropPool.getProp('kapow')
+            kapow.reparentTo(kapowAttachPoint)
+            kapow.hide()
+            kapow.setScale(0.25)
+            kapow.setBillboardPointEye()
+            smoke = loader.loadModel('phase_4/models/props/test_clouds')
+            smoke.reparentTo(cannonAttachPoint)
+            smoke.setScale(0.5)
+            smoke.hide()
+            smoke.setBillboardPointEye()
+            soundBomb = base.loader.loadSfx('phase_4/audio/sfx/MG_cannon_fire_alt.ogg')
+            playSoundBomb = SoundInterval(soundBomb)
+            soundFly = base.loader.loadSfx('phase_4/audio/sfx/firework_whistle_01.ogg')
+            playSoundFly = SoundInterval(soundFly)
+            soundCannonAdjust = base.loader.loadSfx('phase_4/audio/sfx/MG_cannon_adjust.ogg')
+            playSoundCannonAdjust = SoundInterval(soundCannonAdjust, duration=0.6)
+            soundCogPanic = base.loader.loadSfx('phase_5/audio/sfx/ENC_cogafssm.ogg')
+            playSoundCogPanic = SoundInterval(soundCogPanic)
+            reactIval = Parallel(Sequence(Wait(0.0),
+                                  LerpPosInterval(cannonHolder, 2.0, posFinal,
+                                                  startPos=posInit,
+                                                  blendType='easeInOut'),
+                                  Parallel(LerpHprInterval(barrel, 0.6,
+                                                           Point3(0, 0, 0),
+                                                           startHpr=Point3(0,
+                                                                           90,
+                                                                           0),
+                                                           blendType='easeIn'),
+                                           playSoundCannonAdjust), Wait(2.0),
+                                  Parallel(LerpHprInterval(barrel, 0.6,
+                                                           Point3(0, 0, 0),
+                                                           startHpr=Point3(0,
+                                                                           0,
+                                                                           0),
+                                                           blendType='easeIn'),
+                                           playSoundCannonAdjust),
+                                  LerpPosInterval(cannonHolder, 1.0, posInit,
+                                                  startPos=posFinal,
+                                                  blendType='easeInOut')),
+                         Sequence(Wait(0.0),
+                                  Parallel(Sequence(ActorInterval(targetSuit, 'flail'), Func(targetSuit.setNeutralAnimationTrap)),
+                                           targetSuit.scaleInterval(1.0, suitScale),
+                                           LerpPosInterval(targetSuit, 0.25, Point3(0, -1.0, 0.0)),
+                                           Sequence(Wait(0.25), Parallel(playSoundCogPanic,
+                                                                         LerpPosInterval(targetSuit, 1.5,
+                                                                                         Point3(0, -deep,
+                                                                                                0.0),
+                                                                                         blendType='easeIn')))),
+                                  Wait(1.5), Parallel(playSoundBomb, playSoundFly, Sequence(Func(smoke.show), Parallel(
+                                 LerpScaleInterval(smoke, 0.5, 3),
+                                 LerpColorScaleInterval(smoke, 0.5, Vec4(2, 2, 2, 0))), Func(smoke.hide)),
+                                                      Sequence(Func(kapow.show),
+                                                               ActorInterval(kapow, 'kapow'), Func(kapow.hide)),
+                                                      LerpPosInterval(targetSuit, 0.25, Point3(0, 100.0, 0.0)),
+                                                      targetSuit.scaleInterval(0.25, 0.01)), Func(targetSuit.hide)))
+            sival = Sequence(Parallel(Func(targetSuit.reparentTo, cannonAttachPoint), Func(targetSuit.setPos, (0, 0, 0)), Func(targetSuit.setHpr, (0, -90, 0)), reactIval, MovieUtil.createSuitStunIntervalFired(targetSuit, 0.3, 1.3), Func(cannonHolder.remove)))
+            suitResponseTrack.append(Wait(0.5))
+            suitResponseTrack.append(showDamage)
+            suitResponseTrack.append(sival)
+            suitResponseTracks.append(suitResponseTrack)
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    gearPoint = Point3(suitPos.getX(), suitPos.getY() - 10, suitPos.getZ() + suit.height - 0.2)
+    explosionTrack = Sequence()
+    explosionTrack.append(Wait(4.25))
+    explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=5))
+    toonTracks = getToonTracks(attack, 4.25, ['slip-forward'], 6, ['jump'])
+    soundTrack1 = getSoundTrack('ENC_cogfall_apart.ogg', delay=4.25, node=suit)
+    return Parallel(suitTrack, explosionTrack, suitTrack2, suitResponseTracks, soundTrack1, toonTracks)
+
+def doOffboarding(attack, ind):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    damageDelay = 1.7
+    targetSuit = battle.activeSuits[ind]
+    suitTrack2 = getSuitAnimTrack(attack)
+    suitTrack = Sequence(ActorInterval(suit, 'snap'), Func(suit.setNeutralAnimationDrop))
+    suitResponseTracks = Parallel()
+    suitResponseTrack = Sequence()
+    showDamage = Sequence(Func(targetSuit.showHpTextNew, -targetSuit.currHP, text="FIRED!", colorCode=1), Func(targetSuit.checkLayoffs))
+    cannon = loader.loadModel('phase_5/models/props/cannon_cog')
+    barrel = cannon.find('**/cannon')
+    barrel.setHpr(0, 90, 0)
+    cannonHolder = render.attachNewNode('CannonHolder')
+    cannon.reparentTo(cannonHolder)
+    cannon.setPos(0, 0, -8.6)
+    cannonHolder.setPos(targetSuit.getPos(render))
+    cannonHolder.setHpr(targetSuit.getHpr(render))
+    cannonAttachPoint = barrel.attachNewNode('CannonAttach')
+    kapowAttachPoint = barrel.attachNewNode('kapowAttach')
+    scaleFactor = 1.6
+    iScale = 1 / scaleFactor
+    barrel.setScale(scaleFactor, 1, scaleFactor)
+    cannonAttachPoint.setScale(iScale, 1, iScale)
+    cannonAttachPoint.setPos(0, 6.7, 0)
+    kapowAttachPoint.setPos(0, -0.5, 1.9)
+    suitLevel = targetSuit.getActualLevel()
+    if suitLevel > 12:
+        suitLevel = 12
+    deep = 2.5 + suitLevel * 0.2
+    suitScale = 0.9
+    import math
+    suitScale = 0.9 - math.sqrt(suitLevel) * 0.1
+    sival = []
+    posInit = cannonHolder.getPos()
+    posFinal = Point3(posInit[0] + 0.0, posInit[1] + 0.0, posInit[2] + 7.0)
+    kapow = globalPropPool.getProp('kapow')
+    kapow.reparentTo(kapowAttachPoint)
+    kapow.hide()
+    kapow.setScale(0.25)
+    kapow.setBillboardPointEye()
+    smoke = loader.loadModel('phase_4/models/props/test_clouds')
+    smoke.reparentTo(cannonAttachPoint)
+    smoke.setScale(0.5)
+    smoke.hide()
+    smoke.setBillboardPointEye()
+    soundBomb = base.loader.loadSfx('phase_4/audio/sfx/MG_cannon_fire_alt.ogg')
+    playSoundBomb = SoundInterval(soundBomb)
+    soundFly = base.loader.loadSfx('phase_4/audio/sfx/firework_whistle_01.ogg')
+    playSoundFly = SoundInterval(soundFly)
+    soundCannonAdjust = base.loader.loadSfx('phase_4/audio/sfx/MG_cannon_adjust.ogg')
+    playSoundCannonAdjust = SoundInterval(soundCannonAdjust, duration=0.6)
+    soundCogPanic = base.loader.loadSfx('phase_5/audio/sfx/ENC_cogafssm.ogg')
+    playSoundCogPanic = SoundInterval(soundCogPanic)
+    reactIval = Parallel(Sequence(Wait(0.0),
+                          LerpPosInterval(cannonHolder, 2.0, posFinal,
+                                          startPos=posInit,
+                                          blendType='easeInOut'),
+                          Parallel(LerpHprInterval(barrel, 0.6,
+                                                   Point3(0, 0, 0),
+                                                   startHpr=Point3(0,
+                                                                   90,
+                                                                   0),
+                                                   blendType='easeIn'),
+                                   playSoundCannonAdjust), Wait(2.0),
+                          Parallel(LerpHprInterval(barrel, 0.6,
+                                                   Point3(0, 0, 0),
+                                                   startHpr=Point3(0,
+                                                                   0,
+                                                                   0),
+                                                   blendType='easeIn'),
+                                   playSoundCannonAdjust),
+                          LerpPosInterval(cannonHolder, 1.0, posInit,
+                                          startPos=posFinal,
+                                          blendType='easeInOut')),
+                 Sequence(Wait(0.0),
+                          Parallel(Sequence(ActorInterval(targetSuit, 'flail'), Func(targetSuit.setNeutralAnimationTrap)),
+                                   targetSuit.scaleInterval(1.0, suitScale),
+                                   LerpPosInterval(targetSuit, 0.25, Point3(0, -1.0, 0.0)),
+                                   Sequence(Wait(0.25), Parallel(playSoundCogPanic,
+                                                                 LerpPosInterval(targetSuit, 1.5,
+                                                                                 Point3(0, -deep,
+                                                                                        0.0),
+                                                                                 blendType='easeIn')))),
+                          Wait(1.5), Parallel(playSoundBomb, playSoundFly, Sequence(Func(smoke.show), Parallel(
+                         LerpScaleInterval(smoke, 0.5, 3),
+                         LerpColorScaleInterval(smoke, 0.5, Vec4(2, 2, 2, 0))), Func(smoke.hide)),
+                                              Sequence(Func(kapow.show),
+                                                       ActorInterval(kapow, 'kapow'), Func(kapow.hide)),
+                                              LerpPosInterval(targetSuit, 0.25, Point3(0, 100.0, 0.0)),
+                                              targetSuit.scaleInterval(0.25, 0.01)), Func(targetSuit.hide)))
+    sival = Sequence(Parallel(Func(targetSuit.reparentTo, cannonAttachPoint), Func(targetSuit.setPos, (0, 0, 0)), Func(targetSuit.setHpr, (0, -90, 0)), reactIval, MovieUtil.createSuitStunIntervalFired(targetSuit, 0.3, 1.3), Func(cannonHolder.remove)))
+    suitResponseTrack.append(Wait(0.5))
+    suitResponseTrack.append(showDamage)
+    suitResponseTrack.append(sival)
+    suitResponseTracks.append(suitResponseTrack)
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    gearPoint = Point3(suitPos.getX(), suitPos.getY() - 10, suitPos.getZ() + suit.height - 0.2)
+    explosionTrack = Sequence()
+    explosionTrack.append(Wait(4.25))
+    explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=5))
+    toonTracks = getToonTrack(attack, 4.25, ['slip-forward'], 6, ['jump'])
+    soundTrack1 = getSoundTrack('ENC_cogfall_apart.ogg', delay=4.25, node=suit)
+    soundTrack = getSoundTrack('SA_bash.ogg', delay=0)
+    return Parallel(suitTrack, explosionTrack, soundTrack, suitTrack2, suitResponseTracks, soundTrack1, toonTracks)
+
+def doAggrandize(attack, ind):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
+    targetSuit = battle.activeSuits[ind]
+    damageDelay = 1.7
+    targetPos = targetSuit.getPos(battle)
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    suitPos = targetSuit.getPos(battle)
+    y = suitPos.getY()
+    dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
+    dustCloud.setBillboardAxis(2.0)
+    dustCloud.setZ(3)
+    dustCloud.setScale(0.4)
+    dustCloud.createTrack()
+    dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, suit), Func(dustCloud.setPos,
+                                                                        Point3(suitPos.getX(), 0,
+                                                                               0)),
+                                 dustCloud.track, Func(dustCloud.detachNode), Wait(1.7), name='dustCloadIval')
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    selfDamageTrack = Sequence(Wait(1.0), Parallel(dustCloudHideIval, ActorInterval(targetSuit, 'slip-forward', startTime=2.43),
+                                                   Func(targetSuit.makeIntoCTSManager),
+                                                   Func(targetSuit.showHpString, "PROMOTION!"), Func(targetSuit.setMaxHP, 1000), Func(targetSuit.setManager, 1), Func(targetSuit.makeShielding),
+                                                   Func(targetSuit.updateHealthBar, 0)),
+                               Func(targetSuit.setNeutralAnimation), Func(battle.unSueSuit, targetSuit))
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=1.0)
+    soundTrack = getSoundTrack('SA_bash.ogg', delay=0)
+    return Parallel(suitTrack, selfDamageTrack, soundTrack, soundTrack2)

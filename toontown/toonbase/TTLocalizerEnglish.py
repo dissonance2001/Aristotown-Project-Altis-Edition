@@ -4490,8 +4490,8 @@ SuitCheatDescription = {
     # Contingency Director Cheats
  'ContingencyFailsafeProtocol': "The Contingency Director gains a damage defense when\nattacked!",
  'ContingencyRiskThresholdBreach75': "The Contingency Director absorbs all damage dealt to\nother cogs when under 75% health!",
- 'ContingencyRiskThresholdBreach50': "The Contingency Director retaliates every other turn\nwhen under 50% health!",
- 'ContingencyRiskThresholdBreach25': "The Contingency Director gains another attack when\nunder 25% health!",
+ 'ContingencyRiskThresholdBreach50': "The Contingency Director retaliates every other turn\nwhen under 25% health!",
+ 'ContingencyRiskThresholdBreach25': "The Contingency Director gains another attack when\nunder 50% health!",
  'ContingencyContingencyClause': "The Contingency Director bans gags at random!",
  'ContingencyContingencyClauseRetaliation': "The Contingency Director punishes Toons for using banned\ngags!",
  'ContingencyRedundantAuthority': "The Contingency Director uses her own resources to heal\nher allies!",

@@ -358,71 +358,72 @@ class DistributedAvatar(DistributedActor, Avatar):
 
     def showHpTextNew(self, number, text=None, bonus=0, scale=1, attackTrack=-1, colorCode=0):
         if self.HpTextEnabled and not self.ghostMode:
-            if number != 0:
-                if self.hpText:
-                    self.hideHpText()
-                self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
-                if number < 0:
-                    self.HpTextGenerator.setText(str(number))
-                elif type(number) in [int, float]:
-                    self.HpTextGenerator.setText('+' + str(number))
-                else:
-                    self.HpTextGenerator.setText(str(number))
-                self.HpTextGenerator.clearShadow()
-                self.HpTextGenerator.setAlign(TextNode.ACenter)
-                if bonus == 1:
-                    r = 1.0
-                    g = 1.0
-                    b = 0
-                    a = 1
-                elif bonus == 2:
-                    r = 1.0
-                    g = 0.5
-                    b = 0
-                    a = 1
-                elif bonus == 3:
-                    r = 0.6
-                    g = 0.2
-                    b = 0.8
-                    a = 1.0
-                    scale = 0.9
-                elif bonus == 4:
-                    r = 0.93
-                    g = 0.51
-                    b = 0.93
-                    a = 1.0
-                    scale = 0.9
-                elif number < 0:
-                    r = 0.9
-                    g = 0
-                    b = 0
-                    a = 1
-                else:
-                    r = 0
-                    g = 0.9
-                    b = 0
-                    a = 1
-                if self.hpTextInterval:
-                    self.hpTextInterval.finish()
-                    self.hpTextInterval = None
-                if self.hpTextInterval2:
-                    self.hpTextInterval2.finish()
-                    self.hpTextInterval2 = None
-                self.HpTextGenerator.setTextColor(r, g, b, a)
-                self.hpTextNode = self.HpTextGenerator.generate()
-                self.hpText = self.attachNewNode(self.hpTextNode)
-                self.hpText.setScale(scale)
-                self.hpText.setBillboardPointEye()
-                self.hpText.setBin('fixed', 100)
-                self.hpText.setPos(0, 0, self.height / 2)
-                if text != None:
-                    self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0),
-                                                   LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
-                    self.hpTextInterval.start()
-                else:
-                    self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0),
-                                                   LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
-                    self.hpTextInterval.start()
+            if self.hpText:
+                self.hideHpText()
+            self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+            if number == 0:
+                self.HpTextGenerator.setText("")
+            elif number < 0:
+                self.HpTextGenerator.setText(str(number))
+            elif type(number) in [int, float]:
+                self.HpTextGenerator.setText('+' + str(number))
+            else:
+                self.HpTextGenerator.setText(str(number))
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            if bonus == 1:
+                r = 1.0
+                g = 1.0
+                b = 0
+                a = 1
+            elif bonus == 2:
+                r = 1.0
+                g = 0.5
+                b = 0
+                a = 1
+            elif bonus == 3:
+                r = 0.6
+                g = 0.2
+                b = 0.8
+                a = 1.0
+                scale = 0.9
+            elif bonus == 4:
+                r = 0.93
+                g = 0.51
+                b = 0.93
+                a = 1.0
+                scale = 0.9
+            elif number < 0:
+                r = 0.9
+                g = 0
+                b = 0
+                a = 1
+            else:
+                r = 0
+                g = 0.9
+                b = 0
+                a = 1
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
+            self.HpTextGenerator.setTextColor(r, g, b, a)
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText = self.attachNewNode(self.hpTextNode)
+            self.hpText.setScale(scale)
+            self.hpText.setBillboardPointEye()
+            self.hpText.setBin('fixed', 100)
+            self.hpText.setPos(0, 0, self.height / 2)
+        if text != None:
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)),
+                                           Func(self.hideHpText))
+            self.hpTextInterval.start()
+        else:
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0),
+                                           LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval.start()
 
         if text != None:
             self.HpTextGenerator.setFont(OTPGlobals.getSignFont())

@@ -60,8 +60,9 @@ echo Launching the Uberdog Server...
 START uberdog-win32.bat
 echo Launching the AI Server...
 START ai-win32.bat
-cd ..
+echo.
 SET TT_GAMESERVER=127.0.0.1
+echo.
 goto game
 
 

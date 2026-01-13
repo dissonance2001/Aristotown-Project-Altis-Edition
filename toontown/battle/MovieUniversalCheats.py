@@ -843,7 +843,7 @@ def doGovernaughtDeath(attack):
         toon = t['toon']
         dmg = t['hp']
         soundTrack = getSoundTrack('LB_toonup.ogg', node=toon)
-        notifyTrack = Sequence(Func(toon.showHpString, "+5% Damage!"))
+        notifyTrack = Sequence(Func(toon.showHpTextNew, 0, text="+5% Damage!", colorCode=1))
         soundTracks.append(soundTrack)
         notifyTracks.append(notifyTrack)
     return Parallel(notifyTracks, soundTracks, waitTrack)
@@ -871,7 +871,7 @@ def doSueApplication(attack):
         getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
     explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
     suitTrack = Sequence()
-    suitTrack.append(Parallel(ActorInterval(suit, 'pie-small-react'), Func(battle.sueSuit, suit), Func(suit.showHpString, "CEASE AND DESIST!")))
+    suitTrack.append(Parallel(ActorInterval(suit, 'pie-small-react'), Func(battle.sueSuit, suit), Func(suit.showHpTextNew, 0, text="CEASE AND DESIST!", colorCode=0)))
     suitTrack.append(Func(suit.makeSued, 4))
     suitTrack.append(Func(suit.setNeutralAnimationDrop))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('LB_receive_evidence.ogg'), node=suit))

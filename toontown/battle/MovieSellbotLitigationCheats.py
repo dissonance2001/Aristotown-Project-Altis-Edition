@@ -1011,7 +1011,7 @@ def doPromotion(attack, ind):
     dustCloud.setZ(3)
     dustCloud.setScale(0.4)
     dustCloud.createTrack()
-    dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, cage), Func(dustCloud.setPos,
+    dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, suit), Func(dustCloud.setPos,
                                                                         Point3(suitPos.getX(), 0,
                                                                                0)),
                                  dustCloud.track, Func(dustCloud.detachNode), Wait(1.7), name='dustCloadIval')

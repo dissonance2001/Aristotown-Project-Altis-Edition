@@ -582,9 +582,15 @@ def doSuitAttack(attack):
         suitTrack = MovieBoardbotLitigationCheats.doAuditCycle(attack)
         # corporate butcherer
     elif name == 'ButcherOverride':
-        suitTrack = MovieBoardbotLitigationCheats.doOverride(attack)
+        if suit.isChainsawPhase3:
+            suitTrack = MovieBoardbotLitigationCheats.doOverridePhase3(attack)
+        else:
+            suitTrack = MovieBoardbotLitigationCheats.doOverride(attack)
     elif name == 'ButcherOverrideRemoval':
-        suitTrack = MovieBoardbotLitigationCheats.doOverrideRemoval(attack)
+        if suit.isChainsawPhase3:
+            suitTrack = MovieBoardbotLitigationCheats.doOverrideRemovalPhase3(attack)
+        else:
+            suitTrack = MovieBoardbotLitigationCheats.doOverrideRemoval(attack)
     elif name == 'ButcherRevvingUp':
         suitTrack = MovieBoardbotLitigationCheats.doRevvingUp(attack)
     elif name == 'ButcherRevvingUpWhipsaw':
@@ -594,33 +600,33 @@ def doSuitAttack(attack):
     elif name == 'ButcherMarkedWood':
         suitTrack = MovieBoardbotLitigationCheats.do7000RPM(attack)
     elif name == 'ButcherOffboarding':
-        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 1)
+        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 1)
     elif name == 'ButcherOffboarding2':
-        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 2)
+        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 2)
     elif name == 'ButcherOffboarding3':
-        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 3)
+        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 3)
     elif name == 'ButcherOffboarding4':
-        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 4)
+        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 4)
     elif name == 'ButcherOffboarding5':
-        suitTrack = MovieBoardbotLitigationCheats.doOffboarding(attack, 5)
+        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 5)
     elif name == 'ButcherAggrandize':
-        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 1)
+        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 1)
     elif name == 'ButcherAggrandize2':
-        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 2)
+        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 2)
     elif name == 'ButcherAggrandize3':
-        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 3)
+        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 3)
     elif name == 'ButcherAggrandize4':
-        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 4)
+        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 4)
     elif name == 'ButcherAggrandize5':
-        suitTrack = MovieBoardbotLitigationCheats.doAggrandize(attack, 5)
+        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 5)
     elif name == 'ButcherSparkPlug':
         suitTrack = MovieBoardbotLitigationCheats.do2000RPMSparkPlug(attack)
     elif name == 'ButcherSparkPlugDamage':
         suitTrack = MovieBoardbotLitigationCheats.doSparkPlugDamage(attack)
     elif name == 'ButcherScabbard':
-        suitTrack = MovieBoardbotLitigationCheats.doScabbard(attack)
+        suitTrack = MovieBoardbotLitigationCheats.do7000RPMScabbard(attack)
     elif name == 'ButcherLayoffs':
-        suitTrack = MovieBoardbotLitigationCheats.doLayoffs(attack)
+        suitTrack = MovieBoardbotLitigationCheats.do10000RPM(attack)
         # contingency director
     elif name == 'ContingencyFailsafeProtocol':
         suitTrack = MovieBoardbotLitigationCheats.doFailsafeProtocol(attack)
@@ -1473,15 +1479,15 @@ def doSuitAttack(attack):
         elif name == 'AbsorbMovieLevel':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'ButcherSparkPlugDamage':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'RecordkeeperMinutesTaken':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SafetyHeatWaveCalculation':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SafetyViolation':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'UnionBusterUnionCalculator':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ForemanBurningDamage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ForemanSleepyOvercharge':
