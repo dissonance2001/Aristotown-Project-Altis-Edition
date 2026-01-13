@@ -5750,9 +5750,9 @@ class BattleCalculatorAI:
                 #     self.setSuitCondition(theSuit.doId, 'extraAttack10', 1, 99, 'setBoth')
                 
                 # Check to see if the Liquidator already has extra attacks.
-                for i in range(len(self.suitStatusConditionsNew[targetSuit.doId])):
-                    if isinstance(self.suitStatusConditionsNew[targetSuit.doId][i], StatusEffects.ExtraAttacks): # Do they have any extra attacks?
-                        self.suitStatusConditionsNew[targetSuit.doId][i].extraAttacks += 1 # Add one more attack.
+                for i in range(len(self.suitStatusConditionsNew[theSuit.doId])):
+                    if isinstance(self.suitStatusConditionsNew[theSuit.doId][i], StatusEffects.ExtraAttacks): # Do they have any extra attacks?
+                        self.suitStatusConditionsNew[theSuit.doId][i].extraAttacks += 1 # Add one more attack.
                         break # Stop the loop so that we do not go down to else.
 
                 # They do not have any extra attacks, so give them one.
