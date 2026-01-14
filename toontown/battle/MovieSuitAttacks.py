@@ -1483,7 +1483,7 @@ def doSuitAttack(attack):
         elif name == 'RecordkeeperMinutesTaken':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ButcherMarkedWood':
-            suitTrack = MovieBoardbotLitigationCheats.do7000RPM(attack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ButcherOffboarding':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ButcherOffboarding2':
