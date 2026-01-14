@@ -5757,7 +5757,7 @@ class BattleCalculatorAI:
 
                 # They do not have any extra attacks, so give them one.
                 else:
-                    self.suitStatusConditionsNew[targetSuit.doId].append(StatusEffects.ExtraAttacks(1))
+                    self.suitStatusConditionsNew[theSuit.doId].append(StatusEffects.ExtraAttacks(1))
             elif atkType['name'] == 'LiquidatorStormCell':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
