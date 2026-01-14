@@ -1482,6 +1482,34 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'RecordkeeperMinutesTaken':
             resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherMarkedWood':
+            suitTrack = MovieBoardbotLitigationCheats.do7000RPM(attack)
+        elif name == 'ButcherOffboarding':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherOffboarding2':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherOffboarding3':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherOffboarding4':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherOffboarding5':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherAggrandize':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherAggrandize2':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherAggrandize3':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherAggrandize4':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherAggrandize5':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherSparkPlug':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherScabbard':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ButcherLayoffs':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SafetyHeatWaveCalculation':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SafetyViolation':
@@ -3879,7 +3907,7 @@ def doCanned(attack):
         scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 2.31)
     canHpr = VBase3(-173.47, -0.42, 162.09)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(-0.1, -0.175, 0), VBase3(-10.584, 11.945, -161.684)]
+    posPoints = [Point3(-0.1734104046242777, -0.5202312138728331, -0.45), VBase3(-10, 90, -170.635838150289)]
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, propDelay, Point3(9, 9, 9), scaleUpTime=0.25))
     propDelay = propDelay + 0.5
     throwTrack.append(Wait(suitDelay))

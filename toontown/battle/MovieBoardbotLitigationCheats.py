@@ -2324,8 +2324,8 @@ def doContingencyClause(attack):
     for t in targets:
         toon = t['toon']
         safe = loader.loadModel('phase_10/models/cashbotHQ/CashBotSafe')
-        safe.setHpr(180, 0, 180)
-        safe.setPos(-0.375, 0, 0.25)
+        safe.setHpr(90, 0, 90)
+        safe.setPos(-0.26011560693641655, -1.127167630057805, -0.43352601156069426)
         safe.setScale(.000001)
         toonScale = toon.find('**/actorGeom').getScale()
         appearSfx = loader.loadSfx('phase_5/audio/sfx/SA_watercooler_appear_only.ogg')
@@ -2337,10 +2337,10 @@ def doContingencyClause(attack):
             Sequence(Sequence(
                 Wait(1.1), Func(safe.reparentTo, suit.getRightHand()),
                 Parallel(
-                    safe.scaleInterval(.25, (.1, .1, .1)), SoundInterval(appearSfx, duration=.25)
+                    safe.scaleInterval(.25, (.075, .075, .075)), SoundInterval(appearSfx, duration=.25)
                 ),
                 Wait(1.1), Func(safe.wrtReparentTo, render),
-                Parallel(safe.scaleInterval(.25, (.38, .38, .38)),
+                Parallel(safe.scaleInterval(.25, (.35, .35, .35)),
                     safe.hprInterval(.9, (0, 360, 0)), SoundInterval(throwSfx, duration=.7),
                     ProjectileInterval(safe, duration=.9, endPos=(toon.getPos()), gravityMult=5.0),
                     Sequence(Wait(.85), Func(landSfx.play), Func(safe.find('**/SafeShadow1').show), squishTrack)
@@ -3496,6 +3496,7 @@ def doOverrideRemoval(attack):
     battle = attack['battle']
     phase3 = Func(suit.makeChainsawPhase3)
     ceaseTrack = ActorInterval(suit, 'throttle')
+    selfDamageTrack = Sequence(Func(suit.showHpTextNew, 0, text="+50% Damage!", colorCode=1))
     makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 20))
    # for headPart in suit.animatedHeadParts:
        # headInterval = ActorInterval(headPart, 'throttle')
@@ -3510,7 +3511,7 @@ def doOverrideRemoval(attack):
                                      CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
                                      "OVERRIDE- it- SEVERE- hurts- SEVERELY DAMA- let- DAMAGED. ATTEMPT- me- ATTEMPTING- OUT!! FINAL FALLBACK PROCEDURE.",
                                      CFSpeech | CFTimeout), Parallel(ceaseTrack, ceaseSoundTrack, Sequence(Wait(3.75), Func(suit.makeChainsawPhase3))),
-                                Func(suit.setNeutralAnimation))
+                                Func(suit.setNeutralAnimation), selfDamageTrack)
     ceaseSpeechTrack.append(Wait(2.0))
     return Parallel(makeImmune, ceaseSpeechTrack)
 
@@ -3556,7 +3557,7 @@ def doScabbard(attack):
     suitTrack.append(Wait(3.0))
     soundTrack1 = getSoundTrack('SA_scabbard.ogg', node=theSuit)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3, node=theSuit)
-    makeNotImmune2 = Sequence(Func(theSuit.makeUnVulnerable), Func(theSuit.checkVulnerabilityUp, - 30))
+    makeNotImmune2 = Sequence(Func(theSuit.makeUnVulnerable), Func(theSuit.checkVulnerabilityUp, - 50))
     return Parallel(suitTrack, makeNotImmune2, selfDamageTracks, suitTracks, soundTrack2, liftTracks, soundTrack1)
 
 def doKickback(attack):
@@ -3645,7 +3646,7 @@ def doLayoffs(attack):
                                            playSoundCannonAdjust),
                                   LerpPosInterval(cannonHolder, 1.0, posInit,
                                                   startPos=posFinal,
-                                                  blendType='easeInOut')),
+                                                  blendType='easeInOut'), Func(cannonHolder.remove)),
                          Sequence(Wait(0.0),
                                   Parallel(Sequence(ActorInterval(targetSuit, 'flail'), Func(targetSuit.setNeutralAnimationTrap)),
                                            targetSuit.scaleInterval(1.0, suitScale),
@@ -3662,7 +3663,7 @@ def doLayoffs(attack):
                                                                ActorInterval(kapow, 'kapow'), Func(kapow.hide)),
                                                       LerpPosInterval(targetSuit, 0.25, Point3(0, 100.0, 0.0)),
                                                       targetSuit.scaleInterval(0.25, 0.01)), Func(targetSuit.hide)))
-            sival = Sequence(Parallel(Func(targetSuit.reparentTo, cannonAttachPoint), Func(targetSuit.setPos, (0, 0, 0)), Func(targetSuit.setHpr, (0, -90, 0)), reactIval, MovieUtil.createSuitStunIntervalFired(targetSuit, 0.3, 1.3), Func(cannonHolder.remove)))
+            sival = Sequence(Parallel(Func(targetSuit.reparentTo, cannonAttachPoint), Func(targetSuit.setPos, (0, 0, 0)), Func(targetSuit.setHpr, (0, -90, 0)), reactIval, MovieUtil.createSuitStunIntervalFired(targetSuit, 0.3, 1.3)))
             suitResponseTrack.append(Wait(0.5))
             suitResponseTrack.append(showDamage)
             suitResponseTrack.append(sival)
@@ -3751,7 +3752,7 @@ def doOffboarding(attack, ind):
                                    playSoundCannonAdjust),
                           LerpPosInterval(cannonHolder, 1.0, posInit,
                                           startPos=posFinal,
-                                          blendType='easeInOut')),
+                                          blendType='easeInOut'), Func(cannonHolder.remove)),
                  Sequence(Wait(0.0),
                           Parallel(Sequence(ActorInterval(targetSuit, 'flail'), Func(targetSuit.setNeutralAnimationTrap)),
                                    targetSuit.scaleInterval(1.0, suitScale),
@@ -3768,7 +3769,7 @@ def doOffboarding(attack, ind):
                                                        ActorInterval(kapow, 'kapow'), Func(kapow.hide)),
                                               LerpPosInterval(targetSuit, 0.25, Point3(0, 100.0, 0.0)),
                                               targetSuit.scaleInterval(0.25, 0.01)), Func(targetSuit.hide)))
-    sival = Sequence(Parallel(Func(targetSuit.reparentTo, cannonAttachPoint), Func(targetSuit.setPos, (0, 0, 0)), Func(targetSuit.setHpr, (0, -90, 0)), reactIval, MovieUtil.createSuitStunIntervalFired(targetSuit, 0.3, 1.3), Func(cannonHolder.remove)))
+    sival = Sequence(Parallel(Func(targetSuit.reparentTo, cannonAttachPoint), Func(targetSuit.setPos, (0, 0, 0)), Func(targetSuit.setHpr, (0, -90, 0)), reactIval, MovieUtil.createSuitStunIntervalFired(targetSuit, 0.3, 1.3)))
     suitResponseTrack.append(Wait(0.5))
     suitResponseTrack.append(showDamage)
     suitResponseTrack.append(sival)
@@ -3800,7 +3801,7 @@ def doAggrandize(attack, ind):
     dustCloud.setZ(3)
     dustCloud.setScale(0.4)
     dustCloud.createTrack()
-    dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, suit), Func(dustCloud.setPos,
+    dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, targetSuit), Func(dustCloud.setPos,
                                                                         Point3(suitPos.getX(), 0,
                                                                                0)),
                                  dustCloud.track, Func(dustCloud.detachNode), Wait(1.7), name='dustCloadIval')

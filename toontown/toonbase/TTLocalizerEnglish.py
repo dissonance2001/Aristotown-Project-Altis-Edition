@@ -4496,7 +4496,7 @@ SuitCheatDescription = {
  'ContingencyContingencyClauseRetaliation': "The Contingency Director punishes Toons for using banned\ngags!",
  'ContingencyRedundantAuthority': "The Contingency Director uses her own resources to heal\nher allies!",
  'ContingencyOperationalFreeze': "The Contingency Director disables gags at random\nwhen under 25% health!",
- 'ContingencyForecastCollapse': "The Contingency Director buffs her partner when\nunder 20% health!",
+ 'ContingencyForecastCollapse': "The Contingency Director buffs her partner when\nunder 25% health!",
     # Count Erclaim Cheats
 'ErclaimLaffSteal': "Count Erclaim syphons your laff with each attack!",
 'ErclaimSacrifice': "Count Erclaim sacrifices other cogs to become stronger!",
