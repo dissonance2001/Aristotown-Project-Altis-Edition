@@ -9415,8 +9415,9 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'overridecalculator', 1, 10, 'setBoth')
                 if x % 3 == 0 and self.getSuitConditionModifier(suitId, 'rpm') >= 2:
                     self.setSuitCondition(suitId, 'sparkplugcalculator', 1, 10, 'setBoth')
-                self.setSuitCondition(suitId, 'layoffscalculator', 1, 10, 'setBoth')
-                if self.getSuitConditionModifier(suitId, 'rpm') >= 7:
+                if self.getSuitConditionModifier(suitId, 'rpm') >= 10:
+                    self.setSuitCondition(suitId, 'layoffscalculator', 1, 10, 'setBoth')
+                elif self.getSuitConditionModifier(suitId, 'rpm') >= 7:
                     self.setSuitCondition(suitId, 'markedwoodcalculator', 1, 10, 'setBoth')
                 elif self.getSuitConditionModifier(suitId, 'rpm') >= 3 and self.suitHasCondition(suitId, 'deadpromotion') and len(self.battle.activeSuits) >= 3:
                     self.setSuitCondition(suitId, 'aggrandizecalculator', 1, 10, 'setBoth')
