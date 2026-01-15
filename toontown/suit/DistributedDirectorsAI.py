@@ -98,7 +98,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            cogs = self.invokeEmptyPlanner(11, 'directors')
+            cogs = self.invokeEmptyPlanner(11, random.choice(('blitpair1', 'blitpair2', 'blitpair3', 'blitpair4', 'blitpair5', 'blitpair6')))
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)

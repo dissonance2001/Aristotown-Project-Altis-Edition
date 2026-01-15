@@ -11,12 +11,15 @@ from pandac.PandaModules import VBase3, CollisionPlane, CollisionNode, Collision
 from toontown.battle import MovieToonVictory
 from toontown.battle import RewardPanel
 from toontown.battle import SuitBattleGlobals
+from toontown.friends import FriendsListManager
 from toontown.building import ElevatorConstants
 from toontown.chat.ChatGlobals import *
 from toontown.coghq import CogDisguiseGlobals
 from toontown.distributed import DelayDelete
 from toontown.effects import DustCloud
 from toontown.nametag import NametagGlobals
+from toontown.nametag import NametagGroup
+from toontown.nametag.NametagGlobals import *
 from toontown.suit import DistributedBossCog
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
@@ -162,7 +165,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def loadEnvironment(self):
         self.notify.debug('----- loadEnvironment')
         DistributedBossCog.DistributedBossCog.loadEnvironment(self)
-        self.geom = loader.loadModel('phase_12/models/bossbotHQ/ceo-office')
+        self.geom = loader.loadModel('phase_12/models/bossbotHQ/BanquetInterior_1')
         self.elevatorEntrance = self.geom.find('**/elevator_origin')
         elevatorModel = loader.loadModel('phase_12/models/bossbotHQ/BB_Inside_Elevator')
         if not elevatorModel:
@@ -244,13 +247,18 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
             self.resistanceToonOnstage = 0
 
     def enterElevator(self):
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         DistributedBossCog.DistributedBossCog.enterElevator(self)
         self.resistanceToon.removeActive()
         self.__showResistanceToon(True)
         self.resistanceToon.suit.loop('neutral')
         base.camera.setPos(0, 21, 7)
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.BossbotBossBattleOnePosHpr)
+        self.setPosHpr(*ToontownGlobals.BossbotBossBattleOnePosHpr2)
         self.loop('Ff_neutral')
         self.show()
         base.camLens.setMinFov(ToontownGlobals.CEOElevatorFov / (4.0 / 3.0))
@@ -260,10 +268,20 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
             self.__showResistanceToon(True)
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
 
     def exitIntroduction(self):
         DistributedBossCog.DistributedBossCog.exitIntroduction(self)
         self.promotionMusic.stop()
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
 
     def makeIntroductionMovie(self, delayDeletes):
         rToon = self.resistanceToon
@@ -295,6 +313,11 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.show()
 
     def enterPrepareBattleTwo(self):
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         self.controlToons()
         self.setToonsToNeutral(self.involvedToons)
         for toonId in self.involvedToons:
@@ -338,6 +361,27 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
         track = Sequence(Func(camera.reparentTo, render), Func(camera.setPos, rToon, 0, 22, 6), Func(camera.setHpr, 0, 0, 0), Func(rToon.setChatAbsolute, TTL.BossbotRTWearWaiter, CFSpeech), Wait(3.0), self.wearCogSuits(self.toonsA + self.toonsB, render, None, waiter=True), Func(rToon.clearChat), Func(self.setPosHpr, bossPos, Point3(0, 0, 0)), Parallel(LerpPosInterval(camera, 2, getCamBossPos)), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo1, CFSpeech), Wait(3.0), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo2, CFSpeech), Wait(3.0), Parallel(LerpPosHprInterval(camera, 2, getCamRTPos, Point3(10, -8, 0))), Func(self.setPos, bossEndPos), Func(self.clearChat), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood1, CFSpeech), Wait(3.0), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood2, CFSpeech), Wait(1.0), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(90, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), self.createWalkInInterval(), Func(rToon.clearChat), Func(self.__hideResistanceToon))
         return track
+
+    def __clickedNameTag(self, avatar):
+        self.notify.debug('__clickedNameTag')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
+
+    def __handleFriendAvatar(self, avId, avName, avDisableName):
+        self.notify.debug('__handleFriendAvatar')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleFriendAvatar(place, avId, avName, avDisableName)
+
+    def __handleAvatarDetails(self, avId, avName, playerId=None):
+        self.notify.debug('__handleAvatarDetails')
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleAvatarDetails(place, avId, avName, playerId)
 
     def createWalkInInterval(self):
         retval = Parallel()
@@ -400,6 +444,11 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.servingTimer.posInTopRightCorner()
         self.servingTimer.countdown(ToontownGlobals.BossbotBossServingDuration)
         base.playMusic(self.phaseTwoMusic, looping=1, volume=0.9)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
 
     def exitBattleTwo(self):
         if self.servingTimer:
@@ -501,6 +550,11 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.calcNotDeadList()
         self.battleANode.setPosHpr(*ToontownGlobals.DinerBattleAPosHpr)
         self.battleBNode.setPosHpr(*ToontownGlobals.DinerBattleBPosHpr)
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         self.cleanupIntervals()
         self.controlToons()
         self.setToonsToNeutral(self.involvedToons)
@@ -538,6 +592,11 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleThree(self):
         self.cleanupIntervals()
         self.calcNotDeadList()
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         for table in self.tables.values():
             table.setAllDinersToSitNeutral()
 
@@ -1090,7 +1149,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
         seq.start()
         self.activeIntervals[intervalName] = seq
-			
+
     def geomFlashRed(self, geom):
         self.cleanupGeomFlash()
         geom.setColorScale(1, 1, 1, 1)

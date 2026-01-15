@@ -1048,7 +1048,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                'The Powerhouse doubles down damage on toons who chose\nbanned gags!',
+                'The Powerhouse  retaliates against toon who chose\nbanned gags!',
                 attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
@@ -2420,7 +2420,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
     if attack['name'] in TTLocalizer.SuitCheatNames:
         pbpDc = PlayByPlayText.PlayByPlayText()
-        if name == 'ForemanRedTape' or name == 'ForemanBurning' or name == 'MintCompoundingInterest' or name == 'PresidentDriver':
+        if name == 'ForemanRedTape' or name == 'ForemanBurning' or name == 'MintCompoundingInterest' or name == 'PresidentDriver' or name == 'PowerhouseSnipeSoaked':
             pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
             pbpTrack = Func(suit.checkPlayByPlayTextCheat, pbpText, displayName, attackDuration - 2)
         else:

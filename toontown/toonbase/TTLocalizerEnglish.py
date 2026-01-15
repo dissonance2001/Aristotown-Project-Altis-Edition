@@ -4315,7 +4315,7 @@ SuitCheatDescription = {
 'PowerhouseSyphonDesperation': "The Powerhouse gives a syphon ability to all cogs!",
 'PowerhouseSnipeVulnerable': "The Powerhouse retaliates against toons with existing\ndamage vulnerabilities!",
 'PowerhouseSnipeGagBan': "The Powerhouse doubles down damage on toons who picked\nbanned gags!",
-'PowerhouseSnipeSoaked': "The Powerhouse retaliates against Toons at random!",
+'PowerhouseSnipeSoaked': "The Powerhouse applies a damage overtime effect!",
 'PowerhouseSnipeBookkept': "The Powerhouse retaliates against toons who didn't follow the\nBookkeeper's instructions!",
 'PowerhouseSnipeMulligan': "The Powerhouse retaliates against toons who took damage\nfrom Fore!",
 'PowerhouseSnipeCollectCall': "The Powerhouse becomes stronger every turn he is\nzapped!",

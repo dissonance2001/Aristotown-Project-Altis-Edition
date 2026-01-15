@@ -222,11 +222,11 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            cogs = self.invokeEmptyPlanner(11, 'ffm2')
+            cogs = self.invokeEmptyPlanner(11, random.choice(('slitpair1', 'slitpair2', 'slitpair3', 'slitpair4', 'slitpair5', 'slitpair6')))
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)
-            while len(activeSuits) > 6:
+            while len(activeSuits) >= 6:
                 suit = activeSuits.pop()
                 reserveSuits.append((suit, 100))
 
@@ -236,12 +236,12 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
             reserveSuits.sort(compareJoinChance)
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
-        else:
-            cogs = self.invokeEmptyPlanner(11, 'ffm')
+        if battleNumber == 2:
+            cogs = self.invokeEmptyPlanner(11, 'ambassador')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)
-            while len(activeSuits) > 6:
+            while len(activeSuits) >= 6:
                 suit = activeSuits.pop()
                 reserveSuits.append((suit, 100))
 
@@ -252,13 +252,13 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
 
-    def generateNewReserves(self, battleNumber):
+    def generateNewReserves(self, battleNumber, specialCode):
         if battleNumber == 1:
-            cogs = self.invokeReservesPlanner(11, 'ffm2')
+            cogs = self.invokeReservesPlanner(11, specialCode)
             reserveSuits = cogs['reserveSuits']
             return {'reserveSuits': reserveSuits}
         elif battleNumber == 2:
-            cogs = self.invokeReservesPlanner(11, 'ffm')
+            cogs = self.invokeReservesPlanner(11, specialCode)
             reserveSuits = cogs['reserveSuits']
             return {'reserveSuits': reserveSuits}
 

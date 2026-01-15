@@ -362,7 +362,7 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                          self.backupToonsToBattlePosition(self.toonsB, self.battleBNode),
                          Sequence(
                              Wait(2),
-                             Func(self.setChatAbsolute, attackToons, CFSpeech))))))
+                             Func(self.setChatAbsolute, attackToons, CFSpeech | CFTimeout))))))
         track.append(dialogTrack)
         return Sequence(Func(self.stickToonsToFloor), track, Func(self.unstickToons), name=self.uniqueName('Introduction'))
 
@@ -713,6 +713,10 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWantActiveNametags(True)
         self.clearChat()
         self.cagedToon.clearChat()
+        self.battleANode.setPosHpr(*ToontownGlobals.SellbotBossBattleTwoPosHpr2)
+        self.battleBNode.setPosHpr(*ToontownGlobals.SellbotBossBattleTwoPosHpr2)
+        self.toonsToBattlePosition(self.toonsA, self.battleANode)
+        self.toonsToBattlePosition(self.toonsB, self.battleBNode)
         if self.battleA == None or self.battleB == None:
             cageIndex = 1
         else:
@@ -794,6 +798,8 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         self.setPosHpr(*ToontownGlobals.SellbotBossBattleTwoPosHpr)
+        self.battleANode.setPosHpr(*ToontownGlobals.SellbotBossBattleTwoPosHpr2)
+        self.battleBNode.setPosHpr(*ToontownGlobals.SellbotBossBattleTwoPosHpr2)
         self.clearChat()
         self.cagedToon.clearChat()
         self.releaseToons()

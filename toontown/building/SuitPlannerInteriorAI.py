@@ -287,6 +287,66 @@ class SuitPlannerInteriorAI:
             miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)  # Litigator
             activeSuits.append(miniboss3)
             activeSuits.append(miniboss)
+        elif specialCode == 'blitpair1':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0) # Ambassador
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0) # Wiretapper
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'blitpair2':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)  # Bookkeeper
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'c', 25, 0)  # Powerhouse
+            activeSuits.append(miniboss3)
+            activeSuits.append(miniboss4)
+        elif specialCode == 'blitpair3':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)  # Ambassador
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'c', 25, 0)  # Powerhouse
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss4)
+        elif specialCode == 'blitpair4':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)  # Bookkeeper
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)  # Wiretapper
+            activeSuits.append(miniboss3)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'blitpair5':
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'c', 25, 0)  # Powerhouse
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)  # Wiretapper
+            activeSuits.append(miniboss4)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'blitpair6':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)  # Bookkeeper
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)  # Ambassador
+            activeSuits.append(miniboss3)
+            activeSuits.append(miniboss)
+        elif specialCode == 'slitpair1':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 's', 28, 0)  # Pressurizer
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Union Buster
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'slitpair2':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Racketeer
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Radiographer
+            activeSuits.append(miniboss3)
+            activeSuits.append(miniboss4)
+        elif specialCode == 'slitpair3':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 's', 28, 0)  # Pressurizer
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Radiographer
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss4)
+        elif specialCode == 'slitpair4':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Racketeer
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Union Buster
+            activeSuits.append(miniboss3)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'slitpair5':
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Radiographer
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Union Buster
+            activeSuits.append(miniboss4)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'slitpair6':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Racketeer
+            miniboss = self.__genSuitObject(self.zoneId, 28, 's', 28, 0)  # Pressurizer
+            activeSuits.append(miniboss3)
+            activeSuits.append(miniboss)
         elif specialCode == 'ambassador':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)
