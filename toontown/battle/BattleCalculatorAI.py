@@ -3405,6 +3405,11 @@ class BattleCalculatorAI:
                     result *= self.getSuitConditionModifier(theSuit.doId, 'enraged')
                 if self.toonHasCondition(toonId, 'snapped'):
                     result *= self.getToonConditionModifier(toonId, 'snapped')
+                # Going to slowly replace individual status effects so we acclimate to the new system before moving onto a more sophisticated means of this.
+                for condition in self.toonStatusConditionsNew[toonId]:
+                    if isinstance(condition, StatusEffects.Snapped):
+                        result *= condition.defenseMod
+
                 if theSuit.getDamageMultiplier() > 1:
                     result *= theSuit.getDamageMultiplier()
                 #if self.toonHasCondition(toonId, 'heavyRainDamageToon'):
@@ -3729,10 +3734,20 @@ class BattleCalculatorAI:
                 if self.toonHasCondition(toon.doId, 'soakToon') and not self.toonHasCondition(toon.doId, 'hidden'):
                     result = 33
                     attack[SUIT_HP_COL][targetIndex] = result
-                    if self.getToonConditionModifier(toonId, 'snapped') > 1.1:
-                        self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
-                    else:
-                        self.setToonCondition(toon.doId, 'snapped', 1.1, 3, 'setBoth')
+                    # if self.getToonConditionModifier(toonId, 'snapped') > 1.1:
+                    #     self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
+                    # else:
+                    #     self.setToonCondition(toon.doId, 'snapped', 1.1, 3, 'setBoth')
+                    # Search for if the Snapped effect exists.
+                    for i in range(len(self.toonStatusConditionsNew[toon.doId])):
+                        if isinstance(self.toonStatusConditionsNew[toon.doId][i], StatusEffects.Snapped):
+                            # We have a Snapped effect.
+                            self.toonStatusConditionsNew[toon.doId][i].defenseMod = max(self.toonStatusConditionsNew[toon.doId][i].defenseMod, 1.1) # Set the defense modifier to whichever is greater.
+                            self.toonStatusConditionsNew[toon.doId][i].setRoundsLeft(2)
+                            break # Do not allow any more iterations.
+
+                    else: # It does not; add a new effect.
+                        self.toonStatusConditionsNew[toon.doId].append(StatusEffects.Snapped(1.1))
                     self.setToonCondition(toon.doId, 'soakToon', 1, 1, 'setBoth')
                     self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
                     self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
@@ -3743,10 +3758,20 @@ class BattleCalculatorAI:
                 if self.toonHasCondition(toon.doId, 'markedforsnap') and not self.toonHasCondition(toon.doId, 'hidden'):
                     result = 33
                     attack[SUIT_HP_COL][targetIndex] = result
-                    if self.getToonConditionModifier(toonId, 'snapped') > 1.1:
-                        self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
-                    else:
-                        self.setToonCondition(toon.doId, 'snapped', 1.1, 3, 'setBoth')
+                    # if self.getToonConditionModifier(toonId, 'snapped') > 1.1:
+                    #     self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
+                    # else:
+                    #     self.setToonCondition(toon.doId, 'snapped', 1.1, 3, 'setBoth')
+                    # Search for if the Snapped effect exists.
+                    for i in range(len(self.toonStatusConditionsNew[toon.doId])):
+                        if isinstance(self.toonStatusConditionsNew[toon.doId][i], StatusEffects.Snapped):
+                            # We have a Snapped effect.
+                            self.toonStatusConditionsNew[toon.doId][i].defenseMod = max(self.toonStatusConditionsNew[toon.doId][i].defenseMod, 1.1) # Set the defense modifier to whichever is greater.
+                            self.toonStatusConditionsNew[toon.doId][i].setRoundsLeft(2)
+                            break # Do not allow any more iterations.
+
+                    else: # It does not; add a new effect.
+                        self.toonStatusConditionsNew[toon.doId].append(StatusEffects.Snapped(1.1))
                     self.setToonCondition(toon.doId, 'markedforsnap', 1, 1, 'setBoth')
                     self.setSuitCondition(theSuit.doId, 'snappedcalculator2', 0, 0, 'setBoth')
                 else:
@@ -3760,17 +3785,37 @@ class BattleCalculatorAI:
                 if currentBossHealth >= 1:
                     result = 21
                     attack[SUIT_HP_COL][targetIndex] = result
-                    if self.getToonConditionModifier(toonId, 'snapped') > 1.4:
-                        self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
-                    else:
-                        self.setToonCondition(toon.doId, 'snapped', 1.4, 3, 'setBoth')
+                    # if self.getToonConditionModifier(toonId, 'snapped') > 1.4:
+                    #     self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
+                    # else:
+                    #     self.setToonCondition(toon.doId, 'snapped', 1.4, 3, 'setBoth')
+                    # Search for if the Snapped effect exists.
+                    for i in range(len(self.toonStatusConditionsNew[toon.doId])):
+                        if isinstance(self.toonStatusConditionsNew[toon.doId][i], StatusEffects.Snapped):
+                            # We have a Snapped effect.
+                            self.toonStatusConditionsNew[toon.doId][i].defenseMod = max(self.toonStatusConditionsNew[toon.doId][i].defenseMod, 1.4) # Set the defense modifier to whichever is greater.
+                            self.toonStatusConditionsNew[toon.doId][i].setRoundsLeft(2)
+                            break # Do not allow any more iterations.
+
+                    else: # It does not; add a new effect.
+                        self.toonStatusConditionsNew[toon.doId].append(StatusEffects.Snapped(1.4))
                 else:
                     result = 25
                     attack[SUIT_HP_COL][targetIndex] = result
-                    if self.getToonConditionModifier(toonId, 'snapped') > 1.2:
-                        self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
-                    else:
-                        self.setToonCondition(toon.doId, 'snapped', 1.2, 3, 'setBoth')
+                    # if self.getToonConditionModifier(toonId, 'snapped') > 1.2:
+                    #     self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
+                    # else:
+                    #     self.setToonCondition(toon.doId, 'snapped', 1.2, 3, 'setBoth')
+                    # Search for if the Snapped effect exists.
+                    for i in range(len(self.toonStatusConditionsNew[toon.doId])):
+                        if isinstance(self.toonStatusConditionsNew[toon.doId][i], StatusEffects.Snapped):
+                            # We have a Snapped effect.
+                            self.toonStatusConditionsNew[toon.doId][i].defenseMod = max(self.toonStatusConditionsNew[toon.doId][i].defenseMod, 1.2) # Set the defense modifier to whichever is greater.
+                            self.toonStatusConditionsNew[toon.doId][i].setRoundsLeft(2)
+                            break # Do not allow any more iterations.
+
+                    else: # It does not; add a new effect.
+                        self.toonStatusConditionsNew[toon.doId].append(StatusEffects.Snapped(1.2))
                 self.setSuitCondition(theSuit.doId, 'snappedcalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'LitigatorBayouBellow':
                 result = 0
@@ -6352,10 +6397,20 @@ class BattleCalculatorAI:
             elif atkType['name'] == 'PresidentSnap':
                 result = 30
                 attack[SUIT_HP_COL][targetIndex] = result
-                if self.getToonConditionModifier(toonId, 'snapped') > 1.25:
-                    self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
-                else:
-                    self.setToonCondition(toon.doId, 'snapped', 1.25, 3, 'setBoth')
+                # if self.getToonConditionModifier(toonId, 'snapped') > 1.25:
+                #     self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 3, 'setBoth')
+                # else:
+                #     self.setToonCondition(toon.doId, 'snapped', 1.25, 3, 'setBoth')
+                # Search for if the Snapped effect exists.
+                for i in range(len(self.toonStatusConditionsNew[toon.doId])):
+                    if isinstance(self.toonStatusConditionsNew[toon.doId][i], StatusEffects.Snapped):
+                        # We have a Snapped effect.
+                        self.toonStatusConditionsNew[toon.doId][i].defenseMod = max(self.toonStatusConditionsNew[toon.doId][i].defenseMod, 1.25) # Set the defense modifier to whichever is greater.
+                        self.toonStatusConditionsNew[toon.doId][i].setRoundsLeft(2)
+                        break # Do not allow any more iterations.
+
+                else: # It does not; add a new effect.
+                    self.toonStatusConditionsNew[toon.doId].append(StatusEffects.Snapped(1.25))
             elif atkType['name'] == 'PresidentDeepFreeze':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -8899,6 +8954,11 @@ class BattleCalculatorAI:
                         result *= self.getSuitConditionModifier(theSuit.doId, 'enraged')
                     if self.toonHasCondition(toonId, 'snapped'):
                         result *= self.getToonConditionModifier(toonId, 'snapped')
+                    # Going to slowly replace individual status effects so we acclimate to the new system before moving onto a more sophisticated means of this.
+                    for condition in self.toonStatusConditionsNew[toonId]:
+                        if isinstance(condition, StatusEffects.Snapped):
+                            result *= condition.defenseMod
+
                     if theSuit.getDamageMultiplier() > 1:
                         result *= theSuit.getDamageMultiplier()
                     if self.suitHasCondition(theSuit.doId, 'soaked') and theSuit.dna.name == 'redd':
@@ -8934,6 +8994,11 @@ class BattleCalculatorAI:
                     result *= self.getSuitConditionModifier(theSuit.doId, 'enraged')
                 if self.toonHasCondition(toonId, 'snapped'):
                     result *= self.getToonConditionModifier(toonId, 'snapped')
+                # Going to slowly replace individual status effects so we acclimate to the new system before moving onto a more sophisticated means of this.
+                for condition in self.toonStatusConditionsNew[toonId]:
+                    if isinstance(condition, StatusEffects.Snapped):
+                        result *= condition.defenseMod
+
                 if theSuit.getDamageMultiplier() > 1:
                     result *= theSuit.getDamageMultiplier()
                 if self.suitHasCondition(theSuit.doId, 'soaked') and theSuit.dna.name == 'redd':

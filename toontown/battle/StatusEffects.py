@@ -66,6 +66,9 @@ class StatusEffect:
         There are likely some cases where we would like to change the rounds around, so this method will be convenient.
         '''
         self.roundsLeft = roundsLeft
+        # Due to ticking down a round at the end of a round, if it's longer than one turn, then add one more; it will go away the next turn.
+        if roundsLeft >= 1:
+            self.roundsLeft += 1
     
     def updateEffect(self):
         '''
