@@ -654,6 +654,7 @@ def doPaperCut(attack):
         notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
+            notifyTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
             partTracks.append(partTrack)
     suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2), Func(suit.setHpr, battle, origHpr),
                           Func(suit.setNeutralAnimationDrop))
@@ -669,7 +670,7 @@ def doPaperCutMulti(attack):
     toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
     partTracks = Parallel()
     notifyTracks = Parallel()
-    moveTracks = Sequence()
+    moveTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -686,6 +687,7 @@ def doPaperCutMulti(attack):
                                        Func(suit.setNeutralAnimationDrop)))
             moveTracks.append(Func(suit.setHpr, battle, origHpr))
             notifyTracks.append(notifyTrack)
+            notifyTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
             partTracks.append(partTrack)
     suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2),
                           Func(suit.setNeutralAnimationDrop))
@@ -742,7 +744,8 @@ def doExplodingDocument(attack):
     toonTrack = getToonTrackCheat(attack, 2.5, ['slip-forward'], 3.4, ['struggle'])
    # toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2.5, ['slip-forward'])
     soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
-    notifyTrack = Sequence(Wait(2.5), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
+    notifyTrack = Sequence(Wait(2.5), Func(toon.showHpTextNew, -int(dmg), text="DAMAGE DEBUFF!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
     return Parallel(explodeTracks, suitTrack, toonTrack, soundTrack, propTrack, notifyTrack, explosionTrack)
 
 def doBookkeepingRetaliation(attack):
@@ -761,6 +764,7 @@ def doBookkeepingRetaliation(attack):
         suitTrack = Sequence(getSuitAnimTrack(attack))
         suitTrack2 = Sequence(ActorInterval(suit, 'effort', duration=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimationDrop))
         notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextNew, -int(dmg), text="NO GAGS!", colorCode=1))
+        notifyTrack.append(Parallel(Func(toon.makeHidden), Func(toon.addHiddenRounds, 1)))
         soundTrack1 = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
         soundTrack2 = Sequence(Wait(3.4), SoundInterval(globalBattleSoundCache.getSound('SA_haymaker.ogg')))
         soundTrack = Parallel(soundTrack1, soundTrack2)
@@ -1784,7 +1788,7 @@ def doCollectCallDamage(attack):
             spinEffect1.reparentTo(toon)
             spinEffect2.reparentTo(toon)
             spinEffect3.reparentTo(toon)
-            soundTracks.append(Sequence(Wait(2.0), Func(toon.showHpText, '+10% Damage!')))
+            soundTracks.append(Sequence(Wait(2.0), Func(toon.showHpTextNew, 0, text='+10% Damage!', colorCode=1)))
             soundTracks.append(Parallel(Func(toon.makeDamageUp), Func(toon.checkDamageUp, + 10)))
             height1 = toon.getHeight() - (toon.getHeight() / 3)
             height2 = toon.getHeight() - (toon.getHeight() / 2)
@@ -2624,6 +2628,7 @@ def doOverheat(attack):
         BattleParticles.setEffectTexture(sprayEffect, 'fire')
         partTrack4 = getPartTrack(sprayEffect, 1, 3.25, [sprayEffect2, toon, 0], softStop=-1)
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="BURNED!", colorCode=4))
+        notifyTrack.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 2)))
         if dmg > 0:
             partTracks4.append(partTrack4)
             headParts = toon.getHeadParts()

@@ -703,6 +703,7 @@ def doPaperweight(attack):
         missPoint = Point3(missPoint2.getX(), missPoint2.getY(), missPoint2.getZ())
         paperTrack.append(Func(battle.movie.needRestoreRenderProp, paper))
         paperTrack.append(Func(paper.wrtReparentTo, battle))
+        paperTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 2)))
         if dmg > 0:
             paperTrack.append(getThrowTrack(paper, hitPoint, duration=throwDuration, parent=battle, gravity=-100))
             paperTrack.append(Wait(0.6))
@@ -875,6 +876,7 @@ def doWhirlwind(attack):
     notifyTrack = Sequence(Wait(5.9), Func(toon.showHpTextNew, -int(dmg), text="CONFUSED!", colorCode=1))
     toonTrack = getToonTrackCheat(attack, damageDelay=.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91,
                              dodgeAnimNames=['sidestep'], showDamageExtraTime=5, showMissedExtraTime=1.0)
+    notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
     toonSpinTrack = Sequence(Wait(0.9), LerpHprInterval(toon, 4.5, Point3(10800, 0, 0)),
                                  LerpHprInterval(toon, 0.5, toon.getHpr()), Wait(0.5))
     toonLiftTrack = Sequence(Wait(0.9), LerpPosInterval(toon, 4.5, Point3(toon.getX(), toon.getY(), toon.getZ() + 50)), LerpPosInterval(toon, 0.5, toon.getPos()), Wait(0.5))
@@ -992,6 +994,7 @@ def doSuppression(attack):
             Wait(1.7)))
 
     toonTrack.append(getToonTrack(attack, 2.2, ['conked'], 2.5, ['jump']))
+    toonTrack.append(Parallel(Func(toon.makeHidden), Func(toon.addHiddenRounds, 1)))
 
     return Parallel(suitTrack, toonTrack, propTrack)
 
@@ -1088,15 +1091,15 @@ def doSnap2(attack, suit):
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5))
-    moveTracks = Sequence()
+    moveTracks = Parallel()
     notifyTracks = Parallel()
-    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         teeth = globalPropPool.getProp('litigator-teeth')
-        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4), scaleUpTime=propScaleUpTime))
+        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(3, 3, 3), scaleUpTime=propScaleUpTime))
         teethAppearTrack.append(Wait(suitDelay))
         teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
         teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
@@ -1108,6 +1111,7 @@ def doSnap2(attack, suit):
             moveTracks.append(Func(suit.setHpr, battle, origHpr))
             notifyTrack = Sequence(Wait(3.1),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1),)
             notifyTracks.append(notifyTrack)
+            notifyTracks.append(Parallel(Func(toon.makeSnapped), Func(toon.addSnappedRounds, 2)))
             x = toon.getX(battle)
             y = toon.getY(battle)
             z = toon.getZ(battle)
@@ -1161,13 +1165,13 @@ def doSnap(attack, suit):
     throwDuration = 0.25
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     notifyTracks = Parallel()
-    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         teeth = globalPropPool.getProp('litigator-teeth')
-        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4), scaleUpTime=propScaleUpTime))
+        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(3, 3, 3), scaleUpTime=propScaleUpTime))
         teethAppearTrack.append(Wait(suitDelay))
         teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
         teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
@@ -1178,6 +1182,7 @@ def doSnap(attack, suit):
             suitTrack.append(Func(suit.setHpr, battle, origHpr))
             notifyTrack = Sequence(Wait(3.1), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
             notifyTracks.append(notifyTrack)
+            notifyTracks.append(Parallel(Func(toon.makeSnapped), Func(toon.addSnappedRounds, 2)))
             x = toon.getX(battle)
             y = toon.getY(battle)
             z = toon.getZ(battle)
@@ -1333,6 +1338,7 @@ def doCourtSanction(attack):
     )
     toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
     notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
     suitTrack = getSuitTrack(attack)
     soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
@@ -1374,6 +1380,7 @@ def doCourtSanctionBindings(attack):
             suitTracks.append(Sequence(Parallel(suitTrack, headsUp), Func(suit.setHpr, battle, origHpr)))
             soundTracks.append(soundTrack)
             notifyTracks.append(notifyTrack)
+            notifyTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
     toonDamageTrack = getToonTracksCheat(attack, 0.8, ['conked'], 0, ['neutral'])
     return Parallel(suitTracks, toonTracks, toonDamageTrack, propTracks, soundTracks, notifyTracks)
 
@@ -1535,6 +1542,7 @@ def doLegalBindings2(attack):
         notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "LEGALLY BOUND!", 10)))
         allTubeTracks.append(tubeTracks)
         toonTracks.append(Sequence(Wait(2.4), ActorInterval(toon, 'struggle')))
+        toonTracks.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 2)))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.75, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks, notifyTracks)
 
@@ -1595,6 +1603,7 @@ def doLegalBindings(attack):
         notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "LEGALLY BOUND!", 10)))
         allTubeTracks.append(tubeTracks)
         toonTracks.append(Sequence(Wait(2.4), ActorInterval(toon, 'struggle')))
+        toonTracks.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 2)))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.75, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks, notifyTracks)
 

@@ -1,0 +1,116 @@
+@echo off
+title Project Altis CLI Launcher
+
+:menu
+cls
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo What do you want to do!
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo.
+goto game
+
+:run
+cls
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo What do you want to launch!
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo. 
+echo #1 - Locally Host a Server
+echo #2 - Connect to an Existing Server
+echo #3 - Connect to Zen's server
+echo #4 - Connect to Localhost Server
+echo #5 - Go Back
+echo.
+choice /C:1234 /n /m "Selection: "
+if errorlevel ==5 goto menu
+if errorlevel ==4 goto localhost
+if errorlevel ==3 goto awsserver
+if errorlevel ==2 goto connect
+if errorlevel ==1 goto db
+
+:db
+cls
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo What database do you want to use!
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo. 
+echo #1 - YAML (Recommended)
+echo #2 - MongoDB
+echo #3 - Go Back
+echo.
+choice /C:123 /n /m "Selection: "
+if errorlevel ==3 goto run
+if errorlevel ==2 goto mongo
+if errorlevel ==1 goto yaml
+
+:yaml
+cls 
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo Starting Localhost!
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+cd scripts
+echo Launching Astron...
+START astron_yaml-win32.bat
+echo Launching the Uberdog Server...
+START uberdog-win32.bat
+echo Launching the AI Server...
+START ai-win32.bat
+echo.
+SET TT_GAMESERVER=127.0.0.1
+echo.
+goto game
+
+
+:mongo
+cls 
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo Starting Localhost!
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+cd scripts
+echo Launching Mongo...
+START mongo-win32.bat
+echo Launching Astron...
+START astron_mongo-win32.bat
+echo Launching the Uberdog Server...
+START uberdog-win32.bat
+echo Launching the AI Server...
+START ai-win32.bat
+cd ..
+SET TT_GAMESERVER=127.0.0.1
+goto game
+
+:connect
+cls
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo What Server are you connecting to!
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+set /P TT_GAMESERVER="Server IP: "
+goto game
+
+:awsserver
+set TT_GAMESERVER=82.5.38.255
+
+:localhost
+set TT_GAMESERVER=127.0.0.1
+
+:game
+cls
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo Username [!] This does get stored in your source code so beware!
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+set /P ttUsername="Username: "
+set TT_PLAYCOOKIE=%ttUsername%
+set TT_USERNAME=%ttUsername%
+set TT_PASSWORD=%ttUsername%
+set TT_GAMESERVER=127.0.0.1
+echo.
+cls
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+echo Welcome to Aristotown, %ttUsername%!
+echo The Tooniverse Awaits You!
+echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+:startgame
+title Project Altis Client
+"dependencies/panda/python/python.exe" -m toontown.toonbase.ClientStart
+PAUSE
+goto startgame

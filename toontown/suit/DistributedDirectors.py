@@ -284,6 +284,11 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWantActiveNametags(True)
 
     def makeIntroductionMovie(self, delayDeletes):
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         rToon = self.resistanceToon
         rToonStartPos = Point3(ToontownGlobals.BossbotRTIntroStartPosHpr[0], ToontownGlobals.BossbotRTIntroStartPosHpr[1], ToontownGlobals.BossbotRTIntroStartPosHpr[2])
         rToonEndPos = rToonStartPos + Point3(40, 0, 0)

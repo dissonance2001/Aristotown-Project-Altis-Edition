@@ -228,27 +228,37 @@ class TownBattle(StateData.StateData):
         if num == 1:
             self.toonPanels[0].setX(self.oddPos[1])
             self.toonPanels[0].show()
+            self.toonPanels[0].setLaffMeter(base.localAvatar)
         elif num == 2:
             self.toonPanels[0].setX(self.evenPos[2])
             self.toonPanels[0].show()
+            self.toonPanels[0].setLaffMeter(base.localAvatar)
             self.toonPanels[1].setX(self.evenPos[3])
             self.toonPanels[1].show()
+            self.toonPanels[1].setLaffMeter(base.localAvatar)
         elif num == 3:
             self.toonPanels[0].setX(self.oddPos[0])
             self.toonPanels[0].show()
+            self.toonPanels[0].setLaffMeter(base.localAvatar)
             self.toonPanels[1].setX(self.oddPos[1])
             self.toonPanels[1].show()
+            self.toonPanels[1].setLaffMeter(base.localAvatar)
             self.toonPanels[2].setX(self.oddPos[2])
             self.toonPanels[2].show()
+            self.toonPanels[2].setLaffMeter(base.localAvatar)
         elif num == 4:
             self.toonPanels[0].setX(self.evenPos[1])
             self.toonPanels[0].show()
+            self.toonPanels[0].setLaffMeter(base.localAvatar)
             self.toonPanels[1].setX(self.evenPos[2])
             self.toonPanels[1].show()
+            self.toonPanels[1].setLaffMeter(base.localAvatar)
             self.toonPanels[2].setX(self.evenPos[3])
             self.toonPanels[2].show()
+            self.toonPanels[2].setLaffMeter(base.localAvatar)
             self.toonPanels[3].setX(self.evenPos[4])
             self.toonPanels[3].show()
+            self.toonPanels[3].setLaffMeter(base.localAvatar)
         else:
             self.notify.error('Bad number of toons: %s' % num)
 

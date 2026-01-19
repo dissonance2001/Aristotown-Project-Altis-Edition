@@ -2099,6 +2099,7 @@ def doRedlinedClause(attack):
     )
     toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
     notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="REDLINED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 2)))
     suitTrack = getSuitTrack(attack)
     soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
@@ -2158,6 +2159,8 @@ def doRevisedFiling(attack):
                 )
                 neutralTrack.append(Func(toon.loop, 'neutral'))
                 notifyTrack.append(Sequence(Wait(0.7), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1)))
+                notifyTrack.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 1)))
+                notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 1)))
             throwTrack = Parallel(
                 getToonTracksCheat(attack, .7, ['slip-forward'], 2.75, ['sidestep']), neutralTrack
             )
@@ -2219,7 +2222,7 @@ def doMinutesTakenDamage(attack):
         x, y, z = toon.getPos(battle)
         clockPosPoints = [Point3(x, y, z + 0.01), VBase3(toon.getH(), 90, 0)]
         clockPropTrack = Sequence(
-            getPropAppearTrack(clock, battle, clockPosPoints, 0.0, scaleUpPoint=Point3(1.0, 0.01, 1.0), scaleUpTime=1.0),
+            getPropAppearTrack(clock, battle, clockPosPoints, 0.0, scaleUpPoint=Point3(0.75, 0.01, 0.75), scaleUpTime=1.0),
             Parallel(
                 LerpHprInterval(minuteHand, 3.0, VBase3(0, 0, -1800)),
                 LerpHprInterval(hourHand, 3.0, VBase3(0, 0, -150))
@@ -2479,6 +2482,7 @@ def doShadowToon(attack):
     moveUp = Sequence(Parallel(LerpPosInterval(suit, duration=1.0, pos=(oldPos), other=battle), ActorInterval(suit, 'walk', loop=1, duration=1.0)),
                       Func(suit.setNeutralAnimationDrop))
     notifyTrack = Sequence(Wait(tPieHitsSuit), Func(toon.showHpTextNew,  - int(hp), "DAMAGE DEBUFF!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
     toonTrack = getToonTrackCheat(attack, tPieHitsSuit, ['slip-backward'], tSuitDodges, ['sidestep'])
     return Sequence(suitTrack, Parallel(evilToonTrack, pieTrack, notifyTrack, soundTrack, toonTrack), moveUp)
 
@@ -3208,6 +3212,7 @@ def doTornado(attack):
     sinkPos = toon.getPos(battle)
     sinkPos.setZ(sinkPos.getZ() + 25)
     notifyTrack = Sequence(Wait(5.9), Func(toon.showHpTextNew, -int(dmg), text="CONFUSED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
     toonTrack = getToonTrackCheat(attack, damageDelay=.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91,
                              dodgeAnimNames=['sidestep'], showDamageExtraTime=5, showMissedExtraTime=1.0)
     toonSpinTrack = Sequence(Wait(0.9), LerpHprInterval(toon, 4.5, Point3(10800, 0, 0)),
@@ -3348,6 +3353,7 @@ def doMarkedWood(attack):
 
     toonTracks = getToonTracksCheat(attack, 2.2, ['cringe'], 2, ['jump'])
     notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextNew, -int(dmg), text="MARKED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.makeMarkedWood), Func(toon.addMarkedWoodRounds, 2)))
     return Parallel(suitTrack, toonTracks, notifyTrack, propTracks)
 
 def __suitTargetPoint(suit):
@@ -3369,6 +3375,7 @@ def doSparkPlug(attack):
     selfDamageTracks = Parallel()
     sprayTrack = Sequence(Wait(4.0), MovieUtil.getZapTrack(battle, Point4(1.0, 1.0, 0, 1.0), getSprayStartPos, targetPoint, .1, .1, .1, horizScale=.1, vertScale=.1))
     selfDamageTracks.append(Sequence(Func(suit.createSuitSparkPlugInterval)))
+    selfDamageTracks.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 2)))
     suitTrack = Sequence(getSuitTrack(attack), Wait(2.0))
     soundTrack2 = getSoundTrack('SA_sparkplug.ogg')
     toonTrack = getToonTrack(attack, 4.0, ['slip-backward'], 2, ['jump'])

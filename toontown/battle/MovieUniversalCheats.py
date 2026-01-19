@@ -871,7 +871,7 @@ def doSueApplication(attack):
         getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
     explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
     suitTrack = Sequence()
-    suitTrack.append(Parallel(ActorInterval(suit, 'pie-small-react'), Func(battle.sueSuit, suit), Func(suit.showHpTextNew, 0, text="CEASE AND DESIST!", colorCode=0)))
+    suitTrack.append(Parallel(ActorInterval(suit, 'pie-small-react'), Func(battle.sueSuit, suit), Func(suit.showHpTextNew, 0, text="CEASE AND DESIST!", colorCode=1)))
     suitTrack.append(Func(suit.makeSued, 4))
     suitTrack.append(Func(suit.setNeutralAnimationDrop))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('LB_receive_evidence.ogg'), node=suit))

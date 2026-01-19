@@ -362,7 +362,7 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                          self.backupToonsToBattlePosition(self.toonsB, self.battleBNode),
                          Sequence(
                              Wait(2),
-                             Func(self.setChatAbsolute, attackToons, CFSpeech | CFTimeout))))))
+                             Func(self.setChatAbsolute, '', CFSpeech))))))
         track.append(dialogTrack)
         return Sequence(Func(self.stickToonsToFloor), track, Func(self.unstickToons), name=self.uniqueName('Introduction'))
 

@@ -6293,13 +6293,13 @@ def doBite(attack):
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
     suitTrack = getSuitTrack(attack)
-    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         teeth = globalPropPool.getProp('teeth')
-        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4), scaleUpTime=propScaleUpTime))
+        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(3, 3, 3), scaleUpTime=propScaleUpTime))
         teethAppearTrack.append(Wait(suitDelay))
         teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
         teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
@@ -6358,13 +6358,13 @@ def doChomp(attack):
     suitDelay = 1.55
     throwDelay = propDelay + propScaleUpTime + suitDelay
     throwDuration = 0.25
-    posPoints = [Point3(-0.35, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         teeth = globalPropPool.getProp('teeth')
-        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(4, 4, 4),
+        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(3, 3, 3),
                                                        scaleUpTime=propScaleUpTime))
         teethAppearTrack.append(Wait(suitDelay))
         teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))

@@ -267,10 +267,20 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
 
     def exitIntroduction(self):
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         DistributedBossCog.DistributedBossCog.exitIntroduction(self)
         self.promotionMusic.stop()
 
     def makeIntroductionMovie(self, delayDeletes):
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         rToon = self.resistanceToon
         rToonStartPos = Point3(ToontownGlobals.BossbotRTIntroStartPosHpr[0], ToontownGlobals.BossbotRTIntroStartPosHpr[1], ToontownGlobals.BossbotRTIntroStartPosHpr[2])
         rToonEndPos = rToonStartPos + Point3(40, 0, 0)
@@ -300,6 +310,11 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.show()
 
     def enterPrepareBattleTwo(self):
+        self.accept('clickedNametag', self.__clickedNameTag)
+        self.accept('friendAvatar', self.__handleFriendAvatar)
+        self.accept('avatarDetails', self.__handleAvatarDetails)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
         self.controlToons()
         self.setToonsToNeutral(self.involvedToons)
         for toonId in self.involvedToons:

@@ -5250,29 +5250,53 @@ class BattleCalculatorAI:
                         ('useToonUp','useTrap', 'useLure', 'useThrow', 'useSquirt', 'useZap', 'useSound', 'useDrop',)), 1, 2, 'setBoth')
             elif atkType['name'] == 'RacketeerRacketeering':
                 if self.toonHasCondition(toon.doId, 'usedDrop'):
-                    self.setToonCondition(toon.doId, 'disableDrop', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noDropGags', 1, 2, 'setBoth')
                     self.setToonCondition(toon.doId, 'usedDrop', 1, 1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'usedThrow'):
-                    self.setToonCondition(toon.doId, 'disableThrow', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noThrowGags', 1, 2, 'setBoth')
                     self.setToonCondition(toon.doId, 'usedThrow', 1, 1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'usedSquirt'):
-                    self.setToonCondition(toon.doId, 'disableSquirt', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noSquirtGags', 1, 2, 'setBoth')
                     self.setToonCondition(toon.doId, 'usedSquirt', 1, 1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'usedSound'):
-                    self.setToonCondition(toon.doId, 'disableSound', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noSoundGags', 1, 2, 'setBoth')
                     self.setToonCondition(toon.doId, 'usedSound', 1, 1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'usedTrap'):
-                    self.setToonCondition(toon.doId, 'disableTrap', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noTrapGags', 1, 2, 'setBoth')
                     self.setToonCondition(toon.doId, 'usedTrap', 1, 1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'usedLure'):
-                    self.setToonCondition(toon.doId, 'disableLure', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noLureGags', 1, 2, 'setBoth')
                     self.setToonCondition(toon.doId, 'usedLure', 1, 1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'usedHeal'):
-                    self.setToonCondition(toon.doId, 'disableToonUp', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noToonUpGags', 1, 2, 'setBoth')
                     self.setToonCondition(toon.doId, 'usedHeal', 1, 1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'usedZap'):
-                    self.setToonCondition(toon.doId, 'disableZap', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'noZapGags', 1, 2, 'setBoth')
                     self.setToonCondition(toon.doId, 'usedZap', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedDrop'):
+                #     self.setToonCondition(toon.doId, 'disableDrop', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedDrop', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedThrow'):
+                #     self.setToonCondition(toon.doId, 'disableThrow', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedThrow', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedSquirt'):
+                #     self.setToonCondition(toon.doId, 'disableSquirt', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedSquirt', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedSound'):
+                #     self.setToonCondition(toon.doId, 'disableSound', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedSound', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedTrap'):
+                #     self.setToonCondition(toon.doId, 'disableTrap', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedTrap', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedLure'):
+                #     self.setToonCondition(toon.doId, 'disableLure', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedLure', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedHeal'):
+                #     self.setToonCondition(toon.doId, 'disableToonUp', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedHeal', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedZap'):
+                #     self.setToonCondition(toon.doId, 'disableZap', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedZap', 1, 1, 'setBoth')
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'RacketeerPeckingOrderRetaliation':
@@ -9620,8 +9644,8 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'profiteeringcalculator', 1, 10, 'setBoth')
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'extortioncalculator', 1, 10, 'setBoth')
-                if (x + 1) % 5 == 0:
-                    self.setSuitCondition(suitId, 'hustlingcalculator', 1, 10, 'setBoth')
+                # if (x + 1) % 5 == 0:
+                #     self.setSuitCondition(suitId, 'hustlingcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'radiog': #radiographer
                 if x % 5 == 0 and self.suitHasCondition(suitId, 'dancesession'):
                     self.setSuitCondition(suitId, 'radioinfrequencycalculator', 1, 10, 'setBoth')
@@ -11870,15 +11894,15 @@ class BattleCalculatorAI:
                      'freq': 0,
                      'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                      'name': 'UnionBusterBreachOfContract2', # Breach Of Contract Soaked
-                      'animName': 'sanction',
-                      'hp': 0,
-                      'acc': 100,
-                      'freq': 0,
-                      'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                    self.battle.suitAttacks.append(attack)
+                # if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                #       'name': 'UnionBusterBreachOfContract2', # Breach Of Contract Soaked
+                #       'animName': 'sanction',
+                #       'hp': 0,
+                #       'acc': 100,
+                #       'freq': 0,
+                #       'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                #     self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'deadunion') and not self.suitHasCondition(suitId, 'dotfinished') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not self.battle.activeSuits[i].dna.name == 'ubuster':
                 attack = self.__getCheatAttack(suitId, {'suitName': '',
                                             'name': 'UnionBusterUnionBusterDamage',  # Union Buster for when Union Buster is defeated
@@ -12020,6 +12044,15 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'dead') and not self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'DeathCheck',  # Check for Death
+                                                            'animName': 'nothing',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    self.battle.suitAttacks.append(attack)
+                if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'desperation'):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'Desperation',  # Desperation Activation
                                                             'animName': 'nothing',
                                                             'hp': 0,
                                                             'acc': 100,
@@ -12319,16 +12352,16 @@ class BattleCalculatorAI:
                      'freq': 0,
                      'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
-           # if self.battle.activeSuits[i].dna.name == 'racket':
-              #  if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
-                 #   attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                   # 'name': 'RacketeerPeckingOrderRetaliation', # Retaliation to Gag Bans
-                   #  'animName': 'throw-object',
-                   #  'hp': 0,
-                   #  'acc': 100,
-                   #  'freq': 0,
-                    # 'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                   # self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'racket':
+                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                        'name': 'RacketeerPeckingOrderRetaliation', # Retaliation to Gag Bans
+                        'animName': 'throw-object',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'safesupervis':
                 if self.suitHasCondition(suitId, 'highpressurecalculator') and self.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0:
                     self.setSuitCondition(suitId, 'highpressurecalculator', 0, 0, 'setBoth')
@@ -12343,6 +12376,15 @@ class BattleCalculatorAI:
                      'acc': 100,
                      'freq': 0,
                      'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    self.battle.suitAttacks.append(attack)
+                if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'desperation'):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'Desperation',  # Desperation Activation
+                                                            'animName': 'nothing',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'heatwavecalculator') and not self.__suitCanAttack(suitId) and \
                         self.battle.activeSuits[i].currHP > 0:
@@ -12374,6 +12416,15 @@ class BattleCalculatorAI:
                                             'acc': 100,
                                             'freq': 0,
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    self.battle.suitAttacks.append(attack)
+                if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'desperation'):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'Desperation',  # Desperation Activation
+                                                            'animName': 'nothing',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
 
             # Gag Bans & End Of Round Cheats

@@ -2674,7 +2674,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_14/maps/Material.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(6.75)
+            self.setHeight(7.5)
         elif dna.name == 'kbc':
             self.scale = 5.2 / bSize
             self.handColor = VBase4(0.682, 0.682, 0.675, 1)

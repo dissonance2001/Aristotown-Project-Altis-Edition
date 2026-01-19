@@ -1160,6 +1160,7 @@ def doUnionBuster(attack):
             )
         )
     )
+    toonTrack.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 2)))
     cagePropTracks.append(cagePropTrack)
     return Parallel(suitTrack, cagePropTracks, smokeTrack, toonTrack)
 
@@ -1318,8 +1319,8 @@ def doUnionWages(attack):
         if not targetSuit.isContracted and not targetSuit.dna.name == 'ubuster':
             damageSuits.append(targetSuit)
     makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, +  (5 * len(damageSuits))))
-    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextCheat, + (100 * len(damageSuits))),
-                                Func(suit.showHpString, "+%s" % (5 * len(damageSuits)) + "%" + " Damage!"), Func(suit.setHealthForMe, + (100 * len(damageSuits))),
+    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + (100 * len(damageSuits)), text="+%s" % (5 * len(damageSuits)) + "%" + " Damage!", colorCode=1),
+                                Func(suit.setHealthForMe, + (100 * len(damageSuits))),
                                 Func(suit.updateHealthBar, 0))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.0, node=suit)
     return Parallel(suitTrack, calcPropTrack, sprayTrack, soundTrack, makeImmune, managerHealTrack, soundTrack2, spinTrack1, spinTrack2, spinTrack3)
@@ -1348,6 +1349,7 @@ def doBreachOfContract(attack):
     suitTrack = getSuitTrack(attack)
     soundTrack = getSoundTrack('SA_hurry_sickness.ogg', delay =.5, node=suit)
     notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextNew, -int(dmg), text="BREACHED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
 
 def doBreachOfContractGroup(attack):
@@ -1386,6 +1388,7 @@ def doBreachOfContractGroup(attack):
             suitTracks.append(Sequence(Parallel(suitTrack, headsUp), Func(suit.setHpr, battle, origHpr)))
             soundTracks.append(soundTrack)
             notifyTracks.append(notifyTrack)
+            notifyTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
     toonDamageTrack = getToonTracksCheat(attack, 0.8, ['conked'], 0, ['neutral'])
     return Parallel(suitTracks, toonTracks, propTracks, soundTracks, toonDamageTrack, notifyTracks)
 
@@ -1783,7 +1786,8 @@ def doHotTake(attack):
     propTrack.append(getPropThrowTrack(attack, tnt, [hitPoint], [missPoint], .25, parent=battle))
     toonTrack = getToonTrackCheat(attack, 2.25, ['slip-forward'], 0.5, ['jump'])
     soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
-    notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=3))
+    notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextNew, -int(dmg), text="BOMBED!", colorCode=3))
+    notifyTrack.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
     return Parallel(explodeTracks, suitTrack, toonTrack, notifyTrack, soundTrack, propTrack, explosionTrack, explosionTrack2)
 
 def doOvermodulated(attack, ind):
@@ -1970,6 +1974,7 @@ def doShadowToon(attack):
     moveUp = Sequence(Parallel(LerpPosInterval(suit, duration=1.0, pos=(oldPos), other=battle), ActorInterval(suit, 'walk', loop=1, duration=1.0)),
                       Func(suit.setNeutralAnimationDrop))
     notifyTrack = Sequence(Wait(tPieHitsSuit), Func(toon.showHpTextNew,  - int(hp), "CONFUSED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
     toonTrack = getToonTrackCheat(attack, tPieHitsSuit, ['slip-backward'], tSuitDodges, ['sidestep'])
     soundTrack2 = getSoundTrack('SA_hot_air.ogg', delay=2.0, node=suit)
     return Sequence(Parallel(suitTrack, soundTrack2, partTrack4), Parallel(evilToonTrack, soundTrack, pieTrack, notifyTrack, toonTrack), moveUp)

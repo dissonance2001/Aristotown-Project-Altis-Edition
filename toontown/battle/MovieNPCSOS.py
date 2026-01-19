@@ -117,6 +117,7 @@ def teleportIn(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0)):
     h = Func(npc.loop, 'neutral')
     seq = Sequence(a, b, c, d, e, ee, f, g, h)
     seq.append(Func(npc.clearChat))
+    seq.append(Parallel(Func(attack['toon'].makeCooldown), Func(attack['toon'].addCooldownRounds, 3)))
     if npc.getName() == 'Prince Frizzy':
         princeFrizzyTrack = Sequence()
         princeFrizzyTrack.append(Func(npc.setChatAbsolute, "Start Dancing! I got this covered!", CFSpeech | CFTimeout))

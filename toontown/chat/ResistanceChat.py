@@ -143,6 +143,8 @@ def getDanceId():
     return encodeId(RESISTANCE_DANCE, getItems(RESISTANCE_DANCE))
 
 def doEffect(textId, speakingToon, nearbyToons):
+    speakingToon.makeCooldown()
+    speakingToon.addCooldownRounds(3)
     menuIndex, _ = decodeId(textId)
     itemValue = getItemValue(textId)
     if menuIndex == RESISTANCE_TOONUP:

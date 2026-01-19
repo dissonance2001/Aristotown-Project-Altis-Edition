@@ -318,33 +318,33 @@ class SuitPlannerInteriorAI:
             activeSuits.append(miniboss3)
             activeSuits.append(miniboss)
         elif specialCode == 'slitpair1':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 's', 28, 0)  # Pressurizer
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Union Buster
+            miniboss = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Pressurizer
+            miniboss2 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Union Buster
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'slitpair2':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Racketeer
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Radiographer
+            miniboss3 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Racketeer
+            miniboss4 = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)  # Radiographer
             activeSuits.append(miniboss3)
             activeSuits.append(miniboss4)
         elif specialCode == 'slitpair3':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 's', 28, 0)  # Pressurizer
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Radiographer
+            miniboss = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Pressurizer
+            miniboss4 = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)  # Radiographer
             activeSuits.append(miniboss)
             activeSuits.append(miniboss4)
         elif specialCode == 'slitpair4':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Racketeer
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Union Buster
+            miniboss3 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Racketeer
+            miniboss2 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Union Buster
             activeSuits.append(miniboss3)
             activeSuits.append(miniboss2)
         elif specialCode == 'slitpair5':
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Radiographer
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Union Buster
+            miniboss4 = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)  # Radiographer
+            miniboss2 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Union Buster
             activeSuits.append(miniboss4)
             activeSuits.append(miniboss2)
         elif specialCode == 'slitpair6':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Racketeer
-            miniboss = self.__genSuitObject(self.zoneId, 28, 's', 28, 0)  # Pressurizer
+            miniboss3 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Racketeer
+            miniboss = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Pressurizer
             activeSuits.append(miniboss3)
             activeSuits.append(miniboss)
         elif specialCode == 'ambassador':
@@ -482,10 +482,42 @@ class SuitPlannerInteriorAI:
             # litigation
             suit = self.__genSuitObject(self.zoneId, suitKind, 'l', suitLevel, 0)
             reserveSuits.append(suit)
+        if specialCode == 'amb':
+            # litigation
+            suit = self.__genSuitObject(self.zoneId, suitKind, 'c', suitLevel, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'pres':
+            # litigation
+            suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0)
+            reserveSuits.append(suit)
         if specialCode == 'lit2':
             # witness stand-in
             suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0)
             reserveSuits.append(suit)
+        if specialCode == 'ubuster':
+            miniboss2 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)
+            reserveSuits.append(miniboss2)
+        if specialCode == 'safesupervis':
+            miniboss = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)
+            reserveSuits.append(miniboss)
+        if specialCode == 'racket':
+            miniboss3 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)
+            reserveSuits.append(miniboss3)
+        if specialCode == 'radiog':
+            miniboss4 = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)
+            reserveSuits.append(miniboss4)
+        if specialCode == 'wtapper':
+            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)
+            reserveSuits.append(miniboss2)
+        if specialCode == 'ambass':
+            miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)
+            reserveSuits.append(miniboss)
+        if specialCode == 'bkeeper':
+            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)
+            reserveSuits.append(miniboss3)
+        if specialCode == 'phouse':
+            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'c', 25, 0)
+            reserveSuits.append(miniboss4)
         if specialCode == 'stenog':
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)
             reserveSuits.append(miniboss2)

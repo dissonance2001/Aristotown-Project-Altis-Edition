@@ -681,10 +681,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         searchString = chatString.lower()
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             type = 'special'
-        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
-            type = 'exclamation'
         elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
             type = 'question'
+        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
+            type = 'exclamation'
         elif random.randint(0, 1):
             type = 'statementA'
         else:
@@ -758,6 +758,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if float(self.currHP) > float(self.maxHP * 1.5):
             self.playByPlayInterval = pbpText.getShowIntervalOvercharged(displayName, attackDuration)
             self.playByPlayInterval.start()
+        elif float(self.currHP) > float(self.maxHP):
+            self.playByPlayInterval = pbpText.getShowIntervalOverhealed(displayName, attackDuration)
+            self.playByPlayInterval.start()
         else:
             self.playByPlayInterval = pbpText.getShowInterval(displayName, attackDuration)
             self.playByPlayInterval.start()
@@ -765,10 +768,13 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def checkPlayByPlayTextCheat(self, pbpText, displayName, attackDuration):
         pbpText = pbpText
         if float(self.currHP) > float(self.maxHP * 1.5):
-            self.playByPlayInterval = pbpText.getShowIntervalCheatOvercharged(displayName, attackDuration)
+            self.playByPlayInterval = pbpText.getShowIntervalOvercharged(displayName, attackDuration)
+            self.playByPlayInterval.start()
+        elif float(self.currHP) > float(self.maxHP):
+            self.playByPlayInterval = pbpText.getShowIntervalOverhealed(displayName, attackDuration)
             self.playByPlayInterval.start()
         else:
-            self.playByPlayInterval = pbpText.getShowIntervalCheatRed(displayName, attackDuration)
+            self.playByPlayInterval = pbpText.getShowInterval(displayName, attackDuration)
             self.playByPlayInterval.start()
 
     def checkCogHP(self, battle):
@@ -1051,7 +1057,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def createSuitBellowInterval(self):
         if self.style.name == 'lgator':
-            suitInterval = Sequence(ActorInterval(self, 'bellow'))
+            suitInterval = Sequence(ActorInterval(self, 'bellow'), Func(self.setNeutralAnimation))
             for headPart in self.animatedHeadParts:
                 headInterval = Sequence(ActorInterval(headPart, 'bellow'), Func(self.setNeutralAnimation))
                 hasAnimatedHead = True
@@ -1059,7 +1065,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def createSuitRevvingUpInterval(self):
         if self.style.name == 'cbutcher':
-            suitInterval = Sequence(ActorInterval(self, 'revvedup'))
+            suitInterval = Sequence(ActorInterval(self, 'revvedup'), Func(self.setNeutralAnimation))
             for headPart in self.animatedHeadParts:
                 headInterval = Sequence(ActorInterval(headPart, 'revvedup'), Func(self.setNeutralAnimation))
                 hasAnimatedHead = True
@@ -1067,7 +1073,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def createSuitSparkPlugInterval(self):
         if self.style.name == 'cbutcher':
-            suitInterval = Sequence(ActorInterval(self, 'sparkplug'))
+            suitInterval = Sequence(ActorInterval(self, 'sparkplug', Func(self.setNeutralAnimation)))
             for headPart in self.animatedHeadParts:
                 headInterval = Sequence(ActorInterval(headPart, 'sparkplug'), Func(self.setNeutralAnimation))
                 hasAnimatedHead = True
@@ -1075,7 +1081,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def createSuitScabbardInterval(self):
         if self.style.name == 'cbutcher':
-            suitInterval = Sequence(ActorInterval(self, 'scabbard'))
+            suitInterval = Sequence(ActorInterval(self, 'scabbard'), Func(self.setNeutralAnimation))
             for headPart in self.animatedHeadParts:
                 headInterval = Sequence(ActorInterval(headPart, 'scabbard'), Func(self.setNeutralAnimation))
                 hasAnimatedHead = True
@@ -1083,9 +1089,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def createSuitSnapInterval(self):
         if self.style.name == 'lgator':
-            suitInterval = Sequence(ActorInterval(self, 'snap2'))
+            suitInterval = Sequence(ActorInterval(self, 'snap2'), Func(self.setNeutralAnimationDrop))
             for headPart in self.animatedHeadParts:
-                headInterval = Sequence(ActorInterval(headPart, 'gsnap'), Func(self.setNeutralAnimation))
+                headInterval = Sequence(ActorInterval(headPart, 'gsnap'), Func(self.setNeutralAnimationHead))
                 hasAnimatedHead = True
                 Parallel(headInterval, suitInterval).start()
 

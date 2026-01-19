@@ -535,6 +535,30 @@ class Toon(Avatar.Avatar, ToonHead):
         self.wake = None
         self.lastWakeTime = 0
         self.forceJumpIdle = False
+        self.encore = 0
+        self.winded = 0
+        self.encoreRounds = 0
+        self.windedRounds = 0
+        self.damageDown = 0
+        self.damageDownRounds = 0
+        self.damageUp = 0
+        self.damageUpRounds = 0
+        self.confused = 0
+        self.confusedRounds = 0
+        self.hidden = 0
+        self.hiddenRounds = 0
+        self.markedWood = 0
+        self.markedWoodRounds = 0
+        self.damageOvertime = 0
+        self.damageOvertimeRounds = 0
+        self.isVulnerable = 0
+        self.cooldown = 0
+        self.cooldownRounds = 0
+        self.vulnerability = 0
+        self.vulnerabilityRounds = 0
+        self.isSnapped = 0
+        self.snapped = 0
+        self.snappedRounds = 0
         self.headParts = []
         self.animatedHeadParts = []
         self.numPies = 0
@@ -619,6 +643,151 @@ class Toon(Avatar.Avatar, ToonHead):
          State('ScientistPlay', self.enterScientistPlay, self.enterScientistPlay)], 'off', 'off')
         animStateList = self.animFSM.getStates()
         self.animFSM.enterInitialState()
+
+    def makeDamageOvertime(self):
+        self.damageOvertime = 1
+
+    def makeUnDamageOvertime(self):
+        self.damageOvertime = 0
+
+    def addDamageOvertimeRounds(self, num):
+        self.damageOvertimeRounds = num
+
+    def getDamageOvertimeRounds(self):
+        return self.damageOvertimeRounds
+
+    def makeCooldown(self):
+        self.cooldown = 1
+
+    def makeUnCooldown(self):
+        self.cooldown = 0
+
+    def addCooldownRounds(self, num):
+        self.cooldownRounds = num
+
+    def getCooldownRounds(self):
+        return self.cooldownRounds
+
+    def makeMarkedWood(self):
+        self.markedWood = 1
+
+    def makeUnMarkedWood(self):
+        self.markedWood = 0
+
+    def addMarkedWoodRounds(self, num):
+        self.markedWoodRounds = num
+
+    def getMarkedWoodRounds(self):
+        return self.markedWoodRounds
+
+    def makeHidden(self):
+        self.hidden = 1
+
+    def makeUnHidden(self):
+        self.hidden = 0
+
+    def addHiddenRounds(self, num):
+        self.hiddenRounds = num
+
+    def getHiddenRounds(self):
+        return self.hiddenRounds
+
+    def makeConfused(self):
+        self.confused = 1
+
+    def makeUnConfused(self):
+        self.confused = 0
+
+    def addConfusedRounds(self, num):
+        self.confusedRounds = num
+
+    def getConfusedRounds(self):
+        return self.confusedRounds
+
+    def makeDamageUp(self):
+        self.damageUp = 1
+
+    def makeUnDamageUp(self):
+        self.damageUp = 0
+
+    def addDamageUpRounds(self, num):
+        self.damageUpRounds = num
+
+    def getDamageUpRounds(self):
+        return self.damageUpRounds
+
+    def makeDamageDown(self):
+        self.damageDown = 1
+
+    def makeUnDamageDown(self):
+        self.damageDown = 0
+
+    def addDamageDownRounds(self, num):
+        self.damageDownRounds = num
+
+    def getDamageDownRounds(self):
+        return self.damageDownRounds
+
+    def makeEncore(self):
+        self.encore = 1
+
+    def makeUnEncore(self):
+        self.encore = 0
+
+    def addEncoreRounds(self, num):
+        self.encoreRounds = num
+
+    def getEncoreRounds(self):
+        return self.encoreRounds
+
+    def makeWinded(self):
+        self.winded = 1
+        self.encore = 0
+
+    def makeUnWinded(self):
+        self.winded = 0
+
+    def addWindedRounds(self, num):
+        self.windedRounds = num
+
+    def getWindedRounds(self):
+        return self.windedRounds
+
+    def makeVulnerable(self):
+        self.isVulnerable = 1
+
+    def makeUnVulnerable(self):
+        self.isUnVulnerable = 0
+
+    def addVulnerabilityRounds(self, num):
+        self.vulnerabilityRounds = num
+
+    def getVulnerabilityRounds(self):
+        return self.vulnerabilityRounds
+
+    def setVulnerability(self, num):
+        self.vulnerability = num
+
+    def getVulnerability(self):
+        return self.vulnerability
+
+    def makeSnapped(self):
+        self.isSnapped = 1
+
+    def makeUnSnapped(self):
+        self.isSnapped = 0
+
+    def setSnapped(self, num):
+        self.snapped = num
+
+    def getSnapped(self):
+        return self.snapped
+
+    def addSnappedRounds(self, num):
+        self.snappedRounds = num
+
+    def getSnappedRounds(self):
+        return self.snappedRounds
 
     def stopAnimations(self):
         if hasattr(self, 'animFSM'):

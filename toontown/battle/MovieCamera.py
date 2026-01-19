@@ -726,9 +726,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Fired':
         camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == 'FountainPen':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.75))
     elif name == 'FreezeAssets':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.75))
     elif name == 'GlowerPower':
         camTrack.append(defaultCamera(openShotDuration=0.75))
     elif name == 'ReArrange':
@@ -1337,7 +1337,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
     elif name == 'RacketeerPeckingOrderRetaliationSoak':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(5.0),
+                                 motionShot(0.0, 9, 6, -180, 0.0, 0.0, 0, suit), Wait(5.0),
                                  defaultCamera(openShotDuration=0, attackDuration=attackDuration-5)))
         # radiographer
     elif name == 'RadiographerRadioInfrequency':

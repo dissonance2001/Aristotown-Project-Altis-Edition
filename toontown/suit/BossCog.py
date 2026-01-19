@@ -585,25 +585,25 @@ class BossCog(Avatar.Avatar):
         return Task.done
 
     def __pulseRed(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=.25, colorScale=(1, 0, 0, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=0, colorScale=(1, 0, 0, 1),
                                    blendType='easeInOut'))
-        self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=.25, colorScale=(1, 0, 0, 1),
+        self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=0, colorScale=(1, 0, 0, 1),
                                    blendType='easeInOut'))
         self.interval.start()
         self.glowInterval.start()
 
     def __pulseGray(self, task):
-        self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=.25, colorScale=(0.431, 0.431, 0.431, 1),
+        self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=0, colorScale=(0.431, 0.431, 0.431, 1),
                                    blendType='easeInOut'))
-        self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=.25, colorScale=(0, 0, 0, 0),
+        self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=0, colorScale=(0, 0, 0, 0),
                                    blendType='easeInOut'))
         self.interval.start()
         self.glowInterval.start()
 
     def __changeColor(self):
-        self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=1, colorScale=(self.healthColors[self.healthCondition]),
+        self.interval = Parallel(LerpColorScaleInterval(self.healthBar, duration=0, colorScale=(self.healthColors[self.healthCondition]),
                                    blendType='easeInOut'))
-        self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=1, colorScale=(self.healthColors[self.healthCondition]),
+        self.glowInterval = Parallel(LerpColorScaleInterval(self.healthBarGlow, duration=0, colorScale=(self.healthColors[self.healthCondition]),
                                    blendType='easeInOut'))
         self.interval.start()
         self.glowInterval.start()

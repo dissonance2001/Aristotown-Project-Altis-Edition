@@ -41,6 +41,19 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                         Wait(duration),
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)), Func(self.hide))
 
+    def getShowIntervalOverhealed(self, text, duration):
+        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0, 0.949, 1, 1.0)), Func(self.hide), Wait(duration * 0.1), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
+                        LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
+                        self.posInterval(0, (0, 0, .75)), Func(self.setText, text),
+                        Func(self.show),
+                        Wait(0.5),
+                        Parallel(self.scaleInterval(0.25, (1.2, 1.1, 1.1)),
+                                 self.posInterval(0.25, (0, 0, -0.040))),
+                        Parallel(self.scaleInterval(0.25, (1.1, 1.1, 1.1)),
+                                 self.posInterval(0.25, (0, 0, -0.040))),
+                        Wait(duration),
+                        LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)), Func(self.hide))
+
     def getShowIntervalCheat(self, text, duration):
         return Sequence(LerpColorScaleInterval(self, 0, Vec4(0.466, 0.474, 1.0, 1.0)), Func(self.hide), Wait(duration * 0.1), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),

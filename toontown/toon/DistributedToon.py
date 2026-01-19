@@ -138,6 +138,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.splash = None
         self.tossTrack = None
         self.hpTextInterval = None
+        self.damageInterval = None
         self.pieTracks = {}
         self.splatTracks = {}
         self.lastTossedPie = 0
@@ -202,6 +203,18 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.certs = []
         self.spentTrainingPoints = [0, 0, 0, 0, 2, 2, 0, 0]
         self.battleConditions = {}
+
+    def checkVulnerabilityUp(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.setVulnerability, self.getVulnerability() + num)).start()
+
+    def checkSnappedUp(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.setSnapped, self.getSnapped() + num)).start()
 
     def disable(self):
         for soundSequence in self.soundSequenceList:
@@ -2808,11 +2821,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.hpText.setBin('fixed', 100)
             self.hpText.setPos(0, 0, self.height / 2)
         if text != None:
-            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)),
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.25), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)),
                                            Func(self.hideHpText))
             self.hpTextInterval.start()
         else:
-            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0),
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.0), blendType='easeOut'), Wait(1.0),
                                            LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
             self.hpTextInterval.start()
 
@@ -2902,7 +2915,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0),
+                self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.0), blendType='easeOut'), Wait(1.0),
                                                    LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
                 self.hpTextInterval.start()
 
@@ -3173,7 +3186,11 @@ def toonseltown():
 @magicWord(category=CATEGORY_CREATIVE)
 def skyclan():
     spellbook.getInvoker().magicTeleportInitiate(19000, 19000)
-   	
+
+@magicWord(category=CATEGORY_CREATIVE)
+def boardbothq():
+    spellbook.getInvoker().magicTeleportInitiate(20000, 20000)
+
 @magicWord(category=CATEGORY_CREATIVE, types=[int])
 def globalTp(streetZone):
     spellbook.getInvoker().magicTeleportInitiate(ZoneUtil.getHoodId(streetZone), streetZone)

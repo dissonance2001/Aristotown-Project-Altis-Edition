@@ -485,6 +485,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
 
 
     def __updateHp(self, currHp, maxHp, delta):
+        taskMgr.remove(self.frame.uniqueName('pulse-task'))
         health = float(self.avatar.currHP) / float(self.avatar.maxHP)
         if health > 1.5:
             condition = 13
