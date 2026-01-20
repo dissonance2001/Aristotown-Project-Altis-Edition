@@ -423,19 +423,19 @@ class SuitPlannerInteriorAI:
 
         def suitKindFromLevel(level):
             if level >= 25:
-                returnval = random.randint(14, 16)
+                returnval = 14
             elif level >= 24:
-                returnval = random.randint(13, 16)
+                returnval = random.randint(13, 14)
             elif level >= 21:
-                returnval = random.randint(12, 16)
+                returnval = random.randint(12, 14)
             elif level >= 20:
-                returnval = random.randint(11, 16)
+                returnval = random.randint(11, 14)
             elif level >= 18:
-                returnval = random.randint(10, 16)
+                returnval = random.randint(10, 14)
             elif level >= 16:
-                returnval = random.randint(9, 16)
+                returnval = random.randint(9, 14)
             elif level >= 15:
-                returnval = random.randint(9, 15)
+                returnval = random.randint(9, 14)
             elif level >= 14:
                 returnval = random.randint(7, 14)
             elif level >= 13:

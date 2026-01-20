@@ -369,24 +369,21 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def __clickedNameTag(self, avatar):
         self.notify.debug('__clickedNameTag')
-        if self.cr:
-            place = self.cr.playGame.getPlace()
-            if place and hasattr(place, 'fsm'):
-                FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
+        place = self.cr.playGame.getPlace()
+        if place and hasattr(place, 'fsm'):
+            FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
 
     def __handleFriendAvatar(self, avId, avName, avDisableName):
         self.notify.debug('__handleFriendAvatar')
-        if self.cr:
-            place = self.cr.playGame.getPlace()
-            if place and hasattr(place, 'fsm'):
-                FriendsListManager.FriendsListManager._FriendsListManager__handleFriendAvatar(place, avId, avName, avDisableName)
+        place = self.cr.playGame.getPlace()
+        if place and hasattr(place, 'fsm'):
+            FriendsListManager.FriendsListManager._FriendsListManager__handleFriendAvatar(place, avId, avName, avDisableName)
 
     def __handleAvatarDetails(self, avId, avName, playerId=None):
         self.notify.debug('__handleAvatarDetails')
-        if self.cr:
-            place = self.cr.playGame.getPlace()
-            if place and hasattr(place, 'fsm'):
-                FriendsListManager.FriendsListManager._FriendsListManager__handleAvatarDetails(place, avId, avName, playerId)
+        place = self.cr.playGame.getPlace()
+        if place and hasattr(place, 'fsm'):
+            FriendsListManager.FriendsListManager._FriendsListManager__handleAvatarDetails(place, avId, avName, playerId)
 
     def createWalkInInterval(self):
         retval = Parallel()
