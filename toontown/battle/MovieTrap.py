@@ -277,9 +277,9 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     battle = trap['battle']
     origHpr = toon.getHpr(battle)
     if propName == 'spring':
-        trapPoint = Point3(-1, MovieUtil.SUIT_TRAP_DISTANCE, -.25)
+        trapPoint = Point3(0, MovieUtil.SUIT_TRAP_DISTANCE, -.25)
     else:
-        trapPoint = Point3(-1, MovieUtil.SUIT_TRAP_DISTANCE, 0.025)
+        trapPoint = Point3(0, MovieUtil.SUIT_TRAP_DISTANCE, 0.025)
     trapDelay = 2.5
     hands = toon.getLeftHands()
 

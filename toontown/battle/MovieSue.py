@@ -332,6 +332,7 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
         toonTrack.append(ActorInterval(toon, 'duck'))
     toonTrack.append(Func(toon.loop, 'neutral'))
     toonTrack.append(Func(toon.setHpr, battle, origHpr))
+    toonTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 3)))
     buttonTrack = Sequence()
     buttonShow = Func(MovieUtil.showProps, buttons, hands)
     buttonScaleUp = LerpScaleInterval(button, 1.0, button.getScale(), startScale=Point3(0.01, 0.01, 0.01))

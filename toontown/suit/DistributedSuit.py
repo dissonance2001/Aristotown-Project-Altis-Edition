@@ -1158,16 +1158,28 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.healInterval:
             self.healInterval.finish()
             self.healInterval = None
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP >= (self.maxHP * self.hardMaxHP):
-            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="REFINED!", colorCode=1),
-                                         Func(self.updateHealthBar, 0)).start()
-        elif self.currHP + 175 > (self.maxHP * self.hardMaxHP):
-            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REFINED!", colorCode=1),
-                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        if self.getManager():
+            x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+            if self.currHP >= (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="REFINED!", colorCode=1),
+                                             Func(self.updateHealthBar, 0)).start()
+            elif self.currHP + 200 > (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REFINED!", colorCode=1),
+                                             Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+            else:
+                self.healInterval = Parallel(Func(self.showHpTextNew, 200, text="REFINED!", colorCode=1),
+                                             Func(self.setHealthForMe, 200), Func(self.updateHealthBar, 0)).start()
         else:
-            self.healInterval = Parallel(Func(self.showHpTextNew, 175, text="REFINED!", colorCode=1),
-                                         Func(self.setHealthForMe, 175), Func(self.updateHealthBar, 0)).start()
+            x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+            if self.currHP >= (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="REFINED!", colorCode=1),
+                                             Func(self.updateHealthBar, 0)).start()
+            elif self.currHP + 175 > (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REFINED!", colorCode=1),
+                                             Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+            else:
+                self.healInterval = Parallel(Func(self.showHpTextNew, 175, text="REFINED!", colorCode=1),
+                                             Func(self.setHealthForMe, 175), Func(self.updateHealthBar, 0)).start()
 
     def checkRefinementManager(self):
         if self.healInterval:
@@ -1221,16 +1233,31 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.healInterval:
             self.healInterval.finish()
             self.healInterval = None
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP >= (self.maxHP * self.hardMaxHP):
-            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="REFINED!", colorCode=1),
-                                         Func(self.updateHealthBar, 0)).start()
-        elif self.currHP + 275 > (self.maxHP * self.hardMaxHP):
-            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REFINED!", colorCode=1),
-                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        if self.getManager():
+            if self.healInterval:
+                self.healInterval.finish()
+                self.healInterval = None
+            x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+            if self.currHP >= (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="REFINED!", colorCode=1),
+                                             Func(self.updateHealthBar, 0)).start()
+            elif self.currHP + 350 > (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REFINED!", colorCode=1),
+                                             Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+            else:
+                self.healInterval = Parallel(Func(self.showHpTextNew, 350, text="REFINED!", colorCode=1),
+                                             Func(self.setHealthForMe, 350), Func(self.updateHealthBar, 0)).start()
         else:
-            self.healInterval = Parallel(Func(self.showHpTextNew, 275, text="REFINED!", colorCode=1),
-                                         Func(self.setHealthForMe, 275), Func(self.updateHealthBar, 0)).start()
+            x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+            if self.currHP >= (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="REFINED!", colorCode=1),
+                                             Func(self.updateHealthBar, 0)).start()
+            elif self.currHP + 275 > (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REFINED!", colorCode=1),
+                                             Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+            else:
+                self.healInterval = Parallel(Func(self.showHpTextNew, 275, text="REFINED!", colorCode=1),
+                                             Func(self.setHealthForMe, 275), Func(self.updateHealthBar, 0)).start()
 
     def checkProfiteering(self, racketeer, battle):
         if self.damageInterval:

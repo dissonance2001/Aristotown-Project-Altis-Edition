@@ -1356,7 +1356,7 @@ class Suit(Avatar.Avatar):
         # Bossbots
         if dna.name == 'f':
             self.scale = 4.0 / cSize
-            self.handColor = SuitDNA.corpPolyColor
+            self.handColor = VBase4(0.922, 0.827, 0.812, 1)
             self.generateBody()
             #self.generateFlunky()
             self.generateHead2('flunky')
@@ -1364,7 +1364,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(4.88)
         elif dna.name == 'p':
             self.scale = 3.35 / bSize
-            self.handColor = SuitDNA.corpPolyColor
+            self.handColor = VBase4(0.612, 0.565, 0.58, 1)
             self.generateBody()
             self.generateHead2('pencilpusher')
             texture = loader.loadTexture('phase_3.5/maps/pencil_pusher.png')
@@ -1400,7 +1400,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(6.23)
         elif dna.name == 'mm':
             self.scale = 2.5 / cSize
-            self.handColor = SuitDNA.corpPolyColor
+            self.handColor = VBase4(0.945, 0.867, 0.839, 1)
             self.generateFemaleBody()
             self.generateHead2('micromanager')
             texture = loader.loadTexture('phase_3.5/maps/tutorial_suits_palette_3cmla_1.jpg')
@@ -1443,7 +1443,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(7.5)
         elif dna.name == 'hh':
             self.scale = 6.5 / aSize
-            self.handColor = SuitDNA.corpPolyColor
+            self.handColor = VBase4(0.902, 0.808, 0.788, 1)
             self.generateBody()
             self.generateHead2('headhunter')
             texture = loader.loadTexture('phase_3.5/maps/suit-heads_palette_3cmla_2.jpg')
@@ -1461,7 +1461,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(7.45)
         elif dna.name == 'cr':
             self.scale = 6.75 / cSize
-            self.handColor = SuitDNA.corpPolyColor
+            self.handColor = VBase4(0.816, 0.776, 0.761, 1)
             self.generateBody()
             self.generateHead2('flunky')
             texture = loader.loadTexture('phase_4/maps/corporate-raider.jpg')
@@ -1479,7 +1479,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(8.5)
         elif dna.name == 'tbc':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.749, 0.859, 0.525, 1.0)
+            self.handColor = VBase4(0.827, 0.898, 0.631, 1.0)
             self.generateBody()
             self.generateHead2('bigcheese')
             texture = loader.loadTexture('phase_3.5/maps/suit-heads_palette_3cmla_1.png')
@@ -1635,7 +1635,7 @@ class Suit(Avatar.Avatar):
         # Lawbots
         elif dna.name == 'bf':
             self.scale = 4.2 / cSize
-            self.handColor = SuitDNA.legalPolyColor
+            self.handColor = VBase4(0.792, 0.78, 0.878, 1)
             self.generateBody()
             self.generateHead3('bottom_feeder', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_bottom_feeder.png')
@@ -1653,7 +1653,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(5.63)
         elif dna.name == 'pf':
             self.scale = 4.0 / bSize
-            self.handColor = SuitDNA.legalPolyColor
+            self.handColor = VBase4(0.533, 0.561, 0.725, 1)
             self.generateBody()
             self.generateHead3('pettifogger', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_pettifogger.png')
@@ -1662,7 +1662,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(5.6)
         elif dna.name == 'dt':
             self.scale = 4.25 / aSize
-            self.handColor = SuitDNA.legalPolyColor
+            self.handColor = VBase4(0.714, 0.714, 0.808, 1)
             self.generateBody()
             self.generateHead3('doubletalker', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_doubletalker.png')
@@ -1681,7 +1681,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(6.4)
         elif dna.name == 'ac':
             self.scale = 4.2 / bSize
-            self.handColor = SuitDNA.legalPolyColor
+            self.handColor = VBase4(0.714, 0.714, 0.808, 1)
             self.generateBody()
             self.generateHead3('ambulance_chaser', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_ambulance_chaser.png')
@@ -1735,7 +1735,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(7.4)
         elif dna.name == 'le':
             self.scale = 6.8 / aSize
-            self.handColor = VBase4(0.25, 0.25, 0.5, 1.0)
+            self.handColor = VBase4(0.659, 0.647, 0.804, 1.0)
             self.generateBody()
             self.generateHead3('legal_eagle', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_legal_eagle.png')
@@ -1907,7 +1907,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(4.5)
         elif dna.name == 'pp':
             self.scale = 3.55 / aSize
-            self.handColor = VBase4(0.686, 0.212, 0.18, 1.0)
+            self.handColor = VBase4(0.82, 0.384, 0.353, 1.0)
             self.generateBody()
             self.generateHead2('pennypincher')
             self.setHeight(5.26)
@@ -7508,7 +7508,7 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         self.isGovernaught = 1
         try:
-            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_racket.png')
+            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_racket2.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
                 'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')

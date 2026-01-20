@@ -86,12 +86,13 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
         self.arenaSide = None
         self.makeBattleOneBattles()
         self.barrier = self.beginBarrier('Introduction', self.involvedToons, 45, self.doneIntroduction)
+        self.createFoodBelts()
+        self.createBanquetTables()
 
     def makeBattleOneBattles(self):
-        if not self.battleOneBattlesMade:
-            self.postBattleState = 'PrepareBattleTwo'
-            self.initializeBattles(1, ToontownGlobals.BossbotBossBattleOnePosHpr)
-            self.battleOneBattlesMade = True
+        self.postBattleState = 'PrepareBattleTwo'
+        self.initializeBattles(1, ToontownGlobals.BossbotBossBattleOnePosHpr)
+        self.battleOneBattlesMade = True
 
     def getHoodId(self):
         return ToontownGlobals.LawbotHQ
@@ -113,7 +114,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
-            cogs = self.invokeEmptyPlanner(11, 'ambassador')
+            cogs = self.invokeEmptyPlanner(11, 'directors')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)
@@ -220,14 +221,8 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
     def createBanquetTables(self):
         if self.tables:
             return
-        self.calcAndSetBattleDifficulty()
-        diffInfo = ToontownGlobals.BossbotBossDifficultySettings[1]
-        self.diffInfo = diffInfo
-        self.numTables = diffInfo[0]
-        self.numDinersPerTable = diffInfo[1]
-        dinerLevel = diffInfo[2]
-        for i in xrange(self.numTables):
-            newTable = DistributedBanquetTableAI.DistributedBanquetTableAI(self.air, self, i, self.numDinersPerTable, dinerLevel)
+        for i in xrange(15):
+            newTable = DistributedBanquetTableAI.DistributedBanquetTableAI(self.air, self, i, 0, 1)
             self.tables.append(newTable)
             newTable.generateWithRequired(self.zoneId)
 
@@ -292,9 +287,8 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
         self.b_setState('BattleThree')
 
     def makeBattleThreeBattles(self):
-        self.notDeadList = notDeadList
-        self.postBattleState = 'PrepareBattleFour'
-        self.initializeBattles(3, ToontownGlobals.BossbotBossBattleThreePosHpr)
+        self.postBattleState = 'PrepareBattleTwo'
+        self.initializeBattles(2, ToontownGlobals.BossbotBossBattleOnePosHpr)
         self.battleThreeBattlesMade = True
 
     def generateDinerSuits(self):
@@ -347,11 +341,8 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
 
     def enterBattleThree(self):
         self.makeBattleThreeBattles()
-        self.notify.debug('self.battleA = %s' % self.battleA)
-        if self.battleA:
-            self.battleA.startBattle(self.toonsA, self.suitsA)
-        if self.battleB:
-            self.battleB.startBattle(self.toonsB, self.suitsB)
+        if self.battle:
+            self.battle.startBattle(self.toons, self.suits)
 
     def exitBattleThree(self):
         self.resetBattles()

@@ -2820,14 +2820,14 @@ def randomActorShot(actor, battle, duration, actorType, groupShot = 0):
     centralPoint = actor.getPos(battle)
     centralPoint.setZ(centralPoint.getZ() + height * 0.75)
     if actorType == 'suit':
-        x = 4 + random.random() * 6
+        x = 4 + random.random() * 3
         y = -2 - random.random() * 4
         z = height * 0.5 + random.random() * height * 1.5
         if groupShot == 1:
             y = -4
             z = height * 0.5
     else:
-        x = 2 + random.random() * 6
+        x = 2 + random.random() * 3
         y = -2 + random.random() * 3
         z = height + random.random() * height * 1.5
         if groupShot == 1:
@@ -2937,7 +2937,7 @@ def randomToonGroupShot(toons, suit, duration, battle):
 
     avgHeight = sum / len(toons) * 0.75
     suitPos = suit.getPos(battle)
-    x = 1 + random.random() * 6
+    x = 1 + random.random() * 3
     if suitPos.getX() > 0:
         x = -x
     if random.random() > 0.5:

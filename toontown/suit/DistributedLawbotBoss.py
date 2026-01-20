@@ -308,9 +308,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         bossTrack = Sequence()
         self.notify.debug('calling setPosHpr')
         myInterval = base.camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), startPos=Point3(-22, -90, 35), startHpr=Point3(-10, -13, 0), blendType='easeInOut')
-        chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempJury1, CFSpeech), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1), Func(self.setChatAbsolute, '', CFSpeech))
+        chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempJury1, CFSpeech | CFTimeout), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1), Func(self.setChatAbsolute, '', CFSpeech | CFTimeout))
         bossTrack.append(Func(self.getGeomNode().setH, 180))
-        chatTrack.append(Func(self.setChatAbsolute, '', CFSpeech))
+        chatTrack.append(Func(self.setChatAbsolute, '', CFSpeech | CFTimeout))
         track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
         bossTrack.append(track)
         track, hpr = self.rollBossToPoint(battlePos, hpr, battlePos, battleHpr, 0)
@@ -325,8 +325,8 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         battleHpr = VBase3(ToontownGlobals.LawbotBossBattleThreePosHpr[3], ToontownGlobals.LawbotBossBattleThreePosHpr[4], ToontownGlobals.LawbotBossBattleThreePosHpr[5])
         bossTrack = Sequence()
         myInterval = base.camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), startPos=Point3(-22, -90, 35), startHpr=Point3(-10, -13, 0), blendType='easeInOut')
-        chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTrialChat1, CFSpeech), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1), Func(self.setChatAbsolute, '', CFSpeech))
-        bossTrack.append(Func(self.setChatAbsolute, '', CFSpeech))
+        chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTrialChat1, CFSpeech | CFTimeout), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1), Func(self.setChatAbsolute, '', CFSpeech | CFTimeout))
+        bossTrack.append(Func(self.setChatAbsolute, '', CFSpeech | CFTimeout))
         bossTrack.append(Func(self.getGeomNode().setH, 180))
         bossTrack.append(Func(self.loop, 'Ff_neutral_f'))
         track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
@@ -426,9 +426,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
              Func(base.camera.reparentTo, localAvatar),
              Func(base.camera.setPos, localAvatar.cameraPositions[0][0]),
              Func(base.camera.setHpr, 0, 0, 0)]
-        seq.append(Func(self.setChatAbsolute, TTLocalizer.LawbotBossPassExam, CFSpeech))
+        seq.append(Func(self.setChatAbsolute, TTLocalizer.LawbotBossPassExam, CFSpeech | CFTimeout))
         seq.append(Wait(5.0))
-        seq.append(Func(self.setChatAbsolute, '', CFSpeech))
+        seq.append(Func(self.setChatAbsolute, '', CFSpeech | CFTimeout))
         return seq
 
     def __makeBossDamageMovie(self):
@@ -863,7 +863,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleTwoPosHpr)
         self.loop('Ff_neutral_f')
-        self.setChatAbsolute('', CFSpeech)
+        self.setChatAbsolute('', CFSpeech | CFTimeout)
         self.notify.debug('self.battleANode = %s' % self.battleANode)
         base.playMusic(self.battleOneMusic, looping=1, volume=0.9)
         self.__hideWitnessToon()
@@ -1540,11 +1540,11 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         track.append(bossAnimTrack)
         attackToons = TTLocalizer.BossCogAttackToons
         dialogTrack = Track(
-            (0, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie1, CFSpeech)),
+            (0, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie1, CFSpeech | CFTimeout)),
 
-            (5.6, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie2, CFSpeech)),
+            (5.6, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie2, CFSpeech | CFTimeout)),
 
-            (12, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie3, CFSpeech)),
+            (12, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie3, CFSpeech | CFTimeout)),
 
             # Cut to toons losing their cog suits.
             (18, Sequence(Func(self.clearChat),
@@ -1555,7 +1555,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             # ramps retract.
             (24, Sequence(self.toonNormalEyes(self.involvedToons),
                           Func(self.loop, 'Ff_neutral'),
-                          Func(self.setChatAbsolute, attackToons, CFSpeech), Func(self.setChatAbsolute, '', CFSpeech)
+                          Func(self.setChatAbsolute, attackToons, CFSpeech | CFTimeout), Func(self.setChatAbsolute, '', CFSpeech | CFTimeout)
 
                           )),
         )
@@ -1744,16 +1744,16 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 Func(base.camera.reparentTo, render),
                 Func(base.camera.setPos, -3, 175, 15),
                 Func(base.camera.setHpr, 0, 10, 0))),
-            (1.0, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins1, CFSpeech)),
-            (5.5, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins2, CFSpeech)),
+            (1.0, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins1, CFSpeech) | CFTimeout),
+            (5.5, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins2, CFSpeech | CFTimeout)),
             (9.5, Sequence(Func(base.camera.wrtReparentTo, render))),
             (9.6, Parallel(
                 rollTrack,
-                Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins3, CFSpeech),
+                Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins3, CFSpeech | CFTimeout),
                 self.door3.posInterval(2, doorEndPos, startPos=doorStartPos))),
             (13.1, Sequence(Parallel(SoundInterval(whistleSfx),
                    Sequence(
-                       Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins4, CFSpeech),
+                       Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins4, CFSpeech | CFTimeout),
                        LerpScaleInterval(self.dropShadow, 3, Point3(15, 15, 15)),
                        Func(paperwork.reparentTo, render),
                        Parallel(LerpPosInterval(paperwork, 0.1, paperToPos, startPos = paperPosStart), 
@@ -1771,7 +1771,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return bossTrack
 
     def makeDefeatMovie(self):
-        bossTrack = Track((0.0, Sequence(Func(self.clearChat), Func(self.reverseHead), ActorInterval(self, 'Ff_speech'))), (1.0, Func(self.setChatAbsolute, TTLocalizer.LawbotBossProsecutionWins, CFSpeech)))
+        bossTrack = Track((0.0, Sequence(Func(self.clearChat), Func(self.reverseHead), ActorInterval(self, 'Ff_speech'))), (1.0, Func(self.setChatAbsolute, TTLocalizer.LawbotBossProsecutionWins, CFSpeech | CFTimeout)))
         return bossTrack
 
     def __makeWitnessToon(self):
@@ -1943,7 +1943,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def saySomething(self, chatString):
         intervalName = 'ChiefJusticeTaunt'
         seq = Sequence(name=intervalName)
-        seq.append(Func(self.setChatAbsolute, chatString, CFSpeech))
+        seq.append(Func(self.setChatAbsolute, chatString, CFSpeech | CFTimeout))
         seq.append(Wait(4.0))
         seq.append(Func(self.clearChat))
         oldSeq = self.activeIntervals.get(intervalName)

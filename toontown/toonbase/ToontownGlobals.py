@@ -1904,13 +1904,13 @@ BossbotRTEpiloguePosHpr = (0,
  0,
  0)
 BossbotBossBattleOnePosHpr = (0,
- 355,
+ 390,
  0,
  0,
  0,
  0)
 BossbotBossBattleOnePosHpr2 = (0,
- 355,
+ 390,
  0,
  0,
  0,
@@ -1930,7 +1930,7 @@ BossbotElevCamPosHpr = (0,
 BossbotFoodModelScale = 0.75
 BossbotOilDamage = 5
 BossbotNumFoodToExplode = 2
-BossbotBossServingDuration = 300
+BossbotBossServingDuration = 5
 BossbotPrepareBattleThreeDuration = 20
 WaiterBattleAPosHpr = (20,
  - 400,

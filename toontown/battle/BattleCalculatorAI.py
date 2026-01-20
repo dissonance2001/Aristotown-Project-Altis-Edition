@@ -1005,10 +1005,10 @@ class BattleCalculatorAI:
                 toon = self.battle.getToon(toonId)
                 if not suit.getManager() and suit.currHP <= (suit.maxHP * 1.5) and not self.suitHasCondition(targetId, 'insured') and len(self.getAllRelevantConditions(targetId, StatusEffects.ExtraAttacks, toon=False)) == 0:
                     self.setSuitCondition(targetId, 'sued', 1, 4, 'setBoth')
-                    self.setToonCondition(toonId, 'noSOS', 1, 3, 'setBoth')
-                    self.setToonCondition(toonId, 'noFires', 1, 3, 'setBoth')
-                    self.setToonCondition(toonId, 'noUnites', 1, 3, 'setBoth')
-                    self.setToonCondition(toonId, 'noSues', 1, 3, 'setBoth')
+                    # self.setToonCondition(toonId, 'noSOS', 1, 3, 'setBoth')
+                    # self.setToonCondition(toonId, 'noFires', 1, 3, 'setBoth')
+                    # self.setToonCondition(toonId, 'noUnites', 1, 3, 'setBoth')
+                    # self.setToonCondition(toonId, 'noSues', 1, 3, 'setBoth')
                     costToSue = math.ceil(suit.getActualLevel() / 4)
                     abilityToSue = toon.getCeaseAndDesists()
                     toon.removeCeaseAndDesists(costToSue)
@@ -1294,10 +1294,10 @@ class BattleCalculatorAI:
                                 attackDamage = suit.getHP()
                     else:
                         attackDamage = 0
-                    self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'noSues', 1, 3, 'setBoth')
+                    # self.setToonCondition(toon.doId, 'noSOS', 1, 3, 'setBoth')
+                    # self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
+                    # self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
+                    # self.setToonCondition(toon.doId, 'noSues', 1, 3, 'setBoth')
                     bonus = 0
                 elif atkTrack == SUE:
                     suit = self.battle.findSuit(targetId)
@@ -4237,15 +4237,26 @@ class BattleCalculatorAI:
                             self.__removeLured(s)
                         self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
                         self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
-                        if suit.currHP <= 0:
-                            continue
-                        x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                        if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                            suit.setHP(suit.currHP + 0)
-                        elif suit.currHP + 275 > (suit.maxHP * suit.hardMaxHP):
-                            suit.setHP(suit.currHP + x)
+                        if suit.dna.name == 'wtapper' or suit.dna.name == 'bkeeper' or suit.dna.name == 'phouse':
+                            if suit.currHP <= 0:
+                                continue
+                            x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
+                            if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + 0)
+                            elif suit.currHP + 350 > (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + x)
+                            else:
+                                suit.setHP(suit.currHP + 350)
                         else:
-                            suit.setHP(suit.currHP + 275)
+                            if suit.currHP <= 0:
+                                continue
+                            x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
+                            if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + 0)
+                            elif suit.currHP + 275 > (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + x)
+                            else:
+                                suit.setHP(suit.currHP + 275)
                 elif currentBossHealth <= 0:
                     for suit in self.battle.activeSuits:
                         if self.suitHasCondition(suit.doId, 'lured'):
@@ -4255,16 +4266,26 @@ class BattleCalculatorAI:
                             self.__removeLured(s)
                         self.setSuitCondition(suit.doId, 'sued', 0, 0, 'setBoth')
                         self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
-                        if suit.currHP <= 0:
-                            continue
-                        x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                        if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                            suit.setHP(suit.currHP + 0)
-                        elif suit.currHP + 175 > (suit.maxHP * suit.hardMaxHP):
-                            suit.setHP(suit.currHP + x)
+                        if suit.dna.name == 'wtapper' or suit.dna.name == 'bkeeper' or suit.dna.name == 'phouse':
+                            if suit.currHP <= 0:
+                                continue
+                            x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
+                            if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + 0)
+                            elif suit.currHP + 200 > (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + x)
+                            else:
+                                suit.setHP(suit.currHP + 200)
                         else:
-                            suit.setHP(suit.currHP + 175)
-                    continue
+                            if suit.currHP <= 0:
+                                continue
+                            x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
+                            if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + 0)
+                            elif suit.currHP + 175 > (suit.maxHP * suit.hardMaxHP):
+                                suit.setHP(suit.currHP + x)
+                            else:
+                                suit.setHP(suit.currHP + 175)
             elif atkType['name'] == 'AmbassadorRefinementManager':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -9613,12 +9634,12 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'refinementcalculator', 1, 10, 'setBoth')
                 if (x + 2) % 4 == 0:
                     self.setSuitCondition(suitId, 'advancementcalculator', 1, 10, 'setBoth')
-                currentBossHealth = -1
-                for s in self.battle.suits:
-                    if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'phouse':
-                        currentBossHealth = s.currHP
-                    if (x + 3) % 4 == 0 and currentBossHealth > 0:
-                        self.setSuitCondition(suitId, 'refinemanagercalculator', 1, 10, 'setBoth')
+                # currentBossHealth = -1
+                # for s in self.battle.suits:
+                #     if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'phouse':
+                #         currentBossHealth = s.currHP
+                #     if (x + 3) % 4 == 0 and currentBossHealth > 0:
+                #         self.setSuitCondition(suitId, 'refinemanagercalculator', 1, 10, 'setBoth')
                 if (x + 1) % 5 == 0 and self.suitHasCondition(suitId, 'phase3'):
                     self.setSuitCondition(suitId, 'headrollercalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'safesupervis': #safety supervisor

@@ -317,7 +317,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
             (0, Parallel(
                 camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), blendType='easeInOut'),
                 IndirectInterval(toonTrack, 0, 18))),
-            (5.6, Func(self.setChatAbsolute, promoteDoobers, CFSpeech)),
+            (5.6, Func(self.setChatAbsolute, promoteDoobers, CFSpeech | CFTimeout)),
             (9, IndirectInterval(dooberTrack, 0, 9)),
             (10, Sequence(
                 Func(self.clearChat),
@@ -328,11 +328,11 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                 base.camera.posHprInterval(3, Point3(-25, -99, 10), Point3(-14, 10, 0), blendType = 'easeInOut'),
                 IndirectInterval(dooberTrack, 14),
                 IndirectInterval(toonTrack, 30))),
-            (18, Func(self.setChatAbsolute, welcomeToons, CFSpeech)),
-            (22, Func(self.setChatAbsolute, promoteToons, CFSpeech)),
+            (18, Func(self.setChatAbsolute, welcomeToons, CFSpeech | CFTimeout)),
+            (22, Func(self.setChatAbsolute, promoteToons, CFSpeech | CFTimeout)),
             (22.2, Sequence(
                 Func(self.cagedToon.nametag3d.setScale, 2),
-                Func(self.cagedToon.setChatAbsolute, interruptBoss, CFSpeech),
+                Func(self.cagedToon.setChatAbsolute, interruptBoss, CFSpeech | CFTimeout),
                 ActorInterval(self.cagedToon, 'wave'),
                 Func(self.cagedToon.loop, 'neutral'))),
             (25, Sequence(
@@ -340,13 +340,13 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                 Func(self.cagedToon.clearChat),
                 ActorInterval(self, 'Ff_lookRt'))),
             (27, Sequence(
-                Func(self.cagedToon.setChatAbsolute, rescueQuery, CFSpeech),
+                Func(self.cagedToon.setChatAbsolute, rescueQuery, CFSpeech | CFTimeout),
                 base.camera.posHprInterval(2, Point3(-12, 48, 94), Point3(-26, 20, 0), blendType = 'easeInOut'),
                 ActorInterval(self.cagedToon, 'wave'),
                 Func(self.cagedToon.loop, 'neutral'))),
             (31, Sequence(
                 base.camera.posHprInterval(2, Point3(-20, -35, 10), Point3(-88, 25, 0), blendType = 'easeInOut'),
-                Func(self.setChatAbsolute, discoverToons, CFSpeech),
+                Func(self.setChatAbsolute, discoverToons, CFSpeech | CFTimeout),
                 Func(self.cagedToon.nametag3d.setScale, 1),
                 Func(self.cagedToon.clearChat),
                 ActorInterval(self, 'turn2Fb'))),
@@ -362,7 +362,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                          self.backupToonsToBattlePosition(self.toonsB, self.battleBNode),
                          Sequence(
                              Wait(2),
-                             Func(self.setChatAbsolute, '', CFSpeech))))))
+                             Func(self.setChatAbsolute, "Attack!", CFSpeech | CFTimeout))))))
         track.append(dialogTrack)
         return Sequence(Func(self.stickToonsToFloor), track, Func(self.unstickToons), name=self.uniqueName('Introduction'))
 
@@ -398,7 +398,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         if instruct == 1:
             self.cagedToon.nametag3d.setScale(2)
         elif instruct == 2:
-            self.cagedToon.setChatAbsolute(TTLocalizer.CagedToonDrop[cageIndex], CFSpeech)
+            self.cagedToon.setChatAbsolute(TTLocalizer.CagedToonDrop[cageIndex], CFSpeech | CFTimeout)
         elif instruct == 3:
             self.cagedToon.nametag3d.setScale(1)
         elif instruct == 4:
@@ -478,7 +478,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
             Wait(0.2),
             Func(self.cagedToon.loop, 'walk'),
             self.cagedToon.posInterval(0.8, Point3(0, -6, 0)),
-            Func(self.cagedToon.setChatAbsolute, TTLocalizer.CagedToonYippee, CFSpeech),
+            Func(self.cagedToon.setChatAbsolute, TTLocalizer.CagedToonYippee, CFSpeech | CFTimeout),
             ActorInterval(self.cagedToon, 'jump'),
             Func(self.cagedToon.loop, 'neutral'),
             Func(self.cagedToon.headsUp, localAvatar),
@@ -1051,7 +1051,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
             track.start()
 
     def __epilogueChatDone(self, elapsed):
-        self.cagedToon.setChatAbsolute(TTLocalizer.CagedToonGoodbye, CFSpeech)
+        self.cagedToon.setChatAbsolute(TTLocalizer.CagedToonGoodbye, CFSpeech | CFTimeout)
         self.ignore('nextChatPage')
         self.ignore('doneChatPage')
         intervalName = 'EpilogueMovieToonAnim'
