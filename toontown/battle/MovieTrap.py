@@ -158,6 +158,7 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
         propTrack.append(pTracks)
     throwTrack = Sequence()
     throwTrack.append(Wait(throwDelay))
+    throwTrack.append(Func(suit.makeTrapped, level + 1))
     throwTrack.append(Func(unthrownProp.reparentTo, hidden))
     throwTrack.append(Func(toon.update))
     if suit.battleTrap != NO_TRAP:
@@ -220,7 +221,7 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
         throwTrack.append(Wait(0.2))
         throwTrack.append(Parallel(throwingTrack, hprTrack, scaleTrack, soundTrack))
     else:
-        notify.warning('__createThrownTrapMultiTrack() - Incorrect trap:                          %s thrown from toon' % trapName)
+        notify.warning('__createThrownTrapMultiTrack() - Incorrect trap: %s thrown from toon' % trapName)
 
     def placeTrap(trapProp, suit, battle = battle, trapName = trapName):
         if not trapProp or trapProp.isEmpty():
@@ -307,6 +308,7 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     trapTrack.append(Func(trapProp.setScale, Point3(0.1, 0.1, 0.1)))
     trapTrack.append(Func(trapProp.reparentTo, suit))
     trapTrack.append(Func(trapProp.setPos, trapPoint))
+    trapTrack.append(Func(suit.makeTrapped, level + 1))
     if propName == 'wreckingball':
         trapTrack.append(LerpScaleInterval(trapProp, 0.25, Point3(2.5, 2.5, 2.5)))
         trapTrack.append(LerpScaleInterval(trapProp, 0.1, Point3(2.2, 2.2, 2.2)))

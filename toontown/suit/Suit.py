@@ -146,8 +146,8 @@ prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 cinema = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
-racket = (('smile', 'smile', 4), ('layoffs', 'layoffs', 4), ('quick-jump', 'jump', 4), ('taunt', 'taunt', 4), ('smile', 'smile', 4), ('cease', 'cease', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
-ubuster = (('summon', 'summon', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction3', 4))
+racket = (('pickpocket', 'pickpocket', 4), ('smile', 'smile', 4), ('layoffs', 'layoffs', 4), ('quick-jump', 'jump', 4), ('taunt', 'taunt', 4), ('smile', 'smile', 4), ('cease', 'cease', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
+ubuster = (('summon', 'summon', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction3', 4))
 safesupervis = (('rubber-stamp', 'rubber-stamp', 4), ('summon', 'summon', 4), ('cigar-smoke', 'cigar-smoke', 4), ('firestarter-cigar-smoke', 'firestarter-cigar-smoke', 4), ('cease', 'cease', 4), ('snap', 'snap2', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
 psetter = (('quick-jump', 'jump', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4), ('neutral2', 'neutral', 4))
 
@@ -1195,6 +1195,7 @@ class Suit(Avatar.Avatar):
         self.healthBar = None
         self.healthBarDisplay = None
         self.healthCondition = 0
+        self.isTrapped = 0
         self.rpm = 10
         self.rpmIncrease = 0
         self.isKickback = 0
@@ -6593,6 +6594,12 @@ class Suit(Avatar.Avatar):
     def makeLured(self):
         self.isLured = 1
 
+    def makeTrapped(self, level):
+        self.isTrapped = level
+
+    def makeUnTrapped(self):
+        self.isTrapped = 0
+
     def addLuredRounds(self, num):
         self.lureRounds = num
 
@@ -6696,10 +6703,6 @@ class Suit(Avatar.Avatar):
         texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
         for headPart in self.headParts:
             headPart.setTexture(texture, 1)
-        self.isHeavyRain = 0
-        self.isFreezingRain = 0
-        self.isStormCell = 1
-        self.isOilRain = 0
 
     def makeUnSyphon(self):
         self.isSyphon = 0

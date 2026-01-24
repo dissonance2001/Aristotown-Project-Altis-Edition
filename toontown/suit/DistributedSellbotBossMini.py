@@ -340,7 +340,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                 Func(self.cagedToon.clearChat),
                 ActorInterval(self, 'Ff_lookRt'))),
             (27, Sequence(
-                Func(self.cagedToon.setChatAbsolute, rescueQuery, CFSpeech | CFTimeout),
+                Func(self.cagedToon.setChatAbsolute, "", CFSpeech | CFTimeout),
                 base.camera.posHprInterval(2, Point3(-12, 48, 94), Point3(-26, 20, 0), blendType = 'easeInOut'),
                 ActorInterval(self.cagedToon, 'wave'),
                 Func(self.cagedToon.loop, 'neutral'))),
@@ -362,7 +362,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                          self.backupToonsToBattlePosition(self.toonsB, self.battleBNode),
                          Sequence(
                              Wait(2),
-                             Func(self.setChatAbsolute, "Attack!", CFSpeech | CFTimeout))))))
+                             Func(self.setChatAbsolute, "", CFSpeech | CFTimeout))))))
         track.append(dialogTrack)
         return Sequence(Func(self.stickToonsToFloor), track, Func(self.unstickToons), name=self.uniqueName('Introduction'))
 
@@ -398,11 +398,11 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         if instruct == 1:
             self.cagedToon.nametag3d.setScale(2)
         elif instruct == 2:
-            self.cagedToon.setChatAbsolute(TTLocalizer.CagedToonDrop[cageIndex], CFSpeech | CFTimeout)
+            self.cagedToon.setChatAbsolute("", CFSpeech | CFTimeout)
         elif instruct == 3:
             self.cagedToon.nametag3d.setScale(1)
         elif instruct == 4:
-            self.cagedToon.clearChat()
+            self.cagedToon.setChatAbsolute("", CFSpeech | CFTimeout)
 
     def makeEndOfBattleMovie(self, hasLocalToon):
         name = self.uniqueName('CageDrop')
@@ -739,7 +739,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
     def __onToPrepareBattleTwo(self):
         self.disableToonCollision()
         self.unstickBoss()
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleTwoPosHpr)
+        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
         self.doneBarrier('RollToBattleTwo')
 
     def exitRollToBattleTwo(self):
@@ -767,12 +767,11 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
         (localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov),)
         self.hide()
-        self.acceptOnce('doneChatPage', self.__onToBattleTwo)
-        self.cagedToon.setLocalPageChat(TTLocalizer.CagedToonPrepareBattleTwo, 1)
+        self.__onToBattleTwo()
         base.playMusic(self.stingMusic, looping=0, volume=1.0)
         taskMgr.doMethodLater(0.5, self.enableToonCollision, 'enableToonCollision')
 
-    def __onToBattleTwo(self, elapsed):
+    def __onToBattleTwo(self):
         self.doneBarrier('PrepareBattleTwo')
         taskMgr.doMethodLater(1, self.__showWaitingMessage, self.uniqueName('WaitingMessage'))
 
@@ -793,7 +792,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.accept('avatarDetails', self.__handleAvatarDetails)
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleTwoPosHpr)
+        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
         self.clearChat()
         self.cagedToon.clearChat()
         self.releaseToons()
@@ -1183,7 +1182,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                     return
                 toonName = toon.getName()
             text = str % {'toon': toonName}
-            self.cagedToon.setChatAbsolute(text, CFSpeech | CFTimeout)
+            self.cagedToon.setChatAbsolute("", CFSpeech | CFTimeout)
         else:
             self.cagedToon.clearChat()
 

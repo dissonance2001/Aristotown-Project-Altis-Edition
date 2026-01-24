@@ -208,7 +208,7 @@ AvPropStrings = TTLocalizer.BattleGlobalAvPropStrings
 AvPropStringsSingular = TTLocalizer.BattleGlobalAvPropStringsSingular
 AvPropStringsPlural = TTLocalizer.BattleGlobalAvPropStringsPlural
 AvPropAccuracy = (
-(70, 70, 70, 70, 70, 70, 70, 70),
+(100, 100, 100, 100, 100, 100, 100, 100),
 (0, 0, 0, 0, 0, 0, 0, 0),
 (50, 50, 60, 60, 70, 70, 90, 90),
 (75, 75, 75, 75, 75, 75, 75, 75),
@@ -220,14 +220,14 @@ AvDropBonusAccuracy = (90, 90, 90, 90, 90, 90, 90, 90)
 AvTrackAccStrings = TTLocalizer.BattleGlobalAvTrackAccStrings
 AvPropDamage = (
 # Toon-Up
-(((10, 10), (Levels[0][0], Levels[0][1])),
-((12, 12), (Levels[0][1], Levels[0][2])),
-((24, 24), (Levels[0][2], Levels[0][3])),
-((45, 45), (Levels[0][3], Levels[0][4])),
-((60, 60), (Levels[0][4], Levels[0][5])),
-((90, 90), (Levels[0][5], Levels[0][6])),
-((95, 95), (Levels[0][6], Levels[0][7])),
-((135, 135), (Levels[0][7], MaxSkill))),
+(((20, 20), (Levels[0][0], Levels[0][1])),
+((33, 33), (Levels[0][1], Levels[0][2])),
+((44, 44), (Levels[0][2], Levels[0][3])),
+((90, 90), (Levels[0][3], Levels[0][4])),
+((90, 90), (Levels[0][4], Levels[0][5])),
+((150, 150), (Levels[0][5], Levels[0][6])),
+((125, 125), (Levels[0][6], Levels[0][7])),
+((210, 210), (Levels[0][7], MaxSkill))),
 # Trap
 (((16, 16), (Levels[1][0], Levels[1][1])),
 ((32, 32), (Levels[1][1], Levels[1][2])),
@@ -906,5 +906,22 @@ ValidStatusConditions = (
     'activeunion',
     'activerack',
     'activeradio',
+    'activecont',
+    'activebutch',
+    'activerecord',
+    'activeliquid',
+    'deadcont',
+    'deadbutch',
+    'deadrecord',
+    'deadliquid',
     'alreadyDesperation',
+    'dazedcalculator',
+    'zappedcalculator',
+    'alreadyCogSpawn',
+    'markedwood',
+    'beginning',
+    'confusedtarget',
+    'nostrikecalculator',
+    'alreadyDesperation2',
+    'filingcalculator',
 )

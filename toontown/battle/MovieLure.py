@@ -266,6 +266,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                         suitTrack.append(makeUnLured)
                         suitTrack.append(Func(suit.setDizzy, 0))
                         suitTrack.append(Func(suit.makeDazed))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                         if suit.dna.name == 'sgoat':
                             suitTrack.append(Func(suit.addRageBuilding, hp))
                         if suit.dna.name == 'phouse':
@@ -400,6 +401,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                         suitTrack.append(makeUnLured)
                         suitTrack.append(Func(suit.setDizzy, 0))
                         suitTrack.append(Func(suit.makeDazed))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                         if suit.dna.name == 'sgoat':
                             suitTrack.append(Func(suit.addRageBuilding, hp))
                         if suit.dna.name == 'phouse':
@@ -533,6 +535,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                         suitTrack.append(makeUnLured)
                         suitTrack.append(Func(suit.setDizzy, 0))
                         suitTrack.append(Func(suit.makeDazed))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                         if suit.dna.name == 'sgoat':
                             suitTrack.append(Func(suit.addRageBuilding, hp))
                         if suit.dna.name == 'phouse':
@@ -1579,6 +1582,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                         suitTrack.append(makeUnLured)
                         suitTrack.append(Func(suit.setDizzy, 0))
                         suitTrack.append(Func(suit.makeDazed))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                         if suit.dna.name == 'sgoat':
                             suitTrack.append(Func(suit.addRageBuilding, hp))
                         if suit.dna.name == 'phouse':

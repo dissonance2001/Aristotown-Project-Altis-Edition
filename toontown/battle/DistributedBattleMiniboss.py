@@ -8,6 +8,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.chat import ResistanceChat
 from toontown.chat.ChatGlobals import *
 from toontown.battle import BattleProps
+from toontown.battle import SuitBattleGlobals
 from direct.showutil import Effects
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
@@ -103,7 +104,8 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             suit.setPos(startPos)
             suit.headsUp(self)
             flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
-            suitTrack.append(Track((delay, Sequence(flyIval, Func(suit.loop, 'neutral')))))
+            taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
+            suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
             delay += 1
 
         if self.hasLocalToon():

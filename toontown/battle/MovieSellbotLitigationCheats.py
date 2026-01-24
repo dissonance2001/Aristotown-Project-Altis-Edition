@@ -887,6 +887,7 @@ def doHeatWave(attack):
     baseFlameTracks = Parallel()
     flameTracks = Parallel()
     flecksTracks = Parallel()
+    partTracks4 = Parallel()
 
     def changeColor(parts):
         track = Parallel()
@@ -913,6 +914,9 @@ def doHeatWave(attack):
         flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
         flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
         BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
+        sprayEffect = BattleParticles.createParticleEffect('FireSpray')
+        sprayEffect2 = BattleParticles.createParticleEffect('FireSpray')
+        partTrack4 = getPartTrack(sprayEffect, 1, 3.25, [sprayEffect2, toon, 0], softStop=-1)
         flameDelay = 1.45
         flameDuration = 1.5
         flecksDelay = flameDelay + 0.8
@@ -922,6 +926,7 @@ def doHeatWave(attack):
             flameTracks.append(getPartTrack(flameEffect, flameDelay, flameDuration, [flameEffect, toon, 0]))
             flecksTracks.append(getPartTrack(flecksEffect, flecksDelay, flecksDuration, [flecksEffect, toon, 0]))
             headParts = toon.getHeadParts()
+            partTracks4.append(partTrack4)
             torsoParts = toon.getTorsoParts()
             legsParts = toon.getLegsParts()
             colorTracks.append(Sequence(
@@ -957,7 +962,7 @@ def doHeatWave(attack):
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91,
                                splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
     soundTrack = getSoundTrack('SA_hot_air.ogg', delay=.5, node=suit)
-    return Parallel(suitTrack, partTrack, suitDamageTrack, waterfallTrack, partTrack2, baseFlameTrack2, flameTrack2, flecksTrack2, waterfallTrack2, toonTracks, soundTrack, baseFlameTracks, flameTracks, flecksTracks, colorTracks)
+    return Parallel(suitTrack, partTrack, suitDamageTrack, partTracks4, waterfallTrack, partTrack2, baseFlameTrack2, flameTrack2, flecksTrack2, waterfallTrack2, toonTracks, soundTrack, baseFlameTracks, flameTracks, flecksTracks, colorTracks)
 
 def doPromotion(attack, ind):
     suit = attack['suit']
@@ -1090,12 +1095,7 @@ def doUnionCalculator(attack):
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'), Func(suit.setNeutralAnimationDrop), Wait(2.0))
-    if suit.isDesperation:
-        suitSpeechTrack = Func(suit.setChatAbsolute, "You can't stop production; Union Dues have been increased to %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
-    else:
-        suitSpeechTrack = Func(suit.setChatAbsolute,
-                               "You can't stop production; Union Dues have been increased to %s." %
-                              int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+    suitSpeechTrack = Func(suit.setChatAbsolute, "You can't stop production; Toons are now required to work %s extra hours." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
@@ -1237,9 +1237,7 @@ def doUnionBust(attack):
         smoke.setColor(0.8, 0.7, 0.5, 1)
         smoke.setBillboardPointEye()
         suitTrack = Sequence(Wait(2), Parallel(ActorInterval(targetSuit, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(targetSuit, battle)))
-        selfDamageTrack = Sequence(Wait(2), Func(targetSuit.showHpTextNew, -targetSuit.currHP, text="BUSTED!", colorCode=3),
-                                   Func(targetSuit.setHealthForMe, - targetSuit.currHP),
-                                   Func(targetSuit.updateHealthBar, 0))
+        selfDamageTrack = Parallel(Func(targetSuit.checkUnionBust, battle))
         smokeTrack = Sequence(Wait(2.0), Func(smoke.reparentTo, targetSuit),
                               Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                        LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
@@ -1264,7 +1262,6 @@ def doUnionBust(attack):
     )
         if not targetSuit.isContracted and not targetSuit.dna.name == 'ubuster':
             cagePropTracks.append(cagePropTrack)
-            suitTracks.append(suitTrack)
             selfDamageTracks.append(selfDamageTrack)
             smokeTracks.append(smokeTrack)
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_quake.ogg'), node=manager))
@@ -1315,15 +1312,279 @@ def doUnionWages(attack):
     spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
     spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
     spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
-    for targetSuit in battle.activeSuits:
-        if not targetSuit.isContracted and not targetSuit.dna.name == 'ubuster':
-            damageSuits.append(targetSuit)
-    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, +  (5 * len(damageSuits))))
-    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + (100 * len(damageSuits)), text="+%s" % (5 * len(damageSuits)) + "%" + " Damage!", colorCode=1),
-                                Func(suit.setHealthForMe, + (100 * len(damageSuits))),
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 5))
+    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 100, text="+5% Damage!", colorCode=1),
+                                Func(suit.setHealthForMe, + 100),
                                 Func(suit.updateHealthBar, 0))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.0, node=suit)
     return Parallel(suitTrack, calcPropTrack, sprayTrack, soundTrack, makeImmune, managerHealTrack, soundTrack2, spinTrack1, spinTrack2, spinTrack3)
+
+def doUnionWages2(attack):
+    targetSuit = attack['suit']
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    damageDelay = 1.7
+    calculator = globalPropPool.getProp('calculator')
+    calculator.setTwoSided(True)
+    calculator.setScale(1.5)
+    suitType = getSuitBodyType(attack['suitName'])
+    damageSuits = []
+    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcDuration = 1.3
+    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPropTrack = Sequence(
+        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
+        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(MovieUtil.removeProp, calculator)
+    )
+    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
+    spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect3 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect1.reparentTo(targetSuit)
+    spinEffect2.reparentTo(targetSuit)
+    spinEffect3.reparentTo(targetSuit)
+    height1 = targetSuit.getHeight() - (targetSuit.getHeight() / 3)
+    height2 = targetSuit.getHeight() - (targetSuit.getHeight() / 2)
+    height3 = targetSuit.getHeight() - (targetSuit.getHeight() / 1.25)
+    spinEffect1.setPos(0.8, -0.7, height1)
+    spinEffect1.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect1.setHpr(spinEffect1, 0, 50, 0)
+    spinEffect2.setPos(0.8, -0.7, height2)
+    spinEffect2.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect2.setHpr(spinEffect2, 0, 50, 0)
+    spinEffect3.setPos(0.8, -0.7, height3)
+    spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect3.setHpr(spinEffect3, 0, 50, 0)
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
+    spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
+    spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
+    spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 10))
+    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 200, text="+10% Damage!", colorCode=1),
+                                Func(suit.setHealthForMe, + 200),
+                                Func(suit.updateHealthBar, 0))
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.0, node=suit)
+    return Parallel(suitTrack, calcPropTrack, sprayTrack, soundTrack, makeImmune, managerHealTrack, soundTrack2, spinTrack1, spinTrack2, spinTrack3)
+
+def doUnionWages3(attack):
+    targetSuit = attack['suit']
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    damageDelay = 1.7
+    calculator = globalPropPool.getProp('calculator')
+    calculator.setTwoSided(True)
+    calculator.setScale(1.5)
+    suitType = getSuitBodyType(attack['suitName'])
+    damageSuits = []
+    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcDuration = 1.3
+    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPropTrack = Sequence(
+        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
+        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(MovieUtil.removeProp, calculator)
+    )
+    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
+    spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect3 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect1.reparentTo(targetSuit)
+    spinEffect2.reparentTo(targetSuit)
+    spinEffect3.reparentTo(targetSuit)
+    height1 = targetSuit.getHeight() - (targetSuit.getHeight() / 3)
+    height2 = targetSuit.getHeight() - (targetSuit.getHeight() / 2)
+    height3 = targetSuit.getHeight() - (targetSuit.getHeight() / 1.25)
+    spinEffect1.setPos(0.8, -0.7, height1)
+    spinEffect1.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect1.setHpr(spinEffect1, 0, 50, 0)
+    spinEffect2.setPos(0.8, -0.7, height2)
+    spinEffect2.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect2.setHpr(spinEffect2, 0, 50, 0)
+    spinEffect3.setPos(0.8, -0.7, height3)
+    spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect3.setHpr(spinEffect3, 0, 50, 0)
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
+    spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
+    spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
+    spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 15))
+    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 300, text="+15% Damage!", colorCode=1),
+                                Func(suit.setHealthForMe, + 300),
+                                Func(suit.updateHealthBar, 0))
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.0, node=suit)
+    return Parallel(suitTrack, calcPropTrack, sprayTrack, soundTrack, makeImmune, managerHealTrack, soundTrack2, spinTrack1, spinTrack2, spinTrack3)
+
+def doUnionWages4(attack):
+    targetSuit = attack['suit']
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    damageDelay = 1.7
+    calculator = globalPropPool.getProp('calculator')
+    calculator.setTwoSided(True)
+    calculator.setScale(1.5)
+    suitType = getSuitBodyType(attack['suitName'])
+    damageSuits = []
+    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcDuration = 1.3
+    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPropTrack = Sequence(
+        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
+        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(MovieUtil.removeProp, calculator)
+    )
+    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
+    spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect3 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect1.reparentTo(targetSuit)
+    spinEffect2.reparentTo(targetSuit)
+    spinEffect3.reparentTo(targetSuit)
+    height1 = targetSuit.getHeight() - (targetSuit.getHeight() / 3)
+    height2 = targetSuit.getHeight() - (targetSuit.getHeight() / 2)
+    height3 = targetSuit.getHeight() - (targetSuit.getHeight() / 1.25)
+    spinEffect1.setPos(0.8, -0.7, height1)
+    spinEffect1.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect1.setHpr(spinEffect1, 0, 50, 0)
+    spinEffect2.setPos(0.8, -0.7, height2)
+    spinEffect2.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect2.setHpr(spinEffect2, 0, 50, 0)
+    spinEffect3.setPos(0.8, -0.7, height3)
+    spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect3.setHpr(spinEffect3, 0, 50, 0)
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
+    spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
+    spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
+    spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 20))
+    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 400, text="+20% Damage!", colorCode=1),
+                                Func(suit.setHealthForMe, + 400),
+                                Func(suit.updateHealthBar, 0))
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.0, node=suit)
+    return Parallel(suitTrack, calcPropTrack, sprayTrack, soundTrack, makeImmune, managerHealTrack, soundTrack2, spinTrack1, spinTrack2, spinTrack3)
+
+def doUnionWages5(attack):
+    targetSuit = attack['suit']
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    damageDelay = 1.7
+    calculator = globalPropPool.getProp('calculator')
+    calculator.setTwoSided(True)
+    calculator.setScale(1.5)
+    suitType = getSuitBodyType(attack['suitName'])
+    damageSuits = []
+    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcDuration = 1.3
+    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPropTrack = Sequence(
+        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
+        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(MovieUtil.removeProp, calculator)
+    )
+    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
+    spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect3 = BattleParticles.createParticleEffect(file='organizeEffect')
+    spinEffect1.reparentTo(targetSuit)
+    spinEffect2.reparentTo(targetSuit)
+    spinEffect3.reparentTo(targetSuit)
+    height1 = targetSuit.getHeight() - (targetSuit.getHeight() / 3)
+    height2 = targetSuit.getHeight() - (targetSuit.getHeight() / 2)
+    height3 = targetSuit.getHeight() - (targetSuit.getHeight() / 1.25)
+    spinEffect1.setPos(0.8, -0.7, height1)
+    spinEffect1.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect1.setHpr(spinEffect1, 0, 50, 0)
+    spinEffect2.setPos(0.8, -0.7, height2)
+    spinEffect2.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect2.setHpr(spinEffect2, 0, 50, 0)
+    spinEffect3.setPos(0.8, -0.7, height3)
+    spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
+    spinEffect3.setHpr(spinEffect3, 0, 50, 0)
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
+    spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
+    spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
+    spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
+    makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 25))
+    managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 500, text="+25% Damage!", colorCode=1),
+                                Func(suit.setHealthForMe, + 500),
+                                Func(suit.updateHealthBar, 0))
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.0, node=suit)
+    return Parallel(suitTrack, calcPropTrack, sprayTrack, soundTrack, makeImmune, managerHealTrack, soundTrack2, spinTrack1, spinTrack2, spinTrack3)
+
+def doNoStrikeClause(attack):
+    suit = attack['suit']
+    targets = attack['target']
+    tape = globalPropPool.getProp('redtape')
+    tape.setColor(0.129, 0, 0.329, 1)
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5))
+    tubes = []
+    tapePosPoints = [Point3(-0.25, 0, -0.25), VBase3(0, 0, 0)]
+    tapeScaleUpPoint = Point3(1, 1, 0.74)
+    propTracks = Parallel()
+    toonTracks = Parallel()
+    allTubeTracks = Parallel()
+    notifyTracks = Parallel()
+    battle = attack['battle']
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        tape = globalPropPool.getProp('redtape')
+        tubes = []
+        for i in xrange(0, 3):
+            tubes.append(globalPropPool.getProp('redtape-tube'))
+
+        propTrack = Sequence(getPropAppearTrack(tape, suit.getRightHand(), tapePosPoints, 0.25, tapeScaleUpPoint, scaleUpTime=0.25))
+        propTrack.append(Wait(1.55))
+        hitPoint = lambda toon=toon: __toonTorsoPoint(toon)
+        propTrack.append(getPropThrowTrack(attack, tape, [hitPoint], [__toonGroundPoint(attack, toon, 0)], .25, target=t))
+        propTracks.append(propTrack)
+        hips = toon.getHipsParts()
+        animal = toon.style.getAnimal()
+        scale = ToontownGlobals.toonBodyScales[animal]
+        legs = toon.style.legs
+        torso = toon.style.torso
+        torso = torso[0]
+        animal = animal[0]
+        tubeHeight = -0.8
+        if torso == 's':
+            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
+        elif torso == 'm':
+            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
+        elif torso == 'l':
+            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 1.11)
+        if animal == 'h' or animal == 'd':
+            tubeHeight = -0.87
+            scaleUpPoint = Point3(scale * 1.69, scale * 1.69, scale * 0.67)
+        tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
+        tubeTracks = Parallel()
+        tubeTracks.append(Func(battle.movie.needRestoreHips))
+        for partNum in xrange(0, hips.getNumPaths()):
+            nextPart = hips.getPath(partNum)
+            tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
+
+        tubeTracks.append(Func(battle.movie.clearRestoreHips))
+        notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "NO DEFENSE!", 10)))
+        allTubeTracks.append(tubeTracks)
+        toonTracks.append(Sequence(Wait(2.4), ActorInterval(toon, 'struggle')))
+        toonTracks.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 2)))
+    soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.75, node=suit)
+    return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks, notifyTracks)
 
 def doBreachOfContract(attack):
     suit = attack['suit']
@@ -1350,6 +1611,14 @@ def doBreachOfContract(attack):
     soundTrack = getSoundTrack('SA_hurry_sickness.ogg', delay =.5, node=suit)
     notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextNew, -int(dmg), text="BREACHED!", colorCode=1))
     notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+    currentBossHealth = -1
+    for s in battle.suits:
+        if s.dna.name == 'safesupervis':
+            currentBossHealth = s.currHP
+    if currentBossHealth > 0:
+        notifyTrack.append(Parallel(Func(toon.checkDamageDown, 75)))
+    else:
+        notifyTrack.append(Parallel(Func(toon.checkDamageDown, 50)))
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
 
 def doBreachOfContractGroup(attack):
@@ -1389,6 +1658,7 @@ def doBreachOfContractGroup(attack):
             soundTracks.append(soundTrack)
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+            notifyTracks.append(Parallel(Func(toon.checkDamageDown, 25)))
     toonDamageTrack = getToonTracksCheat(attack, 0.8, ['conked'], 0, ['neutral'])
     return Parallel(suitTracks, toonTracks, propTracks, soundTracks, toonDamageTrack, notifyTracks)
 
@@ -1555,6 +1825,8 @@ def doMandatoryCompliance(attack):
         propTrack.append(Func(MovieUtil.removeProp, stamp))
         toonTrack = Parallel(getToonTrackCheat(attack, 3.25, ['conked'], 3.1, ['conked']))
         toonTrack.append(Sequence(Wait(3.25), ActorInterval(toon, 'conked')))
+        toonTrack2 = Parallel(Func(toon.makeGagBan))
+        toonTracks.append(toonTrack2)
         notifyTrack = Sequence(Wait(3.25))
         propTracks.append(propTrack)
         toonTracks.append(toonTrack)
@@ -1606,11 +1878,17 @@ def doExtortion2(attack):
 
 def doRacketeering(attack):
     suit = attack['suit']
+    targets = attack['target']
+    toonTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        toonTrack = Parallel(Func(toon.makeGagBan))
+        toonTracks.append(toonTrack)
     suitTrack = Parallel(getSuitAnimTrack(attack), Sequence(ActorInterval(suit, 'smile'),
                                                             Func(suit.setNeutralAnimationDrop)))
     suitTrack.append(Wait(3.0))
     soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
-    return Parallel(suitTrack, soundTrack)
+    return Parallel(suitTrack, toonTracks, soundTrack)
 
 def doHustling(attack):
     suit = attack['suit']
@@ -1788,6 +2066,7 @@ def doHotTake(attack):
     soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
     notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextNew, -int(dmg), text="BOMBED!", colorCode=3))
     notifyTrack.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
+    notifyTrack.append(Parallel(Func(toon.checkVulnerabilityUp, 50)))
     return Parallel(explodeTracks, suitTrack, toonTrack, notifyTrack, soundTrack, propTrack, explosionTrack, explosionTrack2)
 
 def doOvermodulated(attack, ind):
@@ -1898,7 +2177,7 @@ def doShadowToon(attack):
                         ActorInterval(suit, 'walk', loop=1, playRate=-1, duration=1.0)),
                     Parallel(
                         Sequence(
-                            getSuitTrack(attack),
+                            getSuitAnimTrack(attack),
                             Func(suit.setNeutralAnimationDrop)),
                         Sequence(
                             Wait(1.35),

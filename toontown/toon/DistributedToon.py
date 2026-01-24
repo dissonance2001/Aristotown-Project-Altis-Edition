@@ -208,13 +208,79 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.damageInterval:
             self.damageInterval.finish()
             self.damageInterval = None
-        self.damageInterval = Parallel(Func(self.setVulnerability, self.getVulnerability() + num)).start()
+        if self.getVulnerability() > num:
+            self.damageInterval = Parallel(Func(self.setVulnerability, self.getVulnerability())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setVulnerability, num)).start()
 
     def checkSnappedUp(self, num):
         if self.damageInterval:
             self.damageInterval.finish()
             self.damageInterval = None
-        self.damageInterval = Parallel(Func(self.setSnapped, self.getSnapped() + num)).start()
+        if self.getSnapped() > num:
+            self.damageInterval = Parallel(Func(self.setSnapped, self.getSnapped())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setSnapped, num)).start()
+
+    def checkMarkedWood(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getMarkedWood() > num:
+            self.damageInterval = Parallel(Func(self.setMarkedWood, self.getMarkedWood())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setMarkedWood, num)).start()
+
+    def checkDamageDown(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getDamageDown() > num:
+            self.damageInterval = Parallel(Func(self.setDamageDown, self.getDamageDown())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setDamageDown, num)).start()
+
+    def checkDamageUp(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getDamageUp() > num:
+            self.damageInterval = Parallel(Func(self.setDamageUp, self.getDamageUp())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setDamageUp, num)).start()
+
+    def checkGagBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getGagBoost() > num:
+            self.damageInterval = Parallel(Func(self.setGagBoost, self.getGagBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setGagBoost, num)).start()
+
+    def checkCooldownRounds(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.addCooldownRounds, self.getCooldownRounds() + num)).start()
+
+    def checkDamageUpGovernaught(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.setDamageUpGovernaught, self.getDamageUpGovernaught() + num)).start()
+
+    def checkEncore(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.setEncore, num)).start()
+
+    def checkWinded(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.setWinded, num)).start()
 
     def disable(self):
         for soundSequence in self.soundSequenceList:
@@ -2821,11 +2887,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.hpText.setBin('fixed', 100)
             self.hpText.setPos(0, 0, self.height / 2)
         if text != None:
-            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.25), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)),
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)),
                                            Func(self.hideHpText))
             self.hpTextInterval.start()
         else:
-            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.0), blendType='easeOut'), Wait(1.0),
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0),
                                            LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
             self.hpTextInterval.start()
 
@@ -2915,7 +2981,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 self.hpText.setBillboardPointEye()
                 self.hpText.setBin('fixed', 100)
                 self.hpText.setPos(0, 0, self.height / 2)
-                self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.0), blendType='easeOut'), Wait(1.0),
+                self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0),
                                                    LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
                 self.hpTextInterval.start()
 

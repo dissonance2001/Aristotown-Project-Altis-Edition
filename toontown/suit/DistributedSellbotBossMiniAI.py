@@ -237,7 +237,7 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
-            cogs = self.invokeEmptyPlanner(11, 'ambassador')
+            cogs = self.invokeEmptyPlanner(11, random.choice(('bdlitpair1', 'bdlitpair2', 'bdlitpair3', 'bdlitpair4', 'bdlitpair5', 'bdlitpair6')))
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)
@@ -324,10 +324,8 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
         self.initializeBattles(2, ToontownGlobals.SellbotBossBattleTwoPosHpr)
 
     def enterBattleTwo(self):
-        if self.battleA:
-            self.battleA.startBattle(self.toonsA, self.suitsA)
-        if self.battleB:
-            self.battleB.startBattle(self.toonsB, self.suitsB)
+        if self.battle:
+            self.battle.startBattle(self.toons, self.suits)
 
     def exitBattleTwo(self):
         self.resetBattles()
@@ -571,7 +569,7 @@ def skipVP():
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedSellbotBossAI):
+        if isinstance(do, DistributedSellbotBossMiniAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break
@@ -584,6 +582,26 @@ def skipVP():
     return 'Skipping the first round...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
+def skipVP2():
+    """
+    Skips to the final round of the VP.
+    """
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedSellbotBossMiniAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+    if not boss:
+        return "You aren't in a VP!"
+    if boss.state in ('PrepareBattleTwo', 'BattleTwo'):
+        return "You can't skip this round."
+    boss.exitIntroduction()
+    boss.b_setState('PrepareBattleTwo')
+    return 'Skipping the first round...'
+
+@magicWord(category=CATEGORY_PROGRAMMER)
 def killVP():
     """
     Kills the VP.
@@ -591,7 +609,7 @@ def killVP():
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedSellbotBossAI):
+        if isinstance(do, DistributedSellbotBossMiniAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break

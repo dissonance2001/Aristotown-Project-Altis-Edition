@@ -655,6 +655,14 @@ def doPaperCut(attack):
         if dmg > 0:
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
+            currentBossHealth = -1
+            for s in battle.suits:
+                if s.dna.name == 'phouse':
+                    currentBossHealth = s.currHP
+            if currentBossHealth > 0:
+                notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 50)))
+            else:
+                notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 25)))
             partTracks.append(partTrack)
     suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2), Func(suit.setHpr, battle, origHpr),
                           Func(suit.setNeutralAnimationDrop))
@@ -688,6 +696,7 @@ def doPaperCutMulti(attack):
             moveTracks.append(Func(suit.setHpr, battle, origHpr))
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
+            notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 15)))
             partTracks.append(partTrack)
     suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2),
                           Func(suit.setNeutralAnimationDrop))
@@ -732,20 +741,21 @@ def doExplodingDocument(attack):
     tnt = globalPropPool.getProp('shredder-paper')
     paper = globalPropPool.getProp('shredder-paper')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(0.375, -1.5, .85), VBase3(0, 220, -10)]
+    posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
     propTrack = Sequence(
-        getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.5, MovieUtil.PNT3_ONE, scaleUpTime=0))
-    propTrack.append(Wait(1.5))
+        getPropAppearTrack(tnt, suit.getRightHand(), posPoints, 0.75, VBase3(1.2, 1.2, 1.2),
+                               scaleUpTime=0.25))
+    propTrack.append(Wait(0.95))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)
     missPoint = __toonGroundPoint(attack, toon, 3.1, parent=battle)
     missPoint.setX(missPoint.getX() - 1.1)
     propTrack.append(getPropThrowTrack(attack, tnt, [hitPoint], [missPoint], .25, parent=battle))
-    toonTrack = getToonTrackCheat(attack, 2.5, ['slip-forward'], 3.4, ['struggle'])
+    toonTrack = getToonTrackCheat(attack, 2.25, ['slip-forward'], 3.4, ['struggle'])
    # toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2.5, ['slip-forward'])
     soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
-    notifyTrack = Sequence(Wait(2.5), Func(toon.showHpTextNew, -int(dmg), text="DAMAGE DEBUFF!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+    notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextNew, -int(dmg), text="NO DEFENSE!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 2)))
     return Parallel(explodeTracks, suitTrack, toonTrack, soundTrack, propTrack, notifyTrack, explosionTrack)
 
 def doBookkeepingRetaliation(attack):
@@ -2387,6 +2397,14 @@ def doLiquidateGROUP(attack):
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 30)
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
+        currentBossHealth = -1
+        for s in battle.suits:
+            if s.dna.name == 'wtapper':
+                currentBossHealth = s.currHP
+        if currentBossHealth > 0:
+            notifyTrack.append(Parallel(Func(toon.checkDamageDown, 75)))
+        else:
+            notifyTrack.append(Parallel(Func(toon.checkDamageDown, 50)))
         if t['hp'] != 0:
             notifyTracks.append(notifyTrack)
         cloudPropTrack = Sequence(
@@ -2424,6 +2442,80 @@ def doLiquidateGROUP(attack):
     soundTrack = Parallel(soundTrack1)
     return Parallel(suitTrack, toonTracks, cloudPropTracks, soundTrack)
 
+def doThrowBook(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitDelay = 1.5
+    propDelay = 0.1
+    throwDuration = 1.0
+    paper = globalPropPool.getProp('lawbook')
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+    posPoints = [Point3(-0.5, 0, 0), VBase3(0, 0, 180)]
+    propTracks = Parallel()
+    notifyTracks = Parallel()
+    explosionTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        paperTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, propDelay, Point3(2.25, 2.25, 2.25), scaleUpTime=0.5))
+        paperTrack.append(Wait(suitDelay))
+        hitPoint = toon.getPos(battle)
+        hitPoint.setX(hitPoint.getX() + 0)
+        hitPoint.setY(hitPoint.getY() - .25)
+        missPoint2 = toon.getPos(battle)
+        missPoint2.setY(hitPoint.getY() - 7)
+        movePoint = Point3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ() + 0.2)
+        missPoint = Point3(missPoint2.getX(), missPoint2.getY(), missPoint2.getZ())
+        paperTrack.append(Func(battle.movie.needRestoreRenderProp, paper))
+        paperTrack.append(Func(paper.wrtReparentTo, battle))
+        notifyTrack = Sequence(Wait(3.0), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
+        notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+        toonPos = toon.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
+        gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
+        explosionTrack = Sequence()
+        explosionTrack.append(Wait(3.0))
+        explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
+        currentBossHealth = -1
+        for s in battle.suits:
+            if s.dna.name == 'wtapper':
+                currentBossHealth = s.currHP
+        if currentBossHealth > 0:
+            notifyTrack.append(Parallel(Func(toon.checkDamageDown, 75)))
+        else:
+            notifyTrack.append(Parallel(Func(toon.checkDamageDown, 50)))
+        if dmg > 0:
+            notifyTracks.append(notifyTrack)
+            explosionTracks.append(explosionTrack)
+        if dmg > 0:
+            paperTrack.append(getThrowTrack(paper, hitPoint, duration=throwDuration, parent=battle, gravity=-100))
+            paperTrack.append(Wait(0.6))
+            paperTrack.append(LerpPosInterval(paper, 0.4, movePoint))
+        else:
+            paperTrack.append(getThrowTrack(paper, missPoint2, duration=throwDuration, parent=battle, gravity=-100))
+            paperTrack.append(Wait(0.6))
+            paperTrack.append(LerpPosInterval(paper, 0.4, missPoint))
+        spinTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpHprInterval(paper, throwDuration, Point3(-360, 360, 360)))
+        sizeTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpScaleInterval(paper, throwDuration, Point3(7, 7, 7)), Wait(0.95), LerpScaleInterval(paper, 0, MovieUtil.PNT3_NEARZERO))
+        propTrack = Sequence(Parallel(paperTrack, spinTrack, sizeTrack), Func(MovieUtil.removeProp, paper), Func(battle.movie.clearRenderProp, paper))
+        propTracks.append(propTrack)
+
+    damageAnims = []
+    damageAnims.append(['cringe',
+     0.01,
+     0.21,
+     0.08])
+    damageAnims.append(['slip-forward',
+     0.01,
+     0.6,
+     0.85])
+    damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.95, startTime=1.2))
+    damageAnims.append(['slip-forward', 0.01, 1.51])
+    soundTrack = getSoundTrack('SA_throw_book.ogg', node=suit)
+    toonTracks = getToonTracksCheat(attack, damageDelay=3, splicedDamageAnims=damageAnims, dodgeDelay=1.5, dodgeAnimNames=['duck'], showDamageExtraTime=0.4, showMissedExtraTime=1.3)
+    return Parallel(suitTrack, notifyTracks, explosionTracks, toonTracks, propTracks, soundTrack)
+
 def doPaperRain(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -2455,6 +2547,15 @@ def doPaperRain(attack):
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 30)
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
+        notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+        currentBossHealth = -1
+        for s in battle.suits:
+            if s.dna.name == 'wtapper':
+                currentBossHealth = s.currHP
+        if currentBossHealth > 0:
+            notifyTrack.append(Parallel(Func(toon.checkDamageDown, 75)))
+        else:
+            notifyTrack.append(Parallel(Func(toon.checkDamageDown, 50)))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
         cloudPropTrack.append(Wait(0.6))
@@ -2481,6 +2582,12 @@ def doPaperRain(attack):
 
 def doBudgetCuts(attack):
     suit = attack['suit']
+    targets = attack['target']
+    toonTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        toonTrack = Parallel(Func(toon.makeGagBan))
+        toonTracks.append(toonTrack)
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
@@ -2493,7 +2600,7 @@ def doBudgetCuts(attack):
     )
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    return Parallel(suitTrack, calcPropTrack, suitTrack2, soundTrack)
+    return Parallel(suitTrack, calcPropTrack, suitTrack2, toonTracks, soundTrack)
 
 def __makeBudgetNodePath():
     tn = TextNode('BUDGET CUTS')
@@ -2628,7 +2735,7 @@ def doOverheat(attack):
         BattleParticles.setEffectTexture(sprayEffect, 'fire')
         partTrack4 = getPartTrack(sprayEffect, 1, 3.25, [sprayEffect2, toon, 0], softStop=-1)
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="BURNED!", colorCode=4))
-        notifyTrack.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 2)))
+        notifyTrack.append(Parallel(Func(toon.makeBurned), Func(toon.addBurnedRounds, 3)))
         if dmg > 0:
             partTracks4.append(partTrack4)
             headParts = toon.getHeadParts()
@@ -2756,6 +2863,7 @@ def doGroundbreaker(attack):
         sandTrap.setHpr(Point3(120, 0, 0))
         sandTrap.setScale(0.01)
         sandTrap.setColor(0, 0, 0, 1)
+        puddleTracks.append(Parallel(Func(toon.makeHidden), Func(toon.addHiddenRounds, 1)))
         puddleTracks.append(Sequence(Wait(5.0), Func(toon.hide)))
         puddleTracks.append(Sequence(
             Func(battle.movie.needRestoreRenderProp, sandTrap),

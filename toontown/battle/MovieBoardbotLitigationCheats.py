@@ -2099,13 +2099,19 @@ def doRedlinedClause(attack):
     )
     toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
     notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="REDLINED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 2)))
+    notifyTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.checkCooldownRounds, 2)))
     suitTrack = getSuitTrack(attack)
     soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
 
 def doAuditCycle(attack):
     suit = attack['suit']
+    toonTracks = Parallel()
+    targets = attack['target']
+    for t in targets:
+        toon = t['toon']
+        toonTrack = Parallel(Func(toon.makeGagBan))
+        toonTracks.append(toonTrack)
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
@@ -2118,7 +2124,7 @@ def doAuditCycle(attack):
     )
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
-    return Parallel(suitTrack, calcPropTrack, suitTrack2, soundTrack)
+    return Parallel(suitTrack, calcPropTrack, toonTracks, suitTrack2, soundTrack)
 
 def doRevisedFiling(attack):
     targets = attack['target']
@@ -2151,7 +2157,7 @@ def doRevisedFiling(attack):
                             Sequence(Wait(.1), SoundInterval(throwSfx, duration=.6)),
                             Sequence(
                                 Wait(.2), Func(book.show), Func(book.wrtReparentTo, render),
-                                book.posHprInterval(.5, (toon.getX(), toon.getY(), 4), (0, 720, 0))
+                                book.posHprInterval(.5, (toon.getX(), toon.getY(), 0), (0, 720, 0))
                             )
                         ),
                         Func(book.removeNode)
@@ -2159,8 +2165,18 @@ def doRevisedFiling(attack):
                 )
                 neutralTrack.append(Func(toon.loop, 'neutral'))
                 notifyTrack.append(Sequence(Wait(0.7), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1)))
-                notifyTrack.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 1)))
-                notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 1)))
+                notifyTrack.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
+                notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 2)))
+                currentBossHealth = -1
+                for s in battle.suits:
+                    if s.dna.name == 'cdirector':
+                        currentBossHealth = s.currHP
+                if currentBossHealth > 0:
+                    notifyTrack.append(Parallel(Func(toon.checkVulnerabilityUp, 50)))
+                    notifyTrack.append(Parallel(Func(toon.checkDamageUp, 50)))
+                else:
+                    notifyTrack.append(Parallel(Func(toon.checkVulnerabilityUp, 25)))
+                    notifyTrack.append(Parallel(Func(toon.checkDamageUp, 25)))
             throwTrack = Parallel(
                 getToonTracksCheat(attack, .7, ['slip-forward'], 2.75, ['sidestep']), neutralTrack
             )
@@ -2212,7 +2228,7 @@ def doRevisedFiling(attack):
 def doMinutesTakenDamage(attack):
     battle = attack['battle']
     targets = attack['target']
-    suitTrack = getSuitTrack(attack, playRate=1.25)
+    suitTrack = getSuitTrack(attack)
     clockPropTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -2220,7 +2236,7 @@ def doMinutesTakenDamage(attack):
         hourHand = clock.find('**/hour_hand')
         minuteHand = clock.find('**/minute_hand')
         x, y, z = toon.getPos(battle)
-        clockPosPoints = [Point3(x, y, z + 0.01), VBase3(toon.getH(), 90, 0)]
+        clockPosPoints = [Point3(x, y, z + 0.1), VBase3(toon.getH(), 90, 0)]
         clockPropTrack = Sequence(
             getPropAppearTrack(clock, battle, clockPosPoints, 0.0, scaleUpPoint=Point3(0.75, 0.01, 0.75), scaleUpTime=1.0),
             Parallel(
@@ -2324,8 +2340,11 @@ def doContingencyClause(attack):
     targets = attack['target']
     squishTracks = Parallel()
     safeTracks = Parallel()
+    toonTracks = Parallel()
     for t in targets:
         toon = t['toon']
+        toonTrack = Parallel(Func(toon.makeGagBan))
+        toonTracks.append(toonTrack)
         safe = loader.loadModel('phase_10/models/cashbotHQ/CashBotSafe')
         safe.setHpr(90, 0, 90)
         safe.setPos(-0.26011560693641655, -1.127167630057805, -0.43352601156069426)
@@ -2361,7 +2380,7 @@ def doContingencyClause(attack):
     suitTrack = Parallel(getSuitAnimTrack(attack, playRate=1.25))
     toonTrack = getToonTracksCheat(attack, 4.5, ['jump'], 4.5, ['jump'])
 
-    return Parallel(suitTrack, safeTracks, squishTracks, toonTrack)
+    return Parallel(suitTrack, safeTracks, toonTracks, squishTracks, toonTrack)
 
 def doShadowToon(attack):
     suit = attack['suit']
@@ -2410,7 +2429,7 @@ def doShadowToon(attack):
                         ActorInterval(suit, 'walk', loop=1, playRate=-1, duration=1.0)),
                     Parallel(
                         Sequence(
-                            getSuitTrack(attack),
+                            getSuitAnimTrack(attack),
                             Func(suit.setNeutralAnimationDrop)),
                         Sequence(
                             Wait(1.35),
@@ -2482,6 +2501,14 @@ def doShadowToon(attack):
     moveUp = Sequence(Parallel(LerpPosInterval(suit, duration=1.0, pos=(oldPos), other=battle), ActorInterval(suit, 'walk', loop=1, duration=1.0)),
                       Func(suit.setNeutralAnimationDrop))
     notifyTrack = Sequence(Wait(tPieHitsSuit), Func(toon.showHpTextNew,  - int(hp), "DAMAGE DEBUFF!", colorCode=1))
+    currentBossHealth = -1
+    for s in battle.suits:
+        if s.dna.name == 'cdirector':
+            currentBossHealth = s.currHP
+    if currentBossHealth > 0:
+        notifyTrack.append(Parallel(Func(toon.checkDamageDown, 75)))
+    else:
+        notifyTrack.append(Parallel(Func(toon.checkDamageDown, 50)))
     notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
     toonTrack = getToonTrackCheat(attack, tPieHitsSuit, ['slip-backward'], tSuitDodges, ['sidestep'])
     return Sequence(suitTrack, Parallel(evilToonTrack, pieTrack, notifyTrack, soundTrack, toonTrack), moveUp)
@@ -2577,6 +2604,7 @@ def doContingencyClauseRetaliation(attack):
         )
         if dmg > 0:
             toonTracks.append(toonTrack)
+            toonTracks.append(Parallel(Func(toon.checkDamageDown, 40)))
             smokeTracks.append(smokeTrack)
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     toonDamageTrack = getToonTracksCheat(attack, 1.75, ['nothing'], 0, ['neutral'])
@@ -3354,6 +3382,14 @@ def doMarkedWood(attack):
     toonTracks = getToonTracksCheat(attack, 2.2, ['cringe'], 2, ['jump'])
     notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextNew, -int(dmg), text="MARKED!", colorCode=1))
     notifyTrack.append(Parallel(Func(toon.makeMarkedWood), Func(toon.addMarkedWoodRounds, 2)))
+    currentBossHealth = -1
+    for s in battle.suits:
+        if s.dna.name == 'cdirector':
+            currentBossHealth = s.currHP
+    if currentBossHealth > 0:
+        notifyTrack.append(Parallel(Func(toon.checkMarkedWood, 100)))
+    else:
+        notifyTrack.append(Parallel(Func(toon.checkMarkedWood, 75)))
     return Parallel(suitTrack, toonTracks, notifyTrack, propTracks)
 
 def __suitTargetPoint(suit):

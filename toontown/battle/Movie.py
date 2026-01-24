@@ -305,51 +305,6 @@ class Movie(DirectObject.DirectObject):
             MovieUtil.shotDirection = 'left'
         else:
             MovieUtil.shotDirection = 'right'
-        for toon in self.battle.activeToons:
-            if toon.getCooldownRounds() == 1:
-                toon.makeUnCooldown()
-            if not toon.getCooldownRounds() <= 0:
-                toon.addCooldownRounds(toon.getCooldownRounds() - 1)
-            if toon.getDamageOvertimeRounds() == 1:
-                toon.makeUnDamageOvertime()
-            if not toon.getDamageOvertimeRounds() <= 0:
-                toon.addDamageOvertimeRounds(toon.getDamageOvertimeRounds() - 1)
-            if toon.getMarkedWoodRounds() == 1:
-                toon.makeUnMarkedWood()
-            if not toon.getMarkedWoodRounds() <= 0:
-                toon.addMarkedWoodRounds(toon.getMarkedWoodRounds() - 1)
-            if toon.getHiddenRounds() == 1:
-                toon.makeUnHidden()
-            if not toon.getHiddenRounds() <= 0:
-                toon.addHiddenRounds(toon.getHiddenRounds() - 1)
-            if toon.getConfusedRounds() == 1:
-                toon.makeUnConfused()
-            if not toon.getConfusedRounds() <= 0:
-                toon.addConfusedRounds(toon.getConfusedRounds() - 1)
-            if toon.getDamageUpRounds() == 1:
-                toon.makeUnDamageUp()
-            if not toon.getDamageUpRounds() <= 0:
-                toon.addDamageUpRounds(toon.getDamageUpRounds() - 1)
-            if toon.getDamageDownRounds() == 1:
-                toon.makeUnDamageDown()
-            if not toon.getDamageDownRounds() <= 0:
-                toon.addDamageDownRounds(toon.getDamageDownRounds() - 1)
-            if toon.getEncoreRounds() == 1:
-                toon.makeUnEncore()
-            if not toon.getEncoreRounds() <= 0:
-                toon.addEncoreRounds(toon.getEncoreRounds() - 1)
-            if toon.getWindedRounds() == 1:
-                toon.makeUnWinded()
-            if not toon.getWindedRounds() <= 0:
-                toon.addWindedRounds(toon.getWindedRounds() - 1)
-            if toon.getSnappedRounds() == 1:
-                toon.makeUnSnapped()
-            if not toon.getSnappedRounds() <= 0:
-                toon.addSnappedRounds(toon.getSnappedRounds() - 1)
-            if toon.getVulnerabilityRounds() == 1:
-                toon.makeUnVulnerable()
-            if not toon.getVulnerabilityRounds() <= 0:
-                toon.addVulnerabilityRounds(toon.getVulnerabilityRounds() - 1)
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
             if s.dna.name == 'clubpres' and s.getActualLevel() == 21:
@@ -413,6 +368,63 @@ class Movie(DirectObject.DirectObject):
                                                                                      '',
                                                                                      CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
         ptrack.append(Func(callback))
+        for toon in self.battle.activeToons:
+            if toon.getCooldownRounds() == 1:
+                toon.makeUnCooldown()
+            if not toon.getCooldownRounds() <= 0:
+                toon.addCooldownRounds(toon.getCooldownRounds() - 1)
+            if toon.getBurnedRounds() == 1:
+                toon.makeUnBurned()
+            if not toon.getBurnedRounds() <= 0:
+                toon.addBurnedRounds(toon.getBurnedRounds() - 1)
+            if toon.getDamageOvertimeRounds() == 1:
+                toon.makeUnDamageOvertime()
+            if not toon.getDamageOvertimeRounds() <= 0:
+                toon.addDamageOvertimeRounds(toon.getDamageOvertimeRounds() - 1)
+            if toon.getMarkedWoodRounds() == 1:
+                toon.makeUnMarkedWood()
+            if not toon.getMarkedWoodRounds() <= 0:
+                toon.addMarkedWoodRounds(toon.getMarkedWoodRounds() - 1)
+            if toon.getHiddenRounds() == 1:
+                toon.makeUnHidden()
+            if not toon.getHiddenRounds() <= 0:
+                toon.addHiddenRounds(toon.getHiddenRounds() - 1)
+            if toon.getConfusedRounds() == 1:
+                toon.makeUnConfused()
+            if not toon.getConfusedRounds() <= 0:
+                toon.addConfusedRounds(toon.getConfusedRounds() - 1)
+            if toon.getDamageUpRounds() == 1:
+                toon.makeUnDamageUp()
+            if not toon.getDamageUpRounds() <= 0:
+                toon.addDamageUpRounds(toon.getDamageUpRounds() - 1)
+            if toon.getDamageDownRounds() == 1:
+                toon.makeUnDamageDown()
+            if not toon.getDamageDownRounds() <= 0:
+                toon.addDamageDownRounds(toon.getDamageDownRounds() - 1)
+            if toon.getEncoreRounds() == 1:
+                toon.makeUnEncore()
+            if not toon.getEncoreRounds() <= 0:
+                toon.addEncoreRounds(toon.getEncoreRounds() - 1)
+            if toon.getWindedRounds() == 1:
+                toon.makeUnWinded()
+            if not toon.getWindedRounds() <= 0:
+                toon.addWindedRounds(toon.getWindedRounds() - 1)
+            if toon.getSnappedRounds() == 1:
+                toon.makeUnSnapped()
+            if not toon.getSnappedRounds() <= 0:
+                toon.addSnappedRounds(toon.getSnappedRounds() - 1)
+            if toon.getCheerRounds() == 1:
+                toon.makeUnCheer()
+            if not toon.getCheerRounds() <= 0:
+                toon.addCheerRounds(toon.getCheerRounds() - 1)
+            if toon.getVulnerabilityRounds() == 1:
+                toon.makeUnVulnerable()
+            if not toon.getVulnerabilityRounds() <= 0:
+                toon.addVulnerabilityRounds(toon.getVulnerabilityRounds() - 1)
+            if toon.getGagBoostRounds() == 1:
+                toon.makeUnGagBoost()
+            if not toon.getGagBoostRounds() <= 0:
+                toon.addGagBoostRounds(toon.getGagBoostRounds() - 1)
         self._deleteTrack()
         self.track = Sequence(ptrack, name='movie-track-%d' % self.battle.doId)
         if self.battle.localToonPendingOrActive():

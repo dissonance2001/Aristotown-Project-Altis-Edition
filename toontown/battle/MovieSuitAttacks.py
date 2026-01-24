@@ -243,7 +243,10 @@ def doSuitAttack(attack):
         else:
             suitTrack = doFingerWag(attack)
     elif name == 'Fired':
-        suitTrack = doFired(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = doFiredPressurizer(attack)
+        else:
+            suitTrack = doFired(attack)
     elif name == 'FountainPen':
         suitTrack = doFountainPen(attack)
     elif name == 'FreezeAssets':
@@ -485,11 +488,13 @@ def doSuitAttack(attack):
     elif name == 'BookkeeperPaperCut':
         suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
     elif name == 'BookkeeperExplodingDocument':
-        suitTrack = MovieBossbotLitigationCheats.doPaperRain(attack)
+        suitTrack = MovieBossbotLitigationCheats.doThrowBook(attack)
     elif name == 'BookkeeperBookkeepingRetaliation':
         suitTrack = MovieBossbotLitigationCheats.doBookkeepingRetaliation(attack)
     elif name == 'BookkeeperBookkeeping':
         suitTrack = MovieBossbotLitigationCheats.doBookkeeping(attack)
+    elif name == 'BookkeeperMandatoryFiling':
+        suitTrack = MovieBossbotLitigationCheats.doExplodingDocument(attack)
     #wiretapper cheats
     elif name == 'WiretapperCollectCall':
         suitTrack = MovieBossbotLitigationCheats.doCollectCall(attack)
@@ -764,8 +769,18 @@ def doSuitAttack(attack):
         suitTrack = MovieSellbotLitigationCheats.doUnionBuster(attack)
     elif name == 'UnionBusterUnionBusterDamage':
         suitTrack = MovieSellbotLitigationCheats.doUnionBusterDamage(attack)
+    elif name == 'UnionBusterNoStrikeClause':
+        suitTrack = MovieSellbotLitigationCheats.doNoStrikeClause(attack)
     elif name == 'UnionBusterUnionWages':
         suitTrack = MovieSellbotLitigationCheats.doUnionWages(attack)
+    elif name == 'UnionBusterUnionWages2':
+        suitTrack = MovieSellbotLitigationCheats.doUnionWages2(attack)
+    elif name == 'UnionBusterUnionWages3':
+        suitTrack = MovieSellbotLitigationCheats.doUnionWages3(attack)
+    elif name == 'UnionBusterUnionWages4':
+        suitTrack = MovieSellbotLitigationCheats.doUnionWages4(attack)
+    elif name == 'UnionBusterUnionWages5':
+        suitTrack = MovieSellbotLitigationCheats.doUnionWages5(attack)
     elif name == 'UnionBusterBreachOfContract':
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContract(attack)
     elif name == 'UnionBusterBreachOfContract2':
@@ -3327,8 +3342,8 @@ def doEmbezzle(attack):
     glow.setColorScale(Vec4(1, 0.9, 0, 0.3))
     suitTrack = getSuitTrack(attack)
     suitTrack.append(Wait(1.0))
-    billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
-    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(5.0, 5.0, 5.0))
+    billPosPoints = [Point3(-0.21707670043415206, 0.30390738060781786, -0.4775687409551388), VBase3(-301.64978292329954, 0, 0)]
+    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(2.0, 2.0, 2.0))
     toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     glowTrack = Sequence()
     glowTrack.append(Wait(4.0))
@@ -3891,7 +3906,7 @@ def doCanned(attack):
     hips = toon.getHipsParts()
     propDelay = 0.45
     suitType = getSuitBodyType(attack['suitName'])
-    suitDelay = 1.23
+    suitDelay = 1
     dodgeDelay = 2.6
     throwDuration = 1.5
     can = globalPropPool.getProp('can')
@@ -3906,7 +3921,7 @@ def doCanned(attack):
     elif torso == 'l':
         scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 2.31)
     canHpr = VBase3(-173.47, -0.42, 162.09)
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.75))
     posPoints = [Point3(-0.1734104046242777, -0.5202312138728331, -0.45), VBase3(-10, 90, -170.635838150289)]
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, propDelay, Point3(9, 9, 9), scaleUpTime=0.25))
     propDelay = propDelay + 0.5
@@ -4949,7 +4964,7 @@ def doPickPocket(attack):
     bill = globalPropPool.getProp('1dollar')
     suitTrack = getSuitTrack(attack)
     suitTrack.append(Wait(1.0))
-    billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
+    billPosPoints = [Point3(-0.13024602026049337, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
     billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(1.41, 1.41, 1.41))
     toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
@@ -4967,8 +4982,8 @@ def doPennyPinch(attack):
     coinTypes = ['bronze', 'silver', 'gold']
     bill = loader.loadModel('phase_3.5/models/props/cc_m_prp_gen_coin_' + random.choice(coinTypes) + '.bam')
     suitTrack = getSuitTrack(attack)
-    billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
-    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(1.41, 1.41, 1.41))
+    billPosPoints = [Point3(-0.3039073806078143, 0.30390738060781786, -0.390738060781473), VBase3(-91.17221418234442, -50.79594790159189, 0)]
+    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(1.25, 1.25, 1.25))
     toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
     if dmg > 0:
@@ -5764,6 +5779,94 @@ def doFired(attack):
         flecksSmall = BattleParticles.createParticleEffect('SpriteFiredFlecks')
         BattleParticles.setEffectTexture(baseFlameSmall, 'fire')
         BattleParticles.setEffectTexture(flameSmall, 'fire')
+        BattleParticles.setEffectTexture(flecksSmall, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+        baseFlameSmall.setScale(0.7)
+        flameSmall.setScale(0.7)
+        flecksSmall.setScale(0.7)
+        baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, [baseFlameEffect, toon, 0], softStop=-1)
+        flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, toon, 0], softStop=-1)
+        flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, toon, 0], softStop=-1)
+        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 3.9, [baseFlameSmall, toon, 0], softStop=-1)
+        flameSmallTrack = getPartTrack(flameSmall, 1.0, 3.9, [flameSmall, toon, 0], softStop=-1)
+        flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, [flecksSmall, toon, 0], softStop=-1)
+
+        def changeColor(parts):
+            track = Parallel()
+            for partNum in xrange(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
+
+            return track
+
+        def resetColor(parts):
+            track = Parallel()
+            for partNum in xrange(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(Func(nextPart.clearColorScale))
+
+            return track
+
+        if dmg > 0:
+            headParts = toon.getHeadParts()
+            torsoParts = toon.getTorsoParts()
+            legsParts = toon.getLegsParts()
+            colorTrack = Sequence()
+            colorTrack.append(Wait(2.0))
+            colorTrack.append(Func(battle.movie.needRestoreColor))
+            colorTrack.append(changeColor(headParts))
+            colorTrack.append(changeColor(torsoParts))
+            colorTrack.append(changeColor(legsParts))
+            colorTrack.append(Wait(2.5))
+            colorTrack.append(resetColor(headParts))
+            colorTrack.append(resetColor(torsoParts))
+            colorTrack.append(resetColor(legsParts))
+            colorTrack.append(Func(battle.movie.clearRestoreColor))
+            baseFlameTracks.append(baseFlameTrack)
+            flameTracks.append(flameTrack)
+            flecksTracks.append(flecksTrack)
+            colorTracks.append(colorTrack)
+        else:
+            baseFlameTracks.append(baseFlameSmallTrack)
+            flameTracks.append(flameSmallTrack)
+            flecksTracks.append(flecksSmallTrack)
+
+    return Parallel(suitTrack, baseFlameTracks, flameTracks, flecksTracks, toonTracks, colorTracks, soundTrack)
+
+def doFiredPressurizer(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    BattleParticles.loadParticles()
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    baseFlameTracks = Parallel()
+    flameTracks = Parallel()
+    flecksTracks = Parallel()
+    baseFlameSmallTracks = Parallel()
+    flameSmallTracks = Parallel()
+    flecksSmallTracks = Parallel()
+    colorTracks = Parallel()
+    damageAnims = []
+    damageAnims.append(['cringe',
+                        0.01,
+                        0.7,
+                        0.62])
+    damageAnims.append(['slip-forward',
+                        1e-05,
+                        0.4,
+                        1.2])
+    damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.8, startTime=1.2))
+    toonTracks = getToonTracks(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep'])
+    soundTrack = getSoundTrack('SA_hot_air.ogg', delay=1.0, node=suit)
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+        flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
+        flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
+        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+        baseFlameSmall = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+        flameSmall = BattleParticles.createParticleEffect('FiredFlame2')
+        flecksSmall = BattleParticles.createParticleEffect('SpriteFiredFlecks')
         BattleParticles.setEffectTexture(flecksSmall, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
         baseFlameSmall.setScale(0.7)
         flameSmall.setScale(0.7)

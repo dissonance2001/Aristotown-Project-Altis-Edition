@@ -528,7 +528,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        int(math.ceil(damage * 1.15))) + damageAppendStr,
-                                                                                   'bonus': '\nExe./Gov./Mgr. Mult.: %i%s\nDaze Rounds: %i' % (
+                                                                                   'bonus': '\nExe./Gov./Mgr.: %i%s\nDaze Rounds: %i' % (
                                                                                   int(math.ceil((damage * 1.15) * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS))),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
@@ -539,8 +539,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
-                                                                                   'bonus': '\nExe./Gov./Mgr. Mult.: %i%s\nDaze Rounds: %i' % (
+                                                                                       int(damage)) + damageAppendStr,
+                                                                                   'bonus': '\nExe./Gov./Mgr.: %i%s\nDaze Rounds: %i' % (
                                                                                    int(math.ceil(damage * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS))),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
@@ -635,7 +635,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nSelf Heal: %i%s' % (
                                                                                    int(math.ceil(damage / 2.22)),
                                                                                    damageAppendStr) + damageBonusStr,
@@ -647,7 +647,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
-                                                                                       damage) + damageAppendStr,
+                                                                                       int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nSelf Heal: %i%s' % (
                                                                                    int(math.ceil(damage / 4)),
                                                                                    damageAppendStr) + damageBonusStr,
@@ -1314,13 +1314,13 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if not 'noSOS' in base.localAvatar.battleConditions:
             self.sosButton['state'] = DGG.NORMAL
             self.sosButton['image_color'] = Vec4(0, 0.6, 1, 1)
-        if 'noFires' in base.localAvatar.battleConditions:
+        if 'noFires' in base.localAvatar.battleConditions or localAvatar.cooldown:
             self.fireButton['state'] = DGG.DISABLED
             self.fireButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
-        if 'noSues' in base.localAvatar.battleConditions:
+        if 'noSues' in base.localAvatar.battleConditions or localAvatar.cooldown:
             self.sueButton['state'] = DGG.DISABLED
             self.sueButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
-        if 'noSOS' in base.localAvatar.battleConditions:
+        if 'noSOS' in base.localAvatar.battleConditions or localAvatar.cooldown:
             self.sosButton['state'] = DGG.DISABLED
             self.sosButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
         if settings.get('show-cog-levels', True):

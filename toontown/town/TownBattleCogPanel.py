@@ -2995,6 +2995,62 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(0, 0.902, 1, 1)
                 self.soaked.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+        if self.cog.isTrapped:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            if self.cog.isTrapped == 8:
+                self.dazed = status.find('**/inventory_tnt')
+            elif self.cog.isTrapped == 7:
+                self.dazed = status.find('**/inventory_wreckingball')
+            elif self.cog.isTrapped == 6:
+                self.dazed = status.find('**/inventory_trapdoor')
+            elif self.cog.isTrapped == 5:
+                self.dazed = status.find('**/inventory_quicksand_icon')
+            elif self.cog.isTrapped == 4:
+                self.dazed = status.find('**/inventory_springboard')
+            elif self.cog.isTrapped == 3:
+                self.dazed = status.find('**/inventory_marbles')
+            elif self.cog.isTrapped == 2:
+                self.dazed = status.find('**/inventory_rake')
+            else:
+                self.dazed = status.find('**/inventory_banana_peel')
+            self.dazed.setScale(5.5)
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.dazed.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.dazed.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.dazed.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.dazed.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.dazed.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.dazed.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.dazed.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.dazed.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.dazed.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         self.healthText['text'] = t
 
     def updateHealthBar(self):

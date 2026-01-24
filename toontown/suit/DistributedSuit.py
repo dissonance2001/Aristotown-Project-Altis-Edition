@@ -768,13 +768,58 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def checkPlayByPlayTextCheat(self, pbpText, displayName, attackDuration):
         pbpText = pbpText
         if float(self.currHP) > float(self.maxHP * 1.5):
-            self.playByPlayInterval = pbpText.getShowIntervalOvercharged(displayName, attackDuration)
+            self.playByPlayInterval = pbpText.getShowIntervalCheatOvercharged(displayName, attackDuration)
             self.playByPlayInterval.start()
         elif float(self.currHP) > float(self.maxHP):
-            self.playByPlayInterval = pbpText.getShowIntervalOverhealed(displayName, attackDuration)
+            self.playByPlayInterval = pbpText.getShowIntervalCheatOverhealed(displayName, attackDuration)
             self.playByPlayInterval.start()
         else:
-            self.playByPlayInterval = pbpText.getShowInterval(displayName, attackDuration)
+            self.playByPlayInterval = pbpText.getShowIntervalCheatRed(displayName, attackDuration)
+            self.playByPlayInterval.start()
+
+    def checkPlayByPlayTextLegallyBound(self, pbpText, displayName, attackDuration):
+        pbpText = pbpText
+        if self.isDesperation:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc("Legally Bound Toons take 28 damage per round!", attackDuration)
+            self.playByPlayInterval.start()
+        else:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc("Legally Bound Toons take 20 damage per round!", attackDuration)
+            self.playByPlayInterval.start()
+
+    def checkPlayByPlayTextCourtRecord(self, pbpText, displayName, attackDuration):
+        pbpText = pbpText
+        if self.isDesperation:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Due to an illegal action, this toon takes 70 damage!', attackDuration)
+            self.playByPlayInterval.start()
+        else:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Due to an illegal action, this toon takes 50 damage!', attackDuration - 2)
+            self.playByPlayInterval.start()
+
+    def checkPlayByPlayTextBurned(self, pbpText, attackDuration):
+        pbpText = pbpText
+        if self.isDesperation:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Burned Toons take 42 extra damage per round!', attackDuration)
+            self.playByPlayInterval.start()
+        else:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Burned Toons take 30 extra damage per round!', attackDuration - 2)
+            self.playByPlayInterval.start()
+
+    def checkPlayByPlayTextInflation(self, pbpText, attackDuration):
+        pbpText = pbpText
+        if self.isDesperation:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc("Due to an overinflated budget this toon takes 70 damage!", attackDuration)
+            self.playByPlayInterval.start()
+        else:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc("Due to an overinflated budget this toon takes 50 damage!", attackDuration - 2)
+            self.playByPlayInterval.start()
+
+    def checkPlayByPlayTextBusted(self, pbpText, attackDuration):
+        pbpText = pbpText
+        if self.isDesperation:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Busted Toons are forced to take 35 damage every round!', attackDuration)
+            self.playByPlayInterval.start()
+        else:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Busted Toons are forced to take 25 damage every round!', attackDuration - 2)
             self.playByPlayInterval.start()
 
     def checkCogHP(self, battle):
@@ -1296,6 +1341,16 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                Func(self.updateHealthBar, 0)),
                                            Func(self.setChatAbsolute, "Ouch.", CFSpeech | CFTimeout), Wait(1.0), MovieUtil.createSuitHeadlessDeathTrack(self, battle),
                                           )).start()
+
+    def checkUnionBust(self, battle):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        x = int(self.currHP)
+        if self.currHP > 0 and not self.getManager():
+            self.damageInterval = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle), Func(self.showHpTextNew, -self.currHP, text="BUSTED!", colorCode=3),
+                                   Func(self.setHealthForMe, - self.currHP),
+                                   Func(self.updateHealthBar, 0))).start()
 
     def checkSkelecogHP(self):
         if self.damageInterval:

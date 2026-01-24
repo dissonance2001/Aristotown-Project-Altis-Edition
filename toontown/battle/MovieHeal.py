@@ -97,10 +97,20 @@ def __healToon(toon, hp, ineffective, hasInteractivePropHealBonus):
         else:
             laughter = random.choice(TTLocalizer.MovieHealLaughterHits1)
     toon.setChatAbsolute(laughter, CFSpeech | CFTimeout)
-    if hp > 0 and toon.hp != None:
-        toon.toonUp(hp, hasInteractivePropHealBonus)
+    toon.toonUp(hp, hasInteractivePropHealBonus)
+    return
+
+def __healToonToon(toon, hp, ineffective, hasInteractivePropHealBonus):
+    maxDam = AvPropDamage[0][1][0][1]
+    if hp >= maxDam - 1:
+        laughter = random.choice(TTLocalizer.MovieHealLaughterHits2)
     else:
-        notify.debug('__healToon() - toon: %d hp: %d' % (toon.doId, hp))
+        laughter = random.choice(TTLocalizer.MovieHealLaughterHits1)
+    toon.setChatAbsolute(laughter, CFSpeech | CFTimeout)
+    if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
+        toon.toonUp(int(hp / 2.22), hasInteractivePropHealBonus)
+    else:
+        toon.toonUp(int(hp / 4), hasInteractivePropHealBonus)
     return
 
 
@@ -163,8 +173,15 @@ def __healTickle(heal, hasInteractivePropHealBonus):
     dFeatherScaleDown = 0.5
     featherTrack = Parallel(MovieUtil.getActorIntervals(feathers, 'feather'), Sequence(Wait(tFeatherScaleUp), Func(MovieUtil.showProps, feathers, hands), Func(scaleFeathers, feathers), MovieUtil.getScaleIntervals(feathers, dFeatherScaleUp, MovieUtil.PNT3_NEARZERO, feathers[0].getScale)), Sequence(Wait(toon.getDuration('tickle') - dFeatherScaleDown), MovieUtil.getScaleIntervals(feathers, dFeatherScaleDown, None, MovieUtil.PNT3_NEARZERO)))
     tHeal = 3.0
-    mtrack = Parallel(featherTrack, ActorInterval(toon, 'tickle'), __getSoundTrack(level, 1, node=toon), Sequence(Wait(tHeal), Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus), ActorInterval(target, 'cringe', startTime=20.0 / target.getFrameRate('cringe'))))
+    selfHealTrack = Parallel(Func(__healToonToon, toon, hp, ineffective, hasInteractivePropHealBonus))
+    mtrack = Parallel(featherTrack, ActorInterval(toon, 'tickle'), __getSoundTrack(level, 1, node=toon), Sequence(Wait(tHeal), Parallel(selfHealTrack, Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus)), ActorInterval(target, 'cringe', startTime=20.0 / target.getFrameRate('cringe'))))
     track.append(mtrack)
+    if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
+        track.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 2)))
+        track.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 2)))
+    else:
+        track.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 1)))
+        track.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 1)))
     track.append(Func(MovieUtil.removeProps, feathers))
     track.append(__returnToBase(heal))
     target.setChatAbsolute('', CFSpeech | CFTimeout)
@@ -192,7 +209,14 @@ def __healCannon(heal, hasInteractivePropHealBonus):
     if first == 1:
         targetTrack.append(Wait(delay))
         first = 0
-    targetTrack.append(Parallel(reactIval, ActorInterval(target, 'conked')))
+    selfHealTrack = Parallel(Func(__healToonToon, toon, hp, ineffective, hasInteractivePropHealBonus))
+    targetTrack.append(Parallel(reactIval, selfHealTrack, ActorInterval(target, 'conked')))
+    if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
+        targetTrack.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 2)))
+        targetTrack.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 2)))
+    else:
+        targetTrack.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 1)))
+        targetTrack.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 1)))
     button = globalPropPool.getProp('heal-button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
@@ -272,6 +296,14 @@ def __healJoke(heal, hasInteractivePropHealBonus):
     for target in targets:
         targetToon = target['toon']
         hp = target['hp']
+        selfHealTrack = Parallel(Func(__healToonToon, toon, (hp / len(targets)), ineffective, hasInteractivePropHealBonus))
+        reactTrack.append(selfHealTrack)
+        if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
+            reactTrack.append(Parallel(Func(targetToon.makeCheer), Func(targetToon.addCheerRounds, 2)))
+            reactTrack.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 2)))
+        else:
+            reactTrack.append(Parallel(Func(targetToon.makeCheer), Func(targetToon.addCheerRounds, 1)))
+            reactTrack.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 1)))
         reactTrack.append(Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus))
 
     reactTrack.append(Wait(dTargetLaugh))
@@ -315,8 +347,15 @@ def __healSmooch(heal, hasInteractivePropHealBonus):
 
     lipsTrack = Sequence(Wait(tLips), Func(MovieUtil.showProp, lips, render, getLipPos), Func(lips.setBillboardPointWorld), LerpScaleInterval(lips, dScale, Point3(3, 3, 3), startScale=MovieUtil.PNT3_NEARZERO), Wait(tThrow - tLips - dScale), LerpPosInterval(lips, dThrow, Point3(target.getPos() + Point3(0, 0, target.getHeight()))), Func(MovieUtil.removeProp, lips))
     delay = tThrow + dThrow
-    mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(level, 2, node=toon), Sequence(ActorInterval(toon, 'smooch'), *__returnToBase(heal)), Sequence(Wait(delay), ActorInterval(target, 'conked')), Sequence(Wait(delay), Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus)))
+    selfHealTrack = Parallel(Func(__healToonToon, toon, hp, ineffective, hasInteractivePropHealBonus))
+    mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(level, 2, node=toon), Sequence(ActorInterval(toon, 'smooch'), *__returnToBase(heal)), Sequence(Wait(delay), ActorInterval(target, 'conked')), Sequence(Wait(delay), Parallel(selfHealTrack, Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus))))
     track.append(mtrack)
+    if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
+        track.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 2)))
+        track.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 2)))
+    else:
+        track.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 1)))
+        track.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 1)))
     target.setChatAbsolute('', CFSpeech | CFTimeout)
     return track
 
@@ -343,7 +382,15 @@ def __healDance(heal, hasInteractivePropHealBonus):
     for target in targets:
         targetToon = target['toon']
         hp = target['hp']
-        reactIval = Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus)
+        reactIval = Parallel(Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus))
+        selfHealTrack = Parallel(Func(__healToonToon, toon, (hp / len(targets)), ineffective, hasInteractivePropHealBonus))
+        if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
+            reactIval.append(Parallel(Func(targetToon.makeCheer), Func(targetToon.addCheerRounds, 2)))
+            reactIval.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 2)))
+        else:
+            reactIval.append(Parallel(Func(targetToon.makeCheer), Func(targetToon.addCheerRounds, 1)))
+            reactIval.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 1)))
+        reactIval.append(selfHealTrack)
         if first:
             targetTrack.append(Wait(delay))
             first = 0
@@ -397,8 +444,15 @@ def __healSprinkle(heal, hasInteractivePropHealBonus):
         toon.headsUp(render, targetPoint)
 
     delay = 2.5
-    mtrack = Parallel(__getPartTrack(sprayEffect, 1.5, 0.5, [sprayEffect, toon, 0]), __getPartTrack(dropEffect, 1.9, 2.0, [dropEffect, target, 0]), __getPartTrack(explodeEffect, 2.7, 1.0, [explodeEffect, toon, 0]), __getPartTrack(poofEffect, 3.4, 1.0, [poofEffect, target, 0]), __getPartTrack(wallEffect, 4.05, 1.2, [wallEffect, toon, 0]), __getSoundTrack(level, 2, duration=4.1, node=toon), Sequence(Func(face90), ActorInterval(toon, 'sprinkle-dust')), Sequence(Wait(delay), Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus)))
+    selfHealTrack = Parallel(Func(__healToonToon, toon, hp, ineffective, hasInteractivePropHealBonus))
+    mtrack = Parallel(__getPartTrack(sprayEffect, 1.5, 0.5, [sprayEffect, toon, 0]), __getPartTrack(dropEffect, 1.9, 2.0, [dropEffect, target, 0]), __getPartTrack(explodeEffect, 2.7, 1.0, [explodeEffect, toon, 0]), __getPartTrack(poofEffect, 3.4, 1.0, [poofEffect, target, 0]), __getPartTrack(wallEffect, 4.05, 1.2, [wallEffect, toon, 0]), __getSoundTrack(level, 2, duration=4.1, node=toon), Sequence(Func(face90), ActorInterval(toon, 'sprinkle-dust')), Sequence(Wait(delay), Parallel(selfHealTrack, Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus))))
     track.append(mtrack)
+    if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
+        track.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 2)))
+        track.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 2)))
+    else:
+        track.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 1)))
+        track.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 1)))
     track.append(__returnToBase(heal))
     target.setChatAbsolute('', CFSpeech | CFTimeout)
     return track
@@ -426,7 +480,15 @@ def __healJuggle(heal, hasInteractivePropHealBonus):
     for target in targets:
         targetToon = target['toon']
         hp = target['hp']
-        reactIval = Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus)
+        reactIval = Parallel(Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus))
+        selfHealTrack = Parallel(Func(__healToonToon, toon, (hp / len(targets)), ineffective, hasInteractivePropHealBonus))
+        if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
+            reactIval.append(Parallel(Func(targetToon.makeCheer), Func(targetToon.addCheerRounds, 2)))
+            reactIval.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 2)))
+        else:
+            reactIval.append(Parallel(Func(targetToon.makeCheer), Func(targetToon.addCheerRounds, 1)))
+            reactIval.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 1)))
+        reactIval.append(selfHealTrack)
         if first == 1:
             targetTrack.append(Wait(delay))
             first = 0
@@ -474,7 +536,15 @@ def __healDive(heal, hasInteractivePropHealBonus):
     for target in targets:
         targetToon = target['toon']
         hp = target['hp']
-        reactIval = Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus)
+        reactIval = Parallel(Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus))
+        if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
+            reactIval.append(Parallel(Func(targetToon.makeCheer), Func(targetToon.addCheerRounds, 2)))
+            reactIval.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 2)))
+        else:
+            reactIval.append(Parallel(Func(targetToon.makeCheer), Func(targetToon.addCheerRounds, 1)))
+            reactIval.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 1)))
+        selfHealTrack = Parallel(Func(__healToonToon, toon, (hp / len(targets)), ineffective, hasInteractivePropHealBonus))
+        reactIval.append(selfHealTrack)
         if first == 1:
             targetTrack.append(Wait(delay))
             first = 0

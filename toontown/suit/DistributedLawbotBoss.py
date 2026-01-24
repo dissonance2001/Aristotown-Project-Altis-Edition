@@ -944,7 +944,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         seq = Sequence(prepareBattleTwoMovie, name=intervalName)
         seq.start()
         self.storeInterval(seq, intervalName)
-        self.acceptOnce('doneChatPage', self.__showCannonsAppearing)
+        self.__onToBattleTwo()
         base.playMusic(self.stingMusic, looping=0, volume=1.0)
 
     def __showCannonsAppearing(self, elapsedTime = 0):
@@ -1536,7 +1536,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             ActorInterval(self, 'Ff_lookRt', duration=3),
             ActorInterval(self, 'Ff_lookRt', duration=3, startTime=3, endTime=0),
             ActorInterval(self, 'Ff_neutral', duration=2),
-            ActorInterval(self, 'Ff_speech', duration=7, loop=1))
+            ActorInterval(self, 'Ff_speech', duration=7, loop=1), Func(self.loop, 'Ff_neutral_f'))
         track.append(bossAnimTrack)
         attackToons = TTLocalizer.BossCogAttackToons
         dialogTrack = Track(
@@ -1880,7 +1880,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def __makePrepareBattleTwoMovie(self):
         chatString = 'You know what to do.'
-        movie = Sequence(Func(base.camera.reparentTo, self.witnessToon), Func(base.camera.setPos, 0, 8, 2), Func(base.camera.setHpr, 180, 10, 0), Func(self.witnessToon.setLocalPageChat, chatString, 0))
+        movie = Sequence(Func(base.camera.reparentTo, self.witnessToon), Func(base.camera.setPos, 0, 8, 2), Func(base.camera.setHpr, 180, 10, 0))
         return movie
 
     def __doWitnessPrepareBattleThreeChat(self):

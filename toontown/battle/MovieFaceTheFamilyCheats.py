@@ -680,6 +680,7 @@ def doOverheat(attack):
             colorTrack.append(resetColor(legsParts))
             colorTrack.append(Func(battle.movie.clearRestoreColor))
             notifyTracks.append(notifyTrack)
+            notifyTracks.append(Parallel(Func(toon.makeBurned), Func(toon.addBurnedRounds, 3)))
             baseFlameTracks.append(baseFlameTrack)
             flameTracks.append(flameTrack)
             flecksTracks.append(flecksTrack)
@@ -790,6 +791,8 @@ def doHurrySickness(attack):
             soundTracks.append(getSoundTrack('SA_hurry_sickness.ogg', delay=0, node=suit))
             soundTracks.append(getSoundTrack('SA_finger_wag.ogg', delay=1.3, node=suit))
             notifyTracks.append(Sequence(Wait(1.5), Parallel(Func(toon.showHpTextNew, -int(dmg)))))
+            notifyTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+            notifyTracks.append(Parallel(Func(toon.checkDamageDown, 40)))
     toonTracks = getToonTracksCheat(attack, damageDelay, ['slip-backward'], 0, ['nothing'])
     return Parallel(suitTracks, toonTracks, notifyTracks, soundTracks)
 
@@ -856,6 +859,7 @@ def doRedTape(attack):
         tubeTracks.append(Func(battle.movie.clearRestoreHips))
         damageAnims = [['nothing', 0.01, 0.35]]
         notifyTracks.append(Sequence(Wait(2.4), Parallel(Func(toon.showHpTextNew, -int(dmg), text="COOLDOWN!", colorCode=1))))
+        notifyTracks.append(Parallel(Func(toon.makeCooldown), Func(toon.checkCooldownRounds, 2)))
         allTubeTracks.append(tubeTracks)
         toonTracks.append(Sequence(Wait(2.4), ActorInterval(toon, 'struggle')))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.75, node=suit)
@@ -951,6 +955,7 @@ def doPuzzling(attack):
                           CFSpeech | CFTimeout))
     toonTrack = Sequence(Wait(3.0), Func(toon.setChatAbsolute, random.choice(("Your wish is my command.", "As you desire, Mr. President.", "As you wish.")),
                           CFSpeech | CFTimeout), Wait(3.0))
+    toonTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
     return Parallel(suitTrack, toonTrack)
 
 def doSleepyOvercharge(attack):
@@ -1309,6 +1314,9 @@ def doDriver(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        if dmg > 0:
+            ballPropTracks.append(Parallel(Func(toon.checkDamageDown, 25)))
+            ballPropTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
         ball = loader.loadModel('phase_6/models/golf/golf_ball')
         ball.setColorScale(0.75, 0.75, 0.75, 0.5)
         ball.setTransparency(1)

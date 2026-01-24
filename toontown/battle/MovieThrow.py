@@ -1,4 +1,5 @@
 import random
+import math
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
@@ -318,6 +319,13 @@ def __createSuitResetPosTrack2(suit, battle):
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(walkTrack, moveTrack)
 
+def __healToon(toon, hp):
+    laughter = random.choice(TTLocalizer.MovieHealLaughterHits1)
+    toon.setChatAbsolute(laughter, CFSpeech | CFTimeout)
+    if hp > 0 and toon.hp != None:
+        toon.toonUp(hp)
+    return
+
 
 def __throwPie(throw, delay, hitCount, npcs):
     toon = throw['toon']
@@ -384,6 +392,8 @@ def __throwPie(throw, delay, hitCount, npcs):
         pieTrack.append(pieHide)
         pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
         pieTrack.append(splatShow)
+        if toon.getTrackBonusLevel(THROW_TRACK) > 1:
+            pieTrack.append(Func(__healToon, toon, int(math.ceil(hp / 5))))
         if not suit.isVirtual:
             pieTrack.append(splatTexture)
         pieTrack.append(splatBillboard)

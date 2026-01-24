@@ -703,7 +703,7 @@ def doPaperweight(attack):
         missPoint = Point3(missPoint2.getX(), missPoint2.getY(), missPoint2.getZ())
         paperTrack.append(Func(battle.movie.needRestoreRenderProp, paper))
         paperTrack.append(Func(paper.wrtReparentTo, battle))
-        paperTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 2)))
+        paperTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.checkCooldownRounds, 2)))
         if dmg > 0:
             paperTrack.append(getThrowTrack(paper, hitPoint, duration=throwDuration, parent=battle, gravity=-100))
             paperTrack.append(Wait(0.6))
@@ -1112,6 +1112,7 @@ def doSnap2(attack, suit):
             notifyTrack = Sequence(Wait(3.1),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1),)
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeSnapped), Func(toon.addSnappedRounds, 2)))
+            notifyTracks.append(Parallel(Func(toon.checkSnappedUp, 10)))
             x = toon.getX(battle)
             y = toon.getY(battle)
             z = toon.getZ(battle)
@@ -1183,6 +1184,14 @@ def doSnap(attack, suit):
             notifyTrack = Sequence(Wait(3.1), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeSnapped), Func(toon.addSnappedRounds, 2)))
+            currentBossHealth = -1
+            for s in battle.suits:
+                if s.dna.name == 'stenog':
+                    currentBossHealth = s.currHP
+            if currentBossHealth > 0:
+                notifyTracks.append(Parallel(Func(toon.checkSnappedUp, 40)))
+            else:
+                notifyTracks.append(Parallel(Func(toon.checkSnappedUp, 20)))
             x = toon.getX(battle)
             y = toon.getY(battle)
             z = toon.getZ(battle)
@@ -1339,6 +1348,14 @@ def doCourtSanction(attack):
     toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
     notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
     notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+    currentBossHealth = -1
+    for s in battle.suits:
+        if s.dna.name == 'lgator':
+            currentBossHealth = s.currHP
+    if currentBossHealth > 0:
+        notifyTrack.append(Parallel(Func(toon.checkDamageDown, 75)))
+    else:
+        notifyTrack.append(Parallel(Func(toon.checkDamageDown, 50)))
     suitTrack = getSuitTrack(attack)
     soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
@@ -1381,6 +1398,7 @@ def doCourtSanctionBindings(attack):
             soundTracks.append(soundTrack)
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+            notifyTracks.append(Parallel(Func(toon.checkDamageDown, 25)))
     toonDamageTrack = getToonTracksCheat(attack, 0.8, ['conked'], 0, ['neutral'])
     return Parallel(suitTracks, toonTracks, toonDamageTrack, propTracks, soundTracks, notifyTracks)
 

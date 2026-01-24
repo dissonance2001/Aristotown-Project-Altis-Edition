@@ -919,14 +919,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            if suit.isDesperation:
-                pbpDesc = pbpDc.getShowIntervalDesc(
-            'Due to an illegal action, this toon takes 70 damage!',
-            attackDuration - 2)
-            else:
-                pbpDesc = pbpDc.getShowIntervalDesc(
-                    'Due to an illegal action, this toon takes 50 damage!',
-                    attackDuration - 2)
+            pbpDesc = Func(suit.checkPlayByPlayTextCourtRecord, pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Court Record!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -955,10 +948,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            if suit.isDesperation:
-                pbpDesc = pbpDc.getShowIntervalDesc('Legally Bound Toons take 28 damage per round!', attackDuration - 2)
-            else:
-                pbpDesc = pbpDc.getShowIntervalDesc('Legally Bound Toons take 20 damage per round!', attackDuration - 2)
+            pbpDesc = Func(suit.checkPlayByPlayTextLegallyBound, pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Legally Bound!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -969,14 +959,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            if suit.isDesperation:
-                pbpDesc = pbpDc.getShowIntervalDesc(
-                'Due to an illegal action, this toon takes 70 damage!',
-                attackDuration - 2)
-            else:
-                pbpDesc = pbpDc.getShowIntervalDesc(
-                    'Due to an illegal action, this toon takes 50 damage!',
-                    attackDuration - 2)
+            pbpDesc = Func(suit.checkPlayByPlayTextCourtRecord, pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Court Record!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1097,10 +1080,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            if suit.isDesperation:
-                pbpDesc = pbpDc.getShowIntervalDesc('Burned Toons take 42 extra damage per round!', attackDuration - 2)
-            else:
-                pbpDesc = pbpDc.getShowIntervalDesc('Burned Toons take 30 extra damage per round!', attackDuration - 2)
+            pbpDesc = Func(suit.checkPlayByPlayTextBurned, pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Slow Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1114,7 +1094,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'BookkeeperPaperCut':
         camTrack.append(defaultCamera(openShotDuration=.5))
     elif name == 'BookkeeperExplodingDocument':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'BookkeeperExplodingDocument':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'BookkeeperMandatoryFiling':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'BookkeeperBookkeepingRetaliation':
         if attackDuration > 2:
             camTrack2 = defaultCamera(openShotDuration=3.0)
@@ -1144,14 +1128,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            if suit.isDesperation:
-                pbpDesc = pbpDc.getShowIntervalDesc(
-                "Due to an overinflated budget this toon takes 70 damage!",
-                attackDuration - 2)
-            else:
-                pbpDesc = pbpDc.getShowIntervalDesc(
-                    "Due to an overinflated budget this toon takes 50 damage!",
-                    attackDuration - 2)
+            pbpDesc = Func(suit.checkPlayByPlayTextInflation, pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1256,6 +1233,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     # union buster cheats
     elif name == 'UnionBusterUnionDues':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'UnionBusterNoStrikeClause':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'UnionBusterUnionCalculator':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'UnionBusterUnionBust':
@@ -1267,17 +1246,21 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            if suit.isDesperation:
-                pbpDesc = pbpDc.getShowIntervalDesc('Busted Toons are forced to take 35 damage every round!', attackDuration - 2)
-            else:
-                pbpDesc = pbpDc.getShowIntervalDesc('Busted Toons are forced to take 25 damage every round!',
-                                                    attackDuration - 2)
+            pbpDesc = Func(suit.checkPlayByPlayTextBusted, pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Union Buster!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     elif name == 'UnionBusterUnionWages':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'UnionBusterUnionWages2':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'UnionBusterUnionWages3':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'UnionBusterUnionWages4':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'UnionBusterUnionWages5':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'UnionBusterBreachOfContract':
         camTrack.append(defaultCamera(openShotDuration=0.5))
@@ -2420,7 +2403,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
     if attack['name'] in TTLocalizer.SuitCheatNames:
         pbpDc = PlayByPlayText.PlayByPlayText()
-        if name == 'ForemanRedTape' or name == 'ForemanBurning' or name == 'MintCompoundingInterest' or name == 'PresidentDriver' or name == 'PowerhouseSnipeSoaked':
+        if name == 'ForemanRedTape' or name == 'ForemanBurning' or name == 'MintCompoundingInterest' or name == 'PresidentDriver' or name == 'PowerhouseSnipeSoaked' or name == 'RecordkeeperMinutesTakenDamage':
             pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
             pbpTrack = Func(suit.checkPlayByPlayTextCheat, pbpText, displayName, attackDuration - 2)
         else:

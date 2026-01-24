@@ -408,10 +408,15 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
         if not toon.encore and not toon.winded:
             retval.append(Func(toon.makeEncore))
             retval.append(Func(toon.addEncoreRounds, 1))
+            if toon.getTrackBonusLevel(SOUND_TRACK) > 1:
+                retval.append(Parallel(Func(toon.checkEncore, 20)))
+            else:
+                retval.append(Parallel(Func(toon.checkEncore, 10)))
             retval.append(Func(toon.showHpTextNew, 0, text='Encore!', colorCode=1))
         elif toon.encore:
             retval.append(Func(toon.makeWinded))
             retval.append(Func(toon.addWindedRounds, 2))
+            retval.append(Parallel(Func(toon.checkWinded, 50)))
             retval.append(Func(toon.showHpTextNew, 0, text='Winded!', colorCode=1))
         retval.append(Func(setPosFromOther, sprayEffect, operaInstrument, Point3(0, 1.6, -0.18)))
         retval.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, toon, 0], softStop=-3.5))
@@ -422,10 +427,15 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
         if not toon.encore and not toon.winded:
             retval.append(Func(toon.makeEncore))
             retval.append(Func(toon.addEncoreRounds, 1))
+            if toon.getTrackBonusLevel(SOUND_TRACK) > 1:
+                retval.append(Parallel(Func(toon.checkEncore, 20)))
+            else:
+                retval.append(Parallel(Func(toon.checkEncore, 10)))
             retval.append(Func(toon.showHpTextNew, 0, text='Encore!', colorCode=1))
         elif toon.encore:
             retval.append(Func(toon.makeWinded))
             retval.append(Func(toon.addWindedRounds, 2))
+            retval.append(Parallel(Func(toon.checkWinded, 50)))
             retval.append(Func(toon.showHpTextNew, 0, text='Winded!', colorCode=1))
         retval.append(ActorInterval(toon, 'sound', playRate=1.0, startTime=I1))
     retval.append(Parallel(ActorInterval(toon, 'walk', startTime=0.0001, duration=TIME_TO_WALK_BACK, endTime=1), LerpPosInterval(toon, TIME_TO_WALK_BACK, oldPos, other=battle)))

@@ -155,7 +155,7 @@ class TownBattle(StateData.StateData):
         self.numToons = 1
         self.numCogs = 1
         self.toons = [base.localAvatar.doId]
-        self.toonPanels[0].setLaffMeter(base.localAvatar)
+       # self.toonPanels[0].setLaffMeter(base.localAvatar)
         self.bldg = bldg
         self.creditLevel = None
         self.creditMultiplier = creditMultiplier
@@ -222,43 +222,33 @@ class TownBattle(StateData.StateData):
         self.notify.debug('enterPanels() num: %d localNum: %d' % (num, localNum))
         for toonPanel in self.toonPanels:
             toonPanel.hide()
-            z = -0.84
+            z = -0.7875
             toonPanel.setPos(0, 0, z)
 
         if num == 1:
             self.toonPanels[0].setX(self.oddPos[1])
             self.toonPanels[0].show()
-            self.toonPanels[0].setLaffMeter(base.localAvatar)
         elif num == 2:
             self.toonPanels[0].setX(self.evenPos[2])
             self.toonPanels[0].show()
-            self.toonPanels[0].setLaffMeter(base.localAvatar)
             self.toonPanels[1].setX(self.evenPos[3])
             self.toonPanels[1].show()
-            self.toonPanels[1].setLaffMeter(base.localAvatar)
         elif num == 3:
             self.toonPanels[0].setX(self.oddPos[0])
             self.toonPanels[0].show()
-            self.toonPanels[0].setLaffMeter(base.localAvatar)
             self.toonPanels[1].setX(self.oddPos[1])
             self.toonPanels[1].show()
-            self.toonPanels[1].setLaffMeter(base.localAvatar)
             self.toonPanels[2].setX(self.oddPos[2])
             self.toonPanels[2].show()
-            self.toonPanels[2].setLaffMeter(base.localAvatar)
         elif num == 4:
             self.toonPanels[0].setX(self.evenPos[1])
             self.toonPanels[0].show()
-            self.toonPanels[0].setLaffMeter(base.localAvatar)
             self.toonPanels[1].setX(self.evenPos[2])
             self.toonPanels[1].show()
-            self.toonPanels[1].setLaffMeter(base.localAvatar)
             self.toonPanels[2].setX(self.evenPos[3])
             self.toonPanels[2].show()
-            self.toonPanels[2].setLaffMeter(base.localAvatar)
             self.toonPanels[3].setX(self.evenPos[4])
             self.toonPanels[3].show()
-            self.toonPanels[3].setLaffMeter(base.localAvatar)
         else:
             self.notify.error('Bad number of toons: %s' % num)
 
@@ -457,6 +447,8 @@ class TownBattle(StateData.StateData):
         self.numToons = len(toons)
         self.localNum = toons.index(base.localAvatar)
         currStateName = self.fsm.getCurrentState().getName()
+        # for i in range(len(toons)):
+        #     self.toonPanels[i].setLaffMeter(toons[i])
         if resetActivateMode:
             self.__enterPanels(self.numToons, self.localNum)
             self.__cogPanels(self.numCogs)

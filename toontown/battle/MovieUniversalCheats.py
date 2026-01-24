@@ -709,6 +709,11 @@ def doDesperation(attack):
 def doDesperation2(attack):
     theSuit = attack['suit']
     battle = attack['battle']
+    targets = attack['target']
+    toonTracks = Parallel()
+    for t in battle.activeToons:
+        toonTrack = Parallel(Func(t.makeUnGagBan))
+        toonTracks.append(toonTrack)
     notifyTracks = Sequence()
     cameraTracks = Sequence()
     makeDesperates = Parallel()
@@ -720,7 +725,7 @@ def doDesperation2(attack):
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     makeDesperates.append(makeDesperate)
     makeDamageUps.append(makeDamageUp)
-    return Sequence(notifyTracks, makeDamageUps, makeDesperates)
+    return Sequence(notifyTracks, toonTracks, makeDamageUps, makeDesperates)
 
 def doAbilityQueued(attack):
     theSuit = attack['suit']
@@ -844,6 +849,8 @@ def doGovernaughtDeath(attack):
         dmg = t['hp']
         soundTrack = getSoundTrack('LB_toonup.ogg', node=toon)
         notifyTrack = Sequence(Func(toon.showHpTextNew, 0, text="+5% Damage!", colorCode=1))
+        notifyTrack.append(Parallel(Func(toon.makeDamageUpGovernaught)))
+        notifyTrack.append(Parallel(Func(toon.checkDamageUpGovernaught, toon.getDamageUpGovernaught() + 5)))
         soundTracks.append(soundTrack)
         notifyTracks.append(notifyTrack)
     return Parallel(notifyTracks, soundTracks, waitTrack)
@@ -980,15 +987,27 @@ def doCourtCalculations(attack):
 def doCourtRecord(attack):
     suit = attack['suit']
     battle = attack['battle']
+    targets = attack['target']
+    toonTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        toonTrack = Parallel(Func(toon.makeGagBan))
+        toonTracks.append(toonTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(1.0))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
-    return Parallel(suitTrack, soundTrack)
+    return Parallel(suitTrack, soundTrack, toonTracks)
 
 def doCourtMandate(attack):
     suit = attack['suit']
     battle = attack['battle']
+    targets = attack['target']
+    toonTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        toonTrack = Parallel(Func(toon.makeGagBan))
+        toonTracks.append(toonTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=0.75))
     suitTrack.append(Wait(2.0))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_objection.ogg'), node=suit))
-    return Parallel(suitTrack, soundTrack)
+    return Parallel(suitTrack, soundTrack, toonTracks)

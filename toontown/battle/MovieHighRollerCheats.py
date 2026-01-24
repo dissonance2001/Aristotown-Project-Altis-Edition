@@ -709,9 +709,16 @@ def doPuzzleBan(attack):
 def doPuzzle(attack):
     suit = attack['suit']
     battle = attack['battle']
+    targets = attack['target']
+    notifyTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        toonTrack = Parallel(Func(toon.makeGagBan))
+        notifyTracks.append(toonTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(3.0))
-    return Parallel(suitTrack)
+    return Parallel(suitTrack, notifyTracks)
 
 def doGameOver(attack):
     suit = attack['suit']
@@ -1474,6 +1481,13 @@ def doNoAttack(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack2 = Sequence()
+    targets = attack['target']
+    notifyTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        toonTrack = Parallel(Func(toon.makeUnGagBan))
+        notifyTracks.append(toonTrack)
     if suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog' and suit.isPhase3:
         suitTrack = Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0), Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',)))
         suitTrack.append(Func(suit.makeNonImmortal))
@@ -1482,7 +1496,7 @@ def doNoAttack(attack):
         if suit.dna.name == 'hrollers':
             suitTrack = Sequence()
             return suitTrack
-        return suitTrack2
+        return Parallel(suitTrack2, notifyTracks)
 
 def playSplashEffect(render, x, y, z):
     from toontown.effects import Splash
@@ -1746,6 +1760,13 @@ def doSingingBlues(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
+    notifyTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        notifyTracks.append(Func(toon.makeWinded))
+        notifyTracks.append(Func(toon.addWindedRounds, 99))
+        notifyTracks.append(Parallel(Func(toon.checkWinded, 50)))
     dmg = (attack['target'][0]['hp']) * len(battle.activeToons)
     phone = globalPropPool.getProp('phone')
     receiver = globalPropPool.getProp('receiver')
@@ -1789,7 +1810,7 @@ def doSingingBlues(attack):
     toonTracks = getToonTracks(attack, 2.8, ['slip-backward'], 4.7, ['jump'])
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=0.5, node=suit)
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.8)
-    return Parallel(suitTrack, propTrack, soundTrack, soundTrack1, toonTracks, explodeTracks, explosionTrack)
+    return Parallel(suitTrack, propTrack, soundTrack, notifyTracks, soundTrack1, toonTracks, explodeTracks, explosionTrack)
 
 def doGameTimeSpawn(attack):
     suit = attack['suit']
@@ -3063,6 +3084,8 @@ def doDamageReduction(attack):
         if dmg > 0:
             toonTracks.append(toonTrack)
             smokeTracks.append(smokeTrack)
+            toonTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 1)))
+            toonTracks.append(Parallel(Func(toon.checkDamageDown, 50)))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     toonDamageTrack = getToonTracksCheat(attack, 1.75, ['nothing'], 0, ['neutral'])
     return Parallel(suitTrack, toonDamageTrack, smokeTracks, toonTracks, soundTrack, propTracks)
@@ -3532,6 +3555,8 @@ def doRaisingTheAnte(attack):
                 resetColor(torsoParts),
                 resetColor(legsParts)
             ))
+            explosionTracks.append(Parallel(Func(toon.makeDamageUpGovernaught)))
+            explosionTracks.append(Parallel(Func(toon.checkDamageUpGovernaught, toon.getDamageUpGovernaught() + 1250)))
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.0)
 
     return Parallel(suitTrack, partTracks, explosionTracks, soundTrack1, toonTracks)

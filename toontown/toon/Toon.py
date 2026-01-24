@@ -535,28 +535,41 @@ class Toon(Avatar.Avatar, ToonHead):
         self.wake = None
         self.lastWakeTime = 0
         self.forceJumpIdle = False
+        self.gagBoost = 0
+        self.gagBoostRounds = 0
+        self.gagBoostNumber = 0
         self.encore = 0
+        self.encoreNumber = 0
         self.winded = 0
+        self.windedNumber = 0
         self.encoreRounds = 0
         self.windedRounds = 0
         self.damageDown = 0
+        self.damageUpNumberGovernaught = 0
         self.damageDownRounds = 0
+        self.damageDownNumber = 0
         self.damageUp = 0
+        self.governaughtDamageUp = 0
         self.damageUpRounds = 0
+        self.damageUpNumber = 0
         self.confused = 0
         self.confusedRounds = 0
         self.hidden = 0
         self.hiddenRounds = 0
         self.markedWood = 0
         self.markedWoodRounds = 0
+        self.markedWoodNumber  = 0
         self.damageOvertime = 0
         self.damageOvertimeRounds = 0
         self.isVulnerable = 0
+        self.isGagBan = 0
         self.cooldown = 0
         self.cooldownRounds = 0
         self.vulnerability = 0
         self.vulnerabilityRounds = 0
         self.isSnapped = 0
+        self.isBurned = 0
+        self.burnedRounds = 0
         self.snapped = 0
         self.snappedRounds = 0
         self.headParts = []
@@ -581,6 +594,8 @@ class Toon(Avatar.Avatar, ToonHead):
         self.oldShoes = None
         self.isStunned = 0
         self.isDisguised = 0
+        self.cheer = 0
+        self.cheerRounds = 0
         self.cogHead = 0
         self.cogLevels = [] 
         self.uberType = 0
@@ -656,6 +671,36 @@ class Toon(Avatar.Avatar, ToonHead):
     def getDamageOvertimeRounds(self):
         return self.damageOvertimeRounds
 
+    def makeBurned(self):
+        self.isBurned = 1
+
+    def makeUnBurned(self):
+        self.isBurned = 0
+
+    def addBurnedRounds(self, num):
+        self.burnedRounds = num
+
+    def getBurnedRounds(self):
+        return self.burnedRounds
+
+    def makeGagBoost(self, level):
+        self.gagBoost = level
+
+    def makeUnGagBoost(self):
+        self.gagBoost = 0
+
+    def addGagBoostRounds(self, num):
+        self.gagBoostRounds = num
+
+    def getGagBoostRounds(self):
+        return self.gagBoostRounds
+
+    def setGagBoost(self, num):
+        self.gagBoostNumber = num
+
+    def getGagBoost(self):
+        return self.gagBoostNumber
+
     def makeCooldown(self):
         self.cooldown = 1
 
@@ -673,6 +718,13 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeUnMarkedWood(self):
         self.markedWood = 0
+        self.markedWoodNumber = 0
+
+    def setMarkedWood(self, num):
+        self.markedWoodNumber = num
+
+    def getMarkedWood(self):
+        return self.markedWoodNumber
 
     def addMarkedWoodRounds(self, num):
         self.markedWoodRounds = num
@@ -704,11 +756,30 @@ class Toon(Avatar.Avatar, ToonHead):
     def getConfusedRounds(self):
         return self.confusedRounds
 
+    def makeCheer(self):
+        self.cheer = 1
+
+    def makeUnCheer(self):
+        self.cheer = 0
+
+    def addCheerRounds(self, num):
+        self.cheerRounds = num
+
+    def getCheerRounds(self):
+        return self.cheerRounds
+
     def makeDamageUp(self):
         self.damageUp = 1
 
     def makeUnDamageUp(self):
         self.damageUp = 0
+        self.damageUpNumber = 0
+
+    def makeDamageUpGovernaught(self):
+        self.governaughtDamageUp = 1
+
+    def makeUnDamageUpGovernaught(self):
+        self.governaughtDamageUp = 0
 
     def addDamageUpRounds(self, num):
         self.damageUpRounds = num
@@ -721,6 +792,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeUnDamageDown(self):
         self.damageDown = 0
+        self.damageDownNumber = 0
 
     def addDamageDownRounds(self, num):
         self.damageDownRounds = num
@@ -728,11 +800,41 @@ class Toon(Avatar.Avatar, ToonHead):
     def getDamageDownRounds(self):
         return self.damageDownRounds
 
+    def setDamageDown(self, num):
+        self.damageDownNumber = num
+
+    def getDamageDown(self):
+        return self.damageDownNumber
+
+    def setDamageUp(self, num):
+        self.damageUpNumber = num
+
+    def getDamageUp(self):
+        return self.damageUpNumber
+
+    def setDamageUpGovernaught(self, num):
+        self.damageUpNumberGovernaught = num
+
+    def getDamageUpGovernaught(self):
+        return self.damageUpNumberGovernaught
+
     def makeEncore(self):
         self.encore = 1
 
     def makeUnEncore(self):
         self.encore = 0
+
+    def setEncore(self, num):
+        self.encoreNumber = num
+
+    def getEncore(self):
+        return self.encoreNumber
+
+    def setWinded(self, num):
+        self.windedNumber = num
+
+    def getWinded(self):
+        return self.windedNumber
 
     def addEncoreRounds(self, num):
         self.encoreRounds = num
@@ -757,7 +859,14 @@ class Toon(Avatar.Avatar, ToonHead):
         self.isVulnerable = 1
 
     def makeUnVulnerable(self):
-        self.isUnVulnerable = 0
+        self.isVulnerable = 0
+        self.vulnerability = 0
+
+    def makeGagBan(self):
+        self.isGagBan = 1
+
+    def makeUnGagBan(self):
+        self.isGagBan = 0
 
     def addVulnerabilityRounds(self, num):
         self.vulnerabilityRounds = num
@@ -776,6 +885,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeUnSnapped(self):
         self.isSnapped = 0
+        self.snapped = 0
 
     def setSnapped(self, num):
         self.snapped = num

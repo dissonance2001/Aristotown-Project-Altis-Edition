@@ -269,9 +269,9 @@ def __doSmooch(attack, hp = 0):
     if toon == None:
         return
     targets = attack['toons']
-    level = 2
+    #level = 2
     battle = attack['battle']
-    track = Sequence(teleportIn(attack, toon))
+    track2 = Sequence(teleportIn(attack, toon))
     lipstick = globalPropPool.getProp('lipstick')
     lipstick2 = MovieUtil.copyProp(lipstick)
     lipsticks = [lipstick, lipstick2]
@@ -296,15 +296,45 @@ def __doSmooch(attack, hp = 0):
         lipcopy = MovieUtil.copyProp(lips)
         lipsTrack = Sequence(Wait(tLips), Func(MovieUtil.showProp, lipcopy, render, getLipPos), Func(lipcopy.setBillboardPointWorld), LerpScaleInterval(lipcopy, dScale, Point3(3, 3, 3), startScale=MovieUtil.PNT3_NEARZERO), Wait(tThrow - tLips - dScale), LerpPosInterval(lipcopy, dThrow, Point3(target.getPos() + Point3(0, 0, target.getHeight()))), Func(MovieUtil.removeProp, lipcopy))
         delay = tThrow + dThrow
-        mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(level, 2, node=toon), Sequence(ActorInterval(toon, 'smooch')), Sequence(Wait(delay), ActorInterval(target, 'conked')), Sequence(Wait(delay), Func(__healToon, target, hp)))
+        mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(2, 2, node=toon), Sequence(ActorInterval(toon, 'smooch')), Sequence(Wait(delay), ActorInterval(target, 'conked')), Sequence(Wait(delay), Func(__healToon, target, 0)))
         targetTrack.append(mtrack)
+        track, level, hp = NPCToons.getNPCTrackLevelHp(toon)
+        if level == 0:
+            targetTrack.append(Parallel(Func(target.makeGagBoost, 1), Func(target.addGagBoostRounds, 2)))
+            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
+        elif level == 1:
+            targetTrack.append(Parallel(Func(target.makeGagBoost, 2), Func(target.addGagBoostRounds, 2)))
+            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
+        elif level == 2:
+            targetTrack.append(Parallel(Func(target.makeGagBoost, 3), Func(target.addGagBoostRounds, 2)))
+            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
+        elif level == 3:
+            targetTrack.append(Parallel(Func(target.makeGagBoost, 4), Func(target.addGagBoostRounds, 2)))
+            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
+        elif level == 4:
+            targetTrack.append(Parallel(Func(target.makeGagBoost, 5), Func(target.addGagBoostRounds, 2)))
+            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
+        elif level == 5:
+            targetTrack.append(Parallel(Func(target.makeGagBoost, 6), Func(target.addGagBoostRounds, 2)))
+            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
+        elif level == 6:
+            targetTrack.append(Parallel(Func(target.makeGagBoost, 7), Func(target.addGagBoostRounds, 2)))
+            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
+        elif level == 7:
+            targetTrack.append(Parallel(Func(target.makeGagBoost, 8), Func(target.addGagBoostRounds, 2)))
+            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
+        elif level == 8:
+            targetTrack.append(Parallel(Func(target.makeDamageUp), Func(target.addDamageUpRounds, 2)))
+            targetTrack.append(Parallel(Func(target.checkDamageUp, hp)))
+        else:
+            pass
 
     effectTrack.append(targetTrack)
     effectTrack.append(Func(MovieUtil.removeProps, lipsticks))
-    track.append(effectTrack)
-    track.append(teleportOut(attack, toon))
-    track.append(Func(target.clearChat))
-    return track
+    track2.append(effectTrack)
+    track2.append(teleportOut(attack, toon))
+    track2.append(Func(target.clearChat))
+    return track2
 
 
 def __doDamageBoost(attack, level, hp):

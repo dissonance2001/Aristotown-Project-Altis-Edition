@@ -26,13 +26,29 @@ class TownBattleToonPanel(DirectFrame):
         self.setScale(0.5)
         self.initialiseoptions(TownBattleToonPanel)
         self.status = None
+        self.governaughtDamageUp = None
+        self.govDamageText = None
+        self.cheer = None
+        self.cheerRounds = None
+        self.gagBoost = None
+        self.gagBoostText = None
+        self.gagBoostRoundsText = None
+        self.gagBan = None
         self.status2 = None
         self.status3 = None
         self.status4 = None
+        self.status5 = None
+        self.status6 = None
+        self.status7 = None
+        self.status8 = None
         self.attackIcon = None
         self.attackIcon1 = None
         self.attackIcon2 = None
         self.attackIcon3 = None
+        self.attackIcon4 = None
+        self.attackIcon5 = None
+        self.attackIcon6 = None
+        self.attackIcon7 = None
         self.avatar = None
         self.snapped = None
         self.snappedText = None
@@ -41,23 +57,30 @@ class TownBattleToonPanel(DirectFrame):
         self.vulnerableText = None
         self.vulnerableRoundsText = None
         self.encore = None
+        self.encoreText = None
         self.winded = None
+        self.windedText = None
         self.encoreRounds = None
         self.windedRounds = None
         self.damageDown = None
         self.damageDownRounds = None
+        self.damageDownText = None
         self.damageUp = None
         self.damageUpRounds = None
+        self.damageUpText = None
         self.confused = None
         self.confusedRounds = None
         self.hidden = None
         self.hiddenRounds = None
         self.markedWood = None
         self.markedWoodRounds = None
+        self.markedWoodText = None
         self.damageOvertime = None
         self.damageOvertimeRounds = None
         self.cooldown = None
         self.cooldownRounds = None
+        self.burned = None
+        self.burnedRounds = None
         # self.snapped = status.find('**/vulnerable_icon')
         # self.snapped.setPosHprScale(-0.25, 0, 0.03, -180, 0, 0, .125, .125, .125)
         # self.snapped.reparentTo(self)
@@ -108,6 +131,28 @@ class TownBattleToonPanel(DirectFrame):
 
     def setLaffMeter(self, avatar):
         self.statusEffects = 0
+        if self.gagBoost != None:
+            self.gagBoost.removeNode()
+        if self.gagBoostRoundsText != None:
+            self.gagBoostRoundsText.removeNode()
+        if self.gagBoostText != None:
+            self.gagBoostText.removeNode()
+        if self.attackIcon != None:
+            self.attackIcon.removeNode()
+        if self.attackIcon1 != None:
+            self.attackIcon1.removeNode()
+        if self.attackIcon2 != None:
+            self.attackIcon2.removeNode()
+        if self.attackIcon3 != None:
+            self.attackIcon3.removeNode()
+        if self.attackIcon4 != None:
+            self.attackIcon4.removeNode()
+        if self.attackIcon5 != None:
+            self.attackIcon5.removeNode()
+        if self.attackIcon6 != None:
+            self.attackIcon6.removeNode()
+        if self.attackIcon7 != None:
+            self.attackIcon7.removeNode()
         if self.status != None:
             self.status.removeNode()
         if self.status2 != None:
@@ -116,18 +161,40 @@ class TownBattleToonPanel(DirectFrame):
             self.status3.removeNode()
         if self.status4 != None:
             self.status4.removeNode()
+        if self.status5 != None:
+            self.status5.removeNode()
+        if self.status6 != None:
+            self.status6.removeNode()
+        if self.status7 != None:
+            self.status7.removeNode()
+        if self.status8 != None:
+            self.status8.removeNode()
         if self.encore != None:
             self.encore.removeNode()
+        if self.govDamageText != None:
+            self.govDamageText.removeNode()
+        if self.governaughtDamageUp != None:
+            self.governaughtDamageUp.removeNode()
         if self.encoreRounds != None:
             self.encoreRounds.removeNode()
         if self.winded != None:
             self.winded.removeNode()
+        if self.gagBan != None:
+            self.gagBan.removeNode()
         if self.windedRounds != None:
             self.windedRounds.removeNode()
         if self.damageUpRounds != None:
             self.damageUpRounds.removeNode()
         if self.damageUp != None:
             self.damageUp.removeNode()
+        if self.cheerRounds != None:
+            self.cheerRounds.removeNode()
+        if self.cheer != None:
+            self.cheer.removeNode()
+        if self.burnedRounds != None:
+            self.burnedRounds.removeNode()
+        if self.burned != None:
+            self.burned.removeNode()
         if self.damageDownRounds != None:
             self.damageDownRounds.removeNode()
         if self.damageDown != None:
@@ -162,18 +229,42 @@ class TownBattleToonPanel(DirectFrame):
             self.vulnerable.removeNode()
         if self.vulnerableText != None:
             self.vulnerableRoundsText.removeNode()
-        if self.attackIcon != None:
-            self.attackIcon.removeNode()
-        if self.attackIcon1 != None:
-            self.attackIcon1.removeNode()
-        if self.attackIcon2 != None:
-            self.attackIcon2.removeNode()
-        if self.attackIcon3 != None:
-            self.attackIcon3.removeNode()
+        if self.damageDownText != None:
+            self.damageDownText.removeNode()
+        if self.encoreText != None:
+            self.encoreText.removeNode()
+        if self.windedText != None:
+            self.windedText.removeNode()
+        if self.damageUpText != None:
+            self.damageUpText.removeNode()
         self.status = loader.loadModel('phase_3.5/models/gui/status_effects')
         self.status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
         self.status3 = loader.loadModel('phase_3.5/models/gui/status_effects')
         self.status4 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status5 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status6 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status7 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.status8 = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.attackIcon7 = self.status8.find('**/default_background')
+        self.attackIcon7.reparentTo(self) # 8
+        self.attackIcon7.setPosHprScale(0.36, 0.4, -0.355, 0, 0, 0, .125, .125, .125)
+        self.attackIcon7.setColor(0.525, 0.133, 0.122, 1)
+        self.attackIcon7.hide()
+        self.attackIcon6 = self.status7.find('**/default_background') # 7
+        self.attackIcon6.reparentTo(self)
+        self.attackIcon6.setPosHprScale(0.24, 0.4, -0.355, 0, 0, 0, .125, .125, .125)
+        self.attackIcon6.setColor(0.525, 0.133, 0.122, 1)
+        self.attackIcon6.hide()
+        self.attackIcon5 = self.status6.find('**/default_background') # 6
+        self.attackIcon5.reparentTo(self)
+        self.attackIcon5.setPosHprScale(0.12, 0, -0.355, 0, 0, 0, .125, .125, .125)
+        self.attackIcon5.setColor(0.525, 0.133, 0.122, 1)
+        self.attackIcon5.hide()
+        self.attackIcon4 = self.status5.find('**/default_background') # 5
+        self.attackIcon4.reparentTo(self)
+        self.attackIcon4.setPosHprScale(0, 0, -0.355, 0, 0, 0, .125, .125, .125)
+        self.attackIcon4.setColor(0.525, 0.133, 0.122, 1)
+        self.attackIcon4.hide()
         self.attackIcon3 = self.status4.find('**/default_background')  # fourth
         self.attackIcon3.reparentTo(self)
         self.attackIcon3.setPosHprScale(-0.1675, 0, -0.1925, 0, 0, 0, .125, .125, .125)
@@ -190,6 +281,303 @@ class TownBattleToonPanel(DirectFrame):
         self.attackIcon.reparentTo(self)
         self.attackIcon.setPosHprScale(-0.39, 0, 0.075, 0, 0, 0, .125, .125, .125)
         self.attackIcon.setColor(0.525, 0.133, 0.122, 1)
+        if avatar.cheer:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.cheer = status.find('**/cheer_icon')
+            self.encoreRounds = DirectLabel(parent=self.cheer, relief=None, text="%s" % avatar.getCheerRounds(), text_fg=(1, 1, 1, 1),
+                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, -.5),
+                                            text_scale=.6)
+            self.encoreRounds.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.cheer.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.cheer.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.cheer.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.cheer.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.cheer.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.cheer.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.cheer.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.cheer.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.cheer.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.cheer.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.cheer.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.cheer.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.cheer.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.cheer.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.cheer.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.cheer.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.gagBoost:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            if avatar.gagBoost == 8:
+                self.gagBoost = status.find('**/inventory_boulder')
+            elif avatar.gagBoost == 7:
+                self.gagBoost = status.find('**/inventory_fog_horn')
+            elif avatar.gagBoost == 6:
+                self.gagBoost = status.find('**/inventory_tesla_coil')
+            elif avatar.gagBoost == 5:
+                self.gagBoost = status.find('**/inventory_storm_cloud')
+            elif avatar.gagBoost == 4:
+                self.gagBoost = status.find('**/inventory_cake')
+            elif avatar.gagBoost == 3:
+                self.gagBoost = status.find('**/inventory_hypno_goggles')
+            elif avatar.gagBoost == 2:
+                self.gagBoost = status.find('**/inventory_wreckingball')
+            else:
+                self.gagBoost = status.find('**/inventory_bamboo_cane')
+            self.gagBoost.setScale(5.5)
+            self.gagBoostRoundsText = DirectLabel(parent=self.gagBoost, relief=None, text="%s" % avatar.getGagBoostRounds(), text_fg=(1, 1, 1, 1),
+                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, -.5),
+                                            text_scale=.6)
+            self.gagBoostRoundsText.show()
+            self.gagBoostText = DirectLabel(parent=self.gagBoost, relief=None, text="%s" % avatar.getGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
+                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                          pos=(0.25, 0, 0.15),
+                                          text_scale=.4)
+            self.gagBoostText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.gagBoost.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.gagBoost.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.gagBoost.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.gagBoost.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.gagBoost.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.gagBoost.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.gagBoost.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.gagBoost.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.gagBoost.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.gagBoost.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.gagBoost.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.gagBoost.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.gagBoost.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.gagBoost.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.gagBoost.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.gagBoost.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.encore:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.encore = status.find('**/encore_icon')
+            self.encoreRounds = DirectLabel(parent=self.encore, relief=None, text="%s" % avatar.getEncoreRounds(), text_fg=(1, 1, 1, 1),
+                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, -.5),
+                                            text_scale=.6)
+            self.encoreRounds.show()
+            self.encoreText = DirectLabel(parent=self.encore, relief=None, text="%s" % avatar.getEncore() + "%", text_fg=(0, 1, 0.004, 1),
+                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                          pos=(0.25, 0, 0.15),
+                                          text_scale=.4)
+            self.encoreText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.encore.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.encore.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.encore.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.encore.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.encore.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.encore.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.encore.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.encore.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.encore.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.encore.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.encore.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.encore.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.encore.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.encore.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.encore.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.encore.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.governaughtDamageUp:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.governaughtDamageUp = status.find('**/toon_damage_up_icon')
+            self.govDamageText = DirectLabel(parent=self.governaughtDamageUp, relief=None, text="%s" % avatar.getDamageUpGovernaught() + "%", text_fg=(0, 1, 0.004, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                             pos=(0.25, 0, 0.15),
+                                             text_scale=.4)
+            self.govDamageText.show()
+            self.governaughtDamageUp.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.governaughtDamageUp.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.governaughtDamageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.governaughtDamageUp.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.governaughtDamageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.governaughtDamageUp.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.governaughtDamageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.governaughtDamageUp.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.governaughtDamageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.governaughtDamageUp.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.governaughtDamageUp.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.governaughtDamageUp.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.governaughtDamageUp.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.governaughtDamageUp.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.governaughtDamageUp.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.governaughtDamageUp.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.governaughtDamageUp.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.damageUp:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.damageUp = status.find('**/toon_damage_up_icon')
+            self.damageUpRounds = DirectLabel(parent=self.damageUp, relief=None, text="%s" % avatar.getDamageUpRounds(), text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.6)
+            self.damageUpRounds.show()
+            self.damageUpText = DirectLabel(parent=self.damageUp, relief=None, text="%s" % avatar.getDamageUp() + "%", text_fg=(0, 1, 0.004, 1),
+                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                          pos=(0.25, 0, 0.15),
+                                          text_scale=.4)
+            self.damageUpText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.damageUp.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.damageUp.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.damageUp.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.damageUp.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.damageUp.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.damageUp.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.damageUp.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.damageUp.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.damageUp.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.isGagBan:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.gagBan = status.find('**/backfire_icon')
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.gagBan.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.gagBan.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.gagBan.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.gagBan.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.gagBan.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.gagBan.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.gagBan.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.gagBan.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.gagBan.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.gagBan.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.gagBan.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.gagBan.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.gagBan.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.gagBan.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.gagBan.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.gagBan.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.isSnapped:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.snapped = status.find('**/vulnerable_icon')
@@ -198,6 +586,11 @@ class TownBattleToonPanel(DirectFrame):
                                                  pos=(0.25, 0, -.5),
                                                  text_scale=.6)
             self.snappedRoundsText.show()
+            self.snappedText = DirectLabel(parent=self.snapped, relief=None, text="%s" % avatar.getSnapped() + "%", text_fg=(1, 0, 0, 1),
+                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                 pos=(0.25, 0, 0.15),
+                                                 text_scale=.4)
+            self.snappedText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.snapped.reparentTo(self.attackIcon)
@@ -215,6 +608,26 @@ class TownBattleToonPanel(DirectFrame):
                 self.snapped.reparentTo(self.attackIcon3)
                 self.attackIcon3.setColor(0, 0.902, 1, 1)
                 self.snapped.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.snapped.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.snapped.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.snapped.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.snapped.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.snapped.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.snapped.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.snapped.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.snapped.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.isVulnerable:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.vulnerable = status.find('**/broken_shield_icon')
@@ -223,6 +636,11 @@ class TownBattleToonPanel(DirectFrame):
                                                     pos=(0.25, 0, -.5),
                                                     text_scale=.6)
             self.vulnerableRoundsText.show()
+            self.vulnerableText = DirectLabel(parent=self.vulnerable, relief=None, text="%s" % avatar.getVulnerability() + "%", text_fg=(1, 0, 0, 1),
+                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                           pos=(0.25, 0, 0.15),
+                                           text_scale=.4)
+            self.vulnerableText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.vulnerable.reparentTo(self.attackIcon)
@@ -240,6 +658,26 @@ class TownBattleToonPanel(DirectFrame):
                 self.vulnerable.reparentTo(self.attackIcon3)
                 self.attackIcon3.setColor(0, 0.902, 1, 1)
                 self.vulnerable.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.vulnerable.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.vulnerable.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.vulnerable.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.vulnerable.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.vulnerable.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.vulnerable.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.vulnerable.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.vulnerable.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.markedWood:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.markedWood = status.find('**/marked_wood_icon')
@@ -248,6 +686,11 @@ class TownBattleToonPanel(DirectFrame):
                                                 pos=(0.25, 0, -.5),
                                                 text_scale=.6)
             self.markedWoodRounds.show()
+            self.markedWoodText = DirectLabel(parent=self.markedWood, relief=None, text="%s" % avatar.getMarkedWood() + "%", text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, 0.15),
+                                              text_scale=.4)
+            self.markedWoodText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.markedWood.reparentTo(self.attackIcon)
@@ -265,6 +708,26 @@ class TownBattleToonPanel(DirectFrame):
                 self.markedWood.reparentTo(self.attackIcon3)
                 self.attackIcon3.setColor(0, 0.902, 1, 1)
                 self.markedWood.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.markedWood.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.markedWood.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.markedWood.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.markedWood.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.markedWood.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.markedWood.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.markedWood.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.markedWood.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.damageDown:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.damageDown = status.find('**/toon_damage_down_icon')
@@ -273,6 +736,11 @@ class TownBattleToonPanel(DirectFrame):
                                                 pos=(0.25, 0, -.5),
                                                 text_scale=.6)
             self.damageDownRounds.show()
+            self.damageDownText = DirectLabel(parent=self.damageDown, relief=None, text="%s" % avatar.getDamageDown() + "%", text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, 0.15),
+                                              text_scale=.4)
+            self.damageDownText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.damageDown.reparentTo(self.attackIcon)
@@ -290,6 +758,71 @@ class TownBattleToonPanel(DirectFrame):
                 self.damageDown.reparentTo(self.attackIcon3)
                 self.attackIcon3.setColor(0, 0.902, 1, 1)
                 self.damageDown.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.damageDown.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.damageDown.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.damageDown.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.damageDown.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.damageDown.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.damageDown.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.damageDown.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.damageDown.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.isBurned:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.burned = status.find('**/trialbyfire_icon')
+            self.burnedRounds = DirectLabel(parent=self.burned, relief=None, text="%s" % avatar.getBurnedRounds(), text_fg=(1, 1, 1, 1),
+                                                    text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                    pos=(0.25, 0, -.5),
+                                                    text_scale=.6)
+            self.burnedRounds.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.burned.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.burned.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.burned.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.burned.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.burned.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 11)
+                self.burned.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.burned.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.burned.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.burned.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.burned.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.burned.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.burned.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.burned.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.burned.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.burned.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.burned.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.damageOvertime:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.damageOvertime = status.find('**/damage_over_time_icon')
@@ -315,6 +848,26 @@ class TownBattleToonPanel(DirectFrame):
                 self.damageOvertime.reparentTo(self.attackIcon3)
                 self.attackIcon3.setColor(0, 0.902, 1, 1)
                 self.damageOvertime.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.damageOvertime.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.damageOvertime.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.damageOvertime.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.damageOvertime.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.damageOvertime.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.damageOvertime.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.damageOvertime.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.damageOvertime.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.confused:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.confused = status.find('**/confusion_icon')
@@ -340,6 +893,26 @@ class TownBattleToonPanel(DirectFrame):
                 self.confused.reparentTo(self.attackIcon3)
                 self.attackIcon3.setColor(0, 0.902, 1, 1)
                 self.confused.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.confused.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.confused.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.confused.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.confused.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.confused.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.confused.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.confused.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.confused.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.cooldown:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.cooldown = status.find('**/unite_cooldown_icon')
@@ -365,6 +938,26 @@ class TownBattleToonPanel(DirectFrame):
                 self.cooldown.reparentTo(self.attackIcon3)
                 self.attackIcon3.setColor(0, 0.902, 1, 1)
                 self.cooldown.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.cooldown.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.cooldown.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.cooldown.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.cooldown.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.cooldown.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.cooldown.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.cooldown.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.cooldown.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.hidden:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.hidden = status.find('**/fog_icon')
@@ -390,6 +983,26 @@ class TownBattleToonPanel(DirectFrame):
                 self.hidden.reparentTo(self.attackIcon3)
                 self.attackIcon3.setColor(0, 0.902, 1, 1)
                 self.hidden.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.hidden.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.hidden.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.hidden.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.hidden.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.hidden.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.hidden.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.hidden.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.hidden.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.winded:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.winded = status.find('**/encore_icon')
@@ -398,6 +1011,11 @@ class TownBattleToonPanel(DirectFrame):
                                               pos=(0.25, 0, -.5),
                                               text_scale=.6)
             self.windedRounds.show()
+            self.windedText = DirectLabel(parent=self.winded, relief=None, text="%s" % avatar.getWinded() + "%", text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, 0.15),
+                                              text_scale=.4)
+            self.windedText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.winded.reparentTo(self.attackIcon)
@@ -415,56 +1033,26 @@ class TownBattleToonPanel(DirectFrame):
                 self.winded.reparentTo(self.attackIcon3)
                 self.attackIcon3.setColor(0, 0.902, 1, 1)
                 self.winded.setColor(1, 1, 1, 1)
-        if avatar.encore:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.encore = status.find('**/encore_icon')
-            self.encoreRounds = DirectLabel(parent=self.encore, relief=None, text="%s" % avatar.getEncoreRounds(), text_fg=(1, 1, 1, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, -.5),
-                                            text_scale=.6)
-            self.encoreRounds.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.encore.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.encore.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.encore.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.encore.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.encore.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.encore.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.encore.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.encore.setColor(1, 1, 1, 1)
-        if avatar.damageUp:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.damageUp = status.find('**/toon_damage_up_icon')
-            self.damageUpRounds = DirectLabel(parent=self.damageUp, relief=None, text="%s" % avatar.getDamageUpRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
-            self.damageUpRounds.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.damageUp.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.damageUp.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.damageUp.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.damageUp.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.damageUp.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.winded.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.winded.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.winded.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.winded.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.winded.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.winded.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.winded.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.winded.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         self.notify.debug('setLaffMeter: new avatar %s' % avatar.doId)
         if self.avatar == avatar:
             messenger.send(self.avatar.uniqueName('hpChange'), [avatar.hp, avatar.maxHp, 1])

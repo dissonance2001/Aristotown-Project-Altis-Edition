@@ -1217,6 +1217,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.__adjustTownBattle()
 
     def exitWaitForInput(self):
+        self.__adjustTownBattle()
         self.notify.debug('exitWaitForInput()')
         if self.localToonActive():
             self.townBattle.setState('Off')
