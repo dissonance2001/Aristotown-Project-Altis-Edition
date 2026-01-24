@@ -1260,7 +1260,7 @@ def doUnionBust(attack):
         LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0), cage.posInterval(3, Point3(targetSuitPos.getX(), y, 40), blendType='easeIn'),
         Func(MovieUtil.removeProp, cage)
     )
-        if not targetSuit.isContracted and not targetSuit.dna.name == 'ubuster':
+        if not targetSuit.isContracted and not targetSuit.dna.name == 'ubuster' and not targetSuit.getManager():
             cagePropTracks.append(cagePropTrack)
             selfDamageTracks.append(selfDamageTrack)
             smokeTracks.append(smokeTrack)

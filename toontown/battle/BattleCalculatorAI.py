@@ -9709,7 +9709,7 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'unionbustercalculator', 1, 10, 'setBoth')
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'breachcalculator', 1, 10, 'setBoth')
-                if len(self.battle.activeSuits) >= 6 and self.deadSuits == 0:
+                if len(self.battle.activeSuits) >= 6:
                     self.setSuitCondition(suitId, 'unionduescalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'racket': #racketeer
                 if x % 3 == 0:
@@ -12292,18 +12292,18 @@ class BattleCalculatorAI:
                                                             'freq': 0,
                                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
-                for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
-                    suitId = self.battle.activeSuits[i].doId
-                    if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'Desperation2',  # Desperation Activation
-                                                                'animName': 'nothing',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'overmodulatedcalculator') and not len(self.battle.activeSuits) > 1 and self.battle.activeSuits[i].currHP > 0  and self.__suitCanAttack(suitId):
+                    for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
+                        suitId = self.battle.activeSuits[i].doId
+                        if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
+                            attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'Desperation2',  # Desperation Activation
+                                                                    'animName': 'nothing',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                            self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'overmodulatedcalculator') and not len(self.battle.activeSuits) > 1 and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'overmodulatedcalculator') and not self.__suitCanAttack(suitId) and \
@@ -12629,17 +12629,17 @@ class BattleCalculatorAI:
                                                             'freq': 0,
                                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
-                for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
-                    suitId = self.battle.activeSuits[i].doId
-                    if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'Desperation2',  # Desperation Activation
-                                                                'animName': 'nothing',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        self.battle.suitAttacks.append(attack)
+                    for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
+                        suitId = self.battle.activeSuits[i].doId
+                        if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
+                            attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'Desperation2',  # Desperation Activation
+                                                                    'animName': 'nothing',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                            self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'heatwavecalculator') and not self.__suitCanAttack(suitId) and \
                         self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
@@ -12680,17 +12680,17 @@ class BattleCalculatorAI:
                                                             'freq': 0,
                                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
-                for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
-                    suitId = self.battle.activeSuits[i].doId
-                    if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'Desperation2',  # Desperation Activation
-                                                                'animName': 'nothing',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        self.battle.suitAttacks.append(attack)
+                    for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
+                        suitId = self.battle.activeSuits[i].doId
+                        if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
+                            attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'Desperation2',  # Desperation Activation
+                                                                    'animName': 'nothing',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                            self.battle.suitAttacks.append(attack)
 
             # Gag Bans & End Of Round Cheats
         for i in xrange(len(self.battle.activeSuits)):
@@ -15110,17 +15110,17 @@ class BattleCalculatorAI:
                  'freq': 0,
                  'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                 self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
-            suitId = self.battle.activeSuits[i].doId
-            if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'Desperation2',  # Desperation Activation
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                self.battle.suitAttacks.append(attack)
+            for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
+                suitId = self.battle.activeSuits[i].doId
+                if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'Desperation2',  # Desperation Activation
+                                                            'animName': 'nothing',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    self.battle.suitAttacks.append(attack)
 
         # Extra Attacks
         for i in xrange(len(self.battle.activeSuits)):
