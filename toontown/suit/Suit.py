@@ -49,6 +49,7 @@ ChainsawDialogArray = []
 DOLADialogArray = []
 DOPADialogArray = []
 DOLDDialogArray = []
+DOLDSkeleDialogArray = []
 DOPRDialogArray = []
 DerrickHandDialogArray = []
 DerrickSkeleDialogArray = []
@@ -230,7 +231,7 @@ chairp = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 bdirector = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-dola = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
+dola = (('quick-jump', 'jump', 4), ('stomp', 'stomp', 4), ('effort', 'effort', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 liquid = (('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
 rkeeper = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
@@ -730,6 +731,21 @@ def loadDialog(level):
     for file in DOLDDialogFiles:
         DOLDDialogArray.append(base.loadSfx(loadPath + file + '.ogg'))
 
+
+    if len(DOLDSkeleDialogArray) > 0:
+        return
+    else:
+        loadPath = 'phase_3.5/audio/dial/'
+        DOLDSkeleDialogFiles = ['ttcc_ene_dold_grunt_skel',
+                                   'ttcc_ene_dold_murmur_skel',
+                                   'ttcc_ene_dold_statement_skel',
+                                   'ttcc_ene_dold_question_skel',
+                                   'ttcc_ene_dold_grunt_skel']
+
+    global DOLDSkeleDialogueArray
+    for file in DOLDSkeleDialogFiles:
+        DOLDSkeleDialogArray.append(base.loadSfx(loadPath + file + '.ogg'))
+
     if len(TreekillerDialogArray) > 0:
         return
     else:
@@ -1024,6 +1040,7 @@ def unloadDialog(level):
     global ChairmanDialogArray
     global DOLADialogArray
     global DOLDDialogArray
+    global DOLDSkeleDialogArray
     global DOPADialogArray
     global DOPRDialogArray
     global DerrickHandDialogArray
@@ -1066,6 +1083,7 @@ def unloadDialog(level):
     DOPADialogArray = []
     DOLDDialogArray = []
     DOPRDialogArray = []
+    DOLDSkeleDialogArray = []
     DerrickHandDialogArray = []
     DerrickSkeleDialogArray = []
     DerrickManDialogArray = []
@@ -2254,7 +2272,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(1, 1, 1, 1.0)
             self.makeSkeletonManager()
             self.makeExecutive()
-            self.setHeight(9.5)
+            self.setHeight(10.0)
         elif dna.name == 'bellring':
             self.scale = 5.0 / bSize
             self.handColor = VBase4(0.886, 0.749, 0.451, 1)
@@ -2331,6 +2349,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_14/maps/ttcc_ene_racket.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
+                headPart.setTwoSided(True)
             self.setHeight(9.2)
         elif dna.name == 'ubuster':
             self.scale = 7.0 / aSize
@@ -2468,6 +2487,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_14/maps/cc_t_ene_magnate.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
+                headPart.setTwoSided(True)
             self.setHeight(8.25)
         elif dna.name == 'chw':
             self.scale = 7.0 / aSize
@@ -2814,12 +2834,12 @@ class Suit(Avatar.Avatar):
         elif dna.name == 'nhy':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(1, 0.486, 0, 1)
-            self.generateBody()
-            self.makeExecutive()
-            self.generateHead3('dold', animated=True)
-            texture = loader.loadTexture('phase_14/maps/ttcc_ene_dold.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+            self.generateSkeletonBody()
+            # self.makeExecutive()
+            # self.generateHead3('dold', animated=True)
+            # texture = loader.loadTexture('phase_14/maps/ttcc_ene_dold.png')
+            # for headPart in self.headParts:
+            #     headPart.setTexture(texture, 1)
             self.setHeight(9.0)
         elif dna.name == 'wrt':
             self.scale = 7.2 / aSize
@@ -3164,6 +3184,24 @@ class Suit(Avatar.Avatar):
                 headPart.setR(0)
                 headPart.setH(0)
                 headPart.setScale(1)
+        if self.style.body == 'a' and self.style.name == 'dold':
+            #self.generateDOLDHead()
+            self.headParts = []
+            self.generateHead3('dold', animated=True)
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_dold_skelecog.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.headParts = []
+            self.generateHead3('skullA', animated=True)
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+                headPart.setZ(0)
+                headPart.setY(0)
+                headPart.setX(0)
+                headPart.setR(0)
+                headPart.setH(0)
+                headPart.setScale(1)
         if self.style.body == 'a' and self.style.name == 'radiog':
             self.generateHead3('dopa', animated=True)
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
@@ -3211,7 +3249,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-        if self.style.body == 'a' and not self.style.name == 'autocad' and not self.style.name == 'derrhand' and not self.style.name == 'ambass' and not self.style.name == 'clubpres' and not self.style.name == 'ubuster' and not self.style.name == 'radiog':
+        if self.style.body == 'a' and not self.style.name == 'autocad' and not self.style.name == 'dold' and not self.style.name == 'derrhand' and not self.style.name == 'ambass' and not self.style.name == 'clubpres' and not self.style.name == 'ubuster' and not self.style.name == 'radiog':
             self.generateHead3('skullA', animated=True)
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' %
                                          self.style.dept)
@@ -4263,7 +4301,7 @@ class Suit(Avatar.Avatar):
                 headModel.setScale(1.2)
                 headModel.setZ(.25)
                 headModel.setY(-.2)
-                texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+                texture = loader.loadTexture('phase_9/maps/ttcc_ene_radiog.png')
                 headModel.setTexture(texture, 1)
             elif headType == 'bellringer' and self.style.name == 'cdirector':
                 headModel.setScale(1.05)
@@ -6336,14 +6374,17 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
         elif self.getExecutive() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.getManager() and not self.isWaiter:
+        elif self.getManager() and not self.isWaiter and not self.style.name == 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+        elif self.style.name == 'dold':
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
         elif self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
         self.find('**/body').setTexture(texture, 1)
         self.find('**/emblem_healthmeter').show()
         textureDerrick = loader.loadTexture('phase_12/maps/ttcc_ene_derrickhand_skelecog.png')
         textureDopa = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+        textureDold = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
         textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
         textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
         for headPart in self.headParts:
@@ -6351,6 +6392,8 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(textureDerrick, 1)
             elif self.style.name == 'ubuster':
                 headPart.setTexture(textureDopr, 1)
+            elif self.style.name == 'dold':
+                headPart.setTexture(textureDold, 1)
             elif self.style.name == 'radiog':
                 headPart.setTexture(textureDopa, 1)
             elif self.style.name == 'ambass':
@@ -6447,8 +6490,10 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
         elif self.getExecutive() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.getManager() and not self.isWaiter:
+        elif self.getManager() and not self.isWaiter and not self.style.name == 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+        elif self.style.name == 'dold':
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
         elif self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
         self.find('**/body').setTexture(texture, 1)
@@ -6456,12 +6501,15 @@ class Suit(Avatar.Avatar):
         textureDerrick = loader.loadTexture('phase_12/maps/ttcc_ene_derrickhand_skelecog.png')
         textureDopa = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
         textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+        textureDold = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
         textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
         for headPart in self.headParts:
             if self.style.name == 'derrhand':
                 headPart.setTexture(textureDerrick, 1)
             elif self.style.name == 'ubuster':
                 headPart.setTexture(textureDopr, 1)
+            elif self.style.name == 'dold':
+                headPart.setTexture(textureDold, 1)
             elif self.style.name == 'radiog':
                 headPart.setTexture(textureDopa, 1)
             elif self.style.name == 'ambass':
@@ -7169,7 +7217,7 @@ class Suit(Avatar.Avatar):
                 modelRoot.find('**/necktie-w').setTexture(texture2, 1)
                 modelRoot.find('**/necktie-w').show()
                 modelRoot.find('**/bowtie').hide()
-            if self.style.body == 'a' and not self.style.name == 'derrhand' and not self.style.name == 'ubuster' and not self.style.name == 'radiog' \
+            if self.style.body == 'a' and not self.style.name == 'derrhand' and not self.style.name == 'dold' and not self.style.name == 'ubuster' and not self.style.name == 'radiog' \
                 and not self.style.name == 'charon' and not self.style.name == 'autocad' and not self.style.name == 'clubpres' and not self.style.name == 'hydra' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'styx':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
@@ -8335,6 +8383,9 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'dold' and not self.isSkeleton:
             loadDialog(1)
             return DOLDDialogArray
+        elif self.style.name == 'dold' and self.isSkeleton:
+            loadDialog(1)
+            return DOLDSkeleDialogArray
         elif self.style.name == 'ghd' and not self.isSkeleton:
             loadDialog(1)
             return HighRollerDialogArray
@@ -8398,6 +8449,16 @@ class Suit(Avatar.Avatar):
     def generateMagnate(self):
         self.Vault = loader.loadModel('phase_14/models/char/ttcc_ene_magnate-zero')
         self.Vault.reparentTo(self.find('**/joint_head'))
+        self.Vault.setScale(1)
+        self.Vault.setPosHpr(0, 0, 0, 0, 0, 0)
+        self.Vault.setZ(0)
+        self.isHud = True
+
+    def generateDOLDHead(self):
+        self.Vault = loader.loadModel('phase_14/models/char/ttcc_ene_dold-zero')
+        self.Vault.reparentTo(self.find('**/joint_head'))
+        texture = loader.loadTexture('phase_14/maps/ttcc_ene_dold_skelecog.png')
+        self.Vault.setTexture(texture, 1)
         self.Vault.setScale(1)
         self.Vault.setPosHpr(0, 0, 0, 0, 0, 0)
         self.Vault.setZ(0)

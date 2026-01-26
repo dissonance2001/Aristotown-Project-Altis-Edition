@@ -1961,6 +1961,55 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
             self.hpTextInterval.start()
 
+    def showHpStringSkeletonRevive(self): # damage string
+        if self.HpTextEnabled and not self.ghostMode:
+            self.HpTextGenerator.setText("+50% Damage!")
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
+            self.HpTextGenerator.setTextColor(1, 0.561, 0, 1)
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText = self.attachNewNode(self.hpTextNode)
+            self.hpText.setScale(0.75)
+            self.hpText.setBillboardPointEye()
+            self.hpText.setBin('fixed', 100)
+            self.hpText.setPos(0, 0, self.height / 2)
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0),
+                                                   LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval.start()
+
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("-50% Health!")
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode2 = self.HpTextGenerator.generate()
+        self.hpText2 = self.hpText.attachNewNode(self.hpTextNode2)
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.hpText2.setScale(.7)
+        self.hpText2.setBillboardPointEye()
+        self.hpText2.setBin('fixed', 99)
+        self.hpText2.setPos(0, 0, -0.75)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("-1 Revive!")
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode3 = self.HpTextGenerator.generate()
+        self.hpText3 = self.hpText.attachNewNode(self.hpTextNode3)
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.hpText3.setScale(.7)
+        self.hpText3.setBillboardPointEye()
+        self.hpText3.setBin('fixed', 99)
+        self.hpText3.setPos(0, 0, -1.5)
+            # self.hpTextInterval2 = Sequence(self.hpText2.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText2, .25, Vec4(0, 0, 0, 0)),
+            #             Func(self.hideHpText))
+            # self.hpTextInterval2.start()
+
     def showHpStringDesperation(self): # damage string
         if self.HpTextEnabled and not self.ghostMode:
             self.HpTextGenerator.setText("Desperation!")

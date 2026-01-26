@@ -1298,6 +1298,8 @@ def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
         return "Unable to spawn %s as a skelecog with more than 1 revive."  % suitFullName
     elif name == 'derrhand':
         revives = 1
+    elif name == 'dold':
+        revives = 1
     elif name == 'wsi':
         revives = 1
     elif name == 'erclaim':

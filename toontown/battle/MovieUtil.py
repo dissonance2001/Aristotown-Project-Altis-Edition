@@ -321,11 +321,7 @@ def createSuitReviveTrack(suit, battle):
     suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(suit.show))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
-    suitTrack.append(Sequence(Func(suit.showHpText2,
-                                   '0.5x HP MULTIPLIER',
-                                   2), Func(suit.showHpStringLureManager2,
-                                            '+ 50% Damage'), Func(suit.showHpString,
-                                                                         '-1 Revive')))
+    suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
     suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
@@ -394,6 +390,8 @@ def createSuitReviveTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'dold' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+    elif suit.style.name == 'dold' and deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
     elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'derrhand' and not deathSuit.isSkeleton:
@@ -540,11 +538,7 @@ def createSuitReviveRedd(suit, battle):
     suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
-    suitTrack.append(Sequence(Func(suit.showHpText2,
-                                           '0.5x HP MULTIPLIER',
-                                           2), Func(suit.showHpStringLureManager2,
-                                           '+ 50% Damage'), Func(suit.showHpString,
-                                           '-1 Revive')))
+    suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
     suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     if suit.style.name == 'redd' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
@@ -688,11 +682,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Func(suit.setName, suit.createNameInfoVirtual()))
     suitTrack.append(Func(suit.show))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
-    suitTrack.append(Sequence(Func(suit.showHpText2,
-                                           '0.5x HP MULTIPLIER',
-                                           2), Func(suit.showHpStringLureManager2,
-                                           '+ 50% Damage'), Func(suit.showHpString,
-                                           '-1 Revive')))
+    suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
     suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
@@ -773,6 +763,8 @@ def createSuitReviveTrackVirtual(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'dold' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+    elif suit.style.name == 'dold' and deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
     elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'derrhand' and not deathSuit.isSkeleton:
@@ -1037,6 +1029,8 @@ def createSuitDeathTrack(suit, battle):
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'dold' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+    elif suit.style.name == 'dold' and deathSuit.isSkeleton:
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
     elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'derrhand' and not deathSuit.isSkeleton:

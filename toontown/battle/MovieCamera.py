@@ -1247,7 +1247,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = Func(suit.checkPlayByPlayTextBusted, pbpDc, attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Union Buster!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('At-Will Employment!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=0)

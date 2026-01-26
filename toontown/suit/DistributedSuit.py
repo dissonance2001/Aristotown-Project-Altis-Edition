@@ -792,7 +792,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval = pbpText.getShowIntervalDesc('Due to an illegal action, this toon takes 70 damage!', attackDuration)
             self.playByPlayInterval.start()
         else:
-            self.playByPlayInterval = pbpText.getShowIntervalDesc('Due to an illegal action, this toon takes 50 damage!', attackDuration - 2)
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Due to an illegal action, this toon takes 50 damage!', attackDuration)
             self.playByPlayInterval.start()
 
     def checkPlayByPlayTextBurned(self, pbpText, attackDuration):
@@ -801,7 +801,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval = pbpText.getShowIntervalDesc('Burned Toons take 42 extra damage per round!', attackDuration)
             self.playByPlayInterval.start()
         else:
-            self.playByPlayInterval = pbpText.getShowIntervalDesc('Burned Toons take 30 extra damage per round!', attackDuration - 2)
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Burned Toons take 30 extra damage per round!', attackDuration)
             self.playByPlayInterval.start()
 
     def checkPlayByPlayTextInflation(self, pbpText, attackDuration):
@@ -810,16 +810,16 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval = pbpText.getShowIntervalDesc("Due to an overinflated budget this toon takes 70 damage!", attackDuration)
             self.playByPlayInterval.start()
         else:
-            self.playByPlayInterval = pbpText.getShowIntervalDesc("Due to an overinflated budget this toon takes 50 damage!", attackDuration - 2)
+            self.playByPlayInterval = pbpText.getShowIntervalDesc("Due to an overinflated budget this toon takes 50 damage!", attackDuration)
             self.playByPlayInterval.start()
 
     def checkPlayByPlayTextBusted(self, pbpText, attackDuration):
         pbpText = pbpText
         if self.isDesperation:
-            self.playByPlayInterval = pbpText.getShowIntervalDesc('Busted Toons are forced to take 35 damage every round!', attackDuration)
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Employed Toons are forced to take 35 damage every round!', attackDuration)
             self.playByPlayInterval.start()
         else:
-            self.playByPlayInterval = pbpText.getShowIntervalDesc('Busted Toons are forced to take 25 damage every round!', attackDuration - 2)
+            self.playByPlayInterval = pbpText.getShowIntervalDesc('Employed Toons are forced to take 25 damage every round!', attackDuration)
             self.playByPlayInterval.start()
 
     def checkCogHP(self, battle):
@@ -1507,7 +1507,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
             elif self.isSkeleton and revives >= 2:
                 suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
-            elif self.isSkeleton and revives >= 1 and not suit.isRevive:
+            elif self.isSkeleton and revives >= 1 and not self.isRevive:
                 suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
             elif not self.isSkeleton and revives >= 1:
                 suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
@@ -1530,7 +1530,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
             elif self.isSkeleton and revives >= 2:
                 suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
-            elif self.isSkeleton and revives >= 1 and not suit.isRevive:
+            elif self.isSkeleton and revives >= 1 and not self.isRevive:
                 suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
             elif not self.isSkeleton and revives >= 1:
                 suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))

@@ -4434,7 +4434,7 @@ SuitCheatDescription = {
 'RadiographerOvermodulated3': "The Radiographer gives a cog an extra attack!",
 'RadiographerOvermodulated4': "The Radiographer gives a cog an extra attack!",
 'RadiographerOvermodulated5': "The Radiographer gives a cog an extra attack!",
-'RadiographerDanceSession': "The Radiographer is now taking and dealing less\ndamage while in dancing mode!",
+'RadiographerDanceSession': "The Radiographer is now taking and dealing less\ndamage while in this mode!",
     # Dividend King Cheats
 'DividendAccountRollover': "The Dividend King becomes stronger for every cog\nthat is defeated!",
 'DividendAccountRollover2': "The Dividend King becomes stronger for every cog\nthat is defeated!",
@@ -5033,7 +5033,7 @@ SuitAttackNames = {
     'RadiographerOvermodulated3': "Overmodulated!",
     'RadiographerOvermodulated4': "Overmodulated!",
     'RadiographerOvermodulated5': "Overmodulated!",
-    'RadiographerDanceSession': "Dance Session!",
+    'RadiographerDanceSession': "Off The Air!",
     # Dividend King Cheats
     'DividendAccountRollover': "Account Rollover!",
     'DividendAccountRollover2': "Account Rollover!",
