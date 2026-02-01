@@ -191,19 +191,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         nameInfo = self.createNameInfo()
         self.setDisplayName(nameInfo)
 
-    def setCog(self, cog):
-        self.cog = cog
-        if self.cog:
-            self.processCog()
-
-    def getCog(self):
-        return self.cog
-
-    def processCog(self):
-        if self.isSkelecog:
-            self.maxHP = int(self.getHP())
-        #self.currHP = self.maxHP
-
     def setGovernaught(self, governaught):
         self.governaught = governaught
         if self.governaught:
@@ -218,6 +205,19 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.makeGovernaught()
         nameInfo = self.createNameInfo()
         self.setDisplayName(nameInfo)
+
+    def setCog(self, cog):
+        self.cog = cog
+        if self.cog:
+            self.processCog()
+
+    def getCog(self):
+        return self.cog
+
+    def processCog(self):
+        if self.isSkelecog:
+            self.maxHP = int(self.getHP())
+        #self.currHP = self.maxHP
 
     def setManager(self, manager):
         self.manager = manager
@@ -710,7 +710,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.maxHP
 
     def setHP(self, hp):
-        if hp > self.maxHP * self.hardMaxHP and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres' and not self.dna.name == 'clerk' and not self.dna.name == 'supervis':
+        if hp > self.maxHP * self.hardMaxHP and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres' and not self.dna.name == 'clerk' and not self.dna.name == 'supervis' and not self.dna.name == 'ovt':
             self.currHP = int(self.maxHP * self.hardMaxHP)
         else:
             self.currHP = int(hp)

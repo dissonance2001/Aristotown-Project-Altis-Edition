@@ -5,6 +5,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownBattleGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 import string
+import math
 from toontown.toon import LaffMeter
 from toontown.battle import BattleBase
 from toontown.toonbase import ToontownBattleGlobals
@@ -28,6 +29,8 @@ class TownBattleToonPanel(DirectFrame):
         self.status = None
         self.governaughtDamageUp = None
         self.govDamageText = None
+        self.noDodge = None
+        self.nodDodgeRoundsText = None
         self.cheer = None
         self.cheerRounds = None
         self.gagBoost = None
@@ -49,10 +52,20 @@ class TownBattleToonPanel(DirectFrame):
         self.attackIcon5 = None
         self.attackIcon6 = None
         self.attackIcon7 = None
+        self.collectCall = None
+        self.collectCallRoundsText = None
+        self.mandatoryToll = None
+        self.mandatoryTollNumberText = None
         self.avatar = None
+        self.groupDamageDown = None
+        self.groupDamageDownText = None
+        self.groupDamageDownRoundsText = None
         self.snapped = None
         self.snappedText = None
         self.snappedRoundsText = None
+        self.bombed = None
+        self.bombedText = None
+        self.bombedRoundsText = None
         self.vulnerable = None
         self.vulnerableText = None
         self.vulnerableRoundsText = None
@@ -129,7 +142,8 @@ class TownBattleToonPanel(DirectFrame):
         self.hide()
         gui.removeNode()
 
-    def setLaffMeter(self, avatar):
+    def setStatusEffects(self, avatar):
+        self.avatar = avatar
         self.statusEffects = 0
         if self.gagBoost != None:
             self.gagBoost.removeNode()
@@ -137,6 +151,18 @@ class TownBattleToonPanel(DirectFrame):
             self.gagBoostRoundsText.removeNode()
         if self.gagBoostText != None:
             self.gagBoostText.removeNode()
+        if self.collectCall != None:
+            self.collectCall.removeNode()
+        if self.collectCallRoundsText != None:
+            self.collectCallRoundsText.removeNode()
+        if self.noDodge != None:
+            self.noDodge.removeNode()
+        if self.nodDodgeRoundsText != None:
+            self.nodDodgeRoundsText.removeNode()
+        if self.mandatoryToll != None:
+            self.mandatoryToll.removeNode()
+        if self.mandatoryTollNumberText != None:
+            self.mandatoryTollNumberText.removeNode()
         if self.attackIcon != None:
             self.attackIcon.removeNode()
         if self.attackIcon1 != None:
@@ -199,6 +225,18 @@ class TownBattleToonPanel(DirectFrame):
             self.damageDownRounds.removeNode()
         if self.damageDown != None:
             self.damageDown.removeNode()
+        if self.groupDamageDown != None:
+            self.groupDamageDown.removeNode()
+        if self.groupDamageDownText != None:
+            self.groupDamageDownText.removeNode()
+        if self.groupDamageDownRoundsText != None:
+            self.groupDamageDownRoundsText.removeNode()
+        if self.bombed != None:
+            self.bombed.removeNode()
+        if self.bombedText != None:
+            self.bombedText.removeNode()
+        if self.bombedRoundsText != None:
+            self.bombedRoundsText.removeNode()
         if self.damageOvertime != None:
             self.damageOvertime.removeNode()
         if self.damageOvertimeRounds != None:
@@ -228,6 +266,8 @@ class TownBattleToonPanel(DirectFrame):
         if self.vulnerable != None:
             self.vulnerable.removeNode()
         if self.vulnerableText != None:
+            self.vulnerableText.removeNode()
+        if self.vulnerableRoundsText != None:
             self.vulnerableRoundsText.removeNode()
         if self.damageDownText != None:
             self.damageDownText.removeNode()
@@ -246,21 +286,21 @@ class TownBattleToonPanel(DirectFrame):
         self.status7 = loader.loadModel('phase_3.5/models/gui/status_effects')
         self.status8 = loader.loadModel('phase_3.5/models/gui/status_effects')
         self.attackIcon7 = self.status8.find('**/default_background')
-        self.attackIcon7.reparentTo(self) # 8
+        self.attackIcon7.reparentTo(self)  # 8
         self.attackIcon7.setPosHprScale(0.36, 0.4, -0.355, 0, 0, 0, .125, .125, .125)
         self.attackIcon7.setColor(0.525, 0.133, 0.122, 1)
         self.attackIcon7.hide()
-        self.attackIcon6 = self.status7.find('**/default_background') # 7
+        self.attackIcon6 = self.status7.find('**/default_background')  # 7
         self.attackIcon6.reparentTo(self)
         self.attackIcon6.setPosHprScale(0.24, 0.4, -0.355, 0, 0, 0, .125, .125, .125)
         self.attackIcon6.setColor(0.525, 0.133, 0.122, 1)
         self.attackIcon6.hide()
-        self.attackIcon5 = self.status6.find('**/default_background') # 6
+        self.attackIcon5 = self.status6.find('**/default_background')  # 6
         self.attackIcon5.reparentTo(self)
         self.attackIcon5.setPosHprScale(0.12, 0, -0.355, 0, 0, 0, .125, .125, .125)
         self.attackIcon5.setColor(0.525, 0.133, 0.122, 1)
         self.attackIcon5.hide()
-        self.attackIcon4 = self.status5.find('**/default_background') # 5
+        self.attackIcon4 = self.status5.find('**/default_background')  # 5
         self.attackIcon4.reparentTo(self)
         self.attackIcon4.setPosHprScale(0, 0, -0.355, 0, 0, 0, .125, .125, .125)
         self.attackIcon4.setColor(0.525, 0.133, 0.122, 1)
@@ -346,14 +386,14 @@ class TownBattleToonPanel(DirectFrame):
                 self.gagBoost = status.find('**/inventory_bamboo_cane')
             self.gagBoost.setScale(5.5)
             self.gagBoostRoundsText = DirectLabel(parent=self.gagBoost, relief=None, text="%s" % avatar.getGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, -.5),
-                                            text_scale=.6)
+                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                  pos=(0.25, 0, -.5),
+                                                  text_scale=.6)
             self.gagBoostRoundsText.show()
             self.gagBoostText = DirectLabel(parent=self.gagBoost, relief=None, text="%s" % avatar.getGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                          pos=(0.25, 0, 0.15),
-                                          text_scale=.4)
+                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, 0.15),
+                                            text_scale=.4)
             self.gagBoostText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -446,7 +486,7 @@ class TownBattleToonPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.governaughtDamageUp = status.find('**/toon_damage_up_icon')
             self.govDamageText = DirectLabel(parent=self.governaughtDamageUp, relief=None, text="%s" % avatar.getDamageUpGovernaught() + "%", text_fg=(0, 1, 0.004, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                             text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                              pos=(0.25, 0, 0.15),
                                              text_scale=.4)
             self.govDamageText.show()
@@ -497,9 +537,9 @@ class TownBattleToonPanel(DirectFrame):
                                               text_scale=.6)
             self.damageUpRounds.show()
             self.damageUpText = DirectLabel(parent=self.damageUp, relief=None, text="%s" % avatar.getDamageUp() + "%", text_fg=(0, 1, 0.004, 1),
-                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                          pos=(0.25, 0, 0.15),
-                                          text_scale=.4)
+                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, 0.15),
+                                            text_scale=.4)
             self.damageUpText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -587,9 +627,9 @@ class TownBattleToonPanel(DirectFrame):
                                                  text_scale=.6)
             self.snappedRoundsText.show()
             self.snappedText = DirectLabel(parent=self.snapped, relief=None, text="%s" % avatar.getSnapped() + "%", text_fg=(1, 0, 0, 1),
-                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                 pos=(0.25, 0, 0.15),
-                                                 text_scale=.4)
+                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                           pos=(0.25, 0, 0.15),
+                                           text_scale=.4)
             self.snappedText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -628,6 +668,56 @@ class TownBattleToonPanel(DirectFrame):
                 self.attackIcon7.setColor(0, 0.902, 1, 1)
                 self.snapped.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+        if avatar.isBombed:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.bombed = status.find('**/trap_card_icon')
+            self.bombedRoundsText = DirectLabel(parent=self.bombed, relief=None, text="%s" % avatar.getBombedRounds(), text_fg=(1, 1, 1, 1),
+                                                    text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                    pos=(0.25, 0, -.5),
+                                                    text_scale=.6)
+            self.bombedRoundsText.show()
+            self.bombedText = DirectLabel(parent=self.bombed, relief=None, text="%s" % avatar.getBombed() + "%", text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, 0.15),
+                                              text_scale=.4)
+            self.bombedText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.bombed.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.bombed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.bombed.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.bombed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.bombed.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.bombed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.bombed.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.bombed.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.bombed.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.bombed.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.bombed.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.bombed.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.bombed.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.bombed.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.bombed.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.bombed.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.isVulnerable:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.vulnerable = status.find('**/broken_shield_icon')
@@ -637,9 +727,9 @@ class TownBattleToonPanel(DirectFrame):
                                                     text_scale=.6)
             self.vulnerableRoundsText.show()
             self.vulnerableText = DirectLabel(parent=self.vulnerable, relief=None, text="%s" % avatar.getVulnerability() + "%", text_fg=(1, 0, 0, 1),
-                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                           pos=(0.25, 0, 0.15),
-                                           text_scale=.4)
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, 0.15),
+                                              text_scale=.4)
             self.vulnerableText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -782,9 +872,9 @@ class TownBattleToonPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.burned = status.find('**/trialbyfire_icon')
             self.burnedRounds = DirectLabel(parent=self.burned, relief=None, text="%s" % avatar.getBurnedRounds(), text_fg=(1, 1, 1, 1),
-                                                    text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                    pos=(0.25, 0, -.5),
-                                                    text_scale=.6)
+                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, -.5),
+                                            text_scale=.6)
             self.burnedRounds.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -1003,18 +1093,203 @@ class TownBattleToonPanel(DirectFrame):
                 self.attackIcon7.setColor(0, 0.902, 1, 1)
                 self.hidden.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+        if avatar.noDodge:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.noDodge = status.find('**/hurry_sickness_icon')
+            self.nodDodgeRoundsText = DirectLabel(parent=self.noDodge, relief=None, text="%s" % avatar.getNoDodgeRounds(), text_fg=(1, 1, 1, 1),
+                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                     pos=(0.25, 0, -.5),
+                                                     text_scale=.6)
+            self.nodDodgeRoundsText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.noDodge.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.noDodge.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.noDodge.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.noDodge.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.noDodge.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.noDodge.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.noDodge.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.noDodge.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.noDodge.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.noDodge.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.noDodge.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.noDodge.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.noDodge.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.noDodge.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.noDodge.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.noDodge.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.collectCalled:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.collectCall = status.find('**/bewitched_icon')
+            self.collectCallRoundsText = DirectLabel(parent=self.collectCall, relief=None, text="%s" % avatar.getCollectCallRounds(), text_fg=(1, 1, 1, 1),
+                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                     pos=(0.25, 0, -.5),
+                                                     text_scale=.6)
+            self.collectCallRoundsText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.collectCall.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.collectCall.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.collectCall.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.collectCall.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.collectCall.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.collectCall.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.collectCall.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.collectCall.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.collectCall.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.collectCall.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.collectCall.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.collectCall.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.collectCall.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.collectCall.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.collectCall.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.collectCall.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.mandatoryToll:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.mandatoryToll = status.find('**/bewitched_icon')
+            self.mandatoryTollNumberText = DirectLabel(parent=self.mandatoryToll, relief=None, text="-%s" % avatar.getMandatoryToll(), text_fg=(1, 0, 0, 1),
+                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                     pos=(0.25, 0, -.5),
+                                                     text_scale=.6)
+            self.mandatoryTollNumberText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.mandatoryToll.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.mandatoryToll.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.mandatoryToll.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.mandatoryToll.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.mandatoryToll.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.mandatoryToll.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.mandatoryToll.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.mandatoryToll.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.mandatoryToll.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.mandatoryToll.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.mandatoryToll.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.mandatoryToll.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.mandatoryToll.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.mandatoryToll.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.mandatoryToll.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.mandatoryToll.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.groupDamageDown:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.groupDamageDown = status.find('**/fizzle_icon')
+            self.groupDamageDownRoundsText = DirectLabel(parent=self.groupDamageDown, relief=None, text="%s" % avatar.getGroupDamageDownRounds(), text_fg=(1, 1, 1, 1),
+                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                     pos=(0.25, 0, -.5),
+                                                     text_scale=.6)
+            self.groupDamageDownRoundsText.show()
+            self.groupDamageDownText = DirectLabel(parent=self.groupDamageDown, relief=None, text="-50%", text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, 0.15),
+                                              text_scale=.4)
+            self.groupDamageDownText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.groupDamageDown.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.groupDamageDown.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.groupDamageDown.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.groupDamageDown.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.groupDamageDown.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.groupDamageDown.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.groupDamageDown.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.groupDamageDown.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.groupDamageDown.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.groupDamageDown.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.groupDamageDown.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.groupDamageDown.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.groupDamageDown.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.groupDamageDown.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.groupDamageDown.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.groupDamageDown.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if avatar.winded:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.winded = status.find('**/encore_icon')
             self.windedRounds = DirectLabel(parent=self.winded, relief=None, text="%s" % avatar.getWindedRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
+                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, -.5),
+                                            text_scale=.6)
             self.windedRounds.show()
             self.windedText = DirectLabel(parent=self.winded, relief=None, text="%s" % avatar.getWinded() + "%", text_fg=(1, 0, 0, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, 0.15),
-                                              text_scale=.4)
+                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                          pos=(0.25, 0, 0.15),
+                                          text_scale=.4)
             self.windedText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
@@ -1053,10 +1328,14 @@ class TownBattleToonPanel(DirectFrame):
                 self.attackIcon7.setColor(0, 0.902, 1, 1)
                 self.winded.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+
+    def setLaffMeter(self, avatar):
         self.notify.debug('setLaffMeter: new avatar %s' % avatar.doId)
         if self.avatar == avatar:
+            self.setStatusEffects(avatar)
             messenger.send(self.avatar.uniqueName('hpChange'), [avatar.hp, avatar.maxHp, 1])
         else:
+            self.setStatusEffects(avatar)
             if self.avatar:
                 self.cleanupLaffMeter()
             self.avatar = avatar
@@ -1149,93 +1428,45 @@ class TownBattleToonPanel(DirectFrame):
             damage = int(math.ceil(getAvPropDamage(track, level, self.avatar.experience.getExp(track))))
             lureValue = int(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
-            if track == HEAL_TRACK and 'healBoost' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['healBoost'][0] * 0.01) + 1.0)))
-            elif track == HEAL_TRACK and 'encore' in base.localAvatar.battleConditions:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
-            elif track == TRAP_TRACK and 'trapBoost' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['trapBoost'][0] * 0.01) + 1.0)))
-            elif track == LURE_TRACK and 'lureBoost' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['lureBoost'][0] * 0.01) + 1.0)))
-                lureValue = math.ceil(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) +
-                     self.avatar.battleConditions['lureBoost'][
-                         0]) / 2)
-            elif track == SOUND_TRACK and 'soundBoost' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['soundBoost'][0] * 0.01) + 1.0)))
-            elif track == THROW_TRACK and 'throwBoost' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['throwBoost'][0] * 0.01) + 1.0)))
-            elif track == SQUIRT_TRACK and 'squirtBoost' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['squirtBoost'][0] * 0.01) + 1.0)))
-            elif track == ZAP_TRACK and 'zapBoost' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['zapBoost'][0] * 0.01) + 1.0)))
-            elif track == DROP_TRACK and 'dropBoost' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['dropBoost'][0] * 0.01) + 1.0)))
-            elif track == SOUND_TRACK and 'encore' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
-            elif track == TRAP_TRACK and 'encore' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
-            elif track == THROW_TRACK and 'encore' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
-            elif track == SQUIRT_TRACK and 'encore' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
-            elif track == ZAP_TRACK and 'encore' in  self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
-            elif track == DROP_TRACK and 'encore' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
-            elif track == LURE_TRACK and 'encore' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore'][0] * 0.01) + 1.0)))
-                lureValue = int(math.ceil(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + self.avatar.battleConditions['encore'][
-                        0]) / 2))
-            elif track == SOUND_TRACK and 'encore2' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
-            elif track == TRAP_TRACK and 'encore2' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
-            elif track == THROW_TRACK and 'encore2' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
-            elif track == SQUIRT_TRACK and 'encore2' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
-            elif track == ZAP_TRACK and 'encore2' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
-            elif track == DROP_TRACK and 'encore2' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
-            elif track == LURE_TRACK and 'encore2' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
-                lureValue = int(math.ceil(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) +
-                     base.localAvatar.battleConditions['encore2'][
-                         0]) / 2))
-            elif track == SOUND_TRACK and 'winded' in self.avatar.battleConditions:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['winded'][0] * 0.01) + 1.0)))
-            elif allGagBoost and not track == LURE_TRACK:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
-                lureValue = int(math.ceil(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
-            elif raisedAnte and not track == LURE_TRACK:
-                damage = int(math.ceil(damage * ((self.avatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
-                lureValue = int(math.ceil(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
-            else:
-                lureValue = int(math.ceil(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
+            if self.avatar.gagBoost:
+                damage *= (1.0 + self.avatar.getGagBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getGagBoost() * 0.01)
+            if self.avatar.damageUp:
+                damage *= (1.0 + self.avatar.getDamageUp() * 0.01)
+                lureValue *= (1.0 + self.avatar.getDamageUp() * 0.01)
+            if self.avatar.encore:
+                damage *= (1.0 + self.avatar.getEncore() * 0.01)
+                lureValue *= (1.0 + self.avatar.getEncore() * 0.01)
+            if self.avatar.governaughtDamageUp:
+                damage *= (1.0 + self.avatar.getDamageUpGovernaught() * 0.01)
+                lureValue *= (1.0 + self.avatar.getDamageUpGovernaught() * 0.01)
+            if self.avatar.winded and track == SOUND_TRACK:
+                damage *= (1.0 + self.avatar.getWinded() * 0.01)
+                lureValue *= (1.0 + self.avatar.getWinded() * 0.01)
+            if self.avatar.damageDown:
+                damage *= (1.0 + self.avatar.getDamageDown() * 0.01)
+                lureValue *= (1.0 + self.avatar.getDamageDown() * 0.01)
+            if self.avatar.groupDamageDown and ((track == LURE_TRACK and level == 1) or (track == LURE_TRACK and level == 3) or (track == LURE_TRACK and level == 5) or (track == LURE_TRACK and level == 7) or (track == SOUND_TRACK)\
+                    or (track == ZAP_TRACK) or (track == HEAL_TRACK and level == 1) or (track == HEAL_TRACK and level == 3) or (track == HEAL_TRACK and level == 5) or (track == HEAL_TRACK and level == 7) or (track == SQUIRT_TRACK)):
+                damage *= (1.0 + -50 * 0.01)
+                lureValue *= (1.0 + -50 * 0.01)
             if numTargets is not None and targetIndex is not None and localNum is not None:
                 self.whichText.show()
                 self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
             if track == LURE_TRACK:
                 self.roundsText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(int(lureValue * 1.2)) + '%'
+                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(int(math.ceil(lureValue * 1.2))) + '%'
                 else:
-                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(lureValue) + '%'
+                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(int(math.ceil(lureValue))) + '%'
                 # self.knockbackText.show()
                 # self.knockbackText['text'] = 'Knockback: ' + str(lureValue)+'%'
             if track == HEAL_TRACK:
                 self.roundsText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.roundsText['text'] = '+' + str(damage) + '/' + str(int(damage / 2.22))
+                    self.roundsText['text'] = '+' + str(int(math.ceil(damage))) + '/' + str(int(math.ceil(damage / 2.22)))
                 else:
-                    self.roundsText['text'] = '+' + str(damage) + '/' + str(int(damage / 4))
+                    self.roundsText['text'] = '+' + str(int(math.ceil(damage))) + '/' + str(int(math.ceil(damage / 4)))
                 self.roundsText.setColor(0.176, 1, 0, 1)
                 # self.selfHealText.show()
                 # self.selfHealText['text'] = 'Self Heal: ' + str(damage / 2.5)
@@ -1243,36 +1474,36 @@ class TownBattleToonPanel(DirectFrame):
             if track == TRAP_TRACK:
                 self.damageText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.damageText['text'] = '-' + str(int(damage * 1.15) + 1) + '/' + str(
-                        int(((damage * 1.15) * 1.3) + 1))
+                    self.damageText['text'] = '-' + str(int(math.ceil(damage * 1.15))) + '/' + str(
+                        int(math.ceil(math.ceil(damage * 1.15) * 1.3)))
                 else:
-                    self.damageText['text'] = '-' + str(damage) + '/' + str(int(damage * 1.3))
+                    self.damageText['text'] = '-' + str(int(math.ceil(damage))) + '/' + str(int(math.ceil(damage * 1.3)))
                 # self.exeDamageText.show()
                 # self.exeDamageText['text'] = 'Exe./Gov.: ' + str(damage * 1.3)
             if track == SOUND_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = '-' + str(damage)
+                self.damageText['text'] = '-' + str(int(math.ceil(damage)))
             if track == THROW_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = '-' + str(damage)
+                self.damageText['text'] = '-' + str(int(math.ceil(damage)))
                 # self.selfHealText.show()
                 # self.selfHealText['text'] = 'Self Heal: ' + str(damage/5)
             if track == DROP_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = '-' + str(damage)
+                self.damageText['text'] = '-' + str(int(math.ceil(damage)))
             if track == SQUIRT_TRACK:
                 self.damageText.show()
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.damageText['text'] = '-' + str(int(damage * .75)) + '/ -' + str(damage) + '/ -' + str(
-                        int(damage * .75))
+                    self.damageText['text'] = '-' + str(int(math.ceil(damage * .75))) + '/ -' + str(int(math.ceil(damage))) + '/ -' + str(
+                        int(math.ceil(damage * .75)))
                 else:
-                    self.damageText['text'] = '-' + str(int(damage / 3)) + '/ -' + str(damage) + '/ -' + str(
-                        int(damage / 3))
+                    self.damageText['text'] = '-' + str(int(damage / 3)) + '/ -' + str(int(damage)) + '/ -' + str(
+                        int(math.ceil(damage / 3)))
                 # self.soakedRoundsText.show()
                 # self.soakedRoundsText['text'] = 'Rounds: ' + str(ToontownBattleGlobals.AvSoakRounds[level])
             if track == ZAP_TRACK:
                 self.damageText.show()
-                self.damageText['text'] = '-' + str(damage)
+                self.damageText['text'] = '-' + str(int(math.ceil(damage)))
                 # self.soakedDamageText.show()
                 # self.soakedDamageText['text'] = 'If Soaked: ' + str(damage * 3)
         else:

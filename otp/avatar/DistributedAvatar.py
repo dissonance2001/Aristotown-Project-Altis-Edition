@@ -5,8 +5,11 @@ from toontown.toonbase import ToonPythonUtil as PythonUtil
 from direct.task import Task
 from pandac.PandaModules import *
 from Avatar import Avatar
+from direct.interval.SoundInterval import SoundInterval
 from otp.ai.MagicWordGlobal import *
+from pandac.PandaModules import AudioSound
 from otp.otpbase import OTPGlobals
+from toontown.battle.BattleSounds import *
 from toontown.battle.BattleProps import globalPropPool
 
 class DistributedAvatar(DistributedActor, Avatar):
@@ -115,6 +118,8 @@ class DistributedAvatar(DistributedActor, Avatar):
         self.hp = self.hp - hpLost
         hpLost = oldHp - self.hp
         if hpLost > 0:
+            if base.localAvatar == self:
+                SoundInterval(globalBattleSoundCache.getSound('laff_loss.ogg'), node=self, listenerNode=base.localAvatar).start()
             self.showHpText(-hpLost, bonus)
             self.hpChange(quietly=0)
             if self.hp <= 0 and oldHp > 0:
@@ -127,6 +132,8 @@ class DistributedAvatar(DistributedActor, Avatar):
         self.hp = self.hp - hpLost
         hpLost = oldHp - self.hp
         if hpLost > 0:
+            if base.localAvatar == self:
+                SoundInterval(globalBattleSoundCache.getSound('laff_loss.ogg'), node=self, listenerNode=base.localAvatar).start()
             self.hpChange(quietly=0)
             if self.hp <= 0 and oldHp > 0:
                 self.died()

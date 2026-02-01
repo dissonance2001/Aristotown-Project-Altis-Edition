@@ -475,7 +475,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setExecutive(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
             newSuit.setExecutive(1)
-        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'djockey' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
+        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'djockey' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
             newSuit.setGovernaught(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         if revives is not None:

@@ -97,8 +97,6 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                 self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
             elif self.avatar.dna.name == 'rainmake' and not avatar.isSkeleton:
                 self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
-            elif self.avatar.dna.name == 'liquid' and not avatar.isSkeleton:
-                self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
             elif self.avatar.dna.name == 'dking' and not avatar.isSkeleton:
                 self.head.setPosHprScale(0, 0, 0.09, 180, 0, 0, s, s, s)
             elif avatar.isSkeleton and self.avatar.dna.name == 'ambass':

@@ -25,6 +25,8 @@ from toontown.distributed import DelayDelete
 from toontown.toon import TTEmote
 from otp.avatar import Emote
 from toontown.nametag import NametagGlobals
+from toontown.battle.BattleSounds import *
+from direct.interval.SoundInterval import SoundInterval
 
 class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBase')
@@ -267,7 +269,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         else:
             self.notify.debug('suit.battleTrap != UBER_GAG_LEVEL_INDEX')
             MovieUtil.removeProp(suit.battleTrapProp)
-        
+
         suit.battleTrapProp = None
         self.notify.debug('360 suit.battleTrapProp = None')
         suit.battleTrap = NO_TRAP
@@ -387,7 +389,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
     def setBattleCellId(self, battleCellId):
         pass
- 
+
     def setInteractivePropTrackBonus(self, trackBonus):
         self.interactivePropTrackBonus = trackBonus
 
@@ -1180,15 +1182,16 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.accept(self.localToonBattleEvent, self.__handleLocalToonBattleEvent)
 
     def startTimer(self, ts = 0):
+        self.townBattle.adjustStatusEffects(self.activeToons)
         self.notify.debug('startTimer()')
         self.__adjustTownBattle()
         if ts >= CLIENT_INPUT_TIMEOUT:
             self.notify.warning('startTimer() - ts: %f timeout: %f' % (ts, CLIENT_INPUT_TIMEOUT))
             self.__timedOut()
             return
-        
+
         self.timer.startCallback(CLIENT_INPUT_TIMEOUT - ts, self.__timedOut)
-        timeTask = Task.loop(Task(self.__countdown), Task.pause(0.2))
+        timeTask = Task.loop(Task(self.__countdown), Task.pause(1))
         taskMgr.add(timeTask, self.timerCountdownTaskName)
 
     def __stopTimer(self):
@@ -1226,6 +1229,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.__stopTimer()
 
     def __handleLocalToonBattleEvent(self, response):
+        self.townBattle.adjustStatusEffects(self.activeToons)
         mode = response['mode']
         noAttack = 0
         if mode == 'Attack':
@@ -1328,6 +1332,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.choseAttackAlready = 1
 
     def __timedOut(self):
+        self.townBattle.adjustStatusEffects(self.activeToons)
         if self.choseAttackAlready == 1:
             return
         self.notify.debug('WaitForInput timed out')
@@ -1342,6 +1347,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         pass
 
     def enterPlayMovie(self, ts):
+        self.townBattle.adjustStatusEffects(self.activeToons)
         self.notify.debug('enterPlayMovie()')
         self.delayDeleteMembers()
         if self.hasLocalToon():
@@ -1579,14 +1585,14 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.notify.debug('__adjustDone()')
         if self.hasLocalToon():
             self.d_adjustDone(base.localAvatar.doId)
-        
+
         self.adjustFsm.request('NotAdjusting')
 
     def enterAdjusting(self, ts):
         self.notify.debug('enterAdjusting()')
         if self.localToonActive():
             self.__stopTimer()
-        
+
         self.delayDeleteMembers()
         self.__adjust(ts, self.__handleAdjustDone)
 

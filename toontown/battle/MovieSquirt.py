@@ -1,4 +1,5 @@
 import random
+import math
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleProps import *
@@ -353,7 +354,7 @@ def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, atta
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
-        value = (hp * 0.75)
+        value = math.ceil(hp * 0.75)
         suitTrack.append(Wait(tContact))
         suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level=0))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
@@ -382,7 +383,7 @@ def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
-        value = (hp * 0.75)
+        value = math.ceil(hp * 0.75)
         suitTrack.append(Wait(tContact))
         suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level=0))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
@@ -411,7 +412,7 @@ def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
-        value = (hp / 3)
+        value = math.ceil(hp / 3)
         suitTrack.append(Wait(tContact))
         suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
@@ -440,7 +441,7 @@ def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
-        value = (hp / 3)
+        value = math.ceil(hp / 3)
         suitTrack.append(Wait(tContact))
         suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level))
         suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))

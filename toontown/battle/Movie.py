@@ -421,10 +421,26 @@ class Movie(DirectObject.DirectObject):
                 toon.makeUnVulnerable()
             if not toon.getVulnerabilityRounds() <= 0:
                 toon.addVulnerabilityRounds(toon.getVulnerabilityRounds() - 1)
+            if toon.getCollectCallRounds() == 1:
+                toon.makeUnCollectCalled()
+            if not toon.getCollectCallRounds() <= 0:
+                toon.addCollectCallRounds(toon.getCollectCallRounds() - 1)
+            if toon.getNoDodgeRounds() == 1:
+                toon.makeUnNoDodge()
+            if not toon.getNoDodgeRounds() <= 0:
+                toon.addNoDodgeRounds(toon.getNoDodgeRounds() - 1)
             if toon.getGagBoostRounds() == 1:
                 toon.makeUnGagBoost()
             if not toon.getGagBoostRounds() <= 0:
                 toon.addGagBoostRounds(toon.getGagBoostRounds() - 1)
+            if toon.getGroupDamageDownRounds() == 1:
+                toon.makeUnGroupDamageDown()
+            if not toon.getBombedRounds() <= 0:
+                toon.addBombedRounds(toon.getBombedRounds() - 1)
+            if toon.getBombedRounds() == 1:
+                toon.makeUnBombed()
+            if not toon.getGroupDamageDownRounds() <= 0:
+                toon.addGroupDamageDownRounds(toon.getGroupDamageDownRounds() - 1)
         self._deleteTrack()
         self.track = Sequence(ptrack, name='movie-track-%d' % self.battle.doId)
         if self.battle.localToonPendingOrActive():

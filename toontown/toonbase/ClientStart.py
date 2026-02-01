@@ -184,20 +184,20 @@ def printCameraPos():
     print(camera.getPos())
     print(camera.getHpr())
 
-base.accept('[', printCameraPos)
+# base.accept('[', printCameraPos)
 
 def printOobePos():
     print(base.oobeCameraTrackball.getPos())
     print(base.oobeCameraTrackball.getHpr())
     print
 
-base.accept(']', printOobePos)
+# base.accept(']', printOobePos)
 
 def printToonPos():
     print(camera.getPos())
     print(camera.getHpr())
 
-base.accept('[', printCameraPos)
+# base.accept('[', printCameraPos)
 
 # X movement
 def cameraX():

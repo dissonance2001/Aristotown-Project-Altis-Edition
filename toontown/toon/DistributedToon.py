@@ -13,6 +13,7 @@ from direct.task.Task import Task
 from panda3d.core import *
 from otp.ai.MagicWordGlobal import *
 from otp.avatar import Avatar, DistributedAvatar
+from otp.otpbase import OTPLocalizerEnglish
 from otp.avatar import DistributedPlayer
 from otp.chat import TalkAssistant
 from otp.otpbase import OTPGlobals
@@ -204,6 +205,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.spentTrainingPoints = [0, 0, 0, 0, 2, 2, 0, 0]
         self.battleConditions = {}
 
+    def checkMandatoryToll(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.setMandatoryToll, self.getMandatoryToll() + num)).start()
+
     def checkVulnerabilityUp(self, num):
         if self.damageInterval:
             self.damageInterval.finish()
@@ -212,6 +219,15 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.damageInterval = Parallel(Func(self.setVulnerability, self.getVulnerability())).start()
         else:
             self.damageInterval = Parallel(Func(self.setVulnerability, num)).start()
+
+    def checkBombedUp(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getBombed() > num:
+            self.damageInterval = Parallel(Func(self.setBombed, self.getBombed())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setBombed, num)).start()
 
     def checkSnappedUp(self, num):
         if self.damageInterval:
@@ -238,7 +254,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.getDamageDown() > num:
             self.damageInterval = Parallel(Func(self.setDamageDown, self.getDamageDown())).start()
         else:
-            self.damageInterval = Parallel(Func(self.setDamageDown, num)).start()
+            self.damageInterval = Parallel(Func(self.setDamageDown, -num)).start()
 
     def checkDamageUp(self, num):
         if self.damageInterval:
@@ -280,7 +296,17 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.damageInterval:
             self.damageInterval.finish()
             self.damageInterval = None
-        self.damageInterval = Parallel(Func(self.setWinded, num)).start()
+        self.damageInterval = Parallel(Func(self.setWinded, -num)).start()
+
+    def checkCogDeath(self, suit):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.hp <= 0:
+            if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
+                self.damageInterval = Sequence(Wait(1.0), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout)).start()
+            else:
+                self.damageInterval = Sequence(Wait(1.0), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout)).start()
 
     def disable(self):
         for soundSequence in self.soundSequenceList:

@@ -279,9 +279,13 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        animTrack.append(Func(toon.setHpr, battle, origHpr))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return Parallel(animTrack, indicatorTracks)
 
@@ -461,7 +465,7 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
             #suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
        # else:
           #  suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
-    return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
+    return Parallel(toonTrack, indicatorTrack, suitResponseTrack)
 
 
 def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames = None, splicedDamageAnims = None, showDamageExtraTime = 0.01):
@@ -487,7 +491,7 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
        #     suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
        # else:
           #  suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
-    return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
+    return Parallel(toonTrack, indicatorTrack, suitResponseTrack)
 
 
 def getSplicedAnimsTrack(anims, actor = None):
@@ -928,7 +932,7 @@ def doDeathCheck(attack):
     elif not suit.isVirtual:
         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
     for s in battle.activeSuits:
-        suitTrack2.append(Sequence(Func(s.checkDeathCheck, battle), Wait(7.0)))
+        suitTrack2.append(Sequence(Func(s.checkDeathCheck, battle), Wait(8.0)))
     return Parallel(suitTrack2)
 
 def doSynergy(attack):

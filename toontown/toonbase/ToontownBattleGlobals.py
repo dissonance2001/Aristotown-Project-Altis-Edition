@@ -183,7 +183,7 @@ EXECUTIVE_DMG_MULT = 1.2
 EXECUTIVE_BASE_CHANCE = 30
 GOVERNAUGHT_HP_MULT = 2
 GOVERNAUGHT_DMG_MULT = 1.0
-GOVERNAUGHT_BASE_CHANCE = 5
+GOVERNAUGHT_BASE_CHANCE = 10
 V2_BASE_CHANCE = 25
 pieNames = ['cupcake', 'fruitpie-slice', 'creampie-slice', 'birthday-cake-slice', 'fruitpie', 'creampie', 'birthday-cake', 'wedding-cake', 'lawbook']
 AvProps = (
@@ -560,8 +560,11 @@ ValidStatusConditions = (
     'profiteeringcalculator',
     'hustlingcalculator',
     'radioinfrequencycalculator',
+    'bombedToon',
     'hottakecalculator',
+    'hottakecalculator2',
     'overmodulatedcalculator',
+    'overmodulatedcalculator2',
     'dancesessioncalculator',
     'filmmakercalculator',
     'directorcalculator',
@@ -924,4 +927,34 @@ ValidStatusConditions = (
     'nostrikecalculator',
     'alreadyDesperation2',
     'filingcalculator',
+    'alreadyRedundant',
+    'alreadyContingency',
+    'alreadySecondAttack',
+    'alreadyThirdAttack',
+    'alreadyOperationalFreeze',
+    'alreadyFailsafeProtocol',
+    'alreadyRedlined',
+    'alreadyAbsorbingContingency',
+    'alreadyRisk1',
+    'alreadyRisk2',
+    'alreadyRisk3',
+    'alreadyRisk4',
+    'alreadyRisk5',
+    'alreadyRisk6',
+    'alreadyRisk7',
+    'alreadyRisk8',
+    'soundToon',
+    'risk1',
+    'risk2',
+    'risk3',
+    'risk4',
+    'risk5',
+    'risk6',
+    'risk7',
+    'risk8',
+    'soundcalculator',
+    'contingencyminutestaken',
+    'tollmasterHit',
+    'tollmasterDamage',
+    'finalToll',
 )

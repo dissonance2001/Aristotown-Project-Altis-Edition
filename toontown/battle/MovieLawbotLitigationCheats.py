@@ -317,9 +317,13 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        animTrack.append(Func(toon.setHpr, battle, origHpr))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return Parallel(animTrack, indicatorTracks)
 
@@ -360,9 +364,13 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                Func(MovieUtil.removeProp, indicator))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        animTrack.append(Func(toon.setHpr, battle, origHpr))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return animTrack
 
@@ -542,11 +550,13 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
     suit = attack['suit']
     if damageAnimNames:
         for d in damageAnimNames:
+            toonTrack.append(Func(toon.checkCogDeath, suit))
             toonTrack.append(ActorInterval(toon, d))
 
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     else:
         splicedAnims = getSplicedAnimsTrack(splicedDamageAnims, actor=toon)
+        toonTrack.append(Func(toon.checkCogDeath, suit))
         toonTrack.append(splicedAnims)
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
@@ -558,7 +568,7 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
             #suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
        # else:
           #  suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
-    return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
+    return Parallel(toonTrack, indicatorTrack, suitResponseTrack)
 
 
 def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames = None, splicedDamageAnims = None, showDamageExtraTime = 0.01):
@@ -568,11 +578,13 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
     suit = attack['suit']
     if damageAnimNames:
         for d in damageAnimNames:
+            toonTrack.append(Func(toon.checkCogDeath, suit))
             toonTrack.append(ActorInterval(toon, d))
 
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     else:
         splicedAnims = getSplicedAnimsTrack(splicedDamageAnims, actor=toon)
+        toonTrack.append(Func(toon.checkCogDeath, suit))
         toonTrack.append(splicedAnims)
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
@@ -584,7 +596,7 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
          #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
         #else:
            # suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
-    return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
+    return Parallel(toonTrack, indicatorTrack, suitResponseTrack)
 
 
 def getSplicedAnimsTrack(anims, actor = None):
@@ -873,11 +885,11 @@ def doWhirlwind(attack):
     damageAnims.append(['slip-forward'])
     sinkPos = toon.getPos(battle)
     sinkPos.setZ(sinkPos.getZ() + 25)
-    notifyTrack = Sequence(Wait(5.9), Func(toon.showHpTextNew, -int(dmg), text="CONFUSED!", colorCode=1))
+    notifyTrack = Sequence(Wait(5.9), Func(toon.showHpTextNew, -int(dmg), text="CONFUSED!", colorCode=1), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
     toonTrack = getToonTrackCheat(attack, damageDelay=.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91,
                              dodgeAnimNames=['sidestep'], showDamageExtraTime=5, showMissedExtraTime=1.0)
     notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
-    toonSpinTrack = Sequence(Wait(0.9), LerpHprInterval(toon, 4.5, Point3(10800, 0, 0)),
+    toonSpinTrack = Sequence(Wait(0.9), LerpHprInterval(toon, 4.0, Point3(10800, 0, 0)),
                                  LerpHprInterval(toon, 0.5, toon.getHpr()), Wait(0.5))
     toonLiftTrack = Sequence(Wait(0.9), LerpPosInterval(toon, 4.5, Point3(toon.getX(), toon.getY(), toon.getZ() + 50)), LerpPosInterval(toon, 0.5, toon.getPos()), Wait(0.5))
     return Parallel(suitTrack, cagePropTracks, toonTrack, notifyTrack, toonLiftTrack, toonSpinTrack)
@@ -1508,7 +1520,7 @@ def doLegalBindings2(attack):
     targets = attack['target']
     tape = globalPropPool.getProp('redtape')
     tape.setColor(0.129, 0, 0.329, 1)
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5))
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     tubes = []
     tapePosPoints = [Point3(-0.25, 0, -0.25), VBase3(0, 0, 0)]
     tapeScaleUpPoint = Point3(1, 1, 0.74)

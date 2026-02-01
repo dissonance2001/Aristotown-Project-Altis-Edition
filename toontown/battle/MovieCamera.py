@@ -634,7 +634,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'CloseTheLoop':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HostileTakeover':
-        camTrack.append(defaultCamera(openShotDuration=3.0))
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'NickelAndDime':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Quash':
@@ -1120,7 +1120,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'WiretapperCollectCall2':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'WiretapperCollectCallDamage':
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
     elif name == 'WiretapperBusySignal':
         camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)))
     elif name == 'WiretapperGagBan':
@@ -1232,7 +1232,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
     # union buster cheats
     elif name == 'UnionBusterUnionDues':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'UnionBusterNoStrikeClause':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'UnionBusterUnionCalculator':
@@ -1495,8 +1495,58 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldRelativeShot(suit, 0.0, 10.8096, 10, -180, -10.0, 0.0, attackDuration)))
     elif name == 'LiquidatorTornado':
         camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
+        # tollmaster
+    elif name == 'TollmasterMandatoryToll':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'TollmasterMandatoryTollFinal':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'TollmasterResonanceTax':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'TollmasterResonanceTax2':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'TollmasterResonanceTax3':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'TollmasterResonanceTax4':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'TollmasterResonanceTax5':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'TollmasterMissedPayment':
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=0.5))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
+    elif name == 'TollmasterLedgerOfSound':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=suit.getDuration('glower')), randomActorShot(suit, battle, attackDuration - suit.getDuration('glower'), 'suit')))
+    elif name == 'TollmasterBalanceTheLedger':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
+                                 Func(taskMgr.add, shake_camera_advancement, 'camera_shake'), Wait(0.5),
+                                 Func(taskMgr.remove, 'camera_shake'),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 2)))
+    elif name == 'TollmasterBalanceTheLedger2':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
+                                 Func(taskMgr.add, shake_camera_advancement, 'camera_shake'), Wait(0.5),
+                                 Func(taskMgr.remove, 'camera_shake'),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 2)))
+    elif name == 'TollmasterBalanceTheLedger3':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
+                                 Func(taskMgr.add, shake_camera_advancement, 'camera_shake'), Wait(0.5),
+                                 Func(taskMgr.remove, 'camera_shake'),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 2)))
+    elif name == 'TollmasterBalanceTheLedger4':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
+                                 Func(taskMgr.add, shake_camera_advancement, 'camera_shake'), Wait(0.5),
+                                 Func(taskMgr.remove, 'camera_shake'),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 2)))
+    elif name == 'TollmasterBalanceTheLedger5':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
+                                 Func(taskMgr.add, shake_camera_advancement, 'camera_shake'), Wait(0.5),
+                                 Func(taskMgr.remove, 'camera_shake'),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 2)))
         # record keeper
     elif name == 'RecordkeeperMinutesTaken':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'RecordkeeperMinutesTakenContingency':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RecordkeeperMinutesTakenDamage':
         camTrack.append(defaultCamera(openShotDuration=1.5))
@@ -1575,6 +1625,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         # contingency director
     elif name == 'ContingencyFailsafeProtocol':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ContingencyRiskThresholdBreach':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ContingencyRiskThresholdBreach75':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ContingencyRiskThresholdBreach50':
@@ -1582,13 +1634,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ContingencyRiskThresholdBreach25':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=3), defaultCamera(openShotDuration=1.5, attackDuration=attackDuration-3)))
     elif name == 'ContingencyContingencyClause':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'ContingencyContingencyClauseRetaliation':
         camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == 'ContingencyRedundantAuthority':
         camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
     elif name == 'ContingencyOperationalFreeze':
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'ContingencyForecastCollapse':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'ErclaimLaffSteal':
@@ -2887,12 +2939,12 @@ def randomOverShoulderShot(suit, toon, battle, duration, focus):
     suitCentralPoint.setZ(suitCentralPoint.getZ() + suitHeight * 0.75)
     toonCentralPoint = toon.getPos(battle)
     toonCentralPoint.setZ(toonCentralPoint.getZ() + toonHeight * 0.75)
-    x = 2 + random.random() * 10
+    x = 2 + random.random() * 7
     if focus == 'toon':
-        y = 8 + random.random() * 6
+        y = 6 + random.random() * 4
         z = suitHeight * 1.2 + random.random() * suitHeight
     else:
-        y = -10 - random.random() * 6
+        y = -10 - random.random() * 4
         z = toonHeight * 1.5
     if MovieUtil.shotDirection == 'left':
         x = -x
@@ -2924,7 +2976,7 @@ def randomToonGroupShot(toons, suit, duration, battle):
     if suitPos.getX() > 0:
         x = -x
     if random.random() > 0.5:
-        y = 4 + random.random() * 1
+        y = 3 + random.random() * 1
         z = avgHeight + random.random() * 6
     else:
         y = 11 + random.random() * 2

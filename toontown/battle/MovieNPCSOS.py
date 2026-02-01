@@ -296,7 +296,7 @@ def __doSmooch(attack, hp = 0):
         lipcopy = MovieUtil.copyProp(lips)
         lipsTrack = Sequence(Wait(tLips), Func(MovieUtil.showProp, lipcopy, render, getLipPos), Func(lipcopy.setBillboardPointWorld), LerpScaleInterval(lipcopy, dScale, Point3(3, 3, 3), startScale=MovieUtil.PNT3_NEARZERO), Wait(tThrow - tLips - dScale), LerpPosInterval(lipcopy, dThrow, Point3(target.getPos() + Point3(0, 0, target.getHeight()))), Func(MovieUtil.removeProp, lipcopy))
         delay = tThrow + dThrow
-        mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(2, 2, node=toon), Sequence(ActorInterval(toon, 'smooch')), Sequence(Wait(delay), ActorInterval(target, 'conked')), Sequence(Wait(delay), Func(__healToon, target, 0)))
+        mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(2, 2, node=toon), Sequence(ActorInterval(toon, 'smooch')), Sequence(Wait(delay), ActorInterval(target, 'conked'), Func(toon.loop, 'neutral')), Sequence(Wait(delay), Func(__healToon, target, 0)))
         targetTrack.append(mtrack)
         track, level, hp = NPCToons.getNPCTrackLevelHp(toon)
         if level == 0:

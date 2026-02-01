@@ -4462,8 +4462,8 @@ def oilRain(self):
 @particle
 def paperRainfall(self):
     self.reset()
-    self.setPos(0.000, 0.000, -0.200)
-    self.setHpr(0.000, 0.000, 0.000)
+    self.setPos(0.000, 0.000, 20)
+    self.setHpr(-180.000, 0.000, 0.000)
     self.setScale(1.000, 1.000, 1.000)
     p0 = Particles.Particles('particles-1')
     # Particles parameters
@@ -4495,16 +4495,16 @@ def paperRainfall(self):
     p0.renderer.setXScaleFlag(1)
     p0.renderer.setYScaleFlag(1)
     p0.renderer.setAnimAngleFlag(0)
-    p0.renderer.setInitialXScale(.5)
-    p0.renderer.setFinalXScale(.5)
-    p0.renderer.setInitialYScale(.5)
-    p0.renderer.setFinalYScale(.5)
+    p0.renderer.setInitialXScale(.75)
+    p0.renderer.setFinalXScale(.75)
+    p0.renderer.setInitialYScale(.75)
+    p0.renderer.setFinalYScale(.75)
     p0.renderer.setNonanimatedTheta(0.0000)
     p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(100.0000)
+    p0.emitter.setAmplitude(50.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))

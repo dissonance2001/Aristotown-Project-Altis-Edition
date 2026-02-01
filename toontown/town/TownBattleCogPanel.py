@@ -483,7 +483,7 @@ class TownBattleCogPanel(DirectFrame):
                 self.skeleton.show()
         if self.cog.getManager() or self.cog.isLureResist or self.cog.isInsured or self.cog.isInsured2 or self.cog.isContracted or self.cog.healthCondition == 13:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.luredManager = status.find('**/lured_prestige_icon')
+            self.luredManager = status.find('**/hands_icon')
             if (self.cog.isDesperation and self.cog.isAngry) or self.cog.dna.name == 'hroller' or self.cog.isImmortal or (self.cog.getActualLevel() == 25 and self.cog.dna.name == 'hrollers') or self.cog.isLureImmune:
                 self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
                                                     text="0",
@@ -493,7 +493,7 @@ class TownBattleCogPanel(DirectFrame):
                                                     text_scale=.5)
             elif self.cog.isDesperation or self.cog.dna.name == 'hroller2' or self.cog.dna.name == 'videog' or self.cog.dna.name == 'fires' or self.cog.dna.name == 'fbed' or self.cog.dna.name == 'mouthp' \
                     or self.cog.dna.name == 'rainmake' or self.cog.dna.name == 'whunter' or self.cog.dna.name == 'wsi' or self.cog.dna.name == 'redd' or self.cog.dna.name == 'duckshfl' or self.cog.dna.name == 'treek' \
-                    or self.cog.dna.name == 'bellring' or self.cog.dna.name == 'ddiver' or self.cog.dna.name == 'gatekeep' or self.cog.isAngry or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper'):
+                    or self.cog.dna.name == 'bellring' or self.cog.dna.name == 'ddiver' or self.cog.dna.name == 'gatekeep' or self.cog.isAngry or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or (self.cog.healthCondition == 13 and self.cog.isSkeleton):
                 self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
                                                 text="1",
                                                 text_fg=(1, 0, 0, 1),
@@ -2632,6 +2632,52 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(1, 0.984, 0, 1)
                 self.extraAttacks.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
+        if self.cog.extraAbility:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/toofast4you_icon')
+            self.extraAttacksText = DirectLabel(parent=self.extraAttacks, relief=None, text="%s" % self.cog.getExtraAbilities(),
+                                                text_fg=(1, 0, 0, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.5)
+            self.extraAttacksText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.extraAttacks.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.extraAttacks.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.extraAttacks.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.extraAttacks.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.extraAttacks.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.extraAttacks.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.extraAttacks.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.extraAttacks.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(1, 0.984, 0, 1)
+                self.extraAttacks.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
         if self.cog.isSoakImmune:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.soakResist = status.find('**/soaked_icon')
@@ -2766,7 +2812,10 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.show()
         if self.cog.isLured:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.luredCog = status.find('**/lured_icon')
+            if self.cog.isLured == 1:
+                self.luredCog = status.find('**/lured_icon')
+            else:
+                self.luredCog = status.find('**/lured_prestige_icon')
             self.luredText = DirectLabel(parent=self.luredCog, relief=None, text="%s" % self.cog.getLuredRounds(),
                                          text_fg=(1, 1, 1, 1),
                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
@@ -3357,6 +3406,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .075, .075, .075)
         elif name == 'bellring':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.095, -180, 0, 0, .08, .08, .08)
+        elif name == 'liquid':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .075, .075, .075)
         elif name == 'ubuster':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1025, .1025, .1025)
         elif name == 'radiog':
@@ -3397,7 +3448,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .11, .11, .11)
         elif name == 'whunter':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0575, .0575, .0575)
-        elif name == 'rainmake' or name == 'liquid':
+        elif name == 'rainmake':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.155, -180, 0, 0, .07, .07, .07)
         elif name == 'erfit' or name == 'erclaim':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .075, .075, .075)

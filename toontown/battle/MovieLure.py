@@ -176,7 +176,10 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
                 makeUnLured = Func(suit.makeUnLured)
-                makeLured = Func(suit.makeLured)
+                if toon.getTrackBonusLevel(LURE_TRACK) > 1:
+                    makeLured = Func(suit.makeLured, 2)
+                else:
+                    makeLured = Func(suit.makeLured, 1)
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
@@ -313,7 +316,10 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 suitDelay = 2.6
                 suitMoveDuration = 0.8
                 suitTrack = Sequence()
-                makeLured = Func(suit.makeLured)
+                if toon.getTrackBonusLevel(LURE_TRACK) > 1:
+                    makeLured = Func(suit.makeLured, 2)
+                else:
+                    makeLured = Func(suit.makeLured, 1)
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
@@ -453,7 +459,10 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
             revived = target['revived']
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
-                makeLured = Func(suit.makeLured)
+                if toon.getTrackBonusLevel(LURE_TRACK) > 1:
+                    makeLured = Func(suit.makeLured, 2)
+                else:
+                    makeLured = Func(suit.makeLured, 1)
                 suitDelay = 1.6
                 suitAnimDuration = 1.5
                 opos, ohpr = battle.getActorPosHpr(suit)
@@ -1500,7 +1509,10 @@ def __createSlideshowMultiTrack(lure, npcs = []):
             revived = target['revived']
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
-                makeLured = Func(suit.makeLured)
+                if toon.getTrackBonusLevel(LURE_TRACK) > 1:
+                    makeLured = Func(suit.makeLured, 2)
+                else:
+                    makeLured = Func(suit.makeLured, 1)
                 suitDelay = 3.8
                 suitAnimDuration = 1.5
                 opos, ohpr = battle.getActorPosHpr(suit)

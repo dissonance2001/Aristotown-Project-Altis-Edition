@@ -554,6 +554,10 @@ class Toon(Avatar.Avatar, ToonHead):
         self.damageUpNumber = 0
         self.confused = 0
         self.confusedRounds = 0
+        self.collectCalled = 0
+        self.collectCalledRounds = 0
+        self.mandatoryToll = 0
+        self.mandatoryTollNumber = 0
         self.hidden = 0
         self.hiddenRounds = 0
         self.markedWood = 0
@@ -565,8 +569,15 @@ class Toon(Avatar.Avatar, ToonHead):
         self.isGagBan = 0
         self.cooldown = 0
         self.cooldownRounds = 0
+        self.bombedRounds = 0
         self.vulnerability = 0
         self.vulnerabilityRounds = 0
+        self.bombed = 0
+        self.isBombed = 0
+        self.noDodge = 0
+        self.noDodgeRounds = 0
+        self.groupDamageDown = 0
+        self.groupDamageDownRounds = 0
         self.isSnapped = 0
         self.isBurned = 0
         self.burnedRounds = 0
@@ -683,6 +694,18 @@ class Toon(Avatar.Avatar, ToonHead):
     def getBurnedRounds(self):
         return self.burnedRounds
 
+    def makeGroupDamageDown(self):
+        self.groupDamageDown = 1
+
+    def makeUnGroupDamageDown(self):
+        self.groupDamageDown = 0
+
+    def addGroupDamageDownRounds(self, num):
+        self.groupDamageDownRounds = num
+
+    def getGroupDamageDownRounds(self):
+        return self.groupDamageDownRounds
+
     def makeGagBoost(self, level):
         self.gagBoost = level
 
@@ -744,6 +767,30 @@ class Toon(Avatar.Avatar, ToonHead):
     def getHiddenRounds(self):
         return self.hiddenRounds
 
+    def makeCollectCalled(self):
+        self.collectCalled = 1
+
+    def makeUnCollectCalled(self):
+        self.collectCalled = 0
+
+    def addCollectCallRounds(self, num):
+        self.collectCalledRounds = num
+
+    def getCollectCallRounds(self):
+        return self.collectCalledRounds
+
+    def makeNoDodge(self):
+        self.noDodge = 1
+
+    def makeUnNoDodge(self):
+        self.noDodge = 0
+
+    def addNoDodgeRounds(self, num):
+        self.noDodgeRounds = num
+
+    def getNoDodgeRounds(self):
+        return self.noDodgeRounds
+
     def makeConfused(self):
         self.confused = 1
 
@@ -755,6 +802,18 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getConfusedRounds(self):
         return self.confusedRounds
+
+    def makeMandatoryToll(self):
+        self.mandatoryToll = 1
+
+    def makeUnMandatoryToll(self):
+        self.mandatoryToll = 0
+
+    def setMandatoryToll(self, num):
+        self.mandatoryTollNumber = num
+
+    def getMandatoryToll(self):
+        return self.mandatoryTollNumber
 
     def makeCheer(self):
         self.cheer = 1
@@ -854,6 +913,25 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getWindedRounds(self):
         return self.windedRounds
+
+    def makeBombed(self):
+        self.isBombed = 1
+
+    def makeUnBombed(self):
+        self.isBombed = 0
+        self.bombed = 0
+
+    def addBombedRounds(self, num):
+        self.bombedRounds = num
+
+    def getBombedRounds(self):
+        return self.bombedRounds
+
+    def setBombed(self, num):
+        self.bombed = num
+
+    def getBombed(self):
+        return self.bombed
 
     def makeVulnerable(self):
         self.isVulnerable = 1

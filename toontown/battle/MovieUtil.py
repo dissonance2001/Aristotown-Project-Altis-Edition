@@ -301,10 +301,6 @@ def createSuitReviveTrack(suit, battle):
         for headPart in suit.animatedHeadParts:
             headInterval = Func(headPart.loop, 'murmur')
             hasAnimatedHead = True
-    elif suit.style.name == 'liquid':
-        for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'murmur')
-            hasAnimatedHead = True
     else:
         for headPart in suit.animatedHeadParts:
             headInterval = ActorInterval(headPart, 'death')
@@ -320,14 +316,13 @@ def createSuitReviveTrack(suit, battle):
     suitTrack.append(Func(suit.setDizzy, 0))
     suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(suit.show))
-    suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
-    suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
     suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeRevive))
+    suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:
@@ -409,7 +404,7 @@ def createSuitReviveTrack(suit, battle):
     elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
     elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'dopa':
@@ -681,9 +676,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Func(suit.setVirtual, True, True))
     suitTrack.append(Func(suit.setName, suit.createNameInfoVirtual()))
     suitTrack.append(Func(suit.show))
-    suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
-    suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setDizzy, 0))
@@ -693,6 +686,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Func(suit.makeDamageUp))
     suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeLaserRevive))
+    suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:
@@ -740,7 +734,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
     elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'mplayer' and not deathSuit.isSkeleton:
@@ -940,10 +934,6 @@ def createSuitDeathTrack(suit, battle):
         for headPart in suit.animatedHeadParts:
             headInterval = Func(headPart.loop, 'murmur')
             hasAnimatedHead = True
-    elif suit.style.name == 'liquid':
-        for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'murmur')
-            hasAnimatedHead = True
     elif suit.style.name == 'videog':
         for headPart in suit.animatedHeadParts:
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
@@ -1006,7 +996,7 @@ def createSuitDeathTrack(suit, battle):
     elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
+        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
     elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
         spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'mplayer' and not deathSuit.isSkeleton:

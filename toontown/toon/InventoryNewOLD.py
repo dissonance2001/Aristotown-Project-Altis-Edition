@@ -528,8 +528,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        int(math.ceil(damage * 1.15))) + damageAppendStr,
-                                                                                   'bonus': '\nExe./Gov./Mgr.: %i%s\nDaze Rounds: %i' % (
-                                                                                  int(math.ceil((damage * 1.15) * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS))),
+                                                                                   'bonus': '\nExe./Gov./Mgr.: %s%s\nDaze Rounds: %i' % (
+                                                                                  str(int(math.ceil(math.ceil(damage * 1.15) * 1.3))),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -540,8 +540,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        int(damage)) + damageAppendStr,
-                                                                                   'bonus': '\nExe./Gov./Mgr.: %i%s\nDaze Rounds: %i' % (
-                                                                                   int(math.ceil(damage * (1 + ToontownBattleGlobals.TRAP_EXECUTIVE_BONUS))),
+                                                                                   'bonus': '\nExe./Gov./Mgr.: %s%s\nDaze Rounds: %i' % (
+                                                                                   str(int(math.ceil(damage * 1.3))),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
@@ -616,7 +616,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        int(damage)) + damageAppendStr,
-                                                                                   'bonus': "\nZap Jump Dmg.: 100%",
+                                                                                   'bonus': "\nAftershock Dmg.: 25%",
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.37625)
@@ -626,7 +626,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        int(damage)) + damageAppendStr,
-                                                                                   'bonus': "\nZap Jump Dmg.: 100%",
+                                                                                   'bonus': "",
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.37625)
@@ -1468,6 +1468,18 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                 track, level) <= 0:
                             self.makeDamageDownPressable(button, track, level)
                         if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 5 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 3 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeDamageDownPressable(button, track, level)
+                        if track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
                                 track, level) <= 0:
                             self.makeDamageDownPressable(button, track, level)
                         if 'noGags' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):

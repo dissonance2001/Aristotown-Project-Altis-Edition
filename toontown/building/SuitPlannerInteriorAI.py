@@ -166,11 +166,17 @@ class SuitPlannerInteriorAI:
             suit.setGovernaught(1)
         return flags
 
-    def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, revives = 0):
+    def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, revives = 0, skelecogChance=0, revivesTwoChance=0, revivesThreeChance=0):
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
         #skel, exe = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
         flags = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
         if flags & IFSkelecog:
+            newSuit.setSkelecog(1)
+        if random.randint(0, 100) <= revivesThreeChance:
+            newSuit.setSkeleRevives(2)
+        elif random.randint(0, 100) <= revivesTwoChance:
+            newSuit.setSkeleRevives(1)
+        elif random.randint(0, 100) <= skelecogChance:
             newSuit.setSkelecog(1)
         newSuit.setSkeleRevives(revives)
         newSuit.generateWithRequired(suitZone)
@@ -510,23 +516,23 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(random.choice((suit, suit2, suit3)))
         if specialCode == 'lit':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 'l', suitLevel, 0)
+            suit = self.__genSuitObject(self.zoneId, suitKind, 'l', suitLevel, 0, 15, 10, 5)
             reserveSuits.append(suit)
         if specialCode == 'amb':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 'c', suitLevel, 0)
+            suit = self.__genSuitObject(self.zoneId, suitKind, 'c', suitLevel, 0, 15, 10, 5)
             reserveSuits.append(suit)
         if specialCode == 'pres':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0)
+            suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0, 15, 10, 5)
             reserveSuits.append(suit)
         if specialCode == 'bdlit':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 'g', suitLevel, 0)
+            suit = self.__genSuitObject(self.zoneId, suitKind, 'g', suitLevel, 0, 15, 10, 5)
             reserveSuits.append(suit)
         if specialCode == 'lit2':
             # witness stand-in
-            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0)
+            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 15, 10, 5)
             reserveSuits.append(suit)
         if specialCode == 'cbutcher':
             miniboss2 = self.__genSuitObject(self.zoneId, 23, 'g', 23, 0)

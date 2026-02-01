@@ -391,6 +391,9 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
     if sound.get('npc'):
         isNPC = 1
     battle = sound['battle']
+    target = sound['target']
+    for target in sound['target']:
+        hp = target['hp']
     hasLuredSuits = __hasLuredSuits(sound)
     if not isNPC:
         oldPos, oldHpr = battle.getActorPosHpr(toon)
@@ -405,7 +408,7 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
         sprayEffect.setTwoSided(1)
         I1 = 2.8
         retval.append(ActorInterval(toon, 'sound', playRate=1.0, startTime=0.0, endTime=I1))
-        if not toon.encore and not toon.winded:
+        if not toon.encore and not toon.winded and hp > 0:
             retval.append(Func(toon.makeEncore))
             retval.append(Func(toon.addEncoreRounds, 1))
             if toon.getTrackBonusLevel(SOUND_TRACK) > 1:
@@ -413,7 +416,7 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
             else:
                 retval.append(Parallel(Func(toon.checkEncore, 10)))
             retval.append(Func(toon.showHpTextNew, 0, text='Encore!', colorCode=1))
-        elif toon.encore:
+        elif toon.encore and hp > 0:
             retval.append(Func(toon.makeWinded))
             retval.append(Func(toon.addWindedRounds, 2))
             retval.append(Parallel(Func(toon.checkWinded, 50)))
@@ -424,7 +427,7 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
     else:
         I1 = 2.8
         retval.append(ActorInterval(toon, 'sound', playRate=1.0, startTime=0.0, endTime=I1))
-        if not toon.encore and not toon.winded:
+        if not toon.encore and not toon.winded and hp > 0:
             retval.append(Func(toon.makeEncore))
             retval.append(Func(toon.addEncoreRounds, 1))
             if toon.getTrackBonusLevel(SOUND_TRACK) > 1:
@@ -432,7 +435,7 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
             else:
                 retval.append(Parallel(Func(toon.checkEncore, 10)))
             retval.append(Func(toon.showHpTextNew, 0, text='Encore!', colorCode=1))
-        elif toon.encore:
+        elif toon.encore and hp > 0:
             retval.append(Func(toon.makeWinded))
             retval.append(Func(toon.addWindedRounds, 2))
             retval.append(Parallel(Func(toon.checkWinded, 50)))

@@ -24,7 +24,7 @@ tbc - The Big Cheese Level 8-25
 	
 	Operations Analysts:
 stg - Stooge Level 2-8
-enf - Enforcer Level 3-9
+enf - Enforcer Level 4-10
 mldr - The Molder Level 5-15
 
 	Field Specialists:
@@ -73,7 +73,7 @@ bw - Big Wig Level 8-25
 
 	Operations Analysts:
 pf - Pettifogger Level 2-8
-cv - Conveyancer Level 3-9
+cv - Conveyancer Level 4-10
 ad - Advocate Level 5-15
 
 	Field Specialists:
@@ -119,19 +119,17 @@ ls - Loan Shark Level 7-18
 rb - Robber Baron Level 8-25
 
 	Operation Analysts:
-fct - Fat Cat Level 4-12
+shy - Shylock Level 2-8
+sw - The Swindler Level 4-10
+gld - Golden Goose Level 5-15
 
 	Field Specialists:
-shy - Shylock Level 2-8
-sw - The Swindler Level 3-9
-ovt - Overtimer Level 5-15
-trs - Cash Cow Level 6-15
+fct - Fat Cat Level 4-12
+trs - Cheapskate Level 6-15
 bfh - Big Fish Level 7-18
 
-	Facility Cog:
-maudit - Mint Auditor Level 14-15.exe 
-
 	Facility Manager:
+ovt- Confused Mint Supervisor Level 20.mgr
 supervis - Mint Supervisor Level 20-25.mgr (OFTF)
 
 	Street Managers:
@@ -168,12 +166,12 @@ m - The Mingler Level 7-18
 mh - Mr. Hollywood Level 8-25
 
 	Operations Analysts:
-dc - Double Crosser Level 3-9
-fcs - Forecaster Level 4-12
-
-	Field Specialists:
+dc - Double Crosser Level 4-10
 cn - Connoisseur Level 2-8
 cnd - Candidate Level 5-15
+
+	Field Specialists:
+fcs - Forecaster Level 4-12
 ppl - People Pleaser Level 6-15
 ksp - Kiss-Up Level 7-18
 
@@ -220,11 +218,11 @@ hho - Head Honcho Level 8-25
 
 	Operations Analysts:
 ca - Con Artist Level 2-8
-txm - Toxic Manager Level 4-12
+mdm - Middleman Level 4-10
+ang - Angel Investor Level 5-15
 
 	Field Specialists:
-mdm - Middleman Level 3-9
-ang - Angel Investor Level 5-15
+txm - Toxic Manager Level 4-12
 bfh2 - Big Fish Level 6-15
 chw - Chairwarmer Level 7-18
 
@@ -240,7 +238,7 @@ gatekeep - Gatekeeper Level 10.mgr
 
 	Directors:
 dola - Director Of Land Acquisition Level 12.mgr
-dold - Director Of Land Development Level 25.mgr
+dold - Director Of Land Development Level 25.mgr v2.0
 
 	Boardbot 'Litigation' Team:
 liquid - Liquidator Level 56.mgr
@@ -267,11 +265,11 @@ rus - Root User Level 8-25
 
 	Operations Analysts:
 dhr - Data Hoarder Level 2-8
-key - Keyboard Warrior Level 4-12
+brn - Brainiac Level 4-10
+blk - Black Hat Level 5-15
 
 	Field Specialists:
-brn - Brainiac Level 3-9
-blk - Black Hat Level 5-15
+key - Keyboard Warrior Level 4-12
 pyc - Python Charmer Level 6-15
 sys - Industry Titan Level 7-18
 
@@ -314,11 +312,11 @@ anc - Anchor Man Level 8-20
 
 	Operations Analysts:
 bsd - Backseat Driver Level 2-8
-ath - Agonizing Author Level 4-12
+sbg - Sandbagger Level 4-10
+dcw - Doctor White Level 5-15
 
 	Field Specialists:
-sbg - Sandbagger Level 3-9
-dcw - Doctor White Level 5-15
+ath - Agonizing Author Level 4-12
 wnk - White Knight Level 6-15
 std - Stunt Double Level 7-18
 

@@ -245,26 +245,6 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
             self.maxHP = int(self.maxHP * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
             self.currHP = self.maxHP
 
-    def b_setCog(self, cog):
-        if cog == None:
-            cog = 0
-        self.setCog(cog)
-        self.d_setCog(self.getCog())
-
-    def d_setCog(self, cog):
-        self.sendUpdate('setExecutive', [cog])
-
-    def getCog(self):
-        return self.cog
-
-    def setCog(self, cog):
-        if cog == None:
-            cog = 0
-        self.cog = cog
-        if self.cog:
-            self.maxHP = self.maxHP
-            self.currHP = self.maxHP
-
     def b_setGovernaught(self, governaught):
         if governaught == None:
             governaught = 0
@@ -283,6 +263,26 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         self.governaught = governaught
         if self.governaught:
             self.maxHP = int(self.maxHP * ToontownBattleGlobals.GOVERNAUGHT_HP_MULT)
+            self.currHP = self.maxHP
+
+    def b_setCog(self, cog):
+        if cog == None:
+            cog = 0
+        self.setCog(cog)
+        self.d_setCog(self.getCog())
+
+    def d_setCog(self, cog):
+        self.sendUpdate('setExecutive', [cog])
+
+    def getCog(self):
+        return self.cog
+
+    def setCog(self, cog):
+        if cog == None:
+            cog = 0
+        self.cog = cog
+        if self.cog:
+            self.maxHP = self.maxHP
             self.currHP = self.maxHP
 
     def b_setManager(self, manager):
@@ -346,7 +346,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         return self.currHP
 
     def setHP(self, hp):
-        if hp > self.maxHP * self.hardMaxHP and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres' and not self.dna.name == 'clerk' and not self.dna.name == 'supervis':
+        if hp > self.maxHP * self.hardMaxHP and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres' and not self.dna.name == 'clerk' and not self.dna.name == 'supervis' and not self.dna.name == 'ovt':
             self.currHP = self.maxHP * self.hardMaxHP
         else:
             self.currHP = hp

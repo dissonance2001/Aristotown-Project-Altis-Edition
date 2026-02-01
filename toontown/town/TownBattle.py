@@ -24,6 +24,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.pets import PetConstants
 from direct.gui.DirectGui import DGG
 from toontown.battle import FireCogPanel
+from direct.interval.SoundInterval import SoundInterval
 from toontown.battle import SueCogPanel
 
 class TownBattle(StateData.StateData):
@@ -36,6 +37,7 @@ class TownBattle(StateData.StateData):
         self.numCogs = 1
         self.cogs = []
         self.creditLevel = None
+        self.clockTick = None
         self.luredIndices = []
         self.trappedIndices = []
         self.numToons = 1
@@ -203,11 +205,20 @@ class TownBattle(StateData.StateData):
         if hasattr(self, 'fsm'):
             self.fsm.request(state)
 
+    def checkTimer(self):
+        if self.clockTick != None:
+            return
+        elif self.clockTick == None:
+            self.clockTick = SoundInterval(globalBattleSoundCache.getSound('round_running_out.ogg'), node=base.localAvatar, listenerNode=base.localAvatar).start()
+        else:
+            return
+
     def updateTimer(self, time):
         self.time = time
         self.timer.setTime(time)
-
-
+        self.clockTick = None
+        if time == 10:
+            self.checkTimer()
 
     def __cogPanels(self, num):
         for panel in self.cogPanels:
@@ -420,6 +431,10 @@ class TownBattle(StateData.StateData):
         else:
             canHeal = 1
         return (canHeal, canTrap, canLure)
+
+    def adjustStatusEffects(self, toons):
+        for i in range(len(toons)):
+            self.toonPanels[i].setLaffMeter(toons[i])
 
     def adjustCogsAndToons(self, cogs, luredIndices, trappedIndices, toons):
         cogIds = map(lambda cog: cog.doId, cogs)

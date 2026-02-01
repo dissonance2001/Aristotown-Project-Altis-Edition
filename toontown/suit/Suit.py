@@ -233,10 +233,10 @@ ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dola = (('quick-jump', 'jump', 4), ('stomp', 'stomp', 4), ('effort', 'effort', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-liquid = (('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
+liquid = (('glower', 'glower', 4),('sanction', 'sanction', 4), ('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
 rkeeper = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
 cbutcher = (('roll-o-dex', 'roll-o-dex', 4), ('revvedup', 'revvedup', 4), ('sparkplug', 'sparkplug', 4), ('snap', 'snap-override', 4),  ('scabbard', 'scabbard', 4), ('layoffs', 'layoffs', 4), ('throttle', 'throttle', 4), ('throttletwo', 'throttletwo', 4), ('effort', 'effort', 4), ('glower', 'glower', 4))
-cdirector = (('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('cease', 'cease3', 4), ('defense', 'defense', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
+cdirector = (('frustrated-f', 'frustrated-f', 4), ('sanction', 'sanction3', 4), ('cease', 'cease3', 4), ('defense', 'defense', 4), ('effort', 'effort', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
 dking = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 ottoman = (('effort', 'effort', 4), ('hold-pencil', 'hold-pencil', 4), ('pen-squirt', 'fountain-pen', 4))
 crystal = (('shot5', 'shot5', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('defense', 'defense', 4))
@@ -1365,6 +1365,7 @@ class Suit(Avatar.Avatar):
         self.suitColorTrack = None
         self.partTracks = None
         self.extraAttack = 0
+        self.extraAbility = 0
         self.damageMult = 0
         self.lureRounds = 0
         self.vulnerability = 0
@@ -2558,10 +2559,14 @@ class Suit(Avatar.Avatar):
             self.setTransparency(1)
             self.setHeight(9.31)
         elif dna.name == 'liquid':
-            self.scale = 6.5 / bSize
-            self.handColor = VBase4(0.714, 0.725, 0.773, 1.0)
-            self.generateLongcoatBody()
-            self.generateHead3('rainmaker', animated=True)
+            self.scale = 6.25 / aSize
+            self.handColor = VBase4(0.498, 0.635, 0.655, 1.0)
+            self.generateBody()
+            self.makeBoardbotManager()
+            self.generateHead3('bellringer', animated=True)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_bellringer_board.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(8.5)
         elif dna.name == 'rkeeper':
             self.scale = 7.1 / aSize
@@ -3752,10 +3757,10 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/bowtie').show()
         elif self.style.dept == 's' and not self.style.name == 'racket':
             modelRoot.find('**/necktie-s').show()
-        elif self.style.name == 'liquid':
-            modelRoot.find('**/necktie-w').hide()
-            modelRoot.find('**/bowtie').hide()
-            modelRoot.find('**/necktie-s').hide()
+        # elif self.style.name == 'liquid':
+        #     modelRoot.find('**/necktie-w').hide()
+        #     modelRoot.find('**/bowtie').hide()
+        #     modelRoot.find('**/necktie-s').hide()
         elif self.style.name == 'psetter':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
@@ -3888,10 +3893,10 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-w').hide()
             modelRoot.find('**/bowtie').hide()
             modelRoot.find('**/necktie-s').hide()
-        elif self.style.name == 'liquid':
-            modelRoot.find('**/necktie-w').hide()
-            modelRoot.find('**/bowtie').hide()
-            modelRoot.find('**/necktie-s').hide()
+        # elif self.style.name == 'liquid':
+        #     modelRoot.find('**/necktie-w').hide()
+        #     modelRoot.find('**/bowtie').hide()
+        #     modelRoot.find('**/necktie-s').hide()
         elif self.style.name == 'racket':
             modelRoot.find('**/necktie-w').hide()
             modelRoot.find('**/bowtie').hide()
@@ -4303,7 +4308,7 @@ class Suit(Avatar.Avatar):
                 headModel.setY(-.2)
                 texture = loader.loadTexture('phase_9/maps/ttcc_ene_radiog.png')
                 headModel.setTexture(texture, 1)
-            elif headType == 'bellringer' and self.style.name == 'cdirector':
+            elif headType == 'bellringer' and self.style.name == 'liquid':
                 headModel.setScale(1.05)
                 headModel.setZ(-0.15)
                 headModel.setY(-.125)
@@ -6639,8 +6644,8 @@ class Suit(Avatar.Avatar):
        # self.__changeColor()
         self.isImmortal = 0
 
-    def makeLured(self):
-        self.isLured = 1
+    def makeLured(self, prestige):
+        self.isLured = prestige
 
     def makeTrapped(self, level):
         self.isTrapped = level
@@ -7768,6 +7773,359 @@ class Suit(Avatar.Avatar):
 
         return task.again  # repeat every 0.1 sec
 
+    def makeExtraAbilities(self, num):
+        self.extraAbility = num
+        if self.extraAbility == 1:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack.loop()
+        if self.extraAbility == 2:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack2 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack2.loop()
+        if self.extraAbility == 3:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack3 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack3.loop()
+        if self.extraAbility == 4:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack4 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack4.loop()
+        if self.extraAbility == 5:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack5 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack5.loop()
+        if self.extraAttack == 6:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack6 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack6.loop()
+        if self.extraAbility == 7:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack7 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack7.loop()
+        if self.extraAbility == 8:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack8 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack8.loop()
+        if self.extraAbility == 9:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack9 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack9.loop()
+        if self.extraAbility == 10:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack10 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack10.loop()
+        if self.extraAbility == 11:
+            if self.style.name == 'clubpres':
+                knife = loader.loadModel('phase_6/models/golf/golf_ball')
+                knife.setScale(1)
+            else:
+                knife = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+                knife.setScale(0.5)
+            knife.reparentTo(self)
+            knife.setZ(self.height)
+            self.knifeTrack11 = Parallel(
+            Sequence(
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=1.5, toData=0.0, blendType='easeIn')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=0.0, toData=-1.5, blendType='easeOut')
+                ),
+                Parallel(
+                    LerpFunctionInterval(knife.setX, 1.0, fromData=0.0, toData=1.5, blendType='easeOut'),
+                    LerpFunctionInterval(knife.setY, 1.0, fromData=-1.5, toData=0.0, blendType='easeIn')
+                )
+            ),
+            LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
+        )
+            self.knifeTrack11.loop()
+
+
+    def getExtraAbilities(self):
+        return self.extraAbility
+
+    def removeExtraAbilities(self):
+        self.extraAbility = 0
+        if self.knifeTrack != None:
+            self.knifeTrack.finish()
+
     def makeExtraAttacks(self, num):
         self.extraAttack = num
         if self.extraAttack == 1:
@@ -8089,7 +8447,7 @@ class Suit(Avatar.Avatar):
                 knife.setScale(0.5)
             knife.reparentTo(self)
             knife.setZ(self.height)
-            self.knifeTrack10 = Parallel(
+            self.knifeTrack11 = Parallel(
             Sequence(
                 Parallel(
                     LerpFunctionInterval(knife.setX, 1.0, fromData=1.5, toData=0.0, blendType='easeIn'),
@@ -8110,7 +8468,7 @@ class Suit(Avatar.Avatar):
             ),
             LerpHprInterval(knife, 4.0, VBase3(360.0, 270.0, 0.0), startHpr=VBase3(0.0, 270.0, 0.0))
         )
-            self.knifeTrack10.loop()
+            self.knifeTrack11.loop()
 
 
     def getExtraAttacks(self):
@@ -8268,7 +8626,7 @@ class Suit(Avatar.Avatar):
             return StenographerDialogArray
         elif self.style.name == 'liquid' and not self.isSkeleton:
             loadDialog(1)
-            return RainmakerDialogArray
+            return BellringerDialogArray
         elif self.style.name == 'cdirector' and not self.isSkeleton:
             loadDialog(1)
             return CLODialogArray

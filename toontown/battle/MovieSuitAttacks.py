@@ -572,9 +572,40 @@ def doSuitAttack(attack):
         suitTrack = MovieBoardbotLitigationCheats.doMonsoon(attack)
     elif name == 'LiquidatorTornado':
         suitTrack = MovieBoardbotLitigationCheats.doTornado(attack)
+        # tollmaster
+    elif name == 'TollmasterMandatoryToll':
+        suitTrack = MovieBoardbotLitigationCheats.doMandatoryToll(attack)
+    elif name == 'TollmasterMandatoryTollFinal':
+        suitTrack = MovieBoardbotLitigationCheats.doMandatoryTollFinal(attack)
+    elif name == 'TollmasterResonanceTax':
+        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax(attack)
+    elif name == 'TollmasterResonanceTax2':
+        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax2(attack)
+    elif name == 'TollmasterResonanceTax3':
+        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax3(attack)
+    elif name == 'TollmasterResonanceTax4':
+        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax4(attack)
+    elif name == 'TollmasterResonanceTax5':
+        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax5(attack)
+    elif name == 'TollmasterMissedPayment':
+        suitTrack = MovieBoardbotLitigationCheats.doMissedPayment(attack)
+    elif name == 'TollmasterLedgerOfSound':
+        suitTrack = MovieBoardbotLitigationCheats.doLedgerOfSound(attack)
+    elif name == 'TollmasterBalanceTheLedger':
+        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger(attack)
+    elif name == 'TollmasterBalanceTheLedger2':
+        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger2(attack)
+    elif name == 'TollmasterBalanceTheLedger3':
+        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger3(attack)
+    elif name == 'TollmasterBalanceTheLedger4':
+        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger4(attack)
+    elif name == 'TollmasterBalanceTheLedger5':
+        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger5(attack)
         # record keeper
     elif name == 'RecordkeeperMinutesTaken':
         suitTrack = MovieBoardbotLitigationCheats.doMinutesTaken(attack)
+    elif name == 'RecordkeeperMinutesTakenContingency':
+        suitTrack = MovieBoardbotLitigationCheats.doMinutesTakenContingency(attack)
     elif name == 'RecordkeeperMinutesTakenDamage':
         suitTrack = MovieBoardbotLitigationCheats.doMinutesTakenDamage(attack)
     elif name == 'RecordkeeperPaperTrail':
@@ -648,9 +679,11 @@ def doSuitAttack(attack):
     elif name == 'ContingencyRedundantAuthority':
         suitTrack = MovieBoardbotLitigationCheats.doRedundantAuthority(attack)
     elif name == 'ContingencyOperationalFreeze':
-        suitTrack = MovieBoardbotLitigationCheats.doOperationalFreeze(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doContingencyClause(attack)
     elif name == 'ContingencyForecastCollapse':
         suitTrack = MovieBoardbotLitigationCheats.doForecastCollapse(attack)
+    elif name == 'ContingencyRiskThresholdBreach':
+        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach(attack)
         # dividend king
     elif name == 'DividendAccountRollover':
         suitTrack = MovieBoardbotLitigationCheats.doAccountRollover(attack)
@@ -760,7 +793,7 @@ def doSuitAttack(attack):
         suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 5)
         # union buster
     elif name == 'UnionBusterUnionDues':
-        suitTrack = MovieUniversalCheats.doSynergy(attack)
+        suitTrack = MovieSellbotLitigationCheats.doMandatoryOvertime(attack)
     elif name == 'UnionBusterUnionCalculator':
         suitTrack = MovieSellbotLitigationCheats.doUnionCalculator(attack)
     elif name == 'UnionBusterUnionBust':
@@ -1435,6 +1468,10 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CalculatingFees':
             resetSuitTrack = Sequence(suitTrack)
+        elif name == 'TollmasterMandatoryToll':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'TollmasterMissedPayment':
+            resetSuitTrack = Sequence(suitTrack)
         elif name == 'ButcherRevvingUp':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'ButcherRevvingUpWhipsaw':
@@ -1496,6 +1533,10 @@ def doSuitAttack(attack):
         elif name == 'ButcherSparkPlugDamage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'RecordkeeperMinutesTaken':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'RecordkeeperMinutesTakenContingency':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'ContingencyRiskThresholdBreach':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ButcherMarkedWood':
             resetSuitTrack = Sequence(suitTrack2)
@@ -1802,123 +1843,30 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                  LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                  LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)), LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                           Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale), Func(MovieUtil.removeProp, indicator))
-    currentBossHealth = -1
-    currentBossHealth2 = -1
     if suit:
-        if suit.style.name == 'caseman':
-            for s in battle.activeSuits:
-                if s.dna.name == 'sgoat' or s.dna.name == 'lgator' or s.dna.name == 'stenog':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'sgoat':
-            for s in battle.activeSuits:
-                if s.dna.name == 'caseman':
-                    currentBossHealth2 = s.currHP
-                if s.dna.name == 'stenog' or s.dna.name == 'lgator' or s.dna.name == 'caseman':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'lgator':
-            for s in battle.activeSuits:
-                if s.dna.name == 'caseman':
-                    currentBossHealth2 = s.currHP
-                if s.dna.name == 'sgoat' or s.dna.name == 'stenog' or s.dna.name == 'caseman':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'stenog':
-            for s in battle.activeSuits:
-                if s.dna.name == 'caseman':
-                    currentBossHealth2 = s.currHP
-                if s.dna.name == 'sgoat' or s.dna.name == 'lgator' or s.dna.name == 'caseman':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'ambass':
-            for s in battle.activeSuits:
-                if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'phouse':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'wtapper':
-            for s in battle.activeSuits:
-                if s.dna.name == 'phouse' or s.dna.name == 'bkeeper' or s.dna.name == 'ambass':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'bkeeper':
-            for s in battle.activeSuits:
-                if s.dna.name == 'wtapper' or s.dna.name == 'phouse' or s.dna.name == 'ambass':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'phouse':
-            for s in battle.activeSuits:
-                if s.dna.name == 'wtapper' or s.dna.name == 'bkeeper' or s.dna.name == 'ambass':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'safesupervis':
-            for s in battle.activeSuits:
-                if s.dna.name == 'ubuster' or s.dna.name == 'radiog' or s.dna.name == 'racket':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'ubuster':
-            for s in battle.activeSuits:
-                if s.dna.name == 'radiog' or s.dna.name == 'safesupervis' or s.dna.name == 'racket':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'racket':
-            for s in battle.activeSuits:
-                if s.dna.name == 'ubuster' or s.dna.name == 'safesupervis' or s.dna.name == 'radiog':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        elif suit.style.name == 'radiog':
-            for s in battle.activeSuits:
-                if s.dna.name == 'ubuster' or s.dna.name == 'safesupervis' or s.dna.name == 'racket':
-                    currentBossHealth = s.currHP
-            if currentBossHealth == -1:
-                animTrack.append(Func(suit.makeDesperation))
-                animTrack.append(Func(suit.makeDamageUp))
-        for s in battle.activeSuits:
-                currentBossHealth = s.currHP
-        if currentBossHealth == -1:
-            animTrack.append(Func(suit.removeInsured))
-        syphonSuitTrack = Parallel(Sequence(Func(suit.addSyphonHP, suit, +dmg)))
         fraudulentSuitTrack = Parallel(Sequence(Func(suit.addFraudulentDamage, suit, +(dmg * 3))))
     if suit:
         if dmg > 0 and suit.dna.name == 'supervis' and suit.getActualLevel() == 25:
             animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
             animTrack.append(fraudulentSuitTrack)
-            return Parallel(animTrack, indicatorTracks)
-        elif dmg > 0 and suit.isSyphon:
-            animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
-            animTrack.append(syphonSuitTrack)
+            origPos, origHpr = battle.getActorPosHpr(toon)
+            animTrack.append(Func(toon.setHpr, battle, origHpr))
             return Parallel(animTrack, indicatorTracks)
         elif dmg > 0:
             animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
+            origPos, origHpr = battle.getActorPosHpr(toon)
+            animTrack.append(Func(toon.setHpr, battle, origHpr))
             return Parallel(animTrack, indicatorTracks)
         else:
             animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
             indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
+            origPos, origHpr = battle.getActorPosHpr(toon)
+            animTrack.append(Func(toon.setHpr, battle, origHpr))
             return Parallel(animTrack, indicatorTrack, indicatorTracks)
     elif dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
@@ -2070,6 +2018,7 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     else:
         splicedAnims = getSplicedAnimsTrack(splicedDamageAnims, actor=toon)
+        toonTrack.append(Func(toon.checkCogDeath, suit))
         toonTrack.append(splicedAnims)
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
@@ -2081,7 +2030,7 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
            # suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
       #  else:
           #  suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
-    return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
+    return Parallel(toonTrack, indicatorTrack, suitResponseTrack)
 
 
 def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames = None, splicedDamageAnims = None, showDamageExtraTime = 0.01):
@@ -2096,6 +2045,7 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     else:
         splicedAnims = getSplicedAnimsTrack(splicedDamageAnims, actor=toon)
+        toonTrack.append(Func(toon.checkCogDeath, suit))
         toonTrack.append(splicedAnims)
         indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
     soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
@@ -2107,7 +2057,7 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
           #  suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
         #else:
            # suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
-    return Parallel(toonTrack, indicatorTrack, suitResponseTrack, soundTrack)
+    return Parallel(toonTrack, indicatorTrack, suitResponseTrack)
 
 
 def getSplicedAnimsTrack(anims, actor = None):
@@ -3494,8 +3444,8 @@ def doDenialOfService(attack):
 def doHostileTakeoverNew(attack):
     suit = attack['suit']
     battle = attack['battle']
-    knifeDelay = 3.0
-    suitTrack = getSuitAnimTrack(attack, playRate=1.25)
+    knifeDelay = 1.0
+    suitTrack = getSuitAnimTrack(attack)
     knifeTracks = Parallel()
     for i in xrange(120):
         knife = globalPropPool.getProp('dagger')
@@ -3515,7 +3465,7 @@ def doHostileTakeoverNew(attack):
      ['slip-forward', 0.01, 1.0]]
     dodgeAnims = [['duck', 1e-06, 0.8]]
     toonTracks = getToonTracks(attack, damageDelay=knifeDelay + 0.11, splicedDamageAnims=damageAnims, dodgeDelay=knifeDelay - 0.1, splicedDodgeAnims=dodgeAnims)
-    soundTrack = Sequence(Wait(3.0), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_hostileTakeover.ogg'), node=suit))
+    soundTrack = Sequence(Wait(1.0), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_hostileTakeover.ogg'), node=suit))
     return Parallel(suitTrack, knifeTracks, soundTrack, toonTracks)
 
 
