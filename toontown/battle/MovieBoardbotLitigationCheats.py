@@ -265,6 +265,10 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'liquid' and attack[
+        'name'] == 'TollmasterMandatoryTollFinal':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'liquid' and attack[
         'name'] == 'TollmasterBalanceTheLedger':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
@@ -2660,7 +2664,7 @@ def doContingencyClauseRetaliation(attack):
         )
         if dmg > 0:
             toonTracks.append(toonTrack)
-            toonTracks.append(Parallel(Func(toon.checkDamageDown, 40)))
+            toonTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 1), Func(toon.checkDamageDown, 40)))
             smokeTracks.append(smokeTrack)
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     toonDamageTrack = getToonTracksCheat(attack, 1.75, ['nothing'], 0, ['neutral'])
@@ -3657,7 +3661,7 @@ def doOverrideRemovalPhase3(attack):
                                      "DAMAGE TO- help- TO- help- TO OVER- me- OVERRIDE DE- toons- DETECTED.",
                                      CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
                                      "OVERRIDE- it- SEVERE- hurts- SEVERELY DAMA- let- DAMAGED. ATTEMPT- me- ATTEMPTING- OUT!! FINAL FALLBACK PROCEDURE.",
-                                     CFSpeech | CFTimeout), Parallel(ceaseTrack, ceaseSoundTrack, Sequence(Wait(3.75), Func(suit.makeChainsawPhase3))),
+                                     CFSpeech | CFTimeout), Parallel(ceaseTrack, ceaseSoundTrack, Sequence(Wait(3.25), Func(suit.makeChainsawPhase3))),
                                 Func(suit.setNeutralAnimation))
     ceaseSpeechTrack.append(Wait(2.0))
     return Parallel(ceaseSpeechTrack, makeImmune)
@@ -4001,7 +4005,7 @@ def doLedgerOfSoundOLD(attack):
     soundTrack = getSoundTrack('SA_healing_bell.ogg')
     return Parallel(suitTrack2, soundTrack, sprayTrack)
 
-def doMandatoryTollFinal(attack):
+def donothing(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
@@ -4059,6 +4063,102 @@ def doMandatoryTollFinal(attack):
     toonDamageTrack = getToonTracks(attack, damageDelay=damageDelay + 0.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['neutral'], showDamageExtraTime=1.0)
     soundTracks.append(Sequence(getSoundTrack('SA_life_insurance_loop.ogg', delay=2.0), getSoundTrack('SA_life_insurance_loop.ogg'), getSoundTrack('SA_life_insurance_loop.ogg')))
     return Parallel(toonTracks, toonSpinTracks, toonDamageTrack, suitTrack, spinTracks1, spinTracks2, spinTracks3, soundTracks)
+
+def doMandatoryTollFinal(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    tauntIndex = attack['taunt']
+    for headPart in suit.animatedHeadParts:
+        head = headPart
+    sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
+    sprayEffect.setDepthWrite(0)
+    sprayEffect.setDepthTest(0)
+    sprayEffect.setTwoSided(1)
+    sprayTrack = Sequence(Wait(0.5))
+    makeDanceSessions = Parallel()
+    targets = attack['target']
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        makeDanceSession = Sequence(Wait(2.0), Func(toon.showHpTextNew, 0, text="Toll Increased!", colorCode=1), Func(toon.makeMandatoryToll), Func(toon.checkMandatoryToll, +8), ActorInterval(toon, 'confused'), Func(toon.loop, 'neutral'))
+        if dmg > 0:
+            makeDanceSessions.append(makeDanceSession)
+    sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
+    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
+    sprayTrack.append(doMandatoryTollFinal2(attack))
+    suitTrack2 = Parallel(getSuitAnimTrack(attack), Func(suit.createSuitBellInterval))
+    soundTrack = getSoundTrack('SA_healing_bell.ogg')
+    return Parallel(suitTrack2, soundTrack, sprayTrack)
+
+def doMandatoryTollFinal2(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTrack = Sequence(ActorInterval(suit, 'snap'), Func(suit.setNeutralAnimationDrop))
+    propTracks = Parallel()
+    toonTracks = Parallel()
+    smokeTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1)
+        smoke.setBillboardPointEye()
+        smokeTrack = Sequence(Wait(1.75), Func(smoke.reparentTo, toon),
+                              Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                       LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                              Func(MovieUtil.removeProp, smoke))
+        piano = globalPropPool.getProp('piano')
+        safe = loader.loadModel('phase_4/models/accessories/bosses/backpack_bellringer')
+        boulder = globalPropPool.getProp('boulder')
+        weight = globalPropPool.getProp('weight')
+        toonPos = toon.getPos(battle)
+        toonHpr = battle.getActorPosHpr(toon)
+        y = toonPos.getY()
+        propPos = Point3(toonPos.getX(), y, 50)
+        soundTrack2 = getSoundTrack('AA_drop_piano.ogg', delay=1.75, duration=2.0, node=suit)
+        soundTrack3 = getSoundTrack('AA_drop_boulder.ogg', delay=1.75, duration=2.0, node=suit)
+        soundTrack4 = getSoundTrack('SA_bell.ogg', delay=2.25, node=suit)
+        soundTrack5 = getSoundTrack('AA_drop_bigweight.ogg', delay=1.75, duration=2.0, node=suit)
+        propTrack2 = Sequence(Func(safe.reparentTo, battle),
+            getPropAppearTrack(safe, parent=battle, posPoints=[propPos, VBase3(0, 0, 0)], appearDelay=0.0,
+                               scaleUpPoint=Point3(10), scaleUpTime=1.5),
+            LerpPosInterval(safe, 0.5, Point3(toonPos.getX(), y, 2)),
+            LerpPosInterval(safe, 0.1, Point3(toonPos.getX(), y, 3)),
+            LerpPosInterval(safe, 0.1, Point3(toonPos.getX(), y, 2)), Sequence(
+                Wait(1.5),
+                LerpScaleInterval(safe, .25, MovieUtil.PNT3_ZERO)
+            ))
+        if dmg > 0:
+            propTracks.append(Parallel(propTrack2, soundTrack4))
+        toonTrack = Sequence(
+        Wait(2.25),
+        Parallel(
+            Func(toon.enterFlattened),
+            Func(toon.showHpTextNew,  - int(dmg)),
+            #Func(__doDamageCheat, toon, dmg, t['died'])
+        ),
+        Wait(1.75),
+        Parallel(
+            Sequence(
+                Wait(.5),
+                Func(toon.exitFlattened)
+            ),
+            getSoundTrack('toon_decompress.ogg', node=toon),
+            Sequence(
+                ActorInterval(toon, 'jump'),
+                Func(toon.loop, 'neutral')
+            )
+        )
+        )
+        if dmg > 0:
+            toonTracks.append(toonTrack)
+            toonTracks.append(Func(toon.makeUnMandatoryToll))
+            smokeTracks.append(smokeTrack)
+    soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
+    toonDamageTrack = getToonTracksCheat(attack, 2.25, ['nothing'], 0, ['neutral'])
+    return Parallel(suitTrack, toonDamageTrack, smokeTracks, toonTracks, soundTrack, propTracks)
 
 def doResonanceTax(attack):
     targetSuit = attack['suit']

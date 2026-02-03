@@ -247,6 +247,15 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             self.damageInterval = Parallel(Func(self.setMarkedWood, num)).start()
 
+    def checkInkDrain(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getInkDrain() > num:
+            self.damageInterval = Parallel(Func(self.setInkDrain, self.getInkDrain())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setInkDrain, num)).start()
+
     def checkDamageDown(self, num):
         if self.damageInterval:
             self.damageInterval.finish()

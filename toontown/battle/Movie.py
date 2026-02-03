@@ -435,12 +435,16 @@ class Movie(DirectObject.DirectObject):
                 toon.addGagBoostRounds(toon.getGagBoostRounds() - 1)
             if toon.getGroupDamageDownRounds() == 1:
                 toon.makeUnGroupDamageDown()
-            if not toon.getBombedRounds() <= 0:
-                toon.addBombedRounds(toon.getBombedRounds() - 1)
-            if toon.getBombedRounds() == 1:
-                toon.makeUnBombed()
             if not toon.getGroupDamageDownRounds() <= 0:
                 toon.addGroupDamageDownRounds(toon.getGroupDamageDownRounds() - 1)
+            if toon.getBombedRounds() == 1:
+                toon.makeUnBombed()
+            if not toon.getBombedRounds() <= 0:
+                toon.addBombedRounds(toon.getBombedRounds() - 1)
+            if toon.getInkDrainRounds() == 1:
+                toon.makeUnInkDrain()
+            if not toon.getInkDrainRounds() <= 0:
+                toon.addInkDrainRounds(toon.getInkDrainRounds() - 1)
         self._deleteTrack()
         self.track = Sequence(ptrack, name='movie-track-%d' % self.battle.doId)
         if self.battle.localToonPendingOrActive():

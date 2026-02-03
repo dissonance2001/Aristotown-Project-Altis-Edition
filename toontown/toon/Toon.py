@@ -583,6 +583,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.burnedRounds = 0
         self.snapped = 0
         self.snappedRounds = 0
+        self.inkDrain = 0
+        self.inkDrainNumber = 0
+        self.inkDrainRounds = 0
         self.headParts = []
         self.animatedHeadParts = []
         self.numPies = 0
@@ -754,6 +757,25 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getMarkedWoodRounds(self):
         return self.markedWoodRounds
+
+    def makeInkDrain(self):
+        self.inkDrain = 1
+
+    def makeUnInkDrain(self):
+        self.inkDrain = 0
+        self.inkDrainNumber = 0
+
+    def setInkDrain(self, num):
+        self.inkDrainNumber = num
+
+    def getInkDrain(self):
+        return self.inkDrainNumber
+
+    def addInkDrainRounds(self, num):
+        self.inkDrainRounds = num
+
+    def getInkDrainRounds(self):
+        return self.inkDrainRounds
 
     def makeHidden(self):
         self.hidden = 1

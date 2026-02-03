@@ -932,7 +932,7 @@ def doDeathCheck(attack):
     elif not suit.isVirtual:
         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
     for s in battle.activeSuits:
-        suitTrack2.append(Sequence(Func(s.checkDeathCheck, battle), Wait(8.0)))
+        suitTrack2.append(Sequence(Func(s.checkDeathCheck, battle), Wait(9.0)))
     return Parallel(suitTrack2)
 
 def doSynergy(attack):

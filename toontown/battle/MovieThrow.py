@@ -478,7 +478,7 @@ def __throwPie(throw, delay, hitCount, npcs):
         if kbbonus == 0:
             suitResponseTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         suitResponseTrack.append(Func(suit.setNeutralAnimation))
-        suitResponseTrack.append(Wait(1.0))
+        #suitResponseTrack.append(Wait(1.0))
         if suit.dna.name == 'redd' and revived != 0:
             suitResponseTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:

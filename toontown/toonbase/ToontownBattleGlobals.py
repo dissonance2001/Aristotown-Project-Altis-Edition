@@ -957,4 +957,9 @@ ValidStatusConditions = (
     'tollmasterHit',
     'tollmasterDamage',
     'finalToll',
+    'refinementDerrick',
+    'doprHit',
+    'dopaHit',
+    'inkDraincalculator',
+    'drenched',
 )

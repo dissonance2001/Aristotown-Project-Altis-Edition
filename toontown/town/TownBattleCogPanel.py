@@ -3383,7 +3383,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'txl':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .085, .085, .085)
         elif name == 'derrman':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .095, .095, .095)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .1, .1, .1)
         elif name == 'treek':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .075, .075, .075)
         elif name == 'pcrat':

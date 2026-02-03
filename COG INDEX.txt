@@ -241,7 +241,7 @@ dola - Director Of Land Acquisition Level 12.mgr
 dold - Director Of Land Development Level 25.mgr v2.0
 
 	Boardbot 'Litigation' Team:
-liquid - Liquidator Level 56.mgr
+liquid - Tollmaster Level 56.mgr
 rkeeper - Recordkeeper Level 60.mgr
 cbutcher - Corporate Butcherer Level 60.mgr
 cdirector - Contingency Director Level 66.mgr

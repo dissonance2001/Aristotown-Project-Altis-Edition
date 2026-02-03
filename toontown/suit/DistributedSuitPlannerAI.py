@@ -1302,6 +1302,8 @@ def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
         revives = 1
     elif name == 'wsi':
         revives = 1
+    elif name == 'dopa':
+        revives = 1
     elif name == 'erclaim':
         revives = 1
     elif name == 'erfit':

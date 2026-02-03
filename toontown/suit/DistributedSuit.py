@@ -731,7 +731,8 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             ival = self.__createSuitResetPosTrack(battle)
             ival.start()
         else:
-            pass
+            ival = Func(self.setNeutralAnimationTrap)
+            ival.start()
 
     def checkCogThrowPos(self, item, battle, duration):
         hitPoint = self.getPos(battle)
@@ -1247,6 +1248,21 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             self.healInterval = Parallel(Func(self.showHpTextNew, 200, text="REFINED!", colorCode=1),
                                          Func(self.setHealthForMe, 200), Func(self.updateHealthBar, 0)).start()
+
+    def checkRefinementDerrickMan(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.currHP >= (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="REFINED!", colorCode=1),
+                                         Func(self.updateHealthBar, 0)).start()
+        elif self.currHP + (self.maxHP * 0.4) > (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REFINED!", colorCode=1),
+                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        else:
+            self.healInterval = Parallel(Func(self.showHpTextNew, int(math.ceil(self.maxHP * 0.4)), text="REFINED!", colorCode=1),
+                                         Func(self.setHealthForMe, int(math.ceil(self.maxHP * 0.4))), Func(self.updateHealthBar, 0)).start()
 
     def checkRefinementPowerhouseManager(self):
         if self.healInterval:

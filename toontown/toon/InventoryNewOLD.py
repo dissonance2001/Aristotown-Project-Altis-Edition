@@ -506,19 +506,26 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
         else:
             self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
+            lureValue = int(math.ceil(
+                ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
+            if track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7:
+                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
+                damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
+            elif track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 5:
+                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
+                damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
+            elif track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 3:
+                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
+                damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
+            elif track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1:
+                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
+                damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
             if allGagBoost and not track == LURE_TRACK:
                 damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
-                lureValue = int(math.ceil(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
                 damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost')
             elif raisedAnte and not track == LURE_TRACK:
                 damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
-                lureValue = int(math.ceil(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
                 damageAppendStr = labelColorizeJustAll(damage, 'raisedAnte')
-            else:
-                lureValue = int(math.ceil(
-                    ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
 
         damage = math.ceil(damage)
         organicBonus = self.toon.checkGagBonus(track, level)

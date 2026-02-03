@@ -33,6 +33,9 @@ class TownBattleToonPanel(DirectFrame):
         self.nodDodgeRoundsText = None
         self.cheer = None
         self.cheerRounds = None
+        self.inkDrain = None
+        self.inkDrainRoundsText = None
+        self.inkDrainText = None
         self.gagBoost = None
         self.gagBoostText = None
         self.gagBoostRoundsText = None
@@ -257,6 +260,14 @@ class TownBattleToonPanel(DirectFrame):
             self.markedWood.removeNode()
         if self.markedWoodRounds != None:
             self.markedWoodRounds.removeNode()
+        if self.markedWoodText != None:
+            self.markedWoodText.removeNode()
+        if self.inkDrain != None:
+            self.inkDrain.removeNode()
+        if self.inkDrainRoundsText != None:
+            self.inkDrainRoundsText.removeNode()
+        if self.inkDrainText != None:
+            self.inkDrainText.removeNode()
         if self.snapped != None:
             self.snapped.removeNode()
         if self.snappedText != None:
@@ -817,6 +828,56 @@ class TownBattleToonPanel(DirectFrame):
                 self.markedWood.reparentTo(self.attackIcon7)
                 self.attackIcon7.setColor(0, 0.902, 1, 1)
                 self.markedWood.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.inkDrain:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.inkDrain = status.find('**/ink_drain_icon')
+            self.inkDrainRoundsText = DirectLabel(parent=self.inkDrain, relief=None, text="%s" % avatar.getInkDrainRounds(), text_fg=(1, 1, 1, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.6)
+            self.inkDrainRoundsText.show()
+            self.inkDrainText = DirectLabel(parent=self.inkDrain, relief=None, text="%s" % avatar.getInkDrain() + "%", text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, 0.15),
+                                              text_scale=.4)
+            self.inkDrainText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.inkDrain.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.inkDrain.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.inkDrain.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.inkDrain.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.inkDrain.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 1)
+                self.inkDrain.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.inkDrain.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.inkDrain.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.inkDrain.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.inkDrain.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.inkDrain.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.inkDrain.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.inkDrain.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.inkDrain.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.inkDrain.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.inkDrain.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
         if avatar.damageDown:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -1446,6 +1507,9 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.damageDown:
                 damage *= (1.0 + self.avatar.getDamageDown() * 0.01)
                 lureValue *= (1.0 + self.avatar.getDamageDown() * 0.01)
+            if self.avatar.inkDrain:
+                damage *= (1.0 + self.avatar.getInkDrain() * 0.01)
+                lureValue *= (1.0 + self.avatar.getInkDrain() * 0.01)
             if self.avatar.groupDamageDown and ((track == LURE_TRACK and level == 1) or (track == LURE_TRACK and level == 3) or (track == LURE_TRACK and level == 5) or (track == LURE_TRACK and level == 7) or (track == SOUND_TRACK)\
                     or (track == ZAP_TRACK) or (track == HEAL_TRACK and level == 1) or (track == HEAL_TRACK and level == 3) or (track == HEAL_TRACK and level == 5) or (track == HEAL_TRACK and level == 7) or (track == SQUIRT_TRACK)):
                 damage *= (1.0 + -50 * 0.01)

@@ -295,16 +295,18 @@ def createSuitReviveTrack(suit, battle):
     hasAnimatedHead = False
     if suit.style.name == 'rainmake':
         for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'murmur')
+            headInterval = Sequence(Wait(1.0), Func(headPart.loop, 'murmur'))
             hasAnimatedHead = True
     elif suit.style.name == 'cdirector':
         for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'murmur')
+            headInterval = Sequence(Wait(1.0), Func(headPart.loop, 'murmur'))
             hasAnimatedHead = True
     else:
         for headPart in suit.animatedHeadParts:
-            headInterval = ActorInterval(headPart, 'death')
+            headInterval =  Sequence(Wait(1.0), ActorInterval(headPart, 'death'))
             hasAnimatedHead = True
+    suitTrack.append(Func(suit.checkCogLured, battle))
+    suitTrack.append(Wait(1.0))
     suitTrack.append(
         ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(suit.hide))
@@ -438,7 +440,7 @@ def createSuitReviveTrack(suit, battle):
     else:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
     deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
-    deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
+    deathSoundTrack = Sequence(Wait(1.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
     singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
@@ -454,13 +456,13 @@ def createSuitReviveTrack(suit, battle):
     smallGearExplosion.setDepthWrite(False)
     bigGearExplosion.setDepthWrite(False)
     explosionTrack = Sequence()
-    explosionTrack.append(Wait(5.4))
+    explosionTrack.append(Wait(6.4))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+    gears1Track = Sequence(Wait(3.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
     gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
     toonMTrack = Parallel(name='toonMTrack')
     for mtoon in battle.toons:
-        toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
+        toonMTrack.append(Sequence(Wait(2.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
 
     returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
     if hasAnimatedHead:
@@ -515,9 +517,11 @@ def createSuitReviveRedd(suit, battle):
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
     hasAnimatedHead = False
     for headPart in suit.animatedHeadParts:
-        headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
+        headInterval = Sequence(Wait(1.0), ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
         headInterval2 = Func(headPart.loop, 'neutral')
         hasAnimatedHead = True
+    suitTrack.append(Func(suit.checkCogLured, battle))
+    suitTrack.append(Wait(1.0))
     suitTrack.append(
         ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(suit.hide))
@@ -540,7 +544,7 @@ def createSuitReviveRedd(suit, battle):
     else:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
     deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
-    deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
+    deathSoundTrack = Sequence(Wait(1.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
     singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
@@ -556,9 +560,9 @@ def createSuitReviveRedd(suit, battle):
     smallGearExplosion.setDepthWrite(False)
     bigGearExplosion.setDepthWrite(False)
     explosionTrack = Sequence()
-    explosionTrack.append(Wait(5.4))
+    explosionTrack.append(Wait(6.4))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+    gears1Track = Sequence(Wait(3.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
     gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
     toonMTrack = Parallel(name='toonMTrack')
     if suit.style.name == 'redd':
@@ -591,7 +595,7 @@ def createSuitReviveRedd(suit, battle):
         suitTrack.append(Func(suit.setNeutralAnimation))
         suitTrack.append(Wait(2.0))
     for mtoon in battle.toons:
-        toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
+        toonMTrack.append(Sequence(Wait(2.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
 
     returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
     if hasAnimatedHead:
@@ -666,9 +670,11 @@ def createSuitReviveTrackVirtual(suit, battle):
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
     hasAnimatedHead = False
     for headPart in suit.animatedHeadParts:
-        headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
+        headInterval = Sequence(Wait(1.0), ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
         headInterval2 = Func(headPart.loop, 'neutral')
         hasAnimatedHead = True
+    suitTrack.append(Func(suit.checkCogLured, battle))
+    suitTrack.append(Wait(1.0))
     suitTrack.append(
         ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(suit.hide))
@@ -802,7 +808,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     else:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
     deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
-    deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
+    deathSoundTrack = Sequence(Wait(1.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
     singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
@@ -818,9 +824,9 @@ def createSuitReviveTrackVirtual(suit, battle):
     smallGearExplosion.setDepthWrite(False)
     bigGearExplosion.setDepthWrite(False)
     explosionTrack = Sequence()
-    explosionTrack.append(Wait(5.4))
+    explosionTrack.append(Wait(6.4))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+    gears1Track = Sequence(Wait(3.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
     gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
     toonMTrack = Parallel(name='toonMTrack')
     if suit.style.name == 'wsi':
@@ -853,7 +859,7 @@ def createSuitReviveTrackVirtual(suit, battle):
         suitTrack.append(Func(suit.makeExtraAttacks, suit.getExtraAttacks() + 1))
         suitTrack.append(Wait(2.0))
     for mtoon in battle.toons:
-        toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
+        toonMTrack.append(Sequence(Wait(2.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
 
     returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
     if hasAnimatedHead:
@@ -884,6 +890,8 @@ def createVirtualSuitDeathTrack(suit, battle):
         headInterval.append(ActorInterval(headPart, 'death', duration=2))
         hasAnimatedHead = True
     if suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
+        suitTrack.append(Func(suit.checkCogLured, battle))
+        suitTrack.append(Wait(1.0))
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
         suitTrack.append(Parallel(ActorInterval(suit, 'mplayer-kneel-into')))
@@ -895,6 +903,8 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
         suitTrack.append(Func(suit.makeDead))
     else:
+        suitTrack.append(Func(suit.checkCogLured, battle))
+        suitTrack.append(Wait(1.0))
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
         suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2), headInterval))
@@ -924,25 +934,27 @@ def createSuitDeathTrack(suit, battle):
     hasAnimatedHead = False
     if suit.style.name == 'arbit':
         for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'murmur')
+            headInterval = Sequence(Wait(1.0), Func(headPart.loop, 'murmur'))
             hasAnimatedHead = True
     elif suit.style.name == 'rainmake':
         for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'murmur')
+            headInterval = Sequence(Wait(1.0), Func(headPart.loop, 'murmur'))
             hasAnimatedHead = True
     elif suit.style.name == 'cdirector':
         for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'murmur')
+            headInterval = Sequence(Wait(1.0), Func(headPart.loop, 'murmur'))
             hasAnimatedHead = True
     elif suit.style.name == 'videog':
         for headPart in suit.animatedHeadParts:
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
-            headInterval = Parallel(ActorInterval(headPart, 'death'), Func(headPart.setTexture, texture, 1))
+            headInterval = Parallel(Sequence(Wait(1.0), ActorInterval(headPart, 'death')), Func(headPart.setTexture, texture, 1))
             hasAnimatedHead = True
     else:
         for headPart in suit.animatedHeadParts:
-            headInterval = ActorInterval(headPart, 'death')
+            headInterval = Sequence(Wait(1.0), ActorInterval(headPart, 'death'))
             hasAnimatedHead = True
+    suitTrack.append(Func(suit.checkCogLured, battle))
+    suitTrack.append(Wait(1.0))
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setDizzy, 0))
@@ -1064,7 +1076,7 @@ def createSuitDeathTrack(suit, battle):
     else:
         spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
     deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
-    deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
+    deathSoundTrack = Sequence(Wait(1.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
     singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
@@ -1080,7 +1092,7 @@ def createSuitDeathTrack(suit, battle):
     smallGearExplosion.setDepthWrite(False)
     bigGearExplosion.setDepthWrite(False)
     explosionTrack = Sequence()
-    explosionTrack.append(Wait(5.4))
+    explosionTrack.append(Wait(6.4))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
     suitIndex = battle.activeSuits.index(suit)
     if suit.getExecutive() or suit.getGovernaught():
@@ -1105,11 +1117,11 @@ def createSuitDeathTrack(suit, battle):
         suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
         suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
         suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-    gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+    gears1Track = Sequence(Wait(3.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
     gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
     toonMTrack = Parallel(name='toonMTrack')
     for mtoon in battle.toons:
-        toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
+        toonMTrack.append(Sequence(Wait(2.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
     returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
     if hasAnimatedHead:
         returnval.append(headInterval)

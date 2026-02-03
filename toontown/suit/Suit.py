@@ -233,7 +233,7 @@ ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dola = (('quick-jump', 'jump', 4), ('stomp', 'stomp', 4), ('effort', 'effort', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-liquid = (('glower', 'glower', 4),('sanction', 'sanction', 4), ('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
+liquid = (('glower', 'glower', 4), ('snap', 'snap2', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
 rkeeper = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
 cbutcher = (('roll-o-dex', 'roll-o-dex', 4), ('revvedup', 'revvedup', 4), ('sparkplug', 'sparkplug', 4), ('snap', 'snap-override', 4),  ('scabbard', 'scabbard', 4), ('layoffs', 'layoffs', 4), ('throttle', 'throttle', 4), ('throttletwo', 'throttletwo', 4), ('effort', 'effort', 4), ('glower', 'glower', 4))
 cdirector = (('frustrated-f', 'frustrated-f', 4), ('sanction', 'sanction3', 4), ('cease', 'cease3', 4), ('defense', 'defense', 4), ('effort', 'effort', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -2584,7 +2584,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.4, 0.4, 0.4, 1)
             self.generateChainsawBody()
             self.makeBoardbotManager2()
-            self.generateHead3('chainsaw_c', animated=True)
+            self.generateHead3('chainsaw', animated=True)
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
@@ -4228,6 +4228,9 @@ class Suit(Avatar.Avatar):
                 headModel.setY(-.2)
             elif self.style.name == 'bcaster':
                 headModel.setY(-.2)
+            elif self.style.name == 'derrman':
+                headModel.setY(-.1)
+                headModel.setZ(-.2)
             elif headType == 'clubpresident' and not self.style.name == 'fmaker' and not self.style.name == 'director' and not self.style.name == 'choreo' and not self.style.name == 'cinema':
                 headModel.setZ(-.1)
                 headModel.setY(-.2)
@@ -6401,6 +6404,8 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(textureDold, 1)
             elif self.style.name == 'radiog':
                 headPart.setTexture(textureDopa, 1)
+            elif self.style.name == 'dopa':
+                headPart.setTexture(textureDopa, 1)
             elif self.style.name == 'ambass':
                 headPart.setTexture(textureAmbassador, 1)
             else:
@@ -6516,6 +6521,8 @@ class Suit(Avatar.Avatar):
             elif self.style.name == 'dold':
                 headPart.setTexture(textureDold, 1)
             elif self.style.name == 'radiog':
+                headPart.setTexture(textureDopa, 1)
+            elif self.style.name == 'dopa':
                 headPart.setTexture(textureDopa, 1)
             elif self.style.name == 'ambass':
                 headPart.setTexture(textureAmbassador, 1)
@@ -7160,7 +7167,7 @@ class Suit(Avatar.Avatar):
         for headPart in self.headParts:
             headPart.removeNode()
         self.headParts = []
-        self.generateHead3('chainsaw_c', animated=True)
+        self.generateHead3('chainsaw', animated=True)
         texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
         for headPart in self.headParts:
             headPart.setTexture(texture2, 1)
@@ -8631,8 +8638,12 @@ class Suit(Avatar.Avatar):
             loadDialog(1)
             return CLODialogArray
         elif self.style.name == 'cbutcher' and not self.isSkeleton:
-            loadDialog(1)
-            return ChainsawORDialogArray
+            if self.isChainsawPhase2:
+                loadDialog(1)
+                return ChainsawORDialogArray
+            else:
+                loadDialog(1)
+                return ChainsawDialogArray
         elif self.style.name == 'ambass' and not self.isSkeleton:
             loadDialog(1)
             return PrethinkerDialogArray

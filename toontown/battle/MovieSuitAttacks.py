@@ -867,7 +867,16 @@ def doSuitAttack(attack):
     elif name == 'RadiographerOvermodulated5':
         suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 5)
     elif name == 'RadiographerDanceSession':
-        suitTrack = MovieSellbotLitigationCheats.doDanceSession(attack)
+        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+        # derrick man cheat
+    elif name == 'DerrickManRefinement':
+        suitTrack = MovieDirectorsCheats.doRefinementDerrickMan(attack)
+        #  dola cheat
+    elif name == 'DOLAInkDrain':
+        suitTrack = MovieDirectorsCheats.doInkDrainDOLA(attack)
+        #  dopr cheat
+    elif name == 'DOPRAmbushMarketing':
+        suitTrack = MovieDirectorsCheats.doAmbushMarketing(attack)
         # erclaim erfit cheats
     elif name == 'ErclaimLaffSteal':
         suitTrack = MovieCountCheats.doLaffSteal(attack)
@@ -1466,6 +1475,8 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CaseManagerInsurance':
             resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'RadiographerDanceSession':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CalculatingFees':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'TollmasterMandatoryToll':
@@ -1700,8 +1711,11 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
             theSuit = s
             track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .25))
     if attack[
-        'suitName'] == 'nothing':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
-        track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
+        'suitName'] == 'cbutcher' and suit.isChainsawPhase2:  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
+        track.append(Func(suit.setChatAbsolute, random.choice(["EMPLOYEES ARE RESISTING TERMINATION, CONTINGENCY PROCEDURES ARE IN EFFECT.",
+                  "WARNING: 'GAG' HAS NO DEFINITION, IGNORING...",
+                  "ORDER TO ATTACK HAS BEEN RECEIVED AND PROCESSED.",
+                  "ADDITIONAL DAMAGE TO SUIT DETECTED, CONTINUITY PLAN ACTIVATED."]),
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,

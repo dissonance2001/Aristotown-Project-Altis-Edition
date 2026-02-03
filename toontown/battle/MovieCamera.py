@@ -596,11 +596,21 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
 
     def shake_camera_high_pressure(task):
         camera = base.camera
-        shake_intensity = 1.0  # Adjust for desired shake intensity
+        shake_intensity = 0.75  # Adjust for desired shake intensity
         x_shake = random.uniform(-shake_intensity, shake_intensity)
         y_shake = random.uniform(-shake_intensity, shake_intensity)
         z_shake = random.uniform(-shake_intensity, shake_intensity)
         camera.setPosHpr(0.0, -20.0, 10.0, 0, -20, 0)
+        camera.setPos(camera.getPos() + Vec3(+ x_shake, y_shake, z_shake))
+        return task.cont
+
+    def shake_camera_mandatory_toll(task):
+        camera = base.camera
+        shake_intensity = 0.5  # Adjust for desired shake intensity
+        x_shake = random.uniform(-shake_intensity, shake_intensity)
+        y_shake = random.uniform(-shake_intensity, shake_intensity)
+        z_shake = random.uniform(-shake_intensity, shake_intensity)
+        camera.setPosHpr(5, 0, .5, 155, 35, 0)
         camera.setPos(camera.getPos() + Vec3(+ x_shake, y_shake, z_shake))
         return task.cont
 
@@ -616,7 +626,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
 
     def shake_camera_tremor(task):
         camera = base.camera
-        shake_intensity = 0.1  # Adjust for desired shake intensity
+        shake_intensity = 0.25  # Adjust for desired shake intensity
         x_shake = random.uniform(-shake_intensity, shake_intensity)
         y_shake = random.uniform(-shake_intensity, shake_intensity)
         z_shake = random.uniform(-shake_intensity, shake_intensity)
@@ -970,7 +980,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ScapegoatEnraged':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 heldRelativeShot(suit, 0.0, 8, 6, -180, -20.0, 0.0, attackDuration)))
+                                 heldRelativeShot(suit, 0.0, 10, 6, -180, -20.0, 0.0, attackDuration)))
     elif name == 'ScapegoatGavel':
         camTrack.append(defaultCamera(openShotDuration=2))
     elif name == 'ScapegoatBarnyardBash':
@@ -1349,8 +1359,21 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
-    elif name == 'RadiographerDanceSession':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'RadiographerDanceSession': # Target Check
+        camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
+        #derrick man
+    elif name == 'DerrickManRefinement':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 5.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 moveShot(0.0, -20.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+        #dola
+    elif name == 'DOLAInkDrain':
+        camTrack.append(defaultCamera(openShotDuration=1.0))
+        #dopr
+    elif name == 'DOPRAmbushMarketing':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
         #dividend king
     elif name == 'DividendAccountRollover':
         camTrack.append(Parallel(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
@@ -1499,7 +1522,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'TollmasterMandatoryToll':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'TollmasterMandatoryTollFinal':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 6.0, 'suit'), randomActorShot(suit, battle, 1.0, 'suit'), heldShot(5, 0, .5, 155, 35, 0, 1.375), Func(taskMgr.add, shake_camera_mandatory_toll, 'camera_shake'),
+                                 Wait(3.0), Func(taskMgr.remove, 'camera_shake'), Wait(attackDuration - 11.375)))
     elif name == 'TollmasterResonanceTax':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'TollmasterResonanceTax2':

@@ -2088,6 +2088,14 @@ def doHotTake(attack):
     notifyTrack.append(Parallel(Func(toon.checkBombedUp, 50)))
     return Parallel(explodeTracks, suitTrack, toonTrack, notifyTrack, soundTrack, propTrack, explosionTrack, explosionTrack2)
 
+def __createSuitResetPosTrackOvermodulated(suit, battle):
+    resetPos, resetHpr = battle.getActorPosHpr(suit)
+    moveDist = Vec3(suit.getPos(battle) - resetPos).length()
+    moveDuration = 0.5
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), Func(suit.setNeutralAnimationAttack))
+    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
+    return Parallel(walkTrack, moveTrack)
+
 def doOvermodulated(attack, ind):
     suit = attack['suit']
     battle = attack['battle']
@@ -2111,8 +2119,9 @@ def doOvermodulated(attack, ind):
     headsUp2 = Func(suit.setHpr, battle, origHpr)
     moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('sanction')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
     suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
-    selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + .5), Parallel(ActorInterval(targetSuit, 'slip-backward'),
-                                                   Func(targetSuit.showHpString, "+ 1 ATTACK!"), Func(targetSuit.checkExtraAttacks, 1)), Func(targetSuit.setNeutralAnimationDrop))
+    selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + .5), Parallel(ActorInterval(targetSuit, 'slip-backward'), Func(battle.unlureSuit, targetSuit), Func(targetSuit.setDizzy, 0),
+                                                                             __createSuitResetPosTrackOvermodulated(targetSuit, battle), Func(targetSuit.makeUnLured),
+                                                   Func(targetSuit.showHpString, "+1 ATTACK!"), Func(targetSuit.checkExtraAttacks, 1)), Func(targetSuit.setNeutralAnimationDrop))
     soundTrack = getSoundTrack('SA_haymaker.ogg', delay=suit.getDuration('walk') + .5)
     soundTrack1 = getSoundTrack('SA_sanction.ogg', delay=suit.getDuration('walk'), node=suit)
     return Parallel(suitTrack, moveTrack, selfDamageTrack, soundTrack, soundTrack1)
