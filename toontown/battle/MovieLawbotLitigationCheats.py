@@ -550,24 +550,14 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
     suit = attack['suit']
     if damageAnimNames:
         for d in damageAnimNames:
-            toonTrack.append(Func(toon.checkCogDeath, suit))
             toonTrack.append(ActorInterval(toon, d))
 
-        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
+        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died), Func(toon.checkCogDeath, suit))
     else:
         splicedAnims = getSplicedAnimsTrack(splicedDamageAnims, actor=toon)
-        toonTrack.append(Func(toon.checkCogDeath, suit))
         toonTrack.append(splicedAnims)
-        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
-    soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
+        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died), Func(toon.checkCogDeath, suit))
     toonTrack.append(Func(toon.loop, 'neutral'))
-   # if toon.hp - dmg <= 0:
-       # suit = attack['suit']
-        #toonTrack.append(Wait(3.0))
-        #if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-            #suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-       # else:
-          #  suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack)
 
 
@@ -578,24 +568,14 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
     suit = attack['suit']
     if damageAnimNames:
         for d in damageAnimNames:
-            toonTrack.append(Func(toon.checkCogDeath, suit))
             toonTrack.append(ActorInterval(toon, d))
 
-        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
+        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died), Func(toon.checkCogDeath, suit))
     else:
         splicedAnims = getSplicedAnimsTrack(splicedDamageAnims, actor=toon)
-        toonTrack.append(Func(toon.checkCogDeath, suit))
         toonTrack.append(splicedAnims)
-        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died))
-    soundTrack = getSoundTrack('laff_loss.ogg', delay=delay + showDamageExtraTime, node=toon)
+        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamageCheat, toon, dmg, died), Func(toon.checkCogDeath, suit))
     toonTrack.append(Func(toon.loop, 'neutral'))
-   # if toon.hp - dmg <= 0:
-       # suit = attack['suit']
-       # toonTrack.append(Wait(3.0))
-       # if suit.getStyleName() in OTPLocalizerEnglish.SuitDefeatTaunts:
-         #   suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTaunts[suit.getStyleName()]), CFSpeech | CFTimeout))))
-        #else:
-           # suitResponseTrack.append(Parallel(Sequence(Wait(delay + showDamageExtraTime), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout))))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack)
 
 
@@ -1117,11 +1097,9 @@ def doSnap2(attack, suit):
         teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
         if dmg > 0:
             targetPos = toon.getPos(battle)
-            moveTracks.append(Func(suit.headsUp, battle, targetPos))
-            moveTracks.append(ActorInterval(suit, 'throw-object', playRate=1.5))
             origPos, origHpr = battle.getActorPosHpr(suit)
-            moveTracks.append(Func(suit.setHpr, battle, origHpr))
-            notifyTrack = Sequence(Wait(3.1),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1),)
+            moveTracks.append(Sequence(Func(suit.headsUp, battle, targetPos), ActorInterval(suit, 'throw-object', playRate=1.5), Func(suit.setHpr, battle, origHpr)))
+            notifyTrack = Sequence(Wait(3.1),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeSnapped), Func(toon.addSnappedRounds, 2)))
             notifyTracks.append(Parallel(Func(toon.checkSnappedUp, 10)))

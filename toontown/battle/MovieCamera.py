@@ -1,5 +1,6 @@
 import random
 from panda3d.core import *
+from toontown.suit import SuitBase
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleProps import *

@@ -459,7 +459,7 @@ def createSuitReviveTrack(suit, battle):
     explosionTrack.append(Wait(6.4))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
     gears1Track = Sequence(Wait(3.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
-    gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+    gears2MTrack = Track((0.0, explosionTrack), (1.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (6.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (6.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
     toonMTrack = Parallel(name='toonMTrack')
     for mtoon in battle.toons:
         toonMTrack.append(Sequence(Wait(2.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
@@ -827,7 +827,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     explosionTrack.append(Wait(6.4))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
     gears1Track = Sequence(Wait(3.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
-    gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+    gears2MTrack = Track((0.0, explosionTrack), (1.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (6.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (6.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
     toonMTrack = Parallel(name='toonMTrack')
     if suit.style.name == 'wsi':
         from toontown.battle import MovieCamera
@@ -1118,7 +1118,7 @@ def createSuitDeathTrack(suit, battle):
         suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
         suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
     gears1Track = Sequence(Wait(3.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
-    gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+    gears2MTrack = Track((0.0, explosionTrack), (1.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (6.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (6.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
     toonMTrack = Parallel(name='toonMTrack')
     for mtoon in battle.toons:
         toonMTrack.append(Sequence(Wait(2.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
@@ -1484,10 +1484,10 @@ def shortCircuitTrack(suit, battle):
         parts = ()
         toonPos = suit.getPos(battle)
         y = toonPos.getY()
-        for headPart in suit.headParts:
-            colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
-                                        LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0)),
-                                        Func(headPart.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
+        # for headPart in suit.headParts:
+        #     colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
+        #                                 LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0)),
+        #                                 Func(headPart.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
         for thingIndex in xrange(0, actorCollection.getNumPaths()):
             thing = actorCollection[thingIndex]
             colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1),
@@ -1600,10 +1600,10 @@ def shortCircuitTrack2(suit, battle):
         parts = ()
         toonPos = suit.getPos(battle)
         y = toonPos.getY()
-        for headPart in suit.headParts:
-            colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
-                                        LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0)),
-                                        Func(headPart.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
+        # for headPart in suit.headParts:
+        #     colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
+        #                                 LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0)),
+        #                                 Func(headPart.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
         for thingIndex in xrange(0, actorCollection.getNumPaths()):
             thing = actorCollection[thingIndex]
             colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1),
@@ -2345,29 +2345,9 @@ def createSuitFirestarterCigarSmokeInterval2(suit):
         return stunInterval
 
 def createSuitStunInterval(suit, before, after):
-    hasAnimatedHead = False
+    headInterval = Func(suit.createSuitStunInterval)
     updateTrack = Parallel(Func(suit.setNeutralAnimationHead))
-    if suit.style.name == 'hroller2':
-        for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
-            hasAnimatedHead = True
-    if suit.style.name == 'hrollers':
-        for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
-            hasAnimatedHead = True
-    if suit.style.name == 'hroller':
-        for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
-            hasAnimatedHead = True
-    else:
-        for headPart in suit.animatedHeadParts:
-            headInterval = Func(headPart.loop, 'stun')
-            hasAnimatedHead = True
-    if hasAnimatedHead:
-        return Sequence(Wait(before), Func(suit.setDizzy2, 1), headInterval, Wait(after),
-                            Func(suit.setDizzy2, 0), updateTrack)
-    else:
-        return Sequence(Wait(before), Func(suit.setDizzy2, 1), Wait(after), Func(suit.setDizzy2, 0))
+    return Sequence(Wait(before), headInterval, Func(suit.setDizzy2, 1), Wait(after), updateTrack, Func(suit.setDizzy2, 0))
 
 
 def createSuitStunIntervalFired(suit, before, after):

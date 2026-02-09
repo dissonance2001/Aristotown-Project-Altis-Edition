@@ -1116,6 +1116,32 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 hasAnimatedHead = True
                 Parallel(headInterval, suitInterval).start()
 
+    def createSuitStunInterval(self):
+        hasAnimatedHead = False
+        if self.headInterval:
+            self.headInterval.finish()
+            self.headInterval = None
+        if self.style.name == 'hroller2':
+            for headPart in suit.animatedHeadParts:
+                self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22).start()
+                hasAnimatedHead = True
+        elif self.style.name == 'hrollers':
+            for headPart in self.animatedHeadParts:
+                self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22).start()
+                hasAnimatedHead = True
+        elif self.style.name == 'hroller':
+            for headPart in self.animatedHeadParts:
+                self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22).start()
+                hasAnimatedHead = True
+        else:
+            for headPart in self.animatedHeadParts:
+                self.headInterval = Func(headPart.loop, 'stun')
+                hasAnimatedHead = True
+        if hasAnimatedHead:
+            self.headInterval.start()
+        else:
+            pass
+
     def createSuitRevvingUpInterval(self):
         if self.style.name == 'cbutcher':
             suitInterval = Sequence(ActorInterval(self, 'revvedup'), Func(self.setNeutralAnimation))

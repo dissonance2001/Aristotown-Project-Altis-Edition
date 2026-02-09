@@ -6050,7 +6050,7 @@ SuitAttackTaunts = {
                "I manipulate, you suffer. That's business!",
                "Consider your profits officially squeezed dry.",
                "Let's see how you perform under maximum financial stress.",
-               "I buy low, and you pay the different.",
+               "I buy low, and you pay the difference.",
                "Market pressure coming your way!"],
     None: ["Aw, are these coins for me?",
                 "Cha-ching! That's what I like to hear!",

@@ -1114,7 +1114,7 @@ class BattleCalculatorAI:
                                     lureKBValue *= 1.1
                                 if self.suitHasCondition(targetId, 'marked'):
                                     lureKBValue *= 1.1
-                                if self.toonHasCondition(targetId, 'groupDamageDown') and atkLevel == 1 or atkLevel == 3 or atkLevel == 5 or atkLevel == 7:
+                                if self.toonHasCondition(targetId, 'groupDamageDown') and (atkLevel == 1 or atkLevel == 3 or atkLevel == 5 or atkLevel == 7):
                                     lureKBValue *= 0.5
                                 if theSuit.dna.name == 'fbd' and self.suitHasCondition(targetId, 'bookkeeping'):
                                     self.setToonCondition(toonId, 'bookkeepingtoon', 1, 5, 'setBoth')
@@ -10069,7 +10069,7 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'promotioncalculator', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'heatwavecalculationcalculator', 1, 10, 'setBoth')
-                if (x + 4) % 5 == 0:
+                if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'unionbustercalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'ubuster': #union buster
                 if x % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
@@ -12773,6 +12773,10 @@ class BattleCalculatorAI:
                      'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'safesupervis':
+                if self.suitHasCondition(suitId, 'unionbustercalculator') and not self.__suitCanAttack(suitId) and \
+                        self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getAbilityQueued(suitId)
+                    self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'unionbustercalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'RadiographerHotTakeRetaliation',  # Hot Take Soak Retaliation
