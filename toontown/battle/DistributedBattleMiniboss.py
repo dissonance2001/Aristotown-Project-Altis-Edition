@@ -3,6 +3,7 @@ from panda3d.core import VBase3, Point3
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Track
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import DistributedBattleFinal
+from toontown.effects import DustCloud
 from toontown.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
 from toontown.chat import ResistanceChat
@@ -88,6 +89,8 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             if suit.dna.name == 'cinema':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingSilhouette(suits, ts, name, callback)
+            if suit.dna.name == 'cbutcher':
+                return self.showSuitsFallingPhantomEntry(suits, ts, name, callback)
             suit.setState('Battle')
             if suit.dna.dept == 'l':
                 suit.reparentTo(self.bossCog)
@@ -116,6 +119,57 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 camera.setPosHpr(-20, -4, 7, -60, 0, 0)
         done = Func(callback)
         track = Sequence(suitTrack, done, name=name)
+        track.start(ts)
+        self.storeInterval(track, name)
+        return
+
+    def showSuitsFallingPhantomEntry(self, suits, ts, name, callback):
+        if self.bossCog == None:
+            return
+        suitTracks = Parallel()
+        delay = 0
+        for suit in suits:
+            suit.setState('Battle')
+            suitTrack = Sequence()
+            oldPos, oldHpr = self.getActorPosHpr(suit, self.suits)
+            def getDustCloudIval(oldPos=oldPos):
+                dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
+                dustCloud.setBillboardAxis(2.0)
+                dustCloud.setZ(3)
+                dustCloud.setScale(0.4)
+                dustCloud.createTrack()
+                dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
+                return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.destroy),
+                                name='dustCloadIval')
+            if suit in self.joiningSuits:
+                i = len(self.pendingSuits) + self.joiningSuits.index(suit)
+                destPos, h = self.suitPendingPointsSilhouettes[i]
+                destHpr = VBase3(h, 0, 0)
+            else:
+                destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+            startPos = destPos + Point3(0, 0, 0)
+            startPos2 = destPos + Point3(0, 0, 0)
+            self.notify.debug('startPos for %s = %s' % (suit, startPos))
+            suitTrack.append(Func(suit.reparentTo, self))
+            suitTrack.append(Func(suit.headsUp, self))
+            suitTrack.append(LerpPosInterval(suit, 0, startPos))
+            suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+            suitTrack.append(Func(getDustCloudIval().start))
+            suitTrack.append(Sequence(ActorInterval(suit, 'slip-forward')))
+            suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+            suitTracks.append(suitTrack)
+            #flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+            suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+            delay += 0
+
+        if self.hasLocalToon():
+            camera.reparentTo(self)
+            if random.choice([0, 1]):
+                camera.setPosHpr(0, -10, 7, 0, 0, 0)
+            else:
+                camera.setPosHpr(0, -10, 7, 0, 0, 0)
+        done = Func(callback)
+        track = Sequence(suitTracks, done, name=name)
         track.start(ts)
         self.storeInterval(track, name)
         return

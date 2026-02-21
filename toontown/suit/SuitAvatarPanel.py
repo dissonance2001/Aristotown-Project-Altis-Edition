@@ -89,6 +89,8 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             d = p2 - p1
             biggest = max(d[0], d[1], d[2])
             s = 0.3 / biggest
+            if self.avatar.dna.name == 'cbutcher':
+                self.head.setColor((0, 0, 0, 1))
             if self.avatar.dna.name == 'ls' and not avatar.isSkeleton:
                 self.head.setPosHprScale(0, 0, 0.05, 270, 0, 0, s, s, s)
             elif self.avatar.dna.name == 'bfh2' and not avatar.isSkeleton:

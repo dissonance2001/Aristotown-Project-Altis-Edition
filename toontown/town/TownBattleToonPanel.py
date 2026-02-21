@@ -27,6 +27,8 @@ class TownBattleToonPanel(DirectFrame):
         self.setScale(0.5)
         self.initialiseoptions(TownBattleToonPanel)
         self.status = None
+        self.liquidated = None
+        self.liquidatedText = None
         self.governaughtDamageUp = None
         self.govDamageText = None
         self.noDodge = None
@@ -224,6 +226,10 @@ class TownBattleToonPanel(DirectFrame):
             self.burnedRounds.removeNode()
         if self.burned != None:
             self.burned.removeNode()
+        if self.liquidatedText != None:
+            self.liquidatedText.removeNode()
+        if self.liquidated != None:
+            self.liquidated.removeNode()
         if self.damageDownRounds != None:
             self.damageDownRounds.removeNode()
         if self.damageDown != None:
@@ -378,24 +384,8 @@ class TownBattleToonPanel(DirectFrame):
                 self.cheer.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
         if avatar.gagBoost:
-            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            if avatar.gagBoost == 8:
-                self.gagBoost = status.find('**/inventory_boulder')
-            elif avatar.gagBoost == 7:
-                self.gagBoost = status.find('**/inventory_fog_horn')
-            elif avatar.gagBoost == 6:
-                self.gagBoost = status.find('**/inventory_tesla_coil')
-            elif avatar.gagBoost == 5:
-                self.gagBoost = status.find('**/inventory_storm_cloud')
-            elif avatar.gagBoost == 4:
-                self.gagBoost = status.find('**/inventory_cake')
-            elif avatar.gagBoost == 3:
-                self.gagBoost = status.find('**/inventory_hypno_goggles')
-            elif avatar.gagBoost == 2:
-                self.gagBoost = status.find('**/inventory_wreckingball')
-            else:
-                self.gagBoost = status.find('**/inventory_bamboo_cane')
-            self.gagBoost.setScale(5.5)
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.gagBoost = status.find('**/toon_damage_up_icon')
             self.gagBoostRoundsText = DirectLabel(parent=self.gagBoost, relief=None, text="%s" % avatar.getGagBoostRounds(), text_fg=(1, 1, 1, 1),
                                                   text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                   pos=(0.25, 0, -.5),
@@ -973,6 +963,51 @@ class TownBattleToonPanel(DirectFrame):
                 self.burned.reparentTo(self.attackIcon7)
                 self.attackIcon7.setColor(0, 0.902, 1, 1)
                 self.burned.setColor(1, 1, 1, 1)
+                self.attackIcon7.show()
+        if avatar.liquidated:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.liquidated = status.find('**/heavyrain_icon')
+            self.liquidatedText = DirectLabel(parent=self.liquidated, relief=None, text="%s" % avatar.getLiquidatedRounds(), text_fg=(1, 1, 1, 1),
+                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, -.5),
+                                            text_scale=.6)
+            self.liquidatedText.show()
+            self.statusEffects += 1
+            if self.statusEffects == 1:
+                self.liquidated.reparentTo(self.attackIcon)
+                self.attackIcon.setColor(0, 0.902, 1, 1)
+                self.liquidated.setColor(1, 1, 1, 1)
+            if self.statusEffects == 2:
+                self.liquidated.reparentTo(self.attackIcon1)
+                self.attackIcon1.setColor(0, 0.902, 1, 1)
+                self.liquidated.setColor(1, 1, 1, 1)
+            if self.statusEffects == 3:
+                self.liquidated.reparentTo(self.attackIcon2)
+                self.attackIcon2.setColor(0, 0.902, 1, 11)
+                self.liquidated.setColor(1, 1, 1, 1)
+            if self.statusEffects == 4:
+                self.liquidated.reparentTo(self.attackIcon3)
+                self.attackIcon3.setColor(0, 0.902, 1, 1)
+                self.liquidated.setColor(1, 1, 1, 1)
+            if self.statusEffects == 5:
+                self.liquidated.reparentTo(self.attackIcon4)
+                self.attackIcon4.setColor(0, 0.902, 1, 1)
+                self.liquidated.setColor(1, 1, 1, 1)
+                self.attackIcon4.show()
+            if self.statusEffects == 6:
+                self.liquidated.reparentTo(self.attackIcon5)
+                self.attackIcon5.setColor(0, 0.902, 1, 1)
+                self.liquidated.setColor(1, 1, 1, 1)
+                self.attackIcon5.show()
+            if self.statusEffects == 7:
+                self.liquidated.reparentTo(self.attackIcon6)
+                self.attackIcon6.setColor(0, 0.902, 1, 1)
+                self.liquidated.setColor(1, 1, 1, 1)
+                self.attackIcon6.show()
+            if self.statusEffects == 8:
+                self.liquidated.reparentTo(self.attackIcon7)
+                self.attackIcon7.setColor(0, 0.902, 1, 1)
+                self.liquidated.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
         if avatar.damageOvertime:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')

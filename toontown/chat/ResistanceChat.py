@@ -18,7 +18,6 @@ EFFECT_RADIUS = 30
 RESISTANCE_TOONUP = 0
 RESISTANCE_RESTOCK = 1
 RESISTANCE_MONEY = 2
-RESISTANCE_DANCE = 3
 
 allowedResistanceMessages = []
 if config.GetBool('want-resistance-toonup', True):
@@ -27,7 +26,7 @@ if config.GetBool('want-resistance-restock', True):
     allowedResistanceMessages.append(RESISTANCE_RESTOCK)
 
 resistanceMenu = [
-    RESISTANCE_TOONUP, RESISTANCE_RESTOCK, RESISTANCE_MONEY, RESISTANCE_DANCE
+    RESISTANCE_TOONUP, RESISTANCE_RESTOCK, RESISTANCE_MONEY
 ]
 resistanceDict = {
     RESISTANCE_TOONUP: {
@@ -72,13 +71,6 @@ resistanceDict = {
         ],
         'items': [0, 1, 2, 3, 4, 5, 6, 7, 8]
     },
-    RESISTANCE_DANCE: {
-        'menuName': TTLocalizer.ResistanceDanceMenu,
-        'itemText': TTLocalizer.ResistanceDanceItem,
-        'chatText': TTLocalizer.ResistanceDanceChat,
-        'values': ['Dance'],
-        'items': [0]
-    }
 }
 
 
@@ -197,13 +189,6 @@ def doEffect(textId, speakingToon, nearbyToons):
             p = effect.getParticlesNamed(name)
             p.renderer.setFromNode(icon)
         fadeColor = VBase4(0, 0, 1, 1)
-    elif menuIndex == RESISTANCE_DANCE:
-        effect = BattleParticles.loadParticleFile('resistanceEffectSparkle.ptf')
-        fadeColor = VBase4(1, 0.5, 1, 1)
-        for toonId in nearbyToons:
-            toon = base.cr.doId2do.get(toonId)
-            if toon and (not toon.ghostMode):
-                toon.setAnimState('victory')
     else:
         return
     recolorToons = Parallel()
@@ -218,7 +203,7 @@ def doEffect(textId, speakingToon, nearbyToons):
             recolorToons.append(i)
     i = Parallel(
         ParticleInterval(effect, speakingToon, worldRelative=0, duration=3, cleanup=True),
-        #Sequence(Wait(0.2), recolorToons),
+        Sequence(Wait(0.2), recolorToons),
         autoFinish=1
     )
     i.start()

@@ -538,6 +538,8 @@ class Toon(Avatar.Avatar, ToonHead):
         self.gagBoost = 0
         self.gagBoostRounds = 0
         self.gagBoostNumber = 0
+        self.liquidated = 0
+        self.liquidatedRounds = 0
         self.encore = 0
         self.encoreNumber = 0
         self.winded = 0
@@ -696,6 +698,18 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getBurnedRounds(self):
         return self.burnedRounds
+
+    def makeLiquidated(self):
+        self.liquidated = 1
+
+    def makeUnLiquidated(self):
+        self.liquidated = 0
+
+    def addLiquidatedRounds(self, num):
+        self.liquidatedRounds = num
+
+    def getLiquidatedRounds(self):
+        return self.liquidatedRounds
 
     def makeGroupDamageDown(self):
         self.groupDamageDown = 1
@@ -1919,6 +1933,31 @@ class Toon(Avatar.Avatar, ToonHead):
         self.setActiveShadow(0)
 
     def exitVictory(self):
+        self.makeUnCooldown()
+        self.makeUnBurned()
+        self.makeUnDamageOvertime()
+        self.makeUnLiquidated()
+        self.makeUnGroupDamageDown()
+        self.makeUnGagBoost()
+        self.makeUnCooldown()
+        self.makeUnMarkedWood()
+        self.makeUnInkDrain()
+        self.makeUnHidden()
+        self.makeUnCollectCalled()
+        self.makeUnNoDodge()
+        self.makeUnConfused()
+        self.makeUnMandatoryToll()
+        self.makeUnCheer()
+        self.makeUnDamageUp()
+        self.makeUnDamageUpGovernaught()
+        self.makeUnDamageDown()
+        self.makeUnDamageUp()
+        self.makeUnEncore()
+        self.makeUnWinded()
+        self.makeUnBombed()
+        self.makeUnGagBan()
+        self.makeUnVulnerable()
+        self.makeUnSnapped()
         self.stop()
 
     def enterHappy(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
@@ -1950,6 +1989,31 @@ class Toon(Avatar.Avatar, ToonHead):
             self.controlManager.disableAvatarJump()
 
     def exitSad(self):
+        self.makeUnCooldown()
+        self.makeUnBurned()
+        self.makeUnDamageOvertime()
+        self.makeUnLiquidated()
+        self.makeUnGroupDamageDown()
+        self.makeUnGagBoost()
+        self.makeUnCooldown()
+        self.makeUnMarkedWood()
+        self.makeUnInkDrain()
+        self.makeUnHidden()
+        self.makeUnCollectCalled()
+        self.makeUnNoDodge()
+        self.makeUnConfused()
+        self.makeUnMandatoryToll()
+        self.makeUnCheer()
+        self.makeUnDamageUp()
+        self.makeUnDamageUpGovernaught()
+        self.makeUnDamageDown()
+        self.makeUnDamageUp()
+        self.makeUnEncore()
+        self.makeUnWinded()
+        self.makeUnBombed()
+        self.makeUnGagBan()
+        self.makeUnVulnerable()
+        self.makeUnSnapped()
         self.standWalkRunReverse = None
         self.stop()
         self.motion.exit()

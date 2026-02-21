@@ -177,11 +177,11 @@ def __healTickle(heal, hasInteractivePropHealBonus):
     mtrack = Parallel(featherTrack, ActorInterval(toon, 'tickle'), __getSoundTrack(level, 1, node=toon), Sequence(Wait(tHeal), Parallel(selfHealTrack, Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus)), ActorInterval(target, 'cringe', startTime=20.0 / target.getFrameRate('cringe'))))
     track.append(mtrack)
     if toon.getTrackBonusLevel(HEAL_TRACK) > 1:
-        track.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 2)))
-        track.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 2)))
-    else:
         track.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 1)))
         track.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 1)))
+    else:
+        track.append(Parallel(Func(target.makeCheer), Func(target.addCheerRounds, 0)))
+        track.append(Parallel(Func(toon.makeCheer), Func(toon.addCheerRounds, 0)))
     track.append(Func(MovieUtil.removeProps, feathers))
     track.append(__returnToBase(heal))
     target.setChatAbsolute('', CFSpeech | CFTimeout)

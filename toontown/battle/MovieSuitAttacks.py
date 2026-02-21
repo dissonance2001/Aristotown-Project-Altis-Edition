@@ -616,6 +616,12 @@ def doSuitAttack(attack):
         suitTrack = MovieBoardbotLitigationCheats.doRedlinedClause(attack)
     elif name == 'RecordkeeperAuditCycle':
         suitTrack = MovieBoardbotLitigationCheats.doAuditCycle(attack)
+    elif name == 'RecordkeeperPhantomEntrySpawn':
+        suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySpawn(attack)
+    elif name == 'RecordkeeperPhantomEntryDamage':
+        suitTrack = MovieBoardbotLitigationCheats.doPhantomEntryDamage(attack)
+    elif name == 'RecordkeeperPhantomEntrySacrifice':
+        suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySacrifice(attack)
         # corporate butcherer
     elif name == 'ButcherOverride':
         if suit.isChainsawPhase3:
@@ -669,17 +675,17 @@ def doSuitAttack(attack):
     elif name == 'ContingencyRiskThresholdBreach75':
         suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach75(attack)
     elif name == 'ContingencyRiskThresholdBreach50':
-        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach50(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doExplodingDocument(attack) # Marking Application
     elif name == 'ContingencyRiskThresholdBreach25':
-        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach25(attack)
+        suitTrack = MovieHighRollerCheats.doSnipe(attack) # Marking Damage
     elif name == 'ContingencyContingencyClause':
         suitTrack = MovieBoardbotLitigationCheats.doContingencyClause(attack)
     elif name == 'ContingencyContingencyClauseRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doContingencyClauseRetaliation(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach25(attack)
     elif name == 'ContingencyRedundantAuthority':
         suitTrack = MovieBoardbotLitigationCheats.doRedundantAuthority(attack)
     elif name == 'ContingencyOperationalFreeze':
-        suitTrack = MovieBoardbotLitigationCheats.doContingencyClause(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doContingencyClauseRetaliation(attack)
     elif name == 'ContingencyForecastCollapse':
         suitTrack = MovieBoardbotLitigationCheats.doForecastCollapse(attack)
     elif name == 'ContingencyRiskThresholdBreach':
@@ -701,10 +707,12 @@ def doSuitAttack(attack):
         suitTrack = MovieBoardbotLitigationCheats.doLiquidationEventDamage(attack)
     elif name == 'DividendTotalMarketMeltdown':
         suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown(attack)
+    elif name == 'DividendTotalMarketMeltdown2':
+        suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown(attack)
     elif name == 'DividendPeckingOrder':
-        suitTrack = MovieBoardbotLitigationCheats.doPeckingOrder(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doScabbard(attack)
     elif name == 'DividendPeckingOrderZapped':
-        suitTrack = MovieBoardbotLitigationCheats.doPeckingOrderGroup(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doEmbezzle(attack)
         # ottoman cheats
     elif name == 'OttomanRevisedDraft':
         suitTrack = MovieBoardbotLitigationCheats.doWhirlwind(attack)
@@ -773,6 +781,18 @@ def doSuitAttack(attack):
     elif name == 'ChairmanSnipe':
         suitTrack = MovieBoardbotLitigationCheats.doSnipe(attack)
         # safety supervisor
+    elif name == 'SafetyOverpressureDeath':
+        suitTrack = MovieSellbotLitigationCheats.doOverpressureDeath(attack)
+    elif name == 'SafetyOverpressured':
+        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 1)
+    elif name == 'SafetyOverpressured2':
+        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 2)
+    elif name == 'SafetyOverpressured3':
+        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 3)
+    elif name == 'SafetyOverpressured4':
+        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 4)
+    elif name == 'SafetyOverpressured5':
+        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 5)
     elif name == 'SafetyHighPressure':
         suitTrack = MovieSellbotLitigationCheats.doHighPressure(attack)
     elif name == 'SafetyHeatWave':
@@ -825,6 +845,8 @@ def doSuitAttack(attack):
     elif name == 'UnionBusterContractEnforcement':
         suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack)
         # racketeer
+    elif name == 'RacketeerOverextendedLeverage':
+        suitTrack = MovieSellbotLitigationCheats.doOverextendedLeverage(attack)
     elif name == 'RacketeerProfiteering':
         suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 1)
     elif name == 'RacketeerProfiteering2':
@@ -838,7 +860,7 @@ def doSuitAttack(attack):
     elif name == 'RacketeerExtortion':
         suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
     elif name == 'RacketeerExtortion2':
-        suitTrack = MovieSellbotLitigationCheats.doExtortion2(attack)
+        suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
     elif name == 'RacketeerCompensation':
         suitTrack = MovieSellbotLitigationCheats.doCompensation(attack)
     elif name == 'RacketeerHustling':
@@ -1477,9 +1499,23 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'RadiographerDanceSession':
             resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'RecordkeeperPhantomEntrySpawn':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'RecordkeeperPhantomEntryDamage':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CalculatingFees':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'TollmasterMandatoryToll':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'TollmasterResonanceTax':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'TollmasterResonanceTax2':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'TollmasterResonanceTax3':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'TollmasterResonanceTax4':
+            resetSuitTrack = Sequence(suitTrack)
+        elif name == 'TollmasterResonanceTax5':
             resetSuitTrack = Sequence(suitTrack)
         elif name == 'TollmasterMissedPayment':
             resetSuitTrack = Sequence(suitTrack)
@@ -1496,6 +1532,8 @@ def doSuitAttack(attack):
         elif name == 'LureRemoval':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ScapegoatBarnyardBash':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'DeathCheck':
             resetSuitTrack = Sequence(suitTrack2)
         #elif name == 'HighRollerNoAttack':
            # resetSuitTrack = Sequence(suitTrack2, unlureSuit)
@@ -1544,6 +1582,8 @@ def doSuitAttack(attack):
         elif name == 'ButcherSparkPlugDamage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'RecordkeeperMinutesTaken':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'DividendLiquidationEventDamage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'RecordkeeperMinutesTakenContingency':
             resetSuitTrack = Sequence(suitTrack2)
@@ -3273,7 +3313,7 @@ def doSynergy2(attack):
         return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, toonTracks)
 
 
-def doEmbezzle(attack):
+def doEmbezzleOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
@@ -3299,6 +3339,45 @@ def doEmbezzle(attack):
         soundTrack = getSoundTrack('SA_pick_pocket.ogg', delay=0.2, node=suit)
         multiTrackList.append(billPropTrack)
         multiTrackList.append(soundTrack)
+    return multiTrackList
+
+def doEmbezzle(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    BattleParticles.loadParticles()
+    bill = globalPropPool.getProp('10dollar')
+    suitTrack = getSuitTrack(attack)
+    billPosPoints = [Point3(-0.13024602026049337, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
+    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, appearDelay=0.6, remainDelay=0.55, scaleUpPoint=Point3(2.115, 2.115, 2.115))
+    partTrack = Parallel()
+    for i in range(10):
+        dollar = MovieUtil.copyProp(BattleParticles.getParticle('dollar-sign'))
+        dollar.reparentTo(hidden)
+        dollar.setColor(VBase4(0.0, 1.0, 0.0, 1.0))
+        dollar.setBillboardPointEye()
+        radius = random.random() - 0.5
+        angle = random.random() * 2.0 * math.pi
+        partTrack.append(Sequence(
+            Wait(0.55 + (i * 0.01)),
+            Func(__showProp, dollar, suit.getRightHand(), *billPosPoints),
+            Func(dollar.wrtReparentTo, battle),
+            Func(dollar.setHpr, VBase3(0, 0, 0)),
+            Parallel(
+                LerpFunctionInterval(dollar.setZ, 0.5, suit.getRightHand().getZ() + 1.0, suit.getRightHand().getZ() - 1.0, blendType='easeIn'),
+                LerpScaleInterval(dollar, 0.5, MovieUtil.PNT3_NEARZERO)
+            ),
+            Func(MovieUtil.removeProp, dollar),
+            Func(battle.movie.clearRenderProp, dollar)
+        ))
+
+    toonTrack = getToonTrack(attack, 0.6, ['cringe'], 0.01, ['sidestep'])
+    multiTrackList = Parallel(suitTrack, toonTrack)
+    if target[0]['hp'] > 0:
+        soundTrack = getSoundTrack('ttr_s_ene_bat_embezzle.ogg', node=suit)
+        multiTrackList.append(billPropTrack)
+        multiTrackList.append(soundTrack)
+        multiTrackList.append(partTrack)
     return multiTrackList
 
 def doFloodTheMarket(attack):
@@ -7550,7 +7629,7 @@ def doPeckingOrder(attack):
             #next.reparentTo(suit.getRightHand())
           #  next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)
             if dmg > 0:
-                hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6,
+                hitPoint = Point3(random.random() * 5 - 2.5, -10,
                                   random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
             else:
                 hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)

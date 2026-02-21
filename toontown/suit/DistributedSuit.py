@@ -632,6 +632,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self.detachPropeller()
 
     def enterDanceThenFlyAway(self):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+           # del self.playByPlayInterval
         self.enableBattleDetect('danceThenFlyAway', self.__handleToonCollision)
         if not self.verifySuitPlanner():
             return
@@ -727,12 +730,25 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.cleanUpSoundList()
 
     def checkCogLured(self, battle):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+           # del self.playByPlayInterval
         if self.getDizzy():
-            ival = self.__createSuitResetPosTrack(battle)
-            ival.start()
+            self.playByPlayInterval = self.__createSuitResetPosTrack(battle)
+            self.playByPlayInterval.start()
         else:
-            ival = Func(self.setNeutralAnimationTrap)
-            ival.start()
+            self.playByPlayInterval = Func(self.setNeutralAnimationTrap)
+            self.playByPlayInterval.start()
+
+    def checkCogLuredDeath(self, battle):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+         #   del self.playByPlayInterval
+        if self.getDizzy():
+            self.playByPlayInterval = self.__createSuitResetPosTrack(battle)
+            self.playByPlayInterval.start()
+        else:
+            pass
 
     def checkCogThrowPos(self, item, battle, duration):
         hitPoint = self.getPos(battle)
@@ -755,6 +771,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         return Parallel(unluredTrack, unlureSuit, walkTrack, moveTrack)
 
     def checkPlayByPlayText(self, pbpText, displayName, attackDuration):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+          #  del self.playByPlayInterval
         pbpText = pbpText
         if float(self.currHP) > float(self.maxHP * 1.5):
             self.playByPlayInterval = pbpText.getShowIntervalOvercharged(displayName, attackDuration)
@@ -767,6 +786,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval.start()
 
     def checkPlayByPlayTextCheat(self, pbpText, displayName, attackDuration):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+           # del self.playByPlayInterval
         pbpText = pbpText
         if float(self.currHP) > float(self.maxHP * 1.5):
             self.playByPlayInterval = pbpText.getShowIntervalCheatOvercharged(displayName, attackDuration)
@@ -779,6 +801,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval.start()
 
     def checkPlayByPlayTextLegallyBound(self, pbpText, attackDuration):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+            #del self.playByPlayInterval
         pbpText = pbpText
         if self.isDesperation:
             self.playByPlayInterval = pbpText.getShowIntervalDesc("Legally Bound Toons take 28 damage per round!", attackDuration)
@@ -787,7 +812,22 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval = pbpText.getShowIntervalDesc("Legally Bound Toons take 20 damage per round!", attackDuration)
             self.playByPlayInterval.start()
 
+    def checkPlayByPlayTextLiquidationEvent(self, pbpText, attackDuration):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+           # del self.playByPlayInterval
+        pbpText = pbpText
+        if self.isDesperation:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc("Liquidated Toons take 42 extra damage per round!", attackDuration)
+            self.playByPlayInterval.start()
+        else:
+            self.playByPlayInterval = pbpText.getShowIntervalDesc("Liquidated Toons take 30 extra damage per round!", attackDuration)
+            self.playByPlayInterval.start()
+
     def checkPlayByPlayTextCourtRecord(self, pbpText, attackDuration):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+            #del self.playByPlayInterval
         pbpText = pbpText
         if self.isDesperation:
             self.playByPlayInterval = pbpText.getShowIntervalDesc('Due to an illegal action, this toon takes 70 damage!', attackDuration)
@@ -797,6 +837,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval.start()
 
     def checkPlayByPlayTextBurned(self, pbpText, attackDuration):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+           # del self.playByPlayInterval
         pbpText = pbpText
         if self.isDesperation:
             self.playByPlayInterval = pbpText.getShowIntervalDesc('Burned Toons take 42 extra damage per round!', attackDuration)
@@ -806,6 +849,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval.start()
 
     def checkPlayByPlayTextInflation(self, pbpText, attackDuration):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+            #del self.playByPlayInterval
         pbpText = pbpText
         if self.isDesperation:
             self.playByPlayInterval = pbpText.getShowIntervalDesc("Due to an overinflated budget this toon takes 70 damage!", attackDuration)
@@ -815,6 +861,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.playByPlayInterval.start()
 
     def checkPlayByPlayTextBusted(self, pbpText, attackDuration):
+        if self.playByPlayInterval != None:
+            self.playByPlayInterval.finish()
+           # del self.playByPlayInterval
         pbpText = pbpText
         if self.isDesperation:
             self.playByPlayInterval = pbpText.getShowIntervalDesc('Employed Toons are forced to take 35 damage every round!', attackDuration)
@@ -835,7 +884,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def checkCogDeath(self, battle):
         if self.deathInterval != None:
             self.deathInterval.finish()
-            del self.deathInterval
+          #  del self.deathInterval
         if self.getHP() <= 0:
             self.deadSuits.append(self)
         else:
@@ -862,7 +911,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def checkCogHPBomb(self, battle):
         if self.deathInterval != None:
             self.deathInterval = None
-        elif self.getHP() <= 0 and self.deathInterval == None:
+        elif self.getHP() <= 0 and self.deathInterval == None and not self.isDead:
             self.deathInterval = Sequence(MovieUtil.shortCircuitTrack(self, battle), Func(battle.unlureSuit, self))
             self.deathInterval.start()
         else:
@@ -1020,6 +1069,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                     Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
                                            Func(self.removeLevelDamage)).start()
 
+    def checkDamage2(self, levelDamage):
+        self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                    Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
+                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                           Func(self.removeLevelDamage)).start()
+
     def checkCogOvercharge(self):
         if float(self.currHP) > float(self.maxHP * 1.5):
             self.isOvercharged = 1
@@ -1050,6 +1105,8 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 color = Point4((0.671, 0.671, 0.671, 1))
             elif self.style.name == 'kerberos':
                 color = Point4((0.62, 0.659, 0.624, 1))
+            elif self.style.name == 'cbutcher':
+                color = Point4((0, 0, 0, 1))
             else:
                 color = Point4(1.0, 1.0, 1.0, 1.0)
         else:
@@ -1363,28 +1420,28 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                    Func(self.showHpTextNew, x, text="SYPHONED!", colorCode=1),
                                                    Func(self.setHealthForMe, -x),
                                                    Func(self.updateHealthBar, 0)),
-                               Func(self.setNeutralAnimation), Func(self.checkCogHP, battle)).start()
+                               Func(self.setNeutralAnimationDrop), Func(self.checkCogHP, battle)).start()
             self.healInterval = Sequence(Parallel(Func(racketeer.showHpTextNew, +x, text="+5% Damage!", colorCode=1), Func(racketeer.makeDamageUp), Func(racketeer.checkDamageUp, + 5),
                                                   Func(racketeer.setHealthForMe, +x),
                                                   Func(racketeer.updateHealthBar, 0)),
-                                         Func(racketeer.setNeutralAnimation)).start()
+                                         Func(racketeer.setNeutralAnimationDrop)).start()
         else:
             self.damageInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
                                                     Func(self.showHpTextNew, -(self.maxHP / 4), text="SYPHONED!", colorCode=1),
                                                   Func(self.setHealthForMe, -(self.maxHP / 4)),
                                                   Func(self.updateHealthBar, 0)),
-                                         Func(self.setNeutralAnimation)).start()
+                                         Func(self.setNeutralAnimationDrop)).start()
             self.healInterval = Sequence(Parallel(Func(racketeer.showHpTextNew, +(self.maxHP / 4), text="+5% Damage!", colorCode=1), Func(racketeer.makeDamageUp), Func(racketeer.checkDamageUp, + 5),
                                                    Func(racketeer.setHealthForMe, +(self.maxHP / 4)),
                                                    Func(racketeer.updateHealthBar, 0)),
-                               Func(racketeer.setNeutralAnimation)).start()
+                               Func(racketeer.setNeutralAnimationDrop)).start()
 
     def checkHeadRoller(self, battle):
         if self.damageInterval:
             self.damageInterval.finish()
             self.damageInterval = None
         x = int(self.currHP)
-        if self.currHP > 0:
+        if self.currHP > 0 and not self.isDead:
             self.damageInterval = Sequence(ActorInterval(self, 'soak', duration = 2.0), Sequence(Parallel(MovieUtil.spawnHeadExplosion(self, battle), Func(self.showHpTextNew, -self.currHP, text="TERMINATED!", colorCode=4),
                                             Func(self.setHealthForMe, - self.currHP),
                                Func(self.updateHealthBar, 0)),
@@ -1396,7 +1453,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.damageInterval.finish()
             self.damageInterval = None
         x = int(self.currHP)
-        if (self.currHP > 0) and(self.currHP < self.maxHP) and not self.getManager():
+        if (self.currHP > 0) and (self.currHP < self.maxHP) and not self.getManager():
             self.damageInterval = Sequence(Wait(1.5), Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.spawnHeadExplosion(self, battle), Func(self.showHpTextNew, -self.currHP),
                                             Func(self.setHealthForMe, - self.currHP),
                                Func(self.updateHealthBar, 0)), MovieUtil.createSuitHeadlessDeathTrack(self, battle),
@@ -1411,7 +1468,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.damageInterval.finish()
             self.damageInterval = None
         x = int(self.currHP)
-        if self.currHP > 0 and not self.getManager():
+        if self.currHP > 0 and not self.getManager() and not self.isContracted and not self.isDead:
             self.damageInterval = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle), Func(self.showHpTextNew, -self.currHP, text="BUSTED!", colorCode=3),
                                    Func(self.setHealthForMe, - self.currHP),
                                    Func(self.updateHealthBar, 0))).start()
@@ -1708,6 +1765,23 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
                                               ).start()
 
+    def checkPhantomEntrySacrifice(self, videog):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int(self.currHP)
+        self.damageInterval = Sequence(Func(self.showHpText, -x),
+                                           Func(self.setHealthForMe, -x),
+                                           Func(self.updateHealthBar, 0),
+                                           Func(self.setNeutralAnimationDrop)).start()
+        self.healInterval = Sequence(Func(videog.showHpText, +x),
+                                         Func(videog.setHealthForMe, +x),
+                                         Func(videog.updateHealthBar, 0),
+                                         Func(videog.setNeutralAnimationDrop)).start()
+
     def checkBroadcasterDonation(self, videog, battle):
         if self.damageInterval:
             self.damageInterval.finish()
@@ -1840,12 +1914,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.currHP >= (self.maxHP * self.hardMaxHP):
             self.healInterval = Parallel(Func(self.showHpTextNew, 0, colorCode=1),
                                          Func(self.updateHealthBar, 0)).start()
-        elif self.currHP + 125 > (self.maxHP * self.hardMaxHP):
+        elif self.currHP + 200 > (self.maxHP * self.hardMaxHP):
             self.healInterval = Parallel(Func(self.showHpTextNew, x),
                                          Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
         else:
-            self.healInterval = Parallel(Func(self.showHpTextNew, 125),
-                                         Func(self.setHealthForMe, 125), Func(self.updateHealthBar, 0)).start()
+            self.healInterval = Parallel(Func(self.showHpTextNew, 200),
+                                         Func(self.setHealthForMe, 200), Func(self.updateHealthBar, 0)).start()
 
     def checkOilRain(self):
         if self.healInterval:

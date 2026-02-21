@@ -79,7 +79,7 @@ def showLureRounds(suit, battle, level):
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.isDesperation and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.isAngry and not trapProp:
+    elif suit.isAngry and not trapProp and not suit.dna.name == 'cbutcher':
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.isBookkeeping and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
@@ -422,7 +422,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
         else:
             if not suit.isLured:
-                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.5))
 
     if isSmallMagnet == 1:
         tracks.append(getSoundTrack('TL_small_magnet.ogg', delay=0.7, node=toon))
@@ -714,18 +714,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         else:
             soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_pie_throw_only.ogg'), node=suit), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
-        suitIndex = battle.activeSuits.index(suit)
-        if not suit.isShielding:
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(moveTrack, animTrack, suitTrack, damageTrack, soundTrack))
     elif trapName == 'rake' or trapName == 'rake-react':
         hpr = trapProp.getHpr(parent)
@@ -739,18 +727,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
         soundTrack = getSoundTrack('TL_step_on_rake.ogg', delay=0.6, node=suit)
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
-        suitIndex = battle.activeSuits.index(suit)
-        if not suit.isShielding:
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(rakeTrack, suitTrack, damageTrack, soundTrack))
     elif trapName == 'marbles':
         slidePos = trapProp.getPos(parent)
@@ -762,18 +738,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
         soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_pie_throw_only.ogg'), duration=0.55, node=suit), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
-        suitIndex = battle.activeSuits.index(suit)
-        if not suit.isShielding:
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(moveTrack, animTrack, suitTrack, damageTrack, soundTrack))
     elif trapName == 'quicksand':
         sinkPos1 = trapProp.getPos(battle)
@@ -796,69 +760,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
-            suitIndex = battle.activeSuits.index(suit)
-            if suit.getExecutive() or suit.getGovernaught():
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-            else:
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
+            damageTrack.append(Func(suit.makeDead))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -868,18 +770,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             soundTrack.append(Wait(0.25))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
             animTrack.append(Func(suit.setNeutralAnimationTrap))
-        suitIndex = battle.activeSuits.index(suit)
-        if not suit.isShielding:
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'spring':
         sinkPos1 = trapProp.getPos(battle)
@@ -904,69 +794,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence(Wait(2.75), Func(suit.updateHealthBar, hp))
-            suitIndex = battle.activeSuits.index(suit)
-            if suit.getExecutive() or suit.getGovernaught():
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-            else:
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
+            damageTrack.append(Func(suit.makeDead))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -976,18 +804,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             soundTrack.append(Wait(0.375))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
             animTrack.append(Func(suit.setNeutralAnimationTrap))
-        suitIndex = battle.activeSuits.index(suit)
-        if not suit.isShielding:
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'trapdoor':
         sinkPos = trapProp.getPos(battle)
@@ -1006,69 +822,8 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
+            damageTrack.append(Func(suit.makeDead))
             suitIndex = battle.activeSuits.index(suit)
-            if suit.getExecutive() or suit.getGovernaught():
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7),
-                                                 battle))
-            else:
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
-                animTrack.append(
-                    MovieUtil.__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4),
-                                                 battle))
         else:
             moveTrack.append(Func(suit.wrtReparentTo, battle))
             moveTrack.append(Parallel(LerpHprInterval(suit, 0.3, resetHpr, other=battle), LerpPosInterval(suit, 0.3, resetPos, other=battle)))
@@ -1079,18 +834,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
             soundTrack.append(Wait(0.5))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
-        suitIndex = battle.activeSuits.index(suit)
-        if not suit.isShielding:
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'xspot':
         ballPropTrack = Sequence()
@@ -1117,6 +860,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         if died and not suit.isVirtual:
             suitGone = 1
             damageTrack = Sequence(Wait(2.5), Func(suit.updateHealthBar, hp))
+            damageTrack.append(Func(suit.makeDead))
             animTrack = Sequence(ActorInterval(suit, 'lured', endTime=.75),
                                      ActorInterval(suit, 'flail-wb', startTime=1, endTime=1.35))
             animTrack.append(MovieUtil.createSuitWreckingDeathTrack(suit, battle))
@@ -1142,19 +886,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             damageTrack = Sequence(Wait(2.5), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
             soundTrack.append(Wait(0.6))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
-            suitIndex = battle.activeSuits.index(suit)
             result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack, ballPropTrack))
-        if not suit.isShielding:
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            animTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
     elif trapName == 'tnt':
         tntTrack = ActorInterval(trapProp, 'tnt')
         explosionTrack = Sequence(Wait(2.3), createTNTExplosionTrack(battle, trapProp=trapProp, relativeTo=parent))
@@ -1225,18 +957,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                 SoundInterval(globalBattleSoundCache.getSound('TL_dynamite.ogg'), duration=2.0, node=suit),
                 SoundInterval(explosionSound, duration=0.6, node=suit)
             )
-        suitIndex = battle.activeSuits.index(suit)
-        if not suit.isShielding:
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         result.append(Parallel(tntTrack, suitTrack, damageTrack, explosionTrack, soundTrack))
     elif trapName == 'traintrack':
         result.append(createIncomingTrainInterval(battle, suit, hp, lure, trapProp))

@@ -243,11 +243,13 @@ dold - Director Of Land Development Level 25.mgr v2.0
 	Boardbot 'Litigation' Team:
 liquid - Tollmaster Level 56.mgr
 rkeeper - Recordkeeper Level 60.mgr
-cbutcher - Corporate Butcherer Level 60.mgr
+dking - Dividend King Level 60.mgr
 cdirector - Contingency Director Level 66.mgr
 
+	Recordkeeper Special Cog:
+cbutcher - Phantom Recordkeeper Level 30.mgr
+
 	Boardbot 'Litigation' Team 2:
-dking - Dividend King Level 65.mgr (unfinished)
 ottoman - The Ottoman Level 72.mgr (unfinished)
 crystal - Crystalline Level 77.mgr (unfinished)
 chairman - The Chairman Level 100.mgr (unfinished)

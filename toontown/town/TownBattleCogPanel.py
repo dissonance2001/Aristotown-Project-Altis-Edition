@@ -493,7 +493,7 @@ class TownBattleCogPanel(DirectFrame):
                                                     text_scale=.5)
             elif self.cog.isDesperation or self.cog.dna.name == 'hroller2' or self.cog.dna.name == 'videog' or self.cog.dna.name == 'fires' or self.cog.dna.name == 'fbed' or self.cog.dna.name == 'mouthp' \
                     or self.cog.dna.name == 'rainmake' or self.cog.dna.name == 'whunter' or self.cog.dna.name == 'wsi' or self.cog.dna.name == 'redd' or self.cog.dna.name == 'duckshfl' or self.cog.dna.name == 'treek' \
-                    or self.cog.dna.name == 'bellring' or self.cog.dna.name == 'ddiver' or self.cog.dna.name == 'gatekeep' or self.cog.isAngry or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or (self.cog.healthCondition == 13 and self.cog.isSkeleton):
+                    or self.cog.dna.name == 'bellring' or self.cog.dna.name == 'ddiver' or self.cog.dna.name == 'gatekeep' or (self.cog.isAngry and self.cog.dna.name == 'sgoat') or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or (self.cog.healthCondition == 13 and self.cog.isSkeleton):
                 self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
                                                 text="1",
                                                 text_fg=(1, 0, 0, 1),
@@ -790,92 +790,92 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.setColor(1, 0.984, 0, 1)
                 self.extraAttacks.setColor(1, 1, 1, 1)
                 self.attackIcon7.show()
-        if self.cog.dna.name == 'cbutcher':
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.extraAttacks = status.find('**/chainsaw_icon')
-            self.rageBuildingText = DirectLabel(parent=self.extraAttacks, relief=None,
-                                                text="%s" % self.cog.getRPM() + "K", text_fg=(1, 1, 1, 1),
-                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                pos=(0.25, 0, -.5),
-                                                text_scale=.4)
-            self.rageBuildingText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.extraAttacks.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.extraAttacks.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.extraAttacks.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.extraAttacks.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.extraAttacks.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.extraAttacks.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.extraAttacks.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.extraAttacks.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.dna.name == 'cbutcher' and self.cog.isVulnerable:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.extraAttacks = status.find('**/kickback_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.extraAttacks.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.extraAttacks.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.extraAttacks.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.extraAttacks.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.extraAttacks.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.extraAttacks.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.extraAttacks.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.extraAttacks.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+        # if self.cog.dna.name == 'cbutcher':
+        #     status = loader.loadModel('phase_3.5/models/gui/status_effects')
+        #     self.extraAttacks = status.find('**/chainsaw_icon')
+        #     self.rageBuildingText = DirectLabel(parent=self.extraAttacks, relief=None,
+        #                                         text="%s" % self.cog.getRPM() + "K", text_fg=(1, 1, 1, 1),
+        #                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+        #                                         pos=(0.25, 0, -.5),
+        #                                         text_scale=.4)
+        #     self.rageBuildingText.show()
+        #     self.statusEffects += 1
+        #     if self.statusEffects == 1:
+        #         self.extraAttacks.reparentTo(self.attackIcon)
+        #         self.attackIcon.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #     if self.statusEffects == 2:
+        #         self.extraAttacks.reparentTo(self.attackIcon1)
+        #         self.attackIcon1.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #     if self.statusEffects == 3:
+        #         self.extraAttacks.reparentTo(self.attackIcon2)
+        #         self.attackIcon2.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #     if self.statusEffects == 4:
+        #         self.extraAttacks.reparentTo(self.attackIcon3)
+        #         self.attackIcon3.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #     if self.statusEffects == 5:
+        #         self.extraAttacks.reparentTo(self.attackIcon4)
+        #         self.attackIcon4.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #         self.attackIcon4.show()
+        #     if self.statusEffects == 6:
+        #         self.extraAttacks.reparentTo(self.attackIcon5)
+        #         self.attackIcon5.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #         self.attackIcon5.show()
+        #     if self.statusEffects == 7:
+        #         self.extraAttacks.reparentTo(self.attackIcon6)
+        #         self.attackIcon6.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #         self.attackIcon6.show()
+        #     if self.statusEffects == 8:
+        #         self.extraAttacks.reparentTo(self.attackIcon7)
+        #         self.attackIcon7.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #         self.attackIcon7.show()
+        # if self.cog.dna.name == 'cbutcher' and self.cog.isVulnerable:
+        #     status = loader.loadModel('phase_3.5/models/gui/status_effects')
+        #     self.extraAttacks = status.find('**/kickback_icon')
+        #     self.statusEffects += 1
+        #     if self.statusEffects == 1:
+        #         self.extraAttacks.reparentTo(self.attackIcon)
+        #         self.attackIcon.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #     if self.statusEffects == 2:
+        #         self.extraAttacks.reparentTo(self.attackIcon1)
+        #         self.attackIcon1.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #     if self.statusEffects == 3:
+        #         self.extraAttacks.reparentTo(self.attackIcon2)
+        #         self.attackIcon2.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #     if self.statusEffects == 4:
+        #         self.extraAttacks.reparentTo(self.attackIcon3)
+        #         self.attackIcon3.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #     if self.statusEffects == 5:
+        #         self.extraAttacks.reparentTo(self.attackIcon4)
+        #         self.attackIcon4.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #         self.attackIcon4.show()
+        #     if self.statusEffects == 6:
+        #         self.extraAttacks.reparentTo(self.attackIcon5)
+        #         self.attackIcon5.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #         self.attackIcon5.show()
+        #     if self.statusEffects == 7:
+        #         self.extraAttacks.reparentTo(self.attackIcon6)
+        #         self.attackIcon6.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #         self.attackIcon6.show()
+        #     if self.statusEffects == 8:
+        #         self.extraAttacks.reparentTo(self.attackIcon7)
+        #         self.attackIcon7.setColor(1, 0.984, 0, 1)
+        #         self.extraAttacks.setColor(1, 1, 1, 1)
+        #         self.attackIcon7.show()
         if self.cog.dna.name == 'hroller':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.extraAttacks = status.find('**/insured_icon')
@@ -1250,7 +1250,10 @@ class TownBattleCogPanel(DirectFrame):
                 self.attackIcon7.show()
         if self.cog.isAngry:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.enraged = status.find('**/rage_mode_icon')
+            if self.cog.dna.name == 'cbutcher':
+                self.enraged = status.find('**/worker_management_icon')
+            else:
+                self.enraged = status.find('**/rage_mode_icon')
             self.enrageCountText = DirectLabel(parent=self.enraged, relief=None,
                                               text="%s" % self.cog.getEnrageCounter(), text_fg=(1, 1, 1, 1),
                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
@@ -2190,11 +2193,18 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isDamageDown:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.damageUp = status.find('**/suit_damage_down_icon')
-            self.damageMultText2 = DirectLabel(parent=self.damageUp, relief=None, text="%s" % self.cog.getDamageDown() + "%", text_fg=(0, 1, 0.047, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.4)
-            self.damageMultText2.show()
+            if self.cog.dna.name == 'safesupervis':
+                self.damageMultText2 = DirectLabel(parent=self.damageUp, relief=None, text="25%", text_fg=(0, 1, 0.047, 1),
+                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                  pos=(0.25, 0, -.5),
+                                                  text_scale=.4)
+                self.damageMultText2.show()
+            else:
+                self.damageMultText2 = DirectLabel(parent=self.damageUp, relief=None, text="%s" % self.cog.getDamageDown() + "%", text_fg=(0, 1, 0.047, 1),
+                                                   text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                   pos=(0.25, 0, -.5),
+                                                   text_scale=.4)
+                self.damageMultText2.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.damageUp.reparentTo(self.healthNode)
@@ -2276,6 +2286,13 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.vulnerable = status.find('**/broken_shield_icon')  # third slot vulnerability icon
             if self.cog.dna.name == 'bcaster':
+                self.vulnerabilityText = DirectLabel(parent=self.vulnerable, relief=None,
+                                                 text="100%",
+                                                 text_fg=(0, 1, 0.047, 1),
+                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                 pos=(0.25, 0, -.5),
+                                                 text_scale=.4)
+            elif self.cog.dna.name == 'cbutcher':
                 self.vulnerabilityText = DirectLabel(parent=self.vulnerable, relief=None,
                                                  text="100%",
                                                  text_fg=(0, 1, 0.047, 1),
@@ -2370,13 +2387,22 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isDamageReduction:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.damageReduction = status.find('**/shield_icon')  # third slot vulnerability icon
-            self.vulnerabilityText = DirectLabel(parent=self.damageReduction, relief=None,
+            if self.cog.dna.name == 'rkeeper':
+                self.vulnerabilityText = DirectLabel(parent=self.damageReduction, relief=None,
+                                                         text="50%",
+                                                         text_fg=(1, 0, 0, 1),
+                                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                         pos=(0.25, 0, -.5),
+                                                         text_scale=.4)
+                self.vulnerabilityText.show()
+            else:
+                self.vulnerabilityText = DirectLabel(parent=self.damageReduction, relief=None,
                                                      text="%s" % self.cog.getDamageReduction() + "%",
                                                      text_fg=(1, 0, 0, 1),
                                                      text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                      pos=(0.25, 0, -.5),
                                                      text_scale=.4)
-            self.vulnerabilityText.show()
+                self.vulnerabilityText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.damageReduction.reparentTo(self.healthNode)
@@ -3270,6 +3296,9 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
         elif name == 'stenog' or name == 'crystal' or name == 'rkeeper':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0725, .0725, .0725)
+        elif name == 'cbutcher':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0725, .0725, .0725)
+            self.suitHead.setColor((0, 0, 0, 1))
         elif name == 'clubpres':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
         elif name == 'fmaker':
@@ -3391,7 +3420,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'dopa':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .095, .095, .095)
         elif name == 'dopr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .17, .17, .17)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .1675, .1675, .1675)
         elif name == 'fires':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .0675, .0675, .0675)
         elif name == 'safesupervis':
@@ -3400,7 +3429,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
         elif name == 'mplayer' or name == 'mplayer2':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'chainsaw' or name == 'chainsaw2' or name == 'cbutcher':
+        elif name == 'chainsaw' or name == 'chainsaw2':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0875, .0875, .0875)
         elif name == 'duckshfl':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .075, .075, .075)
@@ -3509,7 +3538,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'gld':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1075, .1075, .1075)
         elif name == 'arbit' or name == 'cdirector':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .09, .09, .09)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0925, .0925, .0925)
         else:
             self.suitHead.setPos(-0.27, 0.5, 0.13)
 

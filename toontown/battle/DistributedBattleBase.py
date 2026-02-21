@@ -1182,7 +1182,6 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.accept(self.localToonBattleEvent, self.__handleLocalToonBattleEvent)
 
     def startTimer(self, ts = 0):
-        self.townBattle.adjustStatusEffects(self.activeToons)
         self.notify.debug('startTimer()')
         self.__adjustTownBattle()
         if ts >= CLIENT_INPUT_TIMEOUT:
@@ -1193,6 +1192,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.timer.startCallback(CLIENT_INPUT_TIMEOUT - ts, self.__timedOut)
         timeTask = Task.loop(Task(self.__countdown), Task.pause(1))
         taskMgr.add(timeTask, self.timerCountdownTaskName)
+        self.townBattle.adjustStatusEffects(self.activeToons)
 
     def __stopTimer(self):
         self.notify.debug('__stopTimer()')
@@ -1218,6 +1218,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.__enterLocalToonWaitForInput()
             self.startTimer(ts)
         self.__adjustTownBattle()
+        self.townBattle.adjustStatusEffects(self.activeToons)
 
     def exitWaitForInput(self):
         self.__adjustTownBattle()

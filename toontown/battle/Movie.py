@@ -403,6 +403,10 @@ class Movie(DirectObject.DirectObject):
                 toon.makeUnBurned()
             if not toon.getBurnedRounds() <= 0:
                 toon.addBurnedRounds(toon.getBurnedRounds() - 1)
+            if toon.getLiquidatedRounds() == 1:
+                toon.makeUnLiquidated()
+            if not toon.getLiquidatedRounds() <= 0:
+                toon.addLiquidatedRounds(toon.getLiquidatedRounds() - 1)
             if toon.getDamageOvertimeRounds() == 1:
                 toon.makeUnDamageOvertime()
             if not toon.getDamageOvertimeRounds() <= 0:

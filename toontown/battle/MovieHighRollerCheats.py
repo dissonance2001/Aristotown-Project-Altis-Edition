@@ -1478,8 +1478,6 @@ def doNoAttack(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        toonTrack = Parallel(Func(toon.makeUnGagBan))
-        notifyTracks.append(toonTrack)
     if suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog' and suit.isPhase3:
         suitTrack = Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0), Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',)))
         suitTrack.append(Func(suit.makeNonImmortal))

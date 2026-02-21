@@ -311,17 +311,6 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        if not suit.isShielding:
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, hp, battle))
-            suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, hp, battle))
         suitTrack.append(Func(suit.setDizzy, 0))
         suitTrack.append(Func(suit.setNeutralAnimation))
         return Parallel(suitTrack, bonusTrack, soakTracks)
@@ -364,17 +353,6 @@ def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, atta
             suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
         if suits[suitIndex].isHeavyRain:
             suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
-        if not suits[suitIndex].isShielding:
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 2, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 2, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 3, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 3, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 4, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 4, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 5, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 5, battle.activeSuits, value, battle))
         return suitTrack
     else:
         return Sequence()
@@ -393,17 +371,6 @@ def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
             suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
         if suits[suitIndex].isHeavyRain:
             suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
-        if not suits[suitIndex].isShielding:
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 2, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 2, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 3, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 3, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 4, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 4, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 5, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 5, battle.activeSuits, value, battle))
         return suitTrack
     else:
         return Sequence()
@@ -422,17 +389,6 @@ def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
             suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
         if suits[suitIndex].isHeavyRain:
             suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
-        if not suits[suitIndex].isShielding:
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 2, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 2, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 3, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 3, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 4, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 4, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 5, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 5, battle.activeSuits, value, battle))
         return suitTrack
     else:
         return Sequence()
@@ -451,17 +407,6 @@ def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
             suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
         if suits[suitIndex].isHeavyRain:
             suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
-        if not suits[suitIndex].isShielding:
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 1, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 1, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 2, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 2, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 3, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 3, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 4, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 4, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex - 5, battle.activeSuits, value, battle))
-            suitTrack.append(__ScapegoatAbsorbSplash(suitIndex + 5, battle.activeSuits, value, battle))
         return suitTrack
     else:
         return Sequence()
@@ -499,7 +444,8 @@ def __soakSuit(suit, tContact, remove=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            suitInterval.append(Func(thing.setColor, color))
+            if not suit.dna.name == 'cbutcher':
+                suitInterval.append(Func(thing.setColor, color))
     if not suit.isSkeleton:
         suitInterval.append(Func(suit.find('**/hands').setTexture, texture, 1))
         suitInterval.append(Func(suit.find('**/hands').setColor, suit.handColor))

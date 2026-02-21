@@ -355,7 +355,7 @@ class SuitPlannerInteriorAI:
             activeSuits.append(miniboss)
         elif specialCode == 'bdlitpair1':
             miniboss = self.__genSuitObject(self.zoneId, 24, 'g', 24, 0)  # Contingency Director
-            miniboss2 = self.__genSuitObject(self.zoneId, 23, 'g', 23, 0)  # Corporate Butcherer
+            miniboss2 = self.__genSuitObject(self.zoneId, 25, 'g', 25, 0)  # Dividend King
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'bdlitpair2':
@@ -370,12 +370,12 @@ class SuitPlannerInteriorAI:
             activeSuits.append(miniboss4)
         elif specialCode == 'bdlitpair4':
             miniboss3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)  # Recordkeeper
-            miniboss2 = self.__genSuitObject(self.zoneId, 23, 'g', 23, 0)  # Corporate Butcherer
+            miniboss2 = self.__genSuitObject(self.zoneId, 25, 'g', 25, 0)  # Dividend King
             activeSuits.append(miniboss3)
             activeSuits.append(miniboss2)
         elif specialCode == 'bdlitpair5':
             miniboss4 = self.__genSuitObject(self.zoneId, 21, 'g', 21, 0)  # Liquidator
-            miniboss2 = self.__genSuitObject(self.zoneId, 23, 'g', 23, 0)  # Corporate Butcherer
+            miniboss2 = self.__genSuitObject(self.zoneId, 25, 'g', 25, 0)  # Dividend King
             activeSuits.append(miniboss4)
             activeSuits.append(miniboss2)
         elif specialCode == 'bdlitpair6':
@@ -534,8 +534,11 @@ class SuitPlannerInteriorAI:
             # witness stand-in
             suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 15, 10, 5)
             reserveSuits.append(suit)
-        if specialCode == 'cbutcher':
+        if specialCode == 'phantom':
             miniboss2 = self.__genSuitObject(self.zoneId, 23, 'g', 23, 0)
+            reserveSuits.append(miniboss2)
+        if specialCode == 'dking':
+            miniboss2 = self.__genSuitObject(self.zoneId, 25, 'g', 25, 0)
             reserveSuits.append(miniboss2)
         if specialCode == 'cdirector':
             miniboss = self.__genSuitObject(self.zoneId, 24, 'g', 24, 0)

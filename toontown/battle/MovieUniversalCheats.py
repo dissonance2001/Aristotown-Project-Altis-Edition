@@ -546,6 +546,8 @@ def __soakRemoval(suit, remove=0):
             color = Point4((0.671, 0.671, 0.671, 1))
         elif suit.style.name == 'kerberos':
             color = Point4((0.62, 0.659, 0.624, 1))
+        elif suit.style.name == 'cbutcher':
+            color = Point4((0, 0, 0, 1))
         else:
             color = Point4(1.0, 1.0, 1.0, 1.0)
     else:

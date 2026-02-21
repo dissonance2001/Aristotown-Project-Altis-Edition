@@ -259,17 +259,6 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 suitTrack.append(Func(suit.addHeavyRainDamage, totalDamage[targetIndex]))
             if suit.isSued:
                 suitTrack.append(Func(suit.makeSued, 3))
-            if not suit.isShielding:
-                suitTrack.append(__ScapegoatAbsorb(suitIndex - 1, battle.activeSuits, totalDamage[targetIndex], battle))
-                suitTrack.append(__ScapegoatAbsorb(suitIndex + 1, battle.activeSuits, totalDamage[targetIndex], battle))
-                suitTrack.append(__ScapegoatAbsorb(suitIndex - 2, battle.activeSuits, totalDamage[targetIndex], battle))
-                suitTrack.append(__ScapegoatAbsorb(suitIndex + 2, battle.activeSuits, totalDamage[targetIndex], battle))
-                suitTrack.append(__ScapegoatAbsorb(suitIndex - 3, battle.activeSuits, totalDamage[targetIndex], battle))
-                suitTrack.append(__ScapegoatAbsorb(suitIndex + 3, battle.activeSuits, totalDamage[targetIndex], battle))
-                suitTrack.append(__ScapegoatAbsorb(suitIndex - 4, battle.activeSuits, totalDamage[targetIndex], battle))
-                suitTrack.append(__ScapegoatAbsorb(suitIndex + 4, battle.activeSuits, totalDamage[targetIndex], battle))
-                suitTrack.append(__ScapegoatAbsorb(suitIndex - 5, battle.activeSuits, totalDamage[targetIndex], battle))
-                suitTrack.append(__ScapegoatAbsorb(suitIndex + 5, battle.activeSuits, totalDamage[targetIndex], battle))
             if bonusTrack == None:
                 tracks.append(suitTrack)
             else:

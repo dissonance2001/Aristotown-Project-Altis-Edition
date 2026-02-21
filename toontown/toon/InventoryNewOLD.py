@@ -357,6 +357,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if 'allGagBoost' in base.localAvatar.battleConditions:
             allGagBoost = True
 
+        allGagBoost2 = False
+        if 'allGagBoost2' in base.localAvatar.battleConditions:
+            allGagBoost2 = True
+
         raisedAnte = False
         if 'raisedAnte' in base.localAvatar.battleConditions:
             raisedAnte = True
@@ -377,6 +381,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             button = self.buttons[track][level]
             if allGagBoost:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['allGagBoost'][0]
+            elif allGagBoost2:
+                val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['allGagBoost2'][0]
             elif raisedAnte:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['raisedAnte'][0]
             else:
@@ -523,7 +529,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             if allGagBoost and not track == LURE_TRACK:
                 damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
                 damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost')
-            elif raisedAnte and not track == LURE_TRACK:
+            if allGagBoost2 and not track == LURE_TRACK:
+                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost2'][0] * 0.01) + 1.0)))
+                damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost2')
+            if raisedAnte and not track == LURE_TRACK:
                 damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
                 damageAppendStr = labelColorizeJustAll(damage, 'raisedAnte')
 
@@ -1377,6 +1386,26 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                             if base.localAvatar.battleConditions['lureBoost'][0] < 0.0:
                                 if not self.numItem(track, level) <= 0 and track == LURE_TRACK:
                                     self.makeDamageDownPressable(button, track, level)
+                        if 'allGagBoost2' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['allGagBoost2'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'allGagBoost2' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['allGagBoost2'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'lureBoost2' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0 and track == LURE_TRACK:
+                            if base.localAvatar.battleConditions['lureBoost2'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'lureBoost2' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['lureBoost2'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0 and track == LURE_TRACK:
+                                    self.makeDamageDownPressable(button, track, level)
                         if 'healBoost' in base.localAvatar.battleConditions and not self.numItem(
                                 track, level) <= 0:
                             if base.localAvatar.battleConditions['healBoost'][0] > 0.0:
@@ -1629,6 +1658,72 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         if 'noDamage' in base.localAvatar.battleConditions and not (self.numItem(track, level) <= 0):
                             self.makeUnpressable(button, track, level)
                         if self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
+                            self.makeUnpressable(button, track, level)
+                        if track == THROW_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == DROP_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == TRAP_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and level == 0 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and level == 2 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and level == 4 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and level == 6 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and level == 0 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and level == 2 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and level == 4 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and level == 6 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == SQUIRT_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == SOUND_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == ZAP_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and level == 7 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and level == 5 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and level == 3 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == HEAL_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and level == 7 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and level == 5 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and level == 3 and not self.numItem(
+                                track, level) <= 0:
+                            self.makeUnpressable(button, track, level)
+                        if track == LURE_TRACK and 'disableGroupGags' in base.localAvatar.battleConditions and level == 1 and not self.numItem(
+                                track, level) <= 0:
                             self.makeUnpressable(button, track, level)
 
                     else:

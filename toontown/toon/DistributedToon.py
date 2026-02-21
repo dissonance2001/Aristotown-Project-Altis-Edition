@@ -256,6 +256,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             self.damageInterval = Parallel(Func(self.setInkDrain, num)).start()
 
+    def setNeutralAnimation(self):
+        Sequence(Func(self.loop, 'neutral')).start()
+
     def checkDamageDown(self, num):
         if self.damageInterval:
             self.damageInterval.finish()
@@ -3019,6 +3022,16 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0),
                                                    LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
                 self.hpTextInterval.start()
+
+    def hideHpText(self):
+        try:
+            DistributedAvatar.DistributedAvatar.hideHpText(self)
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+                del self.hpTextInterval
+        except:
+            pass
 
     def setName(self, name = 'unknownDistributedAvatar'):
         DistributedPlayer.DistributedPlayer.setName(self, name)

@@ -29,7 +29,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)), Func(self.hide))
 
     def getShowIntervalOvercharged(self, text, duration):
-        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0.988, 0., 1.0, 1.0)), Func(self.hide), Wait(duration * 0.1), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
+        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0.988, 0., 1.0, 1.0)), Func(self.hide), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
                         self.posInterval(0, (0, 0, .75)), Func(self.setText, text),
                         Func(self.show),
@@ -42,7 +42,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)), Func(self.hide))
 
     def getShowIntervalOverhealed(self, text, duration):
-        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0, 0.949, 1, 1.0)), Func(self.hide), Wait(duration * 0.1), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
+        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0, 0.949, 1, 1.0)), Func(self.hide), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
                         self.posInterval(0, (0, 0, .75)), Func(self.setText, text),
                         Func(self.show),
@@ -55,7 +55,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)), Func(self.hide))
 
     def getShowIntervalCheat(self, text, duration):
-        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0.466, 0.474, 1.0, 1.0)), Func(self.hide), Wait(duration * 0.1), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
+        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0.466, 0.474, 1.0, 1.0)), Func(self.hide), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
                         self.posInterval(0, (0, 0, .75)), Func(self.setText, text),
                         Func(self.show),
@@ -68,7 +68,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)), Func(self.hide))
 
     def getShowIntervalCheatRed(self, text, duration):
-        return Sequence(LerpColorScaleInterval(self, 0, Vec4(1, 0, 0, 1.0)), Func(self.hide), Wait(duration * 0.1), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
+        return Sequence(LerpColorScaleInterval(self, 0, Vec4(1, 0, 0, 1.0)), Func(self.hide), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
                         self.posInterval(0, (0, 0, .75)), Func(self.setText, text),
                         Func(self.show),
@@ -81,7 +81,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)), Func(self.hide))
 
     def getShowIntervalCheatOverhealed(self, text, duration):
-        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0, 0.949, 1, 1.0)), Func(self.hide), Wait(duration * 0.1), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
+        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0, 0.949, 1, 1.0)), Func(self.hide), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
                         self.posInterval(0, (0, 0, .75)), Func(self.setText, text),
                         Func(self.show),
@@ -94,7 +94,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
                         LerpColorScaleInterval(self, .25, Vec4(0, 0, 0, 0)), Func(self.hide))
 
     def getShowIntervalCheatOvercharged(self, text, duration):
-        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0.988, 0., 1.0, 1.0)), Func(self.hide), Wait(duration * 0.1), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
+        return Sequence(LerpColorScaleInterval(self, 0, Vec4(0.988, 0., 1.0, 1.0)), Func(self.hide), Func(self.setPos, 0.0, 0.75), Func(self.setScale, 0.16),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
                         self.posInterval(0, (0, 0, .75)), Func(self.setText, text),
                         Func(self.show),
@@ -108,7 +108,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
 
     def getShowIntervalDesc(self, text, duration):
         return Sequence(Wait(0.5), LerpColorScaleInterval(self, 0, Vec4(0.847, 0.784, 0.992, 1.0)), Func(self.hide), Func(self.setWordwrap, None), Func(self.setPos, 0.0, 0.6625),
-                        Func(self.setScale, 0.09), Wait(duration * 0.1),
+                        Func(self.setScale, 0.09),
                         Func(self.setText, text),
                         LerpScaleInterval(self, duration=0, scale=(0, 0, 0)),
                         self.posInterval(0, (0, 0, 0.6625)), Func(self.setText, text),
