@@ -71,6 +71,7 @@ class BattleCalculatorAI:
         self.suitAtkStats = {}
         self.unusedConditions = [1, 2, 3, 4, 5, 6, 7]
         self.unusedPhases = [1, 2, 3, 4, 5, 6]
+        self.litigationSpawns = [1, 2, 3, 4]
         self.usedConditions = []
         self.deadSuits = 0
         self.levels = 0
@@ -1835,7 +1836,7 @@ class BattleCalculatorAI:
                             self.setSuitCondition(targetId, 'markedcalculator', 1, 10, 'setBoth')
                             self.setSuitCondition(targetId, 'markedcalculator2', 0, 0, 'setBoth')
                             self.setToonCondition(toon.doId, 'markedManager', 1, 5, 'setBoth')
-                        if suit.dna.name == 'bkeeper' and not self.suitHasCondition(targetId, 'marked'):
+                        if suit.dna.name == 'bkeeper':
                             self.setSuitCondition(targetId, 'markedcalculator', 1, 10, 'setBoth')
                             self.setSuitCondition(targetId, 'markedcalculator2', 0, 0, 'setBoth')
                             self.setToonCondition(toon.doId, 'markedManager', 1, 5, 'setBoth')
@@ -8148,6 +8149,12 @@ class BattleCalculatorAI:
                         if not self.suitHasCondition(suit.doId, 'dead'):
                             self.deadSuits += 1
                             self.setSuitCondition(suit.doId, 'dead', 1, 99, 'setBoth')
+            elif atkType['name'] == 'CogSpawn':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setToonCondition(toon.doId, 'cogSpawn', 1, 99, 'setBoth')
+                for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'alreadyCogSpawn2', 1, 99, 'setBoth')
             elif atkType['name'] == 'SueApplication':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -8243,112 +8250,6 @@ class BattleCalculatorAI:
                         managerTarget = suit
                     if managerTarget == None:
                         managerTarget = theSuit
-                    if theSuit.dna.name == 'lgator':
-                        self.setSuitCondition(suit.doId, 'deadgator', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'caseman':
-                        self.setSuitCondition(suit.doId, 'deadcase', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'stenog':
-                        self.setSuitCondition(suit.doId, 'deadsteno', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'sgoat':
-                        self.setSuitCondition(suit.doId, 'deadgoat', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'cdirector':
-                        self.setSuitCondition(suit.doId, 'deadcont', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'dking':
-                        self.setSuitCondition(suit.doId, 'deadbutch', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'rkeeper':
-                        self.setSuitCondition(suit.doId, 'deadrecord', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'liquid':
-                        self.setSuitCondition(suit.doId, 'deadliquid', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'ambass':
-                        self.setSuitCondition(suit.doId, 'deadamb', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'wtapper':
-                        self.setSuitCondition(suit.doId, 'deadwire', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'bkeeper':
-                        self.setSuitCondition(suit.doId, 'deadbook', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'phouse':
-                        self.setSuitCondition(suit.doId, 'deadpower', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'safesupervis':
-                        self.setSuitCondition(suit.doId, 'deadpres', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'ubuster':
-                        self.setSuitCondition(suit.doId, 'deadunion', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'racket':
-                        self.setSuitCondition(suit.doId, 'deadrack', 1, 99, 'setBoth')
-                    if theSuit.dna.name == 'radiog':
-                        self.setSuitCondition(suit.doId, 'deadradio', 1, 99, 'setBoth')
-            elif atkType['name'] == 'Desperation2':
-                self.setSuitCondition(theSuit.doId, 'desperation', self.getSuitConditionModifier(theSuit.doId, 'desperation') + .4, 99, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'desperationcalculator', 0, 0, 'setBoth')
-                from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedDirectorsAI):
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                boss = do
-                                break
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                if self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadamb') \
-                                        and not self.suitHasCondition(theSuit.doId, 'activeamb') and not theSuit.dna.name == 'ambass':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'ambass')
-                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadwire') \
-                                        and not self.suitHasCondition(theSuit.doId, 'activewire') and not theSuit.dna.name == 'wtapper':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'wtapper')
-                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadbook')\
-                                        and not self.suitHasCondition(theSuit.doId, 'activebook') and not theSuit.dna.name == 'bkeeper':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'bkeeper')
-                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadpower')\
-                                        and not self.suitHasCondition(theSuit.doId, 'activepower') and not theSuit.dna.name == 'phouse':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'phouse')
-                from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedSellbotBossMiniAI):
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                boss = do
-                                break
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                if theSuit.dna.name == 'cdirector' or theSuit.dna.name == 'dking' or theSuit.dna.name == 'rkeeper' or theSuit.dna.name == 'liquid':
-                                    if self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadcont') \
-                                            and not self.suitHasCondition(theSuit.doId, 'activecont') and not theSuit.dna.name == 'cdirector':
-                                        boss.appendSuitsToBattle(boss.battleNumber, 'cdirector')
-                                    elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadbutch') \
-                                            and not self.suitHasCondition(theSuit.doId, 'activebutch') and not theSuit.dna.name == 'dking':
-                                        boss.appendSuitsToBattle(boss.battleNumber, 'dking')
-                                    elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadrecord') \
-                                            and not self.suitHasCondition(theSuit.doId, 'activerecord') and not theSuit.dna.name == 'rkeeper':
-                                        boss.appendSuitsToBattle(boss.battleNumber, 'rkeeper')
-                                    elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadliquid') \
-                                            and not self.suitHasCondition(theSuit.doId, 'activeliquid') and not theSuit.dna.name == 'liquid':
-                                        boss.appendSuitsToBattle(boss.battleNumber, 'liquid')
-                from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedSellbotBossMiniAI):
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                boss = do
-                                break
-                        for t in self.battle.activeToons:
-                            if t in do.involvedToons:
-                                if theSuit.dna.name == 'safesupervis' or theSuit.dna.name == 'ubuster' or theSuit.dna.name == 'racket' or theSuit.dna.name == 'radiog':
-                                    if self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadpres') \
-                                            and not self.suitHasCondition(theSuit.doId, 'activepres') and not theSuit.dna.name == 'safesupervis':
-                                        boss.appendSuitsToBattle(boss.battleNumber, 'safesupervis')
-                                    elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadunion') \
-                                            and not self.suitHasCondition(theSuit.doId, 'activeunion') and not theSuit.dna.name == 'ubuster':
-                                        boss.appendSuitsToBattle(boss.battleNumber, 'ubuster')
-                                    elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadrack') \
-                                            and not self.suitHasCondition(theSuit.doId, 'activerack') and not theSuit.dna.name == 'racket':
-                                        boss.appendSuitsToBattle(boss.battleNumber, 'racket')
-                                    elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadradio') \
-                                            and not self.suitHasCondition(theSuit.doId, 'activeradio') and not theSuit.dna.name == 'radiog':
-                                        boss.appendSuitsToBattle(boss.battleNumber, 'radiog')
                 from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
                 boss = None
@@ -8360,14 +8261,114 @@ class BattleCalculatorAI:
                                 break
                         for t in self.battle.activeToons:
                             if t in do.involvedToons:
-                                if self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadgator') and not self.suitHasCondition(theSuit.doId, 'activegator') and not theSuit.dna.name == 'lgator':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'lgator')
-                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadsteno') and not self.suitHasCondition(theSuit.doId, 'activesteno') and not theSuit.dna.name == 'stenog':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'stenog')
-                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadcase') and not self.suitHasCondition(theSuit.doId, 'activecase') and not theSuit.dna.name == 'caseman':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'caseman')
-                                elif self.toonHasCondition(t, 'desperation') and not self.suitHasCondition(theSuit.doId, 'deadgoat') and not self.suitHasCondition(theSuit.doId, 'activegoat') and not theSuit.dna.name == 'sgoat':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'sgoat')
+                                if self.toonHasCondition(t, 'desperation') and (theSuit.dna.name == 'lgator' or theSuit.dna.name == 'stenog' or theSuit.dna.name == 'caseman' or theSuit.dna.name == 'sgoat'):
+                                    if not self.litigationSpawns:
+                                        continue
+                                    condition = random.choice(self.litigationSpawns)
+                                    if condition == 1:
+                                        self.litigationSpawns.remove(1)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'lgator')
+                                    elif condition == 2:
+                                        self.litigationSpawns.remove(2)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'stenog')
+                                    elif condition == 3:
+                                        self.litigationSpawns.remove(3)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'caseman')
+                                    elif condition == 4:
+                                        self.litigationSpawns.remove(4)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'sgoat')
+                                    else:
+                                        pass
+                from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
+
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedDirectorsAI):
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                boss = do
+                                break
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if self.toonHasCondition(t, 'desperation') and (theSuit.dna.name == 'ambass' or theSuit.dna.name == 'wtapper' or theSuit.dna.name == 'bkeeper' or theSuit.dna.name == 'phouse'):
+                                    if not self.litigationSpawns:
+                                        continue
+                                    condition = random.choice(self.litigationSpawns)
+                                    if condition == 1:
+                                        self.litigationSpawns.remove(1)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'ambass')
+                                    elif condition == 2:
+                                        self.litigationSpawns.remove(2)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'wtapper')
+                                    elif condition == 3:
+                                        self.litigationSpawns.remove(3)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'bkeeper')
+                                    elif condition == 4:
+                                        self.litigationSpawns.remove(4)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'phouse')
+                                    else:
+                                        pass
+                from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedSellbotBossMiniAI):
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                boss = do
+                                break
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if self.toonHasCondition(t, 'desperation') and (theSuit.dna.name == 'cdirector' or theSuit.dna.name == 'dking' or theSuit.dna.name == 'rkeeper' or theSuit.dna.name == 'liquid'):
+                                    if not self.litigationSpawns:
+                                        continue
+                                    condition = random.choice(self.litigationSpawns)
+                                    if condition == 1:
+                                        self.litigationSpawns.remove(1)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'cdirector')
+                                    elif condition == 2:
+                                        self.litigationSpawns.remove(2)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'dking')
+                                    elif condition == 3:
+                                        self.litigationSpawns.remove(3)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'rkeeper')
+                                    elif condition == 4:
+                                        self.litigationSpawns.remove(4)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'liquid')
+                                    else:
+                                        pass
+                from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+
+                boss = None
+                for do in simbase.air.doId2do.values():
+                    if isinstance(do, DistributedSellbotBossMiniAI):
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                boss = do
+                                break
+                        for t in self.battle.activeToons:
+                            if t in do.involvedToons:
+                                if self.toonHasCondition(t, 'desperation') and (theSuit.dna.name == 'safesupervis' or theSuit.dna.name == 'racket' or theSuit.dna.name == 'ubuster' or theSuit.dna.name == 'radiog'):
+                                    if not self.litigationSpawns:
+                                        continue
+                                    condition = random.choice(self.litigationSpawns)
+                                    if condition == 1:
+                                        self.litigationSpawns.remove(1)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'safesupervis')
+                                    elif condition == 2:
+                                        self.litigationSpawns.remove(2)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'ubuster')
+                                    elif condition == 3:
+                                        self.litigationSpawns.remove(3)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'racket')
+                                    elif condition == 4:
+                                        self.litigationSpawns.remove(4)
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'radiog')
+                                    else:
+                                        pass
+            elif atkType['name'] == 'Desperation2':
+                self.setSuitCondition(theSuit.doId, 'desperation', self.getSuitConditionModifier(theSuit.doId, 'desperation') + .4, 99, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'desperationcalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'TargetCheck':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -10108,6 +10109,15 @@ class BattleCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)): # Cheat Calculators
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
+            if x % 99 == 0 and not self.suitHasCondition(suitId, 'alreadyCogSpawn2'):
+                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'CogSpawn',
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'stenog':
                 if x % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
                     from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
@@ -10121,7 +10131,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10144,7 +10154,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10233,7 +10243,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'lit')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10258,7 +10268,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'amb')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10283,7 +10293,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'amb')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10308,7 +10318,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'amb')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10337,7 +10347,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'amb')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10366,7 +10376,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'pres')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10393,7 +10403,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'pres')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10422,7 +10432,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'pres')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10445,7 +10455,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'pres')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10472,7 +10482,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10513,7 +10523,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10523,23 +10533,6 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'redundantcalculator', 1, 10, 'setBoth')
                 if len(self.battle.activeSuits) >= 6 and (x % 2 == 0) and self.deadSuits == 0 and self.suitHasCondition(suitId, 'alreadyHighPressure'):
                     self.setSuitCondition(suitId, 'highpressurecalculator', 1, 10, 'setBoth')
-            if self.battle.activeSuits[i].dna.name == 'dking':
-                if x % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
-
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedSellbotBossMiniAI):
-                            for t in self.battle.activeToons:
-                                if t in do.involvedToons:
-                                    boss = do
-                                    break
-                            for t in self.battle.activeToons:
-                                if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                        boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
-                    for suit in self.battle.activeSuits:
-                        self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'liquid':
                 if x % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
                     from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
@@ -10553,7 +10546,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -10570,7 +10563,7 @@ class BattleCalculatorAI:
                                     break
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
-                                    if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                                    if len(self.battle.activeSuits) < 6 and self.toonHasCondition(t, 'cogSpawn'):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
                     for suit in self.battle.activeSuits:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
@@ -11458,10 +11451,10 @@ class BattleCalculatorAI:
                                                                 'freq': 0,
                                                                 'group': SuitBattleGlobals.ATK_TGT_TRIPLE})
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'phantomEntrycalculator') and self.battle.activeSuits[
-                    i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    self.battle.suitAttacks.append(attack)
+                # if self.suitHasCondition(suitId, 'phantomEntrycalculator') and self.battle.activeSuits[
+                #     i].currHP > 0:
+                #     attack = self.__getAbilityQueued(suitId)
+                #     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'phantomEntrycalculator') and self.battle.activeSuits[
                     i].currHP > 0 and not self.battle.activeSuits[i].currHP <= 1000:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -16434,59 +16427,9 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'attorney', 1, 1, 'setBoth')
                 if suit.dna.name == 'supervis' and suit.getActualLevel() == 24:
                     self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')
-                # if suit.dna.name == 'cbutcher':
-                #     self.setSuitCondition(suit.doId, 'recordkeeperShielding', 1, 99, 'setBoth')
                 if self.suitHasCondition(suit.doId, 'alreadyDesperation'):
                     for s in self.battle.activeSuits:
                         self.setSuitCondition(s.doId, 'alreadyDesperation', 1, 99, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadcase'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadcase', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadsteno'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadsteno', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadgoat'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadgoat', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadgator'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadgator', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadamb'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadamb', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadwire'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadwire', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadbook'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadbook', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadpower'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadpower', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadpres'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadpres', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadunion'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadunion', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadrack'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadrack', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadradio'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadradio', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadcont'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadcont', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadbutch'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadbutch', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadrecord'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadrecord', 1, 100, 'setBoth')
-                if self.suitHasCondition(suit.doId, 'deadliquid'):
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'deadliquid', 1, 100, 'setBoth')
                 if suit.dna.name == 'bcaster':
                     self.setSuitCondition(suit.doId, 'vulnerablebroadcaster', 1, 99, 'setBoth')
                 if suit.dna.name == 'cbutcher':
@@ -16529,70 +16472,64 @@ class BattleCalculatorAI:
                             currentBossHealth4 = s.currHP
                     if currentBossHealth <= 0 and currentBossHealth2 <= 0 and currentBossHealth3 <= 0 and currentBossHealth4 <= 0:
                         self.setSuitCondition(suit.doId, 'immune', 0, 0, 'setBoth')
-                if suit.dna.name == 'sgoat' and not self.suitHasCondition(suit.doId, 'enraged'):
-                    self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')
-                if suit.dna.name == 'sgoat':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activegoat', 1, 99, 'setBoth')
                 if suit.dna.name == 'foreman' and suit.getActualLevel() == 20  and not self.suitHasCondition(suit.doId, 'alreadySleepy'):
                     self.setSuitCondition(suit.doId, 'sleepy', 1, 2, 'setBoth')
                     self.setSuitCondition(suit.doId, 'alreadySleepy', 1, 99, 'setBoth')
                 if suit.dna.name == 'foreman' and suit.getActualLevel() == 22  and not self.suitHasCondition(suit.doId, 'alreadyExplosive'):
                     self.setSuitCondition(suit.doId, 'explosive', 1, 2, 'setBoth')
                     self.setSuitCondition(suit.doId, 'alreadyExplosive', 1, 99, 'setBoth')
-                if suit.dna.name == 'safesupervis':
-                    self.setSuitCondition(suit.doId, 'beginning', 1, 99, 'setBoth')
-                    if self.TurnsElapsed == 0 or self.suitHasCondition(suit.doId, 'beginning'):
-                        self.setSuitCondition(suit.doId, 'deadpromotion', 1, 99, 'setBoth')
+                if suit.dna.name == 'sgoat' and not self.suitHasCondition(suit.doId, 'enraged'):
+                    self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')
+                if suit.dna.name == 'sgoat':
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(4)
                 if suit.dna.name == 'caseman':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activecase', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(3)
                 if suit.dna.name == 'stenog':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activesteno', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(2)
                 if suit.dna.name == 'lgator':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activegator', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(1)
                 if suit.dna.name == 'ambass':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activeamb', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(1)
                 if suit.dna.name == 'wtapper':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activewire', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(2)
                 if suit.dna.name == 'bkeeper':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activebook', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(3)
                 if suit.dna.name == 'phouse':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activepower', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(4)
                 if suit.dna.name == 'safesupervis':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activepres', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(1)
                 if suit.dna.name == 'ubuster':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activeunion', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(2)
                 if suit.dna.name == 'racket':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activerack', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(3)
                 if suit.dna.name == 'radiog':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activeradiog', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(4)
                 if suit.dna.name == 'cdirector':
-                    if not self.suitHasCondition(suit.doId, 'beginning'):
-                        self.setSuitCondition(suit.doId, 'beginning', 1, 99, 'setBoth')
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activecont', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(1)
                 if suit.dna.name == 'dking':
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activebutch', 1, 99, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(2)
                 if suit.dna.name == 'rkeeper':
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(3)
                     self.setSuitCondition(suit.doId, 'beginning', 1, 99, 'setBoth')
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activerecord', 1, 99, 'setBoth')
                 if suit.dna.name == 'liquid':
+                    if self.TurnsElapsed == 0:
+                        self.litigationSpawns.remove(4)
                     self.setSuitCondition(suit.doId, 'beginning', 1, 99, 'setBoth')
-                    for s in self.battle.activeSuits:
-                        self.setSuitCondition(s.doId, 'activeliquid', 1, 99, 'setBoth')
                 if suit.dna.name == 'director':
                     self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')
                 suit.b_setHP(suit.getHP())

@@ -1083,6 +1083,8 @@ def doSuitAttack(attack):
         suitTrack = MovieUniversalCheats.doCourtCalculations(attack)
     elif name == 'DeathCheck':
         suitTrack = MovieUniversalCheats.doDeathCheck(attack)
+    elif name == 'CogSpawn':
+        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'SoakRemoval':
         suitTrack = MovieUniversalCheats.doSoakRemoval(attack)
     elif name == 'GovernaughtDeath':
@@ -1534,6 +1536,8 @@ def doSuitAttack(attack):
         elif name == 'ScapegoatBarnyardBash':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'DeathCheck':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'CogSpawn':
             resetSuitTrack = Sequence(suitTrack2)
         #elif name == 'HighRollerNoAttack':
            # resetSuitTrack = Sequence(suitTrack2, unlureSuit)

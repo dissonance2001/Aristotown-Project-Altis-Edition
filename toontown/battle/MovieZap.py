@@ -17,9 +17,9 @@ from toontown.toonbase import ToontownBattleGlobals
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieZap')
 hitSoundFiles = ('AA_tesla.ogg', 'AA_carpet.ogg', 'AA_balloon.ogg', 'AA_zap_radio.ogg',
-                 'AA_zap_tv.ogg', 'AA_zap_stagelight_hit.ogg', 'AA_tesla.ogg', 'AA_lightning.ogg')
+                 'AA_zap_tv.ogg', 'AA_taser.ogg', 'AA_tesla.ogg', 'AA_lightning.ogg')
 missSoundFiles = ('AA_tesla.ogg', 'AA_carpet.ogg', 'AA_balloon.ogg', 'AA_zap_radio.ogg',
-                 'AA_zap_tv.ogg', 'AA_zap_stagelight_miss.ogg', 'AA_tesla.ogg', 'AA_lightning.ogg')
+                 'AA_zap_tv.ogg', 'AA_taser.ogg', 'AA_tesla.ogg', 'AA_lightning.ogg')
 sprayScales = [0.2,
                0.3,
                0.1,
@@ -796,9 +796,9 @@ def __doBattery(zap, delay, fShowStun, npcs=[]):
         suitPos = suit.getPos(battle)
         targetPoint = lambda suit=suit: __suitTargetPoint(suit)
 
-        def getSprayStartPos(coil=coil, toon=toon):
+        def getSprayStartPos(battery=battery, toon=toon):
             toon.update(0)
-            p = coil.getPos(render)
+            p = battery.getPos(render)
             p.setZ(5)  # Temp "fix," this doesn't like to cooperate
             return p
 
@@ -869,10 +869,17 @@ def __doTazer(zap, delay, fShowStun, npcs=[]):
         suitPos = suit.getPos(battle)
         targetPoint = lambda suit=suit: __suitTargetPoint(suit)
 
-        def getSprayStartPos(coil=coil, toon=toon):
+        def getSprayStartPos(toon=toon):
             toon.update(0)
-            p = coil.getPos(render)
-            p.setZ(5)  # Temp "fix," this doesn't like to cooperate
+            lod0 = toon.getLOD(toon.getLODNames()[0])
+            if base.config.GetBool('want-new-anims', 1):
+                if not lod0.find('**/def_joint_right_hold').isEmpty():
+                    joint = lod0.find('**/def_joint_right_hold')
+                else:
+                    joint = lod0.find('**/joint_Rhold')
+            else:
+                joint = lod0.find('**/joint_Rhold')
+            p = joint.getPos(render)
             return p
 
         sprayTrack = Sequence()
@@ -1179,7 +1186,7 @@ def __doStagelight(zap, delay, fShowStun, uberClone = 0, npcs=[]):
             headPartHide = Parallel(Func(headPart.hide))
         if hitSuit:
             cagePropTrack = Sequence(getPropAppearTrack(cage, suit, cagePos, 3, scaleUpPoint=Point3(1.5, 1.5, 1.5), scaleUpTime=0),
-                                     Parallel(ActorInterval(suit, 'soak', endTime=1.5), Func(suit.setNeutralAnimation)),
+                                     Parallel(ActorInterval(suit, 'soak', endTime=1.5), Func(suit.setNeutralAnimationDrop)),
                                      Wait(0.25),
             Func(cage.find('**/spotlight').hide),
                 Parallel(cagePosition, Func(cage.reparentTo, head)),
@@ -1187,7 +1194,8 @@ def __doStagelight(zap, delay, fShowStun, uberClone = 0, npcs=[]):
             LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
             Func(MovieUtil.removeProp, cage)
             )
-            tracks.append(cagePropTrack)
+            if not suit.dna.name == 'lgator':
+                tracks.append(cagePropTrack)
         else:
             cagePropTrack = Sequence(
                 getPropAppearTrack(cage, suit, cagePos, 3, scaleUpPoint=Point3(1.5, 1.5, 1.5), scaleUpTime=0),
@@ -1293,6 +1301,6 @@ zapfn_array = (__doJoybuzzer,
  __doBalloon,
  __doBrokenRadio,
  __doBrokenTV,
-               __doStagelight,
+               __doTazer,
                __doTesla,
  __doLightning)

@@ -301,6 +301,8 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
         if kbbonus == 0:
             suitTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
+        suitTrack.append(Func(suit.setDizzy, 0))
+        suitTrack.append(Func(suit.setNeutralAnimation))
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:
@@ -311,8 +313,6 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        suitTrack.append(Func(suit.setDizzy, 0))
-        suitTrack.append(Func(suit.setNeutralAnimation))
         return Parallel(suitTrack, bonusTrack, soakTracks)
     else:
         return MovieUtil.createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits)

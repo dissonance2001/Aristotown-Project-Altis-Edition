@@ -477,6 +477,7 @@ def __throwPie(throw, delay, hitCount, npcs):
             bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
         if kbbonus == 0:
             suitResponseTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
+        suitResponseTrack.append(Func(suit.setDizzy, 0))
         suitResponseTrack.append(Func(suit.setNeutralAnimation))
         #suitResponseTrack.append(Wait(1.0))
         if suit.dna.name == 'redd' and revived != 0:
@@ -489,8 +490,6 @@ def __throwPie(throw, delay, hitCount, npcs):
             suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        suitResponseTrack.append(Func(suit.setDizzy, 0))
-        suitResponseTrack.append(Func(suit.setNeutralAnimation))
         suitIndex = battle.activeSuits.index(suit)
         if suit.dna.name == 'sgoat' and suit.isShielding:
             suitResponseTrack.append(Func(suit.addRageBuilding, hp))

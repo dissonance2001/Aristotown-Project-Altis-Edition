@@ -2128,6 +2128,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'DeathCheck':
         camTrack2 = Sequence(Wait(attackDuration))
         return camTrack2
+    elif name == 'CogSpawn':
+        camTrack2 = Sequence(Wait(attackDuration))
+        return camTrack2
     elif name == 'TargetCheck':
         camTrack2 = Sequence(Wait(attackDuration))
         return camTrack2
