@@ -800,6 +800,8 @@ class BattleCalculatorAI:
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost2') * 0.01)
                 if self.toonHasCondition(attackerId, 'raisedAnte'):
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'raisedAnte') * 0.01)
+                if self.toonHasCondition(attackerId, 'governaughtBoost'):
+                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
                 if self.toonHasCondition(attackerId, 'encore'):
                     damage *= 1.2
                 if self.toonHasCondition(attackerId, 'encore2'):
@@ -933,6 +935,8 @@ class BattleCalculatorAI:
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost2') * 0.01)
                 if self.toonHasCondition(attackerId, 'raisedAnte'):
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'raisedAnte') * 0.01)
+                if self.toonHasCondition(attackerId, 'governaughtBoost'):
+                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
                 if self.toonHasCondition(attackerId, 'encore'):
                     damage *= 1.2
                 if self.toonHasCondition(attackerId, 'encore2'):
@@ -1117,6 +1121,8 @@ class BattleCalculatorAI:
                                     lureKBValue += self.getToonConditionModifier(toonId, 'lureBoost')
                                 if self.toonHasCondition(toonId, 'lureBoost2'):
                                     lureKBValue += self.getToonConditionModifier(toonId, 'lureBoost2')
+                                if self.toonHasCondition(toonId, 'governaughtBoost'):
+                                    lureKBValue += self.getToonConditionModifier(toonId, 'governaughtBoost')
                                 if self.toonHasCondition(toonId, 'encore'):
                                     lureKBValue *= 1.2
                                 if self.toonHasCondition(toonId, 'encore2'):
@@ -1391,6 +1397,8 @@ class BattleCalculatorAI:
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost2') * 0.01))
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
+                    if self.toonHasCondition(toonId, 'governaughtBoost'):
+                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
                     if self.toonHasCondition(toonId, 'encore'):
                         attackDamage *= 1.2
                     if self.toonHasCondition(toonId, 'encore2'):
@@ -1447,6 +1455,8 @@ class BattleCalculatorAI:
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost2') * 0.01))
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
+                    if self.toonHasCondition(toonId, 'governaughtBoost'):
+                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
                     if self.suitHasCondition(targetId, 'immune'):
                         attackDamage = 0
                     if self.suitHasCondition(targetId, 'partnered'):
@@ -1801,6 +1811,8 @@ class BattleCalculatorAI:
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost2') * 0.01))
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
+                    if self.toonHasCondition(toonId, 'governaughtBoost'):
+                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
                     if attackDamage > 0:
                         organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                         if organicBonus:
@@ -1912,6 +1924,8 @@ class BattleCalculatorAI:
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost2') * 0.01))
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
+                    if self.toonHasCondition(toonId, 'governaughtBoost'):
+                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
                     if suit.dna.name == 'bkeeper' and self.suitHasCondition(targetId, 'bookkeeping'):
                         self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
                     if suit.dna.name == 'rkeeper':
@@ -1997,6 +2011,8 @@ class BattleCalculatorAI:
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost2') * 0.01))
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
+                    if self.toonHasCondition(toonId, 'governaughtBoost'):
+                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
                     if self.suitHasCondition(targetId, 'partnered'):
                         if self.toonHasCondition(toonId, 'partnered'):
                             attackDamage *= 1.5
@@ -2142,6 +2158,8 @@ class BattleCalculatorAI:
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost2') * 0.01))
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
+                    if self.toonHasCondition(toonId, 'governaughtBoost'):
+                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
                     suit = self.battle.findSuit(targetId)
                     if suit.dna.name == 'bkeeper' and self.suitHasCondition(targetId, 'bookkeeping') and not atkTrack == ZAP:
                         self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
@@ -2648,6 +2666,8 @@ class BattleCalculatorAI:
                             attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost2') * 0.01))
                         if self.toonHasCondition(toonId, 'raisedAnte'):
                             attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
+                        if self.toonHasCondition(toonId, 'governaughtBoost'):
+                            attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
                         if self.suitHasCondition(currTarget.doId, 'immune'):
                             attackDamage = 0
                         if self.suitHasCondition(currTarget.doId, 'HRdamagereduction'):
@@ -3590,6 +3610,8 @@ class BattleCalculatorAI:
                     result *= 0.75
                 if self.suitHasCondition(theSuit.doId, 'soaked') and theSuit.dna.name == 'redd':
                     result *= 1.5
+                if self.suitHasCondition(theSuit.doId, 'damageDown'):
+                    result *= self.getSuitConditionModifier(theSuit.doId, 'damageDown')
                 if theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
                     result *= 1.5
                 if theSuit.getHP() > theSuit.getMaxHP():
@@ -5893,11 +5915,11 @@ class BattleCalculatorAI:
                 if not self.suitHasCondition(theSuit.doId, 'phase3'):
                     self.setSuitCondition(theSuit.doId, 'phase3', 1, 99, 'setBoth')
                     self.setToonCondition(toon.doId, 'phantomDeath', 1, 99, 'setBoth')
-                from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+                from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedSellbotBossMiniAI):
+                    if isinstance(do, DistributedBoardbotBossAI):
                         for t in self.battle.activeToons:
                             if t in do.involvedToons:
                                 boss = do
@@ -5922,6 +5944,7 @@ class BattleCalculatorAI:
                         if suit.currHP <= 0:
                             continue
                         suit.setHP(suit.currHP + theSuit.currHP)
+                        self.setSuitCondition(suit.doId, 'directorDamageReduction', 0, 0, 'setBoth')
                 theSuit.setHP(0)
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -6008,7 +6031,11 @@ class BattleCalculatorAI:
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'redundantcalculator', 0, 0, 'setBoth')
-                theSuit.setHP(theSuit.currHP - 500)
+                #theSuit.setHP(theSuit.currHP - 500)
+                if not self.suitHasCondition(theSuit.doId, 'damageDown'):
+                    self.setSuitCondition(theSuit.doId, 'damageDown', .95, 99, 'setBoth')
+                else:
+                    self.setSuitCondition(theSuit.doId, 'damageDown', (self.getSuitConditionModifier(theSuit.doId, 'damageDown') - .05), 99, 'setBoth')
                 for suit in self.battle.activeSuits:
                     if not suit.dna.name == 'cdirector':
                         if suit.currHP <= 0:
@@ -6090,15 +6117,18 @@ class BattleCalculatorAI:
                 if condition == 4:
                     self.unusedConditions.remove(condition)
                     self.setSuitCondition(theSuit.doId, 'alreadyRedundant', 1, 99, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'redundantcalculator', 1, 3, 'setBoth')
                 if condition == 5:
                     self.unusedConditions.remove(condition)
                     self.setSuitCondition(theSuit.doId, 'alreadyContingency', 1, 99, 'setBoth')
                 if condition == 6:
                     self.unusedConditions.remove(condition)
                     self.setSuitCondition(theSuit.doId, 'alreadySecondAttack', 1, 99, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'markedcalculator', 1, 3, 'setBoth')
                 if condition == 7:
                     self.unusedConditions.remove(condition)
                     self.setSuitCondition(theSuit.doId, 'alreadyHighPressure', 1, 99, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'highpressurecalculator', 1, 3, 'setBoth')
                 # if condition in self.unusedConditions:
                 #     del self.unusedConditions[condition]
                 if self.suitHasCondition(theSuit.doId, 'risk1'):
@@ -8209,7 +8239,7 @@ class BattleCalculatorAI:
             elif atkType['name'] == 'GovernaughtDeath':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'raisedAnte', (self.getToonConditionModifier(toonId, 'raisedAnte') + 5), 99, 'setBoth')
+                self.setToonCondition(toon.doId, 'governaughtBoost', (self.getToonConditionModifier(toonId, 'governaughtBoost') + 5), 99, 'setBoth')
             elif atkType['name'] == 'Desperation':
                 self.setSuitCondition(theSuit.doId, 'alreadyDesperation2', 1, 99, 'setBoth')
                 managerTarget = None
@@ -8308,11 +8338,11 @@ class BattleCalculatorAI:
                                         boss.appendSuitsToBattle(boss.battleNumber, 'phouse')
                                     else:
                                         pass
-                from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+                from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedSellbotBossMiniAI):
+                    if isinstance(do, DistributedBoardbotBossAI):
                         for t in self.battle.activeToons:
                             if t in do.involvedToons:
                                 boss = do
@@ -9599,6 +9629,8 @@ class BattleCalculatorAI:
                         result *= (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))
                     if self.suitHasCondition(theSuit.doId, 'brokenconnection'):
                         result *= self.getSuitConditionModifier(theSuit.doId, 'brokenconnection')
+                    if self.suitHasCondition(theSuit.doId, 'damageDown'):
+                        result *= self.getSuitConditionModifier(theSuit.doId, 'damageDown')
                     if self.suitHasCondition(theSuit.doId, 'override'):
                         result *= 1.3
                     if self.suitHasCondition(theSuit.doId, 'enraged'):
@@ -9635,6 +9667,8 @@ class BattleCalculatorAI:
                     result *= 0.7
                 if self.suitHasCondition(theSuit.doId, 'soaked') and theSuit.dna.name == 'safesupervis':
                     result *= 0.75
+                if self.suitHasCondition(theSuit.doId, 'damageDown'):
+                    result *= self.getSuitConditionModifier(theSuit.doId, 'damageDown')
                 if self.getSuitConditionTurns(theSuit.doId, 'sleepy') == 2:
                     result *= 0.2
                 if self.getSuitConditionTurns(theSuit.doId, 'sleepy') == 1:
@@ -10382,9 +10416,9 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
                 # if len(self.battle.activeSuits) >= 6 and (x % 2 == 0) and self.deadSuits == 0:
                 #     self.setSuitCondition(suitId, 'highpressurecalculator', 1, 10, 'setBoth')
-                if (x + 3) % 6 == 0:
+                if (x + 6) % 8 == 0:
                     self.setSuitCondition(suitId, 'promotioncalculator', 1, 10, 'setBoth')
-                if (x + 3) % 4 == 0:
+                if (x + 4) % 5 == 0:
                     self.setSuitCondition(suitId, 'overpressurecalculator', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'heatwavecalculationcalculator', 1, 10, 'setBoth')
@@ -10411,7 +10445,7 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'contractenforcementcalculator', 1, 10, 'setBoth')
                 # if (x + 2) % 5 == 0:
                 #     self.setSuitCondition(suitId, 'nostrikecalculator', 1, 10, 'setBoth')
-                if (x + 2) % 4 == 0:
+                if (x + 3) % 5 == 0:
                     self.setSuitCondition(suitId, 'unionbustcalculator', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'unionbustercalculator', 1, 10, 'setBoth')
@@ -10463,7 +10497,7 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'radioinfrequencycalculator', 1, 10, 'setBoth')
                 if x % 3 == 0:
                     self.setSuitCondition(suitId, 'overmodulatedcalculator', 1, 10, 'setBoth')
-                if self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'desperation'):
+                if self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'desperation') and x % 2 == 0:
                     self.setSuitCondition(suitId, 'overmodulatedcalculator2', 1, 1, 'setBoth')
                 # if (x + 2) % 5 == 0 and not self.suitHasCondition(suitId, 'desperation'):
                 #     self.setSuitCondition(suitId, 'dancesessioncalculator', 1, 10, 'setBoth')
@@ -10471,11 +10505,11 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'hottakecalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'rkeeper': #recordkeeper
                 if x % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+                    from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
                     boss = None
                     for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedSellbotBossMiniAI):
+                        if isinstance(do, DistributedBoardbotBossAI):
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
                                     boss = do
@@ -10512,11 +10546,11 @@ class BattleCalculatorAI:
                 if self.battle.activeSuits[i].currHP <= 2000 and not self.suitHasCondition(suitId, 'alreadyRisk7'):
                     self.setSuitCondition(suitId, 'risk7', 1, 10, 'setBoth')
                 if x % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+                    from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
                     boss = None
                     for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedSellbotBossMiniAI):
+                        if isinstance(do, DistributedBoardbotBossAI):
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
                                     boss = do
@@ -10529,17 +10563,17 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
                 if (x + 2) % 3 == 0 and self.suitHasCondition(suitId, 'alreadySecondAttack'):
                     self.setSuitCondition(suitId, 'markedcalculator', 1, 10, 'setBoth')
-                if (x + 1) % 5 == 0 and self.suitHasCondition(suitId, 'alreadyRedundant'):
+                if (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'alreadyRedundant'):
                     self.setSuitCondition(suitId, 'redundantcalculator', 1, 10, 'setBoth')
                 if len(self.battle.activeSuits) >= 6 and (x % 2 == 0) and self.deadSuits == 0 and self.suitHasCondition(suitId, 'alreadyHighPressure'):
                     self.setSuitCondition(suitId, 'highpressurecalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'liquid':
                 if x % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+                    from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
                     boss = None
                     for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedSellbotBossMiniAI):
+                        if isinstance(do, DistributedBoardbotBossAI):
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
                                     boss = do
@@ -10552,11 +10586,11 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 2, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'dking':
                 if x % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+                    from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
                     boss = None
                     for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedSellbotBossMiniAI):
+                        if isinstance(do, DistributedBoardbotBossAI):
                             for t in self.battle.activeToons:
                                 if t in do.involvedToons:
                                     boss = do
@@ -11232,12 +11266,11 @@ class BattleCalculatorAI:
                     i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'redundantcalculator') and not len(self.battle.activeSuits) > 2 and self.battle.activeSuits[
+                if self.suitHasCondition(suitId, 'redundantcalculator') and not len(self.battle.activeSuits) > 1 and self.battle.activeSuits[
                     i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'redundantcalculator') and \
-                        self.battle.activeSuits[i].currHP > 500 and self.__suitCanAttack(suitId) and len(self.battle.activeSuits) > 2:
+                if self.suitHasCondition(suitId, 'redundantcalculator') and self.__suitCanAttack(suitId) and len(self.battle.activeSuits) > 1:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'ContingencyRedundantAuthority',
                                                             'animName': 'summon-cog',
@@ -12956,14 +12989,14 @@ class BattleCalculatorAI:
                                                             'freq': 0,
                                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'promotioncalculator') and self.suitHasCondition(suitId, 'deadpromotion') and not len(self.battle.activeSuits) > 1 and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'promotioncalculator') and not len(self.battle.activeSuits) > 1 and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'promotioncalculator') and self.suitHasCondition(suitId, 'deadpromotion') and not self.__suitCanAttack(suitId) and \
+                if self.suitHasCondition(suitId, 'promotioncalculator') and not self.__suitCanAttack(suitId) and \
                         self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'promotioncalculator') and self.suitHasCondition(suitId, 'deadpromotion') and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'promotioncalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'TargetCheck', # Target Check for Promotion
                      'animName': 'nothing',

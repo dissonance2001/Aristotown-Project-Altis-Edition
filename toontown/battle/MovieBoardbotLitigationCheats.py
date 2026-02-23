@@ -3026,7 +3026,7 @@ def doRedundantAuthority(attack):
         if not s.dna.name == 'cdirector':
             selfDamageTrack = Sequence(Wait(3.0), Parallel(Func(s.checkRedundant), Func(s.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
             selfDamageTracks.append(selfDamageTrack)
-    moveTrack = Parallel(Func(suit.setHealthForMe, - 500), Func(suit.showHpTextNew, - 500), Func(suit.updateHealthBar, 0))
+    moveTrack = Parallel(Func(suit.makeDamageDown), Func(suit.checkDamageDown, + 5), Func(suit.showHpTextNew, 0, text="-5% Damage!", colorCode=1))
     suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.0)
     return Parallel(suitTrack, moveTrack, selfDamageTracks, soundTrack2)

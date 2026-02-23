@@ -11,17 +11,14 @@ class CogHQAI:
 
     def __init__(
             self, air, zoneId, lobbyZoneId, lobbyFADoorCode,
-            lobbyElevatorCtor, bossCtor, lobbyFADoorCode2,
-            lobbyElevatorCtor2, bossCtor2):
+            lobbyElevatorCtor, bossCtor):
         self.air = air
         self.zoneId = zoneId
         self.lobbyZoneId = lobbyZoneId
         self.lobbyFADoorCode = lobbyFADoorCode
         self.lobbyElevatorCtor = lobbyElevatorCtor
         self.bossCtor = bossCtor
-        self.lobbyFADoorCode2 = lobbyFADoorCode2
-        self.lobbyElevatorCtor2 = lobbyElevatorCtor2
-        self.bossCtor2 = bossCtor2
+
 
         self.lobbyMgr = None
         self.lobbyElevator = None
@@ -40,9 +37,7 @@ class CogHQAI:
 
     def startup(self):
         self.createLobbyManager()
-        self.createLobbyManager2()
         self.createLobbyElevator()
-        self.createLobbyElevator2()
         self.extDoor = self.makeCogHQDoor(self.lobbyZoneId, 0, 0, self.lobbyFADoorCode)
         if simbase.config.GetBool('want-boarding-groups', True):
             self.createBoardingParty()
@@ -51,19 +46,12 @@ class CogHQAI:
         self.lobbyMgr = LobbyManagerAI.LobbyManagerAI(self.air, self.bossCtor)
         self.lobbyMgr.generateWithRequired(self.lobbyZoneId)
 
-    def createLobbyManager2(self):
-        self.lobbyMgr = LobbyManagerAI.LobbyManagerAI(self.air, self.bossCtor2)
-        self.lobbyMgr.generateWithRequired(self.lobbyZoneId)
 
     def createLobbyElevator(self):
         self.lobbyElevator = self.lobbyElevatorCtor(
             self.air, self.lobbyMgr, self.lobbyZoneId, antiShuffle=1)
         self.lobbyElevator.generateWithRequired(self.lobbyZoneId)
 
-    def createLobbyElevator2(self):
-        self.lobbyElevator = self.lobbyElevatorCtor2(
-            self.air, self.lobbyMgr, self.lobbyZoneId, antiShuffle=1)
-        self.lobbyElevator.generateWithRequired(self.lobbyZoneId)
 
     def makeCogHQDoor(self, destinationZone, intDoorIndex, extDoorIndex, lock=0):
         intDoor = DistributedCogHQDoorAI.DistributedCogHQDoorAI(

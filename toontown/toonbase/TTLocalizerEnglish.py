@@ -2939,10 +2939,10 @@ SuitFaceoffTaunts = {
             "You don't want to see what happens when I get angry."],
 'phouse': ["Let's see how long you last under real pressure.",
         "I'll break you down, piece by piece!"],
-'bkeeper': ['This battle will be one for the books.',
-            'I shall bookend your silliness.',
-            'Consider booking it soon.',
-            "You've no need to book going sad to me."],
+'bkeeper': ['Your existence has been reviewed... and denied.',
+            'Step forward, I will be documenting your failure.',
+            'You stand before corporate authority.',
+            "By order eof the board, this confrontation is mandatory."],
 'wtapper': ["Don't worry, I've already heard everything.",
         "I was listening long before you arrived.",
             "You'd be amazed what slips through the line."],
@@ -4591,7 +4591,7 @@ SuitCheatDescription = {
  'ContingencyOperationalFreeze': "The Contingency Director disables gags at random!",
  'ContingencyForecastCollapse': "The Contingency Director buffs her partner when\nunder 25% health!",
  'ContingencyRiskThresholdBreach': "The Contingency Director gains a new ability when\na new HP threshold has been passed!",
- 'SafetyHighPressure': "The Contingency Director overworks everyone in the battle!",
+ 'SafetyHighPressure': "The Contingency Director overworks everyone when the battle\nis full!",
     # Dividend King Cheats
  'DividendLiquidationEvent': "The Dividend King drowns Toons at random!",
  'DividendLiquidationEventDamage': "Drowned Toons take extra damage every turn!",
@@ -12332,7 +12332,8 @@ LawbotBossName = 'Chief Justice'
 BoardbotBossName = 'Chairman'
 BossCogNameWithDept = '%(name)s\n%(dept)s'
 BossCogPromoteDoobers = 'You are hereby promoted to full-fledged %s.  Congratulations!'
-BossCogDoobersAway = {'s': 'Go!  And make that sale!'}
+BossCogDoobersAway = {'s': 'Go!  And make that sale!',
+                      'g': 'Go away you useless cogs!'}
 BossCogWelcomeToons = 'Welcome, new Cogs!'
 BossCogPromoteToons = 'You are hereby promoted to full-fledged %s.  Congratu--'
 CagedToonInterruptBoss = 'Hey! Hiya! Hey over there!'

@@ -1202,8 +1202,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'def':(60,),
            'freq':(0,),
            'acc':(75,),
-           'initEffects': [StatusEffects.LureResistance(1),
-                           StatusEffects.Pyromaniac()],
+           'initEffects': [StatusEffects.LureResistance(1)],
            'attacks':
                (SuitAttack('CigarSmoke',
                            hp=(12,),
@@ -1229,9 +1228,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
           'def':(60,),
           'freq':(0,),
           'acc':(75,),
-          'initEffects': [StatusEffects.LureResistance(2),
-                          StatusEffects.Overhire(),
-                          StatusEffects.PeacefulSlumber()],
+          'initEffects': [StatusEffects.LureResistance(2)],
           'attacks':
               (SuitAttack('Sacked',
                           hp=(25,),
@@ -1278,8 +1275,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               'def':(60,),
               'freq':(0,),
               'acc':(75,),
-              'initEffects': [StatusEffects.LureResistance(1),
-                              StatusEffects.RevvingUp()],
+              'initEffects': [StatusEffects.LureResistance(1)],
               'attacks':
                   (SuitAttack('Canned',
                               hp=(26,),
@@ -1305,8 +1301,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                'def':(60,),
                'freq':(0,),
                'acc':(75,),
-               'initEffects': [StatusEffects.LureResistance(1),
-                               StatusEffects.RevvingUp()],
+               'initEffects': [StatusEffects.LureResistance(1)],
                'attacks':
                    (SuitAttack('Canned',
                                hp=(26,),
@@ -2632,7 +2627,6 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               'def':(60, 60, 60, 60, 60, 60),
               'freq':(100, 100, 100, 100, 100, 100),
               'acc':(75, 75, 75, 75, 75, 75),
-              'initEffects': [StatusEffects.InsurancePolicy()],
               'attacks':
                   (SuitAttack('Fired',
                               hp=(38, 38, 38, 38, 38, 38),
@@ -2838,8 +2832,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'def':(60,),
            'freq':(0,),
            'acc':(75,),
-           'initEffects': [StatusEffects.LureResistance(1),
-                           StatusEffects.MarketBubble()],
+           'initEffects': [StatusEffects.LureResistance(1)],
            'attacks':
                (SuitAttack('CigarSmoke',
                            hp=(31,),
@@ -2954,8 +2947,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
            'def':(60,),
            'freq':(0,),
            'acc':(75,),
-           'initEffects': [StatusEffects.LureResistance(2),
-                           StatusEffects.Ripped()],
+           'initEffects': [StatusEffects.LureResistance(2)],
            'attacks':
                (SuitAttack('ErfitHydrationCheck',
                            hp=(30,),
@@ -2981,7 +2973,6 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               'def':(60,60,60,60,60,60,60,60,60,60,),
               'freq':(0,0,0,0,0,0,0,0,0,0,),
               'acc':(75,75,75,75,75,75,75,75,75,75,),
-              'initEffects': [StatusEffects.RefractionBarrier()],
               'attacks':
                   (SuitAttack('PowerTrip',
                               hp=(25,25,25,25,25,25,25,25,25,25,),
@@ -3634,8 +3625,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              'def':(60,),
              'freq':(0,),
              'acc':(75,),
-             'initEffects': [StatusEffects.LureResistance(1, hidden=True),
-                             StatusEffects.WillOfThePeople()],
+             'initEffects': [StatusEffects.LureResistance(1, hidden=True)],
              'attacks':
                  (SuitAttack('Sacked',
                              hp=(19,),

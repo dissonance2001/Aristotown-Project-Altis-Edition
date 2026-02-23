@@ -245,7 +245,7 @@ ToonHall = 2513
 PacesetterLobby = 9613
 DerrickmanInterior = 2921
 PizzariaInterior = 3740
-ToontownCentralOld = 19000
+ToontownCentralOld = 20000
 SchoolHouse = 2516
 OTGagShop = 7502
 Dungeon = 7507
@@ -368,12 +368,12 @@ LawbotStageIntB = 13400
 LawbotStageIntC = 13500
 LawbotStageIntD = 13600
 
-BoardbotHQ = 20000
-BoardbotLobby = 20100
-BoardbotOfficeLobby = 22200
-BoardOfficeIntA = 20500
-BoardOfficeIntB = 20600
-BoardOfficeIntC = 20700
+BoardbotHQ = 19000
+BoardbotLobby = 19100
+BoardbotOfficeLobby = 19200
+BoardOfficeIntA = 19500
+BoardOfficeIntB = 19600
+BoardOfficeIntC = 19700
 
 Tutorial = 15000
 MyEstate = 16000

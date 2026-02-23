@@ -12,6 +12,7 @@ from direct.distributed import DistributedObject
 import random
 from toontown.hood import ZoneUtil
 from toontown.char import Char
+from toontown.dna.DNAParser import DNADoor
 from toontown.quest import QuestParser
 from toontown.hood import ZoneUtil
 from direct.actor.Actor import Actor

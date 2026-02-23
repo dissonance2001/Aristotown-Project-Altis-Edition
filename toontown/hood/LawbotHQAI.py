@@ -16,9 +16,6 @@ class LawbotHQAI(CogHQAI.CogHQAI):
             self, air, ToontownGlobals.LawbotHQ, ToontownGlobals.LawbotLobby,
             FADoorCodes.LB_DISGUISE_INCOMPLETE,
             DistributedCJElevatorAI.DistributedCJElevatorAI,
-            DistributedLawbotBossAI.DistributedLawbotBossAI,
-            FADoorCodes.LB_DISGUISE_INCOMPLETE,
-            DistributedCountErclaimElevatorAI.DistributedCountErclaimElevatorAI,
             DistributedLawbotBossAI.DistributedLawbotBossAI)
 
         self.lawOfficeElevators = []

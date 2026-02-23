@@ -635,6 +635,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         x_shake = random.uniform(-shake_intensity, shake_intensity)
         y_shake = random.uniform(-shake_intensity, shake_intensity)
         z_shake = random.uniform(-shake_intensity, shake_intensity)
+        camera.setPosHpr(10, 0, 10, 115, -30, 0)
         camera.setPos(camera.getPos() + Vec3(x_shake, y_shake, z_shake))
         return task.cont
 

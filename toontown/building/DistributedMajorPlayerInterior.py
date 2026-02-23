@@ -13,6 +13,7 @@ import random
 from toontown.hood import ZoneUtil
 from toontown.char import Char
 from toontown.quest import QuestParser
+from toontown.dna.DNAParser import DNADoor
 from toontown.hood import ZoneUtil
 
 class DistributedMajorPlayerInterior(DistributedToonInterior):

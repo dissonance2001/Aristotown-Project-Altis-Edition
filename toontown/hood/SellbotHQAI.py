@@ -16,9 +16,6 @@ class SellbotHQAI(CogHQAI.CogHQAI):
             self, air, ToontownGlobals.SellbotHQ, ToontownGlobals.SellbotLobby,
             FADoorCodes.SB_DISGUISE_INCOMPLETE,
             DistributedVPElevatorAI.DistributedVPElevatorAI,
-            DistributedSellbotBossAI.DistributedSellbotBossAI,
-            FADoorCodes.SB_DISGUISE_INCOMPLETE,
-            DistributedMultislackerElevatorAI.DistributedMultislackerElevatorAI,
             DistributedSellbotBossMiniAI.DistributedSellbotBossMiniAI
         )
 

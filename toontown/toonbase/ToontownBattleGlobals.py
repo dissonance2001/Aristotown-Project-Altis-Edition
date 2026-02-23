@@ -849,6 +849,7 @@ ValidStatusConditions = (
     'redlinedcalculator',
     'groupDamageDown',
     'noDamage',
+    'damageDown',
     'directorDamageReduction',
     'contingencyHit',
     'redundantcalculator',
@@ -959,4 +960,5 @@ ValidStatusConditions = (
     'overpressureDeath3',
     'cogSpawn',
     'alreadyCogSpawn2',
+    'governaughtBoost',
 )

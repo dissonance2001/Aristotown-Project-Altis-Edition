@@ -8,6 +8,7 @@ import ToonInterior
 from DistributedToonInterior import DistributedToonInterior
 import ToonInteriorColors, random
 from direct.directnotify import DirectNotifyGlobal
+from toontown.dna.DNAParser import DNADoor
 from direct.distributed import DistributedObject
 import random
 from toontown.hood import ZoneUtil

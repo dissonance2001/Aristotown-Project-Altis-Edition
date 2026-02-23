@@ -119,6 +119,11 @@ class BossCog(Avatar.Avatar):
             self.murmur = base.loadSfx('phase_9/audio/sfx/Boss_l_COG_VO_murmur.ogg')
             self.statement = base.loadSfx('phase_9/audio/sfx/Boss_l_COG_VO_statement.ogg')
             self.question = base.loadSfx('phase_9/audio/sfx/Boss_l_COG_VO_question.ogg')
+        elif self.style.dept == 'g':
+            self.grunt = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_grunt.ogg')
+            self.murmur = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_murmur.ogg')
+            self.statement = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_statement.ogg')
+            self.question = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_question.ogg')
         else:
             self.grunt = base.loadSfx('phase_9/audio/sfx/Boss_COG_VO_grunt.ogg')
             self.murmur = base.loadSfx('phase_9/audio/sfx/Boss_COG_VO_murmur.ogg')
@@ -185,6 +190,7 @@ class BossCog(Avatar.Avatar):
         self.stars.loop('stun')
         texture = loader.loadTexture('phase_9/maps/cc_t_ene_boss_m.png')
         texture2 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_c.png')
+        texture3 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_g.png')
         self.pelvis = self.getPart('torso')
         if self.style.dept == 'm':
             pelvis = self.pelvis.find('**/Object')
@@ -192,6 +198,9 @@ class BossCog(Avatar.Avatar):
         elif self.style.dept == 'c':
             pelvis = self.pelvis.find('**/Object')
             pelvis.setTexture(texture2, 1)
+        elif self.style.dept == 'g':
+            pelvis = self.pelvis.find('**/Object')
+            pelvis.setTexture(texture3, 1)
         self.pelvisForwardHpr = VBase3(0, 0, 0)
         self.pelvisReversedHpr = VBase3(-180, 0, 0)
         if self.style.dept == 's':
@@ -209,8 +218,9 @@ class BossCog(Avatar.Avatar):
         elif self.style.dept == 'g':
             self.neck = self.getPart('head')
             self.neck.setTwoSided(True)
+            #self.neck.hide()
             self.neckForwardHpr = VBase3(0, 0, 0)
-            self.neckReversedHpr = VBase3(0, -540, 0)
+            self.neckReversedHpr = VBase3(0, 0, 0)
         elif self.style.dept == 'm':
             self.neck = self.getPart('head')
             self.neck.setTwoSided(True)
@@ -430,6 +440,12 @@ class BossCog(Avatar.Avatar):
             headModel.loop('neutral')
             if headType == 'cfo':
                 headModel.setTwoSided(True)
+            if headType == 'chairman-a':
+                headModel.setScale(3)
+                headModel.setH(0)
+                headModel.setP(90)
+                headModel.setR(-90)
+               # headModel.setP(-270)
             if headType == 'ceo-a':
                 ceoeyes = headModel.find('**/ceo_eyes')
                 self.eyes = ceoeyes

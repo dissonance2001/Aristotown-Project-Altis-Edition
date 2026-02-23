@@ -14,9 +14,6 @@ class BossbotHQAI(CogHQAI.CogHQAI):
     def __init__(self, air):
         CogHQAI.CogHQAI.__init__(
             self, air, ToontownGlobals.BossbotHQ, ToontownGlobals.BossbotLobby,
-            FADoorCodes.BB_DISGUISE_INCOMPLETE,
-            DistributedBBElevatorAI.DistributedBBElevatorAI,
-            DistributedBossbotBossAI.DistributedBossbotBossAI,
             FADoorCodes.SB_DISGUISE_INCOMPLETE,
             DistributedDirectorsElevatorAI.DistributedDirectorsElevatorAI,
             DistributedDirectorsAI.DistributedDirectorsAI

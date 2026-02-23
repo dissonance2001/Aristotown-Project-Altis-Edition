@@ -16,9 +16,6 @@ class CashbotHQAI(CogHQAI.CogHQAI):
             self, air, ToontownGlobals.CashbotHQ, ToontownGlobals.CashbotLobby,
             FADoorCodes.CB_DISGUISE_INCOMPLETE,
             DistributedCFOElevatorAI.DistributedCFOElevatorAI,
-            DistributedCashbotBossAI.DistributedCashbotBossAI,
-            FADoorCodes.CB_DISGUISE_INCOMPLETE,
-            DistributedCBMElevatorAI.DistributedCBMElevatorAI,
             DistributedCashbotBossAI.DistributedCashbotBossAI
         )
 

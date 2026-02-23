@@ -221,7 +221,10 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if self.doorType in flatDoorTypes:
             self.bHasFlat = True
         else:
-            self.bHasFlat = not self.findDoorNode('door*flat', True).isEmpty()
+            if ZoneUtil.getHoodId(self.zoneId) == ToontownGlobals.BoardbotHQ:
+                self.bHasFlat = not self.findDoorNode('door*flat', True)
+            else:
+                self.bHasFlat = not self.findDoorNode('door*flat', True).isEmpty()
         self.hideDoorParts()
         self.setTriggerName()
 
@@ -482,6 +485,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
     def getDoorNodePath(self):
         if self.doorType == DoorTypes.INT_STANDARD:
             otherNP = render.find('**/door_origin')
+        elif ZoneUtil.getHoodId(self.zoneId) == ToontownGlobals.BoardbotHQ:
+            otherNP = render.find('**/door_origin_' + str(self.doorIndex))
         elif self.doorType == DoorTypes.EXT_STANDARD:
             otherNP = self.getBuilding().find('**/*door_origin')
         elif self.doorType == DoorTypes.DAISYGARDENSCLASH:

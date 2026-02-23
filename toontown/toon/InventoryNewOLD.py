@@ -365,6 +365,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if 'raisedAnte' in base.localAvatar.battleConditions:
             raisedAnte = True
 
+        governaughtBoost = False
+        if 'governaughtBoost' in base.localAvatar.battleConditions:
+            governaughtBoost = True
+
         groupDamageDown = False
         if 'groupDamageDown' in base.localAvatar.battleConditions:
             groupDamageDown = True
@@ -379,11 +383,13 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
         def labelColorize(damage, param):
             button = self.buttons[track][level]
-            if allGagBoost:
+            if allGagBoost and not track == LURE_TRACK:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['allGagBoost'][0]
-            elif allGagBoost2:
+            elif allGagBoost2 and not track == LURE_TRACK:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['allGagBoost2'][0]
-            elif raisedAnte:
+            elif governaughtBoost:
+                val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['governaughtBoost'][0]
+            elif raisedAnte and not track == LURE_TRACK:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['raisedAnte'][0]
             else:
                 val = base.localAvatar.battleConditions[param][0]
@@ -423,6 +429,12 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             lureValue = int(math.ceil(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100)  + base.localAvatar.battleConditions['lureBoost'][
                         0]) / 2))
+        elif track == LURE_TRACK and 'lureBoost2' in base.localAvatar.battleConditions:
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['lureBoost2'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorize(damage, 'lureBoost2')
+            lureValue = int(math.ceil(
+                ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['lureBoost'][
+                    0]) / 2))
         elif track == SOUND_TRACK and 'soundBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['soundBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'soundBoost')
@@ -532,6 +544,12 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             if allGagBoost2 and not track == LURE_TRACK:
                 damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost2'][0] * 0.01) + 1.0)))
                 damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost2')
+            if governaughtBoost and track == LURE_TRACK:
+                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['governaughtBoost'][0] * 0.01) + 1.0)))
+                damageAppendStr = labelColorize(lureValue, 'governaughtBoost')
+            if governaughtBoost and not track == LURE_TRACK:
+                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['governaughtBoost'][0] * 0.01) + 1.0)))
+                damageAppendStr = labelColorizeJustAll(damage, 'governaughtBoost')
             if raisedAnte and not track == LURE_TRACK:
                 damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
                 damageAppendStr = labelColorizeJustAll(damage, 'raisedAnte')
@@ -1364,6 +1382,16 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         if 'raisedAnte' in base.localAvatar.battleConditions and not self.numItem(
                                 track, level) <= 0:
                             if base.localAvatar.battleConditions['raisedAnte'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'governaughtBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['governaughtBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'governaughtBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['governaughtBoost'][0] < 0.0:
                                 if not self.numItem(track, level) <= 0:
                                     self.makeDamageDownPressable(button, track, level)
                         if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(
