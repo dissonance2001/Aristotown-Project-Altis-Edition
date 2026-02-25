@@ -1750,6 +1750,12 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
     unsueTrack = Func(battle.unSueSuit, suit)
+    origH = suit.getH(battle)
+
+    targetPos = toon.getPos(battle)
+    suit.headsUp(battle, targetPos)
+    targetH = suit.getH(battle)
+    suit.setH(battle, origH)
     for s in battle.activeSuits:
         if s.dna.name == 'psetter':
             theSuit = s
@@ -1777,7 +1783,9 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         return
 
     track.append(Func(reparentTrap))
-    track.append(Func(suit.headsUp, battle, targetPos))
+    track.append(Sequence(
+        LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle)))
+    #track.append(Func(suit.headsUp, battle, targetPos))
     if splicedAnims:
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
@@ -1790,7 +1798,14 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         else:
             track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
-    track.append(Func(suit.setHpr, battle, origHpr))
+  #  track.append(Func(suit.setHpr, battle, origHpr))
+    delta = (targetH - origH + 180) % 360 - 180
+    if delta > 0:
+        shuffleAnim = 'shuffle-right'
+    else:
+        shuffleAnim = 'shuffle-left'
+    track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(targetH, 0, 0), other=battle))
+    )
     # elif suit.isImmortal and suit.dna.name == 'dsf':
     #     track.append(
     #        Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
@@ -7485,7 +7500,7 @@ def doEncrypt(attack):
     dmg = target[0]['hp']
     paper = globalPropPool.getProp('ttht_m_ene_fileFolder')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(0, 0, 0), VBase3(-90, 270, 90)]
+    posPoints = [Point3(-0.4775687409551388, 0, -0.13024602026049337), VBase3(-90, 0, 90)]
     x = toon.getX(battle)
     y = toon.getY(battle)
     z = toon.getZ(battle)

@@ -1208,8 +1208,8 @@ class Suit(Avatar.Avatar):
         self.rightHand = None
         self.shadowJoint = None
         self.nametagJoint = None
-        self.headParts = []
-        self.animatedHeadParts = []
+        # self.headParts = []
+        # self.animatedHeadParts = []
         self.healthBar = None
         self.healthBarDisplay = None
         self.healthCondition = 0

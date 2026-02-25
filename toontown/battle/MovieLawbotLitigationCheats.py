@@ -171,8 +171,14 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     trapStorage = {}
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
+    origH = suit.getH(battle)
+
+    targetPos = toon.getPos(battle)
+    suit.headsUp(battle, targetPos)
+    targetH = suit.getH(battle)
+    suit.setH(battle, origH)
     if attack[
-        'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
+        'suitName'] == 'bkeeper':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
     else:
@@ -182,14 +188,35 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         return
 
     track.append(Func(reparentTrap))
-    track.append(Func(suit.headsUp, battle, targetPos))
+    track.append(Sequence(
+        LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle)))
+    # track.append(Func(suit.headsUp, battle, targetPos))
     if splicedAnims:
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
-    track.append(Func(suit.setHpr, battle, origHpr))
-    if suit.dna.name == 'sgoat' and suit.isAngry:
+    #  track.append(Func(suit.setHpr, battle, origHpr))
+    delta = (targetH - origH + 180) % 360 - 180
+    if delta > 0:
+        shuffleAnim = 'shuffle-right'
+    else:
+        shuffleAnim = 'shuffle-left'
+    track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(targetH, 0, 0), other=battle))
+                 )
+    # if suit.dna.name == 'scg' and suit.isAngry:
+    #     track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
+    #     track.append(Func(suit.loop, 'neutral-enraged'))
+    # elif suit.isImmortal and suit.dna.name == 'dsf':
+    #     track.append(
+    #        Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+    # elif suit.isVulnerable and suit.dna.name == 'crf':
+    #    track.append(
+    #       Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+    # elif suit.isImmortal:
+    #    track.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0))
+    #  track.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
+    if suit.dna.name == 'scg' and suit.isAngry:
         track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
         track.append(Func(suit.loop, 'neutral-enraged'))
     elif suit.isImmortal and suit.dna.name == 'dsf':
@@ -1096,9 +1123,19 @@ def doSnap2(attack, suit):
         teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
         teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
         if dmg > 0:
+            origH = suit.getH(battle)
             targetPos = toon.getPos(battle)
-            origPos, origHpr = battle.getActorPosHpr(suit)
-            moveTracks.append(Sequence(Func(suit.headsUp, battle, targetPos), ActorInterval(suit, 'throw-object', playRate=1.5), Func(suit.setHpr, battle, origHpr)))
+            suit.headsUp(battle, targetPos)
+            targetH = suit.getH(battle)
+            suit.setH(battle, origH)
+            delta = (targetH - origH + 180) % 360 - 180
+            if delta > 0:
+                shuffleAnim = 'shuffle-right'
+            else:
+                shuffleAnim = 'shuffle-left'
+            moveTracks.append(Sequence(LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'throw-object', playRate=1.5),
+                                       Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(targetH, 0, 0), other=battle)),
+                                       Func(suit.setNeutralAnimationDrop)))
             notifyTrack = Sequence(Wait(3.1),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeSnapped), Func(toon.addSnappedRounds, 2)))
@@ -1382,9 +1419,18 @@ def doCourtSanctionBindings(attack):
         soundTrack = getSoundTrack('SA_sanction.ogg', delay=.5, node=suit)
         notifyTrack = Sequence(Wait(.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
         if dmg > 0:
-            headsUp = Func(suit.headsUp, battle, targetPos)
+            origH = suit.getH(battle)
+            targetPos = toon.getPos(battle)
+            suit.headsUp(battle, targetPos)
+            targetH = suit.getH(battle)
+            suit.setH(battle, origH)
+            delta = (targetH - origH + 180) % 360 - 180
+            if delta > 0:
+                shuffleAnim = 'shuffle-right'
+            else:
+                shuffleAnim = 'shuffle-left'
             propTracks.append(propTrack)
-            suitTracks.append(Sequence(Parallel(suitTrack, headsUp), Func(suit.setHpr, battle, origHpr)))
+            suitTracks.append(Sequence(Parallel(suitTrack, LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle)), Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(targetH, 0, 0), other=battle)), Func(suit.setNeutralAnimationDrop)))
             soundTracks.append(soundTrack)
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))

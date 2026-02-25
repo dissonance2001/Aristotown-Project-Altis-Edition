@@ -164,7 +164,6 @@ def __createSuitResetPosTrack(suit, battle):
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(unluredTrack, updateTrack, walkTrack, moveTrack)
 
-
 def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     suit = attack['suit']
     battle = attack['battle']
@@ -176,6 +175,12 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     trapStorage = {}
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
+    origH = suit.getH(battle)
+
+    targetPos = toon.getPos(battle)
+    suit.headsUp(battle, targetPos)
+    targetH = suit.getH(battle)
+    suit.setH(battle, origH)
     if attack[
         'suitName'] == 'bkeeper':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
@@ -187,13 +192,22 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         return
 
     track.append(Func(reparentTrap))
-    track.append(Func(suit.headsUp, battle, targetPos))
+    track.append(Sequence(
+        LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle)))
+    # track.append(Func(suit.headsUp, battle, targetPos))
     if splicedAnims:
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
-    track.append(Func(suit.setHpr, battle, origHpr))
+    #  track.append(Func(suit.setHpr, battle, origHpr))
+    delta = (targetH - origH + 180) % 360 - 180
+    if delta > 0:
+        shuffleAnim = 'shuffle-right'
+    else:
+        shuffleAnim = 'shuffle-left'
+    track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(targetH, 0, 0), other=battle))
+                 )
     # if suit.dna.name == 'scg' and suit.isAngry:
     #     track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
     #     track.append(Func(suit.loop, 'neutral-enraged'))
@@ -682,8 +696,18 @@ def doPaperCutMulti(attack):
         toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
         notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
         if dmg > 0:
-            moveTracks.append(Sequence(Func(suit.headsUp, battle, targetPos), ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2),
-                                       Func(suit.setHpr, battle, origHpr), Func(suit.setNeutralAnimationDrop)))
+            origH = suit.getH(battle)
+            targetPos = toon.getPos(battle)
+            suit.headsUp(battle, targetPos)
+            targetH = suit.getH(battle)
+            suit.setH(battle, origH)
+            delta = (targetH - origH + 180) % 360 - 180
+            if delta > 0:
+                shuffleAnim = 'shuffle-right'
+            else:
+                shuffleAnim = 'shuffle-left'
+            moveTracks.append(Sequence(LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2),
+                                       Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(targetH, 0, 0), other=battle)), Func(suit.setNeutralAnimationDrop)))
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
             notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 15)))

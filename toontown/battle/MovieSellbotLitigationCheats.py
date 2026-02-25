@@ -150,7 +150,6 @@ def __createSuitResetPosTrack(suit, battle):
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(unluredTrack, updateTrack, walkTrack, moveTrack)
 
-
 def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     suit = attack['suit']
     battle = attack['battle']
@@ -162,11 +161,22 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     trapStorage = {}
     trapStorage['trap'] = None
     track = Sequence(Wait(delay))
+    origH = suit.getH(battle)
+
+    targetPos = toon.getPos(battle)
+    suit.headsUp(battle, targetPos)
+    targetH = suit.getH(battle)
+    suit.setH(battle, origH)
+    for s in battle.activeSuits:
+        if s.dna.name == 'psetter':
+            theSuit = s
+            track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .25))
     if attack[
         'suitName'] == 'fbd':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
         track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
-    elif attack['suitName'] == 'safesupervis' and attack['name'] == 'RacketeerPeckingOrderRetaliationSoak':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+    elif attack['suitName'] == 'safesupervis' and attack[
+        'name'] == 'RacketeerPeckingOrderRetaliationSoak':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'SafetyHeatWave':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
@@ -175,7 +185,8 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'SafetyViolation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
-    elif attack['suitName'] == 'safesupervis' and attack['name'] == 'RadiographerRadioInfrequency':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+    elif attack['suitName'] == 'safesupervis' and attack[
+        'name'] == 'RadiographerRadioInfrequency':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     else:
@@ -185,16 +196,22 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         return
 
     track.append(Func(reparentTrap))
-    track.append(Func(suit.headsUp, battle, targetPos))
+    track.append(Sequence(
+        LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle)))
+    #track.append(Func(suit.headsUp, battle, targetPos))
     if splicedAnims:
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
         track.append(ActorInterval(suit, attack['animName'], playRate=playRate))
     origPos, origHpr = battle.getActorPosHpr(suit)
-    track.append(Func(suit.setHpr, battle, origHpr))
-    # if suit.dna.name == 'scg' and suit.isAngry:
-    #     track.append(ActorInterval(suit, 'neutral-enraged-return', startTime=1, endTime=0))
-    #     track.append(Func(suit.loop, 'neutral-enraged'))
+  #  track.append(Func(suit.setHpr, battle, origHpr))
+    delta = (targetH - origH + 180) % 360 - 180
+    if delta > 0:
+        shuffleAnim = 'shuffle-right'
+    else:
+        shuffleAnim = 'shuffle-left'
+    track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(targetH, 0, 0), other=battle))
+    )
     # elif suit.isImmortal and suit.dna.name == 'dsf':
     #     track.append(
     #        Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
