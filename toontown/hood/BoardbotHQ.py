@@ -9,7 +9,7 @@ class BoardbotHQ(CogHood):
 
     ID = ToontownGlobals.BoardbotHQ
     LOADER_CLASS = BoardbotCogHQLoader
-    SKY_FILE = 'phase_3.5/models/props/TT_sky'
+   # SKY_FILE = 'phase_3.5/models/props/TT_sky'
 
     def enter(self, requestStatus):
         CogHood.enter(self, requestStatus)

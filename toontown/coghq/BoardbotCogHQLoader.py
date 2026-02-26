@@ -29,9 +29,9 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
             state.addTransition('factoryExterior')
 
         self.musicFile = 'phase_14/audio/bgm/BD_courtyard.ogg'
-        self.cogHQExteriorModelPath = 'phase_14/models/boardbotHQ/boardbot_courtyard'
+        self.cogHQExteriorModelPath = 'phase_14/models/neighborhoods/CogNation'
         self.factoryExteriorModelPath = 'phase_14/models/boardbotHQ/boardbot_factory_exterior'
-        self.cogHQLobbyModelPath = 'phase_14/models/boardbotHQ/boardbot_factory_exterior'
+        self.cogHQLobbyModelPath = 'phase_14/models/modules/ExecutiveLobby'
         self.geom = None
         return
         
@@ -52,10 +52,10 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.geom = loader.loadModel(self.cogHQExteriorModelPath)
             #ddLinkTunnel = self.geom.find('**/tunnel1')
             #ddLinkTunnel.setName('linktunnel_dl_9252_DNARoot')
-            locator = self.geom.find('**/sign_origin')
-            signText = DirectGui.OnscreenText(text=TTLocalizer.DonaldsDreamland[-1], font=ToontownGlobals.getSuitFont(), scale=3, fg=(0.87, 0.87, 0.87, 1), mayChange=False, parent=self.geom)
-            signText.setPosHpr(locator, 0, 0, 0, 0, 0, 0)
-            signText.setDepthWrite(0)
+            # locator = self.geom.find('**/sign_origin')
+            # signText = DirectGui.OnscreenText(text=TTLocalizer.DonaldsDreamland[-1], font=ToontownGlobals.getSuitFont(), scale=3, fg=(0.87, 0.87, 0.87, 1), mayChange=False, parent=self.geom)
+            # signText.setPosHpr(locator, 0, 0, 0, 0, 0, 0)
+            # signText.setDepthWrite(0)
             self.geom.flattenMedium()
         elif zoneId == ToontownGlobals.BoardbotOfficeLobby:
             self.geom = loader.loadModel(self.factoryExteriorModelPath)

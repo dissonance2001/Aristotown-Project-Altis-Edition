@@ -26,7 +26,7 @@ class BoardbotHQAI(CogHQAI.CogHQAI):
         CogHQAI.CogHQAI.startup(self)
 
         self.createBoardOfficeElevators()
-        self.makeCogHQDoor(ToontownGlobals.BoardbotOfficeLobby, 0, 0)
+        self.makeCogHQDoor(ToontownGlobals.BoardbotLobby, 0, 0)
         self.makeCogHQDoor(ToontownGlobals.BoardbotOfficeLobby, 0, 1)
         if simbase.config.GetBool('want-boarding-groups', True):
             self.createBoardOfficeBoardingParty()
@@ -37,7 +37,7 @@ class BoardbotHQAI(CogHQAI.CogHQAI):
         # For Boardbot HQ, the lobby door index is 2, even though that index
         # should be for the Boardbot office exterior door.
         if destinationZone == self.lobbyZoneId:
-            extDoorIndex = 2
+            extDoorIndex = 0
 
         return CogHQAI.CogHQAI.makeCogHQDoor(
             self, destinationZone, intDoorIndex, extDoorIndex, lock=lock)

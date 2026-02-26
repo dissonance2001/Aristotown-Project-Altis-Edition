@@ -16,7 +16,7 @@ class DistributedCMElevator(DistributedBossElevator.DistributedBossElevator):
         self.leftDoor = self.elevatorModel.find('**/left_door')
         self.rightDoor = self.elevatorModel.find('**/right_door')
         geom = base.cr.playGame.hood.loader.geom
-        locator = geom.find('**/elevator_origin_1')
+        locator = geom.find('**/elevator_locator')
         self.elevatorModel.reparentTo(locator)
         DistributedElevator.DistributedElevator.setupElevator(self)
 
