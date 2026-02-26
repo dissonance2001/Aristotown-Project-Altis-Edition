@@ -21,7 +21,7 @@ class DistributedDirectorsElevator(DistributedBossElevator.DistributedBossElevat
         self.rightDoor = self.elevatorModel.find('**/right-door')
         if self.rightDoor.isEmpty():
             self.rightDoor = self.elevatorModel.find('**/right_door')
-        locator = geom.find('**/office_elevator_locator')
+        locator = geom.find('**/elevator_locator')
         self.elevatorModel.reparentTo(locator)
         DistributedElevator.DistributedElevator.setupElevator(self)
 
