@@ -2571,24 +2571,24 @@ def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
             diedText = av.getName() + ' was defeated!'
             diedTextList = [diedText]
             diedTrack = pbpText.getToonsDiedInterval(diedTextList, 3.5)
-    # elif groupStatus == ATK_TGT_DOUBLE or groupStatus == ATK_TGT_TRIPLE or groupStatus == ATK_TGT_GROUP:
-    #     av = None
-    #     shotChoices = [allGroupLowShot, suitGroupThreeQuarterLeftBehindShot]
-    #     deadToons = []
-    #     targetDicts = attack['target']
-    #     for targetDict in targetDicts:
-    #         died = targetDict['died']
-    #         if died != 0:
-    #             deadToons.append(targetDict['toon'])
-    #
-    #     if len(deadToons) > 0:
-    #         pbpText = attack['playByPlayText']
-    #         diedTextList = []
-    #         for toon in deadToons:
-    #             pbpText = attack['playByPlayText']
-    #             diedTextList.append(toon.getName() + ' was defeated!')
-    #
-    #         diedTrack = pbpText.getToonsDiedInterval(diedTextList, 3.5)
+    elif groupStatus == ATK_TGT_DOUBLE or groupStatus == ATK_TGT_TRIPLE or groupStatus == ATK_TGT_GROUP:
+        av = None
+        shotChoices = [avatarCloseUpThreeQuarterRightShot, suitGroupThreeQuarterLeftBehindShot]
+        deadToons = []
+        targetDicts = attack['target']
+        for targetDict in targetDicts:
+            died = targetDict['died']
+            if died != 0:
+                deadToons.append(targetDict['toon'])
+
+        if len(deadToons) > 0:
+            pbpText = attack['playByPlayText']
+            diedTextList = []
+            for toon in deadToons:
+                pbpText = attack['playByPlayText']
+                diedTextList.append(toon.getName() + ' was defeated!')
+
+            diedTrack = pbpText.getToonsDiedInterval(diedTextList, 3.5)
     else:
         notify.error('Bad groupStatus: %s' % groupStatus)
     track = apply(random.choice(shotChoices), [av, duration])
@@ -2871,9 +2871,19 @@ def randomAttackCam(suit, toon, battle, attackDuration, openShotDuration, attack
         defender = suit
         defenderString = 'suit'
     randomDouble = random.random()
-    openShot = randomActorShot(attacker, battle, openShotDuration, attackerString)
+    if randomDouble > 0.6:
+        openShot = randomActorShot(attacker, battle, openShotDuration, attackerString)
+    elif randomDouble > 0.2:
+        openShot = randomOverShoulderShot(suit, toon, battle, openShotDuration, focus=attackerString)
+    else:
+        openShot = randomActorShot(attacker, battle, openShotDuration, attackerString)
     randomDouble = random.random()
-    closeShot = randomActorShot(defender, battle, closeShotDuration, defenderString)
+    if randomDouble > 0.6:
+        closeShot = randomActorShot(defender, battle, closeShotDuration, defenderString)
+    elif randomDouble > 0.2:
+        closeShot = randomOverShoulderShot(suit, toon, battle, closeShotDuration, focus=defenderString)
+    else:
+        closeShot = randomSplitShot(attacker, defender, battle, closeShotDuration)
     return Sequence(openShot, closeShot)
 
 def randomAttackCamCheat(suit, toon, battle, attackDuration, openShotDuration, attackerString = 'suit'):
@@ -2894,14 +2904,14 @@ def randomAttackCamCheat(suit, toon, battle, attackDuration, openShotDuration, a
     elif randomDouble > 0.2:
         openShot = randomOverShoulderShot(suit, toon, battle, openShotDuration, focus=attackerString)
     else:
-        openShot = randomSplitShot(attacker, defender, battle, openShotDuration)
+        openShot = randomActorShot(defender, battle, closeShotDuration, defenderString)
     randomDouble = random.random()
     if randomDouble > 0.6:
         closeShot = randomActorShot(defender, battle, closeShotDuration, defenderString)
     elif randomDouble > 0.2:
         closeShot = randomOverShoulderShot(suit, toon, battle, closeShotDuration, focus=defenderString)
     else:
-        closeShot = randomSplitShot(attacker, defender, battle, closeShotDuration)
+        closeShot = randomActorShot(defender, battle, closeShotDuration, defenderString)
     return Sequence(openShot, closeShot)
 
 def fromBehindGroupCam(suit, targets, battle, attackDuration, openShotDuration):

@@ -1398,7 +1398,7 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                     if self.toonHasCondition(toonId, 'governaughtBoost'):
-                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
+                        attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'governaughtBoost') * 0.01)
                     if self.toonHasCondition(toonId, 'encore'):
                         attackDamage *= 1.2
                     if self.toonHasCondition(toonId, 'encore2'):
@@ -1456,7 +1456,7 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                     if self.toonHasCondition(toonId, 'governaughtBoost'):
-                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
+                        attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'governaughtBoost') * 0.01)
                     if self.suitHasCondition(targetId, 'immune'):
                         attackDamage = 0
                     if self.suitHasCondition(targetId, 'partnered'):
@@ -1812,7 +1812,7 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                     if self.toonHasCondition(toonId, 'governaughtBoost'):
-                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
+                        attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'governaughtBoost') * 0.01)
                     if attackDamage > 0:
                         organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                         if organicBonus:
@@ -1925,7 +1925,7 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                     if self.toonHasCondition(toonId, 'governaughtBoost'):
-                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
+                        attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'governaughtBoost') * 0.01)
                     if suit.dna.name == 'bkeeper' and self.suitHasCondition(targetId, 'bookkeeping'):
                         self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
                     if suit.dna.name == 'rkeeper':
@@ -2012,7 +2012,7 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                     if self.toonHasCondition(toonId, 'governaughtBoost'):
-                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
+                        attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'governaughtBoost') * 0.01)
                     if self.suitHasCondition(targetId, 'partnered'):
                         if self.toonHasCondition(toonId, 'partnered'):
                             attackDamage *= 1.5
@@ -2159,7 +2159,7 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'raisedAnte'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                     if self.toonHasCondition(toonId, 'governaughtBoost'):
-                        attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
+                        attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'governaughtBoost') * 0.01)
                     suit = self.battle.findSuit(targetId)
                     if suit.dna.name == 'bkeeper' and self.suitHasCondition(targetId, 'bookkeeping') and not atkTrack == ZAP:
                         self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 5, 'setBoth')
@@ -2667,7 +2667,7 @@ class BattleCalculatorAI:
                         if self.toonHasCondition(toonId, 'raisedAnte'):
                             attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'raisedAnte') * 0.01))
                         if self.toonHasCondition(toonId, 'governaughtBoost'):
-                            attackDamage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
+                            attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'governaughtBoost') * 0.01)
                         if self.suitHasCondition(currTarget.doId, 'immune'):
                             attackDamage = 0
                         if self.suitHasCondition(currTarget.doId, 'HRdamagereduction'):
@@ -15805,7 +15805,8 @@ class BattleCalculatorAI:
                     i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'tollmasterHit') and not self.suitHasCondition(suitId, 'finalToll'):
+                if self.suitHasCondition(suitId, 'tollmasterHit') and not self.suitHasCondition(suitId, 'finalToll') and self.battle.activeSuits[
+                    i].currHP > 0:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'TollmasterMandatoryToll',  # Audit
                                                                 'animName': 'neutral',
@@ -16515,53 +16516,101 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')
                 if suit.dna.name == 'sgoat':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(4)
+                        if 4 in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(4)
                 if suit.dna.name == 'caseman':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(3)
+                        if 3 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(3)
                 if suit.dna.name == 'stenog':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(2)
+                        if 3 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(3)
                 if suit.dna.name == 'lgator':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(1)
+                        if 1 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(1)
                 if suit.dna.name == 'ambass':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(1)
+                        if 1 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(1)
                 if suit.dna.name == 'wtapper':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(2)
+                        if 2 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(2)
                 if suit.dna.name == 'bkeeper':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(3)
+                        if 3 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(3)
                 if suit.dna.name == 'phouse':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(4)
+                        if 4 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(4)
                 if suit.dna.name == 'safesupervis':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(1)
+                        if 1 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(1)
                 if suit.dna.name == 'ubuster':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(2)
+                        if 2 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(2)
                 if suit.dna.name == 'racket':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(3)
+                        if 3 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(3)
                 if suit.dna.name == 'radiog':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(4)
+                        if 4 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(4)
                 if suit.dna.name == 'cdirector':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(1)
+                        if 1 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(1)
                 if suit.dna.name == 'dking':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(2)
+                        if 2 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(2)
                 if suit.dna.name == 'rkeeper':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(3)
+                        if 3 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(3)
                     self.setSuitCondition(suit.doId, 'beginning', 1, 99, 'setBoth')
                 if suit.dna.name == 'liquid':
                     if self.TurnsElapsed == 0:
-                        self.litigationSpawns.remove(4)
+                        if 4 not in self.litigationSpawns:
+                            continue
+                        else:
+                            self.litigationSpawns.remove(4)
                     self.setSuitCondition(suit.doId, 'beginning', 1, 99, 'setBoth')
                 if suit.dna.name == 'director':
                     self.setSuitCondition(suit.doId, 'shielding', 1, 99, 'setBoth')

@@ -433,7 +433,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['lureBoost2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'lureBoost2')
             lureValue = int(math.ceil(
-                ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['lureBoost'][
+                ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['lureBoost2'][
                     0]) / 2))
         elif track == SOUND_TRACK and 'soundBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['soundBoost'][0] * 0.01) + 1.0)))
