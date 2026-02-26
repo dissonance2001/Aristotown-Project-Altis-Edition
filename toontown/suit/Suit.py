@@ -6616,6 +6616,44 @@ class Suit(Avatar.Avatar):
         self.actuallySoaked = 1
         self.isSoaked = num
 
+    def createAfterImage(self, battle, fadeTime=0.4):
+        # Find the actor root
+        actorNode = self.find('**/__Actor_modelRoot')
+        actorCollection = actorNode.findAllMatches('*')
+
+        # Create a container node for the ghost
+        ghostRoot = battle.attachNewNode('afterimage')
+        ghostRoot.setPos(self.getPos(battle))
+        ghostRoot.setHpr(self.getHpr(battle))
+
+        # Copy visible geometry
+        for thingIndex in range(actorCollection.getNumPaths()):
+            thing = actorCollection[thingIndex]
+
+            if thing.getName() not in (
+                    'joint_attachMeter',
+                    'joint_shadow',
+                    'joint_nameTag',
+                    'def_nameTag'
+            ):
+                if not thing.isEmpty() and thing.node().isGeomNode():
+                    ghostPart = thing.copyTo(ghostRoot)
+                    ghostPart.setTransparency(TransparencyAttrib.MAlpha)
+                    ghostPart.setColorScale(1, 1, 1, 0.6)  # semi-transparent
+
+        # Fade out and remove
+        fadeTrack = Sequence(
+            LerpColorScaleInterval(
+                ghostRoot,
+                fadeTime,
+                (1, 1, 1, 0),
+                startColorScale=(1, 1, 1, 0.6)
+            ),
+            Func(ghostRoot.removeNode)
+        )
+
+        fadeTrack.start()
+
     def makeZapped(self, num):
         self.isZapped += num
 
@@ -7931,7 +7969,6 @@ class Suit(Avatar.Avatar):
             self.knifeTrack.finish()
 
     def makeExtraAttacks(self, num):
-
         # ---- CLEANUP ----
         if hasattr(self, "knifeTrack") and self.knifeTrack:
             self.knifeTrack.pause()

@@ -2839,12 +2839,25 @@ def doMissedPayment(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        suitTrack = Sequence(getSuitAnimTrack(attack))
+        suitTrack = Parallel(getSuitAnimTrack(attack))
         suitTrack2 = Sequence(ActorInterval(suit, 'effort', duration=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimationDrop))
         notifyTrack = Sequence(Wait(0.5), Func(toon.showHpTextNew, 0, text="NO DEFENSE!", colorCode=1), Func(toon.makeNoDodge), Func(toon.addNoDodgeRounds, 1), ActorInterval(toon, 'conked'), Func(toon.loop, 'neutral'))
         soundTrack1 = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
         soundTrack2 = Sequence(Wait(0.5), SoundInterval(globalBattleSoundCache.getSound('SA_haymaker.ogg')))
         soundTrack = Parallel(soundTrack2)
+        origH = suit.getH(battle)
+        targetPos = toon.getPos(battle)
+        suit.headsUp(battle, targetPos)
+        targetH = suit.getH(battle)
+        suit.setH(battle, origH)
+        delta = (targetH - origH + 180) % 360 - 180
+        if delta > 0:
+            shuffleAnim = 'shuffle-right'
+        else:
+            shuffleAnim = 'shuffle-left'
+        suitTrack.append(Sequence(LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'sanction'),
+                                   Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(targetH, 0, 0), other=battle)),
+                                   Func(suit.setNeutralAnimationDrop)))
         notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 1)))
         notifyTrack.append(Parallel(Func(toon.checkDamageUp, 10)))
         if dmg > 0:
@@ -4804,6 +4817,19 @@ def doLedgerOfSound(attack):
             soundTracks.append(soundTrack2)
             explosionTracks.append(explosionTrack)
             suitTracks.append(suitTrack)
+            origH = suit.getH(battle)
+            targetPos = toon.getPos(battle)
+            suit.headsUp(battle, targetPos)
+            targetH = suit.getH(battle)
+            suit.setH(battle, origH)
+            delta = (targetH - origH + 180) % 360 - 180
+            if delta > 0:
+                shuffleAnim = 'shuffle-right'
+            else:
+                shuffleAnim = 'shuffle-left'
+            suitTracks.append(Sequence(LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'glower'),
+                                       Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(targetH, 0, 0), other=battle)),
+                                       Func(suit.setNeutralAnimationDrop)))
             notifyTracks.append(notifyTrack)
     damageAnims = [['slip-backward', 0.01, 0.35]]
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7,
