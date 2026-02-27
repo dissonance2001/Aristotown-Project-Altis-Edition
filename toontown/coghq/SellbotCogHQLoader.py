@@ -7,6 +7,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toon import Toon
 from direct.fsm import State
 from direct.actor.Actor import Actor
+from toontown.battle.BattleProps import *
 from toontown.coghq import FactoryExterior
 from toontown.coghq import FactoryInterior
 from toontown.coghq import SellbotHQExterior
@@ -53,6 +54,36 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         if self.geom:
             self.geom.removeNode()
             self.geom = None
+        if self.helicopter:
+            self.helicopter.removeNode()
+            self.helicopter = None
+        if self.lightPost:
+            self.lightPost.removeNode()
+            self.lightPost = None
+        if self.lightPost2:
+            self.lightPost2.removeNode()
+            self.lightPost2 = None
+        if self.lightPost3:
+            self.lightPost3.removeNode()
+            self.lightPost3 = None
+        if self.lightPost4:
+            self.lightPost4.removeNode()
+            self.lightPost4 = None
+        if self.lightPost5:
+            self.lightPost5.removeNode()
+            self.lightPost5 = None
+        if self.lightPost6:
+            self.lightPost6.removeNode()
+            self.lightPost6 = None
+        if self.lightPost7:
+            self.lightPost7.removeNode()
+            self.lightPost7 = None
+        if self.lightPost8:
+            self.lightPost8.removeNode()
+            self.lightPost8 = None
+        if self.lightPost9:
+            self.lightPost9.removeNode()
+            self.lightPost9 = None
         CogHQLoader.CogHQLoader.unloadPlaceGeom(self)
 
     def loadPlaceGeom(self, zoneId):
@@ -60,6 +91,57 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         zoneId = zoneId - zoneId % 100
         if zoneId == ToontownGlobals.SellbotHQ:
             self.geom = loader.loadModel(self.cogHQExteriorModelPath)
+            self.helicopter = globalPropPool.getProp('CogNationChopper')
+            self.helicopter.loop('CogNationChopper')
+            self.helicopter.reparentTo(render)
+            self.helicopter.setHpr(180, 0, 0)  # Adjust position
+            self.helicopter.setPos(0.945529, -250.04, -0.00225203)
+            self.helicopter.setScale(0.75)
+            self.lightPost = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+            self.lightPost.reparentTo(render)
+            self.lightPost.setHpr(-720.022, 0, 0)  # Adjust position
+            self.lightPost.setPos(21.0472, -62.7448, 10.0956)
+            self.lightPost.setScale(2.0)
+            self.lightPost2 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+            self.lightPost2.reparentTo(render)
+            self.lightPost2.setHpr(-720.022, 0, 0) # Adjust position
+            self.lightPost2.setPos(54.5917, -62.7448, 10.0956)
+            self.lightPost2.setScale(2.0)
+            self.lightPost3 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+            self.lightPost3.reparentTo(render)
+            self.lightPost3.setHpr(-720.022, 0, 0) # Adjust position
+            self.lightPost3.setPos(-54.2046, -62.7448, 10.0957)
+            self.lightPost3.setScale(2.0)
+            self.lightPost4 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+            self.lightPost4.reparentTo(render)
+            self.lightPost4.setHpr(-720.022, 0, 0) # Adjust position
+            self.lightPost4.setPos(-20.569, -62.7448, 10.0957)
+            self.lightPost4.setScale(2.0)
+            self.lightPost5 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+            self.lightPost5.reparentTo(render)
+            self.lightPost5.setHpr(-445.22, 0, 0) # Adjust position
+            self.lightPost5.setPos(9.9592, -262.335, 0.287451)
+            self.lightPost5.setScale(2.0)
+            self.lightPost6 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+            self.lightPost6.reparentTo(render)
+            self.lightPost6.setHpr(-7.85447, -262.26, 0.308061)  # Adjust position
+            self.lightPost6.setPos(-633.66, 0, 0)
+            self.lightPost6.setScale(2.0)
+            self.lightPost7 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+            self.lightPost7.reparentTo(render)
+            self.lightPost7.setHpr(-180, 0, 0) # Adjust position
+            self.lightPost7.setPos(100.736, -173.906, 0.550146)
+            self.lightPost7.setScale(2.0)
+            self.lightPost8 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+            self.lightPost8.reparentTo(render)
+            self.lightPost8.setHpr(-752.732, 0, 0) # Adjust position
+            self.lightPost8.setPos(94.6744, -141.555, 0.262793)
+            self.lightPost8.setScale(2.0)
+            self.lightPost9 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+            self.lightPost9.reparentTo(render)
+            self.lightPost9.setHpr(90, 0, 0)  # Adjust position
+            self.lightPost9.setPos(-9.27993, -261.34, 0.550146)
+            self.lightPost9.setScale(2.0)
             factoryExteriorPOV = loader.loadModel('phase_9/models/cogHQ/SellbotFactoryExterior')
             factoryExteriorPOV.reparentTo(self.geom)
             factoryExteriorPOV.setPosHpr(400.62, -139.52, 15.22, 272.73, 0, 0)
@@ -102,11 +184,11 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
                 doorFrame.node().setEffect(DecalEffect.make())
                 doorFrame.flattenStrong()
                 door.flattenMedium()
-            self.botcam1 = Actor("phase_9/models/char/BotCam-zero.bam",{"botcamneutral":"phase_9/models/char/BotCam-neutral.bam"})
-            self.bossroom = Actor("phase_9/models/cogHQ/BossRoomPOV.bam")
-            self.botcam1.reparentTo(self.geom)
-            self.botcam1.setPos(-0.01,-39.3,24)
-            self.botcam1.loop('botcamneutral')
+           # self.botcam1 = Actor("phase_9/models/char/BotCam-zero.bam",{"botcamneutral":"phase_9/models/char/BotCam-neutral.bam"})
+            self.bossroom = loader.loadModel("phase_9/models/cogHQ/BossRoomPOV.bam")
+            # self.botcam1.reparentTo(self.geom)
+            # self.botcam1.setPos(-0.01,-39.3,24)
+            # self.botcam1.loop('botcamneutral')
             self.bossroom.reparentTo(self.geom)
             self.bossroom.setPos(42,25,298)
             self.bossroom.setScale(0.1)

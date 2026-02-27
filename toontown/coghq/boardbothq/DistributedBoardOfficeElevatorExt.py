@@ -35,7 +35,7 @@ class DistributedBoardOfficeElevatorExt(DistributedElevatorExt.DistributedElevat
          ToontownGlobals.BoardOfficeIntC: 2}
         originId = boardofficeId2originId[self.boardofficeId]
         geom = self.cr.playGame.hood.loader.geom
-        locator = geom.find('**/elevator_origin_%s' % originId)
+        locator = geom.find('**/elevator_origin%s' % originId)
         if locator:
             self.elevatorModel.setPosHpr(locator, 0, 0, 0, 0, 0, 0)
         else:

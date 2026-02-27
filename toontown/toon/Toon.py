@@ -5435,6 +5435,11 @@ class Toon(Avatar.Avatar, ToonHead):
             return self.__doUnWireFrame()
         return Sequence()
 
+    def printCameraPos():
+        print(base.localAvatar.getPos())
+        print(base.localAvatar.getHpr())
+
+    base.accept('[', printCameraPos)
             
     def putOnSuit(self, suitType, setDisplayName = True, rental = False):
         if self.isDisguised:

@@ -7,6 +7,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toon import Toon
 from direct.fsm import State
 from toontown.coghq import CashbotHQExterior
+from toontown.battle.BattleProps import *
 from toontown.coghq import CashbotHQBossBattle
 from pandac.PandaModules import DecalEffect
 

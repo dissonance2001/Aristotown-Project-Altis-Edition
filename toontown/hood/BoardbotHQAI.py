@@ -56,6 +56,7 @@ class BoardbotHQAI(CogHQAI.CogHQAI):
             boardofficeElevator.generateWithRequired(ToontownGlobals.BoardbotOfficeLobby)
             self.boardofficeElevators.append(boardofficeElevator)
 
+
     def createBoardOfficeBoardingParty(self):
         boardofficeIdList = []
         for boardofficeElevator in self.boardofficeElevators:

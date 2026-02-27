@@ -6,6 +6,7 @@ from toontown.coghq import StageInterior
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import State
 from direct.fsm import StateData
+from toontown.battle.BattleProps import *
 from direct.gui import DirectGui
 from toontown.toon import Toon
 from toontown.toonbase import TTLocalizer
