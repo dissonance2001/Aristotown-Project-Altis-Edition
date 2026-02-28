@@ -24,8 +24,11 @@ ModelDict = {'s': 'phase_9/models/char/sellbotBoss',
  'm': 'phase_10/models/char/cashbotBoss',
  'l': 'phase_11/models/char/lawbotBoss',
  'c': 'phase_12/models/char/bossbotBoss',
- 'g': 'phase_14/models/char/boardbotBoss'}
-AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'Ff_neutral_f', 'turn2Fb', 'Ff_neutral', 'Ff_neutral_f', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
+ 'g': 'phase_14/models/char/boardbotBoss',
+             't': 'phase_14/models/char/techbotBoss',
+             'p': 'phase_14/models/char/pressbotBoss'
+             }
+AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'Ff_cross_arms_loop', 'Ff_neutral_f', 'turn2Fb', 'Ff_neutral', 'Ff_neutral_f', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
 
 
 class BossCog(Avatar.Avatar):
@@ -140,6 +143,8 @@ class BossCog(Avatar.Avatar):
         self.loadModel(GenericModel + '-legs-zero', 'legs')
         if self.style.dept == 'l':
             self.loadModel(filePrefix + '-torso-zero', 'torso')
+        elif self.style.dept == 'p':
+            self.loadModel(filePrefix + '-torso-zero', 'torso')
         else:
             self.loadModel(GenericModel + '-torso-zero', 'torso')
         self.loadModel(filePrefix + '-head-zero', 'head')
@@ -175,6 +180,8 @@ class BossCog(Avatar.Avatar):
         self.corner4Attack.setScale(2)
         if self.style.dept == 'c':
             self.setHeight(30)
+        elif self.style.dept == 'g':
+            self.setHeight(28)
         else:
             self.setHeight(25)
         self.nametag3d.setScale(2.5)
@@ -191,6 +198,7 @@ class BossCog(Avatar.Avatar):
         texture = loader.loadTexture('phase_9/maps/cc_t_ene_boss_m.png')
         texture2 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_c.png')
         texture3 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_g.png')
+        texture4 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_t.png')
         self.pelvis = self.getPart('torso')
         if self.style.dept == 'm':
             pelvis = self.pelvis.find('**/Object')
@@ -201,6 +209,9 @@ class BossCog(Avatar.Avatar):
         elif self.style.dept == 'g':
             pelvis = self.pelvis.find('**/Object')
             pelvis.setTexture(texture3, 1)
+        elif self.style.dept == 't':
+            pelvis = self.pelvis.find('**/Object')
+            pelvis.setTexture(texture4, 1)
         self.pelvisForwardHpr = VBase3(0, 0, 0)
         self.pelvisReversedHpr = VBase3(-180, 0, 0)
         if self.style.dept == 's':
@@ -218,7 +229,7 @@ class BossCog(Avatar.Avatar):
         elif self.style.dept == 'g':
             self.neck = self.getPart('head')
             self.neck.setTwoSided(True)
-            #self.neck.hide()
+            self.neck.hide()
             self.neckForwardHpr = VBase3(0, 0, 0)
             self.neckReversedHpr = VBase3(0, 0, 0)
         elif self.style.dept == 'm':
@@ -231,6 +242,12 @@ class BossCog(Avatar.Avatar):
             self.neck = self.getPart('head')
             self.neck.setTwoSided(True)
             self.neck.hide()
+            self.neckForwardHpr = VBase3(0, 0, 0)
+            self.neckReversedHpr = VBase3(0, -540, 0)
+        else:
+            self.neck = self.getPart('head')
+            self.neck.setTwoSided(True)
+            #self.neck.hide()
             self.neckForwardHpr = VBase3(0, 0, 0)
             self.neckReversedHpr = VBase3(0, -540, 0)
         self.axle = self.find('**/joint_axle')
@@ -247,6 +264,8 @@ class BossCog(Avatar.Avatar):
             self.generateHead3('ceo-a', animated=True)
         elif self.style.dept == 'm':
             self.generateHead3('cfo', animated=True)
+        elif self.style.dept == 'g':
+            self.generateHead3('chairman-a', animated=True)
         elif self.style.dept == 's':
             self.generateHead3('vp', animated=True)
         elif self.style.dept == 'l':
@@ -278,13 +297,21 @@ class BossCog(Avatar.Avatar):
         elif dept == 'm':
             self.corpMedallion = icons.find('**/emblem_money').copyTo(chestNull)
         elif dept == 'g':
-            self.corpMedallion = icons.find('**/emblem_board').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
+            texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette4.png')
+            self.corpMedallion.setTexture(texture, 1)
         elif dept == 't':
-            self.corpMedallion = icons2.find('**/TechIcon').copyTo(chestNull)
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
+            texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette2.png')
+            self.corpMedallion.setTexture(texture, 1)
+        elif dept == 'p':
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
         self.corpMedallion.setScale(3)
         self.corpMedallion.setP(-20)
         if self.style.dept == 'l':
             self.corpMedallion.setY(1.1)
+        elif self.style.dept == 'p':
+            self.corpMedallion.setY(1.875)
         else:
             self.corpMedallion.setY(.25)
 
@@ -302,6 +329,8 @@ class BossCog(Avatar.Avatar):
         self.healthBar = button
         if self.style.dept == 'l':
             base.setY(1.1)
+        elif self.style.dept == 'p':
+            base.setY(1.875)
         else:
             base.setY(.25)
 
@@ -324,6 +353,8 @@ class BossCog(Avatar.Avatar):
         glow.setColor(self.healthGlowColors[0])
         if self.style.dept == 'l':
             button.setY(1.1)
+        elif self.style.dept == 'p':
+            button.setY(1.875)
         else:
             button.setY(.25)
         self.healthBarGlow = glow
@@ -401,6 +432,19 @@ class BossCog(Avatar.Avatar):
                     self.__changeColor()
             self.healthCondition = condition
 
+    def generateHeadAnims(self, path, cActor, additionalAnims=[]):
+        anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
+                 'stun', 'enraged', 'sacrifice-cog', 'summon-cog', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup',
+                 'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive', 'bust',
+                 'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'gsnap', 'overclocked',
+                 'come-on', 'zero']
+        for anim in additionalAnims:
+            anims.append(anim)
+        animList = {}
+        for anim in anims:
+            animList[anim] = path + anim + '.bam'
+        cActor.loadAnims(animList)
+
     def generateHead3(self, headType, headColor=None, headTexture=None, modelOverride=None, pathOverride=None,
                      extraArgs={}, animated=False, additionalAnims=[]):
         if animated:
@@ -442,9 +486,10 @@ class BossCog(Avatar.Avatar):
                 headModel.setTwoSided(True)
             if headType == 'chairman-a':
                 headModel.setScale(3)
-                headModel.setH(0)
-                headModel.setP(90)
-                headModel.setR(-90)
+                headModel.setX(.5)
+                headModel.setZ(0.25)
+                headModel.setP(-90)
+                headModel.setH(-90)
                # headModel.setP(-270)
             if headType == 'ceo-a':
                 ceoeyes = headModel.find('**/ceo_eyes')
@@ -755,7 +800,10 @@ class BossCog(Avatar.Avatar):
         cnode.setCollideMask(ToontownGlobals.PieBitmask | ToontownGlobals.WallBitmask | ToontownGlobals.CameraBitmask)
         cnode.addSolid(cPoly)
         animate.attachNewNode(cnode)
-        fsm = self.DoorFSM(name, animate, callback, openedHpr, closedHpr, self.uniqueName)
+        try:
+            fsm = self.DoorFSM(name, animate, callback, openedHpr, closedHpr, self.uniqueName)
+        except:
+            fsm = self.DoorFSM(name, animate, callback, openedHpr, closedHpr, 'close-%s' % animate)
         return fsm
 
     def doAnimate(self, anim = None, now = 0, queueNeutral = 1, raised = None, forward = None, happy = None):
@@ -904,18 +952,21 @@ class BossCog(Avatar.Avatar):
             partName = None
             if self.happy:
                 for headPart in self.animatedHeadParts:
-                    headPart.setP(0)
+                    if not self.style.dept == 'g':
+                        headPart.setP(0)
                 if self.dna.dept == 'l':
                     animName = 'Ff_neutral_f'
                 else:
                     animName = 'Ff_neutral'
             else:
                 for headPart in self.animatedHeadParts:
-                    headPart.setP(0)
+                    if not self.style.dept == 'g':
+                        headPart.setP(0)
                 animName = 'Fb_neutral'
             if self.raised:
                 for headPart in self.animatedHeadParts:
-                    headPart.setP(0)
+                    if not self.style.dept == 'g':
+                        headPart.setP(0)
                 ival = ActorInterval(self, animName)
             else:
                 for headPart in self.animatedHeadParts:
@@ -925,21 +976,24 @@ class BossCog(Avatar.Avatar):
                 ival = Sequence(Func(self.reverseBody), ival, Func(self.forwardBody))
         elif anim == 'down2Up':
             for headPart in self.animatedHeadParts:
-                headPart.setP(180)
+                if not self.style.dept == 'g':
+                    headPart.setP(180)
                 headAnim = Parallel(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
                 headAnim.start()
             ival = Parallel(SoundInterval(self.upSfx), self.getAngryActorInterval('Fb_down2Up'))
             self.raised = 1
         elif anim == 'up2Down':
             for headPart in self.animatedHeadParts:
-                headPart.setP(180)
+                if not self.style.dept == 'g':
+                    headPart.setP(180)
                 headAnim = Parallel(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
                 headAnim.start()
             ival = Parallel(SoundInterval(self.downSfx), self.getAngryActorInterval('Fb_down2Up', playRate=-1))
             self.raised = 0
         elif anim == 'throw':
             for headPart in self.animatedHeadParts:
-                headPart.setP(180)
+                if not self.style.dept == 'g':
+                    headPart.setP(180)
             self.doAnimate(None, raised=1, happy=0, queueNeutral=0)
             ival = Parallel()
             ival.append(Parallel(Sequence(SoundInterval(self.throwSfx), duration=0),
@@ -949,38 +1003,45 @@ class BossCog(Avatar.Avatar):
                 self.raised = 0
                 ival = self.getAngryActorInterval('Fb_firstHit')
                 for headPart in self.animatedHeadParts:
-                    headPart.setP(180)
+                    if not self.style.dept == 'g':
+                        headPart.setP(180)
                     headAnim = Sequence(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral-lured'))
                     headAnim.start()
             if self.raised:
                 self.raised = 0
                 ival = self.getAngryActorInterval('Fb_firstHit')
                 for headPart in self.animatedHeadParts:
-                    headPart.setP(180)
+                    if not self.style.dept == 'g':
+                        headPart.setP(180)
                     headAnim = Sequence(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
                     headAnim.start()
             else:
                 ival = self.getAngryActorInterval('Fb_downHit')
                 for headPart in self.animatedHeadParts:
-                    headPart.setP(180)
+                    if not self.style.dept == 'g':
+                        headPart.setP(180)
                     headAnim = Sequence(ActorInterval(headPart, 'neutral-lured'), Func(headPart.loop, 'neutral-lured'))
                     headAnim.start()
             ival = Parallel(SoundInterval(self.reelSfx, node=self), ival)
         elif anim == 'ltSwing' or anim == 'rtSwing':
             for headPart in self.animatedHeadParts:
-                headPart.setP(0)
+                if not self.style.dept == 'g':
+                    headPart.setP(0)
             self.doAnimate(None, raised=0, happy=0, queueNeutral=0)
             if anim == 'ltSwing':
                 for headPart in self.animatedHeadParts:
-                    headPart.setP(0)
+                    if not self.style.dept == 'g':
+                        headPart.setP(0)
                 ival = Sequence(Track((0, self.getAngryActorInterval('Fb_downLtSwing')), (0.9, SoundInterval(self.swingSfx, node=self)), (1, Func(self.bubbleL.unstash))), Func(self.bubbleL.stash))
             else:
                 for headPart in self.animatedHeadParts:
-                    headPart.setP(0)
+                    if not self.style.dept == 'g':
+                        headPart.setP(0)
                 ival = Sequence(Track((0, self.getAngryActorInterval('Fb_downRtSwing')), (0.9, SoundInterval(self.swingSfx, node=self)), (1, Func(self.bubbleR.unstash))), Func(self.bubbleR.stash))
         elif anim == 'frontAttack':
             for headPart in self.animatedHeadParts:
-                headPart.setP(0)
+                if not self.style.dept == 'g':
+                    headPart.setP(0)
             if not self.raised:
                 self.doAnimate('down2Up', happy=0, queueNeutral=0)
             else:
@@ -1036,7 +1097,8 @@ class BossCog(Avatar.Avatar):
             self.raised = 1
         elif anim == 'areaAttack':
             for headPart in self.animatedHeadParts:
-                headPart.setP(0)
+                if not self.style.dept == 'g':
+                    headPart.setP(0)
             if self.twoFaced:
                 self.doAnimate(None, raised=1, happy=0, queueNeutral=1)
             else:

@@ -206,7 +206,7 @@ class DistributedBoardbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM
 
     def makeBattleOneBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(1, ToontownGlobals.SellbotBossBattleTwoPosHpr)
+        self.initializeBattles(1, ToontownGlobals.FourBossCogBattleAPosHpr)
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
@@ -309,7 +309,7 @@ class DistributedBoardbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM
 
     def makeBattleTwoBattles(self):
         self.postBattleState = 'PrepareBattleThree'
-        self.initializeBattles(2, ToontownGlobals.SellbotBossBattleTwoPosHpr)
+        self.initializeBattles(2, ToontownGlobals.FourBossCogBattleAPosHpr)
 
     def enterBattleTwo(self):
         if self.battle:

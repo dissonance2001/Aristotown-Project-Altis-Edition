@@ -11,11 +11,14 @@ from direct.task import Task
 import math
 from toontown.friends import FriendsListManager
 from toontown.nametag import NametagGlobals
+from toontown.toon import Toon
+from toontown.toon import ToonDNA
 from toontown.nametag import NametagGroup
 from pandac.PandaModules import *
 import random
 from toontown.suit import DistributedBossCog
 from toontown.suit import SuitDNA
+from toontown.suit import FourBossBattleGlobals
 from toontown.battle import BattleBase
 from toontown.battle import BattleParticles
 from toontown.battle import MovieToonVictory
@@ -23,6 +26,7 @@ from toontown.battle import RewardPanel
 from toontown.battle import SuitBattleGlobals
 from toontown.battle.BattleProps import *
 from toontown.chat.ChatGlobals import *
+from toontown.suit import BossCog
 from toontown.coghq import CogDisguiseGlobals
 from toontown.distributed import DelayDelete
 from toontown.nametag.NametagGlobals import *
@@ -38,12 +42,12 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBoardbotBoss')
 
 
-    cageHeights = [100,
-     81,
-     63,
-     44,
-     25,
-     18]
+    cageHeights = [25,
+     15,
+     0,
+     -15,
+     -25,
+     -50]
 
     def __init__(self, cr):
         DistributedBossCog.DistributedBossCog.__init__(self, cr)
@@ -60,16 +64,30 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.bossDamageMovie = None
         self.cagedToon = None
         self.cageShadow = None
+        self.cioBoss = None
+        self.cpoBoss = None
+        self.vpBoss = None
+        self.cfoBoss = None
+        self.cjBoss = None
+        self.ceoBoss = None
         self.cageIndex = 0
         self.everThrownPie = 0
         self.battleThreeMusicTime = 0
         self.insidesANodePath = None
         self.insidesBNodePath = None
-        self.rampA = None
-        self.rampB = None
-        self.rampC = None
+        self.elevatorEntrance = None
+        self.elevatorChairman = None
+        self.paperStack1 = None
+        self.paperStack2 = None
+        self.meetingTable = None
+        self.tableEnclosureColl = None
+        self.presentation = None
         self.strafeInterval = None
         self.onscreenMessage = None
+        self.chandeliers = []
+        self.bookshelves = []
+        self.geomProps = []
+        self.cagedToons = []
         self.toonMopathInterval = []
         self.nerfed = ToontownGlobals.SELLBOT_NERF_HOLIDAY in base.cr.newsManager.getHolidayIdList()
         self.localToonPromoted = True
@@ -79,7 +97,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def announceGenerate(self):
         global OneBossCog
         DistributedBossCog.DistributedBossCog.announceGenerate(self)
-        self.setName('The Chairman')
+        self.setName('Chairman')
         nameInfo = TTLocalizer.BossCogNameWithDept % {'name': self.name,
          'dept': SuitDNA.getDeptFullname(self.style.dept)}
         self.setDisplayName(nameInfo)
@@ -221,7 +239,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cagedToon = NPCToons.createLocalNPC(self.cagedToonNpcId)
         self.cagedToon.addActive()
         self.cagedToon.reparentTo(self.cage)
-        self.cagedToon.setPosHpr(0, -2, 0, 180, 0, 0)
+        self.cagedToon.setPosHpr(3, 6.0, 52.400, 0.0, 0.0, 0.0)
         self.cagedToon.loop('neutral')
         self.cagedToon.setActiveShadow(0)
         touch = CollisionPolygon(
@@ -441,6 +459,11 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         duration = bossTrack.getDuration()
         return bossTrack
 
+    def testMovie(self):
+        bossTrack = Sequence()
+        bossTrack.append(Func(self.ceoBoss.setChatAbsolute, "This is a test speech.", CFSpeech | CFTimeout))
+        return bossTrack
+
     def __talkAboutPromotion(self, speech):
         if not self.localToonPromoted:
             pass
@@ -520,34 +543,192 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         else:
             self.__removeCageShadow()
 
+    def setupBosses(self):
+        self.fourBosses = [self.vpBoss, self.cfoBoss, self.cjBoss, self.ceoBoss]
+        self.bossNames = ['Senior V.P.', 'C. F. O.', 'C. L. O.',
+                          'C. E. O.']
+        for x in range(4):
+            boss = BossCog.generateBossCog()
+            boss.setName(self.bossNames[x])
+            bossNameInfo = TTLocalizer.BossCogNameWithDept % {'name': boss._name,
+                                                              'dept': SuitDNA.getDeptFullname(boss.style.dept)}
+            boss.setDisplayName(bossNameInfo)
+            boss.reparentTo(self.geom)
+            if self.cjBoss:
+                boss.loop('Ff_neutral_f')
+            else:
+                boss.loop('Ff_neutral_f')
+        for boss in [(self.fourBosses[0], 'VPStand'), (self.fourBosses[1], 'CFOStand'), (self.fourBosses[2], 'CJStand'),
+                     (self.fourBosses[3], 'CEOStand')]:
+            boss[0].reparentTo(self.geom.find('**/%s' % (boss[1])))
+            boss[0].setZ(22)
+        self.vpBoss.setH(90)
+        self.cfoBoss.setPosHpr(0.0, 0.0, 22.0, -90.0, 0.0, 0.0)
+        self.ceoBoss.setPosHpr(0, 5, 22, 0, 0, 0)
+        self.geom.find('**/CFOStand').setPos(45.925, 39.084, 0.0)
+
     def loadEnvironment(self):
         DistributedBossCog.DistributedBossCog.loadEnvironment(self)
-        self.geom = loader.loadModel('phase_9/models/cogHQ/BossRoomPOV')
-        self.rampA = self.geom.find('**/north_ramp')
-        self.rampB = self.geom.find('**/west_ramp')
-        self.rampC = self.geom.find('**/east_ramp')
-        self.cage = self.geom.find('**/cage')
-        elevatorEntrance = self.geom.find('**/elevator_locator')
-        elevatorEntrance.getChildren().detach()
-        elevatorEntrance.setScale(1)
-        elevatorModel = loader.loadModel('phase_9/models/cogHQ/cogHQ_elevator')
-        elevatorModel.reparentTo(elevatorEntrance)
+        self.geom = loader.loadModel('phase_14/models/modules/ExecutiveMeetingRoom')
+        self.paperStack1 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
+        self.paperStack2 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
+        self.paperStack2.setScale(1.5)
+        self.paperStack1.setScale(1.5)
+        self.paperStack1.reparentTo(self.geom)
+        self.paperStack2.reparentTo(self.geom)
+        self.paperStack1.setPosHpr(52.2653, 78.2118, -0.05, 126.891, 0, 0)
+        self.paperStack2.setPosHpr(0, -8.55076, -0.05, 0, 0, 0)
+        # self.rampA = self.geom.find('**/north_ramp')
+        # self.rampB = self.geom.find('**/west_ramp')
+        # self.rampC = self.geom.find('**/east_ramp')
+        self.cage = self.geom.find('**/toon_cage')
+        self.elevatorEntrance = self.geom.find('**/elevatorIN_origin')
+        self.elevatorEntrance.getChildren().detach()
+        self.elevatorEntrance.setScale(1)
+        elevatorModel = loader.loadModel('phase_12/models/bossbotHQ/BB_Inside_Elevator')
+        elevatorModel.reparentTo(self.elevatorEntrance)
         self.setupElevator(elevatorModel)
+        self.elevatorChairman = self.geom.find('**/elevatorOUT_origin')
+        self.elevatorChairman.getChildren().detach()
+        self.elevatorChairman.setScale(1)
+        elevatorModel = loader.loadModel('phase_14/models/modules/RooftopElevator')
+        elevatorModel.reparentTo(self.elevatorChairman)
+        #self.setupChairmanElevator(elevatorModel)
+        #self.setupElevator(elevatorModel)
+        self.meetingTable = loader.loadModel('phase_14/models/props/executive_table-mod')
+        self.meetingTable.reparentTo(self.geom)
+       # self.meetingTable.setBlend(frameBlend=True)
+        self.presentation = loader.loadModel('phase_14/models/props/screen-mod')
+        self.presentation.reparentTo(self.geom.find('**/presentation_origin'))
+       # self.presentation.setBlend(frameBlend=config.GetBool('interpolate-animations', True))
+        self.geomProps.append(self.presentation)
+        self.geom.reparentTo(render)
+        for prop in FourBossBattleGlobals.MeetingProps:
+            model = loader.loadModel('phase_%s/models/%s/%s.bam' % (prop[0], prop[1], prop[2]))
+            model.setPosHprScale(*prop[3])
+            model.reparentTo(self.geom)
+            self.geomProps.append(model)
         pos = self.cage.getPos()
         self.cagePos = []
         for height in self.cageHeights:
             self.cagePos.append(Point3(pos[0], pos[1], height))
 
-        self.cageDoor = self.geom.find('**/cage_door')
+        for i in range(8):
+            chandelier = loader.loadModel('phase_14/models/props/ExecutiveChandelier')
+            chandelier.setPosHpr(*FourBossBattleGlobals.ChandelierInitialPositions[i])
+            chandelier.reparentTo(self.geom)
+            self.chandeliers.append(chandelier)
+
+        for i in range(4):
+            bookshelf = loader.loadModel('phase_14/models/props/LB_AttackShelf-mod.bam')
+            bookshelf.setPosHpr(*FourBossBattleGlobals.BookshelfPosHprs[i])
+            bookshelf.reparentTo(self.geom)
+            self.bookshelves.append(bookshelf)
+
+        toonIds = [1116, 4119, 3112, 2011, 2001]
+        for i in range(5):
+            npc = Toon.Toon()
+            npc.setPickable(0)
+            npc.setPlayerType(NametagGlobals.CCNonPlayer)
+            dna = ToonDNA.ToonDNA()
+            dna.newToonRandom(11237, 'f', 1)
+            dna.head = 'pls'
+            npc.setDNAString(dna.makeNetString())
+            npc.animFSM.request('neutral')
+            npc.reparentTo(self.cage)
+            toon = npc
+            toon.setPosHpr(*FourBossBattleGlobals.CagedToonPosHprs[i])
+            toon.sadEyes()
+            toon.setActiveShadow(0)
+            toon.loop('sad-neutral')
+            self.cagedToons.append(toon)
+
+        self.cageDoor = self.geom.find('**/cage_sides')
         self.cage.setScale(1)
-        self.rope = Rope.Rope(name='supportChain')
-        self.rope.reparentTo(self.cage)
-        self.rope.setup(2, ((self.cage, (0.15, 0.13, 16)), (self.geom, (0.23, 78, 120))))
-        self.rope.ropeNode.setRenderMode(RopeNode.RMBillboard)
-        self.rope.ropeNode.setUvMode(RopeNode.UVDistance)
-        self.rope.ropeNode.setUvDirection(0)
-        self.rope.ropeNode.setUvScale(0.8)
-        self.rope.setTransparency(1)
+
+        self.vpBoss = BossCog.BossCog()
+        dna = SuitDNA.SuitDNA()
+        dna.newBossCog('s')
+        self.vpBoss.vpBoss = True
+        self.vpBoss.setDNA(dna)
+        self.vpBoss.addActive()
+        self.vpBoss.initializeDropShadow()
+        self.vpBoss.setH(90)
+        self.vpBoss.loop('Ff_neutral')
+        self.vpBoss.reparentTo(self.geom.find('**/VPStand'))
+        self.vpBoss.setZ(22)
+        self.vpBoss.setName('Senior V.P.\nSellbot')
+
+        self.cfoBoss = BossCog.BossCog()
+        dna = SuitDNA.SuitDNA()
+        dna.newBossCog('m')
+        self.cfoBoss.cfoBoss = True
+        self.cfoBoss.setDNA(dna)
+        self.cfoBoss.addActive()
+        self.cfoBoss.initializeDropShadow()
+        self.cfoBoss.setH(-90)
+        self.cfoBoss.loop('Ff_neutral')
+        self.cfoBoss.reparentTo(self.geom.find('**/CFOStand'))
+        self.cfoBoss.setZ(22)
+        self.cfoBoss.setName('C. F. O.\nCashbot')
+        self.geom.find('**/CFOStand').setPos(45.925, 39.084, 0.0)
+
+        self.cjBoss = BossCog.BossCog()
+        dna = SuitDNA.SuitDNA()
+        dna.newBossCog('l')
+        self.cjBoss.cjBoss = True
+        self.cjBoss.setDNA(dna)
+        self.cjBoss.addActive()
+        self.cjBoss.initializeDropShadow()
+        self.cjBoss.setH(0)
+        self.cjBoss.loop('Ff_neutral_f')
+        self.cjBoss.reparentTo(self.geom.find('**/CJStand'))
+        self.cjBoss.setZ(22)
+        self.cjBoss.setName('C. L. O.\nLawbot')
+
+        self.ceoBoss = BossCog.BossCog()
+        dna = SuitDNA.SuitDNA()
+        dna.newBossCog('c')
+        self.ceoBoss.ceoBoss = True
+        self.ceoBoss.setDNA(dna)
+        self.ceoBoss.addActive()
+        self.ceoBoss.initializeDropShadow()
+        self.ceoBoss.setH(0)
+        self.ceoBoss.loop('Ff_neutral')
+        self.ceoBoss.reparentTo(self.geom.find('**/CEOStand'))
+        self.ceoBoss.setPosHpr(0, 5, 22, 0, 0, 0)
+        self.ceoBoss.setName('C. E. O.\nBossbot')
+
+        self.cioBoss = BossCog.BossCog()
+        dna = SuitDNA.SuitDNA()
+        dna.newBossCog('t')
+        self.cioBoss.cioBoss = True
+        self.cioBoss.setDNA(dna)
+        self.cioBoss.addActive()
+        self.cioBoss.initializeDropShadow()
+        self.cioBoss.setH(0)
+        self.cioBoss.loop('Ff_neutral')
+        self.cioBoss.reparentTo(self.geom)
+        self.cioBoss.setZ(22)
+        self.cioBoss.setName('C. I. O.\nTechbot')
+        self.cioBoss.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
+
+        self.cpoBoss = BossCog.BossCog()
+        dna = SuitDNA.SuitDNA()
+        dna.newBossCog('p')
+        self.cpoBoss.cpoBoss = True
+        self.cpoBoss.setDNA(dna)
+        self.cpoBoss.addActive()
+        self.cpoBoss.initializeDropShadow()
+        self.cpoBoss.setH(0)
+        self.cpoBoss.loop('Ff_neutral')
+        self.cpoBoss.reparentTo(self.geom)
+        self.cpoBoss.setPosHpr(-50.0306, 77.9406, 22, -325, 0, 0)
+        self.cpoBoss.setName('Chief Justice\nLawbot')
+
+        self.reparentTo(render)
+        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
+
         self.promotionMusic = base.loadMusic('phase_9/audio/bgm/encntr_head_suit_theme.ogg')
         self.toonsDiscovered = base.loadMusic('phase_9/audio/bgm/encntr_sting_announce.ogg')
         self.betweenBattleMusic = base.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
@@ -560,9 +741,21 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.geom.removeNode()
         del self.geom
         del self.cage
-        del self.rampA
-        del self.rampB
-        del self.rampC
+        del self.meetingTable
+        del self.elevatorChairman
+        del self.elevatorEntrance
+        del self.geomProps
+        del self.presentation
+        del self.ceoBoss
+        del self.cjBoss
+        del self.cfoBoss
+        del self.vpBoss
+        del self.paperStack1
+        del self.paperStack2
+        del self.bookshelves
+        del self.chandeliers
+        del self.cioBoss
+        del self.cpoBoss
 
     def __loadMopaths(self):
         self.toonsEnterA = Mopath.Mopath()
@@ -670,9 +863,10 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def enterElevator(self):
         DistributedBossCog.DistributedBossCog.enterElevator(self)
+        #self.setupBosses()
         self.setCageIndex(0)
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
         self.happy = 1
         self.raised = 1
         self.forward = 1
@@ -686,7 +880,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def enterIntroduction(self):
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
         self.stopAnimate()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         self.accept('clickedNametag', self.__clickedNameTag)
@@ -704,7 +898,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleOne(self):
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -725,6 +919,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.disableToonCollision()
         self.releaseToons()
         self.reparentTo(render)
+        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
         self.setCageIndex(2)
         self.stickBossToFloor()
         intervalName = 'RollToBattleTwo'
@@ -737,8 +932,9 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def __onToPrepareBattleTwo(self):
         self.disableToonCollision()
-        self.unstickBoss()
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+       # self.unstickBoss()
+        self.reparentTo(render)
+        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
         self.doneBarrier('RollToBattleTwo')
 
     def exitRollToBattleTwo(self):
@@ -760,7 +956,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.clearChat()
         self.cagedToon.clearChat()
         self.reparentTo(render)
-        self.reparentTo(render)
+        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
         self.setCageIndex(2)
         camera.reparentTo(render)
         camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
@@ -786,12 +982,12 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(2)
         localAvatar.inventory.setBattleCreditMultiplier(mult)
         self.reparentTo(render)
+        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
         self.clearChat()
         self.cagedToon.clearChat()
         self.releaseToons()
@@ -1264,3 +1460,39 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def toonPromoted(self, promoted):
         self.localToonPromoted = promoted
+
+    def setVPDoId(self, vpId):
+        if vpId in self.cr.doId2do:
+            self.setVPBoss(self.cr.doId2do[vpId])
+        else:
+            self.acceptOnce('generate-%d' % vpId, self.setVPBoss)
+
+    def setVPBoss(self, vpBoss):
+        self.vpBoss = vpBoss
+
+    def setCFODoId(self, cfoId):
+        if cfoId in self.cr.doId2do:
+            self.setCFOBoss(self.cr.doId2do[cfoId])
+        else:
+            self.acceptOnce('generate-%d' % cfoId, self.setCFOBoss)
+
+    def setCFOBoss(self, cfoBoss):
+        self.cfoBoss = cfoBoss
+
+    def setCJDoId(self, cjId):
+        if cjId in self.cr.doId2do:
+            self.setCJBoss(self.cr.doId2do[cjId])
+        else:
+            self.acceptOnce('generate-%d' % cjId, self.setCJBoss)
+
+    def setCJBoss(self, cjBoss):
+        self.cjBoss = cjBoss
+
+    def setCEODoId(self, ceoId):
+        if ceoId in self.cr.doId2do:
+            self.setCEOBoss(self.cr.doId2do[ceoId])
+        else:
+            self.acceptOnce('generate-%d' % ceoId, self.setCEOBoss)
+
+    def setCEOBoss(self, ceoBoss):
+        self.ceoBoss = ceoBoss

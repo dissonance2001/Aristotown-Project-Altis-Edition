@@ -2291,7 +2291,7 @@ def doRevisedFiling(attack):
                             Sequence(Wait(.1), SoundInterval(throwSfx, duration=.6)),
                             Sequence(
                                 Wait(.2), Func(book.show), Func(book.wrtReparentTo, render),
-                                book.posHprInterval(.5, (toon.getX(), toon.getY(), 0), (0, 720, 0))
+                                book.posHprInterval(.5, (toon.getX(), toon.getY(), 4), (0, 720, 0))
                             )
                         ),
                         Func(book.removeNode)
@@ -2346,7 +2346,7 @@ def doRevisedFiling(attack):
 
     suitTrack = Parallel(getSuitAnimTrack(attack), Sequence(Func(bookshelf.setH, bookshelf.getH() + 180), Func(bookshelf.wrtReparentTo, battle),
                          Sequence(
-                             Wait(1.0), bookshelf.posInterval(0, (0, -50, 0)), bookshelf.hprInterval(0, (180, 0, 0)), bookshelf.scaleInterval(1.0, (2.0, 2.0, 2.0)), Sequence(
+                             Wait(1.0), bookshelf.posInterval(0, (0, -25, 0)), bookshelf.hprInterval(0, (180, 0, 0)), bookshelf.scaleInterval(1.0, (2.0, 2.0, 2.0)), Sequence(
                                  Parallel(throwBook(attack, targets, bookshelf, throwSfx, end=True), ActorInterval(bookshelf, 'LB_AttackShelf')), Sequence(bookshelf.scaleInterval(.5, (.01, .01, .01)))),
                                  Sequence(Func(bookshelf.wrtReparentTo, suit), bookshelf.hprInterval(.5, (180, 0, 0)),
 

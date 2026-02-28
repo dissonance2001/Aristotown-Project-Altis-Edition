@@ -1085,6 +1085,48 @@ CashbotBossCranePosHprs = [(97.4, -337.6, 0, - 45, 0, 0),
                            (81, -315, 0, -90, 0, 0),
                            (160, -315, 0, 90, 0, 0)
                            ]
+FourBossesBossBattleOnePosHpr = (0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0)
+FourBossesBossBattleFourPosHpr = (0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0)
+FourBossCogBattleAPosHpr = (0,
+ 100,
+ 21.869,
+ -180,
+ 0,
+ 0)
+FourBossCogBattleBPosHpr = (15,
+ 40,
+ 21.869,
+ -46.5,
+ 0,
+ 0)
+FourBossRankedBattleAPosHpr = (-112,
+ -23,
+ 0.025,
+ 90,
+ 0,
+ 0)
+FourBossRankedBattleBPosHpr = (-112,
+ 23,
+ 0.025,
+ 90,
+ 0,
+ 0)
+FourBossRankedBattleCPosHpr = (-112,
+ 0.0,
+ 0.025,
+ 90,
+ 0,
+ 0)
 CashbotBossToMagnetTime = 0.2
 CashbotBossFromMagnetTime = 1
 CashbotBossSafeKnockImpact = 0.5
