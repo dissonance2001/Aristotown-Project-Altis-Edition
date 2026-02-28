@@ -11489,7 +11489,7 @@ class BattleCalculatorAI:
                 #     attack = self.__getAbilityQueued(suitId)
                 #     self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'phantomEntrycalculator') and self.battle.activeSuits[
-                    i].currHP > 0 and not self.battle.activeSuits[i].currHP <= 1000:
+                    i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'RecordkeeperPhantomEntrySpawn',  # Audit
                                                             'animName': 'effort',

@@ -224,6 +224,7 @@ class DistributedBoardbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM
             reserveSuits.sort(compareJoinChance)
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
+
         if battleNumber == 2:
             cogs = self.invokeEmptyPlanner(11, random.choice(('bdlitpair1', 'bdlitpair2', 'bdlitpair3', 'bdlitpair4', 'bdlitpair5', 'bdlitpair6')))
             activeSuits = cogs['activeSuits']

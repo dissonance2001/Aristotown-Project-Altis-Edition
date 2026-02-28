@@ -2283,6 +2283,14 @@ def doRevisedFiling(attack):
                 book.setPos(x, 0, 3)
                 book.hide()
                 book.reparentTo(bookshelf)
+                dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
+                dustCloud.setBillboardAxis(2.0)
+                dustCloud.setZ(3)
+                dustCloud.setScale(0.4)
+                dustCloud.createTrack()
+                dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, toon), Func(dustCloud.setPos,
+                                                                                    Point3(toon.getX(), toon.getY() - 6, toon.getZ() + 3)),
+                                             dustCloud.track, Func(dustCloud.detachNode), Wait(1.7), name='dustCloadIval')
 
                 x += 1
                 throwTrack2.append(
@@ -2291,10 +2299,10 @@ def doRevisedFiling(attack):
                             Sequence(Wait(.1), SoundInterval(throwSfx, duration=.6)),
                             Sequence(
                                 Wait(.2), Func(book.show), Func(book.wrtReparentTo, render),
-                                book.posHprInterval(.5, (toon.getX(), toon.getY(), 4), (0, 720, 0))
+                                book.posHprInterval(.5, (toon.getX(), toon.getY(), toon.getZ() + 3), (0, 720, 0))
                             )
                         ),
-                        Func(book.removeNode)
+                        Parallel(dustCloudHideIval, Func(book.removeNode))
                     )
                 )
                 neutralTrack.append(Func(toon.loop, 'neutral'))
@@ -2336,7 +2344,7 @@ def doRevisedFiling(attack):
                             Sequence(Wait(.1), SoundInterval(throwSfx, duration=.6)),
                             Sequence(
                                 Wait(.2), Func(book.show), Func(book.wrtReparentTo, render),
-                                book.posHprInterval(.5, (toon.getX(), toon.getY(), 4), (0, 720, 0))
+                                book.posHprInterval(.5, (toon.getX(), toon.getY(), toon.getZ() + 3), (0, 720, 0))
                             )
                         ),
                         Func(book.removeNode)
@@ -2346,7 +2354,7 @@ def doRevisedFiling(attack):
 
     suitTrack = Parallel(getSuitAnimTrack(attack), Sequence(Func(bookshelf.setH, bookshelf.getH() + 180), Func(bookshelf.wrtReparentTo, battle),
                          Sequence(
-                             Wait(1.0), bookshelf.posInterval(0, (0, -25, 0)), bookshelf.hprInterval(0, (180, 0, 0)), bookshelf.scaleInterval(1.0, (2.0, 2.0, 2.0)), Sequence(
+                             Wait(1.0), bookshelf.posInterval(0, (0, -125, -22)), bookshelf.hprInterval(0, (180, 0, 0)), bookshelf.scaleInterval(1.0, (7.0, 7.0, 7.0)), Sequence(
                                  Parallel(throwBook(attack, targets, bookshelf, throwSfx, end=True), ActorInterval(bookshelf, 'LB_AttackShelf')), Sequence(bookshelf.scaleInterval(.5, (.01, .01, .01)))),
                                  Sequence(Func(bookshelf.wrtReparentTo, suit), bookshelf.hprInterval(.5, (180, 0, 0)),
 
@@ -2833,8 +2841,8 @@ def doMissedPayment(attack):
             shuffleAnim = 'shuffle-right'
         else:
             shuffleAnim = 'shuffle-left'
-        suitTrack.append(Sequence(LerpHprInterval(suit, 0, (targetH, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'sanction'),
-                                   Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH + delta, 0, 0), startHpr=(targetH, 0, 0), other=battle)),
+        suitTrack.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'sanction'),
+                                   Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)),
                                    Func(suit.setNeutralAnimationDrop)))
         notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 1)))
         notifyTrack.append(Parallel(Func(toon.checkDamageUp, 10)))
