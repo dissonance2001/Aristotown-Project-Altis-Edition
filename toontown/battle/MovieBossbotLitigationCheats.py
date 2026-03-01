@@ -185,14 +185,9 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     # Normalize difference to shortest path
     delta = (targetH - origH + 180) % 360 - 180
 
-    if attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
-        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
-                          CFSpeech | CFTimeout))
-    elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
-        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
-                          CFSpeech | CFTimeout))
-    elif attack['suitName'] == 'safesupervis' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
-        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+    if attack[
+        'suitName'] == 'bkeeper':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
+        track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
                           CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
@@ -660,12 +655,10 @@ def doPaperCut(attack):
             else:
                 notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 25)))
             partTracks.append(partTrack)
-    suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2), Func(suit.setHpr, battle, origHpr),
-                          Func(suit.setNeutralAnimationDrop))
-    suitTrack = Parallel(getSuitAnimTrack(attack, playRate=1.5), Func(suit.headsUp, battle, targetPos))
+    suitTrack = Parallel(getSuitTrack(attack))
     soundTrack = getSoundTrack('SA_shred.ogg', delay=.5, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
-    return Parallel(suitTrack, partTracks, notifyTracks, suitTrack2, toonTrack, soundTrack)
+    return Parallel(suitTrack, partTracks, notifyTracks, toonTrack, soundTrack)
 
 def doPaperCutMulti(attack):
     suit = attack['suit']
@@ -696,18 +689,16 @@ def doPaperCutMulti(attack):
                 shuffleAnim = 'shuffle-right'
             else:
                 shuffleAnim = 'shuffle-left'
-            moveTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2),
+            moveTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'sanction'),
                                        Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)), Func(suit.setNeutralAnimationDrop)))
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
             notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 15)))
             partTracks.append(partTrack)
-    suitTrack2 = Sequence(ActorInterval(suit, 'sanction', endTime=3), ActorInterval(suit, 'sanction', startTime=3, endTime=2), ActorInterval(suit, 'sanction', startTime=2),
-                          Func(suit.setNeutralAnimationDrop))
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack = getSoundTrack('SA_shred.ogg', delay=.5, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
-    return Parallel(suitTrack, partTracks, moveTracks, notifyTracks, suitTrack2, toonTrack, soundTrack)
+    return Parallel(suitTrack, partTracks, moveTracks, notifyTracks, toonTrack, soundTrack)
 
 def doExplodingDocument(attack):
     suit = attack['suit']
@@ -1095,7 +1086,7 @@ def doAdvancement(attack):
         if not targetSuit.dna.name == 'ambass':
             if not targetSuit.isManager:
                 suitTracks.append(suitTrack)
-    soundTrack2 = getSoundTrack('ENC_cogjump_to_side2.ogg', delay=1.5, node=theSuit)
+    soundTrack2 = getSoundTrack('ENC_cogjump_to_side2.ogg', delay=1, node=theSuit)
     return Parallel(suitTracks, soundTrack2, suitTrack3, suitTrack2)
 
 def doBrokenConnection(attack):
@@ -1548,6 +1539,7 @@ def doHeadRollerGroup(attack):
 
 def doGhostMentality(attack):
     manager = attack['suit']
+    suit = attack['suit']
     battle = attack['battle']
     suitTracks = Parallel()
     managerTracks = Parallel()
@@ -1555,7 +1547,17 @@ def doGhostMentality(attack):
 
     for targetSuit in battle.activeSuits:
         targetPos = targetSuit.getPos(battle)
-        headsUp = Func(manager.headsUp, battle, targetPos)
+        origH = suit.getH(battle)
+        targetPos = targetSuit.getPos(battle)
+        suit.headsUp(battle, targetPos)
+        targetH = suit.getH(battle)
+        suit.setH(battle, origH)
+        delta = (targetH - origH + 180) % 360 - 180
+        if delta > 0:
+            shuffleAnim = 'shuffle-right'
+        else:
+            shuffleAnim = 'shuffle-left'
+        headsUp = LerpHprInterval(suit, 0, (origH + delta - 45, 0, 0), startHpr=(origH, 0, 0), other=battle)
         sinkPos = manager.getPos(battle)
         dropPos = manager.getPos(battle)
         sinkPos2 = manager.getPos(battle)
@@ -1568,7 +1570,7 @@ def doGhostMentality(attack):
         battle = attack['battle']
         targetPos2 = toon.getPos(battle)
         origPos, origHpr = battle.getActorPosHpr(manager)
-        headsUp2 = Func(manager.setHpr, battle, origHpr)
+        headsUp2 = Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta - 45, 0, 0), other=battle))
         moveTrack = Sequence(LerpPosInterval(manager, manager.getDuration('walk'), sinkPos2, other=battle),
                              Wait(manager.getDuration('deadwood')),
                              LerpPosInterval(manager, manager.getDuration('walk'), dropPos, other=battle),
@@ -2705,6 +2707,7 @@ def doOverheat(attack):
     flameTracks = Parallel()
     flecksTracks = Parallel()
     colorTracks = Parallel()
+    moveTracks = Parallel()
     hitAtleastOneToon = False
     for t in targets:
         if t['hp'] > 0:
@@ -2758,6 +2761,19 @@ def doOverheat(attack):
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="BURNED!", colorCode=4))
         notifyTrack.append(Parallel(Func(toon.makeBurned), Func(toon.addBurnedRounds, 3)))
         if dmg > 0:
+            origH = suit.getH(battle)
+            targetPos = toon.getPos(battle)
+            suit.headsUp(battle, targetPos)
+            targetH = suit.getH(battle)
+            suit.setH(battle, origH)
+            delta = (targetH - origH + 180) % 360 - 180
+            if delta > 0:
+                shuffleAnim = 'shuffle-right'
+            else:
+                shuffleAnim = 'shuffle-left'
+            moveTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'magic3-alt'),
+                                       Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)),
+                                       Func(suit.setNeutralAnimationDrop)))
             partTracks4.append(partTrack4)
             headParts = toon.getHeadParts()
             torsoParts = toon.getTorsoParts()
@@ -2791,12 +2807,12 @@ def doOverheat(attack):
                         0.4,
                         1.2])
     damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.8, startTime=1.2))
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     toonTracks = getToonTracksCheat(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3,
                                     dodgeAnimNames=['sidestep'])
     soundTrack = getSoundTrack('SA_boilerplate_a.ogg', delay=1.0, node=suit)
     if hitAtleastOneToon == True:
-        multiTrackList = Parallel(suitTrack, baseFlameTracks, notifyTracks, flameTracks, partTracks4, flecksTracks,
+        multiTrackList = Parallel(suitTrack, moveTracks, baseFlameTracks, notifyTracks, flameTracks, partTracks4, flecksTracks,
                                   toonTracks, colorTracks, soundTrack)
     else:
         multiTrackList = Parallel()

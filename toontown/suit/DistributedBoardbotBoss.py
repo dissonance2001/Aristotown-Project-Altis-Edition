@@ -70,6 +70,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cfoBoss = None
         self.cjBoss = None
         self.ceoBoss = None
+        self.cjBoss2 = None
         self.cageIndex = 0
         self.everThrownPie = 0
         self.battleThreeMusicTime = 0
@@ -572,12 +573,16 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.geom = loader.loadModel('phase_14/models/modules/ExecutiveMeetingRoom')
         self.paperStack1 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
         self.paperStack2 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
+        self.paperStack3 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
         self.paperStack2.setScale(1.5)
         self.paperStack1.setScale(1.5)
+        self.paperStack3.setScale(1.5)
         self.paperStack1.reparentTo(self.geom)
+        self.paperStack3.reparentTo(self.geom)
         self.paperStack2.reparentTo(self.geom)
         self.paperStack1.setPosHpr(52.2653, 78.2118, -0.05, 126.891, 0, 0)
-        self.paperStack2.setPosHpr(0, -8.55076, -0.05, 0, 0, 0)
+        self.paperStack2.setPosHpr(20, -8.55076, -0.05, 0, 0, 0) # Chairman Stack
+        self.paperStack3.setPosHpr(-20, -8.55076, -0.05, 0, 0, 0) # CJ Stack
         # self.rampA = self.geom.find('**/north_ramp')
         # self.rampB = self.geom.find('**/west_ramp')
         # self.rampC = self.geom.find('**/east_ramp')
@@ -724,10 +729,23 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cpoBoss.loop('Ff_neutral')
         self.cpoBoss.reparentTo(self.geom)
         self.cpoBoss.setPosHpr(-50.0306, 77.9406, 22, -325, 0, 0)
-        self.cpoBoss.setName('Chief Justice\nLawbot')
+        self.cpoBoss.setName('C. P. O.\nPressbot')
+
+        self.cjBoss2 = BossCog.BossCog()
+        dna = SuitDNA.SuitDNA()
+        dna.newBossCog('l2')
+        self.cjBoss2.cjBoss2 = True
+        self.cjBoss2.setDNA(dna)
+        self.cjBoss2.addActive()
+        self.cjBoss2.initializeDropShadow()
+        self.cjBoss2.setH(0)
+        self.cjBoss2.loop('Ff_neutral')
+        self.cjBoss2.reparentTo(self.geom)
+        self.cjBoss2.setPosHpr(-20, -8.55076, 22, 180, 0, 0)
+        self.cjBoss2.setName('Chief Justice\nLawbot')
 
         self.reparentTo(render)
-        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
 
         self.promotionMusic = base.loadMusic('phase_9/audio/bgm/encntr_head_suit_theme.ogg')
         self.toonsDiscovered = base.loadMusic('phase_9/audio/bgm/encntr_sting_announce.ogg')
@@ -748,10 +766,12 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         del self.presentation
         del self.ceoBoss
         del self.cjBoss
+        del self.cjBoss2
         del self.cfoBoss
         del self.vpBoss
         del self.paperStack1
         del self.paperStack2
+        del self.paperStack3
         del self.bookshelves
         del self.chandeliers
         del self.cioBoss
@@ -866,7 +886,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         #self.setupBosses()
         self.setCageIndex(0)
         self.reparentTo(render)
-        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
         self.happy = 1
         self.raised = 1
         self.forward = 1
@@ -880,7 +900,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def enterIntroduction(self):
         self.reparentTo(render)
-        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
         self.stopAnimate()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         self.accept('clickedNametag', self.__clickedNameTag)
@@ -898,7 +918,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterBattleOne(self):
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
         self.reparentTo(render)
-        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -919,7 +939,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.disableToonCollision()
         self.releaseToons()
         self.reparentTo(render)
-        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
         self.setCageIndex(2)
         self.stickBossToFloor()
         intervalName = 'RollToBattleTwo'
@@ -934,7 +954,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.disableToonCollision()
        # self.unstickBoss()
         self.reparentTo(render)
-        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
         self.doneBarrier('RollToBattleTwo')
 
     def exitRollToBattleTwo(self):
@@ -956,7 +976,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.clearChat()
         self.cagedToon.clearChat()
         self.reparentTo(render)
-        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
         self.setCageIndex(2)
         camera.reparentTo(render)
         camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
@@ -982,7 +1002,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(2)
         localAvatar.inventory.setBattleCreditMultiplier(mult)
         self.reparentTo(render)
-        self.setPosHpr(0, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)

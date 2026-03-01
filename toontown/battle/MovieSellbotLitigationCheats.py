@@ -330,12 +330,14 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
-        animTrack.append(Func(toon.setHpr, battle, origHpr))
+        if not attack['name'] == 'RacketeerExtortion':
+            animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
-        animTrack.append(Func(toon.setHpr, battle, origHpr))
+        if not attack['name'] == 'RacketeerExtortion':
+            animTrack.append(Func(toon.setHpr, battle, origHpr))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return Parallel(animTrack, indicatorTracks)
 
@@ -1075,9 +1077,19 @@ def doPromotion(attack, ind):
     sinkPos.setZ(sinkPos.getZ() - 4.5)
     sinkPos2.setY(sinkPos.getY() - 22.5)
     targetPos = targetSuit.getPos(battle)
-    headsUp = Func(suit.headsUp, battle, targetPos)
+    origH = suit.getH(battle)
+    targetPos = targetSuit.getPos(battle)
+    suit.headsUp(battle, targetPos)
+    targetH = suit.getH(battle)
+    suit.setH(battle, origH)
+    delta = (targetH - origH + 180) % 360 - 180
+    if delta > 0:
+        shuffleAnim = 'shuffle-right'
+    else:
+        shuffleAnim = 'shuffle-left'
+    headsUp = LerpHprInterval(suit, 0, (origH + delta - 45, 0, 0), startHpr=(origH, 0, 0), other=battle)
     origPos, origHpr = battle.getActorPosHpr(suit)
-    headsUp2 = Func(suit.setHpr, battle, origHpr)
+    headsUp2 = Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta - 45, 0, 0), other=battle))
     cage = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
     toonPos = toon.getPos(battle)
     suitPos = targetSuit.getPos(battle)
@@ -1093,7 +1105,7 @@ def doPromotion(attack, ind):
                                                                                0)),
                                  dustCloud.track, Func(dustCloud.detachNode), Wait(1.7), name='dustCloadIval')
     moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('magic3')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
-    suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
+    suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimationDrop))
     selfDamageTrack = Sequence(Wait(5.0), Parallel(dustCloudHideIval, Sequence(ActorInterval(targetSuit, 'slip-forward', startTime=2.43), Func(targetSuit.setNeutralAnimation)),
                                                    Func(targetSuit.makeIntoCTSManager), MovieUtil.createPromotionTrackPressurizer(targetSuit, battle),
                                                    Func(targetSuit.showHpString, "PROMOTION!"), Func(targetSuit.setMaxHP, 1000), Func(targetSuit.setManager, 1), Func(targetSuit.makeShielding),
@@ -2181,13 +2193,20 @@ def doOvermodulated(attack, ind):
     sinkPos.setY(sinkPos.getY() + 12.5)
     sinkPos.setZ(sinkPos.getZ() - 4.5)
     sinkPos2.setY(sinkPos.getY() - 22.5)
-    battle = attack['battle']
     targetPos = targetSuit.getPos(battle)
-    headsUp = Func(suit.headsUp, battle, targetPos)
-    battle = attack['battle']
-    targetPos2 = toon.getPos(battle)
+    origH = suit.getH(battle)
+    targetPos = targetSuit.getPos(battle)
+    suit.headsUp(battle, targetPos)
+    targetH = suit.getH(battle)
+    suit.setH(battle, origH)
+    delta = (targetH - origH + 180) % 360 - 180
+    if delta > 0:
+        shuffleAnim = 'shuffle-right'
+    else:
+        shuffleAnim = 'shuffle-left'
+    headsUp = LerpHprInterval(suit, 0, (origH + delta - 45, 0, 0), startHpr=(origH, 0, 0), other=battle)
     origPos, origHpr = battle.getActorPosHpr(suit)
-    headsUp2 = Func(suit.setHpr, battle, origHpr)
+    headsUp2 = Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta - 45, 0, 0), other=battle))
     moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('sanction')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
     suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
     selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + .5), Parallel(ActorInterval(targetSuit, 'slip-backward'), Func(battle.unlureSuit, targetSuit), Func(targetSuit.setDizzy, 0),

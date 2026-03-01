@@ -1136,7 +1136,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'WiretapperCollectCall2':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'WiretapperCollectCallDamage':
-        camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'WiretapperBusySignal':
         camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)))
     elif name == 'WiretapperGagBan':
@@ -1195,9 +1195,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == 'AmbassadorRefinement':
-        camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, suit.getDuration('snap') + .5), cameraActorShot(suit, 'summon-cog', 0)))
+        camTrack.append(Parallel(Wait(attackDuration), Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, suit.getDuration('snap') + .5), cameraActorShot(suit, 'summon-cog', 0))))
     elif name == 'AmbassadorRefinementManager':
-        camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, suit.getDuration('snap') + .5), cameraActorShot(suit, 'summon-cog', 0)))
+        camTrack.append(Parallel(Wait(attackDuration), Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, suit.getDuration('snap') + .5), cameraActorShot(suit, 'summon-cog', 0))))
     elif name == 'AmbassadorGhostMentality':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'AmbassadorPhase2':
@@ -2095,7 +2095,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PresidentSyphon':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'PresidentBayouBellow':
-        camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5)))
+        camTrack.append(Parallel(Wait(attackDuration), Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5))))
     elif name == 'PresidentSnipe':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'PresidentDeepFreeze':

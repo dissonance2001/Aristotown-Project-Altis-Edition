@@ -150,7 +150,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
     targets = lure['target']
     battle = lure['battle']
     sidestep = lure['sidestep']
-    reachAnimDuration = 3.5
+    reachAnimDuration = 4.5
     pole = globalPropPool.getProp('fishing-pole')
     pole2 = MovieUtil.copyProp(pole)
     poles = [pole, pole2]
@@ -422,7 +422,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
         else:
             if not suit.isLured:
-                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.5))
+                tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.75))
 
     if isSmallMagnet == 1:
         tracks.append(getSoundTrack('TL_small_magnet.ogg', delay=0.7, node=toon))

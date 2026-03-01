@@ -125,7 +125,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         overtimeTwoClubSequence = Sequence(self.bossClub.colorScaleInterval(0.1, colorScale=VBase4(1, 0, 0, 1)), self.bossClub.colorScaleInterval(0.3, colorScale=VBase4(1, 1, 1, 1)))
         self.bossClubIntervals = [overtimeOneClubSequence, overtimeTwoClubSequence]
         self.rightHandJoint = self.find('**/joint17')
-        self.setPosHpr(*ToontownGlobals.BossbotBossBattleOnePosHpr)
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.reparentTo(render)
         self.toonUpSfx = loader.loadSfx('phase_11/audio/sfx/LB_toonup.ogg')
         self.warningSfx = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_grunt.ogg')
@@ -250,12 +250,13 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.resistanceToon.suit.loop('neutral')
         base.camera.setPos(0, 21, 7)
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.BossbotBossBattleOnePosHpr)
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.loop('Ff_neutral')
         self.show()
         base.camLens.setMinFov(ToontownGlobals.CEOElevatorFov / (4.0 / 3.0))
 
     def enterIntroduction(self):
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -267,6 +268,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
 
     def exitIntroduction(self):
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -276,6 +278,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.promotionMusic.stop()
 
     def makeIntroductionMovie(self, delayDeletes):
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -305,11 +308,12 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return track
 
     def enterFrolic(self):
-        self.setPosHpr(*ToontownGlobals.BossbotBossBattleOnePosHpr)
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         DistributedBossCog.DistributedBossCog.enterFrolic(self)
         self.show()
 
     def enterPrepareBattleTwo(self):
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -410,6 +414,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 toon.show()
 
     def enterBattleTwo(self):
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -625,6 +630,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         DistributedBossCog.DistributedBossCog.enterBattleFour(self)
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.releaseToons(finalBattle=1)
         self.setToonsToNeutral(self.involvedToons)
         for toonId in self.involvedToons:

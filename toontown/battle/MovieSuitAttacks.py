@@ -501,7 +501,7 @@ def doSuitAttack(attack):
     elif name == 'WiretapperCollectCall2':
         suitTrack = MovieBossbotLitigationCheats.doVoicemail(attack)
     elif name == 'WiretapperCollectCallDamage':
-        suitTrack = MovieBossbotLitigationCheats.doCollectCallDues(attack)
+        suitTrack = MovieUniversalCheats.doSynergy(attack)
     elif name == 'WiretapperWiretapped':
         suitTrack = MovieBossbotLitigationCheats.doWiretapped(attack)
     elif name == 'WiretapperVoicemail':
@@ -1506,27 +1506,27 @@ def doSuitAttack(attack):
         elif name == 'RecordkeeperPhantomEntryDamage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'CalculatingFees':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'TollmasterMandatoryToll':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'TollmasterResonanceTax':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'TollmasterResonanceTax2':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'TollmasterResonanceTax3':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'TollmasterResonanceTax4':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'TollmasterResonanceTax5':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'TollmasterMissedPayment':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ButcherRevvingUp':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ButcherRevvingUpWhipsaw':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'WiretapperCollectCall':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'Desperation':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'Desperation2':
@@ -1576,13 +1576,13 @@ def doSuitAttack(attack):
         elif name == 'UnionBusterUnionBusterDamage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AmbassadorMulligan':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ArbitratorObjection':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AbsorbMovie':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AbsorbMovieLevel':
-            resetSuitTrack = Sequence(suitTrack)
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ButcherSparkPlugDamage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'RecordkeeperMinutesTaken':

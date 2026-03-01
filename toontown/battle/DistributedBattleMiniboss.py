@@ -139,7 +139,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 dustCloud.setScale(0.4)
                 dustCloud.createTrack()
                 dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
-                return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.destroy),
+                return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
                                 name='dustCloadIval')
             if suit in self.joiningSuits:
                 i = len(self.pendingSuits) + self.joiningSuits.index(suit)

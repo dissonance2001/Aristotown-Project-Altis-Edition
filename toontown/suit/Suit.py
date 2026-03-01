@@ -4129,7 +4129,12 @@ class Suit(Avatar.Avatar):
             if self.headInterval != None:
                 self.headInterval.finish()
                 del self.headInterval
-            self.headInterval = Sequence(Func(headModel.loop, 'neutral')).start()
+            self.headInterval = Sequence(Parallel(ActorInterval(headModel, 'neutral-hurt', endTime=0), ActorInterval(headModel, 'stun', endTime=0),
+                                         ActorInterval(headModel, 'neutral-lured', endTime=0)
+                                         , ActorInterval(headModel, 'murmur', endTime=0), ActorInterval(headModel, 'question', endTime=0),
+                                         ActorInterval(headModel, 'statement', endTime=0),
+                                         ActorInterval(headModel, 'grunt', endTime=0),
+                                         ActorInterval(headModel, 'death', endTime=0)), Func(headModel.loop, 'neutral')).start()
             if 'x' in extraArgs:
                 if extraArgs['x'] != None:
                     headModel.setX(extraArgs['x'])
@@ -5246,10 +5251,7 @@ class Suit(Avatar.Avatar):
             anims.append(anim)
         animList = {}
         for anim in anims:
-            if self.style.name == 'bonetyred' and anim == 'neutral':
-                animList['neutral'] = path + 'neutral-hurt.bam'
-            else:
-                animList[anim] = path + anim + '.bam'
+            animList[anim] = path + anim + '.bam'
         cActor.loadAnims(animList)
 
     def generateCorporateMedallion2(self):
@@ -6845,7 +6847,7 @@ class Suit(Avatar.Avatar):
 
             # Shared pivot (orbit axis)
             self.knifePivot = self.attachNewNode("knifePivot")
-            self.knifePivot.setZ(height)
+            self.knifePivot.setZ(height - 1)
 
             knifeIntervals = []
 

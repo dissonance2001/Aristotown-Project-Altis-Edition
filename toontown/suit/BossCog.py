@@ -26,7 +26,8 @@ ModelDict = {'s': 'phase_9/models/char/sellbotBoss',
  'c': 'phase_12/models/char/bossbotBoss',
  'g': 'phase_14/models/char/boardbotBoss',
              't': 'phase_14/models/char/techbotBoss',
-             'p': 'phase_14/models/char/pressbotBoss'
+             'p': 'phase_14/models/char/pressbotBoss',
+            'l2': 'phase_14/models/char/pressbot2Boss'
              }
 AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'Ff_cross_arms_loop', 'Ff_neutral_f', 'turn2Fb', 'Ff_neutral', 'Ff_neutral_f', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
 
@@ -143,7 +144,7 @@ class BossCog(Avatar.Avatar):
         self.loadModel(GenericModel + '-legs-zero', 'legs')
         if self.style.dept == 'l':
             self.loadModel(filePrefix + '-torso-zero', 'torso')
-        elif self.style.dept == 'p':
+        elif self.style.dept == 'l2':
             self.loadModel(filePrefix + '-torso-zero', 'torso')
         else:
             self.loadModel(GenericModel + '-torso-zero', 'torso')
@@ -182,6 +183,8 @@ class BossCog(Avatar.Avatar):
             self.setHeight(30)
         elif self.style.dept == 'g':
             self.setHeight(28)
+        elif self.style.dept == 'p':
+            self.setHeight(30)
         else:
             self.setHeight(25)
         self.nametag3d.setScale(2.5)
@@ -199,6 +202,7 @@ class BossCog(Avatar.Avatar):
         texture2 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_c.png')
         texture3 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_g.png')
         texture4 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_t.png')
+        texture5 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_p.png')
         self.pelvis = self.getPart('torso')
         if self.style.dept == 'm':
             pelvis = self.pelvis.find('**/Object')
@@ -212,6 +216,9 @@ class BossCog(Avatar.Avatar):
         elif self.style.dept == 't':
             pelvis = self.pelvis.find('**/Object')
             pelvis.setTexture(texture4, 1)
+        elif self.style.dept == 'p':
+            pelvis = self.pelvis.find('**/Object')
+            pelvis.setTexture(texture5, 1)
         self.pelvisForwardHpr = VBase3(0, 0, 0)
         self.pelvisReversedHpr = VBase3(-180, 0, 0)
         if self.style.dept == 's':
@@ -306,11 +313,15 @@ class BossCog(Avatar.Avatar):
             self.corpMedallion.setTexture(texture, 1)
         elif dept == 'p':
             self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
+            texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette3.png')
+            self.corpMedallion.setTexture(texture, 1)
+        elif dept == 'l2':
+            self.corpMedallion = icons.find('**/emblem_legal').copyTo(chestNull)
         self.corpMedallion.setScale(3)
         self.corpMedallion.setP(-20)
         if self.style.dept == 'l':
             self.corpMedallion.setY(1.1)
-        elif self.style.dept == 'p':
+        elif self.style.dept == 'l2':
             self.corpMedallion.setY(1.875)
         else:
             self.corpMedallion.setY(.25)
@@ -329,7 +340,7 @@ class BossCog(Avatar.Avatar):
         self.healthBar = button
         if self.style.dept == 'l':
             base.setY(1.1)
-        elif self.style.dept == 'p':
+        elif self.style.dept == 'l2':
             base.setY(1.875)
         else:
             base.setY(.25)
@@ -353,7 +364,7 @@ class BossCog(Avatar.Avatar):
         glow.setColor(self.healthGlowColors[0])
         if self.style.dept == 'l':
             button.setY(1.1)
-        elif self.style.dept == 'p':
+        elif self.style.dept == 'l2':
             button.setY(1.875)
         else:
             button.setY(.25)

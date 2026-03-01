@@ -2290,7 +2290,7 @@ def doRevisedFiling(attack):
                 dustCloud.createTrack()
                 dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, toon), Func(dustCloud.setPos,
                                                                                     Point3(toon.getX(), toon.getY() - 6, toon.getZ() + 3)),
-                                             dustCloud.track, Func(dustCloud.detachNode), Wait(1.7), name='dustCloadIval')
+                                             dustCloud.track, Func(dustCloud.removeNode), Wait(1.7), name='dustCloadIval')
 
                 x += 1
                 throwTrack2.append(
@@ -2498,7 +2498,7 @@ def doPhantomEntrySacrifice(attack):
         dustCloud.setScale(0.4)
         dustCloud.createTrack()
         dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
-        return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, battle, oldPos + (0, 0, theSuit.getHeight())), dustCloud.track, Func(dustCloud.destroy),
+        return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, battle, oldPos + (0, 0, theSuit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
                         name='dustCloadIval')
     suitTrack = Sequence(ActorInterval(theSuit, 'mplayer-kneel-into'), Parallel(Func(getDustCloudIval().start), LerpColorScaleInterval(theSuit, 0, (0, 0, 0, 0)), Func(theSuit.hide)))
     for suit in battle.activeSuits:
@@ -2605,7 +2605,7 @@ def doShadowToon(attack):
         dustCloud.setScale(0.4)
         dustCloud.createTrack()
         dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
-        return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, battle, oldPos + (0, 0, evilToon.getHeight())), dustCloud.track, Func(dustCloud.destroy),
+        return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, battle, oldPos + (0, 0, evilToon.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
                         name='dustCloadIval')
 
     suitTrack = Sequence(
@@ -4123,7 +4123,7 @@ def doAggrandize(attack, ind):
     dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, targetSuit), Func(dustCloud.setPos,
                                                                         Point3(suitPos.getX(), 0,
                                                                                0)),
-                                 dustCloud.track, Func(dustCloud.detachNode), Wait(1.7), name='dustCloadIval')
+                                 dustCloud.track, Func(dustCloud.removeNode), Wait(1.7), name='dustCloadIval')
     suitTrack = Sequence(getSuitAnimTrack(attack))
     selfDamageTrack = Sequence(Wait(1.0), Parallel(dustCloudHideIval, ActorInterval(targetSuit, 'slip-forward', startTime=2.43),
                                                    Func(targetSuit.makeIntoCTSManager),
