@@ -44,6 +44,9 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
         if self.geom:
             self.geom.removeNode()
             self.geom = None
+        if self.dish:
+            self.dish.removeNode()
+            self.dish = None
         if self.helicopter:
             self.helicopter.removeNode()
             self.helicopter = None
@@ -111,6 +114,11 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.geom.setPos(-35, -200, -64.5)
             self.geom.setScale(2)
             self.geom.setHpr(90, 0, 0)
+            self.dish = loader.loadModel('phase_14/models/props/radar.bam')
+            self.dish.reparentTo(self.geom)
+            self.dish.setHpr(-90, 0, 0)  # Adjust position
+            self.dish.setPos(0, 0, 10)
+            self.dish.setScale(0.25)
             self.helicopter = globalPropPool.getProp('CogNationChopper')
             self.helicopter.reparentTo(render)
             self.helicopter.loop('CogNationChopper')
@@ -164,7 +172,7 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.lightPost9.setScale(2.0)
             self.lightPost10 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost10.reparentTo(self.geom)
-            self.lightPost10.setHpr(-88.3649, 0, 0)  # Adjust position
+            self.lightPost10.setHpr(-90, 0, 0)  # Adjust position
             self.lightPost10.setPos(45.3425, -201.864, 0.403174)
             self.lightPost10.setScale(2.0)
             self.lightPost11 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
@@ -179,7 +187,7 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.lightPost12.setScale(2.0)
             self.lightPost13 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost13.reparentTo(self.geom)
-            self.lightPost13.setHpr(-177.379, 0, 0)  # Adjust position
+            self.lightPost13.setHpr(-180, 0, 0)  # Adjust position
             self.lightPost13.setPos(3.64376, -338.231, 0.403174)
             self.lightPost13.setScale(2.0)
             self.lightPost14 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
@@ -189,12 +197,12 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.lightPost14.setScale(2.0)
             self.lightPost15 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost15.reparentTo(self.geom)
-            self.lightPost15.setHpr(180.678, 0, 0)  # Adjust position
+            self.lightPost15.setHpr(180, 0, 0)  # Adjust position
             self.lightPost15.setPos(79.7079, -337.535, 0.403174)
             self.lightPost15.setScale(2.0)
             self.lightPost16 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost16.reparentTo(self.geom)
-            self.lightPost16.setHpr(181.122, 0, 0)  # Adjust position
+            self.lightPost16.setHpr(180, 0, 0)  # Adjust position
             self.lightPost16.setPos(-88.0122, -341.62, 0.403174)
             self.lightPost16.setScale(2.0)
             self.lightPost17 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
@@ -204,7 +212,7 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.lightPost17.setScale(2.0)
             self.lightPost18 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost18.reparentTo(self.geom)
-            self.lightPost18.setHpr(360.266, 0, 0)  # Adjust position
+            self.lightPost18.setHpr(0, 0, 0)  # Adjust position
             self.lightPost18.setPos(-68.7107, 75.0015, 0.403174)
             self.lightPost18.setScale(2.0)
             self.elevatorModel = loader.loadModel('phase_9/models/cogHQ/ttcc_prop_ms_elevatorBroken.bam')

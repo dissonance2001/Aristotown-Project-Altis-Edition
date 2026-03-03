@@ -982,7 +982,7 @@ def doCut(attack):
     sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
     sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
     can = loader.loadModel('phase_5/models/props/megaphone')
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack2 = Sequence(ActorInterval(suit, 'glower', endTime=1.5), Wait(3.0), ActorInterval(suit, 'glower', startTime=1.5), Func(suit.setNeutralAnimation))
     posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(3.0), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
@@ -1773,7 +1773,7 @@ def doSingingBlues(attack):
         toon = t['toon']
         dmg = t['hp']
         notifyTracks.append(Func(toon.makeWinded))
-        notifyTracks.append(Func(toon.addWindedRounds, 99))
+        notifyTracks.append(Func(toon.addWindedRounds, 1))
         notifyTracks.append(Parallel(Func(toon.checkWinded, 50)))
     dmg = (attack['target'][0]['hp']) * len(battle.activeToons)
     phone = globalPropPool.getProp('phone')
@@ -2487,6 +2487,8 @@ def doViralSensation(attack):
             partTracks.append(partTrack)
             toonTrack = Sequence()
             toonTrack.append(Wait(damageDelay + 5))
+            toonTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 1)))
+            toonTrack.append(Parallel(Func(toon.checkDamageUp, 50)))
             toonTrack.append(Func(toon.showHpStringViral, "VIRAL SENSATION!"))
             toonTracks2.append(toonTrack)
             print
@@ -3408,7 +3410,7 @@ def doGameTimeCog(attack, ind):
                                   , Func(targetSuit.setNeutralAnimation))
     selfDamageTrack = Sequence(Wait(16), Func(targetSuit.showHpTextNew, x, text="OVERCHARGED!", colorCode=1),
                                Func(targetSuit.setHealthForMe, int(targetSuit.maxHP)), Func(targetSuit.setHP,  int(targetSuit.maxHP * 2)), Func(targetSuit.makeExtraAttacks, targetSuit.getExtraAttacks() + 1),
-                               Func(targetSuit.updateHealthBar, 0), Wait(2.0), Func(targetSuit.showHpTextWhite, '+ 1 ATTACK!'))
+                               Func(targetSuit.updateHealthBar, 0), Wait(2.0), Func(targetSuit.showHpTextWhite, '+1 ATTACK!'))
     suitTrack = random.choice((Parallel(managerTrackQuestion, suitTrackQuestion), Parallel(managerTrackQuestion2, suitTrackQuestion2), Parallel(managerTrackQuestion3, suitTrackQuestion3)
                                , Parallel(managerTrackQuestion5, suitTrackQuestion5), Parallel(managerTrackQuestion6, suitTrackQuestion6), Parallel(managerTrackQuestion4, suitTrackQuestion4)))
     suitTrack.append(Wait(2.0))

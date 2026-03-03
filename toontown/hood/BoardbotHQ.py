@@ -11,6 +11,11 @@ class BoardbotHQ(CogHood):
     LOADER_CLASS = BoardbotCogHQLoader
    # SKY_FILE = 'phase_3.5/models/props/TT_sky'
 
+    def load(self):
+        CogHood.load(self)
+
+        self.sky.hide()
+
     def enter(self, requestStatus):
         CogHood.enter(self, requestStatus)
 

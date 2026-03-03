@@ -2108,7 +2108,42 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             #             Func(self.hideHpText))
             # self.hpTextInterval2.start()
 
-    def showHpStringAbility(self, text, duration = 0.85, scale = 1):
+    def showHpStringDesperationDamage(self): # damage string
+        if self.HpTextEnabled and not self.ghostMode:
+            self.HpTextGenerator.setText("Desperation!")
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
+            self.HpTextGenerator.setTextColor(1, 0.561, 0, 1)
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText = self.attachNewNode(self.hpTextNode)
+            self.hpText.setScale(0.75)
+            self.hpText.setBillboardPointEye()
+            self.hpText.setBin('fixed', 100)
+            self.hpText.setPos(0, 0, self.height / 2)
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2), blendType='easeOut'), Wait(1.0),
+                                                   LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval.start()
+
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("+40% Damage!")
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode2 = self.HpTextGenerator.generate()
+        self.hpText2 = self.hpText.attachNewNode(self.hpTextNode2)
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.hpText2.setScale(.7)
+        self.hpText2.setBillboardPointEye()
+        self.hpText2.setBin('fixed', 99)
+        self.hpText2.setPos(0, 0, -0.75)
+
+    def showHpStringAbility(self, text, duration = 0.85, scale = 0.75):
         if self.HpTextEnabled and not self.ghostMode:
             if self.hpTextInterval:
                 self.hpTextInterval.finish()

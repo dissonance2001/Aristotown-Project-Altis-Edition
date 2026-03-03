@@ -326,120 +326,120 @@ def createSuitReviveTrack(suit, battle):
     suitTrack.append(Func(suit.makeRevive))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'crystal' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'ddiver' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
     elif suit.style.name == 'sgoat' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_sgoat_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_sgoat_death.ogg')
     elif suit.style.name == 'lgator' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
     elif suit.style.name == 'bellring' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
     elif suit.style.name == 'whunter' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'chairman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'ottoman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
     elif suit.style.name == 'fires' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'prethink' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
     elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'hrollers' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'chainsaw' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'chainsaw2' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'treek' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
     elif suit.style.name == 'mouthp' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
     elif suit.style.name == 'hroller2' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'rainmake' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'mplayer' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
     elif suit.style.name == 'psetter' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'videog' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'hroller' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'ambass':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
     elif suit.style.name == 'safesupervis' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'dold' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'dold' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
     elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'derrhand' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'derrhand' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'derrman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_derrman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_derrman_death.ogg')
     elif suit.style.name == 'fbed' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'arbit' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
     elif suit.style.name == 'cdirector' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
     elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
     elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'dopa':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'dopr':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'ubuster':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'radiog':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'djockey' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
     elif suit.style.name == 'ptjockey' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
     elif suit.style.name == 'pcrat' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'redd' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.isFemale and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.isFemaleSkelecog and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.isSkelecogDialogue:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     elif deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     else:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(Wait(1.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -488,7 +488,7 @@ def createAmbassadorReviveTrack(suit, battle):
     suitTrack.append(Func(suit.makeRevive))
     suitTrack.append(ActorInterval(suit, 'pie-small-react'))
     suitTrack.append(Func(suit.setNeutralAnimation))
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -540,10 +540,10 @@ def createSuitReviveRedd(suit, battle):
     suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
     suitTrack.append(Func(suit.loop, 'neutral-unstable'))
     if suit.style.name == 'redd' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     else:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(Wait(1.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -614,7 +614,7 @@ def createPromotionTrackPressurizer(suit, battle):
     suitTrack.append(Func(suit.show))
     suitTrack.append(Wait(3.0))
     suitTrack.append(Func(suit.showHpString, 'VIRTUALIZED!', 2))
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -653,7 +653,7 @@ def createGhostMentalityTrack(suit, battle):
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(ActorInterval(suit, 'slip-backward'))
     suitTrack.append(Func(suit.setNeutralAnimation))
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -698,7 +698,7 @@ def createOverpressuredInterval(suit, battle):
     suitTrack.append(Sequence(Func(suit.showHpStringSkeletonReviveOverpressured)))
     suitTrack.append(ActorInterval(suit, 'slip-backward'))
     suitTrack.append(Func(suit.setNeutralAnimation))
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -772,120 +772,120 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'crystal' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'ddiver' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
     elif suit.style.name == 'sgoat' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_sgoat_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_sgoat_death.ogg')
     elif suit.style.name == 'lgator' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
     elif suit.style.name == 'bellring' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
     elif suit.style.name == 'whunter' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'chairman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'ottoman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
     elif suit.style.name == 'fires' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'prethink' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
     elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'hrollers' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'chainsaw' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'chainsaw2' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'treek' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
     elif suit.style.name == 'mouthp' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
     elif suit.style.name == 'hroller2' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'rainmake' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
-    elif suit.style.name == 'cdirector' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
-    elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
-    elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
-    elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'mplayer' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
     elif suit.style.name == 'psetter' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'videog' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'hroller' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'ambass':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
     elif suit.style.name == 'safesupervis' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'dold' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'dold' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
     elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'derrhand' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'derrhand' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'derrman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_derrman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_derrman_death.ogg')
     elif suit.style.name == 'fbed' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'arbit' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+    elif suit.style.name == 'cdirector' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+    elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+    elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
+    elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'dopa':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'dopr':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'ubuster':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'radiog':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'djockey' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
     elif suit.style.name == 'ptjockey' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
     elif suit.style.name == 'pcrat' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'redd' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.isFemale and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.isFemaleSkelecog and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.isSkelecogDialogue:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     elif deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     else:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(Wait(1.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -974,7 +974,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
         suitTrack.append(Parallel(ActorInterval(suit, 'mplayer-kneel-into')))
-        deathSound = base.loadSfx('phase_11/audio/sfx/LB_capacitor_discharge_3.ogg')
+        deathSound = base.loader.loadSfx('phase_11/audio/sfx/LB_capacitor_discharge_3.ogg')
         suitTrack.append(Parallel(Func(suit.loop, 'mplayer-kneel-neutral'), LerpColorScaleInterval(suit, duration=1.25, colorScale=(0, 0, 0, 0),
                                    blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
         suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
@@ -987,7 +987,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
         suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2), headInterval))
-        deathSound = base.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
+        deathSound = base.loader.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
         suitTrack.append(Parallel(ActorInterval(suit, 'slip-forward', duration=2),
                                   LerpColorScaleInterval(suit, duration=1.0, colorScale=(0, 0, 0, 0),
                                                          blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
@@ -1044,118 +1044,120 @@ def createSuitDeathTrack(suit, battle):
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
     #suitTrack.append(Func(suit.hide))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+    elif suit.style.name == 'crystal' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'ddiver' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
     elif suit.style.name == 'sgoat' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_sgoat_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_sgoat_death.ogg')
     elif suit.style.name == 'lgator' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
     elif suit.style.name == 'bellring' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
     elif suit.style.name == 'whunter' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'chairman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
     elif suit.style.name == 'ottoman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
     elif suit.style.name == 'fires' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'prethink' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
     elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'hrollers' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'chainsaw' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'chainsaw2' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'treek' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
     elif suit.style.name == 'mouthp' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
     elif suit.style.name == 'hroller2' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'rainmake' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
-    elif suit.style.name == 'cdirector' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
-    elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
-    elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
-    elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'mplayer' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
     elif suit.style.name == 'psetter' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'videog' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'hroller' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
     elif suit.style.name == 'ambass':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
     elif suit.style.name == 'safesupervis' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
     elif suit.style.name == 'dold' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'dold' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
     elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
     elif suit.style.name == 'derrhand' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
     elif suit.style.name == 'derrhand' and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
     elif suit.style.name == 'derrman' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_derrman_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_derrman_death.ogg')
     elif suit.style.name == 'fbed' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'arbit' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+    elif suit.style.name == 'cdirector' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+    elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+    elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
+    elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'dopa':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'dopr':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'ubuster':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
     elif suit.style.name == 'radiog':
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'djockey' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
     elif suit.style.name == 'ptjockey' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
     elif suit.style.name == 'pcrat' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
     elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.style.name == 'redd' and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     elif suit.isFemale and not deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
     elif suit.isFemaleSkelecog and deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
     elif suit.isSkelecogDialogue:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     elif deathSuit.isSkeleton:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
     else:
-        spinningSound = base.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(Wait(1.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -1222,7 +1224,7 @@ def createSuitDeathTrackExplosiveForeman(suit, battle):
     suitTrack.append(ActorInterval(suit, 'lose', startTime=6))
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
     suitTrack.append(Func(suit.hide))
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -1301,7 +1303,7 @@ def createSuitHeadlessDeathTrack(suit, battle):
     suitTrack.append(Func(suit.hide))
     suitTrack.append(Func(suit.cleanupLoseActor))
     suitTrack.append(Func(suit.makeDead))
-    deathSound = base.loadSfx('phase_5/audio/sfx/COG_headless_death.ogg')
+    deathSound = base.loader.loadSfx('phase_5/audio/sfx/COG_headless_death.ogg')
     deathSoundTrack = Sequence(Wait(0), SoundInterval(deathSound, volume=0.6))
     suitIndex = battle.activeSuits.index(suit)
     if suit.getExecutive() or suit.getGovernaught():
@@ -1335,7 +1337,7 @@ def createSuitWreckingDeathTrack(suit, battle):
     removeTrainTrack(suit, battle, suitTrack)
     deathSuit = suit
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
-    deathSound = base.loadSfx('phase_5/audio/sfx/AA_trap_wreckingball_%s.ogg' % random.randint(1, 3))
+    deathSound = base.loader.loadSfx('phase_5/audio/sfx/AA_trap_wreckingball_%s.ogg' % random.randint(1, 3))
     deathSoundTrack = Sequence(Wait(0), SoundInterval(deathSound, volume=0.6))
     suitTrack.append(ActorInterval(suit, 'lose3', duration=4.0))
     suitTrack.append(Func(suit.hide))
@@ -1376,7 +1378,7 @@ def createSuitCrashTrack(suit, battle):
     #crashSoundEffects = []
     #for sound in crashSounds:
         #crashSoundEffects.append(globalBattleSoundCache.getSound(sound))
-    soundTrack = base.loadSfx('phase_5/audio/sfx/drop_react.ogg')
+    soundTrack = base.loader.loadSfx('phase_5/audio/sfx/drop_react.ogg')
     deathSoundTrack = Sequence(Wait(0), SoundInterval(soundTrack, volume=1.0))
     hasAnimatedHead = False
     for headPart in suit.animatedHeadParts:
@@ -1427,7 +1429,7 @@ def midairSuitExplodeTrack(suit, battle):
     suitTrack.append(Func(avatarHide, suit))
     suitTrack.append(Func(suit.cleanupLoseActor))
     suitTrack.append(Func(suit.makeDead))
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(Wait(0.5), SoundInterval(deathSound, volume=0.8))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
@@ -1556,7 +1558,7 @@ def shortCircuitTrack(suit, battle):
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.3, 0.3, 0.3)
         smoke.setScale(0.75, 1, 1)
-        smoke.setTransparency(1)
+        #smoke.setTransparency(1)
         smoke.setTwoSided(True)
         smoke.setBillboardPointEye()
         actorNode = suit.find('**/__Actor_modelRoot')
@@ -1590,7 +1592,7 @@ def shortCircuitTrack(suit, battle):
         explode = globalPropPool.getProp('dust2')
         explode.setTwoSided(True)
         explode.setColor(0.251, 0.251, 0.251, 1)
-        explode.setTransparency(1)
+       # explode.setTransparency(1)
         explode.setBillboardPointWorld(2)
         explodeTrack = Sequence(Wait(0.3))
         explodeTrack.append(
@@ -1601,7 +1603,7 @@ def shortCircuitTrack(suit, battle):
         explode2 = globalPropPool.getProp('dust2')
         explode2.setTwoSided(True)
         explode2.setColor(0.251, 0.251, 0.251, 1)
-        explode2.setTransparency(1)
+        #explode2.setTransparency(1)
         explode2.setBillboardPointWorld(2)
         explodeTrack2 = Sequence(Wait(.15))
         explodeTrack2.append(
@@ -1612,7 +1614,7 @@ def shortCircuitTrack(suit, battle):
         explode3 = globalPropPool.getProp('dust2')
         explode3.setTwoSided(True)
         explode3.setColor(0.251, 0.251, 0.251, 1)
-        explode3.setTransparency(1)
+       # explode3.setTransparency(1)
         explode3.setBillboardPointWorld(2)
         explodeTrack3 = Sequence(Wait(.45))
         explodeTrack3.append(
@@ -1622,7 +1624,7 @@ def shortCircuitTrack(suit, battle):
         explode4 = globalPropPool.getProp('dust2')
         explode4.setTwoSided(True)
         explode4.setColor(0.251, 0.251, 0.251, 1)
-        explode4.setTransparency(1)
+        #explode4.setTransparency(1)
         explode4.setBillboardPointWorld(2)
         explodeTrack4 = Sequence(Wait(.6))
         explodeTrack4.append(
@@ -1632,7 +1634,7 @@ def shortCircuitTrack(suit, battle):
         explode5 = globalPropPool.getProp('dust2')
         explode5.setTwoSided(True)
         explode5.setColor(0.251, 0.251, 0.251, 1)
-        explode5.setTransparency(1)
+       # explode5.setTransparency(1)
         explode5.setBillboardPointWorld(2)
         explodeTrack5 = Sequence()
         explodeTrack5.append(
@@ -1672,7 +1674,7 @@ def shortCircuitTrack2(suit, battle):
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.3, 0.3, 0.3)
         smoke.setScale(0.75, 1, 1)
-        smoke.setTransparency(1)
+       # smoke.setTransparency(1)
         smoke.setTwoSided(True)
         smoke.setBillboardPointEye()
         actorNode = suit.find('**/__Actor_modelRoot')
@@ -1706,7 +1708,7 @@ def shortCircuitTrack2(suit, battle):
         explode = globalPropPool.getProp('dust2')
         explode.setTwoSided(True)
         explode.setColor(0.251, 0.251, 0.251, 1)
-        explode.setTransparency(1)
+        #explode.setTransparency(1)
         explode.setBillboardPointWorld(2)
         explodeTrack = Sequence(Wait(0.3))
         explodeTrack.append(
@@ -1717,7 +1719,7 @@ def shortCircuitTrack2(suit, battle):
         explode2 = globalPropPool.getProp('dust2')
         explode2.setTwoSided(True)
         explode2.setColor(0.251, 0.251, 0.251, 1)
-        explode2.setTransparency(1)
+        #explode2.setTransparency(1)
         explode2.setBillboardPointWorld(2)
         explodeTrack2 = Sequence(Wait(.15))
         explodeTrack2.append(
@@ -1728,7 +1730,7 @@ def shortCircuitTrack2(suit, battle):
         explode3 = globalPropPool.getProp('dust2')
         explode3.setTwoSided(True)
         explode3.setColor(0.251, 0.251, 0.251, 1)
-        explode3.setTransparency(1)
+       # explode3.setTransparency(1)
         explode3.setBillboardPointWorld(2)
         explodeTrack3 = Sequence(Wait(.45))
         explodeTrack3.append(
@@ -1738,7 +1740,7 @@ def shortCircuitTrack2(suit, battle):
         explode4 = globalPropPool.getProp('dust2')
         explode4.setTwoSided(True)
         explode4.setColor(0.251, 0.251, 0.251, 1)
-        explode4.setTransparency(1)
+        #explode4.setTransparency(1)
         explode4.setBillboardPointWorld(2)
         explodeTrack4 = Sequence(Wait(.6))
         explodeTrack4.append(
@@ -1748,7 +1750,7 @@ def shortCircuitTrack2(suit, battle):
         explode5 = globalPropPool.getProp('dust2')
         explode5.setTwoSided(True)
         explode5.setColor(0.251, 0.251, 0.251, 1)
-        explode5.setTransparency(1)
+      #  explode5.setTransparency(1)
         explode5.setBillboardPointWorld(2)
         explodeTrack5 = Sequence()
         explodeTrack5.append(
@@ -1759,7 +1761,7 @@ def shortCircuitTrack2(suit, battle):
 
 def createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits):
     suitTracks = Parallel()
-    soundTrack = base.loadSfx('phase_5/audio/sfx/ENC_cogjump_to_side.ogg')
+    soundTrack = base.loader.loadSfx('phase_5/audio/sfx/ENC_cogjump_to_side.ogg')
     suitDodgeList, sidestepAnim = avatarDodge(leftSuits, rightSuits, 'sidestep-left', 'sidestep-right')
     for s in suitDodgeList:
         suitTracks.append(Sequence(ActorInterval(s, sidestepAnim),  Func(s.setNeutralAnimationDrop)))

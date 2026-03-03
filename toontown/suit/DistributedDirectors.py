@@ -45,7 +45,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         FSM.FSM.__init__(self, 'DistributedDirectors')
         self.bossDamage = 0
         self.bossMaxDamage = ToontownGlobals.BossbotBossMaxDamage
-        self.elevatorType = ElevatorConstants.ELEVATOR_DIRECTORS
+        self.elevatorType = ElevatorConstants.ELEVATOR_BB
         self.resistanceToon = None
         self.resistanceToonOnstage = 0
         self.battleANode.setPosHpr(*ToontownGlobals.WaiterBattleAPosHpr)
@@ -128,12 +128,13 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         overtimeTwoClubSequence = Sequence(self.bossClub.colorScaleInterval(0.1, colorScale=VBase4(1, 0, 0, 1)), self.bossClub.colorScaleInterval(0.3, colorScale=VBase4(1, 1, 1, 1)))
         self.bossClubIntervals = [overtimeOneClubSequence, overtimeTwoClubSequence]
         self.rightHandJoint = self.find('**/joint17')
-        self.setPosHpr(*ToontownGlobals.BossbotBossBattleOnePosHpr)
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.reparentTo(render)
         self.toonUpSfx = loader.loadSfx('phase_11/audio/sfx/LB_toonup.ogg')
         self.warningSfx = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_grunt.ogg')
         self.swingClubSfx = loader.loadSfx('phase_5/audio/sfx/SA_hardball.ogg')
         self.moveBossTaskName = 'CEOMoveTask'
+        self.chandeliers = []
 
     def disable(self):
         global OneBossCog
@@ -172,7 +173,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
             elevatorModel = loader.loadModel('phase_12/models/bossbotHQ/BB_Elevator')
         elevatorModel.reparentTo(self.elevatorEntrance)
         self.setupElevator(elevatorModel)
-        #self.banquetDoor = self.geom.find('**/door3')
+        self.banquetDoor = self.geom.find('**/door3')
         plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, -50)))
         planeNode = CollisionNode('dropPlane')
         planeNode.addSolid(plane)
@@ -185,6 +186,16 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.phaseFourMusic = base.loader.loadMusic('phase_12/audio/bgm/BossBot_CEO_v2.ogg')
         self.pickupFoodSfx = loader.loadSfx('phase_6/audio/sfx/SZ_MM_gliss.ogg')
         self.explodeSfx = loader.loadSfx('phase_4/audio/sfx/firework_distance_02.ogg')
+
+        for i in range(14):
+            self.chandeliers = loader.loadModel('phase_14/models/props/ExecutiveChandelier')
+            chandelierLocator = self.geom.find('**/TableLocator_%i' % (i + 1))
+            if chandelierLocator.isEmpty():
+                self.chandeliers.reparentTo(render)
+                self.chandeliers.setPos(0, 75, 75)
+            else:
+                self.chandeliers.reparentTo(chandelierLocator)
+                self.chandeliers.setZ(75)
 
     def unloadEnvironment(self):
         for belt in self.belts:
@@ -258,7 +269,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.resistanceToon.suit.loop('neutral')
         base.camera.setPos(0, 21, 7)
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.BossbotBossBattleOnePosHpr2)
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.loop('Ff_neutral')
         self.show()
         base.camLens.setMinFov(ToontownGlobals.CEOElevatorFov / (4.0 / 3.0))
@@ -313,7 +324,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return track
 
     def enterFrolic(self):
-        self.setPosHpr(*ToontownGlobals.BossbotBossBattleOnePosHpr)
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         DistributedBossCog.DistributedBossCog.enterFrolic(self)
         self.show()
 
@@ -350,8 +361,8 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         rToon = self.resistanceToon
         rToonStartPos = Point3(ToontownGlobals.BossbotRTPreTwoPosHpr[0], ToontownGlobals.BossbotRTPreTwoPosHpr[1], ToontownGlobals.BossbotRTPreTwoPosHpr[2])
         rToonEndPos = rToonStartPos + Point3(-40, 0, 0)
-        bossPos = Point3(ToontownGlobals.BossbotBossPreTwoPosHpr[0], ToontownGlobals.BossbotBossPreTwoPosHpr[1], ToontownGlobals.BossbotBossPreTwoPosHpr[2])
-        bossEndPos = Point3(ToontownGlobals.BossbotBossBattleOnePosHpr[0], ToontownGlobals.BossbotBossBattleOnePosHpr[1], ToontownGlobals.BossbotBossBattleOnePosHpr[2])
+        bossPos = Point3(0, 355, 0)
+        bossEndPos = Point3(0, 355, 0)
         tempNode = self.attachNewNode('temp')
         tempNode.setPos(0, -40, 18)
 
@@ -364,7 +375,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         def getCamRTPos(rNode = rNode):
             return rNode.getPos(render)
 
-        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPos, rToon, 0, 22, 6), Func(camera.setHpr, 0, 0, 0), Func(rToon.setChatAbsolute, TTL.BossbotRTWearWaiter, CFSpeech | CFTimeout), Wait(3.0), self.wearCogSuits(self.toonsA + self.toonsB, render, None, waiter=True), Func(rToon.clearChat), Func(self.setPosHpr, bossPos, Point3(0, 0, 0)), Parallel(LerpPosInterval(camera, 2, getCamBossPos)), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo1, CFSpeech | CFTimeout), Wait(3.0), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo2, CFSpeech | CFTimeout), Wait(3.0), Parallel(LerpPosHprInterval(camera, 2, getCamRTPos, Point3(10, -8, 0))), Func(self.setPos, bossEndPos), Func(self.clearChat), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood1, CFSpeech | CFTimeout), Wait(3.0), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood2, CFSpeech | CFTimeout), Wait(1.0), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(90, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), self.createWalkInInterval(), Func(rToon.clearChat), Func(self.__hideResistanceToon))
+        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPos, rToon, 0, 22, 6), Func(camera.setHpr, 0, 0, 0), Func(rToon.setChatAbsolute, TTL.BossbotRTWearWaiter, CFSpeech | CFTimeout), Wait(3.0), self.wearCogSuits(self.toonsA + self.toonsB, render, None, waiter=True), Func(rToon.clearChat), Func(self.setPosHpr, bossPos, Point3(0, 0, 0)), Parallel(LerpPosInterval(camera, 2, getCamBossPos)), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo1, CFSpeech | CFTimeout), Wait(3.0), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo2, CFSpeech | CFTimeout), Wait(3.0), Parallel(LerpHprInterval(self.banquetDoor, 2, Point3(0, 0, 0)), LerpPosHprInterval(camera, 2, getCamRTPos, Point3(10, -8, 0))), Func(self.setPos, bossEndPos), Func(self.clearChat), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood1, CFSpeech | CFTimeout), Wait(3.0), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood2, CFSpeech | CFTimeout), Wait(1.0), LerpHprInterval(self.banquetDoor, 2, Point3(120, 0, 0)), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(90, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), self.createWalkInInterval(), Func(rToon.clearChat), Func(self.__hideResistanceToon))
         return track
 
     def __clickedNameTag(self, avatar):
@@ -1050,7 +1061,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         elif attackCode == ToontownGlobals.BossCogAreaAttack:
             self.setDizzy(0)
             self.doAnimate('areaAttack', now=1)
-            siren = base.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
+            siren = base.loader.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
             seq = Sequence(Func(self.setChatAbsolute, 'I told you Toons to get off of those tables!', CFSpeech),
                            Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)), Wait(1),
                            Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)), Wait(1),

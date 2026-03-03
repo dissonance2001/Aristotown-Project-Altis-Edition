@@ -239,6 +239,10 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         #soakTracks.append(__soakSuit(suit, tContact))
         if suit.dna.name == 'redd':
             showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 1 ROUND", attackTrack=SQUIRT_TRACK, colorCode=1))
+        elif suit.isVirtual:
+            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 2 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+        elif suit.isSkeleton:
+            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 3 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
         else:
             showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 4 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
         value = hp
@@ -249,6 +253,10 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         updateHealthBar = Func(suit.updateHealthBar, value)
         if suit.dna.name == 'redd':
             soakSuit = (Func(suit.makeSoaked, 1))
+        elif suit.isVirtual:
+            soakSuit = (Func(suit.makeSoaked, 1))
+        elif suit.isSkeleton:
+            soakSuit = (Func(suit.makeSoaked, 2))
         else:
             soakSuit = (Func(suit.makeSoaked, 3))
         suitTrack.append(Func(suit.setSoaked, 1))

@@ -393,6 +393,8 @@ def __throwPie(throw, delay, hitCount, npcs):
         pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
         pieTrack.append(splatShow)
         if toon.getTrackBonusLevel(THROW_TRACK) > 1:
+            pieTrack.append(Func(__healToon, toon, int(math.ceil(hp / 4))))
+        else:
             pieTrack.append(Func(__healToon, toon, int(math.ceil(hp / 5))))
         if not suit.isVirtual:
             pieTrack.append(splatTexture)

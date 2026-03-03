@@ -78,7 +78,7 @@ class DistributedRainManager(DistributedWeatherMGR):
         self.rainRender.setBin('fixed', 1)
         self.rain.start(camera, self.rainRender)
 
-        self.rainSound = base.loadSfx('phase_12/audio/sfx/CHQ_rain_ambient.ogg')
+        self.rainSound = base.loader.loadSfx('phase_12/audio/sfx/CHQ_rain_ambient.ogg')
         base.playSfx(self.rainSound, looping = 1, volume = 0.25)
 
         self.currentWeather = 0
@@ -95,9 +95,9 @@ class DistributedRainManager(DistributedWeatherMGR):
         self.rain.start(camera, self.rainRender)
 
         # Winter time stuff
-        self.wind1Sound = base.loadSfx('phase_8/audio/sfx/SZ_TB_wind_1.ogg')
-        self.wind2Sound = base.loadSfx('phase_8/audio/sfx/SZ_TB_wind_2.ogg')
-        self.wind3Sound = base.loadSfx('phase_8/audio/sfx/SZ_TB_wind_3.ogg')
+        self.wind1Sound = base.loader.loadSfx('phase_8/audio/sfx/SZ_TB_wind_1.ogg')
+        self.wind2Sound = base.loader.loadSfx('phase_8/audio/sfx/SZ_TB_wind_2.ogg')
+        self.wind3Sound = base.loader.loadSfx('phase_8/audio/sfx/SZ_TB_wind_3.ogg')
         taskMgr.add(self.snowWindSoundTask, 'snowWind')
 
         self.currentWeather = 0
@@ -131,8 +131,8 @@ class DistributedRainManager(DistributedWeatherMGR):
         self.rainRender.setDepthWrite(0)
         self.rainRender.setBin('fixed', 1)
         self.rain.start(camera, self.rainRender)
-        self.rainSound = base.loadSfx('phase_12/audio/sfx/CHQ_rain_ambient.ogg')
-        self.thunderSound = base.loadSfx('phase_6/audio/sfx/storm_lightning.ogg')
+        self.rainSound = base.loader.loadSfx('phase_12/audio/sfx/CHQ_rain_ambient.ogg')
+        self.thunderSound = base.loader.loadSfx('phase_6/audio/sfx/storm_lightning.ogg')
         base.playSfx(self.rainSound, looping = 1, volume = 0.3)
 
         self.currentWeather = 0

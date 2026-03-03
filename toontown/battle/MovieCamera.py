@@ -958,7 +958,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'CaseManagerLegalBindings':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'CaseManagerLegalBindings2':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        if not suit.isSkeleton:
+            camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                     motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                     heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+
+        else:
+            camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                     motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                     moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                     heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == 'CaseManagerLegallyBound':
         if attackDuration > 2:
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
@@ -1138,7 +1147,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'WiretapperCollectCallDamage':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'WiretapperBusySignal':
-        camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)))
+        camTrack.append(Sequence(heldShot(10, 0, 10, 115, -30, 0, 1.5), randomActorShot(suit, battle, 1.0, 'suit'), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 2.5)))
     elif name == 'WiretapperGagBan':
         if attackDuration > 2:
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
@@ -1207,9 +1216,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'AmbassadorManagerialProtection':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AmbassadorManagerialProtectionImmunity':
-        camTrack.append(defaultCamera(openShotDuration=2.25))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2, attackDuration=2.0), heldShot(0, -60, 20, 0, -20, 0, attackDuration - 2)))
     elif name == 'AmbassadorMulligan':
-        camTrack.append(defaultCamera(openShotDuration=2.25))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2, attackDuration=2.0), heldShot(0, -60, 20, 0, -20, 0, attackDuration - 2)))
     # safety supervisor cheats
     elif name == 'SafetyOverpressured':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),

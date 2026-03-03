@@ -476,6 +476,7 @@ ValidStatusConditions = (
     'groundbreakercalculator',
     'costscalculator',
     'insurancecalculator',
+    'insurancecalculator2',
     'snappedcalculator',
     'sanctioncalculator',
     'bindingscalculator',
@@ -961,4 +962,8 @@ ValidStatusConditions = (
     'cogSpawn',
     'alreadyCogSpawn2',
     'governaughtBoost',
+    'wiretapperHit',
+    'wiretapperHit2',
+    'alreadyBeginning',
+    'brokenconnnectionCooldown',
 )

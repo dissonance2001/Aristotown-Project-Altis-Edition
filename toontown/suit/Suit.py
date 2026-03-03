@@ -12,6 +12,7 @@ from direct.interval.IntervalGlobal import *
 from toontown.battle import BattleParticles
 from direct.particles import ParticleEffect
 from direct.showutil import Effects
+from toontown.battle.BattleProps import *
 from toontown.battle import SuitBattleGlobals
 from toontown.nametag import NametagGlobals
 from direct.task.Task import Task
@@ -119,7 +120,7 @@ chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-ju
 chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('neutral', 'neutral-override', 4))
 phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4),('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
 bkeeper = (('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
-wtapper = (('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
+wtapper = (('throttletwo', 'throttletwo', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
 ambass = (('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap2', 4))
 
 # Sellbots
@@ -1252,6 +1253,8 @@ class Suit(Avatar.Avatar):
         self.damageDownMult = 0
         self.isDamageReduction = 0
         self.isDamageDown = 0
+        self.isCollectCall = 0
+        self.collectCallMult = 0
         self.isSoaked = 0
         self.isZapped = 0
         self.actuallySoaked = 0
@@ -1334,6 +1337,7 @@ class Suit(Avatar.Avatar):
         self.isLured = 0
         self.isPhase3 = 0
         self.isDesperation = 0
+        self.desperationMult = 0
         self.isImmune = 0
         self.isLitigationManager = 0
         self.isDead = 0
@@ -6588,6 +6592,12 @@ class Suit(Avatar.Avatar):
     def makeDesperation(self, elite=False):
         self.isDesperation = 1
 
+    def setDesperation(self, num):
+        self.desperationMult = num
+
+    def getDesperation(self):
+        return self.desperationMult
+
     def getSoakRounds(self):
         return self.isSoaked
 
@@ -6993,6 +7003,81 @@ class Suit(Avatar.Avatar):
     def makeAngry(self, num):
         self.isAngry = num
         self.isShielding = 0
+
+    def makeCollectCall(self):
+        self.isCollectCall = 1
+
+    def setCollectCall(self, num):
+        self.collectCallMult = num
+        # ---- CLEANUP ----
+        if hasattr(self, "knifeTrack") and self.knifeTrack:
+            self.knifeTrack.pause()
+            self.knifeTrack.finish()
+            self.knifeTrack = None
+
+        if hasattr(self, "knifePivot") and not self.knifePivot.isEmpty():
+            self.knifePivot.removeNode()
+
+        from math import pi, cos, sin
+
+        self.collectCallMult = max(1, num)
+        totalKnives = (self.collectCallMult / 5)
+
+        radius = 1.5
+        height = self.height
+
+        # Shared pivot (orbit axis)
+        self.knifePivot = self.attachNewNode("knifePivot")
+        self.knifePivot.setZ(height)
+
+        knifeIntervals = []
+
+        for i in range(totalKnives):
+
+            # Load correct model
+            knife = globalPropPool.getProp(random.choice(('10dollar', '1dollar', '5dollar', '50dollar')))
+            knife.setTwoSided(True)
+            knife.setScale(1)
+
+            knife.reparentTo(self.knifePivot)
+
+            # Even spacing
+            angle = (2 * pi / totalKnives) * i
+            knife.setPos(cos(angle) * radius,
+                         sin(angle) * radius,
+                         0)
+
+            # Match original orientation
+            knife.setHpr(0, 270, 0)
+
+            # Individual knife spin (same as your first knife)
+            spin = LerpHprInterval(
+                knife,
+                4.0,
+                VBase3(360.0, 270.0, 0.0),
+                startHpr=VBase3(0.0, 270.0, 0.0)
+            )
+
+            knifeIntervals.append(spin)
+
+        # Pivot rotation (orbit)
+        orbit = LerpHprInterval(
+            self.knifePivot,
+            4.0,
+            VBase3(360, 0, 0),
+            startHpr=VBase3(0, 0, 0)
+        )
+
+        # Run everything together
+        self.knifeTrack = Parallel(
+            orbit,
+            *knifeIntervals
+        )
+
+        self.knifeTrack.loop()
+
+    def getCollectCall(self):
+        return self.collectCallMult
 
     def getEnrageCounter(self):
         return self.isAngry

@@ -19,8 +19,8 @@ class TSHoodAI(HoodAI.HoodAI):
     def startup(self):
         HoodAI.HoodAI.startup(self)
 
-        if simbase.config.GetBool('want-minigames', True):
-            self.createTrolley()
+        # if simbase.config.GetBool('want-minigames', True):
+        #     self.createTrolley()
         if simbase.config.GetBool('want-classic-chars', True):
             if simbase.config.GetBool('want-minnie', True):
                 self.createClassicChar()
@@ -34,10 +34,10 @@ class TSHoodAI(HoodAI.HoodAI):
                 self.air)
             self.WinterCarolingTargetManager.generateWithRequired(4614)
 
-    def createTrolley(self):
-        self.trolley = DistributedTrolleyAI.DistributedTrolleyAI(self.air)
-        self.trolley.generateWithRequired(self.zoneId)
-        self.trolley.start()
+    # def createTrolley(self):
+    #     self.trolley = DistributedTrolleyAI.DistributedTrolleyAI(self.air)
+    #     self.trolley.generateWithRequired(self.zoneId)
+    #     self.trolley.start()
 
     def createClassicChar(self):
         self.classicChar = DistributedMinnieAI.DistributedMinnieAI(self.air)

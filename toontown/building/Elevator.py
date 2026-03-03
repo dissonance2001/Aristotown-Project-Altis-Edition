@@ -33,7 +33,7 @@ class Elevator(StateData.StateData):
     def load(self):
         self.elevatorState.addChild(self.fsm)
         self.buttonModels = loader.loadModel('phase_3.5/models/gui/inventory_gui')
-        self.upButton = self.buttonModels.find('**//InventoryButtonUp')
+        self.upButton = self.buttonModels.find('**/InventoryButtonUp')
         self.downButton = self.buttonModels.find('**/InventoryButtonDown')
         self.rolloverButton = self.buttonModels.find('**/InventoryButtonRollover')
 
@@ -48,6 +48,7 @@ class Elevator(StateData.StateData):
         del self.upButton
         del self.downButton
         del self.rolloverButton
+        return
 
     def enter(self):
         self.fsm.enterInitialState()
@@ -108,12 +109,11 @@ class Elevator(StateData.StateData):
         self.ignore('boardedElevator')
 
     def enterBoarded(self):
-        #self.enableExitButton()
-        pass
+        self.enableExitButton()
 
     def exitBoarded(self):
         self.cameraBoardTrack.finish()
-        #self.disableExitButton()
+        self.disableExitButton()
 
     def enableExitButton(self):
         self.exitButton = DirectButton(relief=None, text=TTLocalizer.ElevatorHopOff, text_fg=(0.9, 0.9, 0.9, 1), text_pos=(0, -0.23), text_scale=TTLocalizer.EexitButton, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(0.5, 0.5, 0.5, 1), image_scale=(20, 1, 11), pos=(0, 0, 0.8), scale=0.15, command=lambda self = self: self.fsm.request('requestExit'))
@@ -125,11 +125,12 @@ class Elevator(StateData.StateData):
             self.hopWarning.reparentTo(self.exitButton.stateNodePath[2])
         else:
             self.hopWarning = None
+        return
 
     def disableExitButton(self):
         if self.hopWarning:
             self.hopWarning.destroy()
-        #self.exitButton.destroy()
+        self.exitButton.destroy()
 
     def enterRequestExit(self):
         messenger.send('elevatorExitButton')

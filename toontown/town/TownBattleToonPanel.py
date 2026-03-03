@@ -1613,7 +1613,7 @@ class TownBattleToonPanel(DirectFrame):
         targetList = range(numTargets)
         targetList.reverse()
         try:
-            if 'confused' in self.avatar.battleConditions:
+            if self.avatar.confused:
                 marker = '-'
             elif self.avatar.trackBonusLevel[track] >= 1:
                 marker = 'O'

@@ -164,7 +164,9 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
     def loadAssets(self):
         self.tableGroup = loader.loadModel('phase_12/models/bossbotHQ/BanquetTableChairs')
         tableLocator = self.boss.geom.find('**/TableLocator_%d' % (self.index + 1))
-        if tableLocator.isEmpty():
+        if self.index == 6:
+            self.tableGroup.hide()
+        elif tableLocator.isEmpty():
             self.tableGroup.reparentTo(render)
             self.tableGroup.setPos(0, 75, 0)
         else:

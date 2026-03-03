@@ -1722,8 +1722,8 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
     def makeVictoryMovie(self):
         paperwork = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_big_stacks3')
         paperwork.setScale(3)
-        whistleSfx = base.loadSfx('phase_5/audio/sfx/incoming_whistleALT.ogg')
-        dropSfx = base.loadSfx('phase_5/audio/sfx/AA_drop_safe_miss.ogg')
+        whistleSfx = base.loader.loadSfx('phase_5/audio/sfx/incoming_whistleALT.ogg')
+        dropSfx = base.loader.loadSfx('phase_5/audio/sfx/AA_drop_safe_miss.ogg')
         myFromPos = Point3(ToontownGlobals.LawbotBossBattleThreePosHpr[0], ToontownGlobals.LawbotBossBattleThreePosHpr[1], ToontownGlobals.LawbotBossBattleThreePosHpr[2])
         paperwork.setPos(myFromPos)
         myToPos = Point3(myFromPos[0], myFromPos[1] + 60, myFromPos[2])

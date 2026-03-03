@@ -68,6 +68,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.lastZapLocalTime = 0
         self.numAttacks = 7
         self.tableIndex = 15
+        self.chandeliers = []
 
     def announceGenerate(self):
         global OneBossCog
@@ -125,8 +126,8 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         overtimeTwoClubSequence = Sequence(self.bossClub.colorScaleInterval(0.1, colorScale=VBase4(1, 0, 0, 1)), self.bossClub.colorScaleInterval(0.3, colorScale=VBase4(1, 1, 1, 1)))
         self.bossClubIntervals = [overtimeOneClubSequence, overtimeTwoClubSequence]
         self.rightHandJoint = self.find('**/joint17')
-        self.setPosHpr(0, 355, 0, 0, 0, 0)
         self.reparentTo(render)
+        self.setPosHpr(0, 300, 0, 0, 0, 0)
         self.toonUpSfx = loader.loadSfx('phase_11/audio/sfx/LB_toonup.ogg')
         self.warningSfx = loader.loadSfx('phase_5/audio/sfx/Skel_COG_VO_grunt.ogg')
         self.swingClubSfx = loader.loadSfx('phase_5/audio/sfx/SA_hardball.ogg')
@@ -183,6 +184,17 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.pickupFoodSfx = loader.loadSfx('phase_6/audio/sfx/SZ_MM_gliss.ogg')
         self.explodeSfx = loader.loadSfx('phase_4/audio/sfx/firework_distance_02.ogg')
 
+        for i in range(8):
+            self.chandeliers = loader.loadModel('phase_14/models/props/ExecutiveChandelier')
+            chandelierLocator = self.geom.find('**/TableLocator_%i' % (i + 1))
+            if chandelierLocator.isEmpty():
+                self.chandeliers.reparentTo(render)
+                self.chandeliers.setPos(0, 75, 100)
+            else:
+                self.chandeliers.reparentTo(chandelierLocator)
+                self.chandeliers.setZ(100)
+
+
     def unloadEnvironment(self):
         for belt in self.belts:
             if belt:
@@ -195,6 +207,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.golfSpots = {}
         self.geom.removeNode()
         del self.geom
+        del self.chandeliers
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
 
     def __makeResistanceToon(self):
@@ -250,13 +263,14 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.resistanceToon.suit.loop('neutral')
         base.camera.setPos(0, 21, 7)
         self.reparentTo(render)
-        self.setPosHpr(0, 355, 0, 0, 0, 0)
+        self.setPosHpr(0, 300, 0, 0, 0, 0)
         self.loop('Ff_neutral')
         self.show()
         base.camLens.setMinFov(ToontownGlobals.CEOElevatorFov / (4.0 / 3.0))
 
     def enterIntroduction(self):
-        self.setPosHpr(0, 355, 0, 0, 0, 0)
+        self.reparentTo(render)
+        self.setPosHpr(0, 300, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -268,7 +282,8 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
 
     def exitIntroduction(self):
-        self.setPosHpr(0, 355, 0, 0, 0, 0)
+        self.reparentTo(render)
+        self.setPosHpr(0, 300, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -278,7 +293,8 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.promotionMusic.stop()
 
     def makeIntroductionMovie(self, delayDeletes):
-        self.setPosHpr(0, 355, 0, 0, 0, 0)
+        self.reparentTo(render)
+        self.setPosHpr(0, 300, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -308,12 +324,14 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return track
 
     def enterFrolic(self):
-        self.setPosHpr(0, 355, 0, 0, 0, 0)
+        self.reparentTo(render)
+        self.setPosHpr(0, 300, 0, 0, 0, 0)
         DistributedBossCog.DistributedBossCog.enterFrolic(self)
         self.show()
 
     def enterPrepareBattleTwo(self):
-        self.setPosHpr(0, 355, 0, 0, 0, 0)
+        self.reparentTo(render)
+        self.setPosHpr(0, 300, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -414,7 +432,8 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 toon.show()
 
     def enterBattleTwo(self):
-        self.setPosHpr(0, 355, 0, 0, 0, 0)
+        self.reparentTo(render)
+        self.setPosHpr(0, 300, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -630,7 +649,8 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         DistributedBossCog.DistributedBossCog.enterBattleFour(self)
-        self.setPosHpr(0, 355, 0, 0, 0, 0)
+        self.reparentTo(render)
+        self.setPosHpr(0, 300, 0, 0, 0, 0)
         self.releaseToons(finalBattle=1)
         self.setToonsToNeutral(self.involvedToons)
         for toonId in self.involvedToons:
@@ -1030,7 +1050,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         elif attackCode == ToontownGlobals.BossCogAreaAttack:
             self.setDizzy(0)
             self.doAnimate('areaAttack', now=1)
-            siren = base.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
+            siren = base.loader.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
             seq = Sequence(Func(self.setChatAbsolute, 'I told you Toons to get off of those tables!', CFSpeech),
                            Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)), Wait(1),
                            Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)), Wait(1),

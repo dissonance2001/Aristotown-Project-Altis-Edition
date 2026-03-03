@@ -43,7 +43,7 @@ def doLures(lures):
 def showLureRounds(suit, battle, level):
     trapProp = suit.battleTrapProp
     currentBossHealth = -1
-    if suit.isAngry and suit.isDesperation:
+    if suit.isAngry and suit.isDesperation and suit.dna.name == 'sgoat':
         suit.showHpString("IMMUNE")
     elif suit.isImmune:
         suit.showHpString("IMMUNE")
@@ -637,7 +637,7 @@ def __lureHypnotize(lure, npcs = []):
 
 
 def __lureFiftyDollar(lure, npcs = []):
-    dollarProp = '10dollar'
+    dollarProp = '50dollar'
     return __createFishingPoleMultiTrack(lure, dollarProp, npcs=npcs)
 
 

@@ -449,10 +449,6 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         newSuit.initializePath()
         self.zoneChange(newSuit, None, newSuit.zoneId)
         newSuit.setCog(1)
-        if skelecog:
-            newSuit.setSkelecog(skelecog)
-        if self.skeleChance == 1 and not (newSuit.dna.name in SuitBattleGlobals.SpecialCogDict) and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'chairp':
-            newSuit.setSkelecog(1)
         if newSuit.dna.name in SuitBattleGlobals.SpecialCogDict:
             newSuit.setManager(1)
       #  if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not newSuit.getManager() and not newSuit.dna.name == 'cg' and not newSuit.isSkeleton:
@@ -477,6 +473,10 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             newSuit.setExecutive(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not newSuit.getManager() and not newSuit.getExecutive() and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'chairp' and not newSuit.dna.name == 'djockey' and not newSuit.dna.name == 'watchm' and not newSuit.dna.name == 'mh2':
             newSuit.setGovernaught(1)
+        if skelecog:
+            newSuit.setSkelecog(skelecog)
+        if self.skeleChance == 1 and not (newSuit.dna.name in SuitBattleGlobals.SpecialCogDict) and not newSuit.dna.name == 'autocad' and not newSuit.dna.name == 'ant' and not newSuit.dna.name == 'chairp':
+            newSuit.setSkelecog(1)
         newSuit.generateWithRequired(newSuit.zoneId)
         if revives is not None:
             newSuit.b_setSkeleRevives(revives)

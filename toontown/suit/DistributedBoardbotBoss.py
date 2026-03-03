@@ -8,6 +8,7 @@ from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToonPythonUtil import Functor
 from direct.showutil import Rope
 from direct.task import Task
+from toontown.building import ElevatorConstants
 import math
 from toontown.friends import FriendsListManager
 from toontown.nametag import NametagGlobals
@@ -52,6 +53,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def __init__(self, cr):
         DistributedBossCog.DistributedBossCog.__init__(self, cr)
         FSM.FSM.__init__(self, 'DistributedBoardbotBoss')
+        self.elevatorType = ElevatorConstants.ELEVATOR_BB
         self.cagedToonNpcId = None
         self.doobers = []
         self.dooberRequest = None

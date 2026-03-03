@@ -324,7 +324,7 @@ def headExplodeTrack(suit, battle):
     for part in headParts:
         explodeTrack.append(Func(MovieUtil.miscHide, part))
     suitTrack.append(explodeTrack)
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.8))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')

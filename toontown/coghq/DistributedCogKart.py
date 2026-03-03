@@ -22,7 +22,7 @@ class DistributedCogKart(DistributedElevatorExt.DistributedElevatorExt):
     def __init__(self, cr):
         DistributedElevatorExt.DistributedElevatorExt.__init__(self, cr)
         self.type = ElevatorConstants.ELEVATOR_COUNTRY_CLUB
-        self.kartModelPath = 'phase_12/models/bossbotHQ/Coggolf_cart3.bam'
+        self.kartModelPath = 'phase_12/models/bossbotHQ/ttr_m_ara_bhq_kartCGC.bam'
         self.leftDoor = None
         self.rightDoor = None
         self.fillSlotTrack = None

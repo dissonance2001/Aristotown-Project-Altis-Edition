@@ -26,9 +26,9 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
             state.addTransition('countryClubInterior')
 
         self.musicFile = random.choice(['phase_12/audio/bgm/Bossbot_Entry_v1.ogg', 'phase_12/audio/bgm/Bossbot_Entry_v2.ogg', 'phase_12/audio/bgm/Bossbot_Entry_v3.ogg'])
-        self.cogHQExteriorModelPath = 'phase_12/models/bossbotHQ/CogGolfHub'
+        self.cogHQExteriorModelPath = 'phase_12/models/bossbotHQ/ttr_m_ara_bhq_bossbotCourtyard'
         self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_DA_Lobby'
-        self.cogHQLobbyModelPath = 'phase_12/models/bossbotHQ/BossbotLobby'
+        self.cogHQLobbyModelPath = 'phase_12/models/bossbotHQ/ttr_m_ara_bhq_bossbotCountryClubLobby'
         self.geom = None
 
     def load(self, zoneId):
@@ -60,12 +60,6 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
         if self.lightPost6:
             self.lightPost6.removeNode()
             self.lightPost6 = None
-        if self.lightPost7:
-            self.lightPost7.removeNode()
-            self.lightPost7 = None
-        if self.lightPost8:
-            self.lightPost8.removeNode()
-            self.lightPost8 = None
         CogHQLoader.CogHQLoader.unloadPlaceGeom(self)
 
     def loadPlaceGeom(self, zoneId):
@@ -76,53 +70,43 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.helicopter = globalPropPool.getProp('CogNationChopper')
             self.helicopter.loop('CogNationChopper')
             self.helicopter.reparentTo(render)
-            self.helicopter.setHpr(868.959, 0, 0)  # Adjust position
-            self.helicopter.setPos(29.3427, -51.9375, 0.025)
+            self.helicopter.setHpr(90, 0, 0)  # Adjust position
+            self.helicopter.setPos(-167.277, 33.2723, 3.9249)
             self.helicopter.setScale(0.75)
             self.lightPost = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost.reparentTo(render)
-            self.lightPost.setHpr(629.967, 0, 0)  # Adjust position
-            self.lightPost.setPos(84.8929, 154.228, 0.025)
+            self.lightPost.setHpr(899.728, 0, 0)  # Adjust position
+            self.lightPost.setPos(-140.322, -63.0132, 3.92496)
             self.lightPost.setScale(2.0)
             self.lightPost2 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost2.reparentTo(render)
-            self.lightPost2.setHpr(450.51, 0, 0) # Adjust position
-            self.lightPost2.setPos(40.4167, 154.254, 0.025)
+            self.lightPost2.setHpr(1082.18, 0, 0) # Adjust position
+            self.lightPost2.setPos(-140.424, -26.7279, 3.92527)
             self.lightPost2.setScale(2.0)
             self.lightPost3 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost3.reparentTo(render)
-            self.lightPost3.setHpr(449.49, 0, 0) # Adjust position
-            self.lightPost3.setPos(52.6975, 179.591, 0.025)
+            self.lightPost3.setHpr(1079.88, 0, 0) # Adjust position
+            self.lightPost3.setPos(-140.368, 62.8114, 3.92538)
             self.lightPost3.setScale(2.0)
             self.lightPost4 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost4.reparentTo(render)
-            self.lightPost4.setHpr(627.188, 0, 0) # Adjust position
-            self.lightPost4.setPos(73.5187, 179.406, 0.025)
+            self.lightPost4.setHpr(1259.28, 0, 0) # Adjust position
+            self.lightPost4.setPos(-140.235, 26.7049, 3.92398)
             self.lightPost4.setScale(2.0)
             self.lightPost5 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost5.reparentTo(render)
-            self.lightPost5.setHpr(629.492, 0, 0) # Adjust position
-            self.lightPost5.setPos(73.0005, 211.505, 0.025)
+            self.lightPost5.setHpr(1445.4, 0, 0) # Adjust position
+            self.lightPost5.setPos(290.832, 9.65186, 0.0249996)
             self.lightPost5.setScale(2.0)
             self.lightPost6 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
             self.lightPost6.reparentTo(render)
-            self.lightPost6.setHpr(447.533, 0, 0) # Adjust position
-            self.lightPost6.setPos(52.7881, 212.166, 0.0255188)
+            self.lightPost6.setHpr(1624.35, 0, 0) # Adjust position
+            self.lightPost6.setPos(292.982, -8.64156, 0.024999)
             self.lightPost6.setScale(2.0)
-            self.lightPost7 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            self.lightPost7.reparentTo(render)
-            self.lightPost7.setHpr(38.4983, 0, 0) # Adjust position
-            self.lightPost7.setPos(74.6562, 131.042, 0.275)
-            self.lightPost7.setScale(2.0)
-            self.lightPost8 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            self.lightPost8.reparentTo(render)
-            self.lightPost8.setHpr(-49.6244, 0, 0) # Adjust position
-            self.lightPost8.setPos(51.0679, 129.965, 0.275)
-            self.lightPost8.setScale(2.0)
             self.geom = loader.loadModel(self.cogHQExteriorModelPath)
             gzLinkTunnel = self.geom.find('**/LinkTunnel1')
             gzLinkTunnel.setName('linktunnel_oz_6320_DNARoot')
-            self.makeSigns()
+            #self.makeSigns()
             top = self.geom.find('**/TunnelEntrance')
             origin = top.find('**/tunnel_origin')
             origin.setH(-33.33)

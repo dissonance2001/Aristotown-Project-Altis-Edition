@@ -141,7 +141,6 @@ class SuitPlannerInteriorAI:
         dna.newSuitRandom(suitType, bldgTrack)
         suit.dna = dna
         suit.setLevel(suitLevel)
-        suit.setCog(1)
         if suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             suit.setManager(1)
         #if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.isSkeleton:
@@ -164,19 +163,20 @@ class SuitPlannerInteriorAI:
             suit.setExecutive(1)
         if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'djockey' and not suit.dna.name == 'autocad' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
             suit.setGovernaught(1)
+        suit.setCog(1)
         return flags
 
     def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, revives = 0, skelecogChance=0, revivesTwoChance=0, revivesThreeChance=0):
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
         #skel, exe = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
         flags = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
-        if flags & IFSkelecog:
-            newSuit.setSkelecog(1)
         if random.randint(0, 100) <= revivesThreeChance:
             newSuit.setSkeleRevives(2)
         elif random.randint(0, 100) <= revivesTwoChance:
             newSuit.setSkeleRevives(1)
         elif random.randint(0, 100) <= skelecogChance:
+            newSuit.setSkelecog(1)
+        elif flags & IFSkelecog:
             newSuit.setSkelecog(1)
         newSuit.setSkeleRevives(revives)
         newSuit.generateWithRequired(suitZone)
@@ -524,7 +524,7 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'pres':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0, 15, 10, 5)
+            suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0, 100, 10, 5)
             reserveSuits.append(suit)
         if specialCode == 'bdlit':
             # litigation
@@ -601,19 +601,34 @@ class SuitPlannerInteriorAI:
             suit = self.__genSuitObject(self.zoneId, 27, 'm', random.randint(27, 36), 0)
             reserveSuits.append(suit)
         if specialCode == 'sil1':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((27, 29)), 0)
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 27, 0)
             reserveSuits.append(suit)
         if specialCode == 'sil2':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((28, 30)), 0)
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 28, 0)
             reserveSuits.append(suit)
         if specialCode == 'sil3':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((31, 32)), 0)
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 29, 0)
             reserveSuits.append(suit)
         if specialCode == 'sil4':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((33, 34)), 0)
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 30, 0)
             reserveSuits.append(suit)
         if specialCode == 'sil5':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', random.choice((35, 36)), 0)
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 31, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil6':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 32, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil7':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 33, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil8':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 34, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil9':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 35, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil10':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 36, 0)
             reserveSuits.append(suit)
         if specialCode == 'videog':
             suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)

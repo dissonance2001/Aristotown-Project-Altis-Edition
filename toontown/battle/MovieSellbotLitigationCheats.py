@@ -1786,9 +1786,8 @@ def doContractEnforcement(attack):
         if not suit.dna.name == 'ubuster':
             suitTrack.append(Parallel(healSound, Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
                                            CFSpeech | CFTimeout)))
-        suitTrack.append(Func(suit.setNeutralAnimation))
         suitTrack.append(Func(battle.unSueSuit, suit))
-        suitTracks.append(Sequence(getSuitAnimTrack(attack, playRate=1.5), Func(suit.setNeutralAnimation)))
+        suitTracks.append(Sequence(getSuitAnimTrack(attack, playRate=1.5)))
         suitTracks.append(Wait(6.5))
     posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
     knifeTracks = Parallel()

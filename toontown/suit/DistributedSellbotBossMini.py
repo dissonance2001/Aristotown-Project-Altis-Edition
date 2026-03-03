@@ -14,6 +14,7 @@ from toontown.nametag import NametagGlobals
 from toontown.nametag import NametagGroup
 from pandac.PandaModules import *
 import random
+from toontown.battle import BattleProps
 from toontown.suit import DistributedBossCog
 from toontown.suit import SuitDNA
 from toontown.battle import BattleBase
@@ -70,6 +71,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.rampC = None
         self.strafeInterval = None
         self.onscreenMessage = None
+        self.helicopter = None
         self.toonMopathInterval = []
         self.nerfed = ToontownGlobals.SELLBOT_NERF_HOLIDAY in base.cr.newsManager.getHolidayIdList()
         self.localToonPromoted = True
@@ -428,10 +430,10 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         return seq
 
     def __makeBossDamageMovie(self):
-        startPos = Point3(ToontownGlobals.SellbotBossBattleTwoPosHpr[0], ToontownGlobals.SellbotBossBattleTwoPosHpr[1], ToontownGlobals.SellbotBossBattleTwoPosHpr[2])
-        startHpr = Point3(*ToontownGlobals.SellbotBossBattleThreeHpr)
-        bottomPos = Point3(*ToontownGlobals.SellbotBossBottomPos)
-        deathPos = Point3(*ToontownGlobals.SellbotBossDeathPos)
+        startPos = Point3(0, 60, 18)
+        startHpr = Point3(180, 0, 0)
+        bottomPos = Point3(0, -110, -6.5)
+        deathPos = Point3(0, -175, -6.5)
         self.setPosHpr(startPos, startHpr)
         bossTrack = Sequence()
         bossTrack.append(Func(self.loop, 'Fb_neutral'))
@@ -524,6 +526,11 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
     def loadEnvironment(self):
         DistributedBossCog.DistributedBossCog.loadEnvironment(self)
         self.geom = loader.loadModel('phase_9/models/cogHQ/BossRoomPOV')
+        self.helicopter = globalPropPool.getProp('CogNationChopper')
+        self.helicopter.reparentTo(self.geom)
+        self.helicopter.loop('CogNationChopper')
+        self.helicopter.setPosHpr(0, -100, 0, 180, 0, 0)
+        self.helicopter.setScale(1.0)
         self.rampA = self.geom.find('**/north_ramp')
         self.rampB = self.geom.find('**/west_ramp')
         self.rampC = self.geom.find('**/east_ramp')
@@ -564,6 +571,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         del self.rampA
         del self.rampB
         del self.rampC
+        del self.helicopter
 
     def __loadMopaths(self):
         self.toonsEnterA = Mopath.Mopath()
@@ -673,7 +681,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         DistributedBossCog.DistributedBossCog.enterElevator(self)
         self.setCageIndex(0)
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.setPosHpr(0, - 35, 0, - 90, 0, 0)
         self.happy = 1
         self.raised = 1
         self.forward = 1
@@ -687,7 +695,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
 
     def enterIntroduction(self):
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.setPosHpr(0, - 35, 0, - 90, 0, 0)
         self.stopAnimate()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         self.accept('clickedNametag', self.__clickedNameTag)
@@ -705,7 +713,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
     def enterBattleOne(self):
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
         self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.setPosHpr(0, - 35, 0, - 90, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -739,7 +747,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
     def __onToPrepareBattleTwo(self):
         self.disableToonCollision()
         self.unstickBoss()
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.setPosHpr(0, 60, 18, - 90, 0, 0)
         self.doneBarrier('RollToBattleTwo')
 
     def exitRollToBattleTwo(self):
@@ -761,7 +769,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.clearChat()
         self.cagedToon.clearChat()
         self.reparentTo(render)
-        self.reparentTo(render)
+        self.setPosHpr(0, 60, 18, - 90, 0, 0)
         self.setCageIndex(2)
         camera.reparentTo(render)
         camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
@@ -792,7 +800,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.accept('avatarDetails', self.__handleAvatarDetails)
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
-        self.setPosHpr(*ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.setPosHpr(0, 60, 18, - 90, 0, 0)
         self.clearChat()
         self.cagedToon.clearChat()
         self.releaseToons()
@@ -919,8 +927,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
     def enterNearVictory(self):
         self.cleanupIntervals()
         self.reparentTo(render)
-        self.setPos(*ToontownGlobals.SellbotBossDeathPos)
-        self.setHpr(*ToontownGlobals.SellbotBossBattleThreeHpr)
+        self.setPosHpr(0, -175, -6.5, 180, 0, 0)
         self.clearChat()
         self.cagedToon.clearChat()
         self.setCageIndex(4)
@@ -954,8 +961,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.cleanupIntervals()
         localAvatar.setCameraFov(ToontownGlobals.BossBattleCameraFov)
         self.reparentTo(render)
-        self.setPos(*ToontownGlobals.SellbotBossDeathPos)
-        self.setHpr(*ToontownGlobals.SellbotBossBattleThreeHpr)
+        self.setPosHpr(0, -175, -6.5, 180, 0, 0)
         self.clearChat()
         self.cagedToon.clearChat()
         self.setCageIndex(4)

@@ -609,8 +609,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damage': str(
                                                                                        int(damage)) + damageAppendStr,
                                                                                    'bonus': '\nMark Rounds: %i\nMarked Damage: %i%%\nSelf Heal: %i' % (
-                                                                                       ToontownBattleGlobals.AvMarkRounds[
-                                                                                           level], +ToontownBattleGlobals.AvMarkBoost, int(math.ceil(damage / 5))) + damageBonusStr,
+                                                                                       2, +ToontownBattleGlobals.AvMarkBoost, int(math.ceil(damage / 4))) + damageBonusStr,
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.42625)
@@ -620,12 +619,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        int(damage)) + damageAppendStr,
-                                                                                   'bonus': '\nMark Rounds: %i\nMarked Damage: %i%%' % (
-                                                                                       ToontownBattleGlobals.AvMarkRounds[
-                                                                                           level], +ToontownBattleGlobals.AvMarkBoost),
+                                                                                   'bonus': '\nMark Rounds: %i\nMarked Damage: %i%%\nSelf Heal: %i' % (
+                                                                                       1, +ToontownBattleGlobals.AvMarkBoost, int(math.ceil(damage / 5))),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
-            self.detailCreditLabel.setPos(-0.22, 0, -0.39625)
+            self.detailCreditLabel.setPos(-0.22, 0, -0.42625)
         elif track == SOUND_TRACK and organicBonus:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(

@@ -722,17 +722,16 @@ def doDesperation2(attack):
         toonTrack = Parallel(Func(t.makeUnGagBan))
         toonTracks.append(toonTrack)
     notifyTracks = Sequence()
-    cameraTracks = Sequence()
-    makeDesperates = Parallel()
     makeDamageUps = Parallel()
-    notifyTrack = Sequence(Func(theSuit.showHpStringDesperation))
-    makeDesperate = Func(theSuit.makeDesperation)
-    makeDamageUp = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 40))
+    if theSuit.isDesperation:
+        notifyTrack = Sequence(Func(theSuit.showHpStringDesperationDamage))
+    else:
+        notifyTrack = Sequence(Func(theSuit.showHpStringDesperation))
+    makeDamageUp = Parallel(Func(theSuit.makeDesperation), Func(theSuit.checkDesperation, + 40))
     cameraTrack = Sequence(Wait(3.0))
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
-    makeDesperates.append(makeDesperate)
     makeDamageUps.append(makeDamageUp)
-    return Sequence(notifyTracks, toonTracks, makeDamageUps, makeDesperates)
+    return Sequence(notifyTracks, toonTracks, makeDamageUps)
 
 def doAbilityQueued(attack):
     theSuit = attack['suit']
@@ -840,7 +839,7 @@ def doMarkRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Parallel()
-    suitTrack.append(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2.25), Func(suit.splatClear), Func(suit.makeUnMarked), Func(suit.setNeutralAnimationDrop)))
+    suitTrack.append(Sequence(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2.25), Func(suit.splatClear), Func(suit.makeUnMarked)), Func(suit.setNeutralAnimationDrop)))
     for suit in battle.activeSuits:
         suitTrack.append(Func(suit.checkMarkRounds))
     return suitTrack

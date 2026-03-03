@@ -434,32 +434,32 @@ def loadDialog():
     deerDialogueFiles = ('AV_deer_short', 'AV_deer_med', 'AV_deer_long', 'AV_deer_question', 'AV_deer_exclaim', 'AV_deer_howl', 'AV_deer_indifferent')
     global DeerDialogueArray
     for file in deerDialogueFiles:
-        DeerDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
+        DeerDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 		
     beaverDialogFiles = ('AV_beaver_short', 'AV_beaver_med', 'AV_beaver_long', 'AV_beaver_question', 'AV_beaver_exclaim', 'AV_beaver_howl', 'AV_beaver_indifferent')
     global BeaverDialogueArray
     for file in beaverDialogFiles:
-        BeaverDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
+        BeaverDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 		
     gatorDialogFiles = ('AV_gator_short', 'AV_gator_med', 'AV_gator_long', 'AV_gator_question', 'AV_gator_exclaim', 'AV_gator_howl', 'AV_gator_indifferent')
     global AlligatorDialogueArray
     for file in gatorDialogFiles:
-        AlligatorDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
+        AlligatorDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 		
     foxDialogFiles = ('AV_fox_short', 'AV_fox_med', 'AV_fox_long', 'AV_fox_question', 'AV_fox_exclaim', 'AV_fox_howl', 'AV_fox_indifferent')
     global FoxDialogueArray
     for file in foxDialogFiles:
-        FoxDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
+        FoxDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
     batDialogFiles = ('AV_bat_short', 'AV_bat_med', 'AV_bat_long', 'AV_bat_question', 'AV_bat_exclaim', 'AV_bat_howl', 'AV_bat_indifferent')
     global BatDialogueArray
     for file in batDialogFiles:
-        BatDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
+        BatDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 		
     raccoonDialogFiles = ('AV_raccoon_short', 'AV_raccoon_med', 'AV_raccoon_long', 'AV_raccoon_question', 'AV_raccoon_exclaim', 'AV_raccoon_howl', 'AV_raccoon_indifferent')
     global RaccoonDialogueArray
     for file in raccoonDialogFiles:
-        RaccoonDialogueArray.append(base.loadSfx(loadPath + file + '.ogg'))
+        RaccoonDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
 
 def unloadDialog():
     global CatDialogueArray
@@ -625,7 +625,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.setTag('pieCode', str(ToontownGlobals.PieCodeToon))
         self.setFont(ToontownGlobals.getToonFont())
         self.soundChatBubble = base.loader.loadSfx('phase_3/audio/sfx/GUI_balloon_popup.ogg')
-        self.swimRunSfx = base.loadSfx('phase_4/audio/sfx/AV_footstep_runloop_water.ogg')
+        self.swimRunSfx = base.loader.loadSfx('phase_4/audio/sfx/AV_footstep_runloop_water.ogg')
         self.swimRunLooping = False
         self.animFSM = ClassicFSM('Toon', [State('off', self.enterOff, self.exitOff),
          State('neutral', self.enterNeutral, self.exitNeutral),

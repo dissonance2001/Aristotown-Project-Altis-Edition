@@ -424,7 +424,10 @@ def doSuitAttack(attack):
     elif name == 'CaseManagerLegalBindings':
         suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
     elif name == 'CaseManagerLegalBindings2':
-        suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
+        if not suit.isSkeleton:
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance2(attack)
+        else:
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanSkelecogInsurance2(attack)
     elif name == 'CaseManagerLegallyBound':
         suitTrack = MovieLawbotLitigationCheats.doLegallyBound(attack)
     elif name == 'CaseManagerCourtRecordBan':
@@ -501,7 +504,7 @@ def doSuitAttack(attack):
     elif name == 'WiretapperCollectCall2':
         suitTrack = MovieBossbotLitigationCheats.doVoicemail(attack)
     elif name == 'WiretapperCollectCallDamage':
-        suitTrack = MovieUniversalCheats.doSynergy(attack)
+        suitTrack = MovieBossbotLitigationCheats.doCollectCallDues(attack)
     elif name == 'WiretapperWiretapped':
         suitTrack = MovieBossbotLitigationCheats.doWiretapped(attack)
     elif name == 'WiretapperVoicemail':
@@ -511,7 +514,7 @@ def doSuitAttack(attack):
     elif name == 'WiretapperGagBan':
         suitTrack = MovieBossbotLitigationCheats.doCloseTheLoopNew(attack)
     elif name == 'WiretapperBusySignal':
-        suitTrack = MovieBossbotLitigationCheats.doCollectCallDamage(attack)
+        suitTrack = MovieBossbotLitigationCheats.doBusySignal(attack)
     #ambassador cheats
     elif name == 'AmbassadorHeadRoller':
         suitTrack = MovieBossbotLitigationCheats.doDamageUp1(attack)
@@ -1576,6 +1579,8 @@ def doSuitAttack(attack):
         elif name == 'UnionBusterUnionBusterDamage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AmbassadorMulligan':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'AmbassadorManagerialProtectionImmunity':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ArbitratorObjection':
             resetSuitTrack = Sequence(suitTrack2)
