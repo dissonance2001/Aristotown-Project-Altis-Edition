@@ -4358,7 +4358,7 @@ class BattleCalculatorAI:
             elif atkType['name'] == 'PowerhouseAbsorb':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'shielding', 1, 99, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'shielding', 1, 2, 'setBoth')
             elif atkType['name'] == 'PowerhouseSoakImmune':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
