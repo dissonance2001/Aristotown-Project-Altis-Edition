@@ -12092,16 +12092,6 @@ class BattleCalculatorAI:
                                             'freq': 0,
                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     self.battle.suitAttacks.append(attack)
-            if self.suitHasCondition(suitId, 'deadpower') and not self.suitHasCondition(suitId, 'dotfinished') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not \
-            self.battle.activeSuits[i].dna.name == 'phouse':
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'PowerhouseBurnDamage',  # Slow Burn for Managers when Powerhouse is dead
-                                                        'animName': 'nothing',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,
-                                                        'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'phouse':  # powerhouse
                 if self.TurnsElapsed % 1 == 0 and self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'dotfinished'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -12112,6 +12102,16 @@ class BattleCalculatorAI:
                                                             'freq': 0,
                                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     self.battle.suitAttacks.append(attack)
+            if self.suitHasCondition(suitId, 'deadpower') and not self.suitHasCondition(suitId, 'dotfinished') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not \
+            self.battle.activeSuits[i].dna.name == 'phouse':
+                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                        'name': 'PowerhouseBurnDamage',  # Slow Burn for Managers when Powerhouse is dead
+                                                        'animName': 'nothing',
+                                                        'hp': 0,
+                                                        'acc': 100,
+                                                        'freq': 0,
+                                                        'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                self.battle.suitAttacks.append(attack)
 
             # Gag Ban Retaliations & DOT
             if self.battle.activeSuits[i].dna.name == 'ambass':
@@ -12780,7 +12780,7 @@ class BattleCalculatorAI:
                 if self.suitHasCondition(suitId, 'explodingcalculator2') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'BookkeeperExplodingDocument', # Paper Rain
-                     'animName': 'magic3',
+                     'animName': 'throw-object',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,

@@ -1709,8 +1709,8 @@ def doAmbassadorPhase2(attack):
     suitTrackAnim.append(Func(theSuit.makeAmbassadorPhase3))
     suitTrackAnim.append(Func(theSuit.setNeutralAnimationDrop))
     suitTrackAnim.append(Sequence(Parallel(Func(theSuit.updateHealthBar, 0), getSuitAnimTrack(attack),
-                                  Func(theSuit.showHpString, "+50% Damage!"))),
-                                  Func(theSuit.setNeutralAnimationDrop))
+                                  Func(theSuit.showHpString, "+50% Damage!")),
+                                  Func(theSuit.setNeutralAnimationDrop)))
     suitTrackAnim.append(Wait(3))
     return Parallel(suitTrackAnim, soundTrack3)
 
