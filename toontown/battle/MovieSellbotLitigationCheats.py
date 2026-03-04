@@ -326,7 +326,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -373,7 +373,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         return Parallel(animTrack, indicatorTracks)
@@ -687,7 +687,7 @@ def doHighPressure(attack):
                 getThrowTrack(knife, toon.getPos(battle), 2.35, battle, -64.288),
                 LerpHprInterval(knife, 0.8, VBase3(720, 630, 720))
             ),
-            Func(MovieUtil.removeProp, knife)
+            Func(knife.removeNode)
         )
         knifeTracks.append(knifeTrack)
 
@@ -900,7 +900,7 @@ def doOverpressured(attack, ind):
             getThrowTrack(tnt, hitPoint, 1.5, battle, -30.288),
             LerpHprInterval(tnt, 0.8, VBase3(0, 0, 0)), LerpScaleInterval(tnt, 0, VBase3(1, 1, 1))),
         Parallel(LerpPosInterval(tnt, 0.5, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)), Sequence(Wait(0.25), LerpScaleInterval(tnt, 0.5, VBase3(0, 0, 0)))),
-        Func(MovieUtil.removeProp, tnt)
+        Func(tnt.removeNode)
     )
     propTracks.append(propTrack)
     flameTracks.append(flameTrack)
@@ -1143,7 +1143,7 @@ def doViolation(attack):
                                  LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
                                  Wait(1.5),
                                  LerpScaleInterval(cage, .25, MovieUtil.PNT3_ZERO),
-                                 Func(MovieUtil.removeProp, cage)
+                                 Func(cage.removeNode)
                                  )
         toonTrack = Sequence(
         Wait(2.5),
@@ -1184,7 +1184,7 @@ def doUnionCalculator(attack):
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
         ActorInterval(calculator, 'court-costs-calculator'),
-        Func(MovieUtil.removeProp, calculator)
+        Func(calculator.removeNode)
     )
     soundTrack = getSoundTrack('SA_calculating_costs.ogg')
     return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
@@ -1215,7 +1215,7 @@ def doUnionBuster(attack):
     cagePos = [Point3(toonPos.getX(), y, 40.0), toon.getHpr(battle)]
     smokeTrack = Sequence(Wait(0.6), Func(smoke.reparentTo, toon), Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                    LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
-                          Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(MovieUtil.removeProp, smoke))
+                          Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(smoke.removeNode))
     cagePropTrack = Sequence(
             getPropAppearTrack(cage, battle, cagePos, 0, scaleUpPoint=Point3(1.75), scaleUpTime=0), Parallel(cagePosition),
             Parallel(
@@ -1223,7 +1223,7 @@ def doUnionBuster(attack):
                 SoundInterval(base.loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_stomper_large.ogg'), duration=1.0)
             ,
             LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0), cage.posInterval(3, Point3(toonPos.getX(), y, 40), blendType='easeIn'),
-            Func(MovieUtil.removeProp, cage)
+            Func(cage.removeNode)
         )
     toonTrack = Sequence(
         Wait(.6),
@@ -1272,7 +1272,7 @@ def doUnionBusterDamage(attack):
         cagePos = [Point3(toonPos.getX(), y, 40.0), toon.getHpr(battle)]
         smokeTrack = Sequence(Wait(0.6), Func(smoke.reparentTo, toon), Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                    LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
-                          Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(MovieUtil.removeProp, smoke))
+                          Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(smoke.removeNode))
         cagePropTrack = Sequence(
             getPropAppearTrack(cage, battle, cagePos, 0, scaleUpPoint=Point3(1.75), scaleUpTime=0), Parallel(cagePosition),
             Parallel(
@@ -1280,7 +1280,7 @@ def doUnionBusterDamage(attack):
                 SoundInterval(base.loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_stomper_large.ogg'), duration=1.0)
             ,
             LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0), cage.posInterval(3, Point3(toonPos.getX(), y, 40), blendType='easeIn'),
-            Func(MovieUtil.removeProp, cage)
+            Func(cage.removeNode)
         )
         toonTrack = Sequence(
         Wait(.5),
@@ -1325,7 +1325,7 @@ def doUnionBust(attack):
         smokeTrack = Sequence(Wait(2.0), Func(smoke.reparentTo, targetSuit),
                               Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                        LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
-                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(MovieUtil.removeProp, smoke))
+                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(smoke.removeNode))
         cage = loader.loadModel('phase_9/models/cogHQ/square_stomper')
         cagePosition = LerpHprInterval(cage, 0, Point3(0, -90, 0))
         shaft = cage.find('**/shaft')
@@ -1342,7 +1342,7 @@ def doUnionBust(attack):
             SoundInterval(base.loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_stomper_large.ogg'), duration=1.0),
         Wait(1.5),
         LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0), cage.posInterval(3, Point3(targetSuitPos.getX(), y, 40), blendType='easeIn'),
-        Func(MovieUtil.removeProp, cage)
+        Func(cage.removeNode)
     )
         if not targetSuit.isContracted and not targetSuit.dna.name == 'ubuster' and not targetSuit.getManager():
             cagePropTracks.append(cagePropTrack)
@@ -1369,7 +1369,7 @@ def doUnionWages(attack):
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),
-        Func(MovieUtil.removeProp, calculator)
+        Func(calculator.removeNode)
     )
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
@@ -1421,7 +1421,7 @@ def doUnionWages2(attack):
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),
-        Func(MovieUtil.removeProp, calculator)
+        Func(calculator.removeNode)
     )
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
@@ -1473,7 +1473,7 @@ def doUnionWages3(attack):
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),
-        Func(MovieUtil.removeProp, calculator)
+        Func(calculator.removeNode)
     )
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
@@ -1525,7 +1525,7 @@ def doUnionWages4(attack):
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),
-        Func(MovieUtil.removeProp, calculator)
+        Func(calculator.removeNode)
     )
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
@@ -1577,7 +1577,7 @@ def doUnionWages5(attack):
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),
-        Func(MovieUtil.removeProp, calculator)
+        Func(calculator.removeNode)
     )
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
@@ -1687,8 +1687,7 @@ def doBreachOfContract(attack):
         Func(sanctioned.setP, 0),
         Func(sanctioned.setR, 0),
         getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
-        Func(MovieUtil.removeProp, sanctioned),
-        Func(battle.movie.clearRenderProp, sanctioned)
+        Func(sanctioned.removeNode)
     )
     toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0.2, ['sidestep'])
     suitTrack = getSuitTrack(attack)
@@ -1717,25 +1716,22 @@ def doBreachOfContractGroup(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        targetPos = toon.getPos(battle)
-        origPos, origHpr = battle.getActorPosHpr(suit)
-        sanctioned = loader.loadModel('phase_5/models/props/ttrpg_m_ene_prp_deniedSign')
-        missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
-        propTrack = Sequence(
-        Wait(0.5),
-        Func(battle.movie.needRestoreRenderProp, sanctioned),
-        Func(sanctioned.reparentTo, render),
-        Func(sanctioned.setScale, 3.5),
-        Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
-        Func(sanctioned.setP, 0),
-        Func(sanctioned.setR, 0),
-        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
-        Func(MovieUtil.removeProp, sanctioned),
-        Func(battle.movie.clearRenderProp, sanctioned))
         suitTrack = getSuitAnimTrack(attack)
         soundTrack = getSoundTrack('SA_hurry_sickness.ogg', delay =.5, node=suit)
         notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextNew, -int(dmg), text="BREACHED!", colorCode=1))
         if dmg > 0:
+            sanctioned = loader.loadModel('phase_5/models/props/ttrpg_m_ene_prp_deniedSign')
+            missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
+            propTrack = Sequence(Func(sanctioned.lookAt, toon),
+                Wait(0.5),
+                Func(battle.movie.needRestoreRenderProp, sanctioned),
+                Func(sanctioned.reparentTo, render),
+                Func(sanctioned.setScale, 3.5),
+                Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
+                Func(sanctioned.setP, 0),
+                Func(sanctioned.setR, 0),
+                getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
+                Func(sanctioned.removeNode))
             origH = suit.getH(battle)
             targetPos = toon.getPos(battle)
             suit.headsUp(battle, targetPos)
@@ -1806,7 +1802,7 @@ def doContractEnforcement(attack):
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
-            Func(MovieUtil.removeProp, knife)
+            Func(knife.removeNode)
         )
         knifeTracks.append(knifeTrack)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
@@ -1912,11 +1908,10 @@ def doMandatoryCompliance(attack):
         missPoint = lambda cancelled = cancelled, toon = toon: __toonMissPoint(cancelled, toon)
         propTrack = Sequence(Func(__showProp, stamp, suit.getRightHand(), stampPosPoints[0], stampPosPoints[1]), LerpScaleInterval(stamp, 0.5, Point3(1.2, 1.2, 1.2)), Wait(2.6), Func(battle.movie.needRestoreRenderProp, cancelled), Func(cancelled.reparentTo, render), Func(cancelled.setScale, 0.6), Func(cancelled.setPosHpr, stamp, 0.81, -1.11, -0.16, 0, 0, 90), Func(cancelled.setP, 0), Func(cancelled.setR, 0))
         propTrack.append(getPropThrowTrack(attack, cancelled, [__toonFacePoint(toon)], [__toonFacePoint(toon)]))
-        propTrack.append(Func(MovieUtil.removeProp, cancelled))
-        propTrack.append(Func(battle.movie.clearRenderProp, cancelled))
+        propTrack.append(Func(cancelled.removeNode))
         propTrack.append(Wait(0.3))
         propTrack.append(LerpScaleInterval(stamp, 0.5, MovieUtil.PNT3_NEARZERO))
-        propTrack.append(Func(MovieUtil.removeProp, stamp))
+        propTrack.append(Func(stamp.removeNode))
         toonTrack = Parallel(getToonTrackCheat(attack, 3.25, ['conked'], 3.1, ['conked']))
         toonTrack.append(Sequence(Wait(3.25), ActorInterval(toon, 'conked')))
         toonTrack2 = Parallel(Func(toon.makeGagBan))
@@ -2039,7 +2034,7 @@ def doPeckingOrderGroup(attack):
                                  LerpPosInterval(next, 0.5, hitPoint))
             scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(next, 0.5, Point3(9, 9, 9)), LerpScaleInterval(next, .5, Point3(0, 0, 0)))
             if dmg > 0:
-                birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(MovieUtil.removeProp, next)))
+                birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(next.removeNode)))
         suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
         notifyTrack = Sequence(Wait(2.5), Func(toon.showHpText, - int(dmg)))
         if dmg > 0:
@@ -2344,11 +2339,11 @@ def doShadowToon(attack):
 
     if hitToon:
         pieFly = LerpPosInterval(pie, tPieHitsSuit - tPieLeavesHand, pos=MovieUtil.avatarFacePoint(toon, other=battle), other=battle)
-        pieHide = Func(MovieUtil.removeProps, pies)
+        pieHide = Func(pies.removeNode)
         splatShow = Func(__showProp, splat, toon, Point3(0, 0, toon.getHeight()))
         splatBillboard = Func(__billboardProp, splat)
         splatAnim = ActorInterval(splat, splatName)
-        splatHide = Func(MovieUtil.removeProp, splat)
+        splatHide = Func(splat.removeNode)
         pieTrack.append(pieFly)
         pieTrack.append(pieHide)
         pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
@@ -2361,7 +2356,7 @@ def doShadowToon(attack):
         suitPoint = __suitMissPoint(toon, other=battle)
         piePreMiss = Func(__piePreMiss, missDict, pie, suitPoint, battle)
         pieMiss = LerpFunctionInterval(__pieMissLerpCallback, extraArgs=[missDict], duration=(tPieHitsSuit - tPieLeavesHand) * ratioMissToHit)
-        pieHide = Func(MovieUtil.removeProps, pies)
+        pieHide = Func(pies.removeNode)
         pieTrack.append(piePreMiss)
         pieTrack.append(pieMiss)
         pieTrack.append(pieHide)

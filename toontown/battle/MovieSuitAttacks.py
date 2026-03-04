@@ -497,7 +497,7 @@ def doSuitAttack(attack):
     elif name == 'BookkeeperBookkeeping':
         suitTrack = MovieBossbotLitigationCheats.doBookkeeping(attack)
     elif name == 'BookkeeperMandatoryFiling':
-        suitTrack = MovieBossbotLitigationCheats.doExplodingDocument(attack)
+        suitTrack = MovieBossbotLitigationCheats.doMandatoryFiling(attack)
     #wiretapper cheats
     elif name == 'WiretapperCollectCall':
         suitTrack = MovieBossbotLitigationCheats.doCollectCall(attack)
@@ -1580,6 +1580,8 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AmbassadorMulligan':
             resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'PowerhouseAbsorb':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'AmbassadorManagerialProtectionImmunity':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ArbitratorObjection':
@@ -1888,7 +1890,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                  LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                  LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                  LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)), LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
-                          Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale), Func(MovieUtil.removeProp, indicator))
+                          Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale), Func(indicator.removeNode))
     if suit:
         fraudulentSuitTrack = Parallel(Sequence(Func(suit.addFraudulentDamage, suit, +(dmg * 3))))
     if suit:
@@ -2318,8 +2320,7 @@ def doGoldDust(attack):
             ParticleInterval(snowEffect, cloud, worldRelative=0, duration=3.5, cleanup=True, softStopT=-1))
         cloudPropTrack.append(Wait(0.4))
         cloudPropTrack.append(LerpScaleInterval(cloud, 0.25, MovieUtil.PNT3_NEARZERO))
-        cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
-        cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
+        cloudPropTrack.append(Func(cloud.removeNode))
         cloudPropTracks.append(cloudPropTrack)
 
     damageAnims = [['cringe',
@@ -2421,8 +2422,7 @@ def doClipOnTie(attack):
         tiePropTrack.append(Wait(0.6))
         tiePropTrack.append(LerpPosInterval(tie, 0.4, missPoint))
         tiePropTrack.append(LerpScaleInterval(tie, 0.1, MovieUtil.PNT3_NEARZERO))
-        tiePropTrack.append(Func(MovieUtil.removeProp, tie))
-        tiePropTrack.append(Func(battle.movie.clearRenderProp, tie))
+        tiePropTrack.append(Func(tie.removeNode))
     soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
     tiePropTrack.append(Parallel(explodeTrack, soundTrack))
     toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['duck'])
@@ -2455,8 +2455,7 @@ def doSandTrap(attack):
             LerpScaleInterval(sandTrap, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO),
             Wait(0.3 if dmg == 0 else 3.2),
             LerpFunctionInterval(sandTrap.setAlphaScale, fromData=1, toData=0, duration=0.8),
-            Func(MovieUtil.removeProp, sandTrap),
-            Func(battle.movie.clearRenderProp, sandTrap)
+            Func(sandTrap.removeNode)
         ))
         soundTracks.append(getSoundTrack('TL_quicksand.ogg', delay=0.5, duration=0.67 if dmg == 0 else 0.0, node=toon))
 
@@ -2485,7 +2484,7 @@ def doFiveOClockShadow(attack):
             LerpColorScaleInterval(clock, 1.0, Vec4(0.0, 0.0, 0.0, 1.0)),
             Wait(0.3 if t['hp'] == 0 else 3.9),
             LerpFunctionInterval(clock.setAlphaScale, duration=0.8, fromData=1, toData=0),
-            Func(MovieUtil.removeProp, clock)
+            Func(clock.removeNode)
         )
         clockPropTracks.append(clockPropTrack)
 
@@ -2517,7 +2516,7 @@ def doDisassemble(attack):
     propTrackNew.append(
         getPropTrack(card, cage, laptopPosPoints, 1e-06, 2, scaleUpPoint=scaleUpPoint, scaleUpTime=0,
                      anim=1, animStartTime=0.5, animDuration=2.5,
-                     propName='ttht_m_ene_techbotLaptop'))
+                     propName='ttht_m_ene_techbotLaptop'), Func(card.removeNode))
     cagePos = [Point3(suitPos.getX() - 3, suitPos.getY() - 3, 0), suit.getHpr(battle)]
     cagePropTrack = Sequence(
         getPropAppearTrack(cage, battle, cagePos, 0.01, scaleUpPoint=Point3(1.5), scaleUpTime=1),
@@ -2527,7 +2526,7 @@ def doDisassemble(attack):
         Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=cage),
         Wait(2.0),
         LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
-        Func(MovieUtil.removeProp, cage)
+        Func(cage.removeNode)
     )
 
     cagePropTracks.append(cagePropTrack)
@@ -2986,7 +2985,7 @@ def doElectrostaticEnergy(attack):
                               Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                        LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
-                              Func(MovieUtil.removeProp, smoke))
+                              Func(smoke.removeNode))
         cage = loader.loadModel('phase_5/models/props/lightning')
         cage.setColorScale(0, 0.961, 1, 1)
         cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
@@ -3007,7 +3006,7 @@ def doElectrostaticEnergy(attack):
             Func(base.playSfx, base.loader.loadSfx('phase_5/audio/sfx/AA_cog_shock.ogg'), node=cage),
             Wait(0.5),
             LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
-            Func(MovieUtil.removeProp, cage)
+            Func(cage.removeNode)
         )
         cagePropTracks.append(cagePropTrack)
         smokeTracks.append(smokeTrack)
@@ -3107,6 +3106,7 @@ def doDiskScratch(attack):
     suitTrack = getSuitAnimTrack(attack)
     padPosPoints = [Point3(0, 0, 0), VBase3(14.93, -2.29, 180.0)]
     padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5, 2.57)
+    padPropTrack.append(Func(pad.removeNode))
     toonTrack = getToonTracks(attack, 2.2, ['cringe'], 2.0, ['jump'])
     oldcolor = render.getColorScale()
     lightingTrack = Sequence(Wait(1), LerpColorScaleInterval(render, 0.5, (0, 0.992, 1, 1)),
@@ -5001,6 +5001,7 @@ def doPennyPinch(attack):
     suitTrack = getSuitTrack(attack)
     billPosPoints = [Point3(-0.3039073806078143, 0.30390738060781786, -0.390738060781473), VBase3(-91.17221418234442, -50.79594790159189, 0)]
     billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(1.25, 1.25, 1.25))
+    billPropTrack.append(Func(bill.removeNode))
     toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
     if dmg > 0:
@@ -5271,7 +5272,7 @@ def doBash(attack):
     propTrackNew = Sequence(
         Func(__showProp, card, cage, *laptopPosPoints),
         ActorInterval(card, 'ttht_m_ene_techbotLaptop', playRate=1.5),
-        Func(MovieUtil.removeProp, card)
+        Func(card.removeNode)
     )
     cagePos = [Point3(suitPos.getX() - 3, suitPos.getY() - 3, 0), suit.getHpr(battle)]
     cagePropTrack = Sequence(
@@ -5282,7 +5283,7 @@ def doBash(attack):
             Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=cage),
             Wait(1.0),
             LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
-            Func(MovieUtil.removeProp, cage)
+            Func(cage.removeNode)
         )
 
     cagePropTracks.append(cagePropTrack)
@@ -5311,7 +5312,7 @@ def doDataCorruption(attack):
     propTrackNew = Sequence(
         Func(__showProp, card, cage, *laptopPosPoints),
         ActorInterval(card, 'ttht_m_ene_techbotLaptop', playRate=1.5),
-        Func(MovieUtil.removeProp, card)
+        Func(card.removeNode)
     )
     cagePos = [Point3(suitPos.getX() - 3, suitPos.getY() - 3, 0), suit.getHpr(battle)]
     cagePropTrack = Sequence(
@@ -5322,7 +5323,7 @@ def doDataCorruption(attack):
         Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=cage),
         Wait(1.0),
         LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
-        Func(MovieUtil.removeProp, cage)
+        Func(cage.removeNode)
     )
 
     cagePropTracks.append(cagePropTrack)
@@ -6989,7 +6990,7 @@ def doShortSqueeze(attack):
                     Wait(damageDelay + 0.1 * i),
                     Func(__showProp, coin, toon, startPos, VBase3(random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)), Point3(1.0)),
                     getThrowTrack(coin, landPos, 1.0, battle),
-                    Func(MovieUtil.removeProp, coin)
+                    Func(coin.removeNode)
                 ))
 
             coinTracks.append(coinTrack)
@@ -7048,7 +7049,7 @@ def doBlueChip(attack):
     #spinTrack2 = Sequence(Wait(propDelay + suitDelay + 1.45), LerpHprInterval(chip, throwDuration, Point3(0, 0, 90)))
     #bounceTrack2 = Sequence(Wait(propDelay + suitDelay + 1.45), Effects.createZBounce(chip, .25, hitPoint, 0.5, 1.5), Effects.createZBounce(chip, .25, hitPoint, 0.5, 1.5), Effects.createZBounce(chip, .25, hitPoint, 0.5, 1.5))
     sizeTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpScaleInterval(chip, throwDuration, Point3(6)), Wait(0.95), LerpScaleInterval(chip, 0.4, MovieUtil.PNT3_NEARZERO))
-    propTrack = Sequence(Parallel(chipTrack, sizeTrack, spinTrack), Func(MovieUtil.removeProp, chip), Func(battle.movie.clearRenderProp, chip))
+    propTrack = Sequence(Parallel(chipTrack, sizeTrack, spinTrack), Func(chip.removeNode))
     propTracks.append(propTrack)
     soundTrack2 = getSoundTrack('toon_decompress.ogg', node=suit)
     toonTracks = getToonTrack(attack, 3.3, ['squish'], 2.0, ['sidestep'])
@@ -7443,6 +7444,7 @@ def doBreakthrough(attack):
         missPoint = __toonGroundPoint(attack, toon, 0.7, parent=battle)
         missPoint.setX(missPoint.getX() - 1.1)
         propTrack.append(getPropThrowTrack(attack, paper, [hitPoint], [missPoint], .25, parent=battle, target=t))
+        propTrack.append(Func(paper.removeNode))
         explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
         splatName = 'dust'
         splat = globalPropPool.getProp('dust')
@@ -7477,11 +7479,20 @@ def doEncrypt(attack):
     x = toon.getX(battle)
     y = toon.getY(battle)
     z = toon.getZ(battle)
-    cagePosition = Parallel(LerpHprInterval(paper, 0.25, Point3(-90, 0, 0)), LerpScaleInterval(paper, 0.25, Point3(2, 2, 2)), LerpPosInterval(paper, 0.25, Point3(x, y + 15, z + 2)))
-    cagePosition2 = Parallel(LerpPosInterval(paper, 0.25, Point3(x, y + 10, z + 2)))
+    cagePosition = Parallel(
+        LerpHprInterval(paper, 0.25, Point3(-90, 0, 0)),
+        LerpScaleInterval(paper, 0.25, Point3(2, 2, 2)),
+        LerpPosInterval(paper, 0.25, Point3(0, 3.5, 2))  # 3.5 units in front, 2 up
+    )
+
+    cagePosition2 = LerpPosInterval(
+        paper,
+        0.25,
+        Point3(0, .5, 2)
+    )
     propTrack = Sequence(
         Parallel(Func(paper.play, 'ttht_m_ene_fileFolder'), getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, Point3(1.5, 1.5, 1.5), scaleUpTime=0.25)),
-                 Wait(1.25), Func(paper.reparentTo, toon), cagePosition, Wait(1), cagePosition2)
+                 Wait(1.25), Func(paper.wrtReparentTo, toon), cagePosition, Wait(1), cagePosition2)
     propTrack.append(Wait(0.25))
     hitPoint = __toonFacePoint(toon, parent=battle)
     hitPoint.setX(hitPoint.getX() - 1.4)

@@ -213,7 +213,7 @@ FunnyFarm = 500000
 GoofySpeedway = 8000
 YeOlde = 7000
 Toonseltown = 18000 
-SkyClan = 21000 
+SkyClan = 22000
 KnightKnoll = 7100
 NobleNook = 7200
 WizardWay=7300
@@ -375,6 +375,9 @@ BoardOfficeIntA = 19500
 BoardOfficeIntB = 19600
 BoardOfficeIntC = 19700
 
+TechbotHQ = 21000
+TechbotLobby = 21100
+
 Tutorial = 15000
 MyEstate = 16000
 GolfZone = 17000
@@ -388,21 +391,27 @@ cogDept2index = {'c': 0,
  'l': 1,
  'm': 2,
  's': 3,
- 'g': 4}
+ 'g': 4,
+ 't': 5,}
 cogIndex2dept = invertDict(cogDept2index)
 HQToSafezone = {SellbotHQ: DaisyGardens,
  CashbotHQ: MinniesMelodyland,
  LawbotHQ: TheBrrrgh,
  BossbotHQ: OutdoorZone,
- BoardbotHQ: DonaldsDreamland}
+ BoardbotHQ: DonaldsDreamland,
+                TechbotHQ: DonaldsDreamland
+                }
 CogDeptNames = [TTLocalizer.Bossbot,
  TTLocalizer.Lawbot,
  TTLocalizer.Cashbot,
  TTLocalizer.Sellbot,
- TTLocalizer.Boardbot]
+ TTLocalizer.Boardbot,
+ TTLocalizer.Techbot]
 
 def cogHQZoneId2deptIndex(zone):
-    if zone >= 19000 and zone <= 19999:
+    if zone >= 21000 and zone <= 21999:
+        return 5
+    elif zone >= 19000 and zone <= 19999:
         return 4
     elif zone >= 13000 and zone <= 13999:
         return 1
@@ -423,7 +432,8 @@ def dept2cogHQ(dept):
      'l': LawbotHQ,
      'm': CashbotHQ,
      's': SellbotHQ,
-     'g': BoardbotHQ}
+     'g': BoardbotHQ,
+    't': TechbotHQ}
     return dept2hq[dept]
 
 
@@ -513,6 +523,7 @@ Hoods = (DonaldsDock,
  CashbotHQ,
  LawbotHQ,
  BoardbotHQ,
+ TechbotHQ,
  GolfZone)
 HoodsForTeleportAll = (DonaldsDock,
  ToontownCentral,
@@ -623,6 +634,7 @@ phaseMap = {Tutorial: 4,
  CashbotHQ: 10,
  LawbotHQ: 11,
  BoardbotHQ: 14,
+ TechbotHQ: 11,
  GolfZone: 6,
  PartyHood: 13}
 streetPhaseMap = {
@@ -644,6 +656,7 @@ streetPhaseMap = {
  CashbotHQ: 10,
  LawbotHQ: 11,
  BoardbotHQ: 14,
+ TechbotHQ: 11,
  PartyHood: 13}
 dnaMap = {Tutorial: 'toontown_central',
  ToontownCentral: 'toontown_central',
@@ -661,6 +674,7 @@ dnaMap = {Tutorial: 'toontown_central',
  CashbotHQ: 'cog_hq_cashbot',
  LawbotHQ: 'cog_hq_lawbot',
  BoardbotHQ: 'cog_hq_boardbot',
+ TechbotHQ: 'cog_hq_boardbot',
  GolfZone: 'golf_zone',
  Toonseltown: 'toonseltown',
  SkyClan: 'skyclan'} 
@@ -682,6 +696,7 @@ hoodNameMap = {DonaldsDock: TTLocalizer.DonaldsDock,
  CashbotHQ: TTLocalizer.CashbotHQ,
  LawbotHQ: TTLocalizer.LawbotHQ,
  BoardbotHQ: TTLocalizer.BoardbotHQ,
+ TechbotHQ: TTLocalizer.TechbotHQ,
  Tutorial: TTLocalizer.Tutorial,
  MyEstate: TTLocalizer.MyEstate,
  GolfZone: TTLocalizer.GolfZone,
@@ -705,6 +720,7 @@ safeZoneCountMap = {MyEstate: 8,
  GoofySpeedway: 500,
  YeOlde: 500,
  Toonseltown: 500,
+#HQ: 2,
  SkyClan: 500,
  TheBrrrgh: 8,
  DaisyGardens: 9,
@@ -749,6 +765,7 @@ hoodCountMap = {MyEstate: 2,
  CashbotHQ: 2,
  LawbotHQ: 2,
  BoardbotHQ: 2,
+ TechbotHQ: 1,
  GolfZone: 2,
  PartyHood: 2}
 TrophyStarLevels = (10,

@@ -292,7 +292,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -337,7 +337,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)

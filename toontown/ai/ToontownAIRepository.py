@@ -43,6 +43,7 @@ from toontown.hood import DLHoodAI
 from toontown.hood import GSHoodAI
 from toontown.hood import GZHoodAI
 from toontown.hood import LawbotHQAI
+from toontown.hood import TechbotHQAI
 from toontown.hood import MMHoodAI
 from toontown.hood import OTHoodAI
 from toontown.hood import OZHoodAI
@@ -252,6 +253,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         if self.config.GetBool('want-bossbot-headquarters', True):
             self.countryClubMgr = CountryClubManagerAI.CountryClubManagerAI(self)
             self.cogHeadquarters.append(BossbotHQAI.BossbotHQAI(self))
+        if self.config.GetBool('want-techbot-headquarters', True):
+            self.cogHeadquarters.append(TechbotHQAI.TechbotHQAI(self))
         if self.config.GetBool('want-bdhq', True):
             self.boardofficeMgr = BoardOfficeManagerAI.BoardOfficeManagerAI(self)
             self.cogHeadquarters.append(BoardbotHQAI.BoardbotHQAI(self))

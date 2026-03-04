@@ -795,7 +795,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PlayHardball':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PoundKey':
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PowerTie':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PowerTrip':
@@ -1123,7 +1123,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'BookkeeperExplodingDocument':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'BookkeeperMandatoryFiling':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(heldShot(0, 15, 20, -180, -20, 0, attackDuration))
     elif name == 'BookkeeperBookkeepingRetaliation':
         if attackDuration > 2:
             camTrack2 = defaultCamera(openShotDuration=3.0)

@@ -220,6 +220,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         else:
             if ZoneUtil.getHoodId(self.zoneId) == ToontownGlobals.BoardbotHQ:
                 self.bHasFlat = not self.findDoorNode('door*flat', False)
+            elif ZoneUtil.getHoodId(self.zoneId) == ToontownGlobals.TechbotHQ:
+                self.bHasFlat = not self.findDoorNode('door*flat', False)
             else:
                 self.bHasFlat = not self.findDoorNode('door*flat', True).isEmpty()
         self.hideDoorParts()

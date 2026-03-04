@@ -269,7 +269,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
 
     def makeBattleOneBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(1, ToontownGlobals.LawbotBossBattleFourPosHpr)
+        self.initializeBattles(1, (-2.798, 0, 0, 180, 0, 0))
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
@@ -364,7 +364,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
 
     def makeBattleTwoBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(2, ToontownGlobals.LawbotBossBattleLitigationPosHpr)
+        self.initializeBattles(2, (-2.798, 233, 7.55, 180, 0, 0))
 
     def enterPrepareBattleTwo(self):
         self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)

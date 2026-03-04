@@ -321,7 +321,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -368,7 +368,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -666,7 +666,7 @@ def doThrowBookCog(attack, ind):
             Parallel(
                 getThrowTrack(knife, hitPoint, 1.0, battle, -100),
                 LerpHprInterval(knife, 0.5, VBase3(0, 0, 0)), LerpScaleInterval(knife, 0, VBase3(8, 8, 8))), Sequence(Wait(1), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0))),
-            Func(MovieUtil.removeProp, knife)
+            Func(knife.removeNode)
         )
     knifeTracks.append(knifeTrack)
     hpTrack = Sequence(Wait(3), Func(targetSuit.checkHeadRoller2, theSuit, battle))
@@ -713,7 +713,7 @@ def doPaperweight(attack):
             paperTrack.append(LerpPosInterval(paper, 0.4, missPoint))
         spinTrack = Sequence(Wait(propDelay + suitDelay + 0.7), LerpHprInterval(paper, throwDuration, Point3(-360, 360, 360)))
         sizeTrack = Sequence(Wait(propDelay + suitDelay + 0.7), LerpScaleInterval(paper, throwDuration, Point3(3, 3, 3)), Wait(0.95), LerpScaleInterval(paper, 0.75, MovieUtil.PNT3_NEARZERO))
-        propTrack = Sequence(Parallel(paperTrack, spinTrack, sizeTrack), Func(MovieUtil.removeProp, paper), Func(battle.movie.clearRenderProp, paper))
+        propTrack = Sequence(Parallel(paperTrack, spinTrack, sizeTrack), Func(paper.removeNode))
         propTracks.append(propTrack)
 
     damageAnims = []
@@ -749,7 +749,7 @@ def doPaperRain(attack):
                               Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                        LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
-                              Func(MovieUtil.removeProp, smoke))
+                              Func(smoke.removeNode))
         piano = loader.loadModel('phase_11/models/lawbotHQ/LB_filing_cabB')
         safe = loader.loadModel('phase_11/models/lawbotHQ/LB_filing_cabB')
         boulder = loader.loadModel('phase_11/models/lawbotHQ/LB_filing_cabB')
@@ -858,7 +858,7 @@ def doWhirlwind(attack):
             SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/tt_s_ara_cfg_toonInWhirlwind.ogg'), duration=0.75, node=cage), spinTrack,
         ),
         LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
-        Func(MovieUtil.removeProp, cage)
+        Func(cage.removeNode)
     )
     cagePropTracks.append(cagePropTrack)
     damageAnims = [['slip-forward', 0.0001, 0.5]]
@@ -912,7 +912,7 @@ def doPeckingOrder(attack):
                                  Func(next.wrtReparentTo, battle), Func(next.setHpr, Point3(90, 20, 0)),
                                  LerpPosInterval(next, 0.5, hitPoint))
             scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(next, 0.5, Point3(9, 9, 9)), LerpScaleInterval(next, .5, Point3(0, 0, 0)))
-            birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(MovieUtil.removeProp, next)))
+            birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(next.removeNode)))
     damageAnims = []
     damageAnims.append(['cringe',
                         0.01,
@@ -1134,7 +1134,7 @@ def doSnap2(attack, suit):
             scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(teeth, throwDuration, Point3(8, 8, 8)), Wait(0.9), LerpScaleInterval(teeth, 0.2, Point3(14, 14, 14)), Wait(1.2), LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO))
             hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.2), LerpHprInterval(teeth, 0.4, Point3(180, -35, 0), startHpr=Point3(180, 0, 0)), Wait(0.1), LerpHprInterval(teeth, 0.1, Point3(180, -75, 0), startHpr=Point3(180, -35, 0)))
             animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'litigator-teeth', duration=throwDuration), ActorInterval(teeth, 'litigator-teeth', duration=0.3), Func(teeth.pose, 'litigator-teeth', 1), Wait(0.7), ActorInterval(teeth, 'litigator-teeth', duration=0.9))
-            propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(MovieUtil.removeProp, teeth), Func(battle.movie.clearRenderProp, teeth))
+            propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(teeth.removeNode))
             propTracks.append(propTrack)
 
     damageAnims = [['cringe',
@@ -1213,7 +1213,7 @@ def doSnap(attack, suit):
             scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(teeth, throwDuration, Point3(8, 8, 8)), Wait(0.9), LerpScaleInterval(teeth, 0.2, Point3(14, 14, 14)), Wait(1.2), LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO))
             hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.2), LerpHprInterval(teeth, 0.4, Point3(180, -35, 0), startHpr=Point3(180, 0, 0)), Wait(0.1), LerpHprInterval(teeth, 0.1, Point3(180, -75, 0), startHpr=Point3(180, -35, 0)))
             animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'litigator-teeth', duration=throwDuration), ActorInterval(teeth, 'litigator-teeth', duration=0.3), Func(teeth.pose, 'litigator-teeth', 1), Wait(0.7), ActorInterval(teeth, 'litigator-teeth', duration=0.9))
-            propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(MovieUtil.removeProp, teeth), Func(battle.movie.clearRenderProp, teeth))
+            propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(teeth.removeNode))
             propTracks.append(propTrack)
 
     damageAnims = [['cringe',
@@ -1349,8 +1349,7 @@ def doCourtSanction(attack):
         Func(sanctioned.setP, 0),
         Func(sanctioned.setR, 0),
         getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
-        Func(MovieUtil.removeProp, sanctioned),
-        Func(battle.movie.clearRenderProp, sanctioned)
+        Func(sanctioned.removeNode)
     )
     toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
     notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
@@ -1380,25 +1379,22 @@ def doCourtSanctionBindings(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        targetPos = toon.getPos(battle)
-        origPos, origHpr = battle.getActorPosHpr(suit)
-        sanctioned = __makeSanctionedNodePath()
-        missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
-        propTrack = Sequence(
-            Wait(0.5),
-            Func(battle.movie.needRestoreRenderProp, sanctioned),
-            Func(sanctioned.reparentTo, render),
-            Func(sanctioned.setScale, 0.6),
-            Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 80, 90),
-            Func(sanctioned.setP, 0),
-            Func(sanctioned.setR, 0),
-            getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
-            Func(MovieUtil.removeProp, sanctioned),
-            Func(battle.movie.clearRenderProp, sanctioned))
         suitTrack = getSuitAnimTrack(attack)
         soundTrack = getSoundTrack('SA_sanction.ogg', delay=.5, node=suit)
         notifyTrack = Sequence(Wait(.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
         if dmg > 0:
+            sanctioned = __makeSanctionedNodePath()
+            missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
+            propTrack = Sequence(Func(sanctioned.lookAt, toon),
+                Wait(0.5),
+                Func(battle.movie.needRestoreRenderProp, sanctioned),
+                Func(sanctioned.reparentTo, render),
+                Func(sanctioned.setScale, 0.6),
+                Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 80, 90),
+                Func(sanctioned.setP, 0),
+                Func(sanctioned.setR, 0),
+                getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
+                Func(sanctioned.removeNode))
             origH = suit.getH(battle)
             targetPos = toon.getPos(battle)
             suit.headsUp(battle, targetPos)
@@ -1439,7 +1435,7 @@ def doGavelCourtRecord2(attack):
             Parallel(getSoundTrack('LB_gavel.ogg'), Sequence(
                 Wait(0.1),
                 LerpHprInterval(gavel, 0.5, VBase3(0, 0, 0)),
-                LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO)
+                LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO), Func(gavel.removeNode)
             ))
         )
         toonTrack = Sequence(
@@ -1489,7 +1485,7 @@ def doGavelCourtRecord(attack):
             Parallel(getSoundTrack('LB_gavel.ogg'), Sequence(
                 Wait(0.1),
                 LerpHprInterval(gavel, 0.5, VBase3(0, 0, 0)),
-                LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO)
+                LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO), Func(gavel.removeNode)
             ))
         )
         toonTrack = Sequence(
@@ -1802,7 +1798,7 @@ def doCaseInsurancePlanInsurance(attack):
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
-            Func(MovieUtil.removeProp, knife)
+            Func(knife.removeNode)
         )
         knifeTracks.append(knifeTrack)
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
@@ -1877,7 +1873,7 @@ def doCaseInsurancePlanInsurance2(attack):
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
-            Func(MovieUtil.removeProp, knife)
+            Func(knife.removeNode)
         )
         knifeTracks.append(knifeTrack)
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
@@ -1955,7 +1951,7 @@ def doCaseInsurancePlanSkelecogInsurance2(attack):
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
-            Func(MovieUtil.removeProp, knife)
+            Func(knife.removeNode)
         )
         knifeTracks.append(knifeTrack)
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
@@ -2022,7 +2018,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
-            Func(MovieUtil.removeProp, knife)
+            Func(knife.removeNode)
         )
         knifeTracks.append(knifeTrack)
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
@@ -2123,7 +2119,7 @@ def doGavel(attack):
         Parallel(getSoundTrack('LB_gavel.ogg'), Sequence(
             Wait(0.1),
             LerpHprInterval(gavel, 0.5, VBase3(0, 0, 0)),
-            LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO)
+            LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO), Func(gavel.removeNode)
         ))
     )
     taunt = "Any gags Toons use can and will be held against them in a court of law."

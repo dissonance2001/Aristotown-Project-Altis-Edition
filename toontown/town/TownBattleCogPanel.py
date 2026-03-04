@@ -503,7 +503,7 @@ class TownBattleCogPanel(DirectFrame):
                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                     pos=(0.25, 0, -.5),
                                                     text_scale=.5)
-            elif self.cog.isDesperation or self.cog.dna.name == 'hroller2' or self.cog.dna.name == 'videog' or self.cog.dna.name == 'fires' or self.cog.dna.name == 'fbed' or self.cog.dna.name == 'mouthp' \
+            elif self.cog.isDesperation or self.cog.isBookkeeping or self.cog.dna.name == 'hroller2' or self.cog.dna.name == 'videog' or self.cog.dna.name == 'fires' or self.cog.dna.name == 'fbed' or self.cog.dna.name == 'mouthp' \
                     or self.cog.dna.name == 'rainmake' or self.cog.dna.name == 'whunter' or self.cog.dna.name == 'wsi' or self.cog.dna.name == 'redd' or self.cog.dna.name == 'duckshfl' or self.cog.dna.name == 'treek' \
                     or self.cog.dna.name == 'bellring' or self.cog.dna.name == 'ddiver' or self.cog.dna.name == 'gatekeep' or (self.cog.isAngry and self.cog.dna.name == 'sgoat') or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or (self.cog.healthCondition == 13 and self.cog.isSkeleton):
                 self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
@@ -1572,6 +1572,13 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isShielding and not self.cog.dna.name == 'sgoat' and not self.cog.dna.name == 'hroller':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.absorbing = status.find('**/damage_absorb_icon')  # 3 slot absorb icon
+            if self.cog.dna.name == 'ambass':
+                self.extraAttacksText = DirectLabel(parent=self.absorbing, relief=None, text="1",
+                                                text_fg=(1, 1, 1, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.5)
+                self.extraAttacksText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.absorbing.reparentTo(self.attackIcon)

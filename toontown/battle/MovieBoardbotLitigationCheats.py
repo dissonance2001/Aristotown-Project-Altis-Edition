@@ -356,7 +356,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -404,7 +404,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -803,15 +803,14 @@ def doLiquidationEvent(attack):
             Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=3.3))))
         cloudPropTrack.append(Wait(0.4))
         cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
-        cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
-        cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
+        cloudPropTrack.append(Func(cloud.removeNode))
         cloudPropTracks.append(cloudPropTrack)
         if t['hp'] != 0:
             puddle = globalPropPool.getProp('quicksand')
             puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
             puddle.setHpr(Point3(120, 0, 0))
             puddle.setScale(0.01)
-            puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Wait(damageDelay - 0.7), Func(puddle.reparentTo, battle), Func(puddle.setPos, toon.getPos(battle)), LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
+            puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Wait(damageDelay - 0.7), Func(puddle.reparentTo, battle), Func(puddle.setPos, toon.getPos(battle)), LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(puddle.removeNode))
             puddleTracks.append(puddleTrack)
             notifyTrack = Sequence(Wait(damageDelay), Func(toon.showHpTextNew, -t['hp'], text="LIQUIDATED!", colorCode=1))
             notifyTracks.append(notifyTrack)
@@ -861,8 +860,7 @@ def doLiquidationEventDamage(attack):
                 Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=3.3))))
             cloudPropTrack.append(Wait(0.4))
             cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
-            cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
-            cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
+            cloudPropTrack.append(Func(cloud.removeNode))
             cloudPropTracks.append(cloudPropTrack)
             notifyTrack = Sequence(Wait(damageDelay), Func(toon.showHpTextNew, -t['hp']))
             notifyTracks.append(notifyTrack)
@@ -878,8 +876,7 @@ def doLiquidationEventDamage(attack):
                 LerpScaleInterval(sandTrap, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO),
                 Wait(0.3 if dmg == 0 else 3.2),
                 LerpFunctionInterval(sandTrap.setAlphaScale, fromData=1, toData=0, duration=0.8),
-                Func(MovieUtil.removeProp, sandTrap),
-                Func(battle.movie.clearRenderProp, sandTrap)
+                Func(sandTrap.removeNode)
             ))
             soundTracks.append(getSoundTrack('SA_liquidate.ogg', delay=0.5, duration=0.67 if dmg == 0 else 0.0, node=toon))
 
@@ -2228,8 +2225,7 @@ def doRedlinedClause(attack):
         Func(sanctioned.setP, 0),
         Func(sanctioned.setR, 0),
         getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
-        Func(MovieUtil.removeProp, sanctioned),
-        Func(battle.movie.clearRenderProp, sanctioned)
+        Func(sanctioned.removeNode)
     )
     toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
     notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="REDLINED!", colorCode=1))
@@ -2254,7 +2250,7 @@ def doAuditCycle(attack):
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),
-        Func(MovieUtil.removeProp, calculator)
+        Func(calculator.removeNode)
     )
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
@@ -2334,7 +2330,7 @@ def doRevisedFiling(attack):
                 book.hide()
                 book.reparentTo(bookshelf)
                 throwTrack2.append(Sequence(Wait(.7),
-                    ActorInterval(toon, 'slip-backward', startTime=.5, playRate=2.0)
+                    ActorInterval(toon, 'slip-forward', startTime=.5, playRate=2.0)
                 ))
 
                 x += 1
@@ -2360,7 +2356,7 @@ def doRevisedFiling(attack):
 
                              ),
                              Parallel(
-                                 Sequence(Func(bookshelf.delete)),
+                                 Sequence(Func(bookshelf.removeNode)),
                              ))))
     soundTrack2 = loader.loadSfx('phase_5/audio/sfx/SA_bash.ogg')
     soundTrack = SoundInterval(soundTrack2)
@@ -2390,7 +2386,7 @@ def doMinutesTakenDamage(attack):
             LerpColorScaleInterval(clock, 1.0, Vec4(0.0, 0.0, 0.0, 1.0)),
             Wait(0.3 if t['hp'] == 0 else 3.9),
             LerpFunctionInterval(clock.setAlphaScale, duration=0.8, fromData=1, toData=0),
-            Func(MovieUtil.removeProp, clock)
+            Func(clock.removeNode)
         )
         clockPropTracks.append(clockPropTrack)
 
@@ -2667,7 +2663,7 @@ def doShadowToon(attack):
         splatHide = Func(MovieUtil.removeProp, splat)
         pieTrack.append(pieFly)
         pieTrack.append(pieHide)
-        pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
+        pieTrack.append(Func(pies[0].removeNode))
         pieTrack.append(splatShow)
         pieTrack.append(splatBillboard)
         pieTrack.append(splatAnim)
@@ -2681,7 +2677,7 @@ def doShadowToon(attack):
         pieTrack.append(piePreMiss)
         pieTrack.append(pieMiss)
         pieTrack.append(pieHide)
-        pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
+        pieTrack.append(Func(pies[0].removeNode))
 
     moveUp = Sequence(Parallel(LerpPosInterval(suit, duration=1.0, pos=(oldPos), other=battle), ActorInterval(suit, 'walk', loop=1, duration=1.0)),
                       Func(suit.setNeutralAnimationDrop))
@@ -2745,7 +2741,7 @@ def doContingencyClauseRetaliation(attack):
             LerpPosInterval(safe, 0.1, Point3(toonPos.getX(), y, 1)),
             LerpPosInterval(safe, 0.1, Point3(toonPos.getX(), y, 0)), Sequence(
                 Wait(1.5),
-                LerpScaleInterval(safe, .25, MovieUtil.PNT3_ZERO)
+                LerpScaleInterval(safe, .25, MovieUtil.PNT3_ZERO), Func(safe.removeNode)
             ))
         propTrack3 = Sequence(Func(boulder.reparentTo, battle),
             getPropAppearTrack(boulder, parent=battle, posPoints=[propPos, VBase3(0, 90, 0)], appearDelay=0.0,
@@ -4368,6 +4364,7 @@ def doEmbezzle(attack):
     glowTrack = Sequence()
     glowTrack.append(Wait(4.0))
     glowTrack.append(Func(glow.hide))
+    glowTrack.append(Func(glow.removeNode))
     notifyTrack = Sequence(Wait(0.25), Func(toon.showHpTextNew, - int(dmg), text="CONFUSED!", colorCode=1))
     notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
     multiTrackList = Parallel(suitTrack, notifyTrack, toonTrack, glowTrack)

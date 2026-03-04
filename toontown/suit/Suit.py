@@ -118,10 +118,10 @@ fbed = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4))
 choreo = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
 chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('neutral', 'neutral-override', 4))
-phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4),('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
-bkeeper = (('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
+phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4), ('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
+bkeeper = (('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
 wtapper = (('throttletwo', 'throttletwo', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
-ambass = (('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap2', 4))
+ambass = (('defense', 'defense', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap2', 4))
 
 # Sellbots
 cc = (('speak', 'speak', 4), ('glower', 'glower', 4))
@@ -7004,11 +7004,8 @@ class Suit(Avatar.Avatar):
         self.isAngry = num
         self.isShielding = 0
 
-    def makeCollectCall(self):
-        self.isCollectCall = 1
-
-    def setCollectCall(self, num):
-        self.collectCallMult = num
+    def makeCollectCall(self, num):
+        self.isCollectCall += num
         # ---- CLEANUP ----
         if hasattr(self, "knifeTrack") and self.knifeTrack:
             self.knifeTrack.pause()
@@ -7020,8 +7017,8 @@ class Suit(Avatar.Avatar):
 
         from math import pi, cos, sin
 
-        self.collectCallMult = max(1, num)
-        totalKnives = (self.collectCallMult / 5)
+        self.isCollectCall = max(1, num)
+        totalKnives = self.isCollectCall
 
         radius = 1.5
         height = self.height
@@ -7033,7 +7030,6 @@ class Suit(Avatar.Avatar):
         knifeIntervals = []
 
         for i in range(totalKnives):
-
             # Load correct model
             knife = globalPropPool.getProp(random.choice(('10dollar', '1dollar', '5dollar', '50dollar')))
             knife.setTwoSided(True)
@@ -7075,6 +7071,9 @@ class Suit(Avatar.Avatar):
         )
 
         self.knifeTrack.loop()
+
+    def setCollectCall(self, num):
+        self.collectCallMult = num
 
     def getCollectCall(self):
         return self.collectCallMult

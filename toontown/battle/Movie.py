@@ -366,6 +366,8 @@ class Movie(DirectObject.DirectObject):
                 s.makeAngry(s.getEnrageCounter() - 1)
             if s.isDazed:
                 s.makeUnDazed()
+            if s.dna.name == 'ambass':
+                s.makeUnShielding()
         tattacks, tcam = self.__doToonAttacks()
         if tattacks:
             ptrack.append(tattacks)

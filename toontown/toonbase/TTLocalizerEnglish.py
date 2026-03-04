@@ -160,6 +160,8 @@ GlobalStreetNames = {15000: ('to', 'on', 'Tutorial Terrace'),
  19600: ('to the', 'in the', 'Board Office B'),
  19700: ('to the', 'in the', 'Board Office C'),
  20000: ('to the', 'in the', 'Playground'),
+                     21000: ('to the', 'in the', 'Techbot HQ Courtyard'),
+                     21100: ('to the', 'in the', 'Techbot Lobby'),
  26000: ('to the', 'in the', 'Playground'),
  27000: ('to the', 'in the', 'Playground')}
 DonaldsDock = ('to', 'in', lDonaldsDock)
@@ -178,6 +180,7 @@ SellbotHQ = ('to', 'in', 'Sellbot HQ')
 CashbotHQ = ('to', 'in', 'Cashbot HQ')
 LawbotHQ = ('to', 'in', 'Lawbot HQ')
 BoardbotHQ = ('to', 'in', 'Boardbot HQ')
+TechbotHQ = ('to', 'in', 'Techbot HQ')
 Tutorial = ('to the', 'in the', 'Toon-torial')
 MyEstate = ('to', 'in', 'your house')
 WelcomeValley = ('to', 'in', 'Welcome Valley')
@@ -4373,9 +4376,9 @@ SuitCheatDescription = {
 'ScapegoatEnraged': "The Scapegoat's temperature has boiled over!",
 'ScapegoatBarnyardBash': "Toons that were removed, take damage upon re-entry!",
     # Powerhouse Cheats
-'PowerhouseGroundbreaker': "The Powerhouse removes Toons at random from battle!",
+'PowerhouseGroundbreaker': "The Powerhouse removes Toons from the battle!",
 'PowerhouseGroundbreakerRevert': "Toons take damage upon re-entry!",
-'PowerhouseAbsorb': "The Powerhouse is now absorbing damage from the other\ncogs!",
+'PowerhouseAbsorb': "The Ambassador is now absorbing damage taken from the\nother cogs!",
 'PowerhouseSoakImmune': "The Powerhouse is now soak resistant!",
 'PowerhouseLureImmune': "The Powerhouse is now entirely immune to lure!",
 'PowerhouseDropImmune': "The Powerhouse is now entirely immune to drop!",
@@ -4401,11 +4404,11 @@ SuitCheatDescription = {
 'BookkeeperBookkeeping': "The Chief Archivist is focusing, and must not be\ntargeted!",
     # Wiretapper Cheats
 'WiretapperCollectCall': "The Wiretapper pairs herself up with a Toon!",
-'WiretapperCollectCall2': "The Wiretapper increases the dues when a new HP\nthreshold has been reached!",
+'WiretapperCollectCall2': "The Wiretapper is about to collect!",
 'WiretapperCollectCallDamage': "The dues are racking up!",
 'WiretapperWiretapped': "The Wiretapper syphons health from the toons!",
 'WiretapperVoicemail': "The Wiretapper is now immune for the next round!",
-'WiretapperBusySignal': "The Wiretapper confuses the collect called Toon when\nnot acked by them!",
+'WiretapperBusySignal': "The Wiretapper confuses the collect called Toon when\nnot attacked by them!",
 'WiretapperBrokenConnection': "The Wiretapper loses her connection when not attacked!",
     # Ambassador Cheats
 'AmbassadorHeadRoller': "The Ambassador becomes stronger for every cog he\nsacrifices!",
@@ -5013,7 +5016,7 @@ SuitAttackNames = {
     # Powerhouse Cheats
     'PowerhouseGroundbreaker': "Groundbreaker!",
     'PowerhouseGroundbreakerRevert': "Groundbreaker!",
-    'PowerhouseAbsorb': "Tank Mentality!",
+    'PowerhouseAbsorb': "Asset Coverage!",
     'PowerhouseSoakImmune': "Tank Mentality!",
     'PowerhouseLureImmune': "Tank Mentality!",
     'PowerhouseDropImmune': "Tank Mentality!",
@@ -5047,11 +5050,11 @@ SuitAttackNames = {
     'WiretapperGagBan': "Budget Cuts!",
     'WiretapperBusySignal': "Wire Cut!",
     # Ambassador Cheats
-    'AmbassadorHeadRoller': "Compensation!",
-    'AmbassadorHeadRoller2': "Compensation!",
-    'AmbassadorHeadRoller3': "Compensation!",
-    'AmbassadorHeadRoller4': "Compensation!",
-    'AmbassadorHeadRoller5': "Compensation!",
+    'AmbassadorHeadRoller': "Consolidation!",
+    'AmbassadorHeadRoller2': "Consolidation!",
+    'AmbassadorHeadRoller3': "Consolidation!",
+    'AmbassadorHeadRoller4': "Consolidation!",
+    'AmbassadorHeadRoller5': "Consolidation!",
     'AmbassadorAdvancement': "Executive Directive!",
     'AmbassadorAdvancement2': "Advancement!",
     'AmbassadorAdvancement3': "Advancement!",
@@ -8012,7 +8015,7 @@ SuitAttackTaunts = {
                             "This foundation's about to give way!",
                         "Time to bring this whole operation down!"],
 'PowerhouseAbsorb': ["I'll shield my associates from your nonsense.",
-                        "Consider me their insurance policy.",
+                        "Nothing moves without my approval!",
                         "I'll handle all losses personally.",
                         "Think you can damage my colleagues? I'll take the hit."],
 'PowerhouseSoakImmune': ["I'm sealed tighter than your bank account.",
@@ -8121,25 +8124,41 @@ SuitAttackTaunts = {
                                "Am I not worth your attention?",
                                "I'm breaking up... can you hear that?"],
                     #ambassador cheats
-'AmbassadorHeadRoller': ["You hit me, I hit you back even harder.",
-                       "Do you have any idea how much it costs to manufacture those suits?!",
-                        "You didn't think I'd make it easier for you to defeat me did you?"
+'AmbassadorHeadRoller': ["Every organization requires restructuring, and your contribution will now serve a higher purpose.",
+                       "I don't waste assets, I convert them.",
+                         "Stand down. You will strengthen me more this way!",
+                         "Your service was adequate, your sacrifice will be exceptional.",
+                        "Growth demands consolidation, and I will take what I require!"
                                  ],
-'AmbassadorHeadRoller2': ["You hit me, I hit you back even harder.",
-                       "Do you have any idea how much it costs to manufacture those suits?!",
-                        "You didn't think I'd make it easier for you to defeat me did you?"
+'AmbassadorHeadRoller2': ["Every organization requires restructuring, and your contribution will now serve a higher purpose.",
+                       "I don't waste assets, I convert them.",
+                         "Stand down. You will strengthen me more this way!",
+                         "Your service was adequate, your sacrifice will be exceptional.",
+                        "Growth demands consolidation, and I will take what I require!"
                                  ],
-'AmbassadorHeadRoller3': ["You hit me, I hit you back even harder.",
-                       "Do you have any idea how much it costs to manufacture those suits?!",
-                        "You didn't think I'd make it easier for you to defeat me did you?"
+'AmbassadorHeadRoller3': ["Every organization requires restructuring, and your contribution will now serve a higher purpose.",
+                       "I don't waste assets, I convert them.",
+                         "Stand down. You will strengthen me more this way!",
+                         "Your service was adequate, your sacrifice will be exceptional.",
+                        "Growth demands consolidation, and I will take what I require!"
                                  ],
-'AmbassadorHeadRoller4': ["You hit me, I hit you back even harder.",
-                       "Do you have any idea how much it costs to manufacture those suits?!",
-                        "You didn't think I'd make it easier for you to defeat me did you?"
+'AmbassadorHeadRoller4': ["Every organization requires restructuring, and your contribution will now serve a higher purpose.",
+                       "I don't waste assets, I convert them.",
+                         "Stand down. You will strengthen me more this way!",
+                         "Your service was adequate, your sacrifice will be exceptional.",
+                        "Growth demands consolidation, and I will take what I require!"
                                  ],
-'AmbassadorHeadRoller5': ["You hit me, I hit you back even harder.",
-                       "Do you have any idea how much it costs to manufacture those suits?!",
-                        "You didn't think I'd make it easier for you to defeat me did you?"
+'AmbassadorHeadRoller5': ["Every organization requires restructuring, and your contribution will now serve a higher purpose.",
+                       "I don't waste assets, I convert them.",
+                         "Stand down. You will strengthen me more this way!",
+                         "Your service was adequate, your sacrifice will be exceptional.",
+                        "Growth demands consolidation, and I will take what I require!"
+                                 ],
+'AmbassadorPhase2': ["You mistake restraint for weakness, this shell was a courtesy, and now that you've shattered it, I will respond without limitation!",
+                       "You've worked so hard to reach half my strength, how tragic that you'll never survive the other half!",
+                         "Very well; negotiations are over, appearances are discarded, and I will no longer dilute my power for your comfort!",
+                         "You wanted to see what I was holding back? Then watch carefully; this is what happens when I stop pretending you're a threat!",
+                        "You should've accepted the version of me that was 'polite', the one you face now is not concerned with diplomacy!"
                                  ],
 'AmbassadorHeadRollerGroup': ["You can't beat me if I keep cutting employees.",
                               "I'll cut my losses, and my staff.",
@@ -9349,6 +9368,7 @@ FADoorCodes_CB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon
 FADoorCodes_LB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Lawbot Disguise first!\n\nBuild your Lawbot Disguise out of parts from the DA Offices."
 FADoorCodes_BB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Bossbot Disguise first!\n\nBuild your Bossbot Disguise out of parts from the Cog Golf Courses."
 FADoorCodes_BD_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Boardbot Disguise first!\n\nBuild your Boardbot Disguise out of parts from the Board Offices."
+FADoorCodes_TB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Techbot Disguise first!\n\nBuild your Techbot Disguise out of parts from the Board Offices."
 KnockKnockJokes = [['Who', "Bad echo in here, isn't there?"],
  ['Dozen', 'Dozen anybody want to let me in?'],
  ['Freddie', 'Freddie or not, here I come.'],

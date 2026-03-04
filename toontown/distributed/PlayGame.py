@@ -20,7 +20,7 @@ from toontown.hood import OZHood
 from toontown.hood import GZHood
 from toontown.hood import TSHood
 from toontown.hood import SCHood
-from toontown.hood import SellbotHQ, CashbotHQ, LawbotHQ, BossbotHQ, BoardbotHQ
+from toontown.hood import SellbotHQ, CashbotHQ, LawbotHQ, BossbotHQ, BoardbotHQ, TechbotHQ
 from toontown.hood import TutorialHood
 from direct.task import TaskManagerGlobal
 from toontown.hood import QuietZoneState
@@ -53,7 +53,8 @@ class PlayGame(StateData.StateData):
      ToontownGlobals.Toonseltown: TSHood.TSHood,
      ToontownGlobals.SkyClan: SCHood.SCHood,      
      ToontownGlobals.PartyHood: PartyHood.PartyHood,
-     ToontownGlobals.BoardbotHQ: BoardbotHQ.BoardbotHQ}
+     ToontownGlobals.BoardbotHQ: BoardbotHQ.BoardbotHQ,
+                      ToontownGlobals.TechbotHQ: TechbotHQ.TechbotHQ}
     Hood2StateDict = {ToontownGlobals.ToontownCentral: 'TTHood',
      ToontownGlobals.ToontownCentralOld: 'TTOHood',
      ToontownGlobals.DonaldsDock: 'DDHood',
@@ -74,7 +75,8 @@ class PlayGame(StateData.StateData):
      ToontownGlobals.LawbotHQ: 'LawbotHQ',
      ToontownGlobals.GolfZone: 'GZHood',
      ToontownGlobals.PartyHood: 'PartyHood',
-     ToontownGlobals.BoardbotHQ: 'BoardbotHQ'}
+     ToontownGlobals.BoardbotHQ: 'BoardbotHQ',
+                      ToontownGlobals.TechbotHQ: 'TechbotHQ'}
 
     def __init__(self, parentFSM, doneEvent):
         StateData.StateData.__init__(self, doneEvent)
@@ -100,7 +102,8 @@ class PlayGame(StateData.StateData):
           'TutorialHood',
           'EstateHood',
           'PartyHood',
-          'BoardbotHQ']),
+          'BoardbotHQ',
+          'TechbotHQ']),
          State.State('TTHood', self.enterTTHood, self.exitTTHood, ['quietZone']),
          State.State('TTOHood', self.enterTTOHood, self.exitTTOHood, ['quietZone']),
          State.State('DDHood', self.enterDDHood, self.exitDDHood, ['quietZone']),
@@ -121,7 +124,8 @@ class PlayGame(StateData.StateData):
          State.State('TutorialHood', self.enterTutorialHood, self.exitTutorialHood, ['quietZone']),
          State.State('EstateHood', self.enterEstateHood, self.exitEstateHood, ['quietZone']),
          State.State('PartyHood', self.enterPartyHood, self.exitPartyHood, ['quietZone']),
-         State.State('BoardbotHQ', self.enterBoardbotHQ, self.exitBoardbotHQ, ['quietZone'])], 'start', 'start')
+         State.State('BoardbotHQ', self.enterBoardbotHQ, self.exitBoardbotHQ, ['quietZone']),
+         State.State('TechbotHQ', self.enterTechbotHQ, self.exitTechbotHQ, ['quietZone'])], 'start', 'start')
         self.fsm.enterInitialState()
         self.parentFSM = parentFSM
         self.parentFSM.getStateNamed('playGame').addChild(self.fsm)
@@ -402,7 +406,6 @@ class PlayGame(StateData.StateData):
     def exitSCHood(self):
         self._destroyHood()
 
-
     def enterSellbotHQ(self, requestStatus):
         self.accept(self.hoodDoneEvent, self.handleHoodDone)
         self.hood.enter(requestStatus)
@@ -415,6 +418,13 @@ class PlayGame(StateData.StateData):
         self.hood.enter(requestStatus)
 
     def exitCashbotHQ(self):
+        self._destroyHood()
+
+    def enterTechbotHQ(self, requestStatus):
+        self.accept(self.hoodDoneEvent, self.handleHoodDone)
+        self.hood.enter(requestStatus)
+
+    def exitTechbotHQ(self):
         self._destroyHood()
 
     def enterLawbotHQ(self, requestStatus):

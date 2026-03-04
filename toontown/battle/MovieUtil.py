@@ -8,6 +8,7 @@ from toontown.battle import BattleParticles
 from toontown.battle import BattleProps
 from panda3d.core import *
 from toontown.suit import SuitBase
+from toontown.suit.SuitDNA import *
 from toontown.chat.ChatGlobals import *
 from toontown.nametag import NametagGlobals
 from toontown.nametag.NametagGlobals import *
@@ -1176,29 +1177,6 @@ def createSuitDeathTrack(suit, battle):
     explosionTrack = Sequence()
     explosionTrack.append(Wait(6.4))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    suitIndex = battle.activeSuits.index(suit)
-    if suit.getExecutive() or suit.getGovernaught():
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-    else:
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
     gears1Track = Sequence(Wait(3.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
     gears2MTrack = Track((0.0, explosionTrack), (1.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (6.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (6.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
     toonMTrack = Parallel(name='toonMTrack')
@@ -1305,29 +1283,6 @@ def createSuitHeadlessDeathTrack(suit, battle):
     suitTrack.append(Func(suit.makeDead))
     deathSound = base.loader.loadSfx('phase_5/audio/sfx/COG_headless_death.ogg')
     deathSoundTrack = Sequence(Wait(0), SoundInterval(deathSound, volume=0.6))
-    suitIndex = battle.activeSuits.index(suit)
-    if suit.getExecutive() or suit.getGovernaught():
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-    else:
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
     returnval = Parallel(suitTrack, deathSoundTrack)
     return returnval
 
@@ -1337,35 +1292,18 @@ def createSuitWreckingDeathTrack(suit, battle):
     removeTrainTrack(suit, battle, suitTrack)
     deathSuit = suit
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
-    deathSound = base.loader.loadSfx('phase_5/audio/sfx/AA_trap_wreckingball_%s.ogg' % random.randint(1, 3))
+    suitType = getSuitBodyType(suit.dna.name)
+    if suitType == 'a':
+        deathSound = base.loader.loadSfx('phase_5/audio/sfx/AA_trap_wreckingball_A.ogg')
+    elif suitType == 'b':
+        deathSound = base.loader.loadSfx('phase_5/audio/sfx/AA_trap_wreckingball_B.ogg')
+    else:
+        deathSound = base.loader.loadSfx('phase_5/audio/sfx/AA_trap_wreckingball_C.ogg')
     deathSoundTrack = Sequence(Wait(0), SoundInterval(deathSound, volume=0.6))
     suitTrack.append(ActorInterval(suit, 'lose3', duration=4.0))
     suitTrack.append(Func(suit.hide))
     suitTrack.append(Func(suit.cleanupLoseActor))
     suitTrack.append(Func(suit.makeDead))
-    suitIndex = battle.activeSuits.index(suit)
-    if suit.getExecutive() or suit.getGovernaught():
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-    else:
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
     returnval = Parallel(suitTrack, deathSoundTrack)
     return returnval
 
@@ -1393,29 +1331,6 @@ def createSuitCrashTrack(suit, battle):
     suitTrack.append(Func(suit.hide))
     suitTrack.append(Func(suit.cleanupLoseActor))
     suitTrack.append(Func(suit.makeDead))
-    suitIndex = battle.activeSuits.index(suit)
-    if suit.getExecutive() or suit.getGovernaught():
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-    else:
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
     if hasAnimatedHead:
         return Parallel(suitTrack, deathSoundTrack, headInterval)
     else:
@@ -1447,29 +1362,6 @@ def midairSuitExplodeTrack(suit, battle):
     bigGearExplosion.setDepthWrite(False)
     explosionTrack = Sequence()
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    suitIndex = battle.activeSuits.index(suit)
-    if suit.getExecutive() or suit.getGovernaught():
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-    else:
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
     gears1Track = Sequence(Wait(0.5), ParticleInterval(smallGears, battle, worldRelative=0, duration=1.0, cleanup=True), name='gears1Track')
     gears2MTrack = Track(
         (0.1, ParticleInterval(singleGear, battle, worldRelative=0, duration=0.4, cleanup=True)),
@@ -1549,214 +1441,108 @@ def __showProp(prop, parent, pos, hpr = None, scale = None):
     if scale:
         prop.setScale(scale)
 
+
 def shortCircuitTrack(suit, battle):
     if suit.isHidden():
         return Sequence()
-    else:
-        suitTrack = Sequence(Wait(1.0))
-        colorTracks = Parallel()
-        smoke = loader.loadModel('phase_4/models/props/test_clouds')
-        smoke.setColor(0.3, 0.3, 0.3)
-        smoke.setScale(0.75, 1, 1)
-        #smoke.setTransparency(1)
-        smoke.setTwoSided(True)
-        smoke.setBillboardPointEye()
-        actorNode = suit.find('**/__Actor_modelRoot')
-        actorCollection = actorNode.findAllMatches('*')
-        parts = ()
-        toonPos = suit.getPos(battle)
-        y = toonPos.getY()
-        # for headPart in suit.headParts:
-        #     colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
-        #                                 LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0)),
-        #                                 Func(headPart.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
-        for thingIndex in xrange(0, actorCollection.getNumPaths()):
-            thing = actorCollection[thingIndex]
-            colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1),
-                                        LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
-                                        Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
-        smokeTrack = Sequence(Func(smoke.reparentTo, battle), LerpPosInterval(smoke, 0, Point3(toonPos.getX(), y - 5, toonPos.getZ())),
-                              Parallel(Sequence(LerpScaleInterval(smoke, 2.0, Point3(.5, 1, 5)),
-                                                LerpScaleInterval(smoke, 2.5, Point3(.5, 1, 10))),
-                                       Sequence(Wait(1.5), LerpColorScaleInterval(smoke, 2.0, Vec4(1, 1, 1, 0)))),
-                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
-                              Func(removeProp, smoke))
-        suitPos = suit.getPos(battle)
-        suitTrack.append(Func(suit.hide))
-        suitTrack.append(Func(suit.cleanupLoseActor))
-        suitTrack.append(Func(suit.makeDead))
-        suitTrack.append(Wait(1.0))
-        BattleParticles.loadParticles()
-        explodePosPoints = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ()), PNT3_ZERO]
-        splatName = 'dust2'
+
+    suitPos = suit.getPos(battle)
+    # Base suit track
+    suitTrack = Sequence(
+        Wait(1.0),
+        Func(suit.hide),
+        Func(suit.cleanupLoseActor),
+        Func(suit.makeDead),
+        Wait(1.0)
+    )
+
+    # Fade out suit parts
+    colorTracks = Parallel()
+    actorNode = suit.find('**/__Actor_modelRoot')
+    actorCollection = actorNode.findAllMatches('*')
+    for thingIndex in range(actorCollection.getNumPaths()):
+        thing = actorCollection[thingIndex]
+        colorTracks.append(Sequence(
+            Func(thing.setDepthWrite, False),
+            Func(thing.setBin, 'fixed', 1),
+            LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
+            Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+        ))
+
+    # Smoke effect
+    toonPos = suit.getPos(battle)
+
+    # Explosion effects (reuse a loop)
+    explodeTracks = Parallel()
+    offsets = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]  # z offsets for explosions
+    for offset in offsets:
         explode = globalPropPool.getProp('dust2')
         explode.setTwoSided(True)
-        explode.setColor(0.251, 0.251, 0.251, 1)
-       # explode.setTransparency(1)
+        explode.setColor(0, 0, 0, 1)
         explode.setBillboardPointWorld(2)
-        explodeTrack = Sequence(Wait(0.3))
-        explodeTrack.append(
-            getPropAppearTrack(explode, battle, explodePosPoints, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=0))
-        explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-        explodePosPoints2 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() - 2), PNT3_ZERO]
-        splatName = 'dust2'
-        explode2 = globalPropPool.getProp('dust2')
-        explode2.setTwoSided(True)
-        explode2.setColor(0.251, 0.251, 0.251, 1)
-        #explode2.setTransparency(1)
-        explode2.setBillboardPointWorld(2)
-        explodeTrack2 = Sequence(Wait(.15))
-        explodeTrack2.append(
-            getPropAppearTrack(explode2, battle, explodePosPoints2, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=0))
-        explodeTrack2.append(Sequence(ActorInterval(explode2, splatName), Func(explode2.detachNode)))
-        explodePosPoints3 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + 2), PNT3_ZERO]
-        splatName = 'dust2'
-        explode3 = globalPropPool.getProp('dust2')
-        explode3.setTwoSided(True)
-        explode3.setColor(0.251, 0.251, 0.251, 1)
-       # explode3.setTransparency(1)
-        explode3.setBillboardPointWorld(2)
-        explodeTrack3 = Sequence(Wait(.45))
-        explodeTrack3.append(
-            getPropAppearTrack(explode3, battle, explodePosPoints3, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=0))
-        explodeTrack3.append(Sequence(ActorInterval(explode3, splatName), Func(explode3.detachNode)))
-        explodePosPoints4 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + 4), PNT3_ZERO]
-        explode4 = globalPropPool.getProp('dust2')
-        explode4.setTwoSided(True)
-        explode4.setColor(0.251, 0.251, 0.251, 1)
-        #explode4.setTransparency(1)
-        explode4.setBillboardPointWorld(2)
-        explodeTrack4 = Sequence(Wait(.6))
-        explodeTrack4.append(
-            getPropAppearTrack(explode3, battle, explodePosPoints4, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=0))
-        explodeTrack4.append(Sequence(ActorInterval(explode4, splatName), Func(explode4.detachNode)))
-        explodePosPoints5 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() - 4), PNT3_ZERO]
-        explode5 = globalPropPool.getProp('dust2')
-        explode5.setTwoSided(True)
-        explode5.setColor(0.251, 0.251, 0.251, 1)
-       # explode5.setTransparency(1)
-        explode5.setBillboardPointWorld(2)
-        explodeTrack5 = Sequence()
-        explodeTrack5.append(
-            getPropAppearTrack(explode5, battle, explodePosPoints5, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=0))
-        explodeTrack5.append(Sequence(ActorInterval(explode5, splatName), Func(explode5.detachNode)))
-        suitIndex = battle.activeSuits.index(suit)
-        if suit.getExecutive() or suit.getGovernaught():
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 7), battle))
-        else:
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 1, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 2, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 3, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 4, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex - 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-            suitTrack.append(__HighRollerAbsorb(suitIndex + 5, battle.activeSuits, (suit.getActualLevel() * 4), battle))
-        return Parallel(suitTrack, explodeTrack, explodeTrack2, explodeTrack3, explodeTrack4, explodeTrack5, colorTracks)
+
+        explodePosPoints = [Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + offset), PNT3_ZERO]
+        delay = abs(offset) * 0.1  # small stagger
+        explodeTrack = Sequence(
+            Wait(delay),
+            getPropAppearTrack(explode, battle, explodePosPoints, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=0),
+            Sequence(ActorInterval(explode, 'dust2'), Func(explode.removeNode))
+        )
+        explodeTracks.append(explodeTrack)
+
+    # Return all tracks in parallel
+    return Parallel(suitTrack, explodeTracks, colorTracks)
 
 def shortCircuitTrack2(suit, battle):
     if suit.isHidden():
         return Sequence()
-    else:
-        suitTrack = Sequence(Wait(1.5))
-        colorTracks = Parallel()
-        smoke = loader.loadModel('phase_4/models/props/test_clouds')
-        smoke.setColor(0.3, 0.3, 0.3)
-        smoke.setScale(0.75, 1, 1)
-       # smoke.setTransparency(1)
-        smoke.setTwoSided(True)
-        smoke.setBillboardPointEye()
-        actorNode = suit.find('**/__Actor_modelRoot')
-        actorCollection = actorNode.findAllMatches('*')
-        parts = ()
-        toonPos = suit.getPos(battle)
-        y = toonPos.getY()
-        # for headPart in suit.headParts:
-        #     colorTracks.append(Sequence(Func(headPart.setDepthWrite, False), Func(headPart.setBin, 'fixed', 1),
-        #                                 LerpColorScaleInterval(headPart, 1.0, (0, 0, 0, 0)),
-        #                                 Func(headPart.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
-        for thingIndex in xrange(0, actorCollection.getNumPaths()):
-            thing = actorCollection[thingIndex]
-            colorTracks.append(Sequence(Func(thing.setDepthWrite, False), Func(thing.setBin, 'fixed', 1),
-                                        LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
-                                        Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))))
-        smokeTrack = Sequence(Func(smoke.reparentTo, battle), LerpPosInterval(smoke, 0, Point3(toonPos.getX(), y - 5, toonPos.getZ())),
-                              Parallel(Sequence(LerpScaleInterval(smoke, 2.0, Point3(.5, 1, 5)),
-                                                LerpScaleInterval(smoke, 2.5, Point3(.5, 1, 10))),
-                                       Sequence(Wait(1.5), LerpColorScaleInterval(smoke, 2.0, Vec4(1, 1, 1, 0)))),
-                              Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
-                              Func(removeProp, smoke))
-        suitPos = suit.getPos(battle)
-        suitTrack.append(Func(suit.hide))
-        suitTrack.append(Func(suit.cleanupLoseActor))
-        suitTrack.append(Func(suit.makeDead))
-        suitTrack.append(Wait(1.0))
-        BattleParticles.loadParticles()
-        explodePosPoints = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ()), PNT3_ZERO]
-        splatName = 'dust2'
+
+    suitPos = suit.getPos(battle)
+    # Base suit track
+    suitTrack = Sequence(
+                 Wait(1.0),
+                Func(suit.hide),
+                Func(suit.cleanupLoseActor),
+             Func(suit.makeDead),
+                 Wait(1.0)
+             )
+
+    # Fade out suit parts
+    colorTracks = Parallel()
+    actorNode = suit.find('**/__Actor_modelRoot')
+    actorCollection = actorNode.findAllMatches('*')
+    for thingIndex in range(actorCollection.getNumPaths()):
+        thing = actorCollection[thingIndex]
+        colorTracks.append(Sequence(
+            Func(thing.setDepthWrite, False),
+            Func(thing.setBin, 'fixed', 1),
+            LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
+            Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+        ))
+
+    # Smoke effect
+    toonPos = suit.getPos(battle)
+
+    # Explosion effects (reuse a loop)
+    explodeTracks = Parallel()
+    offsets = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]  # z offsets for explosions
+    for offset in offsets:
         explode = globalPropPool.getProp('dust2')
         explode.setTwoSided(True)
-        explode.setColor(0.251, 0.251, 0.251, 1)
-        #explode.setTransparency(1)
+        explode.setColor(0, 0, 0, 1)
         explode.setBillboardPointWorld(2)
-        explodeTrack = Sequence(Wait(0.3))
-        explodeTrack.append(
-            getPropAppearTrack(explode, battle, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
-        explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-        explodePosPoints2 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() - 2), PNT3_ZERO]
-        splatName = 'dust2'
-        explode2 = globalPropPool.getProp('dust2')
-        explode2.setTwoSided(True)
-        explode2.setColor(0.251, 0.251, 0.251, 1)
-        #explode2.setTransparency(1)
-        explode2.setBillboardPointWorld(2)
-        explodeTrack2 = Sequence(Wait(.15))
-        explodeTrack2.append(
-            getPropAppearTrack(explode2, battle, explodePosPoints2, 0, Point3(2, 2, 2), scaleUpTime=0))
-        explodeTrack2.append(Sequence(ActorInterval(explode2, splatName), Func(explode2.detachNode)))
-        explodePosPoints3 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + 2), PNT3_ZERO]
-        splatName = 'dust2'
-        explode3 = globalPropPool.getProp('dust2')
-        explode3.setTwoSided(True)
-        explode3.setColor(0.251, 0.251, 0.251, 1)
-       # explode3.setTransparency(1)
-        explode3.setBillboardPointWorld(2)
-        explodeTrack3 = Sequence(Wait(.45))
-        explodeTrack3.append(
-            getPropAppearTrack(explode3, battle, explodePosPoints3, 0, Point3(2, 2, 2), scaleUpTime=0))
-        explodeTrack3.append(Sequence(ActorInterval(explode3, splatName), Func(explode3.detachNode)))
-        explodePosPoints4 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + 4), PNT3_ZERO]
-        explode4 = globalPropPool.getProp('dust2')
-        explode4.setTwoSided(True)
-        explode4.setColor(0.251, 0.251, 0.251, 1)
-        #explode4.setTransparency(1)
-        explode4.setBillboardPointWorld(2)
-        explodeTrack4 = Sequence(Wait(.6))
-        explodeTrack4.append(
-            getPropAppearTrack(explode3, battle, explodePosPoints4, 0, Point3(2, 2, 2), scaleUpTime=0))
-        explodeTrack4.append(Sequence(ActorInterval(explode4, splatName), Func(explode4.detachNode)))
-        explodePosPoints5 = [Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() - 4), PNT3_ZERO]
-        explode5 = globalPropPool.getProp('dust2')
-        explode5.setTwoSided(True)
-        explode5.setColor(0.251, 0.251, 0.251, 1)
-      #  explode5.setTransparency(1)
-        explode5.setBillboardPointWorld(2)
-        explodeTrack5 = Sequence()
-        explodeTrack5.append(
-            getPropAppearTrack(explode3, battle, explodePosPoints5, 0, Point3(2, 2, 2), scaleUpTime=0))
-        explodeTrack5.append(Sequence(ActorInterval(explode5, splatName), Func(explode5.detachNode)))
-        return Parallel(suitTrack, explodeTrack, explodeTrack2, explodeTrack3, explodeTrack4, explodeTrack5, colorTracks)
+
+        explodePosPoints = [Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + offset), PNT3_ZERO]
+        delay = abs(offset) * 0.1  # small stagger
+        explodeTrack = Sequence(
+            Wait(delay),
+            getPropAppearTrack(explode, battle, explodePosPoints, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=0),
+            Sequence(ActorInterval(explode, 'dust2'), Func(explode.removeNode))
+        )
+        explodeTracks.append(explodeTrack)
+
+    # Return all tracks in parallel
+    return Parallel(suitTrack, explodeTracks, colorTracks)
 
 
 def createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits):
@@ -2430,6 +2216,32 @@ def createSuitStunInterval(suit, before, after):
     headInterval = Func(suit.createSuitStunInterval)
     updateTrack = Parallel(Func(suit.setNeutralAnimationHead))
     return Sequence(Wait(before), headInterval, Func(suit.setDizzy2, 1), Wait(after), updateTrack, Func(suit.setDizzy2, 0))
+
+
+def createSuitStunIntervalLawbotLawyers(suit, before, after):
+    p1 = Point3(0)
+    p2 = Point3(0)
+    stars = globalPropPool.getProp('stun')
+    stars.setColor(1, 1, 1, 1)
+    stars.adjustAllPriorities(100)
+    stars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+    stars.setBlend(frameBlend=base.wantSmoothAnims)
+    head = suit.find('**/to_head')
+    head.calcTightBounds(p1, p2)
+    hasAnimatedHead = False
+    for headPart in suit.animatedHeadParts:
+        headInterval = Func(headPart.loop, 'stun')
+        headLoop = Func(headPart.loop,
+                            'neutral')
+        hasAnimatedHead = True
+    if hasAnimatedHead:
+        return Sequence(Wait(before), Func(stars.reparentTo, head),
+                        Func(stars.loop, 'stun'), headInterval, Wait(after), headLoop, Func(stars.cleanup),
+                        Func(stars.removeNode))
+    else:
+        return Sequence(Wait(before), Func(stars.reparentTo, head),
+                        Func(stars.loop, 'stun'), Wait(after), Func(stars.cleanup),
+                        Func(stars.removeNode))
 
 
 def createSuitStunIntervalFired(suit, before, after):

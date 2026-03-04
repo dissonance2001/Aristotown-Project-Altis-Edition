@@ -1263,7 +1263,7 @@ def __doLightning(zap, delay, fShowStun, uberClone = 0, npcs=[]):
             Parallel(cagePosition),
             Parallel(cage.posInterval(0, Point3(suitPos.getX(), y + 1, 0.1), blendType='easeIn')), Wait(0.5),
             LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
-            Func(MovieUtil.removeProp, cage)
+            Func(cage.removeNode)
             )
         if hp > 0:
             cagePropTracks.append(cagePropTrack)

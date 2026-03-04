@@ -293,7 +293,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -760,7 +760,7 @@ def doAccountantRequirement(attack):
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),
-        Func(MovieUtil.removeProp, calculator)
+        Func(calculator.removeNode)
     )
     soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
     suitTrack = Sequence(getSuitAnimTrack(attack))
@@ -985,7 +985,7 @@ def doCourtCalculations(attack):
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
         ActorInterval(calculator, 'court-costs-calculator'),
-        Func(MovieUtil.removeProp, calculator)
+        Func(calculator.removeNode)
     )
     soundTrack = getSoundTrack('SA_calculating_costs.ogg')
     return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)

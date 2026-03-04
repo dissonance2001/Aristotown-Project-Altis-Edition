@@ -24,5 +24,6 @@ want-resistance-toonup #t
 want-resistance-restock #t
 want-resistance-money #f
 
+
 # Developer options:
 want-dev #f

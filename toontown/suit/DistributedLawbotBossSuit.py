@@ -118,6 +118,32 @@ class DistributedLawbotBossSuit(DistributedSuitBase.DistributedSuitBase):
     def setNeutralAnimationTrap(self):
         pass
 
+    def createSuitStunInterval(self):
+        hasAnimatedHead = False
+        if self.headInterval:
+            self.headInterval.finish()
+            self.headInterval = None
+        if self.style.name == 'hroller2':
+            for headPart in suit.animatedHeadParts:
+                self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
+                hasAnimatedHead = True
+        elif self.style.name == 'hrollers':
+            for headPart in self.animatedHeadParts:
+                self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
+                hasAnimatedHead = True
+        elif self.style.name == 'hroller':
+            for headPart in self.animatedHeadParts:
+                self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
+                hasAnimatedHead = True
+        else:
+            for headPart in self.animatedHeadParts:
+                self.headInterval = Func(headPart.loop, 'stun')
+                hasAnimatedHead = True
+        if hasAnimatedHead:
+            self.headInterval.start()
+        else:
+            pass
+
     def announceGenerate(self):
         DistributedSuitBase.DistributedSuitBase.announceGenerate(self)
         self.notify.debug('DLBS.announceGenerate')
@@ -409,7 +435,7 @@ class DistributedLawbotBossSuit(DistributedSuitBase.DistributedSuitBase):
             del self.activeIntervals[throwName]
 
     def enterStunned(self):
-        stunSequence = MovieUtil.createSuitStunInterval(self, 0, ToontownGlobals.LawbotBossLawyerStunTime)
+        stunSequence = MovieUtil.createSuitStunIntervalLawbotLawyers(self, 0, ToontownGlobals.LawbotBossLawyerStunTime)
         self.loop('lured', 0)
         seqName = stunSequence.getName()
         stunSequence.append(Func(self.fsm.request, 'neutral'))

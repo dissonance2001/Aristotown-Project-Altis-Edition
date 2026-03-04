@@ -372,7 +372,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -420,7 +420,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -1244,7 +1244,7 @@ def doDirectorCuts(attack):
                                    LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7),
                                                      startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2),
                                    LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
-                                   Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
+                                   Func(puddle.removeNode))
             sinkPos1 = s.getPos(battle)
             sinkPos2 = s.getPos(battle)
             dropPos = s.getPos(battle)
@@ -1437,7 +1437,7 @@ def doRisingStarsSacrifice(attack):
                                    LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7),
                                                      startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2),
                                    LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
-                                   Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
+                                   Func(puddle.removeNode))
             sinkPos1 = s.getPos(battle)
             sinkPos2 = s.getPos(battle)
             dropPos = s.getPos(battle)
@@ -2022,10 +2022,8 @@ def doBar(attack):
                                  Wait(1.5), shrinkProp)
         shipTrack.append(objAnimShrink)
         MovieUtil.removeProp(ship2)
-    shipTrack.append(Func(MovieUtil.removeProp, ship))
-    shipTrack.append(Func(battle.movie.clearRenderProp, ship))
-    shipTrack.append(Func(MovieUtil.removeProp, ship4))
-    shipTrack.append(Func(battle.movie.clearRenderProp, ship4))
+    shipTrack.append(Func(ship.removeNode))
+    shipTrack.append(Func(ship4.removeNode))
     dropShadow = MovieUtil.copyProp(targets[closestTarget]['toon'].dropShadow)
     dropShadow.setScale(3.6)
 
@@ -2052,8 +2050,7 @@ def doBar(attack):
         Func(posShadow), Func(posShadow2),
         LerpScaleInterval(dropShadow, 1.86, dropShadow.getScale(), startScale=MovieUtil.PNT3_NEARZERO),
         Wait(0.3),
-        Func(MovieUtil.removeProp, dropShadow),
-        Func(battle.movie.clearRenderProp, dropShadow)
+        Func(dropShadow.removeNode)
     )
     for t in targets:
         toon = t['toon']
@@ -2158,8 +2155,7 @@ def doFreeCruise(attack):
                                  Wait(1.5), shrinkProp)
         shipTrack.append(objAnimShrink)
         MovieUtil.removeProp(ship2)
-    shipTrack.append(Func(MovieUtil.removeProp, ship))
-    shipTrack.append(Func(battle.movie.clearRenderProp, ship))
+    shipTrack.append(Func(ship.removeNode))
     dropShadow = MovieUtil.copyProp(targets[closestTarget]['toon'].dropShadow)
     dropShadow.setScale(3.6)
 
@@ -2177,8 +2173,7 @@ def doFreeCruise(attack):
         Func(posShadow),
         LerpScaleInterval(dropShadow, 1.86, dropShadow.getScale(), startScale=MovieUtil.PNT3_NEARZERO),
         Wait(0.3),
-        Func(MovieUtil.removeProp, dropShadow),
-        Func(battle.movie.clearRenderProp, dropShadow)
+        Func(dropShadow.removeNode)
     )
     toonTracks = Parallel()
     for t in targets:
@@ -3457,7 +3452,7 @@ def doConduction(attack):
                               gravity=-96.432),
                 LerpScaleInterval(next, 0.25, Point3(6.25, 6.25, 2.5)),
                 LerpScaleInterval(next, 0.25, MovieUtil.PNT3_NEARZERO),
-                Func(MovieUtil.removeProp, next)
+                Func(next.removeNode)
             )
             duckTracks.append(duckTrack)
 

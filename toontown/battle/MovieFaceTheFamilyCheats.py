@@ -279,7 +279,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -324,7 +324,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(MovieUtil.removeProp, indicator))
+                               Func(indicator.removeNode))
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
@@ -1219,7 +1219,7 @@ def doMulligan(attack):
                              Wait(0.75))
     missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
     ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], .1))
-    ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
+    ballPropTrack.append(Func(ball.removeNode))
     dodgeDelay = suitTrack.getDuration()
     toonTrack = getToonTrack(attack, 2.5, ['slip-backward'], 1, ['duck'],
                              showMissedExtraTime=1.7)
@@ -1299,6 +1299,66 @@ def doRushJob(attack):
     return Parallel(suitTracks, soundTrack)
 
 def doDriver(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.75))
+    club = globalPropPool.getProp('golf-club')
+    clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
+    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 2.25, Point3(1.1, 1.1, 1.1))
+    ballPosPoints = [Point3(7.1, -50.0, 0)]
+    ballPropTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        if dmg > 0:
+            ballPropTracks.append(Parallel(Func(toon.checkDamageDown, 25)))
+            ballPropTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+        numBalls = 5  # Change this to any number you want
+        startDelay = 2.0  # When first ball appears
+        intervalDelay = 0.075  # Time between each ball
+
+        ballScale = 2.5
+
+        # Load base model once (better performance)
+        baseBall = loader.loadModel('phase_6/models/golf/golf_ball')
+        baseBall.setColorScale(0.75, 0.75, 0.75, 0.5)
+        baseBall.setTransparency(1)
+        baseBall.setScale(ballScale)
+
+        for i in range(numBalls):
+            ball = baseBall.copyTo(render)  # Instance instead of reloading
+
+            delay = startDelay + (i * intervalDelay)
+
+            ballTrack = Sequence(
+                Wait(delay),
+                getPropAppearTrack(ball, suit, ballPosPoints, 0, ballScale),
+                Func(ball.wrtReparentTo, render)
+            )
+
+            missPoint = lambda b=ball, toon=toon: __toonMissPoint(b, toon)
+
+            ballTrack.append(
+                getPropThrowTrack(
+                    attack,
+                    ball,
+                    [__toonFacePoint(toon)],
+                    [missPoint],
+                    0.1,
+                    target=t
+                )
+            )
+
+            ballTrack.append(Func(ball.removeNode))  # Clean up properly
+
+            ballPropTracks.append(ballTrack)
+    toonTracks = getToonTracks(attack, 2.5, ['slip-forward'], 1, ['duck'],
+                               showMissedExtraTime=1.7)
+    soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2, node=suit)
+    return Parallel(suitTrack, ballPropTracks, toonTracks, soundTrack, clubPropTrack)
+
+def doDriverOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']

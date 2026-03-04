@@ -25,7 +25,7 @@ ModelDict = {'s': 'phase_9/models/char/sellbotBoss',
  'l': 'phase_11/models/char/lawbotBoss',
  'c': 'phase_12/models/char/bossbotBoss',
  'g': 'phase_14/models/char/boardbotBoss',
-             't': 'phase_14/models/char/techbotBoss',
+             't': 'phase_9/models/char/lawbotBoss2',
              'p': 'phase_14/models/char/pressbotBoss',
             'l2': 'phase_14/models/char/pressbot2Boss'
              }
@@ -203,6 +203,7 @@ class BossCog(Avatar.Avatar):
         texture3 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_g.png')
         texture4 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_t.png')
         texture5 = loader.loadTexture('phase_9/maps/cc_t_ene_boss_p.png')
+        texture6 = loader.loadTexture('phase_11/maps/ttcc_ene_clo_torso_t.png')
         self.pelvis = self.getPart('torso')
         if self.style.dept == 'm':
             pelvis = self.pelvis.find('**/Object')
@@ -965,7 +966,7 @@ class BossCog(Avatar.Avatar):
                 for headPart in self.animatedHeadParts:
                     if not self.style.dept == 'g':
                         headPart.setP(0)
-                if self.dna.dept == 'l':
+                if self.style.dept == 'l':
                     animName = 'Ff_neutral_f'
                 else:
                     animName = 'Ff_neutral'
@@ -981,15 +982,19 @@ class BossCog(Avatar.Avatar):
                 ival = ActorInterval(self, animName)
             else:
                 for headPart in self.animatedHeadParts:
-                    headPart.setP(0)
-                ival = Parallel(ActorInterval(self, animName, partName=['torso', 'head']), ActorInterval(self, 'Fb_downNeutral', partName='legs'))
+                    headAnim = Parallel(ActorInterval(headPart, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)), Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
+                    headAnim.start()
+                    if not self.style.dept == 'g':
+                        headPart.setP(0)
+                ival = Sequence(ActorInterval(self, animName, partName=['torso', 'head']), ActorInterval(self, 'Fb_downNeutral', partName='legs'))
             if not self.forward:
                 ival = Sequence(Func(self.reverseBody), ival, Func(self.forwardBody))
         elif anim == 'down2Up':
             for headPart in self.animatedHeadParts:
                 if not self.style.dept == 'g':
                     headPart.setP(180)
-                headAnim = Parallel(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
+                headAnim = Parallel(ActorInterval(headPart, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)),
+                                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
                 headAnim.start()
             ival = Parallel(SoundInterval(self.upSfx), self.getAngryActorInterval('Fb_down2Up'))
             self.raised = 1
@@ -997,7 +1002,7 @@ class BossCog(Avatar.Avatar):
             for headPart in self.animatedHeadParts:
                 if not self.style.dept == 'g':
                     headPart.setP(180)
-                headAnim = Parallel(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',)))
+                headAnim = Sequence(ActorInterval(headPart, 'stun'), Func(headPart.loop, 'neutral-lured'))
                 headAnim.start()
             ival = Parallel(SoundInterval(self.downSfx), self.getAngryActorInterval('Fb_down2Up', playRate=-1))
             self.raised = 0
