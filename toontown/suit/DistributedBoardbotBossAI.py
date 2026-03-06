@@ -591,6 +591,26 @@ def skipChairman2():
     return 'Skipping the first round...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
+def skipbdlitcutscene():
+    """
+    Skips to the final round of the VP.
+    """
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedBoardbotBossAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+    if not boss:
+        return "You aren't in a VP!"
+    if boss.state in ('PrepareBattleTwo', 'BattleTwo'):
+        return "You can't skip this round."
+    boss.exitIntroduction()
+    boss.b_setState('BattleOne')
+    return 'Skipping Boardbot Litigation cutscene...'
+
+@magicWord(category=CATEGORY_PROGRAMMER)
 def killChairman():
     """
     Kills the Chairman.

@@ -161,12 +161,16 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     origH = suit.getH(battle)
 
     # Calculate heading to toon
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    origPos2 = suit.getPos(battle)
+    suit.setPos(battle, origPos)
     targetPos = toon.getPos(battle)
     suit.headsUp(battle, targetPos)
     targetH = suit.getH(battle)
 
     # Restore original heading
     suit.setH(battle, origH)
+    suit.setPos(battle, origPos2)
 
     # Normalize difference to shortest path
     delta = (targetH - origH + 180) % 360 - 180
@@ -288,17 +292,21 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
     battle = attack['battle']
     targets = attack['target']
     partTracks = Parallel()
+    origPos, origHpr = battle.getActorPosHpr(suit)
     origHpr = battle.getActorPosHpr(suit)[1]
+    origPos2 = suit.getPos(battle)
     for i in xrange(len(targets)):
         tgt = targets[i]
         toon = tgt['toon']
         origHpr = battle.getActorPosHpr(suit)[1] # We only want the rotation.
+        suit.setPos(battle, origPos)
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
-        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative]), softStop)
+        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative], softStop))
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
+    suit.setPos(battle, origPos2)
     return partTracks
 
 
@@ -309,7 +317,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     if suit:
-        suitPos = suit.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
@@ -357,7 +365,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    suitPos = suit.getPos(battle)
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
@@ -1045,22 +1053,28 @@ def doPromotion(attack, ind):
     toon = target[0]['toon']
     dmg = target[0]['hp']
     targetSuit = battle.activeSuits[ind]
+
     damageDelay = 1.7
+
     BattleParticles.loadParticles()
     baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
     flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
     flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
     BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+
     baseFlameSmall = BattleParticles.createParticleEffect(file='firedBaseFlame2')
     flameSmall = BattleParticles.createParticleEffect('FiredFlame2')
     flecksSmall = BattleParticles.createParticleEffect('SpriteFiredFlecks')
     BattleParticles.setEffectTexture(flecksSmall, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+
     baseFlameSmall.setScale(0.7)
     flameSmall.setScale(0.7)
     flecksSmall.setScale(0.7)
+
     baseFlameTrack = getPartTrack(baseFlameEffect, 2.1, 3.9, [baseFlameEffect, targetSuit, 0], softStop=-1)
     flameTrack = getPartTrack(flameEffect, 2.1, 3.9, [flameEffect, targetSuit, 0], softStop=-1)
     flecksTrack = getPartTrack(flecksEffect, 2.9, 2.1, [flecksEffect, targetSuit, 0], softStop=-1)
+
     baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.1, 3.9, [baseFlameSmall, targetSuit, 0], softStop=-1)
     flameSmallTrack = getPartTrack(flameSmall, 2.1, 3.9, [flameSmall, targetSuit, 0], softStop=-1)
     flecksSmallTrack = getPartTrack(flecksSmall, 2.9, 2.1, [flecksSmall, targetSuit, 0], softStop=-1)
@@ -1068,52 +1082,131 @@ def doPromotion(attack, ind):
     sprayEffect = BattleParticles.createParticleEffect('FireSprayPromotion')
     sprayEffect2 = BattleParticles.createParticleEffect('FireSprayPromotion')
     partTrack4 = getPartTrack(sprayEffect, 2.1, 3.25, [sprayEffect2, targetSuit, 0], softStop=-1)
-    resetPos, resetHpr = battle.getActorPosHpr(suit)
-    sinkPos = suit.getPos(battle)
-    dropPos = suit.getPos(battle)
-    sinkPos2 = suit.getPos(battle)
-    dropPos2 = suit.getPos(battle)
-    sinkPos.setY(sinkPos.getY() + 12.5)
-    sinkPos.setZ(sinkPos.getZ() - 4.5)
-    sinkPos2.setY(sinkPos.getY() - 22.5)
-    targetPos = targetSuit.getPos(battle)
-    origH = suit.getH(battle)
-    targetPos = targetSuit.getPos(battle)
-    suit.headsUp(battle, targetPos)
-    targetH = suit.getH(battle)
-    suit.setH(battle, origH)
-    delta = (targetH - origH + 180) % 360 - 180
-    if delta > 0:
-        shuffleAnim = 'shuffle-right'
-    else:
-        shuffleAnim = 'shuffle-left'
-    headsUp = LerpHprInterval(suit, 0, (origH + delta - 45, 0, 0), startHpr=(origH, 0, 0), other=battle)
+
     origPos, origHpr = battle.getActorPosHpr(suit)
-    headsUp2 = Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta - 45, 0, 0), other=battle))
-    cage = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
-    toonPos = toon.getPos(battle)
+    origPos2 = suit.getPos(battle)
+
+    walkDur = suit.getDuration('walk')
+    attackDur = suit.getDuration('magic3')
+
+    walkOutPos = Point3(origPos)
+    walkOutPos.setY(walkOutPos.getY() - 12.5)
+
+    targetPos = targetSuit.getPos(battle)
+
+    # Calculate the HPR the suit should have while standing out front
+    suit.setPos(battle, walkOutPos)
+    suit.setHpr(battle, origHpr)
+    suit.headsUp(battle, targetPos)
+    targetHpr = suit.getHpr(battle)
+
+    # Restore original transform immediately after calculating
+    suit.setPos(battle, origPos2)
+    suit.setHpr(battle, origHpr)
+
+
+    walkOutTrack = Parallel(
+        ActorInterval(suit, 'walk'),
+        LerpPosInterval(
+            suit,
+            walkDur,
+            walkOutPos,
+            startPos=origPos,
+            other=battle
+        ),
+        LerpHprInterval(
+            suit,
+            walkDur,
+            targetHpr,
+            startHpr=origHpr,
+            other=battle
+        )
+    )
+
+    turnBackTrack = Parallel(
+        ActorInterval(suit, 'walk'),
+        LerpHprInterval(
+            suit,
+            walkDur,
+            origHpr,
+            startHpr=targetHpr,
+            other=battle
+        ),
+        LerpPosInterval(
+            suit,
+            walkDur,
+            origPos,
+            startPos=walkOutPos,
+            other=battle
+        )
+    )
+
+
+
+    suitTrack = Sequence(
+        walkOutTrack,
+        getSuitAnimTrack(attack),
+        turnBackTrack,
+        Func(suit.setPos, battle, origPos),
+        Func(suit.setHpr, battle, origHpr),
+        Func(suit.setNeutralAnimationDrop)
+    )
+
     suitPos = targetSuit.getPos(battle)
     y = suitPos.getY()
-    cagePos = [Point3(suitPos.getX(), y, 0), VBase3(0, 0, 0)]
+
     dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
     dustCloud.setBillboardAxis(2.0)
     dustCloud.setZ(3)
     dustCloud.setScale(0.4)
     dustCloud.createTrack()
-    dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, targetSuit), Func(dustCloud.setPos,
-                                                                        Point3(suitPos.getX(), 0,
-                                                                               0)),
-                                 dustCloud.track, Func(dustCloud.detachNode), Wait(1.7), name='dustCloadIval')
-    moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('magic3')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
-    suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimationDrop))
-    selfDamageTrack = Sequence(Wait(5.0), Parallel(dustCloudHideIval, Sequence(ActorInterval(targetSuit, 'slip-forward', startTime=2.43), Func(targetSuit.setNeutralAnimation)),
-                                                   Func(targetSuit.makeIntoCTSManager), MovieUtil.createPromotionTrackPressurizer(targetSuit, battle),
-                                                   Func(targetSuit.showHpString, "PROMOTION!"), Func(targetSuit.setMaxHP, 1000), Func(targetSuit.setManager, 1), Func(targetSuit.makeShielding),
-                                                   Func(targetSuit.updateHealthBar, 0)), Func(battle.unSueSuit, targetSuit))
+
+    dustCloudHideIval = Sequence(
+        Func(dustCloud.reparentTo, targetSuit),
+        Func(dustCloud.setPos, Point3(suitPos.getX(), 0, 0)),
+        dustCloud.track,
+        Func(dustCloud.detachNode),
+        Wait(1.7),
+        name='dustCloadIval'
+    )
+
+    # Keep your original effect timing
+    selfDamageTrack = Sequence(
+        Wait(5.0),
+        Parallel(
+            dustCloudHideIval,
+            Sequence(
+                ActorInterval(targetSuit, 'slip-forward', startTime=2.43),
+                Func(targetSuit.setNeutralAnimation)
+            ),
+            Func(targetSuit.makeIntoCTSManager),
+            MovieUtil.createPromotionTrackPressurizer(targetSuit, battle),
+            Func(targetSuit.showHpString, "PROMOTION!"),
+            Func(targetSuit.setMaxHP, 1000),
+            Func(targetSuit.setManager, 1),
+            Func(targetSuit.makeShielding),
+            Func(targetSuit.updateHealthBar, 0)
+        ),
+        Func(battle.unSueSuit, targetSuit)
+    )
     selfDamageTrack.append(Func(targetSuit.makeContracted))
+
     soundTrack = getSoundTrack('SA_boilerplate_a.ogg', delay=2.5, node=suit)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=5.0)
-    return Parallel(baseFlameSmallTrack, flecksTrack, flameTrack, partTrack4, baseFlameTrack, suitTrack, moveTrack, selfDamageTrack, soundTrack2, flecksSmallTrack, flameSmallTrack, soundTrack)
+
+    return Parallel(
+        baseFlameSmallTrack,
+        flecksTrack,
+        flameTrack,
+        partTrack4,
+        baseFlameTrack,
+        suitTrack,
+        selfDamageTrack,
+        soundTrack2,
+        flecksSmallTrack,
+        flameSmallTrack,
+        soundTrack
+    )
 
 def doViolation(attack):
     suit = attack['suit']
@@ -1798,7 +1891,7 @@ def doContractEnforcement(attack):
                                scaleUpTime=0.25),
             Wait(0.95),
             Parallel(
-                getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
+                getThrowTrack(knife, hitPoint, 1.5, battle, -20.288),
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
@@ -2179,35 +2272,83 @@ def doOvermodulated(attack, ind):
     target = attack['target']
     toon = target[0]['toon']
     targetSuit = battle.activeSuits[ind]
-    resetPos, resetHpr = battle.getActorPosHpr(suit)
-    sinkPos = suit.getPos(battle)
-    dropPos = suit.getPos(battle)
-    sinkPos2 = suit.getPos(battle)
-    dropPos2 = suit.getPos(battle)
-    sinkPos.setY(sinkPos.getY() + 12.5)
-    sinkPos.setZ(sinkPos.getZ() - 4.5)
-    sinkPos2.setY(sinkPos.getY() - 22.5)
-    targetPos = targetSuit.getPos(battle)
-    origH = suit.getH(battle)
-    targetPos = targetSuit.getPos(battle)
-    suit.headsUp(battle, targetPos)
-    targetH = suit.getH(battle)
-    suit.setH(battle, origH)
-    delta = (targetH - origH + 180) % 360 - 180
-    if delta > 0:
-        shuffleAnim = 'shuffle-right'
-    else:
-        shuffleAnim = 'shuffle-left'
-    headsUp = LerpHprInterval(suit, 0, (origH + delta - 45, 0, 0), startHpr=(origH, 0, 0), other=battle)
+
     origPos, origHpr = battle.getActorPosHpr(suit)
-    headsUp2 = Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta - 45, 0, 0), other=battle))
-    moveTrack = Sequence(LerpPosInterval(suit, suit.getDuration('walk'), sinkPos2, other=battle), Wait(suit.getDuration('sanction')), LerpPosInterval(suit, suit.getDuration('walk'), dropPos, other=battle), Func(suit.setPos, battle, resetPos))
-    suitTrack = Sequence(ActorInterval(suit, 'walk'), headsUp, getSuitAnimTrack(attack), ActorInterval(suit, 'walk'), headsUp2, Func(suit.setNeutralAnimation))
-    selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + .5), Parallel(ActorInterval(targetSuit, 'slip-backward'), Func(battle.unlureSuit, targetSuit), Func(targetSuit.setDizzy, 0),
-                                                                             __createSuitResetPosTrackOvermodulated(targetSuit, battle), Func(targetSuit.makeUnLured),
-                                                   Func(targetSuit.showHpString, "+1 ATTACK!"), Func(targetSuit.checkExtraAttacks, 1)), Func(targetSuit.setNeutralAnimationDrop))
-    soundTrack = getSoundTrack('SA_haymaker.ogg', delay=suit.getDuration('walk') + .5)
-    soundTrack1 = getSoundTrack('SA_sanction.ogg', delay=suit.getDuration('walk'), node=suit)
+    origPos2 = suit.getPos(battle)
+
+    walkOutPos = Point3(origPos)
+    walkOutPos.setY(walkOutPos.getY() - 10.5)
+
+    # Calculate the HPR the suit should have while standing forward
+    targetPos = targetSuit.getPos(battle)
+
+    suit.setPos(battle, walkOutPos)
+    suit.setHpr(battle, origHpr)
+    suit.headsUp(battle, targetPos)
+    targetHpr = suit.getHpr(battle)
+
+    # Restore original transform immediately after calculating
+    suit.setPos(battle, origPos2)
+    suit.setHpr(battle, origHpr)
+
+    moveTrack = Sequence(
+        Parallel(LerpHprInterval(
+        suit,
+        suit.getDuration('walk'),
+        targetHpr,
+        startHpr=origHpr,
+        other=battle
+    ),
+            LerpPosInterval(
+            suit,
+            suit.getDuration('walk'),
+            walkOutPos,
+            startPos=origPos,
+            other=battle
+        )),
+        Wait(suit.getDuration('sanction')),
+        Parallel(LerpHprInterval(
+            suit,
+            suit.getDuration('walk'),
+            origHpr,
+            startHpr=targetHpr,
+            other=battle
+        ),
+            LerpPosInterval(
+            suit,
+            suit.getDuration('walk'),
+            origPos,
+            startPos=walkOutPos,
+            other=battle
+        )),
+        Func(suit.setPos, battle, origPos),
+        Func(suit.setHpr, battle, origHpr)
+    )
+
+    suitTrack = Sequence(
+        ActorInterval(suit, 'walk'),
+        Parallel(getSuitAnimTrack(attack)),
+        ActorInterval(suit, 'walk'),
+        Func(suit.setNeutralAnimationDrop)
+    )
+
+    selfDamageTrack = Sequence(
+        Wait((suit.getDuration('walk')) + 0.5),
+        Parallel(
+            ActorInterval(targetSuit, 'slip-backward'),
+            Func(battle.unlureSuit, targetSuit),
+            Func(targetSuit.setDizzy, 0),
+            __createSuitResetPosTrackOvermodulated(targetSuit, battle),
+            Func(targetSuit.makeUnLured),
+            Func(targetSuit.showHpString, "+1 ATTACK!"),
+            Func(targetSuit.checkExtraAttacks, 1)
+        ),
+        Func(targetSuit.setNeutralAnimationDrop)
+    )
+
+    soundTrack = getSoundTrack('SA_haymaker.ogg', delay=(suit.getDuration('walk')) + 0.5)
+    soundTrack1 = getSoundTrack('SA_sanction.ogg', delay=(suit.getDuration('walk')), node=suit)
+
     return Parallel(suitTrack, moveTrack, selfDamageTrack, soundTrack, soundTrack1)
 
 hitSoundFiles = ('AA_tart_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_slice_only.ogg', 'AA_wholepie_only.ogg', 'AA_wholepie_only.ogg')
@@ -2339,7 +2480,7 @@ def doShadowToon(attack):
 
     if hitToon:
         pieFly = LerpPosInterval(pie, tPieHitsSuit - tPieLeavesHand, pos=MovieUtil.avatarFacePoint(toon, other=battle), other=battle)
-        pieHide = Func(pies.removeNode)
+        pieHide = Func(MovieUtil.removeProps, pies)
         splatShow = Func(__showProp, splat, toon, Point3(0, 0, toon.getHeight()))
         splatBillboard = Func(__billboardProp, splat)
         splatAnim = ActorInterval(splat, splatName)
@@ -2356,7 +2497,7 @@ def doShadowToon(attack):
         suitPoint = __suitMissPoint(toon, other=battle)
         piePreMiss = Func(__piePreMiss, missDict, pie, suitPoint, battle)
         pieMiss = LerpFunctionInterval(__pieMissLerpCallback, extraArgs=[missDict], duration=(tPieHitsSuit - tPieLeavesHand) * ratioMissToHit)
-        pieHide = Func(pies.removeNode)
+        pieHide = Func(MovieUtil.removeProps, pies)
         pieTrack.append(piePreMiss)
         pieTrack.append(pieMiss)
         pieTrack.append(pieHide)

@@ -85,7 +85,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
     def enterIntroduction(self):
         self.arenaSide = None
         self.makeBattleOneBattles()
-        self.barrier = self.beginBarrier('Introduction', self.involvedToons, 45, self.doneIntroduction)
+        self.barrier = self.beginBarrier('Introduction', self.involvedToons, 300, self.doneIntroduction)
         self.createFoodBelts()
         self.createBanquetTables()
 
@@ -194,7 +194,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
         return
 
     def enterPrepareBattleTwo(self):
-        self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)
+        self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 120, self.__donePrepareBattleTwo)
         self.createFoodBelts()
         self.createBanquetTables()
 
@@ -923,6 +923,23 @@ def skipDirectors():
     boss.b_setState('PrepareBattleThree')
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
+def skipDirectorsCutscene():
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedDirectorsAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+
+    if not boss:
+        return "You aren't in a CEO!"
+    if boss.state in ('PrepareBattleTwo', 'BattleTwo'):
+        return "You can't skip this round."
+    boss.exitIntroduction()
+    boss.b_setState('PrepareBattleTwo')
+
+@magicWord(category=CATEGORY_ADMINISTRATOR)
 def skipDirectorsFirst():
     invoker = spellbook.getInvoker()
     boss = None
@@ -956,6 +973,24 @@ def skipDirectorsFinal():
         return "You can't skip this round."
     boss.exitIntroduction()
     boss.b_setState('PrepareBattleFour')
+
+@magicWord(category=CATEGORY_ADMINISTRATOR)
+def skipexecutscene():
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedDirectorsAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+
+    if not boss:
+        return "You aren't in a CEO!"
+    if boss.state in ('PrepareBattleFour', 'BattleFour'):
+        return "You can't skip this round."
+    boss.exitIntroduction()
+    boss.b_setState('BattleOne')
+    return 'Skipping Executive Board cutscene...'
 
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)

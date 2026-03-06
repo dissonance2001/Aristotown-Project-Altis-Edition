@@ -112,7 +112,7 @@ autocad = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), (
 clubpres = (('snap', 'snap2', 4), ('bellow', 'bellow', 4), ('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
 derrman = (('pen-squirt', 'fountain-pen', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 derrhand = (('pen-squirt', 'fountain-pen', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('summon', 'summon', 4))
-mplayer = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
+mplayer = (('shot1', 'majorplayer-fusiondance-shot1', 4), ('shot2', 'majorplayer-fusiondance-shot2', 4), ('shot3', 'majorplayer-fusiondance-shot3', 4), ('shot4', 'majorplayer-fusiondance-shot4', 4), ('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
 fires = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4))
 fbed = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4))
 choreo = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
@@ -121,7 +121,7 @@ chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-j
 phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4), ('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
 bkeeper = (('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
 wtapper = (('throttletwo', 'throttletwo', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
-ambass = (('defense', 'defense', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap2', 4))
+ambass = (('frustrated', 'frustrated', 4), ('defense', 'defense', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap2', 4))
 
 # Sellbots
 cc = (('speak', 'speak', 4), ('glower', 'glower', 4))
@@ -170,7 +170,7 @@ bfh = (('watercooler', 'watercooler', 4), ('pickpocket', 'pickpocket', 4))
 rb = (('cigar-smoke', 'cigar-smoke', 4), ('pickpocket', 'pickpocket', 4), ('golf-club-swing', 'golf-club-swing', 4))
 ovt = (('finger-wag', 'finger-wag', 4), ('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4), ('frustrated', 'frustrated', 4), ('objection', 'objection', 4))
 supervis = (('finger-wag', 'finger-wag', 4), ('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-duckshfl = (('cigar-smoke', 'cigar-smoke', 4), ('sit-dock', 'sit-dock', 4))
+duckshfl = (('shot1', 'fusiondance-shot1', 4), ('shot2', 'fusiondance-shot2', 4), ('shot3', 'fusiondance-shot3', 4), ('shot4', 'fusiondance-shot4', 4), ('cigar-smoke', 'cigar-smoke', 4), ('sit-dock', 'sit-dock', 4))
 treek = (('shredder', 'shredder', 4), ('pen-squirt', 'fountain-pen', 4))
 styx = (('watercooler', 'watercooler', 4), ('glower', 'glower', 4))
 nix = (('hold-eraser', 'hold-eraser', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -5247,6 +5247,7 @@ class Suit(Avatar.Avatar):
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
         anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
+                 'fusiondance-shot1', 'fusiondance-shot2', 'fusiondance-shot3', 'fusiondance-shot4', 'fusiondance-shot5',
                  'stun', 'enraged', 'sacrifice-cog', 'summon-cog', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup',
                  'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive', 'bust',
                  'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'gsnap', 'overclocked',
@@ -5290,7 +5291,7 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setTexture(texture, 1)
 
         self.corpMedallion.setPosHprScale(0, -1, 0, 180.0, 0.0, 0.0, 0, 0, 0)
-        self.corpMedallion.setColor(self.medallionColors[dept])
+        #self.corpMedallion.setColor(self.medallionColors[dept])
         if self.style.name == 'fhj':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hrollers':
@@ -5341,7 +5342,7 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setTexture(texture, 1)
 
         self.corpMedallion.setPosHprScale(0, -1, 0, 180.0, 0.0, 0.0, 0, 0, 0)
-        self.corpMedallion.setColor(self.medallionColors[dept])
+        #self.corpMedallion.setColor(self.medallionColors[dept])
         if self.style.name == 'fhj':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hrollers':
@@ -5419,7 +5420,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_3/maps/ttcc_suit_insignias_palette3.png')
             self.corpMedallion.setTexture(texture, 1)
         self.corpMedallion.setH(180.0)
-        self.corpMedallion.setColor(self.medallionColors[dept])
+       # self.corpMedallion.setColor(self.medallionColors[dept])
         if self.style.body == 'a' and not self.isFemale and not self.isBuff:
             self.corpMedallion.setY(-.1125)
             self.corpMedallion.setZ(-.1)
@@ -5500,7 +5501,7 @@ class Suit(Avatar.Avatar):
         elif dept == 'p':
             self.hpBase = model.find('**/emblem_base').copyTo(chestNull)
         self.hpBase.setH(180.0)
-        self.hpBase.setColor(self.medallionColors[dept])
+       # self.hpBase.setColor(self.medallionColors[dept])
         if self.style.name == 'fhj':
             self.hpBase.setScale(0)
         elif self.style.name == 'hroller2':

@@ -476,12 +476,13 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
 
     def __makeDoobers(self):
         self.__resetDoobers()
-        for i in xrange(8):
+        for i in xrange(12):
             suit = DistributedSuitAI.DistributedSuitAI(self.air, None)
-            level = random.randint(1, 14)
+            level = random.randint(11, 14)
             suit.dna = SuitDNA.SuitDNA()
             suit.dna.newSuitRandom(level=level, dept=self.dna.dept)
-            suit.setLevel(level)
+            suit.setLevel(34)
+            suit.setExecutive(1)
             suit.generateWithRequired(self.zoneId)
             self.doobers.append(suit)
 
@@ -600,6 +601,26 @@ def skipVP2():
     boss.exitIntroduction()
     boss.b_setState('PrepareBattleTwo')
     return 'Skipping the first round...'
+
+@magicWord(category=CATEGORY_PROGRAMMER)
+def skipsblitcutscene():
+    """
+    Skips to the final round of the VP.
+    """
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedSellbotBossMiniAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+    if not boss:
+        return "You aren't in a VP!"
+    if boss.state in ('PrepareBattleTwo', 'BattleTwo'):
+        return "You can't skip this round."
+    boss.exitIntroduction()
+    boss.b_setState('BattleOne')
+    return 'Skipping Sellbot Litigation cutscene...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
 def killVP():

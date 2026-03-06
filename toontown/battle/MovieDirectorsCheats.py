@@ -159,12 +159,16 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     origH = suit.getH(battle)
 
     # Calculate heading to toon
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    origPos2 = suit.getPos(battle)
+    suit.setPos(battle, origPos)
     targetPos = toon.getPos(battle)
     suit.headsUp(battle, targetPos)
     targetH = suit.getH(battle)
 
     # Restore original heading
     suit.setH(battle, origH)
+    suit.setPos(battle, origPos2)
 
     # Normalize difference to shortest path
     delta = (targetH - origH + 180) % 360 - 180
@@ -275,7 +279,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     if suit:
-        suitPos = suit.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
@@ -321,7 +325,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    suitPos = suit.getPos(battle)
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)

@@ -771,17 +771,17 @@ class TownBattleToonPanel(DirectFrame):
                 self.attackIcon7.show()
         if avatar.markedWood:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.markedWood = status.find('**/marked_wood_icon')
+            self.markedWood = status.find('**/sued_icon')
             self.markedWoodRounds = DirectLabel(parent=self.markedWood, relief=None, text="%s" % avatar.getMarkedWoodRounds(), text_fg=(1, 1, 1, 1),
                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                 pos=(0.25, 0, -.5),
                                                 text_scale=.6)
             self.markedWoodRounds.show()
-            self.markedWoodText = DirectLabel(parent=self.markedWood, relief=None, text="%s" % avatar.getMarkedWood() + "%", text_fg=(1, 0, 0, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, 0.15),
-                                              text_scale=.4)
-            self.markedWoodText.show()
+            # self.markedWoodText = DirectLabel(parent=self.markedWood, relief=None, text="%s" % avatar.getMarkedWood() + "%", text_fg=(1, 0, 0, 1),
+            #                                   text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+            #                                   pos=(0.25, 0, 0.15),
+            #                                   text_scale=.4)
+            # self.markedWoodText.show()
             self.statusEffects += 1
             if self.statusEffects == 1:
                 self.markedWood.reparentTo(self.attackIcon)
@@ -1614,7 +1614,7 @@ class TownBattleToonPanel(DirectFrame):
         targetList.reverse()
         try:
             if self.avatar.confused:
-                marker = '-'
+                marker = '?'
             elif self.avatar.trackBonusLevel[track] >= 1:
                 marker = 'O'
             else:

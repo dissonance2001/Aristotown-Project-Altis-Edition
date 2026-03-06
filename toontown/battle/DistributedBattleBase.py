@@ -365,6 +365,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.needAdjustTownBattle = 1
             if actorList == []:
                 actorList = self.activeSuits
+
             if actorList.count(actor) != 0:
                 numSuits = len(actorList) - 1
                 index = actorList.index(actor)
@@ -1016,10 +1017,16 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             if self.joiningSuits.count(s):
                 self.notify.warning('suit: %d was in joining list!' % s.doId)
                 self.joiningSuits.remove(s)
+
             if self.pendingSuits.count(s):
                 self.pendingSuits.remove(s)
+
             self.notify.debug('__makeAvsActive() - suit: %d' % s.doId)
-            self.activeSuits.append(s)
+
+            if len(self.activeSuits) < 2:
+                self.activeSuits.append(s)  # first and second stay in their normal spots
+            else:
+                self.activeSuits.insert(len(self.activeSuits) - 1, s)  # insert before suit 2
 
         if len(self.activeSuits) >= 1:
             for suit in self.activeSuits:
@@ -1471,27 +1478,27 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def __adjust(self, ts, callback):
         self.notify.debug('__adjust(%f)' % ts)
         adjustTrack = Parallel()
-        if len(self.pendingSuits) >= 0 or self.suitGone == 1:
+        if len(self.pendingSuits) > 0 or self.suitGone == 1:
             self.suitGone = 0
             numSuits = len(self.pendingSuits) + len(self.activeSuits) - 1
-            index = 0
-            for suit in self.activeSuits:
+
+            if len(self.activeSuits) < 2:
+                orderedSuits = list(self.activeSuits) + list(self.pendingSuits)
+            else:
+                orderedSuits = list(self.activeSuits[:-1]) + list(self.pendingSuits) + [self.activeSuits[-1]]
+
+            for index, suit in enumerate(orderedSuits):
                 point = self.suitPoints[numSuits][index]
-                pos = suit.getPos(self)
                 destPos = point[0]
+
                 if self.isSuitLured(suit) == 1:
                     destPos = Point3(destPos[0], destPos[1] - MovieUtil.SUIT_LURE_DISTANCE, destPos[2])
-                if pos != destPos:
-                    destHpr = VBase3(point[1], 0.0, 0.0)
-                    adjustTrack.append(self.createAdjustInterval(suit, destPos, destHpr))
-                index += 1
 
-            for suit in self.pendingSuits:
-                point = self.suitPoints[numSuits][index]
-                destPos = point[0]
                 destHpr = VBase3(point[1], 0.0, 0.0)
-                adjustTrack.append(self.createAdjustInterval(suit, destPos, destHpr))
-                index += 1
+                pos = suit.getPos(self)
+
+                if pos != destPos:
+                    adjustTrack.append(self.createAdjustInterval(suit, destPos, destHpr))
 
         if len(self.pendingToons) > 0 or self.toonGone == 1:
             self.toonGone = 0

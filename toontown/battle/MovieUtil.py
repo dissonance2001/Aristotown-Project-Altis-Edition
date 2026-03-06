@@ -307,6 +307,7 @@ def createSuitReviveTrack(suit, battle):
             headInterval =  Sequence(Wait(1.0), ActorInterval(headPart, 'death'))
             hasAnimatedHead = True
     suitTrack.append(Func(suit.checkCogLuredDeath, battle))
+    suitTrack.append(Func(suit.makeDead))
     suitTrack.append(Wait(1.0))
     suitTrack.append(
         ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
@@ -325,6 +326,7 @@ def createSuitReviveTrack(suit, battle):
     suitTrack.append(Func(suit.makeDamageUp))
     suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeRevive))
+    suitTrack.append(Func(suit.makeUnDead))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
@@ -752,6 +754,7 @@ def createSuitReviveTrackVirtual(suit, battle):
         headInterval = Sequence(Wait(1.0), ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
         headInterval2 = Func(headPart.loop, 'neutral')
         hasAnimatedHead = True
+    suitTrack.append(Func(suit.makeDead))
     suitTrack.append(Func(suit.checkCogLuredDeath, battle))
     suitTrack.append(Wait(1.0))
     suitTrack.append(
@@ -761,6 +764,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Func(suit.setVirtual, True, True))
     suitTrack.append(Func(suit.setName, suit.createNameInfoVirtual()))
     suitTrack.append(Func(suit.show))
+    suitTrack.append(Func(suit.makeUnDead))
     suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
@@ -949,10 +953,15 @@ def createVirtualSuitDeathTrack(suit, battle):
     suitTrack = Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     deathSuit = suit
-    headInterval = Parallel()
+    headInterval = Sequence()
     hasAnimatedHead = False
+    for headPart in suit.animatedHeadParts:
+        headInterval.append(Wait(1.0))
+        headInterval.append(ActorInterval(headPart, 'death', duration=2))
+        hasAnimatedHead = True
     if suit.style.name == 'wsi':
         from toontown.battle import MovieCamera
+        suitTrack.append(Func(suit.makeDead))
         suitTrack.append(MovieCamera.motionShot(0.0, 10.0, 8.0, -180, -10.0, 0.0, 0, suit))
         suitTrack.append(Func(suit.setChatAbsolute,
                               "Ugh... I don't get paid enough for this...",
@@ -965,12 +974,20 @@ def createVirtualSuitDeathTrack(suit, battle):
                               CFSpeech | CFTimeout))
         suitTrack.append(Wait(4.0))
         suitTrack.append(ActorInterval(suit, 'defeated-out'))
-    for headPart in suit.animatedHeadParts:
-        headInterval.append(Wait(1.0))
-        headInterval.append(ActorInterval(headPart, 'death', duration=2))
-        hasAnimatedHead = True
-    if suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
-        suitTrack.append(Func(suit.checkCogLuredDeath, battle))
+        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle), headInterval))
+        suitTrack.append(Wait(1.0))
+        suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
+        suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
+        suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2)))
+        deathSound = base.loader.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
+        suitTrack.append(Parallel(ActorInterval(suit, 'slip-forward', duration=2),
+                                  LerpColorScaleInterval(suit, duration=1.0, colorScale=(0, 0, 0, 0),
+                                                         blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
+        suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
+        suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
+        suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
+    elif suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
+        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle), headInterval))
         suitTrack.append(Wait(1.0))
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
@@ -983,11 +1000,12 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
         suitTrack.append(Func(suit.makeDead))
     else:
-        suitTrack.append(Func(suit.checkCogLuredDeath, battle))
+        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle), headInterval))
+        suitTrack.append(Func(suit.makeDead))
         suitTrack.append(Wait(1.0))
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
-        suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2), headInterval))
+        suitTrack.append(Parallel(ActorInterval(suit, 'lose', duration=2)))
         deathSound = base.loader.loadSfx('phase_11/audio/sfx/LB_laser_beam_off_death.ogg')
         suitTrack.append(Parallel(ActorInterval(suit, 'slip-forward', duration=2),
                                   LerpColorScaleInterval(suit, duration=1.0, colorScale=(0, 0, 0, 0),
@@ -995,7 +1013,6 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
         suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
         suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
-        suitTrack.append(Func(suit.makeDead))
     #suitTrack.append(Func(suit.hide))
     returnval = Parallel()
     multiTrack = Parallel(suitTrack, returnval)
@@ -1034,12 +1051,12 @@ def createSuitDeathTrack(suit, battle):
             headInterval = Sequence(Wait(1.0), ActorInterval(headPart, 'death'))
             hasAnimatedHead = True
     suitTrack.append(Func(suit.checkCogLuredDeath, battle))
+    suitTrack.append(Func(suit.makeDead))
     suitTrack.append(Wait(1.0))
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setDizzy, 0))
     suitTrack.append(Func(suit.setSued2, 0))
-    suitTrack.append(Func(suit.makeDead))
     suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
     suitTrack.append(ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
@@ -2086,6 +2103,46 @@ def createSuitBellowInterval(suit):
         return Parallel(headInterval, suitInterval, headLoop)
     else:
         return stunInterval
+
+def createShot1(suit):
+    suitInterval = ActorInterval(suit, 'shot1')
+    for headPart in suit.animatedHeadParts:
+        headInterval = Sequence(ActorInterval(headPart, 'fusiondance-shot1'), Func(headPart.loop,
+                        'neutral'))
+    else:
+        return Parallel(headInterval, suitInterval)
+
+def createShot2(suit):
+    suitInterval = ActorInterval(suit, 'shot2')
+    for headPart in suit.animatedHeadParts:
+        headInterval = Sequence(ActorInterval(headPart, 'fusiondance-shot2'), Func(headPart.loop,
+                        'neutral'))
+    else:
+        return Parallel(headInterval, suitInterval)
+
+def createShot3(suit):
+    suitInterval = ActorInterval(suit, 'shot3')
+    for headPart in suit.animatedHeadParts:
+        headInterval = Sequence(ActorInterval(headPart, 'fusiondance-shot3'), Func(headPart.loop,
+                        'neutral'))
+    else:
+        return Parallel(headInterval, suitInterval)
+
+def createShot4(suit):
+    suitInterval = ActorInterval(suit, 'shot4')
+    for headPart in suit.animatedHeadParts:
+        headInterval = Sequence(ActorInterval(headPart, 'fusiondance-shot4'), Func(headPart.loop,
+                        'neutral'))
+    else:
+        return Parallel(headInterval, suitInterval)
+
+def createShot5(suit):
+    suitInterval = ActorInterval(suit, 'shot5')
+    for headPart in suit.animatedHeadParts:
+        headInterval = Sequence(ActorInterval(headPart, 'fusiondance-shot5'), Func(headPart.loop,
+                        'neutral'))
+    else:
+        return Parallel(headInterval, suitInterval)
 
 def createSuitSnapInterval(suit):
     p1 = Point3(0)

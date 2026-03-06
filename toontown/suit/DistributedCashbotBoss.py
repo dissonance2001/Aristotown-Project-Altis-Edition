@@ -19,6 +19,7 @@ from toontown.suit import SuitDNA
 from toontown.battle.BattleProps import *
 from otp.otpbase import OTPGlobals
 from toontown.battle import MovieToonVictory
+from toontown.battle import MovieUtil
 from toontown.friends import FriendsListManager
 from toontown.battle import RewardPanel
 from toontown.suit import DistributedSuitBase
@@ -71,7 +72,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.highroller.setPickable(0)
         self.highroller.setDisplayName('High Roller\nCashbot\nLevel 100.mgr')
         self.highroller.doId = 0
-        self.highroller.loop('neutral')
+        self.highroller.loop('neutral2')
 
         self.mrhollywood = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
@@ -80,7 +81,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.mrhollywood.setPickable(0)
         self.mrhollywood.setDisplayName('Mr. Hollywood\nSellbot\nLevel 25.exe')
         self.mrhollywood.doId = 0
-        self.mrhollywood.loop('neutral')
+        self.mrhollywood.loop('neutral2')
         self.videographer = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('videog')
@@ -88,7 +89,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.videographer.setPickable(0)
         self.videographer.setDisplayName('Videographer\nPressbot\nLevel 99.mgr')
         self.videographer.doId = 0
-        self.videographer.loop('neutral')
+        self.videographer.loop('neutral2')
         self.director = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('mh2')
@@ -96,7 +97,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.director.setPickable(0)
         self.director.setDisplayName('Mr. Hollywood\nSellbot\nLevel 25.exe')
         self.director.doId = 0
-        self.director.loop('neutral')
+        self.director.loop('neutral2')
         self.filmmaker = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('std2')
@@ -104,7 +105,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.filmmaker.setPickable(0)
         self.filmmaker.setDisplayName('Stunt Double\nPressbot\nLevel 18.exe')
         self.filmmaker.doId = 0
-        self.filmmaker.loop('neutral')
+        self.filmmaker.loop('neutral2')
         self.majorplayer2 = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('mplayer')
@@ -112,7 +113,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.majorplayer2.setPickable(0)
         self.majorplayer2.setDisplayName('Major Player\nBossbot\nLevel 28.mgr')
         self.majorplayer2.doId = 0
-        self.majorplayer2.loop('neutral')
+        self.majorplayer2.loop('neutral2')
         self.duckshuffler2 = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('duckshfl')
@@ -261,6 +262,8 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.highRollerWheel = globalPropPool.getProp('wheel')
         self.highRollerWheel.loop('wheel')
         self.highRollerWheel.setScale(6)
+        self.highRollerWheel2 = globalPropPool.getProp('wheel2')
+        self.highRollerWheel2.setScale(6)
         self.midVault = loader.loadModel('phase_10/models/cogHQ/MidVault.bam')
         self.endVault = loader.loadModel('phase_10/models/cogHQ/EndVault.bam')
         self.lightning = loader.loadModel('phase_10/models/cogHQ/CBLightning.bam')
@@ -310,6 +313,10 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.filmmaker.hide()
         self.highRollerWheel.reparentTo(self.geom)
         self.highRollerWheel.setPosHpr(0, -170, 0, 180, 0, 0)
+        self.highRollerWheel.hide()
+        self.highRollerWheel2.reparentTo(self.geom)
+        self.highRollerWheel2.setPosHpr(0, -170, 0, 180, 0, 0)
+        self.highRollerWheel2.hide()
         self.highRollerTV.reparentTo(self.geom)
         self.highRollerTV.setPosHpr(-25, -185, 21.75, -10, 0, 0)
         self.endVault.findAllMatches('**/MagnetArms').detach()
@@ -346,7 +353,9 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         planeNode.setCollideMask(ToontownGlobals.PieBitmask)
         self.geom.attachNewNode(planeNode)
         self.geom.reparentTo(render)
+        self.introduction = base.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn.ogg')
         self.elevatorMusic = base.loader.loadMusic('phase_10/audio/bgm/cb_elevator.ogg')
+        self.battleOneMusic = base.loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle.ogg')
         self.battleTwoMusic = base.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
         self.midCutsceneMusic = base.loadMusic('phase_10/audio/bgm/CB_boss_cutscene.ogg')
         self.battleThreeMusic = base.loadMusic('phase_10/audio/bgm/encntr_cfo_crane.ogg')
@@ -448,18 +457,31 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
         rToon = self.resistanceToon
         rToon.setPosHpr(*ToontownGlobals.CashbotRTBattleOneStartPosHpr)
-        track = Sequence(
-            #Func(base.camera.setPosHpr, 82, -219, 5, 267, 0, 0),
-                        Func(base.camera.reparentTo, render),
+        track = Sequence(Func(base.camera.reparentTo, render),
                         Func(base.camera.setPosHpr, 0, - 240, 10, 0, 0, 0),
                         Parallel(
                             bossTrack,
                             Sequence(Func(self.majorplayer2.setChatAbsolute, "How's the hoop skip out there toe-taps, can't thank ya enough for these claps!", CFSpeech),
                              Wait(4),
                                      Func(self.majorplayer2.setChatAbsolute,
+                                          "The due morning dew duet is a pitch perfect harp strum for this singing stringer's symphonic set-strike solicitations!",
+                                          CFSpeech),   Wait(4),
+                                     Func(self.majorplayer2.setChatAbsolute,
                                           "Takes two to tango, babe, and I am proud and poppin' to introduce today's special guest!",
-                                          CFSpeech),
+                                          CFSpeech), Func(self.majorplayer2.loop, 'neutral'),
                                      Wait(3),
+                                     Func(self.majorplayer2.setChatAbsolute,
+                                          "The Casino Cardshaper...",
+                                          CFSpeech), Wait(2.0),
+                                     Func(self.majorplayer2.setChatAbsolute,
+                                          "The Roulette Rockabilly...",
+                                          CFSpeech), Wait(2.0),
+                                     Func(self.majorplayer2.setChatAbsolute,
+                                          "The Quartet Quack Attacker...",
+                                          CFSpeech), Wait(2.0),
+                                     Func(self.majorplayer2.setChatAbsolute,
+                                          "The Spinning Wheel...",
+                                          CFSpeech), Wait(5.0),
                                      Func(self.duckshuffler2.show), ActorInterval(self.duckshuffler2, 'slip-forward'), Func(self.duckshuffler2.loop, 'neutral'),
                                      Func(self.majorplayer2.setChatAbsolute,
                                           "Buck Ruffler: The Duck Shuffler!",
@@ -467,46 +489,88 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                                           "Oh my Cogth thath me",
                                           CFSpeech), Wait(1.5), Func(self.duckshuffler2.setChatAbsolute,
                                                           "Waith I needth to thay it too",
-                                          CFSpeech), Wait(1.5), Func(self.duckshuffler2.setChatAbsolute,
+                                          CFSpeech), Wait(2.5), Func(self.duckshuffler2.setChatAbsolute,
                                                           "Buck Ruffler: The Duck Thuffler!",
                                           CFSpeech),
                                      Wait(3),
-                                    Func(self.majorplayer2.setChatAbsolute,
-                                          "Oooh, but that's no high class brass, looks like we got some surprise guests! Baby Blue, ya knew my words were true-I told ya we'd meet again!",
+                                     Func(self.duckshuffler2.setChatAbsolute,
+                                          "HAHAHALRIGHT! Let'th thake thome dithe!",
                                           CFSpeech),
                                      Wait(3),
                                      Func(self.duckshuffler2.setChatAbsolute,
-                                          "I gueth we'll have to give em tha thpecial thow though! Come on mic thpam!",
+                                          "THE TABLE ITH HOT AND I'M ON TOP! Let'th play!!",
                                           CFSpeech),
-                                     Wait(2),
+                                     Wait(3.0),
+                                    Parallel(Func(self.majorplayer2.setChatAbsolute,
+                                          "Oooh, but that's no high class brass, looks like we got some surprise guests!",
+                                          CFSpeech), Func(base.playSfx, base.loader.loadSfx('phase_13/audio/sfx/april_toons/highroller/cc_s_dlg_ene_duckshfl_normal_dialog.ogg')), LerpHprInterval(self.duckshuffler2, 1, (3780, 0, 0))),
+                                     Wait(3),
                                      Func(self.majorplayer2.setChatAbsolute,
-                                          "Hachahoo hooi-didibadoo! Here's a special shabaadoopdaa-show from we to you!",
+                                          "Baby Blue, ya knew my words were true-I told ya we'd meet again!",
                                           CFSpeech),
                                      Wait(3),
+                                     Parallel(Func(self.duckshuffler2.setChatAbsolute,
+                                          "HHAHAHHAHAHAHA DBSEHIFWEIUABYUEYKTRARTXRVEWIAYRVAESLKUSNARETSYREOYOXMROTEBURASXAEWRNEWIORVUE4OIBRUOEWUPMXAWOTBRUPOE!",
+                                          CFSpeech), Sequence(ActorInterval(self.duckshuffler2, 'flail', playRate=3), Func(self.duckshuffler2.loop, 'neutral'))),
+                                     Wait(.25),
+                                     Parallel(Func(self.duckshuffler2.setChatAbsolute,
+                                                   "HHAHAHHAHAHAHA DBSEHIFWEIUABYUEYKTRARTXRVEWIAYRVAESLKUSNARETSYREOYOXMROTEBURASXAEWRNEWIORVUE4OIBRUOEWUPMXAWOTBRUPOE!",
+                                                   CFSpeech), Sequence(ActorInterval(self.duckshuffler2, 'magic3', playRate=3), Func(self.duckshuffler2.loop, 'neutral'))),
+                                     Wait(.25),
+                                     Parallel(Func(self.duckshuffler2.setChatAbsolute,
+                                                   "HHAHAHHAHAHAHA DBSEHIFWEIUABYUEYKTRARTXRVEWIAYRVAESLKUSNARETSYREOYOXMROTEBURASXAEWRNEWIORVUE4OIBRUOEWUPMXAWOTBRUPOE!",
+                                                   CFSpeech), Sequence(ActorInterval(self.duckshuffler2, 'slip-backward', playRate=3), Func(self.duckshuffler2.loop, 'neutral'))),
+                                     Wait(.25),
+                                     Func(self.duckshuffler2.setChatAbsolute,
+                                          "!",
+                                          CFSpeech),
+                                     Wait(.25),
+                                     Func(self.duckshuffler2.setChatAbsolute,
+                                          "!",
+                                          CFSpeech),
+                                     Wait(.25),
+                                     Func(self.duckshuffler2.setChatAbsolute,
+                                          "!",
+                                          CFSpeech),
+                                     Wait(.25),
+                                          Parallel(Func(self.duckshuffler2.setChatAbsolute,
+                                          "I gueth we'll have to give em tha thpecial thow though! Come on mic thpam!",
+                                          CFSpeech), Sequence(ActorInterval(self.duckshuffler2, 'slip-forward', playRate=3), Func(self.duckshuffler2.loop, 'neutral'))),
+                                     Wait(3),
+                                          Func(self.majorplayer2.setChatAbsolute,
+                                               "Hachahoo hooi-didibadoo! Here's a special shabaadoopdaa-show from we to you!",
+                                               CFSpeech),
+                                          Wait(3),
+                                     Parallel(Func(self.duckshuffler2.setPos, (-13, -182.5, -4)), Func(self.duckshuffler2.setHpr, (180, 0, 0)),  Func(self.majorplayer2.setHpr, (180, 0, 0)), Func(self.majorplayer2.setPos, (13, -182.5, -4))),
+                                          Parallel(MovieUtil.createShot1(self.duckshuffler2), MovieUtil.createShot1(self.majorplayer2)),
+                                          Parallel(MovieUtil.createShot2(self.duckshuffler2), MovieUtil.createShot2(self.majorplayer2)),
+                                          Parallel(MovieUtil.createShot3(self.duckshuffler2), MovieUtil.createShot3(self.majorplayer2)),
+                                          Parallel(MovieUtil.createShot4(self.duckshuffler2), MovieUtil.createShot4(self.majorplayer2)),
                                      Func(self.majorplayer2.removeNode), Func(self.duckshuffler2.removeNode),
                                 Func(rToon.clearChat),
-                            #base.camera.posHprInterval(1, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
-                            Func(self.titleSeq.start),
                                 Func(self.highroller.show),
-                            Func(self.highroller.setChatAbsolute, "Welcome back to the Tooniverffe'ff favorite ffhow!", CFSpeech),
+                                     Parallel(Func(self.highroller.setPos, (0, -183.5, -4.5)), Func(self.highroller.setHpr, (180, 0, 0)), ActorInterval(self.highroller, 'shot5')),
+                                     Parallel(Func(self.highroller.setPos, (0, -200, 0)), Func(self.highroller.setHpr, (180, 0, 0)), Func(self.highroller.loop, 'neutral')),
+                                     Wait(3.0),
+                            Parallel(Func(self.highroller.nametag3d.setScale, 3), Func(base.playSfx, base.loader.loadSfx('phase_13/audio/sfx/april_toons/highroller/cc_s_dlg_ene_hroller_good_morning_clash_general.ogg')), Func(self.highroller.setChatAbsolute, "GOOD MOOORNING TOONTOOOOWN!!!!", CFSpeech)),
                              Wait(4),
+                                     Func(self.highroller.nametag3d.setScale, 1),
                             Func(self.highroller.setChatAbsolute, "What'ya waitin' for, babe? Hop on fftage! let'ff get hoppin' and boppin', jumpin' and jinglin', ffingin' and ffwingin'!", CFSpeech),
                             Wait(4),
-                            Func(self.highroller.setChatAbsolute, "Ohoho-no-no, takeff a party to partiffipate and play, and I ffay play!!", CFSpeech),
-                            self.loseCogSuits(self.toonsA + self.toonsB, render, (113, -228, 10, 90, 0, 0)),
-                            Wait(1),
-                            Func(rToon.setHpr, 0, 0, 0),
-                            self.loseCogSuits([rToon], render, (133, -243, 5, 143, 0, 0), True),
-                            Wait(1),
-                                    self.toonNormalEyes(self.involvedToons),
-                                    self.toonNormalEyes([self.resistanceToon], True),
-                                    Func(rToon.clearChat),
-            Func(base.camera.reparentTo, render),
-            Func(base.camera.setPosHpr, 0, - 240, 10, 0, 0, 0),
-                                    #Func(base.camera.setPosHpr, 93.3, -230, 0.7, -92.9, 39.7, 8.3),
-                                   # base.camera.posHprInterval(2, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
-            Func(self.highroller.setChatAbsolute,
-                 "Here'ff a ffpinnin wheel I know ya can get behaHAHAHA-hind!", CFSpeech),
+                            Parallel(Func(self.highroller.setChatAbsolute,
+                                                   "Ohoho-no-no, takeff a party to partiffipate and play, and I ffay play!!",
+                                                   CFSpeech), Sequence(ActorInterval(self.highroller, 'taunt'), Func(self.highroller.loop, 'neutral'))),
+                            Wait(4),
+                                     Parallel(ActorInterval(self.highRollerWheel2, 'wheel2'), Func(base.playSfx, base.loader.loadSfx('phase_5/audio/sfx/SA_bash.ogg')),
+                                              Func(base.playSfx, base.loader.loadSfx('phase_13/audio/sfx/april_toons/highroller/cc_s_sfx_ara_wheel_summon.ogg')),
+                                              Func(self.highRollerWheel2.show), Func(self.highroller.setChatAbsolute,
+                                                   "Here'ff a ffpinnin wheel I know ya can get behaHAHAHA-hind!",
+                                                   CFSpeech), Sequence(ActorInterval(self.highroller, 'snap'), Func(self.highroller.loop, 'neutral'))),
+                                     Parallel(Func(self.highRollerWheel.show), Func(self.highRollerWheel2.hide)),
+                                     Wait(4),
+                                     Func(self.highroller.setChatAbsolute,
+                                          "Get ready for the ffho-ho-how of a lifetime, Bobby Dazzler!",
+                                          CFSpeech),
             Wait(4), Func(self.highroller.hide),
             Func(self.highroller.setChatAbsolute, '', CFSpeech))))
         return Sequence(Func(base.camera.reparentTo, render), track)
@@ -519,6 +583,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         finalHpr = VBase3(135, 0, 0)
         toonPosHpr = ToontownGlobals.CashbotRTBattleTwoEndPosHpr
         bossTrack = Sequence()
+        track2 = Sequence()
         bossTrack.append(Func(self.reparentTo, render))
         bossTrack.append(Func(self.getGeomNode().setH, 180))
         bossTrack.append(Func(self.pelvis.setHpr, self.pelvisForwardHpr))
@@ -573,7 +638,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             Func(self.highroller.setChatAbsolute, '', CFSpeech),
                     Func(self.__showToons),
         Func(self.mrhollywood.removeNode), Func(self.highroller.removeNode),  Func(self.videographer.removeNode), Func(self.director.removeNode),  Func(self.filmmaker.removeNode))))
-        return Sequence(Func(base.camera.reparentTo, self), base.camera.posHprInterval(1, Point3(0, -27, 25), VBase3(0, -18, 0), blendType='easeInOut'), track, Func(base.camera.reparentTo, render))
+        return track2
 		
     def createWalkInInterval(self):
         retval = Parallel()
@@ -950,12 +1015,12 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.evWalls.stash()
         self.midVault.unstash()
         self.__showResistanceToon(True)
-        base.playMusic(self.midCutsceneMusic, looping=1, volume=0.9)
+        base.playMusic(self.introduction, looping=1, volume=0.9)
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
 
     def exitIntroduction(self):
         DistributedBossCog.DistributedBossCog.exitIntroduction(self)
-        self.midCutsceneMusic.stop()
+        self.introduction.stop()
 
     def enterBattleOne(self):
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)

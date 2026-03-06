@@ -69,6 +69,10 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.onscreenMessage = None
         self.chaseTrack = None
         self.cjBoss2 = None
+        self.stenoMusic = None
+        self.litigatorMusic = None
+        self.caseMusic = None
+        self.goatMusic = None
         self.chaseTime = 0
 
         # Hacky fix for crashing when we run over a table.
@@ -100,6 +104,43 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.bonusWeight = 0
         self.numJurorsLocalToonSeated = 0
         self.cannonIndex = -1
+
+        from toontown.suit.DistributedSuitBase import DistributedSuitBase
+        self.litigator = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('lgator')
+        self.litigator.setDNA(suitDNA)
+        self.litigator.setPickable(0)
+        self.litigator.setDisplayName('Litigator\nLawbot\nLevel 40.mgr')
+        self.litigator.doId = 0
+        self.litigator.loop('sit-exec')
+
+        self.stenographer = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('stenog')
+        self.stenographer.setDNA(suitDNA)
+        self.stenographer.setPickable(0)
+        self.stenographer.setDisplayName('Stenographer\nLawbot\nLevel 35.mgr')
+        self.stenographer.doId = 0
+        self.stenographer.loop('sit-exec')
+
+        self.casemanager = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('caseman')
+        self.casemanager.setDNA(suitDNA)
+        self.casemanager.setPickable(0)
+        self.casemanager.setDisplayName('Case Manager\nLawbot\nLevel 35.mgr')
+        self.casemanager.doId = 0
+        self.casemanager.loop('sit-exec')
+
+        self.scapegoat = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('sgoat')
+        self.scapegoat.setDNA(suitDNA)
+        self.scapegoat.setPickable(0)
+        self.scapegoat.setDisplayName('Scapegoat\nLawbot\nLevel 30.mgr')
+        self.scapegoat.doId = 0
+        self.scapegoat.loop('sit-exec')
         return
 
     def announceGenerate(self):
@@ -159,6 +200,34 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         OneBossCog = self
         return
 
+    def hideLitigator(self):
+        self.litigator.hide()
+        self.litigatorMusic.setVolume(1)
+
+    def hideStenographer(self):
+        self.stenographer.hide()
+        self.stenoMusic.setVolume(1)
+
+    def hideCaseManager(self):
+        self.casemanager.hide()
+        self.caseMusic.setVolume(1)
+
+    def hideScapegoat(self):
+        self.scapegoat.hide()
+        self.goatMusic.setVolume(1)
+
+    def stopLitigatorMusic(self):
+        self.litigatorMusic.stop()
+
+    def stopStenographerMusic(self):
+        self.stenoMusic.stop()
+
+    def stopCaseManagerMusic(self):
+        self.caseMusic.stop()
+
+    def stopScapegoatMusic(self):
+        self.goatMusic.stop()
+
     def disable(self):
         global OneBossCog
         self.notify.debug('----- disable')
@@ -177,6 +246,10 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cr.relatedObjectMgr.abortRequest(self.lawyerRequest)
         self.lawyerRequest = None
         self.betweenBattleMusic.stop()
+        self.stenoMusic.stop()
+        self.litigatorMusic.stop()
+        self.caseMusic.stop()
+        self.goatMusic.stop()
         self.promotionMusic.stop()
         self.stingMusic.stop()
         self.battleOneMusic.stop()
@@ -292,34 +365,117 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return Sequence(Func(node.setPos, fromPos), Func(node.headsUp, toPos), node.posInterval(time, toPos))
 
     def __makeRollToBattleTwoMovie(self):
-        startPos = Point3(ToontownGlobals.LawbotBossBattleTwoPosHpr[0], ToontownGlobals.LawbotBossBattleTwoPosHpr[1], ToontownGlobals.LawbotBossBattleTwoPosHpr[2])
-        if self.arenaSide:
-            topRampPos = Point3(*ToontownGlobals.LawbotBossTopRampPosB)
-            topRampTurnPos = Point3(*ToontownGlobals.LawbotBossTopRampTurnPosB)
-            p3Pos = Point3(*ToontownGlobals.LawbotBossP3PosB)
-        else:
-            topRampPos = Point3(*ToontownGlobals.LawbotBossTopRampPosA)
-            topRampTurnPos = Point3(*ToontownGlobals.LawbotBossTopRampTurnPosA)
-            p3Pos = Point3(*ToontownGlobals.LawbotBossP3PosA)
-        battlePos = Point3(ToontownGlobals.LawbotBossBattleThreePosHpr[0],
-                           ToontownGlobals.LawbotBossBattleThreePosHpr[1],
-                           ToontownGlobals.LawbotBossBattleThreePosHpr[2])
-        battleHpr = VBase3(ToontownGlobals.LawbotBossBattleThreePosHpr[3],
-                           ToontownGlobals.LawbotBossBattleThreePosHpr[4],
-                           ToontownGlobals.LawbotBossBattleThreePosHpr[5])
-        bossTrack = Sequence()
-        self.notify.debug('calling setPosHpr')
-        myInterval = base.camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), startPos=Point3(-22, -90, 35), startHpr=Point3(-10, -13, 0), blendType='easeInOut')
-        chatTrack = Sequence(Func(self.setChatAbsolute, TTLocalizer.LawbotBossTempJury1, CFSpeech | CFTimeout), Func(base.camera.reparentTo, localAvatar), Func(base.camera.setPos, localAvatar.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0), Func(self.releaseToons, 1), Func(self.setChatAbsolute, '', CFSpeech | CFTimeout))
-        bossTrack.append(Func(self.getGeomNode().setH, 180))
-        chatTrack.append(Func(self.setChatAbsolute, '', CFSpeech | CFTimeout))
-        track, hpr = self.rollBossToPoint(startPos, None, battlePos, None, 0)
-        bossTrack.append(track)
-        track, hpr = self.rollBossToPoint(battlePos, hpr, battlePos, battleHpr, 0)
-        self.makeToonsWait()
-        finalPodiumPos = Point3(self.podium.getX(), self.podium.getY(), self.podium.getZ() + ToontownGlobals.LawbotBossBattleTwoPosHpr[2])
-        finalReflectedPodiumPos = Point3(self.reflectedPodium.getX(), self.reflectedPodium.getY(), self.reflectedPodium.getZ() + ToontownGlobals.LawbotBossBattleTwoPosHpr[2])
-        return Sequence(chatTrack, bossTrack, Func(self.getGeomNode().setH, 0), Parallel(self.podium.posInterval(5.0, finalPodiumPos), self.reflectedPodium.posInterval(5.0, finalReflectedPodiumPos), Func(self.stashBoss), self.posInterval(5.0, battlePos), Func(taskMgr.doMethodLater, 0.01, self.unstashBoss, 'unstashBoss')), name=self.uniqueName('BattleTwoMovie'))
+        self.litigator.reparentTo(render)
+        self.litigator.setPosHpr(-10.5, 149, 4.0, -90, 0, 0)
+        self.stenographer.reparentTo(render)
+        self.stenographer.setPosHpr(-11.25, 127, 4.0, -90, 0, 0)
+        self.casemanager.reparentTo(render)
+        self.casemanager.setPosHpr(7.5, 127, 4.0, 90, 0, 0)
+        self.scapegoat.reparentTo(render)
+        self.scapegoat.setPosHpr(6.75, 149, 4.0, 90, 0, 0)
+        tempNode = self.attachNewNode('temp')
+        tempNode.setPosHpr(0, -45, 12.5, 0, 0, 0)
+        bossEndPos = (-2.798, 220, 0)
+        loseSuitCamAngle = (0, 19, 6, -180, 0, 0)
+
+        def getCamBossPos(tempNode=tempNode):
+            return tempNode.getPos(render)
+
+        tempNode3 = self.attachNewNode('temp')
+        tempNode3.setPos(0, -150, 40)
+
+        def getCamBossPos2(tempNode3=tempNode3):
+            return tempNode3.getPos(render)
+
+        tempNode4 = self.attachNewNode('temp')
+        tempNode4.setPos(0, -300, 20)
+
+        def getCamBossPos3(tempNode4=tempNode4):
+            return tempNode4.getPos(render)
+
+        tempNodeLitigator = self.attachNewNode('temp')
+        tempNodeLitigator.setPosHpr(10, -71, 12.5, 90, 0, 0)
+
+        def getCamBossPosLitigator(tempNodeLitigator=tempNodeLitigator):
+            return tempNodeLitigator.getPos(render)
+
+        tempNodeStenographer = self.attachNewNode('temp')
+        tempNodeStenographer.setPosHpr(10, -93, 12.5, 90, 0, 0)
+
+        def getCamBossPosStenographer(tempNodeStenographer=tempNodeStenographer):
+            return tempNodeStenographer.getPos(render)
+
+        tempNodeCaseManager = self.attachNewNode('temp')
+        tempNodeCaseManager.setPosHpr(-10, -93, 12.5, -90, 0, 0)
+
+        def getCamBossPosCaseManager(tempNodeCaseManager=tempNodeCaseManager):
+            return tempNodeCaseManager.getPos(render)
+
+        tempNodeScapegoat = self.attachNewNode('temp')
+        tempNodeScapegoat.setPosHpr(-10, -71, 12.5, -90, 0, 0)
+
+        def getCamBossPosScapegoat(tempNodeScapegoat=tempNodeScapegoat):
+            return tempNodeScapegoat.getPos(render)
+
+        tempNodeOrg = self.attachNewNode('temp')
+        tempNodeOrg.setPosHpr(0, -45, 20, 0, 0, 0)
+
+        def getCamBossPosOrg(tempNodeOrg=tempNodeOrg):
+            return tempNodeOrg.getPos(render)
+
+        track = Sequence(Sequence(ActorInterval(self, 'Ff_cross_arms_loop'), Func(self.loop, 'Ff_cross_arms_loop')), Func(camera.reparentTo, render), LerpPosInterval(camera, 0, getCamBossPos3), Func(camera.setH, 0), Parallel(LerpHprInterval(self.geom2.find('**/door_entry_L'), 1, Point3(120, 0, 0)), LerpHprInterval(self.geom2.find('**/door_entry_R'), 1, Point3(-120, 0, 0)),
+                       ), Parallel(LerpPosInterval(camera, 3, getCamBossPos), Func(self.setChatAbsolute, "You again? Why do we even bother funding a security system that Toons can so easily disable?", CFSpeech | CFTimeout)), Wait(2.0),
+                         Func(self.setChatAbsolute, "These little pests truly have no common decency, nor a sense of worth when it comes to high-tech security! I've had enough of this!", CFSpeech | CFTimeout), Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPos2), LerpHprInterval(camera, 2, (0, -20, 0)), Func(self.setChatAbsolute, "Maybe the four of you can actually do something about our infestation problem this time?", CFSpeech | CFTimeout),
+                                  Sequence(ActorInterval(self, 'Ff_cross_arms_out'), Func(self.loop, 'Ff_neutral_f'))), Wait(4.0),
+                            Parallel(LerpPosInterval(camera, 2, getCamBossPosLitigator), LerpHprInterval(camera, 2, tempNodeLitigator.getHpr), Sequence(Wait(1),
+                            Func(self.litigator.setChatAbsolute, "Calm yourself, Ms. Morsecode, we've got it covered this time. Mrs. Case, your analysis, please?", CFSpeech | CFTimeout))),
+                                  Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosStenographer), LerpHprInterval(camera, 1, tempNodeStenographer.getHpr), Sequence(Wait(1),
+                            Func(self.stenographer.setChatAbsolute,  "Of course! Let me see...", CFSpeech | CFTimeout), Wait(4.0),
+                        Func(self.stenographer.setChatAbsolute, "Ah! There are only four Toons, Mr. Mudsnapper! They've halved their usual amount. This will barely be an issue. Trivial, even.", CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosCaseManager), LerpHprInterval(camera, 1, tempNodeCaseManager.getHpr), Sequence(Wait(1),
+                           Func(self.casemanager.setChatAbsolute, "...four...?",  CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosScapegoat), LerpHprInterval(camera, 1, tempNodeScapegoat.getHpr), Sequence(Wait(1),
+                                Func(self.scapegoat.setChatAbsolute, "Huh!? Runnin' outta Resistance guys, are they?", CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosLitigator), LerpHprInterval(camera, 1, tempNodeLitigator.getHpr), Sequence(Wait(1),
+                     Func(self.litigator.setChatAbsolute, "Whether or not a lack of manpower is the case...",  CFSpeech | CFTimeout), Wait(4.0),
+                        Func(self.litigator.setChatAbsolute, "I think we should take this opportunity to show off exactly how well the Litigation Team cooperates.", CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosScapegoat), LerpHprInterval(camera, 1, tempNodeScapegoat.getHpr), Sequence(Wait(1),
+                          Func(self.scapegoat.setChatAbsolute,  "Really!? You mean-!",  CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosCaseManager), LerpHprInterval(camera, 1, tempNodeCaseManager.getHpr), Sequence(Wait(1),
+                          Func(self.casemanager.setChatAbsolute,  "Hmph!", CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosStenographer), LerpHprInterval(camera, 1, tempNodeStenographer.getHpr), Sequence(Wait(1),
+                             Func(self.stenographer.setChatAbsolute, "Recalculating... Only four Toons versus the four of us will be no match!",  CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPosLitigator), LerpHprInterval(camera, 2, tempNodeLitigator.getHpr), Sequence(Wait(1),
+                      Func(self.litigator.setChatAbsolute,  "It's time these nuisances truly see us as the team we are!",  CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosStenographer), LerpHprInterval(camera, 1, tempNodeStenographer.getHpr), Sequence(Wait(1),
+                           Func(self.stenographer.setChatAbsolute, "Of course!",  CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosScapegoat), LerpHprInterval(camera, 1, tempNodeScapegoat.getHpr), Sequence(Wait(1),
+                          Func(self.scapegoat.setChatAbsolute, "Yessir!!",  CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 1, getCamBossPosCaseManager), LerpHprInterval(camera, 1, tempNodeCaseManager.getHpr), Sequence(Wait(1),
+                          Func(self.casemanager.setChatAbsolute, "Mhm..", CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPosOrg), LerpHprInterval(camera, 2, tempNodeOrg.getHpr),
+                                  Func(self.setChatAbsolute, "Well? What are you waiting for?", CFSpeech | CFTimeout)), Wait(3.0), Parallel(Func(self.setChatAbsolute, "Get these Toons out of my office!", CFSpeech | CFTimeout),
+                                                                                                                                            Sequence(ActorInterval(self, 'Ff_point'), Func(self.loop, 'Ff_neutral_f'))),
+                         Wait(3.0), Func(self.setChatAbsolute, "", CFSpeech | CFTimeout)
+                         )
+
+        return Sequence(
+            Func(self.stickToonsToFloor),
+            track,
+            Func(self.unstickToons), name=self.uniqueName('prepareBattleTwo'))
 
     def __makeRollToBattleThreeMovie(self):
         startPos = Point3(ToontownGlobals.LawbotBossBattleTwoPosHpr[0], ToontownGlobals.LawbotBossBattleTwoPosHpr[1], ToontownGlobals.LawbotBossBattleTwoPosHpr[2])
@@ -481,13 +637,14 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         dna.newBossCog('l2')
         self.cjBoss2.cjBoss2 = True
         self.cjBoss2.setDNA(dna)
-        self.cjBoss2.addActive()
         self.cjBoss2.initializeDropShadow()
         self.cjBoss2.setH(0)
         self.cjBoss2.loop('Ff_neutral')
         self.cjBoss2.reparentTo(self.geom2)
         self.cjBoss2.setPosHpr(-1.5, 135, 0, 180, 0, 0)
         self.cjBoss2.setName('Chief Justice\nLawbot')
+        self.cjBoss2.setPickable(0)
+        self.cjBoss2.doId = 0
         self.elevatorEntrance = self.geom2.find('**/elevator_origin')
         self.elevatorEntrance.getChildren().detach()
         self.elevatorEntrance.setScale(1)
@@ -496,19 +653,14 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.setupElevator(elevatorModel)
         self.elevatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_elevator.ogg')
         self.promotionMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_hard_boss_cutscene_1.ogg')
-        self.betweenBattleMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
-        self.battleTwoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation.ogg')
-        self.stenoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_stenograph.ogg')
-        self.litigatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_litigator.ogg')
-        self.caseMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_casemgr.ogg')
-        self.goatMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_scapegoat.ogg')
+        self.betweenBattleMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_hard_boss_cutscene_1.ogg')
         self.battleOneMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation.ogg')
-        # floor = self.geom2.find('**/floor')
-        # if floor.isEmpty():
-        #     floor = self.geom2.find('**/floor')
-        # self.evFloor = self.replaceCollisionPolysWithPlanes(floor)
-        # self.evFloor.reparentTo(self.geom2)
-        # self.evFloor.setName('floor')
+        floor = self.geom2.find('**/floor')
+        if floor.isEmpty():
+            floor = self.geom2.find('**/floor')
+        self.evFloor = self.replaceCollisionPolysWithPlanes(floor)
+        self.evFloor.reparentTo(self.geom2)
+        self.evFloor.setName('floor')
         plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, -50)))
         planeNode = CollisionNode('dropPlane')
         planeNode.addSolid(plane)
@@ -517,38 +669,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.door3 = self.geom.find('**/SlidingDoor1/')
         self.door4 = self.geom2.find('**/door_back')
         self.table = self.geom2.find('**/table')
-        self.geom2.find('**/table_col').reparentTo(self.table)
         self.paper = self.geom2.find('**/paper')
-        self.paper.hide()
         self.gavel1 = self.geom2.find('**/gavel_0')
         self.gavel2 = self.geom2.find('**/gavel_1')
-        self.collisions = self.geom2.find('**/table_col')
-        self.frontdoors = self.geom2.find('**/g_doors')
-        self.collisionsdoor1 = self.geom2.find('**/entry_R_col')
-        self.collisionsdoor2 = self.geom2.find('**/entry_L_col')
-        if self.door3.isEmpty():
-            self.door3 = self.geom.find('**/interior/CR3_Door')
-        self.mainDoor = self.geom.find('**/Door_1')
-        if not self.mainDoor.isEmpty():
-            itemsToHide = ['entry_R', 'entry_L']
-            for str in itemsToHide:
-                stuffToHide = self.geom2.find('**/%s' % str)
-                if not stuffToHide.isEmpty():
-                    self.notify.debug('found %s' % stuffToHide)
-                    stuffToHide.wrtReparentTo(self.mainDoor)
-                else:
-                    self.notify.debug('not found %s' % stuffToHide)
-
-        self.reflectedMainDoor = self.geom.find('**/interiorrefl/CR3_Door')
-        if not self.reflectedMainDoor.isEmpty():
-            itemsToHide = ['Reflections/Door_1']
-            for str in itemsToHide:
-                stuffToHide = self.geom.find('**/%s' % str)
-                if not stuffToHide.isEmpty():
-                    self.notify.debug('found %s' % stuffToHide)
-                    stuffToHide.wrtReparentTo(self.reflectedMainDoor)
-                else:
-                    self.notify.debug('not found %s' % stuffToHide)
 
         #self.geom.reparentTo(render)
         self.geom2.reparentTo(render)
@@ -815,10 +938,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.forward = 1
         self.doAnimate()
         self.__hideWitnessToon()
-        if not self.mainDoor.isEmpty():
-            self.mainDoor.stash()
-        if not self.reflectedMainDoor.isEmpty():
-            self.reflectedMainDoor.stash()
         base.camera.reparentTo(self.elevatorModel)
         base.camera.setPosHpr(0, 30, 8, 180, 0, 0)
         base.camLens.setMinFov(ToontownGlobals.CJElevatorFov/(4./3.))
@@ -833,9 +952,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleOnePosHpr)
         self.stopAnimate()
-        self.frontdoors.removeNode()
-        self.collisionsdoor1.removeNode()
-        self.collisionsdoor2.removeNode()
         self.__hideWitnessToon()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
@@ -846,10 +962,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
         base.camera.setPosHpr(-4, 173.1, 16, -1, 12, 0)
-        if not self.mainDoor.isEmpty():
-            self.mainDoor.stash()
-        if not self.reflectedMainDoor.isEmpty():
-            self.reflectedMainDoor.stash()
 
     def exitIntroduction(self):
         self.notify.debug('----- exitIntroduction')
@@ -861,12 +973,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        if not self.mainDoor.isEmpty():
-            pass
-        if not self.reflectedMainDoor.isEmpty():
-            self.reflectedMainDoor.unstash()
-        if not self.elevatorEntrance.isEmpty():
-            pass
 
     def enterBattleOne(self):
         self.notify.debug('----- LawbotBoss.enterBattleOne ')
@@ -902,16 +1008,18 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def enterRollToBattleTwo(self):
         self.notify.debug('----- enterRollToBattleTwo')
-        self.releaseToons(finalBattle=1)
-        self.stashBoss()
+       # self.releaseToons(finalBattle=1)
+        self.controlToons()
+        base.camera.setPosHpr(-4, 173.1, 16, -1, 12, 0)
+        #self.stashBoss()
         self.toonsToBattlePosition(self.involvedToons, self.battleANode)
-        #self.stickBossToFloor()
+        self.stickBossToFloor()
         intervalName = 'RollToBattleTwo'
         seq = Sequence(self.__makeRollToBattleTwoMovie(), Func(self.__onToPrepareBattleTwo), name=intervalName)
         seq.start()
         self.storeInterval(seq, intervalName)
         base.playMusic(self.betweenBattleMusic, looping=1, volume=0.9)
-        taskMgr.doMethodLater(0.01, self.unstashBoss, 'unstashBoss')
+        #taskMgr.doMethodLater(0.01, self.unstashBoss, 'unstashBoss')
 
     def __clickedNameTag(self, avatar):
         self.notify.debug('__clickedNameTag')
@@ -939,6 +1047,28 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.unstickBoss()
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleTwoPosHpr)
         self.doneBarrier('RollToBattleTwo')
+        self.betweenBattleMusic.stop()
+        self.stingMusic.stop()
+        self.paper.hide()
+        self.battleTwoMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_base.ogg')
+        self.stenoMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_stenograph.ogg')
+        self.litigatorMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_litigator.ogg')
+        self.caseMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_casemgr.ogg')
+        self.goatMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_scapegoat.ogg')
+        self.musicTracks = [
+            self.battleTwoMusic,
+            self.stenoMusic,
+            self.litigatorMusic,
+            self.caseMusic,
+            self.goatMusic
+        ]
+
+        for track in self.musicTracks:
+            track.setLoop(True)
+            track.setVolume(0)
+            track.play()
+
+        self.battleTwoMusic.setVolume(1)
 
     def exitRollToBattleTwo(self):
         self.notify.debug('----- exitRollToBattleTwo')
@@ -950,18 +1080,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterPrepareBattleTwo(self):
         self.notify.debug('----- enterPrepareBattleTwo')
         self.cleanupIntervals()
-        self.controlToons()
-        NametagGlobals.setWant2dNametags(False)
-        self.setToonsToNeutral(self.involvedToons)
-        self.clearChat()
-        self.reparentTo(render)
-        self.__showWitnessToon()
-        prepareBattleTwoMovie = self.__makePrepareBattleTwoMovie()
-        intervalName = 'prepareBattleTwo'
-        seq = Sequence(prepareBattleTwoMovie, name=intervalName)
-        seq.start()
-        self.storeInterval(seq, intervalName)
-        self.__onToBattleTwo()
         base.playMusic(self.stingMusic, looping=0, volume=1.0)
 
     def __showCannonsAppearing(self, elapsedTime = 0):
@@ -1016,7 +1134,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         if not self.useCannons:
             self.toonsToBattlePosition(self.toonsA, self.battleANode)
             self.toonsToBattlePosition(self.toonsB, self.battleBNode)
-        base.playMusic(self.battleTwoMusic, looping=1, volume=0.9)
+
         #self.startJuryBoxMoving()
 
     def getChairParent(self):
@@ -1049,7 +1167,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterRollToBattleThree(self):
         self.notify.debug('----- enterRollToBattleThree')
         self.reparentTo(render)
-        #self.stickBossToFloor()
+        self.stickBossToFloor()
         self.startJuryBoxMoving()
         intervalName = 'RollToBattleThree'
         seq = Sequence(self.__makeRollToBattleThreeMovie(), Func(self.__onToPrepareBattleThree), name=intervalName)
@@ -1132,7 +1250,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.accept('enterProsecutionCol', self.__enterProsecutionCol)
         localAvatar.setCameraFov(ToontownGlobals.BossBattleCameraFov)
         taskMgr.doMethodLater(30, self.__howToGetPies, self.uniqueName('PieAdvice'))
-        #self.stickBossToFloor()
+        self.stickBossToFloor()
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleThreePosHpr)
         self.bossMaxDamage = ToontownGlobals.LawbotBossMaxDamage
         base.playMusic(self.battleThreeMusic, looping=1, volume=0.9)
@@ -1547,36 +1665,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             if toon:
                 delayDeletes.append(DelayDelete.DelayDelete(toon, 'LawbotBoss.makeIntroductionMovie'))
 
-        track = Parallel()
-        bossAnimTrack = Sequence(
-            ActorInterval(self, 'Ff_speech', startTime=2, duration=10, loop=1),
-            ActorInterval(self, 'Ff_lookRt', duration=3),
-            ActorInterval(self, 'Ff_lookRt', duration=3, startTime=3, endTime=0),
-            ActorInterval(self, 'Ff_neutral', duration=2),
-            ActorInterval(self, 'Ff_speech', duration=7, loop=1), Func(self.loop, 'Ff_neutral_f'))
-        track.append(bossAnimTrack)
-        attackToons = TTLocalizer.BossCogAttackToons
-        dialogTrack = Track(
-            (0, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie1, CFSpeech | CFTimeout)),
-
-            (5.6, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie2, CFSpeech | CFTimeout)),
-
-            (12, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie3, CFSpeech | CFTimeout)),
-
-            # Cut to toons losing their cog suits.
-            (18, Sequence(Func(self.clearChat),
-                          self.loseCogSuits(self.toonsA + self.toonsB, render, (-2.798, -70, 10, 180, 0, 0)),
-                          )),
-
-            # Cut to wide shot of battle arena.  Toons back up and
-            # ramps retract.
-            (24, Sequence(self.toonNormalEyes(self.involvedToons),
-                          Func(self.loop, 'Ff_neutral'),
-                          Func(self.setChatAbsolute, attackToons, CFSpeech | CFTimeout), Func(self.setChatAbsolute, '', CFSpeech | CFTimeout)
-
-                          )),
-        )
-        track.append(dialogTrack)
+        track = Parallel(Sequence(self.loseCogSuits(self.toonsA + self.toonsB, render, (-2.798, -70, 10, 180, 0, 0))))
 
         return Sequence(
             Func(self.stickToonsToFloor),
@@ -1896,9 +1985,8 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.notify.debug('done with positionToons')
 
     def __makePrepareBattleTwoMovie(self):
-        chatString = 'You know what to do.'
-        movie = Sequence(Func(base.camera.reparentTo, self.witnessToon), Func(base.camera.setPos, 0, 8, 2), Func(base.camera.setHpr, 180, 10, 0))
-        return movie
+        track = Parallel()
+        return track
 
     def __doWitnessPrepareBattleThreeChat(self):
         self.notify.debug('__doWitnessPrepareBattleThreeChat: original self.numToonJurorsSeated = %d' % self.numToonJurorsSeated)

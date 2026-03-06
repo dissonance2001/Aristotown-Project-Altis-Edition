@@ -1970,7 +1970,11 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def __adjustDone(self):
         for s in self.adjustingSuits:
             self.pendingSuits.remove(s)
-            self.activeSuits.append(s)
+
+            if len(self.activeSuits) < 2:
+                self.activeSuits.append(s)  # first and second stay in normal order
+            else:
+                self.activeSuits.insert(len(self.activeSuits) - 1, s)  # insert before suit 2
 
         self.adjustingSuits = []
         for toon in self.adjustingToons:

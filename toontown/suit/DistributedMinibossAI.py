@@ -286,7 +286,7 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
         self.resetBattles()
         self.arenaSide = None
         self.makeBattleOneBattles()
-        self.barrier = self.beginBarrier('Introduction', self.involvedToons, 45, self.doneIntroduction)
+        self.barrier = self.beginBarrier('Introduction', self.involvedToons, 350, self.doneIntroduction)
         return
 
     def doneIntroduction(self, avIds):

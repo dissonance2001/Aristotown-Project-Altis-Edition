@@ -11,6 +11,7 @@ from pandac.PandaModules import VBase3, CollisionPlane, CollisionNode, Collision
 from toontown.battle import MovieToonVictory
 from toontown.battle import RewardPanel
 from toontown.battle import SuitBattleGlobals
+from toontown.suit import DistributedSuitBase
 from toontown.friends import FriendsListManager
 from toontown.building import ElevatorConstants
 from toontown.chat.ChatGlobals import *
@@ -71,6 +72,55 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.lastZapLocalTime = 0
         self.numAttacks = 7
         self.tableIndex = 15
+
+        self.ambassador = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('ambass')
+        self.ambassador.setDNA(suitDNA)
+        self.ambassador.setPickable(0)
+        self.ambassador.setDisplayName('Ambassador\nBossbot\nLevel 48.mgr')
+        self.ambassador.doId = 0
+        self.ambassador.loop('sit-exec')
+
+        self.vaultmaster = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('bkeeper')
+        self.vaultmaster.setDNA(suitDNA)
+        self.vaultmaster.setPickable(0)
+        self.vaultmaster.setDisplayName('Vaultmaster\nBossbot\nLevel 44.mgr')
+        self.vaultmaster.doId = 0
+        self.vaultmaster.loop('sit-exec')
+
+        self.wiretapper = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('wtapper')
+        self.wiretapper.setDNA(suitDNA)
+        self.wiretapper.setPickable(0)
+        self.wiretapper.setDisplayName('Wiretapper\nBossbot\nLevel 44.mgr')
+        self.wiretapper.doId = 0
+        self.wiretapper.loop('sit-exec')
+
+        self.powerhouse = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('phouse')
+        self.powerhouse.setDNA(suitDNA)
+        self.powerhouse.setPickable(0)
+        self.powerhouse.setDisplayName('Powerhouse\nBossbot\nLevel 38.mgr')
+        self.powerhouse.doId = 0
+        self.powerhouse.loop('sit-exec')
+
+
+    def hideAmbassador(self):
+        self.ambassador.hide()
+
+    def hideVaultmaster(self):
+        self.vaultmaster.hide()
+
+    def hidePowerhouse(self):
+        self.powerhouse.hide()
+
+    def hideWiretapper(self):
+        self.wiretapper.hide()
 
     def announceGenerate(self):
         global OneBossCog
@@ -180,9 +230,12 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         planeNode.setCollideMask(ToontownGlobals.PieBitmask)
         self.geom.attachNewNode(planeNode)
         self.geom.reparentTo(render)
-        self.promotionMusic = base.loader.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
+        self.promotionMusic = base.loader.loadMusic('phase_14/audio/bgm/ET_boss_prep.ogg')
         self.betweenPhaseMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
-        self.phaseTwoMusic = base.loader.loadMusic('phase_12/audio/bgm/BossBot_CEO_v1.ogg')
+        self.battleOneMusic = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
+        self.battleOneMusicNew = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
+        self.battleOneMusicLoop = loader.loadMusic('phase_14/audio/bgm/encntr_penultimate_unlock-loop.ogg')
+        self.phaseTwoMusic = loader.loadMusic('phase_12/audio/bgm/BossBot_CEO_v1.ogg')
         self.phaseFourMusic = base.loader.loadMusic('phase_12/audio/bgm/BossBot_CEO_v2.ogg')
         self.pickupFoodSfx = loader.loadSfx('phase_6/audio/sfx/SZ_MM_gliss.ogg')
         self.explodeSfx = loader.loadSfx('phase_4/audio/sfx/firework_distance_02.ogg')
@@ -192,10 +245,10 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
             chandelierLocator = self.geom.find('**/TableLocator_%i' % (i + 1))
             if chandelierLocator.isEmpty():
                 self.chandeliers.reparentTo(render)
-                self.chandeliers.setPos(0, 75, 75)
+                self.chandeliers.setPos(0, 75, 100)
             else:
                 self.chandeliers.reparentTo(chandelierLocator)
-                self.chandeliers.setZ(75)
+                self.chandeliers.setZ(100)
 
     def unloadEnvironment(self):
         for belt in self.belts:
@@ -224,7 +277,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         npc.animFSM.request('neutral')
         npc.loop('neutral')
         self.resistanceToon = npc
-        self.resistanceToon.setPosHpr(*ToontownGlobals.BossbotRTIntroStartPosHpr)
+        self.resistanceToon.setPosHpr(*ToontownGlobals.BossbotRTPreTwoPosHpr)
         state = random.getstate()
         random.seed(self.doId)
         self.resistanceToon.suitType = SuitDNA.getRandomSuitByDept('c')
@@ -286,6 +339,8 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWantActiveNametags(True)
 
     def exitIntroduction(self):
+        self.reparentTo(render)
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
         DistributedBossCog.DistributedBossCog.exitIntroduction(self)
         self.promotionMusic.stop()
         self.accept('clickedNametag', self.__clickedNameTag)
@@ -295,32 +350,151 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWantActiveNametags(True)
 
     def makeIntroductionMovie(self, delayDeletes):
+        self.reparentTo(render)
+        self.setPosHpr(0, 355, 0, 0, 0, 0)
+        self.ambassador.reparentTo(render)
+        self.ambassador.setPosHpr(15, 352.25, 2.5, 180, 0, 0)
+        self.wiretapper.reparentTo(render)
+        self.wiretapper.setPosHpr(-15, 352.25, 2.5, 180, 0, 0)
+        self.vaultmaster.reparentTo(render)
+        self.vaultmaster.setPosHpr(-30, 352.25, 2.5, 180, 0, 0)
+        self.powerhouse.reparentTo(render)
+        self.powerhouse.setPosHpr(30, 352.25, 2.5, 180, 0, 0)
+        chairAmbassador = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoomChair')
+        chairAmbassador.setScale(0.75)
+        chairAmbassador.reparentTo(render)
+        chairAmbassador.setPosHpr(15, 355, 0, 180, 0, 0)
+        chairWiretapper = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoomChair')
+        chairWiretapper.setScale(0.75)
+        chairWiretapper.reparentTo(render)
+        chairWiretapper.setPosHpr(-15, 355, 0, 180, 0, 0)
+        chairPowerhouse = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoomChair')
+        chairPowerhouse.setScale(0.75)
+        chairPowerhouse.reparentTo(render)
+        chairPowerhouse.setPosHpr(30, 355, 0, 180, 0, 0)
+        chairVaultmaster = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoomChair')
+        chairVaultmaster.setScale(0.75)
+        chairVaultmaster.reparentTo(render)
+        chairVaultmaster.setPosHpr(-30, 355, 0, 180, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         rToon = self.resistanceToon
-        rToonStartPos = Point3(ToontownGlobals.BossbotRTIntroStartPosHpr[0], ToontownGlobals.BossbotRTIntroStartPosHpr[1], ToontownGlobals.BossbotRTIntroStartPosHpr[2])
-        rToonEndPos = rToonStartPos + Point3(40, 0, 0)
-        elevCamPosHpr = ToontownGlobals.BossbotElevCamPosHpr
-        closeUpRTCamPos = Point3(elevCamPosHpr[0], elevCamPosHpr[1], elevCamPosHpr[2])
-        closeUpRTCamHpr = Point3(elevCamPosHpr[3], elevCamPosHpr[4], elevCamPosHpr[5])
-        closeUpRTCamPos.setY(closeUpRTCamPos.getY() + 20)
-        closeUpRTCamPos.setZ(closeUpRTCamPos.getZ() + -2)
-        closeUpRTCamHpr = Point3(0, 5, 0)
-        loseSuitCamPos = Point3(rToonStartPos)
-        loseSuitCamPos += Point3(0, -5, 4)
-        loseSuitCamHpr = Point3(180, 0, 0)
-        waiterCamPos = Point3(rToonStartPos)
-        waiterCamPos += Point3(-5, -10, 5)
-        waiterCamHpr = Point3(-30, 0, 0)
-        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPosHpr, *elevCamPosHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTWelcome, CFSpeech | CFTimeout), LerpPosHprInterval(camera, 3, closeUpRTCamPos, closeUpRTCamHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTRemoveSuit, CFSpeech | CFTimeout), Wait(3), Func(self.clearChat), self.loseCogSuits(self.toonsA + self.toonsB, render, (loseSuitCamPos[0],
-         loseSuitCamPos[1],
-         loseSuitCamPos[2],
-         loseSuitCamHpr[0],
-         loseSuitCamHpr[1],
-         loseSuitCamHpr[2])), self.toonNormalEyes(self.involvedToons), Wait(2), Func(camera.setPosHpr, closeUpRTCamPos, closeUpRTCamHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTFightWaiter, CFSpeech | CFTimeout), Wait(1), LerpHprInterval(camera, 2, Point3(-15, 5, 0)), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(270, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), Wait(3), Func(rToon.clearChat), Func(self.__hideResistanceToon))
+        rToonStartPos = Point3(ToontownGlobals.BossbotRTPreTwoPosHpr[0], ToontownGlobals.BossbotRTPreTwoPosHpr[1], ToontownGlobals.BossbotRTPreTwoPosHpr[2])
+        rToonEndPos = rToonStartPos + Point3(-40, 0, 0)
+        bossPos = Point3(ToontownGlobals.BossbotBossPreTwoPosHpr[0], ToontownGlobals.BossbotBossPreTwoPosHpr[1], ToontownGlobals.BossbotBossPreTwoPosHpr[2])
+        bossEndPos = Point3(0, 355, 0)
+        tempNode = self.attachNewNode('temp')
+        tempNode.setPos(0, -45, 23)
+        loseSuitCamAngle = (0, 19, 6, -180, 0, 0)
+
+        def getCamBossPos(tempNode=tempNode):
+            return tempNode.getPos(render)
+
+        tempNode3 = self.attachNewNode('temp')
+        tempNode3.setPos(0, -60, 20)
+
+        def getCamBossPos2(tempNode3=tempNode3):
+            return tempNode3.getPos(render)
+
+        rNode = rToon.attachNewNode('temp2')
+        rNode.setPos(-5, 25, 12)
+
+        def getCamRTPos(rNode=rNode):
+            return rNode.getPos(render)
+
+        tempNodePowerhouse = self.attachNewNode('temp')
+        tempNodePowerhouse.setPos(30, -20, 10)
+
+        def getCamBossPosPowerhouse(tempNodePowerhouse=tempNodePowerhouse):
+            return tempNodePowerhouse.getPos(render)
+
+        tempNodeWiretapper = self.attachNewNode('temp')
+        tempNodeWiretapper.setPos(-15, -20, 10)
+
+        def getCamBossPosWiretapper(tempNodeWiretapper=tempNodeWiretapper):
+            return tempNodeWiretapper.getPos(render)
+
+        tempNodeVaultmaster = self.attachNewNode('temp')
+        tempNodeVaultmaster.setPos(-30, -20, 10)
+
+        def getCamBossPosVaultmaster(tempNodeVaultmaster=tempNodeVaultmaster):
+            return tempNodeVaultmaster.getPos(render)
+
+        tempNodeAmbassador = self.attachNewNode('temp')
+        tempNodeAmbassador.setPos(15, -20, 10)
+
+        def getCamBossPosAmbassador(tempNodeAmbassador=tempNodeAmbassador):
+            return tempNodeAmbassador.getPos(render)
+
+        track2 = Sequence(Wait(2.0))
+        track = Sequence(self.loseCogSuits(self.toonsA + self.toonsB, base.localAvatar, loseSuitCamAngle), Wait(2.0), Func(camera.setH, 0), Func(camera.reparentTo, render), Parallel(LerpHprInterval(self.banquetDoor, 0.5, Point3(90, 0, 0)), LerpPosInterval(camera, 4, getCamBossPos)),
+                         Parallel(Func(self.setChatAbsolute, "So... you've made it this far. I will admit, that's more persistence than most.", CFSpeech), Sequence(ActorInterval(self, 'Ff_speech'), ActorInterval(self, 'Ff_speech'))), Parallel(Func(self.setChatAbsolute, "But you seem to be under a dangerous misconception.", CFSpeech), ActorInterval(self, 'Ff_lookRt', duration=3)),
+            ActorInterval(self, 'Ff_lookRt', duration=3, startTime=3, endTime=0),
+            ActorInterval(self, 'Ff_neutral', duration=2),
+                         Parallel(Func(self.setChatAbsolute, "You believed you were climbing.", CFSpeech), ActorInterval(self, 'Ff_speech')),
+                         Parallel(Func(self.setChatAbsolute, "You were being evaluated.", CFSpeech), ActorInterval(self, 'Ff_speech')), ActorInterval(self, 'Ff_neutral', duration=2),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPos2),
+                                  Sequence(Parallel(ActorInterval(self.powerhouse, 'sit-lose'), ActorInterval(self.ambassador, 'sit-lose'), ActorInterval(self.wiretapper, 'sit-lose'), ActorInterval(self.vaultmaster, 'sit-lose')),
+                                  Parallel(Func(self.powerhouse.loop, 'neutral'), Func(self.powerhouse.setZ, 4.25), Func(self.powerhouse.setY, 355),
+                                  Func(self.ambassador.loop, 'neutral'), Func(self.ambassador.setZ, 4.25), Func(self.ambassador.setY, 355),
+                                  Func(self.wiretapper.loop, 'neutral'), Func(self.wiretapper.setZ, 4.25), Func(self.wiretapper.setY, 355),
+                                  Func(self.vaultmaster.loop, 'neutral'), Func(self.vaultmaster.setZ, 4.25), Func(self.vaultmaster.setY, 355),)),
+                                  Func(self.setChatAbsolute, "You've inconvenienced my workforce, impressive for amateurs... You're about to find out why WE are the ones in charge.", CFSpeech), Func(self.loop, 'Ff_neutral')),
+                         Wait(3.0), LerpPosInterval(camera, 2, getCamBossPosPowerhouse),
+                         Parallel(Func(self.setChatAbsolute, "Powerhouse, the operational enforcement. He doesn't break. He overwhelms.", CFSpeech), Sequence(ActorInterval(self, 'Ff_speech'), Func(self.loop, 'Ff_neutral'))),
+                         Parallel(Func(self.powerhouse.setChatAbsolute, "I don't debate, I don't stall, I apply pressure where it hurts!", CFSpeech), Sequence(ActorInterval(self.powerhouse, 'mob-mentality'), Func(self.powerhouse.loop, 'neutral'))),
+                    Sequence(Func(self.powerhouse.setChatAbsolute, "And eventually?", CFSpeech), Wait(3.0), Func(self.powerhouse.setChatAbsolute, "Everything cracks...", CFSpeech), ActorInterval(self.powerhouse, 'glower'), Func(self.powerhouse.loop, 'neutral'),
+                             Func(self.powerhouse.setChatAbsolute, "You're not built for this!", CFSpeech), Wait(3.0), Func(self.powerhouse.setChatAbsolute, "", CFSpeech)),
+
+                         LerpPosInterval(camera, 2, getCamBossPosVaultmaster),
+                         Parallel(Func(self.setChatAbsolute, "Vaultmaster, when something becomes inefficient, it is removed. He decides what remains, and what is written off.", CFSpeech), Sequence(ActorInterval(self, 'Ff_speech'), Func(self.loop, 'Ff_neutral'))),
+                         Parallel(Func(self.vaultmaster.setChatAbsolute, "You are liabilities...", CFSpeech),
+                                  Sequence(ActorInterval(self.vaultmaster, 'speak', playRate=1.5), Func(self.vaultmaster.loop, 'neutral'))),
+                         Sequence(Func(self.vaultmaster.setChatAbsolute, "Unsecured. Uninsured.", CFSpeech), Wait(3.0), Func(self.vaultmaster.setChatAbsolute, "I will correct that.", CFSpeech),
+                                  ActorInterval(self.vaultmaster, 'effort', playRate=1.25), Func(self.vaultmaster.loop, 'neutral'),
+                                  Func(self.vaultmaster.setChatAbsolute, "Permanently!", CFSpeech), Wait(3.0), Func(self.vaultmaster.setChatAbsolute, "", CFSpeech)),
+
+                         LerpPosInterval(camera, 2, getCamBossPosWiretapper),
+                         Parallel(Func(self.setChatAbsolute, "Wiretapper, intelligence division, she listens long before you arrive. She already knows how this ends.", CFSpeech),
+                                  Sequence(ActorInterval(self, 'Ff_speech'), Func(self.loop, 'Ff_neutral'))),
+                         Parallel(Func(self.wiretapper.setChatAbsolute, "You telegraph everything.", CFSpeech),
+                                  Sequence(ActorInterval(self.wiretapper, 'cease'), Func(self.wiretapper.loop, 'neutral'))),
+                         Sequence(Func(self.wiretapper.setChatAbsolute, "Breathing patterns, movement hesitation, team coordination flaws.", CFSpeech), Wait(3.0), Func(self.wiretapper.setChatAbsolute, "You've already made three mistakes since walking in.", CFSpeech),
+                                  ActorInterval(self.wiretapper, 'speak', playRate=1.5), Func(self.wiretapper.loop, 'neutral'),
+                                  Func(self.wiretapper.setChatAbsolute, "I don't guess outcomes... I confirm them!", CFSpeech), Wait(3.0), Func(self.wiretapper.setChatAbsolute, "", CFSpeech)),
+
+                         LerpPosInterval(camera, 2, getCamBossPosAmbassador),
+                         Parallel(Func(self.setChatAbsolute, "And finally, Ambassador, the architect of negotiations you wouldn't survive. He commands rooms you wouldn't even dream of being in.", CFSpeech),
+                                  Sequence(ActorInterval(self, 'Ff_speech'), Func(self.loop, 'Ff_neutral'))),
+                         Parallel(Func(self.ambassador.setChatAbsolute, "You mistake noise for leverage.", CFSpeech),
+                                  Sequence(ActorInterval(self.ambassador, 'frustrated'),  Func(self.ambassador.loop, 'neutral'))),
+                         Sequence(Func(self.ambassador.setChatAbsolute, "You mistake chaos for strategy.", CFSpeech), Wait(3.0), Func(self.ambassador.setChatAbsolute, "I do not shout, I persuade.", CFSpeech), Wait(3.0),
+                                  Parallel(Sequence(ActorInterval(self.ambassador, 'deadwood'), Func(self.ambassador.loop, 'neutral')),
+                                  Sequence(Func(self.ambassador.setChatAbsolute, "And today...", CFSpeech), Wait(2.0), Func(self.ambassador.setChatAbsolute, "YOU WILL AGREE TO LOSE!", CFSpeech))), Wait(3.0), Func(self.ambassador.setChatAbsolute, "", CFSpeech)),
+                         LerpPosInterval(camera, 2, getCamBossPos),
+
+                         Parallel(Func(self.setChatAbsolute, "You wanted an audience, now you have one.", CFSpeech),
+                                  Sequence(ActorInterval(self, 'Ff_speech'), Func(self.loop, 'Ff_neutral'))),
+                         Parallel(Sequence(ActorInterval(self, 'Ff_point'), Func(self.loop, 'Ff_neutral')), Func(self.setChatAbsolute, "Now show them why we're in charge!", CFSpeech), LerpPosInterval(camera, 3, getCamBossPos2)),
+                                  Parallel(Func(self.ambassador.setChatAbsolute, "We will be efficient!", CFSpeech), ActorInterval(self.ambassador, 'mob-mentality'),
+                                           Func(self.wiretapper.setChatAbsolute, "We will be precise!", CFSpeech), ActorInterval(self.wiretapper, 'mob-mentality'),
+                                           Func(self.vaultmaster.setChatAbsolute, "We will be final!", CFSpeech), ActorInterval(self.vaultmaster, 'mob-mentality'),
+                                           Func(self.powerhouse.setChatAbsolute, "We will be thorough!", CFSpeech), ActorInterval(self.powerhouse, 'mob-mentality')),
+                                  Sequence(Func(self.loop, 'Ff_neutral')),
+                         Parallel(Sequence(Wait(2.5), LerpHprInterval(self.banquetDoor, 0.5, Point3(0, 0, 0))), LerpPosHprInterval(camera, 3, getCamRTPos, Point3(10, -8, 0))), Parallel(Func(self.setChatAbsolute, "", CFSpeech),
+                          Func(self.powerhouse.setChatAbsolute, "", CFSpeech), Func(self.powerhouse.loop, 'sit-exec'), Func(self.powerhouse.setZ, 2.5), Func(self.powerhouse.setY, 352.25),
+                           Func(self.ambassador.setChatAbsolute, "", CFSpeech), Func(self.ambassador.loop, 'sit-exec'), Func(self.ambassador.setZ, 2.5), Func(self.ambassador.setY, 352.25),
+                          Func(self.wiretapper.setChatAbsolute, "", CFSpeech), Func(self.wiretapper.loop, 'sit-exec'), Func(self.wiretapper.setZ, 2.5), Func(self.wiretapper.setY, 352.25),
+                         Func(self.vaultmaster.setChatAbsolute, "", CFSpeech), Func(self.vaultmaster.loop, 'sit-exec'), Func(self.vaultmaster.setZ, 2.5), Func(self.vaultmaster.setY, 352.25)), Func(self.setPos, bossEndPos),
+                         Func(self.clearChat), Func(rToon.setChatAbsolute, "Alright, Toons... that's the Executive Board. They're the worst the Bossbots have to offer.", CFSpeech),
+                         Wait(3.0), Func(rToon.setChatAbsolute, "But they're still cogs.", CFSpeech), Wait(3.0), Func(rToon.setChatAbsolute, "Stay sharp, work together, and don't let them intimidate you!", CFSpeech), Wait(3.0),
+                         Func(rToon.setChatAbsolute, "We've come too far to turn back now!", CFSpeech), Wait(3.0), Func(rToon.setChatAbsolute, "Good luck Toons, we're all counting on you!", CFSpeech),
+                         LerpHprInterval(self.banquetDoor, 2, Point3(120, 0, 0)),
+                         Sequence(Func(rToon.suit.loop, 'walk'), self.createWalkInInterval(), rToon.hprInterval(1, VBase3(90, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')),
+                         LerpHprInterval(self.banquetDoor, 2, Point3(0, 0, 0)), Func(rToon.setChatAbsolute, "", CFSpeech), Func(self.setChatAbsolute, "", CFSpeech | CFTimeout), Func(self.__hideResistanceToon))
         return track
 
     def enterFrolic(self):
@@ -404,7 +578,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
             toon = base.cr.doId2do.get(toonId)
             if not toon:
                 continue
-            destPos = Point3(-14 + index * 4, 25, 0)
+            destPos = Point3(0, 25, 0)
 
             def toWalk(toon):
                 if hasattr(toon, 'suit') and toon.suit:

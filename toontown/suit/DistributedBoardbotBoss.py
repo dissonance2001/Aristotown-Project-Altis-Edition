@@ -658,20 +658,19 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         dna.newBossCog('s')
         self.vpBoss.vpBoss = True
         self.vpBoss.setDNA(dna)
-        self.vpBoss.addActive()
         self.vpBoss.initializeDropShadow()
         self.vpBoss.setH(90)
         self.vpBoss.loop('Ff_neutral')
         self.vpBoss.reparentTo(self.geom.find('**/VPStand'))
         self.vpBoss.setZ(22)
         self.vpBoss.setName('Senior V.P.\nSellbot')
+        self.vpBoss.doId = 0
 
         self.cfoBoss = BossCog.BossCog()
         dna = SuitDNA.SuitDNA()
         dna.newBossCog('m')
         self.cfoBoss.cfoBoss = True
         self.cfoBoss.setDNA(dna)
-        self.cfoBoss.addActive()
         self.cfoBoss.initializeDropShadow()
         self.cfoBoss.setH(-90)
         self.cfoBoss.loop('Ff_neutral')
@@ -679,39 +678,39 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cfoBoss.setZ(22)
         self.cfoBoss.setName('C. F. O.\nCashbot')
         self.geom.find('**/CFOStand').setPos(45.925, 39.084, 0.0)
+        self.cfoBoss.doId = 0
 
         self.cjBoss = BossCog.BossCog()
         dna = SuitDNA.SuitDNA()
         dna.newBossCog('l')
         self.cjBoss.cjBoss = True
         self.cjBoss.setDNA(dna)
-        self.cjBoss.addActive()
         self.cjBoss.initializeDropShadow()
         self.cjBoss.setH(0)
         self.cjBoss.loop('Ff_neutral_f')
         self.cjBoss.reparentTo(self.geom.find('**/CJStand'))
         self.cjBoss.setZ(22)
         self.cjBoss.setName('C. L. O.\nLawbot')
+        self.cjBoss.doId = 0
 
         self.ceoBoss = BossCog.BossCog()
         dna = SuitDNA.SuitDNA()
         dna.newBossCog('c')
         self.ceoBoss.ceoBoss = True
         self.ceoBoss.setDNA(dna)
-        self.ceoBoss.addActive()
         self.ceoBoss.initializeDropShadow()
         self.ceoBoss.setH(0)
         self.ceoBoss.loop('Ff_neutral')
         self.ceoBoss.reparentTo(self.geom.find('**/CEOStand'))
         self.ceoBoss.setPosHpr(0, 5, 22, 0, 0, 0)
         self.ceoBoss.setName('C. E. O.\nBossbot')
+        self.ceoBoss.doId = 0
 
         self.cioBoss = BossCog.BossCog()
         dna = SuitDNA.SuitDNA()
         dna.newBossCog('t')
         self.cioBoss.cioBoss = True
         self.cioBoss.setDNA(dna)
-        self.cioBoss.addActive()
         self.cioBoss.initializeDropShadow()
         self.cioBoss.setH(0)
         self.cioBoss.loop('Ff_neutral')
@@ -719,41 +718,44 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cioBoss.setZ(22)
         self.cioBoss.setName('C. I. O.\nTechbot')
         self.cioBoss.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
+        self.cioBoss.doId = 0
 
         self.cpoBoss = BossCog.BossCog()
         dna = SuitDNA.SuitDNA()
         dna.newBossCog('p')
         self.cpoBoss.cpoBoss = True
         self.cpoBoss.setDNA(dna)
-        self.cpoBoss.addActive()
         self.cpoBoss.initializeDropShadow()
         self.cpoBoss.setH(0)
         self.cpoBoss.loop('Ff_neutral')
         self.cpoBoss.reparentTo(self.geom)
         self.cpoBoss.setPosHpr(-50.0306, 77.9406, 22, -325, 0, 0)
         self.cpoBoss.setName('C. P. O.\nPressbot')
+        self.cpoBoss.doId = 0
 
         self.cjBoss2 = BossCog.BossCog()
         dna = SuitDNA.SuitDNA()
         dna.newBossCog('l2')
         self.cjBoss2.cjBoss2 = True
         self.cjBoss2.setDNA(dna)
-        self.cjBoss2.addActive()
         self.cjBoss2.initializeDropShadow()
         self.cjBoss2.setH(0)
         self.cjBoss2.loop('Ff_neutral')
         self.cjBoss2.reparentTo(self.geom)
         self.cjBoss2.setPosHpr(-20, -8.55076, 22, 180, 0, 0)
         self.cjBoss2.setName('Chief Justice\nLawbot')
+        self.cjBoss2.doId = 0
 
         self.reparentTo(render)
         self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
 
-        self.promotionMusic = base.loadMusic('phase_9/audio/bgm/encntr_head_suit_theme.ogg')
         self.toonsDiscovered = base.loadMusic('phase_9/audio/bgm/encntr_sting_announce.ogg')
         self.betweenBattleMusic = base.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleTwoMusic = base.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
         self.battleThreeMusic = base.loadMusic('phase_9/audio/bgm/encntr_head_suit_theme.ogg')
+        self.promotionMusic = base.loader.loadMusic('phase_14/audio/bgm/ET_boss_prep.ogg')
+        self.betweenPhaseMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
+        self.battleOneMusic = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
         self.geom.reparentTo(render)
 
     def unloadEnvironment(self):

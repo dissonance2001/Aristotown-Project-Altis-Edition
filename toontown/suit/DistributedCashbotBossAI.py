@@ -484,7 +484,7 @@ class DistributedCashbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
         self.initializeBattles(2, ToontownGlobals.CashbotBossBattleOnePosHpr)
         
     def enterPrepareBattleTwo(self):
-        self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)
+        self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 350, self.__donePrepareBattleTwo)
         self.divideToons()
         self.makeBattleTwoBattles()
         self.__makeBattleThreeObjects()
@@ -720,6 +720,24 @@ def cfo2():
     boss.exitIntroduction()
     boss.b_setState('PrepareBattleTwo')
     return 'Skipping the first round...'
+
+@magicWord(category=CATEGORY_PROGRAMMER)
+def cfocutscene1():
+    """
+    Skips to the next round of the CFO.
+    """
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedCashbotBossAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+    if not boss:
+        return "You aren't in a CFO!"
+    boss.exitIntroduction()
+    boss.b_setState('BattleOne')
+    return 'Skipping first cutscene...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
 def killCFO():

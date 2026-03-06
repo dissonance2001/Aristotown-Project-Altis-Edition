@@ -192,7 +192,7 @@ def findToonAttack(toons, attacks, track):
     return foundAttacks
 
 
-SERVER_BUFFER_TIME = 2.0
+SERVER_BUFFER_TIME = 60
 SERVER_INPUT_TIMEOUT = CLIENT_INPUT_TIMEOUT + SERVER_BUFFER_TIME
 MAX_JOIN_T = TTLocalizer.BBbattleInputTimeout
 FACEOFF_TAUNT_T = 3.5

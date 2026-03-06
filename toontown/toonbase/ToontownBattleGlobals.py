@@ -966,4 +966,5 @@ ValidStatusConditions = (
     'wiretapperHit2',
     'alreadyBeginning',
     'brokenconnnectionCooldown',
+    'bookkeeperHit',
 )

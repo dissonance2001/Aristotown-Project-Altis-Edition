@@ -29,7 +29,7 @@ ModelDict = {'s': 'phase_9/models/char/sellbotBoss',
              'p': 'phase_14/models/char/pressbotBoss',
             'l2': 'phase_14/models/char/pressbot2Boss'
              }
-AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'Ff_lookRt', 'Ff_cross_arms_loop', 'Ff_neutral_f', 'turn2Fb', 'Ff_neutral', 'Ff_neutral_f', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
+AnimList = ('Ff_speech', 'ltTurn2Wave', 'wave', 'point', 'Ff_lookRt', 'Ff_lookLt', 'Ff_point', 'Ff_cross_arms_loop', 'Ff_cross_arms_into', 'Ff_cross_arms_out', 'Ff_neutral_f', 'turn2Fb', 'Ff_neutral', 'Ff_neutral_f', 'Bb_neutral', 'Ff2Bb_spin', 'Bb2Ff_spin', 'Fb_neutral', 'Bf_neutral', 'Fb_firstHit', 'Fb_downNeutral', 'Fb_downHit', 'Fb_fall', 'Fb_down2Up', 'Fb_downLtSwing', 'Fb_downRtSwing', 'Fb_DownThrow', 'Fb_UpThrow', 'Fb_jump', 'golf_swing')
 
 
 class BossCog(Avatar.Avatar):

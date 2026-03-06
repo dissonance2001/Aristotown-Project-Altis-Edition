@@ -652,6 +652,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
         anims = ['bellow', 'neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured', 'bust',
+                 'fusiondance-shot1', 'fusiondance-shot2', 'fusiondance-shot3', 'fusiondance-shot4', 'fusiondance-shot5',
                  'stun', 'enraged', 'insurance', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup', 'scabbard', 'sparkplug', 'throttle', 'gsnap', 'throttle2', 'mouthdrop', 'dive',
                  'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'overclocked', 'come-on', 'zero']
         for anim in additionalAnims:
@@ -1052,9 +1053,22 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                          Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)).start()
 
     def checkLevelDamage(self, levelDamage):
-        self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
-                                         Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
+        if self.dna.name == 'hroller':
+            if float(self.currHP) < levelDamage:
+                x = int(self.currHP - 1)
+                self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                         Func(self.showHpText, - x), Func(self.setHealthForMe, - x),
                                          Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                           Func(self.removeLevelDamage)).start()
+            else:
+                self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                        Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
+                                                        Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                               Func(self.removeLevelDamage)).start()
+        else:
+            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                                    Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
+                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
                                            Func(self.removeLevelDamage)).start()
 
     def checkDamage(self, levelDamage):
@@ -1144,10 +1158,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                       )
                 soakSuit = Func(self.makeSoaked, 1)
             elif self.isVirtual:
-                showDamage = Sequence(Func(self.showHpTextNew, - int(math.floor(hp)), text="SOAKED 2 ROUNDS", attackTrack=attackTrack, colorCode=1))
+                showDamage = Sequence(Func(self.showHpTextNew, - int(math.floor(hp)), text="SOAKED 2 ROUNDS", attackTrack=attackTrack, colorCode=1), updateHealthBar)
                 soakSuit = Func(self.makeSoaked, 1)
             elif self.isSkeleton:
-                showDamage = Sequence(Func(self.showHpTextNew, - int(math.floor(hp)), text="SOAKED 3 ROUNDS", attackTrack=attackTrack, colorCode=1))
+                showDamage = Sequence(Func(self.showHpTextNew, - int(math.floor(hp)), text="SOAKED 3 ROUNDS", attackTrack=attackTrack, colorCode=1), updateHealthBar)
                 soakSuit = Func(self.makeSoaked, 2)
             else:
                 showDamage = Parallel(Func(self.showHpTextNew, -int(math.floor(hp)), text="SOAKED 4 ROUNDS", attackTrack=attackTrack, colorCode=1), updateHealthBar,

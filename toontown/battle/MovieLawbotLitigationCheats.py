@@ -171,12 +171,16 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     origH = suit.getH(battle)
 
     # Calculate heading to toon
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    origPos2 = suit.getPos(battle)
+    suit.setPos(battle, origPos)
     targetPos = toon.getPos(battle)
     suit.headsUp(battle, targetPos)
     targetH = suit.getH(battle)
 
     # Restore original heading
     suit.setH(battle, origH)
+    suit.setPos(battle, origPos2)
 
     # Normalize difference to shortest path
     delta = (targetH - origH + 180) % 360 - 180
@@ -283,17 +287,21 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
     battle = attack['battle']
     targets = attack['target']
     partTracks = Parallel()
+    origPos, origHpr = battle.getActorPosHpr(suit)
     origHpr = battle.getActorPosHpr(suit)[1]
+    origPos2 = suit.getPos(battle)
     for i in xrange(len(targets)):
         tgt = targets[i]
         toon = tgt['toon']
         origHpr = battle.getActorPosHpr(suit)[1] # We only want the rotation.
+        suit.setPos(battle, origPos)
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
         partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative], softStop))
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
+    suit.setPos(battle, origPos2)
     return partTracks
 
 
@@ -304,7 +312,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     if suit:
-        suitPos = suit.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
@@ -351,7 +359,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     battle = attack['battle']
     suit = attack['suit']
     if suit:
-        suitPos = suit.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
@@ -665,7 +673,7 @@ def doThrowBookCog(attack, ind):
             Wait(1.5),
             Parallel(
                 getThrowTrack(knife, hitPoint, 1.0, battle, -100),
-                LerpHprInterval(knife, 0.5, VBase3(0, 0, 0)), LerpScaleInterval(knife, 0, VBase3(8, 8, 8))), Sequence(Wait(1), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0))),
+                LerpHprInterval(knife, 0.5, VBase3(0, 0, 0)), LerpScaleInterval(knife, 0, VBase3(8.5, 8.5, 8.5))), Sequence(Wait(1), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0))),
             Func(knife.removeNode)
         )
     knifeTracks.append(knifeTrack)
@@ -1794,7 +1802,7 @@ def doCaseInsurancePlanInsurance(attack):
                                scaleUpTime=0.1),
             Wait(2.3),
             Parallel(
-                getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
+                getThrowTrack(knife, hitPoint, 1.5, battle, -20.288),
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
@@ -1869,7 +1877,7 @@ def doCaseInsurancePlanInsurance2(attack):
                                scaleUpTime=0.1),
             Wait(2.3),
             Parallel(
-                getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
+                getThrowTrack(knife, hitPoint, 1.5, battle, -20.288),
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
@@ -1947,7 +1955,7 @@ def doCaseInsurancePlanSkelecogInsurance2(attack):
                                scaleUpTime=0.25),
             Wait(1.75),
             Parallel(
-                getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
+                getThrowTrack(knife, hitPoint, 1.5, battle, -20.288),
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
@@ -2014,7 +2022,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
                                scaleUpTime=0.25),
             Wait(1.75),
             Parallel(
-                getThrowTrack(knife, hitPoint, 1.5, battle, -30.288),
+                getThrowTrack(knife, hitPoint, 1.5, battle, -20.288),
                 LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
             Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
                      Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),

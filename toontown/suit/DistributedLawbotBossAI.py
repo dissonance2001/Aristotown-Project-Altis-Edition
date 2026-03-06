@@ -354,7 +354,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
 
     def enterRollToBattleTwo(self):
         self.divideToons()
-        self.barrier = self.beginBarrier('RollToBattleTwo', self.involvedToons, 50, self.__doneRollToBattleTwo)
+        self.barrier = self.beginBarrier('RollToBattleTwo', self.involvedToons, 350, self.__doneRollToBattleTwo)
 
     def __doneRollToBattleTwo(self, avIds):
         self.b_setState('PrepareBattleTwo')
@@ -363,11 +363,11 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         self.ignoreBarrier(self.barrier)
 
     def makeBattleTwoBattles(self):
-        self.postBattleState = 'RollToBattleTwo'
+        self.postBattleState = 'PrepareBattleThree'
         self.initializeBattles(2, (-2.798, 233, 7.55, 180, 0, 0))
 
     def enterPrepareBattleTwo(self):
-        self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)
+        self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 0, self.__donePrepareBattleTwo)
         self.makeBattleTwoBattles()
 
     def __donePrepareBattleTwo(self, avIds):
@@ -968,6 +968,24 @@ def skipCJFinal():
     boss.exitIntroduction()
     boss.b_setState('PrepareBattleThree')
     return 'Skipped to CJ Final.'
+
+@magicWord(category=CATEGORY_ADMINISTRATOR)
+def skiplitcutscene():
+    """
+    Kills the CJ.
+    """
+    invoker = spellbook.getInvoker()
+    boss = None
+    for do in simbase.air.doId2do.values():
+        if isinstance(do, DistributedLawbotBossAI):
+            if invoker.doId in do.involvedToons:
+                boss = do
+                break
+    if not boss:
+        return "You aren't in a CJ"
+    boss.exitIntroduction()
+    boss.b_setState('BattleTwo')
+    return 'Skipping litigation cutscene...'
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
 def killCJ():

@@ -296,7 +296,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.damageInterval:
             self.damageInterval.finish()
             self.damageInterval = None
-        self.damageInterval = Parallel(Func(self.setDamageUpGovernaught, self.getDamageUpGovernaught() + num)).start()
+        self.damageInterval = Parallel(Func(self.setDamageUpGovernaught, num)).start()
 
     def checkEncore(self, num):
         if self.damageInterval:

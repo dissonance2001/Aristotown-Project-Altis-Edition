@@ -72,11 +72,64 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.strafeInterval = None
         self.onscreenMessage = None
         self.helicopter = None
+        self.tv = None
+        self.tv2 = None
+        self.tv3 = None
+        self.tv4 = None
         self.toonMopathInterval = []
         self.nerfed = ToontownGlobals.SELLBOT_NERF_HOLIDAY in base.cr.newsManager.getHolidayIdList()
         self.localToonPromoted = True
         self.resetMaxDamage()
         self.maxHP = self.bossMaxDamage
+
+        from toontown.suit.DistributedSuitBase import DistributedSuitBase
+        self.pressurizer = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('safesupervis')
+        self.pressurizer.setDNA(suitDNA)
+        self.pressurizer.setPickable(0)
+        self.pressurizer.setDisplayName('Pressurizer\nSellbot\nLevel 45.mgr')
+        self.pressurizer.doId = 0
+        self.pressurizer.loop('sit-exec')
+
+        self.unionbuster = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('ubuster')
+        self.unionbuster.setDNA(suitDNA)
+        self.unionbuster.setPickable(0)
+        self.unionbuster.setDisplayName('Union Buster\nSellbot\nLevel 40.mgr')
+        self.unionbuster.doId = 0
+        self.unionbuster.loop('sit-exec')
+
+        self.racketeer = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('racket')
+        self.racketeer.setDNA(suitDNA)
+        self.racketeer.setPickable(0)
+        self.racketeer.setDisplayName('Racketeer\nSellbot\nLevel 40.mgr')
+        self.racketeer.doId = 0
+        self.racketeer.loop('sit-exec')
+
+        self.radiographer = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('radiog')
+        self.radiographer.setDNA(suitDNA)
+        self.radiographer.setPickable(0)
+        self.radiographer.setDisplayName('Radiographer\nSellbot\nLevel 35.mgr')
+        self.radiographer.doId = 0
+        self.radiographer.loop('sit-exec')
+
+    def hidePressurizer(self):
+        self.pressurizer.hide()
+
+    def hideUnionBuster(self):
+        self.unionbuster.hide()
+
+    def hideRacketeer(self):
+        self.racketeer.hide()
+
+    def hideRadiographer(self):
+        self.radiographer.hide()
 
     def announceGenerate(self):
         global OneBossCog
@@ -268,36 +321,67 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         return Sequence(Func(node.setPos, fromPos), Func(node.headsUp, toPos), node.posInterval(time, toPos))
 
     def makeIntroductionMovie(self, delayDeletes):
+        self.pressurizer.reparentTo(self.geom)
+        self.pressurizer.setPosHpr(102.75, -10, 20.5, -90, 0, 0)
+        self.unionbuster.reparentTo(self.geom)
+        self.unionbuster.setPosHpr(-102.75, -10, 20.5, 90, 0, 0)
+        self.racketeer.reparentTo(self.geom)
+        self.racketeer.setPosHpr(77, 38.5, 20.5, -45, 0, 0)
+        self.radiographer.reparentTo(self.geom)
+        self.radiographer.setPosHpr(-77, 38.5, 20.5, 45, 0, 0)
+        light = loader.loadModel('phase_14/models/props/CN-streetlight')
+        light.setScale(2.0)
+        light.reparentTo(self.geom)
+        light.setPosHpr(85, -10, 18, 90, 0, 0)
+        light2 = loader.loadModel('phase_14/models/props/CN-streetlight')
+        light2.setScale(2.0)
+        light2.reparentTo(self.geom)
+        light2.setPosHpr(-85, -10, 18, -90, 0, 0)
+        light3 = loader.loadModel('phase_14/models/props/CN-streetlight')
+        light3.setScale(2.0)
+        light3.reparentTo(self.geom)
+        light3.setPosHpr(65, 27, 18, 135, 0, 0)
+        light4 = loader.loadModel('phase_14/models/props/CN-streetlight')
+        light4.setScale(2.0)
+        light4.reparentTo(self.geom)
+        light4.setPosHpr(-65, 27, 18, -135, 0, 0)
+        chairPressurizer = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoomChair')
+        chairPressurizer.setScale(0.75)
+        chairPressurizer.reparentTo(self.geom)
+        chairPressurizer.setPosHpr(100, -10, 18, -90, 0, 0)
+        chairUnionBuster = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoomChair')
+        chairUnionBuster.setScale(0.75)
+        chairUnionBuster.reparentTo(self.geom)
+        chairUnionBuster.setPosHpr(-100, -10, 18, 90, 0, 0)
+        chairRacketeer = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoomChair')
+        chairRacketeer.setScale(0.75)
+        chairRacketeer.reparentTo(self.geom)
+        chairRacketeer.setPosHpr(75, 37, 18, -45, 0, 0)
+        chairRadiographer = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoomChair')
+        chairRadiographer.setScale(0.75)
+        chairRadiographer.reparentTo(self.geom)
+        chairRadiographer.setPosHpr(-75, 37, 18, 45, 0, 0)
         track = Parallel()
         camera.reparentTo(render)
         localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
         dooberTrack = Parallel()
         if self.doobers:
-            self.__doobersToPromotionPosition(self.doobers[:4], self.battleANode)
-            self.__doobersToPromotionPosition(self.doobers[4:], self.battleBNode)
+            self.__doobersToPromotionPosition(self.doobers)
             turnPosA = ToontownGlobals.SellbotBossDooberTurnPosA
             turnPosB = ToontownGlobals.SellbotBossDooberTurnPosB
             self.__walkDoober(self.doobers[0], 0, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[1], 4, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[2], 8, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[3], 12, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[7], 2, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[6], 6, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[5], 10, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[1], 2, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[2], 4, turnPosA, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[3], 6, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[7], 8, turnPosA, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[6], 10, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[5], 12, turnPosA, dooberTrack, delayDeletes)
             self.__walkDoober(self.doobers[4], 14, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[8], 16, turnPosA, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[9], 18, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[10], 20, turnPosA, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[11], 22, turnPosB, dooberTrack, delayDeletes)
         toonTrack = Parallel()
-        self.__toonsToPromotionPosition(self.toonsA, self.battleANode)
-        self.__toonsToPromotionPosition(self.toonsB, self.battleBNode)
-        delay = 0
-        for toonId in self.toonsA:
-            self.__walkToonToPromotion(toonId, delay, self.toonsEnterA, toonTrack, delayDeletes)
-            delay += 1
-
-        for toonId in self.toonsB:
-            self.__walkToonToPromotion(toonId, delay, self.toonsEnterB, toonTrack, delayDeletes)
-            delay += 1
-
-        toonTrack.append(Sequence(Wait(delay), self.closeDoors))
         self.clearChat()
         self.cagedToon.clearChat()
         promoteDoobers = TTLocalizer.BossCogPromoteDoobers % SuitDNA.getDeptFullnameP(self.style.dept)
@@ -529,8 +613,32 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.helicopter = globalPropPool.getProp('CogNationChopper')
         self.helicopter.reparentTo(self.geom)
         self.helicopter.loop('CogNationChopper')
-        self.helicopter.setPosHpr(0, -100, 0, 180, 0, 0)
+        self.helicopter.setPosHpr(0, -200, 0, 180, 0, 0)
         self.helicopter.setScale(1.0)
+        self.tv = loader.loadModel('phase_9/models/cogHQ/multislacker_tv')
+        self.tv.reparentTo(self.geom)
+        self.tv.setScale(2.0)
+        self.tv.setPosHpr(130, -10, 17.9522, 0, 0, 0)
+        screen = loader.loadModel('phase_9/models/cogHQ/ms_tvScreen')
+        screen.reparentTo(self.tv.find('**/tvScreen_origin'))
+        self.tv2 = loader.loadModel('phase_9/models/cogHQ/multislacker_tv')
+        self.tv2.reparentTo(self.geom)
+        self.tv2.setScale(2.0)
+        self.tv2.setPosHpr(-130, -10, 17.9522, 180, 0, 0)
+        screen = loader.loadModel('phase_9/models/cogHQ/ms_tvScreen')
+        screen.reparentTo(self.tv2.find('**/tvScreen_origin'))
+        self.tv3 = loader.loadModel('phase_9/models/cogHQ/multislacker_tv')
+        self.tv3.reparentTo(self.geom)
+        self.tv3.setScale(2.0)
+        self.tv3.setPosHpr(90, 52, 17.9522, 45, 0, 0)
+        screen = loader.loadModel('phase_9/models/cogHQ/ms_tvScreen')
+        screen.reparentTo(self.tv3.find('**/tvScreen_origin'))
+        self.tv4 = loader.loadModel('phase_9/models/cogHQ/multislacker_tv')
+        self.tv4.reparentTo(self.geom)
+        self.tv4.setScale(2.0)
+        self.tv4.setPosHpr(-90, 52, 17.9522, 135, 0, 0)
+        screen = loader.loadModel('phase_9/models/cogHQ/ms_tvScreen')
+        screen.reparentTo(self.tv4.find('**/tvScreen_origin'))
         self.rampA = self.geom.find('**/north_ramp')
         self.rampB = self.geom.find('**/west_ramp')
         self.rampC = self.geom.find('**/east_ramp')
@@ -549,6 +657,8 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.cageDoor = self.geom.find('**/cage_door')
         self.cage.setScale(1)
         self.rope = Rope.Rope(name='supportChain')
+        texture = loader.loadTexture('phase_9/maps/hq_chain.png')
+        self.rope.setTexture(texture, 1)
         self.rope.reparentTo(self.cage)
         self.rope.setup(2, ((self.cage, (0.15, 0.13, 16)), (self.geom, (0.23, 78, 120))))
         self.rope.ropeNode.setRenderMode(RopeNode.RMBillboard)
@@ -556,12 +666,15 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.rope.ropeNode.setUvDirection(0)
         self.rope.ropeNode.setUvScale(0.8)
         self.rope.setTransparency(1)
-        self.promotionMusic = base.loadMusic('phase_9/audio/bgm/encntr_head_suit_theme.ogg')
         self.toonsDiscovered = base.loadMusic('phase_9/audio/bgm/encntr_sting_announce.ogg')
         self.betweenBattleMusic = base.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleTwoMusic = base.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
         self.battleThreeMusic = base.loadMusic('phase_9/audio/bgm/encntr_head_suit_theme.ogg')
+        self.promotionMusic = base.loader.loadMusic('phase_14/audio/bgm/ET_boss_prep.ogg')
+        self.betweenPhaseMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
+        self.battleOneMusic = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
         self.geom.reparentTo(render)
+        self.setPosHpr(0, 60, 18, 0, 0, 0)
 
     def unloadEnvironment(self):
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
@@ -681,7 +794,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         DistributedBossCog.DistributedBossCog.enterElevator(self)
         self.setCageIndex(0)
         self.reparentTo(render)
-        self.setPosHpr(0, - 35, 0, - 90, 0, 0)
+        self.setPosHpr(0, 50, 18, 180, 0, 0)
         self.happy = 1
         self.raised = 1
         self.forward = 1
@@ -695,7 +808,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
 
     def enterIntroduction(self):
         self.reparentTo(render)
-        self.setPosHpr(0, - 35, 0, - 90, 0, 0)
+        self.setPosHpr(0, 50, 18, 180, 0, 0)
         self.stopAnimate()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         self.accept('clickedNametag', self.__clickedNameTag)
@@ -1113,14 +1226,30 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                 pos, h = points[i]
                 toon.setPosHpr(battleNode, pos[0], pos[1] + 10, pos[2], h, 0, 0)
 
-    def __doobersToPromotionPosition(self, doobers, battleNode):
-        points = BattleBase.BattleBase.toonPoints[len(doobers) - 1]
+    def __doobersToPromotionPosition(self, doobers):
+        positions = [
+            (15, 60, 18, 0),
+            (-15, 60, 18, 0),
+            (25, 60, 18, 0),
+            (-25, 60, 18, 0),
+            (35, 60, 18, 0),
+            (-35, 60, 18, 0),
+            (40, 40, 18, 0),
+            (-40, 40, 18, 0),
+            (50, 40, 18, 0),
+            (-50, 40, 18, 0),
+            (30, 40, 18, 0),
+            (-30, 40, 18, 0),
+        ]
+
         for i in xrange(len(doobers)):
             suit = doobers[i]
             suit.fsm.request('neutral')
             suit.loop('neutral')
-            pos, h = points[i]
-            suit.setPosHpr(battleNode, pos[0], pos[1] + 10, pos[2], h, 0, 0)
+
+            x, y, z, h = positions[i]
+            suit.wrtReparentTo(render)
+            suit.setPosHpr(x, y, z, h, 0, 0)
 
     def __touchedCage(self, entry):
         self.sendUpdate('touchCage', [])

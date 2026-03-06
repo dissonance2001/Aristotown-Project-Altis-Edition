@@ -487,7 +487,7 @@ def doSuitAttack(attack):
     elif name == 'BookkeeperPaperCutSoaked':
         suitTrack = MovieBossbotLitigationCheats.doPaperCutMulti(attack)
     elif name == 'BookkeeperPaperCutMarked':
-        suitTrack = MovieBossbotLitigationCheats.doPaperCutMulti(attack)
+        suitTrack = MovieBossbotLitigationCheats.doBookkeepingDamageUp(attack)
     elif name == 'BookkeeperPaperCut':
         suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
     elif name == 'BookkeeperExplodingDocument':
@@ -1077,7 +1077,7 @@ def doSuitAttack(attack):
     elif name == 'AmbassadorTargetCheck':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'Desperation':
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+        suitTrack = MovieHighRollerCheats.doDesperation(attack)
     elif name == 'Desperation2':
         suitTrack = MovieUniversalCheats.doDesperation2(attack)
     elif name == 'SynergyFees':
@@ -1756,12 +1756,16 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     origH = suit.getH(battle)
 
     # Calculate heading to toon
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    origPos2 = suit.getPos(battle)
+    suit.setPos(battle, origPos)
     targetPos = toon.getPos(battle)
     suit.headsUp(battle, targetPos)
     targetH = suit.getH(battle)
 
     # Restore original heading
     suit.setH(battle, origH)
+    suit.setPos(battle, origPos2)
 
     # Normalize difference to shortest path
     delta = (targetH - origH + 180) % 360 - 180
@@ -1855,17 +1859,21 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
     battle = attack['battle']
     targets = attack['target']
     partTracks = Parallel()
+    origPos, origHpr = battle.getActorPosHpr(suit)
     origHpr = battle.getActorPosHpr(suit)[1]
+    origPos2 = suit.getPos(battle)
     for i in xrange(len(targets)):
         tgt = targets[i]
         toon = tgt['toon']
         origHpr = battle.getActorPosHpr(suit)[1] # We only want the rotation.
+        suit.setPos(battle, origPos)
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
         partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative], softStop))
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
+    suit.setPos(battle, origPos2)
     return partTracks
 
 
@@ -1876,7 +1884,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     if suit:
-        suitPos = suit.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)

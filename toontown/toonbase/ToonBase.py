@@ -136,7 +136,7 @@ class ToonBase(OTPBase.OTPBase):
         self.musicManager.setVolume(settings.get("musicVol"))
         for sfm in self.sfxManagerList:
             sfm.setVolume(settings.get("sfxVol"))
-        self.sfxActive = settings.get("sfxVol") > 0.0
+        self.sfxActive = settings.get("sfxVol") >= 0.0
         self.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         self.screenshotSfx = self.loader.loadSfx('phase_4/audio/sfx/Photo_shutter.ogg')
         tpm = TextPropertiesManager.getGlobalPtr()

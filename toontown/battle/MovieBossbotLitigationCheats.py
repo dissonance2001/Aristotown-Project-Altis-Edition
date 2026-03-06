@@ -177,12 +177,16 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     origH = suit.getH(battle)
 
     # Calculate heading to toon
+    origPos, origHpr = battle.getActorPosHpr(suit)
+    origPos2 = suit.getPos(battle)
+    suit.setPos(battle, origPos)
     targetPos = toon.getPos(battle)
     suit.headsUp(battle, targetPos)
     targetH = suit.getH(battle)
 
     # Restore original heading
     suit.setH(battle, origH)
+    suit.setPos(battle, origPos2)
 
     # Normalize difference to shortest path
     delta = (targetH - origH + 180) % 360 - 180
@@ -222,12 +226,11 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     tauntIndex = attack['taunt']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
-    if attack[
-        'suitName'] == 'bkeeper':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
-        track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
-                          CFSpeech | CFTimeout))
-    else:
-        track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
+    # if attack[
+    #     'suitName'] == 'bkeeper':  # It isn't just 'caseman', it really all depends on the shorthand you have for the Case Manager.  If it is not 'caseman', change it to whatever is the actual shorthand for the Case Manager, or the Case Manager will not grunt as intended.
+    #     track.append(Func(suit.setChatAbsolute, random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...']),
+    #                       CFSpeech | CFTimeout))
+    track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     if splicedAnims:
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
@@ -267,17 +270,21 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
     battle = attack['battle']
     targets = attack['target']
     partTracks = Parallel()
+    origPos, origHpr = battle.getActorPosHpr(suit)
     origHpr = battle.getActorPosHpr(suit)[1]
+    origPos2 = suit.getPos(battle)
     for i in xrange(len(targets)):
         tgt = targets[i]
         toon = tgt['toon']
         origHpr = battle.getActorPosHpr(suit)[1] # We only want the rotation.
+        suit.setPos(battle, origPos)
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
         partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative], softStop))
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
+    suit.setPos(battle, origPos2)
     return partTracks
 
 
@@ -288,7 +295,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     battle = attack['battle']
     suit = attack['suit']
     if suit:
-        suitPos = suit.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
@@ -337,7 +344,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     suit = attack['suit']
     name = attack['name']
     if suit:
-        suitPos = suit.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
@@ -656,8 +663,8 @@ def doMandatoryFiling(attack):
                 dustCloud.setZ(3)
                 dustCloud.setScale(0.4)
                 dustCloud.createTrack()
-                dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, toon), Func(dustCloud.setPos,
-                                                                                    Point3(toon.getX(), toon.getY() - 6, toon.getZ() + 3)),
+                dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, bookshelf), Func(dustCloud.setPos,
+                                                                                    Point3(0, -70, 0)),
                                              dustCloud.track, Func(dustCloud.removeNode), Wait(1.7), name='dustCloadIval')
 
                 x += 1
@@ -739,18 +746,12 @@ def doPaperCut(attack):
         origPos, origHpr = battle.getActorPosHpr(suit)
         partTrack = getPartTrack(particleEffect, .5, 3.5, [particleEffect, toon, 0], softStop=-2)
         toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
-        notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
+        notifyTrack = Sequence(Wait(0.5), Func(toon.showHpTextNew, -int(dmg), text="MARKED!", colorCode=4))
+        notifyTrack.append(Parallel(Func(toon.makeMarkedWood), Func(toon.addMarkedWoodRounds, 3)))
+        notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 3)))
+        notifyTrack.append(Parallel(Func(toon.checkDamageUp, 25)))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
-            notifyTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
-            currentBossHealth = -1
-            for s in battle.suits:
-                if s.dna.name == 'phouse':
-                    currentBossHealth = s.currHP
-            if currentBossHealth > 0:
-                notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 50)))
-            else:
-                notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 25)))
             partTracks.append(partTrack)
     suitTrack = Parallel(getSuitTrack(attack))
     soundTrack = getSoundTrack('SA_shred.ogg', delay=.5, node=suit)
@@ -774,7 +775,7 @@ def doPaperCutMulti(attack):
         origPos, origHpr = battle.getActorPosHpr(suit)
         partTrack = getPartTrack(particleEffect, .5, 3.5, [particleEffect, toon, 0], softStop=-2)
         toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
-        notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
+        notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg)))
         if dmg > 0:
             origH = suit.getH(battle)
             targetPos = toon.getPos(battle)
@@ -789,13 +790,19 @@ def doPaperCutMulti(attack):
             moveTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'sanction'),
                                        Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)), Func(suit.setNeutralAnimationDrop)))
             notifyTracks.append(notifyTrack)
-            notifyTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
-            notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 15)))
             partTracks.append(partTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack = getSoundTrack('SA_shred.ogg', delay=.5, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
     return Parallel(suitTrack, partTracks, moveTracks, notifyTracks, toonTrack, soundTrack)
+
+def doBookkeepingDamageUp(attack):
+    suit = attack['suit']
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
+    makeImmune = Sequence(Func(suit.removeBookkeeping), Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 10))
+    managerHealTrack = Sequence(Wait(1), Func(suit.showHpString, "+10% Damage!"))
+    return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doExplodingDocument(attack):
     suit = attack['suit']
@@ -865,8 +872,9 @@ def doBookkeepingRetaliation(attack):
         origPos, origHpr = battle.getActorPosHpr(suit)
         suitTrack = Sequence(getSuitAnimTrack(attack))
         suitTrack2 = Sequence(ActorInterval(suit, 'effort', duration=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimationDrop))
-        notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextNew, -int(dmg), text="NO GAGS!", colorCode=1))
-        notifyTrack.append(Parallel(Func(toon.makeHidden), Func(toon.addHiddenRounds, 1)))
+        notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextNew, -int(dmg), text="-99% Damage!", colorCode=1))
+        notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 1)))
+        notifyTrack.append(Parallel(Func(toon.checkDamageDown, 99)))
         soundTrack1 = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
         soundTrack2 = Sequence(Wait(3.4), SoundInterval(globalBattleSoundCache.getSound('SA_haymaker.ogg')))
         soundTrack = Parallel(soundTrack1, soundTrack2)
@@ -1649,55 +1657,103 @@ def doGhostMentality(attack):
     manager = attack['suit']
     suit = attack['suit']
     battle = attack['battle']
+    target = attack['target']
+
     suitTracks = Parallel()
     managerTracks = Parallel()
     moveTracks = Parallel()
 
+    origPos, origHpr = battle.getActorPosHpr(manager)
+    origPos2 = suit.getPos(battle)
+
+    walkOutPos = Point3(origPos)
+    walkOutPos.setY(walkOutPos.getY() - 12.5)
+
     for targetSuit in battle.activeSuits:
+        if targetSuit == manager:
+            continue
+
+        # Face the target suit while standing out in front
         targetPos = targetSuit.getPos(battle)
-        origH = suit.getH(battle)
-        targetPos = targetSuit.getPos(battle)
-        suit.headsUp(battle, targetPos)
-        targetH = suit.getH(battle)
-        suit.setH(battle, origH)
-        delta = (targetH - origH + 180) % 360 - 180
-        if delta > 0:
-            shuffleAnim = 'shuffle-right'
-        else:
-            shuffleAnim = 'shuffle-left'
-        headsUp = LerpHprInterval(suit, 0, (origH + delta - 45, 0, 0), startHpr=(origH, 0, 0), other=battle)
-        sinkPos = manager.getPos(battle)
-        dropPos = manager.getPos(battle)
-        sinkPos2 = manager.getPos(battle)
-        dropPos2 = manager.getPos(battle)
-        target = attack['target']
-        toon = target[0]['toon']
-        sinkPos.setY(sinkPos.getY() + 12.5)
-        sinkPos.setZ(sinkPos.getZ() - 4.5)
-        sinkPos2.setY(sinkPos.getY() - 22.5)
-        battle = attack['battle']
-        targetPos2 = toon.getPos(battle)
-        origPos, origHpr = battle.getActorPosHpr(manager)
-        headsUp2 = Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta - 45, 0, 0), other=battle))
-        moveTrack = Sequence(LerpPosInterval(manager, manager.getDuration('walk'), sinkPos2, other=battle),
-                             Wait(manager.getDuration('deadwood')),
-                             LerpPosInterval(manager, manager.getDuration('walk'), dropPos, other=battle),
-                             Func(manager.setPos, battle, dropPos))
-        managerTrack = Sequence(ActorInterval(manager, 'walk'), headsUp, getSuitAnimTrack(attack),
-                             ActorInterval(manager, 'walk'), headsUp2, Func(manager.setNeutralAnimation))
+
+        manager.setPos(battle, walkOutPos)
+        manager.setHpr(battle, origHpr)
+        manager.headsUp(battle, targetPos)
+        targetHpr = manager.getHpr(battle)
+
+        manager.setPos(battle, origPos2)
+        manager.setHpr(battle, origHpr)
+
+        moveTrack = Sequence(
+            Parallel(LerpHprInterval(
+                suit,
+                suit.getDuration('walk'),
+                targetHpr,
+                startHpr=origHpr,
+                other=battle
+            ),
+                LerpPosInterval(
+                    suit,
+                    suit.getDuration('walk'),
+                    walkOutPos,
+                    startPos=origPos,
+                    other=battle
+                )),
+            Wait(suit.getDuration('deadwood')),
+            Parallel(LerpHprInterval(
+                suit,
+                suit.getDuration('walk'),
+                origHpr,
+                startHpr=targetHpr,
+                other=battle
+            ),
+                LerpPosInterval(
+                    suit,
+                    suit.getDuration('walk'),
+                    origPos,
+                    startPos=walkOutPos,
+                    other=battle
+                )),
+            Func(suit.setPos, battle, origPos),
+            Func(suit.setHpr, battle, origHpr)
+        )
+
+        managerTrack = Sequence(
+            ActorInterval(manager, 'walk'),
+            Parallel(getSuitAnimTrack(attack), Wait(manager.getDuration('deadwood'))),
+            ActorInterval(manager, 'walk'),
+            Func(manager.setNeutralAnimation)
+        )
+
         managerTracks.append(managerTrack)
         moveTracks.append(moveTrack)
-        suitTrack = Sequence(Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5), MovieUtil.createGhostMentalityTrack(targetSuit, battle))
-        suitTrack2 = Sequence(Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5), Func(targetSuit.showHpString, "+50% Damage!"), Func(targetSuit.checkDamageUp, 50))
+
+        suitTrack = Sequence(
+            Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5),
+            MovieUtil.createGhostMentalityTrack(targetSuit, battle)
+        )
+
+        suitTrack2 = Sequence(
+            Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5),
+            Func(targetSuit.showHpString, "+50% Damage!"),
+            Func(targetSuit.checkDamageUp, 50)
+        )
+
         suitTrack.append(Func(battle.unSueSuit, targetSuit))
-        if not targetSuit.dna.name == 'ambass':
+
+        if targetSuit.dna.name != 'ambass':
             if targetSuit.isManager:
                 pass
-            if not targetSuit.isManager and not targetSuit.isVirtual:
+            elif not targetSuit.isVirtual:
                 suitTracks.append(suitTrack)
-            if targetSuit.isVirtual:
+            else:
                 suitTracks.append(suitTrack2)
-    soundTrack = Sequence(Wait(manager.getDuration('walk')), SoundInterval(globalBattleSoundCache.getSound('SA_deadwood.ogg'), node=manager))
+
+    soundTrack = Sequence(
+        Wait((manager.getDuration('walk'))),
+        SoundInterval(globalBattleSoundCache.getSound('SA_deadwood.ogg'), node=manager)
+    )
+
     return Parallel(managerTracks, moveTracks, suitTracks, soundTrack)
 
 def doAmbassadorPhase2(attack):
@@ -2804,22 +2860,13 @@ def doThrowBook(attack):
         missPoint = Point3(missPoint2.getX(), missPoint2.getY(), missPoint2.getZ())
         paperTrack.append(Func(battle.movie.needRestoreRenderProp, paper))
         paperTrack.append(Func(paper.wrtReparentTo, battle))
-        notifyTrack = Sequence(Wait(3.0), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
-        notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+        notifyTrack = Sequence(Wait(3.0), Func(toon.showHpTextNew, -int(dmg), text="GAGS DISABLED!", colorCode=1))
         toonPos = toon.getPos(battle)
         suitPos, suitHpr = battle.getActorPosHpr(suit)
         gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
         explosionTrack = Sequence()
         explosionTrack.append(Wait(3.0))
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
-        currentBossHealth = -1
-        for s in battle.suits:
-            if s.dna.name == 'wtapper':
-                currentBossHealth = s.currHP
-        if currentBossHealth > 0:
-            notifyTrack.append(Parallel(Func(toon.checkDamageDown, 75)))
-        else:
-            notifyTrack.append(Parallel(Func(toon.checkDamageDown, 50)))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
             explosionTracks.append(explosionTrack)

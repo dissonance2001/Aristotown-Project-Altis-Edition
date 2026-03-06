@@ -12,6 +12,9 @@ want-pstats #f
 
 # Audio:
 audio-library-name p3fmod_audio
+audio-sfx-active 16
+audio-master-volume 1.0
+audio-music-volume 1.0
 
 # Graphics:
 aux-display pandagl
