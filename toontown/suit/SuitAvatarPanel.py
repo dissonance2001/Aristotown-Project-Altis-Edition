@@ -357,7 +357,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             self.deptLabel['text'] = ''
         elif self.avatar.isImmortal and not self.avatar.dna.name == 'hroller' and not self.avatar.isPhase3:
             self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogImmune % (
-            'Immune!')
+            'Immune')
         elif self.avatar.dna.name == 'hrollers' and self.maxHp > 9999 and tempHp <= 0:
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (

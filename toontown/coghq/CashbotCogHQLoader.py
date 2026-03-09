@@ -22,12 +22,14 @@ class CashbotCogHQLoader(CogHQLoader.CogHQLoader):
             state.addTransition('mintInterior')
 
         self.musicFile = 'phase_10/audio/bgm/CB_courtyard.ogg'
+        self.battleMusic = 'phase_10/audio/bgm/CB_courtyard_encntr.ogg'
         self.cogHQExteriorModelPath = 'phase_10/models/cogHQ/CashBotShippingStation'
         self.cogHQLobbyModelPath = 'phase_10/models/cogHQ/VaultLobby'
         self.zoneVisDict = []
         self.geom = None
 
     def load(self, zoneId):
+        self.battleMusic = 'phase_11/audio/bgm/LB_courtyard_encntr.ogg'
         CogHQLoader.CogHQLoader.load(self, zoneId)
         Toon.loadCashbotHQAnims()
 

@@ -455,7 +455,7 @@ def __hasLuredSuits(sound):
 def __doKazoo(sound, delay, toon, level):
     tracks = Parallel()
     instrMin = Vec3(0.001, 0.001, 0.001)
-    instrMax = Vec3(0.65, 0.65, 0.65)
+    instrMax = Vec3(0.1, 0.1, 0.1)
     instrMax *= INSTRUMENT_SCALE_MODIFIER
     instrStretch = Vec3(0.6, 1.1, 0.6)
     instrStretch *= INSTRUMENT_SCALE_MODIFIER

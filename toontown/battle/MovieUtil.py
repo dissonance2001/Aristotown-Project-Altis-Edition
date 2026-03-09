@@ -974,7 +974,7 @@ def createVirtualSuitDeathTrack(suit, battle):
                               CFSpeech | CFTimeout))
         suitTrack.append(Wait(4.0))
         suitTrack.append(ActorInterval(suit, 'defeated-out'))
-        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle), headInterval))
+        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle)))
         suitTrack.append(Wait(1.0))
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
@@ -987,7 +987,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
         suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
     elif suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
-        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle), headInterval))
+        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle)))
         suitTrack.append(Wait(1.0))
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
@@ -1000,7 +1000,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
         suitTrack.append(Func(suit.makeDead))
     else:
-        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle), headInterval))
+        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle)))
         suitTrack.append(Func(suit.makeDead))
         suitTrack.append(Wait(1.0))
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))

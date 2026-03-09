@@ -333,6 +333,7 @@ class Movie(DirectObject.DirectObject):
             MovieUtil.shotDirection = 'right'
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
+            s.makeUnFreshlyZapped()
             if s.dna.name == 'clubpres' and s.getActualLevel() == 21:
                 s.makeExtraAttacks(s.getExtraAttacks() + 1)
             for suit in self.battle.activeSuits:

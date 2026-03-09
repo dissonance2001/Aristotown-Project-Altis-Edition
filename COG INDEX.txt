@@ -54,7 +54,7 @@ mplayer - Major Player Level 28.mgr
 chainsaw - Chainsaw Consultant Level 50.mgr
 chainsaw2 - Chainsaw Consultant (Override) Level 50.mgr
 
-	Bossbot 'Litigation' Team:
+	Executive Board:
 phouse - Powerhouse Level 38.mgr
 bkeeper - Bookkeeper Level 44.mgr
 wtapper - Wiretapper Level 44.mgr
@@ -101,7 +101,7 @@ mouthp - Mouthpiece Level 16.mgr
 rainmake - Rainmaker Level 16.mgr
 whunter - Witch Hunter Level 20.mgr 
 
-	Lawbot Litigation Team:
+	Litigation Team:
 sgoat - Scapegoat Level 30.mgr
 caseman - Case Manager Level 35.mgr
 stenog - Stenographer Level 35.mgr
@@ -199,7 +199,7 @@ psetter - Pacesetter Level 66.mgr
 	Videographer Manager:
 cinema - Photographer Level 26.mgr
 
-	Sellbot 'Litigation' Team:
+	Pressure Division:
 radiog - Radiographer Level 32.mgr
 racket - Racketeer Level 38.mgr
 ubuster - Union Buster Level 38.mgr
@@ -240,7 +240,7 @@ gatekeep - Gatekeeper Level 10.mgr
 dola - Director Of Land Acquisition Level 12.mgr
 dold - Director Of Land Development Level 25.mgr v2.0
 
-	Boardbot 'Litigation' Team:
+	Oversight Committee:
 liquid - Tollmaster Level 56.mgr
 rkeeper - Recordkeeper Level 60.mgr
 dking - Dividend King Level 60.mgr
@@ -249,7 +249,7 @@ cdirector - Contingency Director Level 66.mgr
 	Recordkeeper Special Cog:
 cbutcher - Phantom Recordkeeper Level 30.mgr
 
-	Boardbot 'Litigation' Team 2:
+	Extras:
 ottoman - The Ottoman Level 72.mgr (unfinished)
 crystal - Crystalline Level 77.mgr (unfinished)
 chairman - The Chairman Level 100.mgr (unfinished)

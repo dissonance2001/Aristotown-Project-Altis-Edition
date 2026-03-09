@@ -1826,10 +1826,18 @@ def doBreachOfContractGroup(attack):
                 getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
                 Func(sanctioned.removeNode))
             origH = suit.getH(battle)
+
+            # Calculate heading to toon
+            origPos, origHpr = battle.getActorPosHpr(suit)
+            origPos2 = suit.getPos(battle)
+            suit.setPos(battle, origPos)
             targetPos = toon.getPos(battle)
             suit.headsUp(battle, targetPos)
             targetH = suit.getH(battle)
+
+            # Restore original heading
             suit.setH(battle, origH)
+            suit.setPos(battle, origPos2)
             delta = (targetH - origH + 180) % 360 - 180
             if delta > 0:
                 shuffleAnim = 'shuffle-right'

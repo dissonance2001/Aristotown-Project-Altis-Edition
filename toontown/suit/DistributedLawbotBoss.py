@@ -1233,7 +1233,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.paper.removeNode()
         self.gavel1.removeNode()
         self.gavel2.removeNode()
-        self.collisions.removeNode()
         self.generateHealthBar()
         self.updateHealthBar()
         self.reparentTo(render)
@@ -1842,8 +1841,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             Func(self.getGeomNode().setH, 0))
         rollTrackDuration = rollTrack.getDuration()
         self.notify.debug('rollTrackDuration = %f' % rollTrackDuration)
-        doorStartPos = self.door3.getPos()
-        doorEndPos = Point3(doorStartPos[0], doorStartPos[1], doorStartPos[2] + 35)
         bossTrack = Track(
             (0.5, Sequence(
                 Func(self.clearChat),
@@ -1855,8 +1852,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             (9.5, Sequence(Func(base.camera.wrtReparentTo, render))),
             (9.6, Parallel(
                 rollTrack,
-                Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins3, CFSpeech | CFTimeout),
-                self.door3.posInterval(2, doorEndPos, startPos=doorStartPos))),
+                Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins3, CFSpeech | CFTimeout))),
             (13.1, Sequence(Parallel(SoundInterval(whistleSfx),
                    Sequence(
                        Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins4, CFSpeech | CFTimeout),
@@ -1866,7 +1862,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                        SoundInterval(dropSfx),
                        Func(self.stash)),
                        Func(paperwork.detachNode))))),
-            (17, Sequence(self.door3.posInterval(1, doorStartPos))))
+            (17, ))
         retTrack = Parallel(bossTrack, ActorInterval(self, 'Ff_speech', loop=1))
         return bossTrack
 

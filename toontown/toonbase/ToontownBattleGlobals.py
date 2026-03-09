@@ -574,7 +574,9 @@ ValidStatusConditions = (
     'directorscutscalculator',
     'trickofthelight',
     'hollywoodcalculator',
+    'immunecalculator',
     'gameovercalculator',
+    'gameovercalculator2',
     'gametimecalculator',
     'electricshockcalculator',
     'target2',
@@ -712,6 +714,7 @@ ValidStatusConditions = (
     'markedThrow',
     'alreadyZapped',
     'alreadyDeathCheck',
+    'govException',
     'snappedcalculator2',
     'markedforsanction2',
     'sanctioncalculator3',
@@ -967,4 +970,5 @@ ValidStatusConditions = (
     'alreadyBeginning',
     'brokenconnnectionCooldown',
     'bookkeeperHit',
+    'alreadyGovDeath',
 )

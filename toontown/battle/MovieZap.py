@@ -245,16 +245,17 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             deathTracks.append(MovieUtil.shortCircuitTrack(suit, battle))
-        else:
-            #suitTrack.append(__createSuitResetPosTrack(suit, battle))
-            suitTrack.append(Func(battle.unlureSuit, suit))
-            #suitTrack.append(__soakRemoval(suit))
         if revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
+        else:
+            #suitTrack.append(__createSuitResetPosTrack(suit, battle))
+            suitTrack.append(Func(battle.unlureSuit, suit))
+            #suitTrack.append(__soakRemoval(suit))
         suitTrack.append(Func(battle.unlureSuit, suit))
         suitTrack.append(Func(suit.setDizzy, 0))
+        suitTrack.append(Func(suit.makeFreshlyZapped))
        # suitTrack.append(createSuitResetPosTrack(suit, battle))
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
         #suitTrack.append(Parallel(__soakRemoval(suit, 1)))

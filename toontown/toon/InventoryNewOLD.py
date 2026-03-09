@@ -417,142 +417,141 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if track == HEAL_TRACK and 'healBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['healBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'healBoost')
-        elif track == HEAL_TRACK and 'encore' in base.localAvatar.battleConditions:
+        if track == HEAL_TRACK and 'encore' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
-        elif track == TRAP_TRACK and 'trapBoost' in base.localAvatar.battleConditions:
+        if track == TRAP_TRACK and 'trapBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['trapBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'trapBoost')
-        elif track == LURE_TRACK and 'lureBoost' in base.localAvatar.battleConditions:
+        if track == LURE_TRACK and 'lureBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['lureBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'lureBoost')
             lureValue = int(math.ceil(
                     ((ToontownBattleGlobals.AvLureKnockback[level] * 100)  + base.localAvatar.battleConditions['lureBoost'][
                         0]) / 2))
-        elif track == LURE_TRACK and 'lureBoost2' in base.localAvatar.battleConditions:
+        if track == LURE_TRACK and 'lureBoost2' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['lureBoost2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'lureBoost2')
             lureValue = int(math.ceil(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['lureBoost2'][
                     0]) / 2))
-        elif track == SOUND_TRACK and 'soundBoost' in base.localAvatar.battleConditions:
+        if track == SOUND_TRACK and 'soundBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['soundBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'soundBoost')
-        elif track == SOUND_TRACK and 'encore' in base.localAvatar.battleConditions:
+        if track == SOUND_TRACK and 'encore' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
-        elif track == TRAP_TRACK and 'encore' in base.localAvatar.battleConditions:
+        if track == TRAP_TRACK and 'encore' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
-        elif track == THROW_TRACK and 'encore' in base.localAvatar.battleConditions:
+        if track == THROW_TRACK and 'encore' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
-        elif track == SQUIRT_TRACK and 'encore' in base.localAvatar.battleConditions:
+        if track == SQUIRT_TRACK and 'encore' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
-        elif track == ZAP_TRACK and 'encore' in base.localAvatar.battleConditions:
+        if track == ZAP_TRACK and 'encore' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
-        elif track == DROP_TRACK and 'encore' in base.localAvatar.battleConditions:
+        if track == DROP_TRACK and 'encore' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
-        elif track == LURE_TRACK and 'encore' in base.localAvatar.battleConditions:
+        if track == LURE_TRACK and 'encore' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore')
             lureValue = int(math.ceil(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['encore'][
                     0]) / 2))
-        elif track == SOUND_TRACK and 'encore2' in base.localAvatar.battleConditions:
+        if track == SOUND_TRACK and 'encore2' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
-        elif track == TRAP_TRACK and 'encore2' in base.localAvatar.battleConditions:
+        if track == TRAP_TRACK and 'encore2' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
-        elif track == THROW_TRACK and 'encore2' in base.localAvatar.battleConditions:
+        if track == THROW_TRACK and 'encore2' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
-        elif track == SQUIRT_TRACK and 'encore2' in base.localAvatar.battleConditions:
+        if track == SQUIRT_TRACK and 'encore2' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
-        elif track == ZAP_TRACK and 'encore2' in base.localAvatar.battleConditions:
+        if track == ZAP_TRACK and 'encore2' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
-        elif track == DROP_TRACK and 'encore2' in base.localAvatar.battleConditions:
+        if track == DROP_TRACK and 'encore2' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
-        elif track == LURE_TRACK and 'encore2' in base.localAvatar.battleConditions:
+        if track == LURE_TRACK and 'encore2' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['encore2'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'encore2')
             lureValue = int(math.ceil(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['encore2'][
                     0]) / 2))
-        elif track == SOUND_TRACK and 'winded' in base.localAvatar.battleConditions:
+        if track == SOUND_TRACK and 'winded' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['winded'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'winded')
-        elif track == THROW_TRACK and 'throwBoost' in base.localAvatar.battleConditions:
+        if track == THROW_TRACK and 'throwBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['throwBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'throwBoost')
-        elif track == SQUIRT_TRACK and 'squirtBoost' in base.localAvatar.battleConditions:
+        if track == SQUIRT_TRACK and 'squirtBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['squirtBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'squirtBoost')
-        elif track == ZAP_TRACK and 'zapBoost' in base.localAvatar.battleConditions:
+        if track == ZAP_TRACK and 'zapBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['zapBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'zapBoost')
-        elif track == DROP_TRACK and 'dropBoost' in base.localAvatar.battleConditions:
+        if track == DROP_TRACK and 'dropBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['dropBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'dropBoost')
-        elif track == SOUND_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
+        if track == SOUND_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
-        elif track == SQUIRT_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
+        if track == SQUIRT_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
-        elif track == ZAP_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
+        if track == ZAP_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
-        elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7:
+        if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
-        elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 5:
+        if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 5:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
-        elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 3:
+        if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 3:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
-        elif track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1:
+        if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
-        else:
-            self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
-            lureValue = int(math.ceil(
-                ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
-            if track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7:
-                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
-                damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
-            elif track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 5:
-                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
-                damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
-            elif track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 3:
-                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
-                damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
-            elif track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1:
-                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
-                damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
-            if allGagBoost and not track == LURE_TRACK:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
-                damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost')
-            if allGagBoost2 and not track == LURE_TRACK:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost2'][0] * 0.01) + 1.0)))
-                damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost2')
-            if governaughtBoost and track == LURE_TRACK:
-                lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['governaughtBoost'][0] * 0.01) + 1.0)))
-                damageAppendStr = labelColorize(lureValue, 'governaughtBoost')
-            if governaughtBoost and not track == LURE_TRACK:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['governaughtBoost'][0] * 0.01) + 1.0)))
-                damageAppendStr = labelColorizeJustAll(damage, 'governaughtBoost')
-            if raisedAnte and not track == LURE_TRACK:
-                damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
-                damageAppendStr = labelColorizeJustAll(damage, 'raisedAnte')
+        self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
+        lureValue = int(math.ceil(
+            ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
+        if track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7:
+            lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
+        elif track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 5:
+            lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
+        elif track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 3:
+            lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
+        elif track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1:
+            lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorize(lureValue, 'groupDamageDown')
+        if allGagBoost and not track == LURE_TRACK:
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost')
+        if allGagBoost2 and not track == LURE_TRACK:
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['allGagBoost2'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorizeJustAll(damage, 'allGagBoost2')
+        if governaughtBoost and track == LURE_TRACK:
+            lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['governaughtBoost'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorize(lureValue, 'governaughtBoost')
+        if governaughtBoost and not track == LURE_TRACK:
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['governaughtBoost'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorizeJustAll(damage, 'governaughtBoost')
+        if raisedAnte and not track == LURE_TRACK:
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorizeJustAll(damage, 'raisedAnte')
 
         damage = math.ceil(damage)
         organicBonus = self.toon.checkGagBonus(track, level)

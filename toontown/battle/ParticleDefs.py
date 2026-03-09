@@ -7,6 +7,64 @@ def particle(func):
     ParticleTable[func.func_name] = func
 
 @particle
+def quash(self):
+    self.reset()
+    self.setPos(0.000, 0.000, 5.500)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    #p0.setRenderer("LineParticleRenderer")
+    p0.setEmitter("DiscEmitter")
+    p0.setPoolSize(30)
+    p0.setBirthRate(0.0700)
+    p0.setLitterSize(1)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.5000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAINOUT)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/snow-particle")
+    p0.renderer.setColor(Vec4(1.00, 0.30, 0.30, 1.00))
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.05)
+    p0.renderer.setFinalXScale(0.05)
+    p0.renderer.setInitialYScale(1.0)
+    p0.renderer.setFinalYScale(1.0)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Line parameters
+    #p0.renderer.setHeadColor(Vec4(1.00, 0.50, 0.50, 1.00))
+    #p0.renderer.setTailColor(Vec4(1.00, 0.50, 0.50, 1.00))
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETEXPLICIT)
+    p0.emitter.setAmplitude(1.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(0.0000, 0.0000, -20.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
+    # Disc parameters
+    p0.emitter.setRadius(2.0000)
+    self.addParticles(p0)
+
+@particle
 def raindisk(self):
     self.reset()
     self.setPos(0.0, 5.0, 50.0)

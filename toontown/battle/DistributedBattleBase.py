@@ -365,7 +365,6 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.needAdjustTownBattle = 1
             if actorList == []:
                 actorList = self.activeSuits
-
             if actorList.count(actor) != 0:
                 numSuits = len(actorList) - 1
                 index = actorList.index(actor)
@@ -934,17 +933,23 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
     def makeSuitJoin(self, suit, ts):
         self.notify.debug('makeSuitJoin(%d)' % suit.doId)
-        spotIndex = len(self.pendingSuits) + len(self.joiningSuits)
+
         self.joiningSuits.append(suit)
+        self._rebuildSuitStateLists()
+
         suit.setState('Battle')
+
+        spotIndex = self._getPendingPreviewIndex(suit)
         openSpot = self.suitPendingPoints[spotIndex]
         pos = openSpot[0]
         hpr = VBase3(openSpot[1], 0.0, 0.0)
+
         trackName = self.taskName('to-pending-suit-%d' % suit.doId)
         track = self.__createJoinInterval(suit, pos, hpr, trackName, ts, self.__handleSuitJoinDone)
         track.start(ts)
         track.delayDelete = DelayDelete.DelayDelete(suit, 'makeSuitJoin')
         self.storeInterval(track, trackName)
+
         if ToontownBattleGlobals.SkipMovie:
             track.finish()
 
@@ -958,7 +963,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.clearInterval(self.taskName('to-pending-suit-%d' % suit.doId), finish=1)
         if self.joiningSuits.count(suit):
             self.joiningSuits.remove(suit)
-        self.pendingSuits.append(suit)
+        if suit not in self.pendingSuits:
+            self.pendingSuits.append(suit)
+        self._rebuildSuitStateLists()
 
     def __teleportToSafeZone(self, toon):
         self.notify.debug('teleportToSafeZone(%d)' % toon.doId)
@@ -1011,65 +1018,100 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         if base.localAvatar == toon:
             currStateName = self.fsm.getCurrentState().getName()
 
+    def _getCanonicalSuitOrder(self, suits):
+        suits = suits[:]
+
+        if len(suits) <= 1:
+            return suits
+
+        ordered = [suits[0], suits[1]]
+
+        for suit in suits[2:]:
+            ordered.insert(len(ordered) - 1, suit)
+
+        return ordered
+
+    def _getPendingPreviewIndex(self, suit, silhouettes=False):
+        """
+        Return the slot this joining suit will occupy in the same formation
+        order used by __adjust().
+        """
+        if suit not in self.joiningSuits:
+            return 0
+
+        future_visible = self.activeSuits[:] + self.pendingSuits[:] + self.joiningSuits[:]
+        canonical = [s for s in self._getCanonicalSuitOrder(self.suits) if s in future_visible]
+
+        return canonical.index(suit)
+
+    def _rebuildSuitStateLists(self):
+        canonical = self._getCanonicalSuitOrder(self.suits)
+
+        self.activeSuits = [s for s in canonical if s in self.activeSuits]
+        self.pendingSuits = [s for s in canonical if s in self.pendingSuits]
+        self.joiningSuits = [s for s in canonical if s in self.joiningSuits]
+
     def __makeAvsActive(self, suits, toons):
         self.notify.debug('__makeAvsActive()')
         for s in suits:
             if self.joiningSuits.count(s):
                 self.notify.warning('suit: %d was in joining list!' % s.doId)
                 self.joiningSuits.remove(s)
-
             if self.pendingSuits.count(s):
                 self.pendingSuits.remove(s)
-
             self.notify.debug('__makeAvsActive() - suit: %d' % s.doId)
+            if s not in self.activeSuits:
+                self.activeSuits.append(s)
 
-            if len(self.activeSuits) < 2:
-                self.activeSuits.append(s)  # first and second stay in their normal spots
-            else:
-                self.activeSuits.insert(len(self.activeSuits) - 1, s)  # insert before suit 2
-
+        self._rebuildSuitStateLists()
+        adjustTrack = Parallel()
         if len(self.activeSuits) >= 1:
             for suit in self.activeSuits:
                 suitPos, suitHpr = self.getActorPosHpr(suit)
                 if self.isSuitLured(suit) == 1:
                     spos = Point3(suitPos[0], suitPos[1] - MovieUtil.SUIT_LURE_DISTANCE, suitPos[2])
+                    #adjustTrack.append(Func(suit.setPosHpr, spos, suitHpr))
                     suit.setPosHpr(self, spos, suitHpr)
-                    suit.setDizzy(1)
+                    adjustTrack.append(Func(suit.setDizzy, 1))
                     if suit.style.name == 'hrollers':
                         for headPart in suit.animatedHeadParts:
-                            headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
+                            adjustTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
                     elif suit.style.name == 'hroller2':
                         for headPart in suit.animatedHeadParts:
-                            headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
+                            adjustTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
                     elif suit.style.name == 'hroller':
                         for headPart in suit.animatedHeadParts:
-                            headPart.loop('neutral-lured', fromFrame=0, toFrame=22)
+                            adjustTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
                     else:
                         for headPart in suit.animatedHeadParts:
-                            headPart.loop('neutral-lured')
+                            adjustTrack.append(Func(headPart.loop, 'neutral-lured'))
                 else:
-                    if suit.style.name == 'mh2':
-                        suit.setNeutralAnimationRolled()
-                    elif suit.style.name == 'std2':
-                        suit.setNeutralAnimationRolled()
-                    elif suit.style.name == 'hrollers':
-                        suit.setNeutralAnimationRolled()
-                    elif suit.style.name == 'cinema':
-                        suit.setNeutralAnimationRolled()
-                    elif suit.style.name == 'choreo':
-                        suit.setNeutralAnimationRolled()
-                    elif suit.style.name == 'videog':
-                        suit.setNeutralAnimationRolled()
-                    elif suit.style.name == 'bcaster':
-                        suit.setNeutralAnimationRolled()
-                    elif suit.style.name == 'director':
-                        suit.setNeutralAnimationRolled()
-                    elif suit.style.name == 'fmaker':
-                        suit.setNeutralAnimationRolled()
-                    else:
-                        suit.setNeutralAnimation()
                     suit.setPosHpr(self, suitPos, suitHpr)
-                    suit.setDizzy(0)
+                    #adjustTrack.append(Func(suit.setPosHpr, suitPos, suitHpr))
+                    if suit.style.name == 'mh2':
+                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                    elif suit.style.name == 'std2':
+                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                    elif suit.style.name == 'hrollers':
+                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                    elif suit.style.name == 'cinema':
+                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                    elif suit.style.name == 'choreo':
+                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                    elif suit.style.name == 'videog':
+                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                    elif suit.style.name == 'bcaster':
+                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                    elif suit.style.name == 'director':
+                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                    elif suit.style.name == 'fmaker':
+                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                    else:
+                        adjustTrack.append(Func(suit.setNeutralAnimation))
+                    adjustTrack.append(Func(suit.setDizzy, 0))
+                    adjustTrack.start()
+                    if ToontownBattleGlobals.SkipMovie:
+                        adjustTrack.finish()
 
         for toon in toons:
             if self.joiningToons.count(toon):
@@ -1094,6 +1136,22 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.__enterLocalToonWaitForInput()
             self.localToonJustJoined = 0
             self.startTimer()
+
+    def _getCustomActiveSuitOrder(self, suits):
+        """
+        Keep client visual suit order identical to AI suit order.
+        """
+        suits = suits[:]
+
+        if len(suits) <= 1:
+            return suits
+
+        ordered = [suits[0], suits[1]]
+
+        for suit in suits[2:]:
+            ordered.insert(len(ordered) - 1, suit)
+
+        return ordered
 
     def __makeToonRun(self, toon, ts):
         self.notify.debug('__makeToonRun(%d)' % toon.doId)
@@ -1478,10 +1536,12 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def __adjust(self, ts, callback):
         self.notify.debug('__adjust(%f)' % ts)
         adjustTrack = Parallel()
+
         if len(self.pendingSuits) > 0 or self.suitGone == 1:
             self.suitGone = 0
             numSuits = len(self.pendingSuits) + len(self.activeSuits) - 1
 
+            # Build the suit order you actually want to place.
             if len(self.activeSuits) < 2:
                 orderedSuits = list(self.activeSuits) + list(self.pendingSuits)
             else:
@@ -1489,15 +1549,14 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
             for index, suit in enumerate(orderedSuits):
                 point = self.suitPoints[numSuits][index]
+                pos = suit.getPos(self)
                 destPos = point[0]
 
                 if self.isSuitLured(suit) == 1:
                     destPos = Point3(destPos[0], destPos[1] - MovieUtil.SUIT_LURE_DISTANCE, destPos[2])
 
-                destHpr = VBase3(point[1], 0.0, 0.0)
-                pos = suit.getPos(self)
-
                 if pos != destPos:
+                    destHpr = VBase3(point[1], 0.0, 0.0)
                     adjustTrack.append(self.createAdjustInterval(suit, destPos, destHpr))
 
         if len(self.pendingToons) > 0 or self.toonGone == 1:

@@ -328,7 +328,9 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.door2 = self.midVault.find('**/SlidingDoor/')
         self.door3 = self.endVault.find('**/SlidingDoor/')
         elevatorModel = loader.loadModel('phase_10/models/cogHQ/CFOElevator')
-        elevatorOrigin = self.midVault.find('**/elevator_origin')
+        elevatorModel2 = loader.loadModel('phase_10/models/cogHQ/CFOElevator')
+        elevatorModel2.reparentTo(self.midVault.find('**/elevator_origin'))
+        elevatorOrigin = self.highRollerArena.find('**/elevator_origin')
         elevatorOrigin.setScale(1)
         elevatorModel.reparentTo(elevatorOrigin)
         leftDoor = elevatorModel.find('**/left_door')
@@ -359,6 +361,74 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.battleTwoMusic = base.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
         self.midCutsceneMusic = base.loadMusic('phase_10/audio/bgm/CB_boss_cutscene.ogg')
         self.battleThreeMusic = base.loadMusic('phase_10/audio/bgm/encntr_cfo_crane.ogg')
+        self.phaseOneMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle_2.ogg')
+        self.shuffleMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_shuffle.ogg')
+        self.puzzleMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_puzzle.ogg')
+        self.triviaMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_trivia.ogg')
+        self.stingerMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_stinger.ogg')
+        self.phaseTwoCutsceneMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn_2.ogg')
+        self.phaseTwoMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle_3.ogg')
+        self.phaseThreeCutsceneMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn_3.ogg')
+        self.phaseThreeMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/BONUSROUND.ogg')
+
+    def puzzle(self):
+        self.puzzleMusic.setLoop(True)
+        self.puzzleMusic.play()
+        self.battleOneMusic.stop()
+        self.phaseOneMusic.stop()
+
+    def shuffle(self):
+        self.shuffleMusic.setLoop(True)
+        self.shuffleMusic.play()
+        self.battleOneMusic.stop()
+        self.phaseOneMusic.stop()
+
+    def trivia(self):
+        self.triviaMusic.setLoop(True)
+        self.triviaMusic.play()
+        self.battleOneMusic.stop()
+        self.phaseOneMusic.stop()
+
+    def stinger(self):
+        self.stingerMusic.play()
+        self.battleOneMusic.stop()
+        self.phaseOneMusic.stop()
+        self.shuffleMusic.stop()
+        self.triviaMusic.stop()
+        self.puzzleMusic.stop()
+        taskMgr.doMethodLater(
+            self.stingerMusic.length(),
+            self.__startBattleOneLoop,
+            'startBattleOneLoop'
+        )
+
+    def __startBattleOneLoop(self, task):
+        self.phaseOneMusic.setLoop(True)
+        self.phaseOneMusic.play()
+        return task.done
+
+    def phase2Intro(self):
+        self.battleOneMusic.stop()
+        self.phaseOneMusic.stop()
+        self.phaseTwoCutsceneMusic.play()
+        self.battleTwoMusic.stop()
+
+    def startPhase2Music(self):
+        self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
+        self.phaseTwoCutsceneMusic.stop()
+        self.phaseTwoMusic.play()
+        self.phaseTwoMusic.setLoop(True)
+        self.battleTwoMusic.stop()
+
+    def phase3Intro(self):
+        self.phaseTwoMusic.stop()
+        self.phaseOneMusic.stop()
+        self.phaseThreeCutsceneMusic.play()
+
+    def startPhase3Music(self):
+        self.phaseThreeCutsceneMusic.stop()
+        self.phaseThreeMusic.play()
+        self.phaseThreeMusic.setLoop(True)
 
     def unloadEnvironment(self):
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
@@ -541,7 +611,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                                                "Hachahoo hooi-didibadoo! Here's a special shabaadoopdaa-show from we to you!",
                                                CFSpeech),
                                           Wait(3),
-                                     Parallel(Func(self.duckshuffler2.setPos, (-13, -182.5, -4)), Func(self.duckshuffler2.setHpr, (180, 0, 0)),  Func(self.majorplayer2.setHpr, (180, 0, 0)), Func(self.majorplayer2.setPos, (13, -182.5, -4))),
+                                     Parallel(Func(self.duckshuffler2.setPos, (-15, -182.5, -3.75)), Func(self.duckshuffler2.setHpr, (180, 0, 0)),  Func(self.majorplayer2.setHpr, (180, 0, 0)), Func(self.majorplayer2.setPos, (15, -182.5, -3.75))),
                                           Parallel(MovieUtil.createShot1(self.duckshuffler2), MovieUtil.createShot1(self.majorplayer2)),
                                           Parallel(MovieUtil.createShot2(self.duckshuffler2), MovieUtil.createShot2(self.majorplayer2)),
                                           Parallel(MovieUtil.createShot3(self.duckshuffler2), MovieUtil.createShot3(self.majorplayer2)),
@@ -549,7 +619,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                                      Func(self.majorplayer2.removeNode), Func(self.duckshuffler2.removeNode),
                                 Func(rToon.clearChat),
                                 Func(self.highroller.show),
-                                     Parallel(Func(self.highroller.setPos, (0, -183.5, -4.5)), Func(self.highroller.setHpr, (180, 0, 0)), ActorInterval(self.highroller, 'shot5')),
+                                     Parallel(Func(self.highroller.setPos, (0, -183.5, -4.5)), Func(self.highroller.setHpr, (180, 0, 0)), MovieUtil.createShot5(self.highroller)),
                                      Parallel(Func(self.highroller.setPos, (0, -200, 0)), Func(self.highroller.setHpr, (180, 0, 0)), Func(self.highroller.loop, 'neutral')),
                                      Wait(3.0),
                             Parallel(Func(self.highroller.nametag3d.setScale, 3), Func(base.playSfx, base.loader.loadSfx('phase_13/audio/sfx/april_toons/highroller/cc_s_dlg_ene_hroller_good_morning_clash_general.ogg')), Func(self.highroller.setChatAbsolute, "GOOD MOOORNING TOONTOOOOWN!!!!", CFSpeech)),
@@ -583,6 +653,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         finalHpr = VBase3(135, 0, 0)
         toonPosHpr = ToontownGlobals.CashbotRTBattleTwoEndPosHpr
         bossTrack = Sequence()
+        self.phaseThreeMusic.play()
         track2 = Sequence()
         bossTrack.append(Func(self.reparentTo, render))
         bossTrack.append(Func(self.getGeomNode().setH, 180))
@@ -597,7 +668,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         rToon = self.resistanceToon
         rToon.setPosHpr(*ToontownGlobals.CashbotRTBattleTwoStartPosHpr)
         self.__arrangeToonsAroundResistanceToon()
-        base.playMusic(self.midCutsceneMusic, looping=1, volume=0.9)
+        base.playMusic(self.midCutsceneMusic, looping=1, volume=0)
         track = Sequence(
             # Func(base.camera.setPosHpr, 82, -219, 5, 267, 0, 0),
             Func(base.camera.reparentTo, render),

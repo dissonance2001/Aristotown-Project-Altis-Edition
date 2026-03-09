@@ -237,7 +237,7 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
-            cogs = self.invokeEmptyPlanner(11, random.choice(('bdlitpair1', 'bdlitpair2', 'bdlitpair3', 'bdlitpair4', 'bdlitpair5', 'bdlitpair6')))
+            cogs = self.invokeEmptyPlanner(11, 'crf2')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)

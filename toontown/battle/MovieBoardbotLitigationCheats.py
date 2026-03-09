@@ -2836,10 +2836,18 @@ def doMissedPayment(attack):
         soundTrack2 = Sequence(Wait(0.5), SoundInterval(globalBattleSoundCache.getSound('SA_haymaker.ogg')))
         soundTrack = Parallel(soundTrack2)
         origH = suit.getH(battle)
+
+        # Calculate heading to toon
+        origPos, origHpr = battle.getActorPosHpr(suit)
+        origPos2 = suit.getPos(battle)
+        suit.setPos(battle, origPos)
         targetPos = toon.getPos(battle)
         suit.headsUp(battle, targetPos)
         targetH = suit.getH(battle)
+
+        # Restore original heading
         suit.setH(battle, origH)
+        suit.setPos(battle, origPos2)
         delta = (targetH - origH + 180) % 360 - 180
         if delta > 0:
             shuffleAnim = 'shuffle-right'
@@ -4872,10 +4880,18 @@ def doLedgerOfSound(attack):
             explosionTracks.append(explosionTrack)
             suitTracks.append(suitTrack)
             origH = suit.getH(battle)
+
+            # Calculate heading to toon
+            origPos, origHpr = battle.getActorPosHpr(suit)
+            origPos2 = suit.getPos(battle)
+            suit.setPos(battle, origPos)
             targetPos = toon.getPos(battle)
             suit.headsUp(battle, targetPos)
             targetH = suit.getH(battle)
+
+            # Restore original heading
             suit.setH(battle, origH)
+            suit.setPos(battle, origPos2)
             delta = (targetH - origH + 180) % 360 - 180
             if delta > 0:
                 shuffleAnim = 'shuffle-right'

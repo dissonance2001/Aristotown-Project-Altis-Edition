@@ -34,7 +34,8 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             state = self.fsm.getStateNamed(stateName)
             state.addTransition('factoryInterior')
 
-        self.musicFile = 'phase_9/audio/bgm/encntr_suit_HQ_nbrhood.ogg'
+        self.musicFile = 'phase_9/audio/bgm/SB_courtyard.ogg'
+        self.battleMusic = 'phase_9/audio/bgm/SB_courtyard_encntnr.ogg'
         self.cogHQExteriorModelPath = 'phase_9/models/cogHQ/SellbotHQExterior'
         self.cogHQLobbyModelPath = 'phase_9/models/cogHQ/SellbotHQLobby'
         self.factoryExteriorModelPath = 'phase_9/models/cogHQ/SellbotFactoryExterior'
@@ -47,6 +48,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.spot6Sequence = None
 
     def load(self, zoneId):
+        self.battleMusic = 'phase_11/audio/bgm/LB_courtyard_encntr.ogg'
         CogHQLoader.CogHQLoader.load(self, zoneId)
         Toon.loadSellbotHQAnims()
 

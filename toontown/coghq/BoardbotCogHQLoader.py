@@ -29,7 +29,7 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
             state = self.fsm.getStateNamed(stateName)
             state.addTransition('factoryExterior')
 
-        self.musicFile = 'phase_14/audio/bgm/BD_courtyard.ogg'
+        self.musicFile = 'phase_14/audio/bgm/CN_SZ.ogg'
         self.cogHQExteriorModelPath = 'phase_14/models/neighborhoods/CogNation'
         self.factoryExteriorModelPath = 'phase_14/models/boardbotHQ/boardbot_factory_exterior'
         self.cogHQLobbyModelPath = 'phase_14/models/modules/ExecutiveLobby'

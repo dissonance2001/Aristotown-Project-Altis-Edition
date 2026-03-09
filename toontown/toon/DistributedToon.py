@@ -296,7 +296,13 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.damageInterval:
             self.damageInterval.finish()
             self.damageInterval = None
-        self.damageInterval = Parallel(Func(self.setDamageUpGovernaught, num)).start()
+        self.damageInterval = Parallel(Func(self.setDamageUpGovernaught, self.getDamageUpGovernaught() + num)).start()
+
+    def checkRaisedAnte(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.setRaisedAnte, self.getRaisedAnte() + num)).start()
 
     def checkEncore(self, num):
         if self.damageInterval:
@@ -2864,7 +2870,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.showHpText(hpGained, hasInteractivePropBonus=hasInteractivePropBonus)
             self.hpChange(quietly=0)
 
-    def showHpTextNew(self, number, text=None, bonus=0, scale=1, attackTrack=-1, colorCode=0):
+    def showHpTextNew(self, number, text=None, bonus=0, scale=0.85, attackTrack=-1, colorCode=0):
         if self.HpTextEnabled and not self.ghostMode:
             if self.hpText:
                 self.hideHpText()
@@ -2925,7 +2931,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.hpText.setBin('fixed', 100)
             self.hpText.setPos(0, 0, self.height / 2)
         if text != None:
-            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)),
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2.0), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)),
                                            Func(self.hideHpText))
             self.hpTextInterval.start()
         else:
@@ -2955,7 +2961,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.hpText2.setScale(scale)
             self.hpText2.setBillboardPointEye()
             self.hpText2.setBin('fixed', 99)
-            self.hpText2.setPos(0, 0, -1)
+            self.hpText2.setPos(0, 0, -0.875)
             # self.hpTextInterval2 = Sequence(self.hpText2.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText2, .25, Vec4(0, 0, 0, 0)),
             #             Func(self.hideHpText))
             # self.hpTextInterval2.start()

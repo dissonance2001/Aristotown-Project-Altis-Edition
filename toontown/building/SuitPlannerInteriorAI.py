@@ -170,15 +170,15 @@ class SuitPlannerInteriorAI:
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
         #skel, exe = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
         flags = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
-        if random.randint(0, 100) <= revivesThreeChance:
+        newSuit.setSkeleRevives(revives)
+        if random.randint(1, 100) <= revivesThreeChance:
             newSuit.setSkeleRevives(2)
-        elif random.randint(0, 100) <= revivesTwoChance:
+        elif random.randint(1, 100) <= revivesTwoChance:
             newSuit.setSkeleRevives(1)
-        elif random.randint(0, 100) <= skelecogChance:
+        if random.randint(1, 100) <= skelecogChance:
             newSuit.setSkelecog(1)
         elif flags & IFSkelecog:
             newSuit.setSkelecog(1)
-        newSuit.setSkeleRevives(revives)
         newSuit.generateWithRequired(suitZone)
         if flags & IFWaiter:
             newSuit.b_setWaiter(1)
@@ -423,14 +423,8 @@ class SuitPlannerInteriorAI:
             miniboss = self.__genSuitObject(self.zoneId, 25, 'm', 25, 0)
             activeSuits.append(miniboss)
         elif specialCode == 'crf2':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'm', 28, 0)
-            miniboss2 = self.__genSuitObject(self.zoneId, 20, 'p', 20, 0)
-            suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            suit4 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
+            miniboss = self.__genSuitObject(self.zoneId, 1, 'm', 1, 0)
             activeSuits.append(miniboss)
-            activeSuits.append(miniboss2)
-            activeSuits.append(suit)
-            activeSuits.append(suit4)
         elif specialCode == 'videog':
             miniboss = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
@@ -506,8 +500,10 @@ class SuitPlannerInteriorAI:
             return returnval
 
         suitLevel = random.randint(10, 31)
+        suitLevel3 = random.randint(1, 31)
         suitLevel2 = random.randint(7, 15)
         suitKind = suitKindFromLevel(suitLevel)
+        suitKind3 = suitKindFromLevel(suitLevel3)
         if specialCode == 'crf':
             # generate random cashbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, 25, 'm', 25, 0)
@@ -524,7 +520,7 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'pres':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0, 100, 10, 5)
+            suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0, 15, 10, 5)
             reserveSuits.append(suit)
         if specialCode == 'bdlit':
             # litigation
@@ -585,6 +581,18 @@ class SuitPlannerInteriorAI:
         if specialCode == 'sgoat':
             miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)
             reserveSuits.append(miniboss4)
+        if specialCode == 'hrollerPhase3':
+            miniboss4 = self.__genSuitObject(self.zoneId, 28, 'm', 28, 0)
+            reserveSuits.append(miniboss4)
+        if specialCode == 'videogPhase2':
+            miniboss2 = self.__genSuitObject(self.zoneId, 20, 'p', 20, 0)
+            reserveSuits.append(miniboss2)
+        if specialCode == 'std':
+            miniboss2 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
+            reserveSuits.append(miniboss2)
+        if specialCode == 'mh':
+            miniboss2 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
+            reserveSuits.append(miniboss2)
         if specialCode == 'ffm2':
             # generate random cashbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, 17, 't', random.randint(17, 20), 0)
@@ -595,7 +603,7 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'crf1':
             # generate random cashbot from lv 12 to 20
-            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0)
+            suit = self.__genSuitObject(self.zoneId, suitKind3, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel3, 0)
             reserveSuits.append(suit)
         if specialCode == 'crf2':
             suit = self.__genSuitObject(self.zoneId, 27, 'm', random.randint(27, 36), 0)

@@ -747,8 +747,8 @@ def doPaperCut(attack):
         partTrack = getPartTrack(particleEffect, .5, 3.5, [particleEffect, toon, 0], softStop=-2)
         toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
         notifyTrack = Sequence(Wait(0.5), Func(toon.showHpTextNew, -int(dmg), text="MARKED!", colorCode=4))
-        notifyTrack.append(Parallel(Func(toon.makeMarkedWood), Func(toon.addMarkedWoodRounds, 3)))
-        notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 3)))
+        notifyTrack.append(Parallel(Func(toon.makeMarkedWood), Func(toon.addMarkedWoodRounds, 2)))
+        notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 2)))
         notifyTrack.append(Parallel(Func(toon.checkDamageUp, 25)))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
@@ -778,10 +778,18 @@ def doPaperCutMulti(attack):
         notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg)))
         if dmg > 0:
             origH = suit.getH(battle)
+
+            # Calculate heading to toon
+            origPos, origHpr = battle.getActorPosHpr(suit)
+            origPos2 = suit.getPos(battle)
+            suit.setPos(battle, origPos)
             targetPos = toon.getPos(battle)
             suit.headsUp(battle, targetPos)
             targetH = suit.getH(battle)
+
+            # Restore original heading
             suit.setH(battle, origH)
+            suit.setPos(battle, origPos2)
             delta = (targetH - origH + 180) % 360 - 180
             if delta > 0:
                 shuffleAnim = 'shuffle-right'
@@ -3122,10 +3130,18 @@ def doOverheat(attack):
         notifyTrack.append(Parallel(Func(toon.makeBurned), Func(toon.addBurnedRounds, 3)))
         if dmg > 0:
             origH = suit.getH(battle)
+
+            # Calculate heading to toon
+            origPos, origHpr = battle.getActorPosHpr(suit)
+            origPos2 = suit.getPos(battle)
+            suit.setPos(battle, origPos)
             targetPos = toon.getPos(battle)
             suit.headsUp(battle, targetPos)
             targetH = suit.getH(battle)
+
+            # Restore original heading
             suit.setH(battle, origH)
+            suit.setPos(battle, origPos2)
             delta = (targetH - origH + 180) % 360 - 180
             if delta > 0:
                 shuffleAnim = 'shuffle-right'

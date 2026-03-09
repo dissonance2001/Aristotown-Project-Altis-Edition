@@ -862,9 +862,9 @@ def doGovernaughtDeath(attack):
         toon = t['toon']
         dmg = t['hp']
         soundTrack = getSoundTrack('LB_toonup.ogg', node=toon)
-        notifyTrack = Sequence(Func(toon.showHpTextNew, 0, text="+5% Damage!", colorCode=1))
+        notifyTrack = Sequence(Func(toon.showHpTextNew, 0, text="+%s" % dmg + "% Damage!", colorCode=1))
         notifyTrack.append(Parallel(Func(toon.makeDamageUpGovernaught)))
-        notifyTrack.append(Parallel(Func(toon.checkDamageUpGovernaught, toon.getDamageUpGovernaught() + 5)))
+        notifyTrack.append(Parallel(Func(toon.checkDamageUpGovernaught, dmg)))
         soundTracks.append(soundTrack)
         notifyTracks.append(notifyTrack)
     return Parallel(notifyTracks, soundTracks, waitTrack)

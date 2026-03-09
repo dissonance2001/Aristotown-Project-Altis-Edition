@@ -984,7 +984,7 @@ def skiplitcutscene():
     if not boss:
         return "You aren't in a CJ"
     boss.exitIntroduction()
-    boss.b_setState('BattleTwo')
+    boss.b_setState('PrepareBattleTwo')
     return 'Skipping litigation cutscene...'
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)

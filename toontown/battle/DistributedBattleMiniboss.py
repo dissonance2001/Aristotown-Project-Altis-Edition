@@ -9,11 +9,13 @@ from toontown.toonbase import ToontownGlobals
 from toontown.chat import ResistanceChat
 from toontown.chat.ChatGlobals import *
 from toontown.battle import BattleProps
+from toontown.battle import MovieUtil
 from toontown.battle import SuitBattleGlobals
 from direct.showutil import Effects
 from direct.directnotify import DirectNotifyGlobal
 from toontown.suit.DistributedDirectors import DistributedDirectors
 from toontown.suit.DistributedLawbotBoss import DistributedLawbotBoss
+from toontown.suit.DistributedCashbotBoss import DistributedCashbotBoss
 from toontown.suit.DistributedSellbotBossMini import DistributedSellbotBossMini
 from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect
@@ -51,18 +53,17 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         self.storeInterval(track, name)
 
     def moveSuitsToInitialPos(self):
-        battlePts = self.suitPoints[len(self.suitPendingPoints) - 1]
-        for i in xrange(len(self.suits)):
-            suit = self.suits[i]
+        orderedSuits = self._getCanonicalSuitOrder(self.suits)
+        for suit in orderedSuits:
             suit.reparentTo(self)
-            destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+            destPos, destHpr = self.getActorPosHpr(suit, orderedSuits)
             suit.setPos(destPos)
             suit.setHpr(destHpr)
 
     def showSuitsFalling(self, suits, ts, name, callback):
         if self.bossCog == None:
             return
-        suitTrack = Parallel()
+        suitTracks = Parallel()
         delay = 0
         for suit in suits:
             if suit.dna.name == 'ambass':
@@ -115,102 +116,179 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                         obj.hideRadiographer()
             if suit.dna.name == 'hrollers':
                 suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suit, ts, name, callback)
-            if suit.dna.name == 'hroller2':
-                suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suit, ts, name, callback)
-            if suit.dna.name == 'videog':
-                suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suit, ts, name, callback)
+                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
             if suit.dna.name == 'bcaster':
                 suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suit, ts, name, callback)
+                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
             if suit.dna.name == 'hroller':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingHighRoller(suit, ts, name, callback)
-            if suit.dna.name == 'director':
-                suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suit, ts, name, callback)
-            if suit.dna.name == 'fmaker':
-                suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suit, ts, name, callback)
-            if suit.dna.name == 'choreo':
-                suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suit, ts, name, callback)
-            if suit.dna.name == 'cinema':
-                suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suit, ts, name, callback)
             if suit.dna.name == 'cbutcher':
-                return self.showSuitsFallingPhantomEntry(suit, ts, name, callback)
-            suit.setState('Battle')
-            if suit.dna.dept == 'l':
-                suit.reparentTo(self.bossCog)
-                suit.setPos(0, 0, 0)
-            if suit in self.joiningSuits:
-                i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-                destPos, h = self.suitPendingPoints[i]
-                destHpr = VBase3(h, 0, 0)
-            else:
-                destPos, destHpr = self.getActorPosHpr(suit, self.suits)
-            startPos = destPos + Point3(0, 0, SuitTimings.fromSky * ToontownGlobals.SuitWalkSpeed)
-            self.notify.debug('startPos for %s = %s' % (suit, startPos))
-            suit.reparentTo(self)
-            suit.setPos(startPos)
-            suit.headsUp(self)
-            flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
-            taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
-            suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
-            delay += 1
+                suit.setState('Battle')
+                suitTrack = Sequence()
+                oldPos, oldHpr = self.getActorPosHpr(suit, self.suits)
 
-        if self.hasLocalToon():
-            camera.reparentTo(self)
-            if random.choice([0, 1]):
-                camera.setPosHpr(20, -4, 7, 60, 0, 0)
+                def getDustCloudIval(oldPos=oldPos):
+                    dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
+                    dustCloud.setBillboardAxis(2.0)
+                    dustCloud.setZ(3)
+                    dustCloud.setScale(0.4)
+                    dustCloud.createTrack()
+                    dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
+                    return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
+                                    name='dustCloadIval')
+
+                if suit in self.joiningSuits:
+                    i = self._getPendingPreviewIndex(suit)
+                    destPos, h = self.suitPendingPointsSilhouettes[i]
+                    destHpr = VBase3(h, 0, 0)
+                else:
+                    destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+                startPos = destPos + Point3(0, 0, 0)
+                startPos2 = destPos + Point3(0, 0, 0)
+                self.notify.debug('startPos for %s = %s' % (suit, startPos))
+                suitTrack.append(Func(suit.reparentTo, self))
+                suitTrack.append(Func(suit.headsUp, self))
+                suitTrack.append(LerpPosInterval(suit, 0, startPos))
+                suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+                suitTrack.append(Func(getDustCloudIval().start))
+                suitTrack.append(Sequence(ActorInterval(suit, 'mob-mentality', startTime=1)))
+                suitTrack.append(Func(suit.loop, 'neutral'))
+                suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+                suitTracks.append(suitTrack)
+                # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+                suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+                delay += 0
+                if self.hasLocalToon():
+                    camera.reparentTo(self)
+                    if random.choice([0, 1]):
+                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                    else:
+                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+            elif suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'choreo' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'director':
+                suit.setState('Battle')
+                suitTrack = Sequence()
+                oldPos, oldHpr = self.getActorPosHpr(suit, self.suits)
+
+                def getDustCloudIval(oldPos=oldPos):
+                    dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
+                    dustCloud.setBillboardAxis(2.0)
+                    dustCloud.setZ(3)
+                    dustCloud.setScale(0.4)
+                    dustCloud.createTrack()
+                    dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
+                    return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
+                                    name='dustCloadIval')
+
+                if suit in self.joiningSuits:
+                    i = self._getPendingPreviewIndex(suit)
+                    destPos, h = self.suitPendingPointsSilhouettes[i]
+                    destHpr = VBase3(h, 0, 0)
+                else:
+                    destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+                startPos = destPos + Point3(0, 0, 0)
+                startPos2 = destPos + Point3(0, 0, 0)
+                self.notify.debug('startPos for %s = %s' % (suit, startPos))
+                suitTrack.append(Func(suit.reparentTo, self))
+                suitTrack.append(Func(suit.headsUp, self))
+                suitTrack.append(Func(suit.hide))
+                suitTrack.append(Wait(delay))
+                suitTrack.append(Func(suit.show))
+                suitTrack.append(LerpPosInterval(suit, 0, startPos))
+                suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+                suitTrack.append(Func(getDustCloudIval().start))
+                suitTrack.append(random.choice((ActorInterval(suit, 'mob-mentality', startTime=suit.getDuration('mob-mentality') - 1),
+                                                ActorInterval(suit, 'slip-forward', startTime=suit.getDuration('slip-forward') - 1),
+                                                ActorInterval(suit, 'glower', startTime=suit.getDuration('glower') - 1),
+                                                ActorInterval(suit, 'speak', startTime=suit.getDuration('speak') - 1),
+                                                ActorInterval(suit, 'finger-wag', startTime=suit.getDuration('finger-wag') - 1))))
+                suitTrack.append(Func(suit.loop, 'neutral'))
+                suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+                suitTracks.append(suitTrack)
+                # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+                suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+                delay += .1
+                if self.hasLocalToon():
+                    camera.reparentTo(self)
+                    if random.choice([0, 1]):
+                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                    else:
+                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
             else:
-                camera.setPosHpr(-20, -4, 7, -60, 0, 0)
+                if suit.dna.name == 'hroller2':
+                    suit.hide()
+                suit.setState('Battle')
+                if suit.dna.dept == 'l':
+                    suit.reparentTo(self.bossCog)
+                    suit.setPos(0, 0, 0)
+                if suit in self.joiningSuits:
+                    i = self._getPendingPreviewIndex(suit)
+                    destPos, h = self.suitPendingPoints[i]
+                    destHpr = VBase3(h, 0, 0)
+                else:
+                    destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+                startPos = destPos + Point3(0, 0, SuitTimings.fromSky * ToontownGlobals.SuitWalkSpeed)
+                self.notify.debug('startPos for %s = %s' % (suit, startPos))
+                suit.reparentTo(self)
+                suit.setPos(startPos)
+                suit.headsUp(self)
+                flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+                taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
+                suitTracks.append(Track((delay, Sequence(Parallel(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
+                delay += 1
+
+                if self.hasLocalToon():
+                    camera.reparentTo(self)
+                    if random.choice([0, 1]):
+                        camera.setPosHpr(20, -4, 7, 60, 0, 0)
+                    else:
+                        camera.setPosHpr(-20, -4, 7, -60, 0, 0)
         done = Func(callback)
-        track = Sequence(suitTrack, done, name=name)
+        track = Sequence(suitTracks, done, name=name)
         track.start(ts)
         self.storeInterval(track, name)
         return
 
-    def showSuitsFallingPhantomEntry(self, suit, ts, name, callback):
+    def showSuitsFallingPhantomEntry(self, suits, ts, name, callback):
         if self.bossCog == None:
             return
         suitTracks = Parallel()
         delay = 0
-        suit.setState('Battle')
-        suitTrack = Sequence()
-        oldPos, oldHpr = self.getActorPosHpr(suit, self.suits)
-        def getDustCloudIval(oldPos=oldPos):
-            dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
-            dustCloud.setBillboardAxis(2.0)
-            dustCloud.setZ(3)
-            dustCloud.setScale(0.4)
-            dustCloud.createTrack()
-            dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
-            return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
-                            name='dustCloadIval')
-        if suit in self.joiningSuits:
-            i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-            destPos, h = self.suitPendingPointsSilhouettes[i]
-            destHpr = VBase3(h, 0, 0)
-        else:
-            destPos, destHpr = self.getActorPosHpr(suit, self.suits)
-        startPos = destPos + Point3(0, 0, 0)
-        startPos2 = destPos + Point3(0, 0, 0)
-        self.notify.debug('startPos for %s = %s' % (suit, startPos))
-        suitTrack.append(Func(suit.reparentTo, self))
-        suitTrack.append(Func(suit.headsUp, self))
-        suitTrack.append(LerpPosInterval(suit, 0, startPos))
-        suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
-        suitTrack.append(Func(getDustCloudIval().start))
-        suitTrack.append(Sequence(ActorInterval(suit, 'mob-mentality', startTime=1.0)))
-        suitTrack.append(LerpPosInterval(suit, 0, startPos2))
-        suitTracks.append(suitTrack)
-        #flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
-        suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
-        delay += 0
+        for suit in suits:
+            suit.setState('Battle')
+            suitTrack = Sequence()
+            oldPos, oldHpr = self.getActorPosHpr(suit, self.suits)
+
+            def getDustCloudIval(oldPos=oldPos):
+                dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
+                dustCloud.setBillboardAxis(2.0)
+                dustCloud.setZ(3)
+                dustCloud.setScale(0.4)
+                dustCloud.createTrack()
+                dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
+                return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
+                                name='dustCloadIval')
+
+            if suit in self.joiningSuits:
+                i = self._getPendingPreviewIndex(suit)
+                destPos, h = self.suitPendingPointsSilhouettes[i]
+                destHpr = VBase3(h, 0, 0)
+            else:
+                destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+            startPos = destPos + Point3(0, 0, 0)
+            startPos2 = destPos + Point3(0, 0, 0)
+            self.notify.debug('startPos for %s = %s' % (suit, startPos))
+            suitTrack.append(Func(suit.reparentTo, self))
+            suitTrack.append(Func(suit.headsUp, self))
+            suitTrack.append(LerpPosInterval(suit, 0, startPos))
+            suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+            suitTrack.append(Func(getDustCloudIval().start))
+            suitTrack.append(Sequence(ActorInterval(suit, 'slip-forward')))
+            suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+            suitTracks.append(suitTrack)
+            # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+            suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+            delay += 0
 
         if self.hasLocalToon():
             camera.reparentTo(self)
@@ -224,35 +302,36 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         self.storeInterval(track, name)
         return
 
-    def showSuitsFallingSilhouette(self, suit, ts, name, callback):
+    def showSuitsFallingSilhouette(self, suits, ts, name, callback):
         if self.bossCog == None:
             return
         suitTracks = Parallel()
         delay = 0
-        suit.setState('Battle')
-        suitTrack = Sequence()
-        if suit in self.joiningSuits:
-            i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-            destPos, h = self.suitPendingPointsSilhouettes[i]
-            destHpr = VBase3(h, 0, 0)
-        else:
-            destPos, destHpr = self.getActorPosHpr(suit, self.suits)
-        startPos = destPos + Point3(0, 0, 0)
-        startPos.setY(startPos.getY() + 16.5)
-        startPos.setZ(startPos.getZ() - 4.5)
-        startPos2 = destPos + Point3(0, 0, 0)
-        self.notify.debug('startPos for %s = %s' % (suit, startPos))
-        suitTrack.append(Func(suit.reparentTo, self))
-        suitTrack.append(Func(suit.headsUp, self))
-        suitTrack.append(LerpPosInterval(suit, 0, startPos))
-        suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
-        suitTrack.append(LerpColorScaleInterval(suit, 0, (0, 0, 0, 0)))
-        suitTrack.append(Sequence(ActorInterval(suit, 'shot5', startTime=3, endTime=3), Parallel(Wait(3.0), LerpColorScaleInterval(suit, 3, (1, 1, 1, 1)))))
-        suitTrack.append(LerpPosInterval(suit, 0, startPos2))
-        suitTracks.append(suitTrack)
-        #flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
-        suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
-        delay += 0
+        for suit in suits:
+            suit.setState('Battle')
+            suitTrack = Sequence()
+            if suit in self.joiningSuits:
+                i = self._getPendingPreviewIndex(suit)
+                destPos, h = self.suitPendingPointsSilhouettes[i]
+                destHpr = VBase3(h, 0, 0)
+            else:
+                destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+            startPos = destPos + Point3(0, 0, 0)
+            startPos.setY(startPos.getY() + 16.5)
+            startPos.setZ(startPos.getZ() - 4.5)
+            startPos2 = destPos + Point3(0, 0, 0)
+            self.notify.debug('startPos for %s = %s' % (suit, startPos))
+            suitTrack.append(Func(suit.reparentTo, self))
+            suitTrack.append(Func(suit.headsUp, self))
+            suitTrack.append(LerpPosInterval(suit, 0, startPos))
+            suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+            suitTrack.append(LerpColorScaleInterval(suit, 0, (0, 0, 0, 0)))
+            suitTrack.append(Sequence(ActorInterval(suit, 'shot5', startTime=3, endTime=3), Parallel(Wait(3.0), LerpColorScaleInterval(suit, 3, (1, 1, 1, 1)))))
+            suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+            suitTracks.append(suitTrack)
+            # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+            suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+            delay += 0
 
         if self.hasLocalToon():
             camera.reparentTo(self)
@@ -274,7 +353,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         suit.setState('Battle')
         suitTrack = Sequence()
         if suit in self.joiningSuits:
-            i = len(self.pendingSuits) + self.joiningSuits.index(suit)
+            i = self._getPendingPreviewIndex(suit)
             destPos, h = self.suitPendingPointsSilhouettes[i]
             destHpr = VBase3(h, 0, 0)
         else:
@@ -312,7 +391,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         suit.setState('Battle')
         suitTrack = Sequence()
         if suit in self.joiningSuits:
-            i = len(self.pendingSuits) + self.joiningSuits.index(suit)
+            i = self._getPendingPreviewIndex(suit)
             destPos, h = self.suitPendingPointsSilhouettes[i]
             destHpr = VBase3(h, 0, 0)
         else:
@@ -355,7 +434,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             suit.setState('Battle')
             suitTrack = Sequence()
             if suit in self.joiningSuits:
-                i = len(self.pendingSuits) + self.joiningSuits.index(suit)
+                i = self._getPendingPreviewIndex(suit)
                 destPos, h = self.suitPendingPointsSilhouettes[i]
                 destHpr = VBase3(h, 0, 0)
             else:
@@ -389,36 +468,30 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         self.storeInterval(track, name)
         return
 
-    def showSuitsFallingHighRoller2(self, suits, ts, name, callback):
+    def showSuitsFallingHighRoller2(self, suit, ts, name, callback):
         if self.bossCog == None:
             return
-        suitTracks = Parallel()
+        suitTrack = Parallel()
         delay = 0
-        for suit in suits:
-            suit.setState('Battle')
-            suitTrack = Sequence()
-            if suit in self.joiningSuits:
-                i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-                destPos, h = self.suitPendingPointsSilhouettes[i]
-                destHpr = VBase3(h, 0, 0)
-            else:
-                destPos, destHpr = self.getActorPosHpr(suit, self.suits)
-            startPos = destPos + Point3(0, 0, 0)
-            startPos.setY(startPos.getY() + 16.5)
-            startPos.setZ(startPos.getZ() - 4.5)
-            startPos2 = destPos + Point3(0, 0, 0)
-            self.notify.debug('startPos for %s = %s' % (suit, startPos))
-            suitTrack.append(Func(suit.reparentTo, self))
-            suitTrack.append(Func(suit.headsUp, self))
-            suitTrack.append(LerpPosInterval(suit, 0, startPos))
-            suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
-            suitTrack.append(LerpColorScaleInterval(suit, 0, (0, 0, 0, 0)))
-            suitTrack.append(Parallel(ActorInterval(suit, 'shot5'), LerpColorScaleInterval(suit, 0.5, (1, 1, 1, 1))))
-            suitTrack.append(LerpPosInterval(suit, 0, startPos2))
-            suitTracks.append(suitTrack)
-            #flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
-            suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
-            delay += 0
+        suit.setState('Battle')
+        if suit.dna.dept == 'l':
+            suit.reparentTo(self.bossCog)
+            suit.setPos(0, 0, 0)
+        if suit in self.joiningSuits:
+            i = self._getPendingPreviewIndex(suit)
+            destPos, h = self.suitPendingPointsSilhouettes[i]
+            destHpr = VBase3(h, 0, 0)
+        else:
+            destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+        startPos = destPos + Point3(0, 0, SuitTimings.fromSky * ToontownGlobals.SuitWalkSpeed)
+        self.notify.debug('startPos for %s = %s' % (suit, startPos))
+        suit.reparentTo(self)
+        suit.setPos(destPos)
+        suit.headsUp(self)
+        suit.hide()
+        flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+        taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
+        delay += 1
 
         if self.hasLocalToon():
             camera.reparentTo(self)
@@ -427,7 +500,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             else:
                 camera.setPosHpr(0, -10, 7, 0, 0, 0)
         done = Func(callback)
-        track = Sequence(suitTracks, done, name=name)
+        track = Sequence(suitTrack, name=name)
         track.start(ts)
         self.storeInterval(track, name)
         return
@@ -441,7 +514,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         flyingDur = animTimeInAir
         impactLength = dur - animTimeInAir
         if suit in self.joiningSuits:
-            i = len(self.pendingSuits) + self.joiningSuits.index(suit)
+            i = self._getPendingPreviewIndex(suit)
             destPos, h = self.suitPendingPointsSilhouettes[i]
             destHpr = VBase3(h, 0, 0)
         else:

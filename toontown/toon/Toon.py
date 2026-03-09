@@ -552,6 +552,8 @@ class Toon(Avatar.Avatar, ToonHead):
         self.damageDownNumber = 0
         self.damageUp = 0
         self.governaughtDamageUp = 0
+        self.raisedAnte = 0
+        self.raisedAnteNumber = 0
         self.damageUpRounds = 0
         self.damageUpNumber = 0
         self.confused = 0
@@ -875,6 +877,18 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeUnDamageUpGovernaught(self):
         self.governaughtDamageUp = 0
+
+    def makeRaisedAnte(self):
+        self.raisedAnte = 1
+
+    def makeUnRaisedAnte(self):
+        self.raisedAnte = 0
+
+    def setRaisedAnte(self, num):
+        self.raisedAnteNumber = num
+
+    def getRaisedAnte(self):
+        return self.raisedAnteNumber
 
     def addDamageUpRounds(self, num):
         self.damageUpRounds = num
@@ -1949,6 +1963,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnMandatoryToll()
         self.makeUnCheer()
         self.makeUnDamageUp()
+        self.makeUnRaisedAnte()
         self.makeUnDamageUpGovernaught()
         self.makeUnDamageDown()
         self.makeUnDamageUp()
@@ -2005,6 +2020,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnMandatoryToll()
         self.makeUnCheer()
         self.makeUnDamageUp()
+        self.makeUnRaisedAnte()
         self.makeUnDamageUpGovernaught()
         self.makeUnDamageDown()
         self.makeUnDamageUp()

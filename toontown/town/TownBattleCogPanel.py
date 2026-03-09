@@ -175,6 +175,8 @@ class TownBattleCogPanel(DirectFrame):
         self.status6 = None
         self.status7 = None
         self.status8 = None
+        self.status9 = None
+        self.status10 = None
         self.attackIcon = None
         self.attackIcon1 = None
         self.attackIcon2 = None
@@ -183,6 +185,8 @@ class TownBattleCogPanel(DirectFrame):
         self.attackIcon5 = None
         self.attackIcon6 = None
         self.attackIcon7 = None
+        self.attackIcon8 = None
+        self.attackIcon9 = None
         self.lureImmune = None
         self.rainbow = None
         self.hollywoods = None
@@ -213,188 +217,215 @@ class TownBattleCogPanel(DirectFrame):
         self.generateSuitHead(cog.getStyleName())
         self.setLevelText()
 
-    def setLevelText(self):
+    def _clear_status_node(self, attrName):
+        node = getattr(self, attrName, None)
+        if node is not None:
+            try:
+                node.removeNode()
+            except:
+                pass
+            setattr(self, attrName, None)
+
+    def _clear_status_interval(self, attrName):
+        interval = getattr(self, attrName, None)
+        if interval is not None:
+            try:
+                interval.finish()
+            except:
+                pass
+            setattr(self, attrName, None)
+
+    def _cleanupStatusDisplay(self):
         taskMgr.remove(self.uniqueName('overcharge-pulse-task'))
+
+        if hasattr(self, 'statusSlots'):
+            for slot in self.statusSlots:
+                pulse = slot.get('pulse')
+                if pulse:
+                    try:
+                        pulse.finish()
+                    except:
+                        pass
+                    slot['pulse'] = None
+
+        for name in (
+                'attackIcon', 'attackIcon1', 'attackIcon2', 'attackIcon3',
+                'attackIcon4', 'attackIcon5', 'attackIcon6', 'attackIcon7',
+                'status', 'status2', 'status3', 'status4', 'attackIcon8', 'attackIcon9',
+                'status5', 'status6', 'status7', 'status8', 'status9', 'status10',
+                'statusFrame', 'desperationText', 'desperation', 'collectcall',
+                'collectcallText', 'luredText', 'damageMultText', 'damageMultText2',
+                'extraAttacks', 'sued', 'sued2', 'suedRoundsText', 'sued2RoundsText',
+                'extraAttacksText', 'dazed', 'dazedText', 'enrageCountText',
+                'soakedRoundsText', 'soaked', 'marked', 'zapped',
+                'zappedRoundsText', 'markedRoundsText', 'enraged', 'shielding',
+                'skeleton', 'virtual', 'damageUp', 'overcharged', 'insured',
+                'insuredText', 'vulnerabilityText', 'damageReductionText',
+                'luredCog', 'luredManagerText', 'rageBuildingText', 'immortal',
+                'luredManager', 'syphon', 'vulnerable', 'soakResist',
+                'absorbing', 'damageReduction', 'lureImmune', 'rainbow',
+                'hollywoods', 'sharkwatcher', 'statusFramePanel'
+        ):
+            self._clear_status_node(name)
+
+        if hasattr(self, 'statusSlots'):
+            for slot in self.statusSlots:
+                try:
+                    slot['bgModel'].removeNode()
+                except:
+                    pass
+                try:
+                    slot['iconRoot'].removeNode()
+                except:
+                    pass
+
+        self.statusSlots = []
         self.statusEffects = 0
-        if self.attackIcon != None:
-            self.attackIcon.removeNode()
-        if self.pulseTask != None:
-            self.pulseTask.finish()
-            del self.pulseTask
-        if self.attackIcon1 != None:
-            self.attackIcon1.removeNode()
-        if self.attackIcon2 != None:
-            self.attackIcon2.removeNode()
-        if self.attackIcon3 != None:
-            self.attackIcon3.removeNode()
-        if self.attackIcon4 != None:
-            self.attackIcon4.removeNode()
-        if self.attackIcon5 != None:
-            self.attackIcon5.removeNode()
-        if self.attackIcon6 != None:
-            self.attackIcon6.removeNode()
-        if self.attackIcon7 != None:
-            self.attackIcon7.removeNode()
-        if self.statusFrame != None:
-            self.statusFrame.removeNode()
-        if self.status != None:
-            self.status.removeNode()
-        if self.status2 != None:
-            self.status2.removeNode()
-        if self.status3 != None:
-            self.status3.removeNode()
-        if self.status4 != None:
-            self.status4.removeNode()
-        if self.status5 != None:
-            self.status5.removeNode()
-        if self.status6 != None:
-            self.status6.removeNode()
-        if self.status7 != None:
-            self.status7.removeNode()
-        if self.status8 != None:
-            self.status8.removeNode()
-        self.status = loader.loadModel('phase_3.5/models/gui/status_effects')
-        self.status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        self.status3 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        self.status4 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        self.status5 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        self.status6 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        self.status7 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        self.status8 = loader.loadModel('phase_3.5/models/gui/status_effects')
-        self.attackIcon7 = self.status8.find('**/default_background')  # fourth upper
-        self.attackIcon7.reparentTo(self.healthNode)
-        self.attackIcon7.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-        self.attackIcon7.hide()
-        self.attackIcon6 = self.status7.find('**/default_background')  # third upper
-        self.attackIcon6.reparentTo(self.healthNode)
-        self.attackIcon6.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-        self.attackIcon6.hide()
-        self.attackIcon5 = self.status6.find('**/default_background')  # second upper
-        self.attackIcon5.reparentTo(self.healthNode)
-        self.attackIcon5.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-        self.attackIcon5.hide()
-        self.attackIcon4 = self.status5.find('**/default_background')  # first upper
-        self.attackIcon4.reparentTo(self.healthNode)
-        self.attackIcon4.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-        self.attackIcon4.hide()
-        self.attackIcon3 = self.status4.find('**/default_background')  # fourth
-        self.attackIcon3.reparentTo(self.healthNode)
-        self.attackIcon3.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.attackIcon2 = self.status3.find('**/default_background')  # third
-        self.attackIcon2.reparentTo(self.healthNode)
-        self.attackIcon2.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.attackIcon1 = self.status2.find('**/default_background')  # second
-        self.attackIcon1.reparentTo(self.healthNode)
-        self.attackIcon1.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-        self.attackIcon = self.status.find('**/default_background')  # first
-        self.attackIcon.reparentTo(self.healthNode)
-        self.attackIcon.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-        self.attackIcon.setColor(1, 1, 1, 1)
-        self.attackIcon1.setColor(1, 1, 1, 1)
-        self.attackIcon2.setColor(1, 1, 1, 1)
-        self.attackIcon3.setColor(1, 1, 1, 1)
-        self.attackIcon4.setColor(1, 1, 1, 1)
-        self.attackIcon5.setColor(1, 1, 1, 1)
-        self.attackIcon6.setColor(1, 1, 1, 1)
-        self.attackIcon7.setColor(1, 1, 1, 1)
-        if self.desperationText != None:
-            self.desperationText.removeNode()
-        if self.desperation != None:
-            self.desperation.removeNode()
-        if self.collectcall != None:
-            self.collectcall.removeNode()
-        if self.collectcallText != None:
-            self.collectcallText.removeNode()
-        if self.luredText != None:
-            self.luredText.removeNode()
-        if self.damageMultText != None:
-            self.damageMultText.removeNode()
-        if self.damageMultText2 != None:
-            self.damageMultText2.removeNode()
-        if self.extraAttacks != None:
-            self.extraAttacks.removeNode()
-        if self.sued != None:
-            self.sued.removeNode()
-        if self.sued2 != None:
-            self.sued2.removeNode()
-        if self.suedRoundsText != None:
-            self.suedRoundsText.removeNode()
-        if self.sued2RoundsText != None:
-            self.sued2RoundsText.removeNode()
-        if self.extraAttacksText != None:
-            self.extraAttacksText.removeNode()
-        if self.dazed != None:
-            self.dazed.removeNode()
-        if self.dazedText != None:
-            self.dazedText.removeNode()
-        if self.enrageCountText != None:
-            self.enrageCountText.removeNode()
-        if self.soakedRoundsText != None:
-            self.soakedRoundsText.removeNode()
-        if self.soaked != None:
-            self.soaked.removeNode()
-        if self.marked != None:
-            self.marked.removeNode()
-        if self.zapped != None:
-            self.zapped.removeNode()
-        if self.zappedRoundsText != None:
-            self.zappedRoundsText.removeNode()
-        if self.markedRoundsText != None:
-            self.markedRoundsText.removeNode()
-        if self.enraged != None:
-            self.enraged.removeNode()
-        if self.dazed != None:
-            self.dazed.removeNode()
-        if self.extraAttacks != None:
-            self.extraAttacks.removeNode()
-        if self.shielding != None:
-            self.shielding.removeNode()
-        if self.skeleton != None:
-            self.skeleton.removeNode()
-        if self.virtual != None:
-            self.virtual.removeNode()
-        if self.damageUp != None:
-            self.damageUp.removeNode()
-        if self.overcharged != None:
-            self.overcharged.removeNode()
-        if self.insured != None:
-            self.insured.removeNode()
-        if self.insuredText != None:
-            self.insuredText.removeNode()
-        if self.vulnerabilityText != None:
-            self.vulnerabilityText.removeNode()
-        if self.damageReductionText != None:
-            self.damageReductionText.removeNode()
-        if self.luredCog != None:
-            self.luredCog.removeNode()
-        if self.luredManagerText != None:
-            self.luredManagerText.removeNode()
-        if self.rageBuildingText != None:
-            self.rageBuildingText.removeNode()
-        if self.immortal != None:
-            self.immortal.removeNode()
-        if self.luredManager != None:
-            self.luredManager.removeNode()
-        if self.syphon != None:
-            self.syphon.removeNode()
-        if self.vulnerable != None:
-            self.vulnerable.removeNode()
-        if self.soakResist != None:
-            self.soakResist.removeNode()
-        if self.absorbing != None:
-            self.absorbing.removeNode()
-        if self.damageReduction != None:
-            self.damageReduction.removeNode()
-        if self.lureImmune != None:
-            self.lureImmune.removeNode()
-        if self.rainbow != None:
-            self.rainbow.removeNode()
-        if self.hollywoods != None:
-            self.hollywoods.removeNode()
+
+    def _buildStatusSlots(self):
+        slotLayouts = [
+            (-0.335, 0.4, -0.26),  # 1
+            (-0.2075, 0.5, -0.355),  # 2
+            (-0.045, 0.5, -0.355),  # 3
+            (0.085, 0.4, -0.26),  # 4
+            (-0.37, 0.4, 0.23),  # 5
+            (-0.21, 0.4, 0.23),  # 6
+            (-0.05, 0.4, 0.23),  # 7
+            (0.11, 0.4, 0.23),  # 8
+            (0.27, 0.4, 0.23),  # 9
+            (-0.53, 0.4, 0.23),  # 10
+        ]
+
+        self.statusSlots = [None] * len(slotLayouts)
+
+        for i in reversed(range(len(slotLayouts))):
+            x, y, z = slotLayouts[i]
+
+            bgModel = loader.loadModel('phase_3.5/models/gui/status_effects')
+            bgNode = bgModel.find('**/default_background')
+            bgNode.reparentTo(self.healthNode)
+            bgNode.setPosHprScale(x, y, z, 0, 0, 0, .165, .165, .165)
+            bgNode.setColor(1, 1, 1, 1)
+
+            iconRoot = self.healthNode.attachNewNode('statusIconRoot-%d' % i)
+            iconRoot.setPosHprScale(x, y, z, 0, 0, 0, .165, .165, .165)
+
+            if i >= 4:
+                bgNode.hide()
+                iconRoot.hide()
+
+            self.statusSlots[i] = {
+                'bgModel': bgModel,
+                'bg': bgNode,
+                'iconRoot': iconRoot,
+                'pulse': None,
+            }
+
+        self.status = self.statusSlots[0]['bgModel']
+        self.status2 = self.statusSlots[1]['bgModel']
+        self.status3 = self.statusSlots[2]['bgModel']
+        self.status4 = self.statusSlots[3]['bgModel']
+        self.status5 = self.statusSlots[4]['bgModel']
+        self.status6 = self.statusSlots[5]['bgModel']
+        self.status7 = self.statusSlots[6]['bgModel']
+        self.status8 = self.statusSlots[7]['bgModel']
+        self.status9 = self.statusSlots[8]['bgModel']
+        self.status10 = self.statusSlots[9]['bgModel']
+
+        self.attackIcon = self.statusSlots[0]['bg']
+        self.attackIcon1 = self.statusSlots[1]['bg']
+        self.attackIcon2 = self.statusSlots[2]['bg']
+        self.attackIcon3 = self.statusSlots[3]['bg']
+        self.attackIcon4 = self.statusSlots[4]['bg']
+        self.attackIcon5 = self.statusSlots[5]['bg']
+        self.attackIcon6 = self.statusSlots[6]['bg']
+        self.attackIcon7 = self.statusSlots[7]['bg']
+        self.attackIcon8 = self.statusSlots[8]['bg']
+        self.attackIcon9 = self.statusSlots[9]['bg']
+
+    def _stopSlotPulse(self, slot):
+        if slot is None:
+            return
+
+        pulse = slot.get('pulse')
+        if pulse is not None:
+            try:
+                pulse.finish()
+            except:
+                pass
+            slot['pulse'] = None
+
+        slot['bg'].setColorScale(1, 1, 1, 1)
+
+    def _claimNextStatusSlot(self):
+        if self.statusEffects >= len(self.statusSlots):
+            return None
+
+        slot = self.statusSlots[self.statusEffects]
+        self.statusEffects += 1
+
+        if self.statusEffects > 4:
+            slot['bg'].show()
+            slot['iconRoot'].show()
+
+        return slot
+
+    def _attachStatusIcon(self, iconNode, slot, slotColor=(1, 1, 1, 1), scale=(1, 1, 1)):
+        if slot is None:
+            return
+
+        if isinstance(scale, (int, float)):
+            scale = (scale, scale, scale)
+
+        slot['bg'].setColor(*slotColor)
+        slot['bg'].setColorScale(1, 1, 1, 1)
+
+        iconNode.reparentTo(slot['iconRoot'])
+        sx, sy, sz = scale
+        iconNode.setPosHprScale(0, 0, 0, 0, 0, 0, sx, sy, sz)
+        iconNode.setColor(1, 1, 1, 1)
+
+    def _pulseStatusSlot(self, slot, fromColor, toColor=(1, 1, 1, 1), duration=1.0):
+        if slot is None:
+            return
+
+        self._stopSlotPulse(slot)
+
+        slot['pulse'] = Sequence(
+            LerpColorScaleInterval(slot['bg'], duration, fromColor, blendType='easeInOut'),
+            LerpColorScaleInterval(slot['bg'], duration, toColor, blendType='easeInOut'), Wait(1.0)
+        )
+        slot['pulse'].loop()
+
+    def _pulseRainbowStatusSlot(self, slot, duration=0.35):
+        if slot is None:
+            return
+
+        self._stopSlotPulse(slot)
+
+        slot['pulse'] = Sequence(
+            LerpColorScaleInterval(slot['bg'], duration, (1, 0, 0, 1), blendType='easeInOut'),
+            LerpColorScaleInterval(slot['bg'], duration, (1, 0.5, 0, 1), blendType='easeInOut'),
+            LerpColorScaleInterval(slot['bg'], duration, (1, 1, 0, 1), blendType='easeInOut'),
+            LerpColorScaleInterval(slot['bg'], duration, (0, 1, 0, 1), blendType='easeInOut'),
+            LerpColorScaleInterval(slot['bg'], duration, (0, 0, 1, 1), blendType='easeInOut'),
+            LerpColorScaleInterval(slot['bg'], duration, (0.29, 0, 0.51, 1), blendType='easeInOut'),
+            LerpColorScaleInterval(slot['bg'], duration, (0.56, 0, 1, 1), blendType='easeInOut')
+        )
+        slot['pulse'].loop()
+
+    def setLevelText(self):
+        for taskName in (
+                'overcharge-pulse-task',
+                'rainbow-pulse-task',
+        ):
+            taskMgr.remove(self.uniqueName(taskName))
+        self._cleanupStatusDisplay()
+        self._buildStatusSlots()
+
+        # Shark Watcher and Leveling Information
         if self.sharkwatcher != None:
             self.sharkwatcher.removeNode()
-        if self.statusFramePanel != None:
-            self.statusFramePanel.removeNode()
         if self.cog.dna.name == 'shw':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.sharkwatcher = status.find('**/ripped_icon')
@@ -413,86 +444,20 @@ class TownBattleCogPanel(DirectFrame):
                 t += TTLocalizer.GovernaughtPostFix
         if self.cog.getSkeleRevives() > 0:
             t += TTLocalizer.SkeleRevivePostFix % (self.cog.getSkeleRevives() + 1)
+
+        # Status Effects
         if self.cog.isVirtual:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.virtual = status.find('**/virtual_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.virtual.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0.361, 0.361, 0.361, 1)
-                self.virtual.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.virtual.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0.361, 0.361, 0.361, 1)
-                self.virtual.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.virtual.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0.361, 0.361, 0.361, 1)
-                self.virtual.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.virtual.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0.361, 0.361, 0.361, 1)
-                self.virtual.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.virtual.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0.361, 0.361, 0.361, 1)
-                self.virtual.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.virtual.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0.361, 0.361, 0.361, 1)
-                self.virtual.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.virtual.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0.361, 0.361, 0.361, 1)
-                self.virtual.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.virtual.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0.361, 0.361, 0.361, 1)
-                self.virtual.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.virtual, slot, slotColor=(0.361, 0.361, 0.361, 1))
+
         if self.cog.isSkeleton and not self.cog.isVirtual:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.skeleton = status.find('**/skelecog_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.skeleton.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0.722, 0.722, 0.722, 1)
-                self.skeleton.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.skeleton.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0.722, 0.722, 0.722, 1)
-                self.skeleton.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.skeleton.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0.722, 0.722, 0.722, 1)
-                self.skeleton.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.skeleton.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0.722, 0.722, 0.722, 1)
-                self.skeleton.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.skeleton.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0.722, 0.722, 0.722, 1)
-                self.skeleton.setColor(1, 1, 1, 1)
-                self.skeleton.show()
-            if self.statusEffects == 6:
-                self.skeleton.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0.722, 0.722, 0.722, 1)
-                self.skeleton.setColor(1, 1, 1, 1)
-                self.skeleton.show()
-            if self.statusEffects == 7:
-                self.skeleton.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0.722, 0.722, 0.722, 1)
-                self.skeleton.setColor(1, 1, 1, 1)
-                self.skeleton.show()
-            if self.statusEffects == 8:
-                self.skeleton.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0.722, 0.722, 0.722, 1)
-                self.skeleton.setColor(1, 1, 1, 1)
-                self.skeleton.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.skeleton, slot, slotColor=(0.722, 0.722, 0.722, 1))
+
         if self.cog.getManager() or self.cog.isLureResist or self.cog.isInsured or self.cog.isInsured2 or self.cog.isContracted or self.cog.healthCondition == 13:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.luredManager = status.find('**/hands_icon')
@@ -503,9 +468,8 @@ class TownBattleCogPanel(DirectFrame):
                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                     pos=(0.25, 0, -.5),
                                                     text_scale=.5)
-            elif self.cog.isDesperation or self.cog.isBookkeeping or self.cog.dna.name == 'hroller2' or self.cog.dna.name == 'videog' or self.cog.dna.name == 'fires' or self.cog.dna.name == 'fbed' or self.cog.dna.name == 'mouthp' \
-                    or self.cog.dna.name == 'rainmake' or self.cog.dna.name == 'whunter' or self.cog.dna.name == 'wsi' or self.cog.dna.name == 'redd' or self.cog.dna.name == 'duckshfl' or self.cog.dna.name == 'treek' \
-                    or self.cog.dna.name == 'bellring' or self.cog.dna.name == 'ddiver' or self.cog.dna.name == 'gatekeep' or (self.cog.isAngry and self.cog.dna.name == 'sgoat') or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or (self.cog.healthCondition == 13 and self.cog.isSkeleton):
+            elif self.cog.isDesperation or self.cog.isBookkeeping or self.cog.dna.name in ('bcaster', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep')\
+                    or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper')  or (self.cog.healthCondition == 13 and self.cog.isSkeleton) or (self.cog.isAngry and self.cog.dna.name == 'sgoat'):
                 self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
                                                 text="1",
                                                 text_fg=(1, 0, 0, 1),
@@ -520,242 +484,35 @@ class TownBattleCogPanel(DirectFrame):
                                                     pos=(0.25, 0, -.5),
                                                     text_scale=.5)
             self.luredManagerText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.luredManager.reparentTo(self.healthNode)
-                self.luredManager.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.luredManager.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.luredManager.reparentTo(self.healthNode)
-                self.luredManager.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.luredManager.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.luredManager.reparentTo(self.healthNode)
-                self.luredManager.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.luredManager.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.luredManager.reparentTo(self.healthNode)
-                self.luredManager.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.luredManager.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.luredManager.reparentTo(self.healthNode)
-                self.luredManager.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.luredManager.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.luredManager.reparentTo(self.healthNode)
-                self.luredManager.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.luredManager.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.luredManager.reparentTo(self.healthNode)
-                self.luredManager.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.luredManager.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.attackIcon7.reparentTo(self.healthNode)
-                self.attackIcon7.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.luredManager.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.luredManager, slot)
+            self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
+
         if self.cog.healthCondition == 13:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.overcharged = status.find('**/overcharge_icon')
-            self.overcharged.setScale(0.8)
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.overcharged.reparentTo(self.healthNode)
-                self.overcharged.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .145, .145, .145)
-                self.pulseTask = Sequence(LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.992, 0.227, 1, 1),
-                                   blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(self.healthColors[13]),
-                                   blendType='easeInOut'), Wait(2)).loop()
-                self.overcharged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.overcharged.reparentTo(self.healthNode)
-                self.overcharged.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .145, .145, .145)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.992, 0.227, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(self.healthColors[13]),
-                                           blendType='easeInOut'), Wait(2)).loop()
-                self.overcharged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.overcharged.reparentTo(self.healthNode)
-                self.overcharged.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .145, .145, .145)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.992, 0.227, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(self.healthColors[13]),
-                                           blendType='easeInOut'), Wait(2)).loop()
-                self.overcharged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.overcharged.reparentTo(self.healthNode)
-                self.overcharged.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .145, .145, .145)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.992, 0.227, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(self.healthColors[13]),
-                                           blendType='easeInOut'), Wait(2)).loop()
-                self.overcharged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.overcharged.reparentTo(self.healthNode)
-                self.overcharged.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .145, .145, .145)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.992, 0.227, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(self.healthColors[13]),
-                                           blendType='easeInOut'), Wait(2)).loop()
-                self.overcharged.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.overcharged.reparentTo(self.healthNode)
-                self.overcharged.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .145, .145, .145)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.992, 0.227, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(self.healthColors[13]),
-                                           blendType='easeInOut'), Wait(2)).loop()
-                self.overcharged.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.overcharged.reparentTo(self.healthNode)
-                self.overcharged.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .145, .145, .145)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.992, 0.227, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(self.healthColors[13]),
-                                           blendType='easeInOut'), Wait(2)).loop()
-                self.overcharged.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.overcharged.reparentTo(self.healthNode)
-                self.overcharged.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .145, .145, .145)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.992, 0.227, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(self.healthColors[13]),
-                                           blendType='easeInOut'), Wait(2)).loop()
-                self.overcharged.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.overcharged, slot, scale=(.8, .8, .8))
+            self._pulseStatusSlot(slot, fromColor=(0.992, 0.227, 1, 1), toColor=(self.healthColors[13]))
+
         if self.cog.isImmortal and self.cog.dna.name == 'videog':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.hollywoods = status.find('**/marked_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.hollywoods.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.hollywoods.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.hollywoods.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.hollywoods.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.hollywoods.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.hollywoods.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.hollywoods.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.hollywoods.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.hollywoods, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.dna.name == 'hroller2' and not self.cog.isPhase3:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.hollywoods = status.find('**/marked_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.hollywoods.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.hollywoods.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.hollywoods.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.hollywoods.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.hollywoods.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.hollywoods.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.hollywoods.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.hollywoods.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.hollywoods.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.hollywoods, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.dna.name == 'hroller' and self.cog.isPhase3:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.hollywoods = status.find('**/marked_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.hollywoods, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.dna.name == 'phouse':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.extraAttacks = status.find('**/sparkplug_icon')
@@ -765,322 +522,30 @@ class TownBattleCogPanel(DirectFrame):
                                                 pos=(0.25, 0, -.5),
                                                 text_scale=.4)
             self.rageBuildingText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.extraAttacks.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.extraAttacks.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.extraAttacks.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.extraAttacks.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.extraAttacks.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.extraAttacks.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.extraAttacks.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.extraAttacks.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        # if self.cog.dna.name == 'cbutcher':
-        #     status = loader.loadModel('phase_3.5/models/gui/status_effects')
-        #     self.extraAttacks = status.find('**/chainsaw_icon')
-        #     self.rageBuildingText = DirectLabel(parent=self.extraAttacks, relief=None,
-        #                                         text="%s" % self.cog.getRPM() + "K", text_fg=(1, 1, 1, 1),
-        #                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-        #                                         pos=(0.25, 0, -.5),
-        #                                         text_scale=.4)
-        #     self.rageBuildingText.show()
-        #     self.statusEffects += 1
-        #     if self.statusEffects == 1:
-        #         self.extraAttacks.reparentTo(self.attackIcon)
-        #         self.attackIcon.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #     if self.statusEffects == 2:
-        #         self.extraAttacks.reparentTo(self.attackIcon1)
-        #         self.attackIcon1.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #     if self.statusEffects == 3:
-        #         self.extraAttacks.reparentTo(self.attackIcon2)
-        #         self.attackIcon2.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #     if self.statusEffects == 4:
-        #         self.extraAttacks.reparentTo(self.attackIcon3)
-        #         self.attackIcon3.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #     if self.statusEffects == 5:
-        #         self.extraAttacks.reparentTo(self.attackIcon4)
-        #         self.attackIcon4.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #         self.attackIcon4.show()
-        #     if self.statusEffects == 6:
-        #         self.extraAttacks.reparentTo(self.attackIcon5)
-        #         self.attackIcon5.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #         self.attackIcon5.show()
-        #     if self.statusEffects == 7:
-        #         self.extraAttacks.reparentTo(self.attackIcon6)
-        #         self.attackIcon6.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #         self.attackIcon6.show()
-        #     if self.statusEffects == 8:
-        #         self.extraAttacks.reparentTo(self.attackIcon7)
-        #         self.attackIcon7.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #         self.attackIcon7.show()
-        # if self.cog.dna.name == 'cbutcher' and self.cog.isVulnerable:
-        #     status = loader.loadModel('phase_3.5/models/gui/status_effects')
-        #     self.extraAttacks = status.find('**/kickback_icon')
-        #     self.statusEffects += 1
-        #     if self.statusEffects == 1:
-        #         self.extraAttacks.reparentTo(self.attackIcon)
-        #         self.attackIcon.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #     if self.statusEffects == 2:
-        #         self.extraAttacks.reparentTo(self.attackIcon1)
-        #         self.attackIcon1.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #     if self.statusEffects == 3:
-        #         self.extraAttacks.reparentTo(self.attackIcon2)
-        #         self.attackIcon2.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #     if self.statusEffects == 4:
-        #         self.extraAttacks.reparentTo(self.attackIcon3)
-        #         self.attackIcon3.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #     if self.statusEffects == 5:
-        #         self.extraAttacks.reparentTo(self.attackIcon4)
-        #         self.attackIcon4.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #         self.attackIcon4.show()
-        #     if self.statusEffects == 6:
-        #         self.extraAttacks.reparentTo(self.attackIcon5)
-        #         self.attackIcon5.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #         self.attackIcon5.show()
-        #     if self.statusEffects == 7:
-        #         self.extraAttacks.reparentTo(self.attackIcon6)
-        #         self.attackIcon6.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #         self.attackIcon6.show()
-        #     if self.statusEffects == 8:
-        #         self.extraAttacks.reparentTo(self.attackIcon7)
-        #         self.attackIcon7.setColor(1, 0.984, 0, 1)
-        #         self.extraAttacks.setColor(1, 1, 1, 1)
-        #         self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.extraAttacks, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.dna.name == 'hroller':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.extraAttacks = status.find('**/insured_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.extraAttacks.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.extraAttacks.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.extraAttacks.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.extraAttacks.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.extraAttacks.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.extraAttacks.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.extraAttacks.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.extraAttacks.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.extraAttacks, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isImmortal and self.cog.dna.name not in ('hroller', 'hroller2', 'videog'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.immortal = status.find('**/schadenfreude_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.immortal, slot)
+            self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
+
         if self.cog.dna.name == 'hroller2' and not self.cog.isVulnerable and self.cog.isPhase3:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.extraAttacks = status.find('**/harmonious_colors_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.extraAttacks.reparentTo(self.healthNode)
-                self.extraAttacks.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'), LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0.56, 0, 1, 1), blendType='easeInOut')).loop()
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.extraAttacks.reparentTo(self.healthNode)
-                self.extraAttacks.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.extraAttacks.reparentTo(self.healthNode)
-                self.extraAttacks.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.extraAttacks.reparentTo(self.healthNode)
-                self.extraAttacks.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.extraAttacks.reparentTo(self.healthNode)
-                self.extraAttacks.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.extraAttacks.reparentTo(self.healthNode)
-                self.extraAttacks.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.extraAttacks.reparentTo(self.healthNode)
-                self.extraAttacks.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.extraAttacks.reparentTo(self.healthNode)
-                self.extraAttacks.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.extraAttacks, slot)
+            self._clear_status_interval('rainbowPulseTask')
+            self._pulseRainbowStatusSlot(slot, duration=2.0)
+
         if self.cog.dna.name == 'hrollers':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             if self.cog.getActualLevel() == 34:
@@ -1092,7 +557,7 @@ class TownBattleCogPanel(DirectFrame):
             if self.cog.getActualLevel() == 31:
                 self.rainbow = status.find('**/duck_drop_icon')
             if self.cog.getActualLevel() == 30:
-                self.rainbow = status.find('**/brain_icon')
+                self.rainbow = status.find('**/backfire_icon')
             if self.cog.getActualLevel() == 29:
                 self.rainbow = status.find('**/trap_card_icon')
             if self.cog.getActualLevel() == 28:
@@ -1103,163 +568,11 @@ class TownBattleCogPanel(DirectFrame):
                 self.rainbow = status.find('**/full_deck_icon')
             if self.cog.getActualLevel() == 25:
                 self.rainbow = status.find('**/no_green_light_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.rainbow.reparentTo(self.healthNode)
-                self.rainbow.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.rainbow.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.rainbow.reparentTo(self.healthNode)
-                self.rainbow.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.rainbow.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.rainbow.reparentTo(self.healthNode)
-                self.rainbow.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.rainbow.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.rainbow.reparentTo(self.healthNode)
-                self.rainbow.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.rainbow.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.rainbow.reparentTo(self.healthNode)
-                self.rainbow.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.rainbow.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.rainbow.reparentTo(self.healthNode)
-                self.rainbow.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.rainbow.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.rainbow.reparentTo(self.healthNode)
-                self.rainbow.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.rainbow.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.rainbow.reparentTo(self.healthNode)
-                self.rainbow.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 0.5, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(1, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0, 0, 1, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0.29, 0, 0.51, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=2, colorScale=(0.56, 0, 1, 1),
-                                           blendType='easeInOut')).loop()
-                self.rainbow.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.rainbow, slot)
+            self._clear_status_interval('rainbowPulseTask')
+            self._pulseRainbowStatusSlot(slot, duration=2.0)
+
         if self.cog.isAngry:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             if self.cog.dna.name == 'cbutcher':
@@ -1274,255 +587,9 @@ class TownBattleCogPanel(DirectFrame):
                                               pos=(0.25, 0, -.5),
                                               text_scale=.5)
             self.enrageCountText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.enraged.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.enraged.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.enraged.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.enraged.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.enraged.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.enraged.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.enraged.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.enraged.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isStormCell:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.enraged = status.find('**/stormcell_icon')
-            self.enrageCountText = DirectLabel(parent=self.enraged, relief=None,
-                                              text="-%s" % self.cog.getStormCellDamage(), text_fg=(1, 0, 0, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.4)
-            self.enrageCountText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.enraged.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.enraged.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.enraged.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.enraged.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.enraged.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.enraged.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.enraged.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.enraged.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isHeavyRain:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.enraged = status.find('**/heavyrain_icon')
-            self.enrageCountText = DirectLabel(parent=self.enraged, relief=None,
-                                              text="-%s" % self.cog.getHeavyRainDamage(), text_fg=(1, 0, 0, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.4)
-            self.enrageCountText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.enraged.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.enraged.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.enraged.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.enraged.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.enraged.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.enraged.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.enraged.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.enraged.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isMonsoon:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.enraged = status.find('**/monsoon_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.enraged.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.enraged.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.enraged.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.enraged.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.enraged.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.enraged.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.enraged.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.enraged.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isFreezingRain:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.enraged = status.find('**/frozen_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.enraged.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.enraged.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.enraged.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.enraged.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.enraged.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.enraged.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.enraged.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.enraged.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isOilRain:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.enraged = status.find('**/oilrain_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.enraged.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.enraged.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.enraged.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.enraged.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.enraged.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.enraged.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.enraged.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.enraged.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.enraged, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isShielding and self.cog.dna.name == 'sgoat':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.absorbing = status.find('**/defense_mode_icon')
@@ -1532,43 +599,9 @@ class TownBattleCogPanel(DirectFrame):
                                                 pos=(0.25, 0, -.5),
                                                 text_scale=.4)
             self.rageBuildingText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.absorbing.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.absorbing.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.absorbing.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.absorbing.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.absorbing.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.absorbing.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.absorbing.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.absorbing.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.absorbing, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isShielding and not self.cog.dna.name == 'sgoat' and not self.cog.dna.name == 'hroller':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.absorbing = status.find('**/damage_absorb_icon')  # 3 slot absorb icon
@@ -1579,376 +612,46 @@ class TownBattleCogPanel(DirectFrame):
                                                 pos=(0.25, 0, -.5),
                                                 text_scale=.5)
                 self.extraAttacksText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.absorbing.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.absorbing.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.absorbing.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.absorbing.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.absorbing.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.absorbing.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.absorbing.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.absorbing.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.absorbing.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.absorbing, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isDropImmune:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.enraged = status.find('**/duck_drop_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.enraged.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.enraged.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.enraged.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.enraged.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.enraged.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.enraged.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.enraged.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.enraged.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.enraged, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isZapImmune:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.enraged = status.find('**/fizzle_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.enraged.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.enraged.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.enraged.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.enraged.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.enraged.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.enraged.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.enraged.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.enraged.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.enraged.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.enraged, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isSoakImmune:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.soakResist = status.find('**/soaked_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.soakResist, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isLureImmune and not self.cog.dna.name == 'hrollers':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.lureImmune = status.find('**/cashback_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.lureImmune.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.lureImmune.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.lureImmune.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.lureImmune.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.lureImmune.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.lureImmune.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.lureImmune.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.lureImmune.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.lureImmune.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.lureImmune.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.lureImmune.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.lureImmune.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.lureImmune.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.lureImmune.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.lureImmune.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.lureImmune.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.dna.name == 'hroller2':
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.immortal = status.find('**/schadenfreude_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.lureImmune, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isBookkeeping:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/backfire_icon')
-            self.damageMultText2 = DirectLabel(parent=self.immortal, relief=None, text="1", text_fg=(1, 0, 0, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.5)
-            self.damageMultText2.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.immortal, slot)
+            self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
+
         if self.cog.getGovernaught():
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/tie_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.immortal, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isTarget or self.cog.isExplosive:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/union_bust_icon')
@@ -1964,168 +667,21 @@ class TownBattleCogPanel(DirectFrame):
                                                   pos=(0.25, 0, -.5),
                                                   text_scale=.5)
                 self.damageMultText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.immortal, slot)
+            self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
+
         if self.cog.isSleepy:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/lunch_background')
             self.damageMultText = DirectLabel(parent=self.immortal, relief=None, text="%s" % (self.cog.getSleepyCondition() - 1), text_fg=(1, 1, 1, 1),
                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
+                                              pos=(0.225, 0, -.5),
                                               text_scale=.5)
             self.damageMultText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.immortal.reparentTo(self.healthNode)
-                self.immortal.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.immortal.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.immortal, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isDesperation:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.desperation = status.find('**/toofast4you_icon')
@@ -2134,128 +690,56 @@ class TownBattleCogPanel(DirectFrame):
                                                pos=(0.25, 0, -.5),
                                                text_scale=.4)
             self.desperationText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.desperation.reparentTo(self.healthNode)
-                self.desperation.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.desperation.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.desperation.reparentTo(self.healthNode)
-                self.desperation.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.desperation.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.desperation.reparentTo(self.healthNode)
-                self.desperation.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.desperation.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.desperation.reparentTo(self.healthNode)
-                self.desperation.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.desperation.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.desperation.reparentTo(self.healthNode)
-                self.desperation.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.desperation.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.desperation.reparentTo(self.healthNode)
-                self.desperation.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.desperation.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.desperation.reparentTo(self.healthNode)
-                self.desperation.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.desperation.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.desperation.reparentTo(self.healthNode)
-                self.desperation.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.desperation.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.desperation, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isCollectCall:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.collectcall = status.find('**/cashback_icon')
             self.collectcallText = DirectLabel(parent=self.collectcall, relief=None, text="%s" % self.cog.getCollectCall(), text_fg=(1, 0, 0, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.4)
+                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                               pos=(0.25, 0, -.5),
+                                               text_scale=.4)
             self.collectcallText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.collectcall.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.collectcall.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.collectcall.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.collectcall.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.collectcall.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.collectcall.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.collectcall.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.collectcall.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.collectcall.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.collectcall.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.collectcall.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.collectcall.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.collectcall.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.collectcall.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.collectcall.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.collectcall.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.collectcall, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isInsured or self.cog.isInsured2:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/heal_over_time_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isContracted or self.cog.dna.name == 'supervis' or self.cog.dna.name == 'ovt':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/insured_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.extraAttack:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/extra_attacks_icon')
+            self.extraAttacksText = DirectLabel(parent=self.extraAttacks, relief=None, text="+%s" % self.cog.getExtraAttacks(),
+                                                text_fg=(1, 0, 0, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.5)
+            self.extraAttacksText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.extraAttacks, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.extraAbility:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/extra_attacks_icon')
+            self.extraAttacksText = DirectLabel(parent=self.extraAttacks, relief=None, text="%s" % self.cog.getExtraAbilities(),
+                                                text_fg=(1, 0, 0, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.25, 0, -.5),
+                                                text_scale=.5)
+            self.extraAttacksText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.extraAttacks, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isDamageUp:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.damageUp = status.find('**/suit_damage_up_icon')
@@ -2264,83 +748,38 @@ class TownBattleCogPanel(DirectFrame):
                                               pos=(0.25, 0, -.5),
                                               text_scale=.4)
             self.damageMultText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.damageUp, slot)
+            self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
+
+        if self.cog.isDamageReduction:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.damageReduction = status.find('**/shield_icon')  # third slot vulnerability icon
+            if self.cog.dna.name == 'rkeeper':
+                self.vulnerabilityText = DirectLabel(parent=self.damageReduction, relief=None,
+                                                         text="50%",
+                                                         text_fg=(1, 0, 0, 1),
+                                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                         pos=(0.25, 0, -.5),
+                                                         text_scale=.4)
+                self.vulnerabilityText.show()
+            else:
+                self.vulnerabilityText = DirectLabel(parent=self.damageReduction, relief=None,
+                                                     text="%s" % self.cog.getDamageReduction() + "%",
+                                                     text_fg=(1, 0, 0, 1),
+                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                     pos=(0.25, 0, -.5),
+                                                     text_scale=.4)
+                self.vulnerabilityText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.damageReduction, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isSyphon:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.syphon = status.find('**/ink_drain_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.syphon, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isDamageDown:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.damageUp = status.find('**/suit_damage_down_icon')
@@ -2356,83 +795,10 @@ class TownBattleCogPanel(DirectFrame):
                                                    pos=(0.25, 0, -.5),
                                                    text_scale=.4)
                 self.damageMultText2.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.damageUp.reparentTo(self.healthNode)
-                self.damageUp.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageUp.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.damageUp, slot)
+            self._pulseStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(0, 0.902, 1, 1))
+
         if self.cog.isVulnerable and not self.cog.dna.name == 'hroller2':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.vulnerable = status.find('**/broken_shield_icon')  # third slot vulnerability icon
@@ -2458,443 +824,10 @@ class TownBattleCogPanel(DirectFrame):
                                                      pos=(0.25, 0, -.5),
                                                      text_scale=.4)
             self.vulnerabilityText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.vulnerable.reparentTo(self.healthNode)
-                self.vulnerable.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.vulnerable.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.vulnerable.reparentTo(self.healthNode)
-                self.vulnerable.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.vulnerable.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.vulnerable.reparentTo(self.healthNode)
-                self.vulnerable.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.vulnerable.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.vulnerable.reparentTo(self.healthNode)
-                self.vulnerable.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.vulnerable.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.vulnerable.reparentTo(self.healthNode)
-                self.vulnerable.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.vulnerable.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.vulnerable.reparentTo(self.healthNode)
-                self.vulnerable.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.vulnerable.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.vulnerable.reparentTo(self.healthNode)
-                self.vulnerable.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.vulnerable.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.vulnerable.reparentTo(self.healthNode)
-                self.vulnerable.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(0.027, 1, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.vulnerable.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isDamageReduction:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.damageReduction = status.find('**/shield_icon')  # third slot vulnerability icon
-            if self.cog.dna.name == 'rkeeper':
-                self.vulnerabilityText = DirectLabel(parent=self.damageReduction, relief=None,
-                                                         text="50%",
-                                                         text_fg=(1, 0, 0, 1),
-                                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                         pos=(0.25, 0, -.5),
-                                                         text_scale=.4)
-                self.vulnerabilityText.show()
-            else:
-                self.vulnerabilityText = DirectLabel(parent=self.damageReduction, relief=None,
-                                                     text="%s" % self.cog.getDamageReduction() + "%",
-                                                     text_fg=(1, 0, 0, 1),
-                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                     pos=(0.25, 0, -.5),
-                                                     text_scale=.4)
-                self.vulnerabilityText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.damageReduction.reparentTo(self.healthNode)
-                self.damageReduction.setPosHprScale(-0.335, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageReduction.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.damageReduction.reparentTo(self.healthNode)
-                self.damageReduction.setPosHprScale(-0.2075, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon1, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageReduction.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.damageReduction.reparentTo(self.healthNode)
-                self.damageReduction.setPosHprScale(-0.045, 0.5, -0.355, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon2, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageReduction.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.damageReduction.reparentTo(self.healthNode)
-                self.damageReduction.setPosHprScale(0.085, 0.4, -0.26, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon3, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageReduction.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.damageReduction.reparentTo(self.healthNode)
-                self.damageReduction.setPosHprScale(-0.37, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon4, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageReduction.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.damageReduction.reparentTo(self.healthNode)
-                self.damageReduction.setPosHprScale(-0.2075, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon5, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageReduction.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.damageReduction.reparentTo(self.healthNode)
-                self.damageReduction.setPosHprScale(-0.045, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon6, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageReduction.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.damageReduction.reparentTo(self.healthNode)
-                self.damageReduction.setPosHprScale(0.115, 0.4, 0.23, 0, 0, 0, .165, .165, .165)
-                self.pulseTask = Sequence(
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0, 0, 1),
-                                           blendType='easeInOut'),
-                    LerpColorScaleInterval(self.attackIcon7, duration=1, colorScale=(1, 0.984, 0, 1),
-                                           blendType='easeInOut'), Wait(1)).loop()
-                self.damageReduction.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isSyphon:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.syphon = status.find('**/ink_drain_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.syphon.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.syphon.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.syphon.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.syphon.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.syphon.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.syphon.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.syphon.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.syphon.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.syphon.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.syphon.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.syphon.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.syphon.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.syphon.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.syphon.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.syphon.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.syphon.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isInsured or self.cog.isInsured2:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.insured = status.find('**/heal_over_time_icon')
-            if self.cog.isInsured2:
-                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+85", text_fg=(0, 1, 0.047, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.4)
-                self.insuredText.show()
-            else:
-                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+50", text_fg=(0, 1, 0.047, 1),
-                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                               pos=(0.25, 0, -.5),
-                                               text_scale=.4)
-                self.insuredText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.insured.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.insured.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.insured.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.insured.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.insured.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.insured.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.insured.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.insured.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isContracted or self.cog.dna.name == 'supervis' or self.cog.dna.name == 'ovt':
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.insured = status.find('**/insured_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.insured.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.insured.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.insured.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.insured.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.insured.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.insured.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.insured.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.insured.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.insured.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.extraAttack:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.extraAttacks = status.find('**/extra_attacks_icon')
-            self.extraAttacksText = DirectLabel(parent=self.extraAttacks, relief=None, text="+%s" % self.cog.getExtraAttacks(),
-                                                text_fg=(1, 0, 0, 1),
-                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                pos=(0.25, 0, -.5),
-                                                text_scale=.5)
-            self.extraAttacksText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.extraAttacks.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.extraAttacks.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.extraAttacks.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.extraAttacks.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.extraAttacks.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.extraAttacks.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.extraAttacks.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.extraAttacks.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.extraAbility:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.extraAttacks = status.find('**/extra_attacks_icon')
-            self.extraAttacksText = DirectLabel(parent=self.extraAttacks, relief=None, text="%s" % self.cog.getExtraAbilities(),
-                                                text_fg=(1, 0, 0, 1),
-                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                pos=(0.25, 0, -.5),
-                                                text_scale=.5)
-            self.extraAttacksText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.extraAttacks.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.extraAttacks.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.extraAttacks.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.extraAttacks.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.extraAttacks.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.extraAttacks.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.extraAttacks.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.extraAttacks.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.extraAttacks.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
-        if self.cog.isSoakImmune:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.soakResist = status.find('**/soaked_icon')
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.soakResist.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(1, 0.984, 0, 1)
-                self.soakResist.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.soakResist.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(1, 0.984, 0, 1)
-                self.soakResist.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.soakResist.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(1, 0.984, 0, 1)
-                self.soakResist.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.soakResist.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(1, 0.984, 0, 1)
-                self.soakResist.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.soakResist.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(1, 0.984, 0, 1)
-                self.soakResist.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.soakResist.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(1, 0.984, 0, 1)
-                self.soakResist.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.soakResist.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(1, 0.984, 0, 1)
-                self.soakResist.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.soakResist.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(1, 0.984, 0, 1)
-                self.soakResist.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.vulnerable, slot)
+            self._pulseStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(0, 0.902, 1, 1))
+
         if self.cog.isSued:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.sued = status.find('**/sued_icon')
@@ -2904,89 +837,21 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -.5),
                                          text_scale=.5)
             self.suedRoundsText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.sued.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0, 0.902, 1, 1)
-                self.sued.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.sued.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0, 0.902, 1, 1)
-                self.sued.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.sued.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0, 0.902, 1, 1)
-                self.sued.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.sued.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0, 0.902, 1, 1)
-                self.sued.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.sued.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0, 0.902, 1, 1)
-                self.sued.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.sued.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0, 0.902, 1, 1)
-                self.sued.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.sued.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0, 0.902, 1, 1)
-                self.sued.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.sued.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0, 0.902, 1, 1)
-                self.sued.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            self.sued2RoundsText = DirectLabel(parent=self.sued2, relief=None, text="-%s" % int(self.cog.getMaxHP() / 4),
+                                               text_fg=(1, 0, 0, 1),
+                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                               pos=(0.25, 0, -.5),
+                                               text_scale=.4)
+            self.sued2RoundsText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.sued, slot, slotColor=(0, 0.902, 1, 1))
+
         if self.cog.isSued:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.sued2 = status.find('**/damage_over_time_icon')
-            self.sued2RoundsText = DirectLabel(parent=self.sued2, relief=None, text="-%s" % int(self.cog.getMaxHP() / 4),
-                                              text_fg=(1, 0, 0, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.4)
-            self.sued2RoundsText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.sued2.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0, 0.902, 1, 1)
-                self.sued2.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.sued2.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0, 0.902, 1, 1)
-                self.sued2.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.sued2.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0, 0.902, 1, 1)
-                self.sued2.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.sued2.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0, 0.902, 1, 1)
-                self.sued2.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.sued2.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0, 0.902, 1, 1)
-                self.sued2.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.sued2.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0, 0.902, 1, 1)
-                self.sued2.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.sued2.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0, 0.902, 1, 1)
-                self.sued2.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.sued2.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0, 0.902, 1, 1)
-                self.sued2.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.sued2, slot, slotColor=(0, 0.902, 1, 1))
+
         if self.cog.isLured:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             if self.cog.isLured == 1:
@@ -2999,43 +864,9 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -.5),
                                          text_scale=.5)
             self.luredText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.luredCog.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0, 0.902, 1, 1)
-                self.luredCog.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.luredCog.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0, 0.902, 1, 1)
-                self.luredCog.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.luredCog.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0, 0.902, 1, 1)
-                self.luredCog.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.luredCog.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0, 0.902, 1, 1)
-                self.luredCog.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.luredCog.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0, 0.902, 1, 1)
-                self.luredCog.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.luredCog.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0, 0.902, 1, 1)
-                self.luredCog.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.luredCog.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0, 0.902, 1, 1)
-                self.luredCog.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.luredCog.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0, 0.902, 1, 1)
-                self.luredCog.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.luredCog, slot, slotColor=(0, 0.902, 1, 1))
+
         if self.cog.isZapped:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.zapped = status.find('**/reward_cooldown_icon')
@@ -3045,43 +876,9 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -.4),
                                          text_scale=.4)
             self.zappedRoundsText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.zapped.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0, 0.902, 1, 1)
-                self.zapped.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.zapped.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0, 0.902, 1, 1)
-                self.zapped.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.zapped.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0, 0.902, 1, 1)
-                self.zapped.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.zapped.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0, 0.902, 1, 1)
-                self.zapped.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.zapped.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0, 0.902, 1, 1)
-                self.zapped.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.zapped.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0, 0.902, 1, 1)
-                self.zapped.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.zapped.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0, 0.902, 1, 1)
-                self.zapped.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.zapped.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0, 0.902, 1, 1)
-                self.zapped.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.zapped, slot, slotColor=(0, 0.902, 1, 1))
+
         if self.cog.isMarked:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.marked = status.find('**/deepfreeze_icon')
@@ -3091,43 +888,9 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -.5),
                                          text_scale=.5)
             self.markedRoundsText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.marked.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0, 0.902, 1, 1)
-                self.marked.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.marked.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0, 0.902, 1, 1)
-                self.marked.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.marked.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0, 0.902, 1, 1)
-                self.marked.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.marked.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0, 0.902, 1, 1)
-                self.marked.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.marked.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0, 0.902, 1, 1)
-                self.marked.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.marked.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0, 0.902, 1, 1)
-                self.marked.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.marked.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0, 0.902, 1, 1)
-                self.marked.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.marked.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0, 0.902, 1, 1)
-                self.marked.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.marked, slot, slotColor=(0, 0.902, 1, 1))
+
         if self.cog.isDazed:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.dazed = status.find('**/confusion_icon')
@@ -3138,43 +901,9 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -.5),
                                          text_scale=.5)
             self.dazedText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.dazed.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.dazed.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.dazed.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.dazed.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.dazed.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.dazed.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.dazed.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.dazed.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.dazed, slot, slotColor=(0, 0.902, 1, 1))
+
         if self.cog.isSoaked:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.soaked = status.find('**/scope_creep_icon')
@@ -3184,43 +913,9 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -.5),
                                          text_scale=.5)
             self.soakedRoundsText.show()
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.soaked.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0, 0.902, 1, 1)
-                self.soaked.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.soaked.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0, 0.902, 1, 1)
-                self.soaked.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.soaked.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0, 0.902, 1, 1)
-                self.soaked.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.soaked.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0, 0.902, 1, 1)
-                self.soaked.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.soaked.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0, 0.902, 1, 1)
-                self.soaked.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.soaked.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0, 0.902, 1, 1)
-                self.soaked.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.soaked.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0, 0.902, 1, 1)
-                self.soaked.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.soaked.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0, 0.902, 1, 1)
-                self.soaked.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.soaked, slot, slotColor=(0, 0.902, 1, 1))
+
         if self.cog.isTrapped:
             status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
             if self.cog.isTrapped == 8:
@@ -3239,44 +934,10 @@ class TownBattleCogPanel(DirectFrame):
                 self.dazed = status.find('**/inventory_rake')
             else:
                 self.dazed = status.find('**/inventory_banana_peel')
-            self.dazed.setScale(5.5)
-            self.statusEffects += 1
-            if self.statusEffects == 1:
-                self.dazed.reparentTo(self.attackIcon)
-                self.attackIcon.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-            if self.statusEffects == 2:
-                self.dazed.reparentTo(self.attackIcon1)
-                self.attackIcon1.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-            if self.statusEffects == 3:
-                self.dazed.reparentTo(self.attackIcon2)
-                self.attackIcon2.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-            if self.statusEffects == 4:
-                self.dazed.reparentTo(self.attackIcon3)
-                self.attackIcon3.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-            if self.statusEffects == 5:
-                self.dazed.reparentTo(self.attackIcon4)
-                self.attackIcon4.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-                self.attackIcon4.show()
-            if self.statusEffects == 6:
-                self.dazed.reparentTo(self.attackIcon5)
-                self.attackIcon5.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-                self.attackIcon5.show()
-            if self.statusEffects == 7:
-                self.dazed.reparentTo(self.attackIcon6)
-                self.attackIcon6.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-                self.attackIcon6.show()
-            if self.statusEffects == 8:
-                self.dazed.reparentTo(self.attackIcon7)
-                self.attackIcon7.setColor(0, 0.902, 1, 1)
-                self.dazed.setColor(1, 1, 1, 1)
-                self.attackIcon7.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.dazed, slot, slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
+
+
         self.healthText['text'] = t
 
     def updateHealthBar(self):
@@ -3288,7 +949,7 @@ class TownBattleCogPanel(DirectFrame):
             self.hp = 0
         self.maxHp = self.cog.getMaxHP()
         if self.cog.isImmortal and not self.cog.dna.name == 'hroller' and not self.cog.isPhase3:
-            self.hp = 'Immune!'
+            self.hp = 'Immune'
             self.hpText['text_fg'] = Vec4(0, 0, 0, 1.0)
             if self.healthBar2:
                 self.healthBar2.setProp('barColor', (1, 1, 1, 1))
@@ -3927,6 +1588,10 @@ class TownBattleCogPanel(DirectFrame):
         del self.statusText2
         del self.statusText2
         del self.pulseTask
+        del self.attackIcon8
+        del self.attackIcon9
+        del self.status9
+        del self.status10
         DirectFrame.destroy(self)
 
     def cleanup(self):

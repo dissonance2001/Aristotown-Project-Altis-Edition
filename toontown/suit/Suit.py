@@ -82,11 +82,11 @@ AllSuitsMinigame = (('victory', 'victory'), ('flail', 'flailing'), ('flail-wb', 
                     ('slip-backward', 'slip-backward'), ('lose3', 'wrecked'), ('slip-forward', 'slip-forward'))
 AllSuitsTutorialBattle = (('lose', 'lose'), ('lose2', 'headless-death'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'), ('dance', 'song-and-dance'), ('pie-small-react', 'pie-small'),
                           ('squirt-small-react', 'squirt-small'))
-AllSuitsBattle = (('shuffle-left', 'shuffle-left'), ('shuffle-right', 'shuffle-right'), ('drop-react', 'anvil-drop'), ('flatten', 'drop'), ('speak', 'speak'), ('song-and-dance', 'song-and-dance'), ('glower', 'glower'), ('headless-death', 'headless-death'), ('dance', 'song-and-dance'), ('frustrated', 'frustrated-f'),
+AllSuitsBattle = (('shuffle-left', 'shuffle-left'),  ('finger-wag', 'finger-wag'), ('shuffle-right', 'shuffle-right'), ('drop-react', 'anvil-drop'), ('flatten', 'drop'), ('speak', 'speak'), ('song-and-dance', 'song-and-dance'), ('glower', 'glower'), ('headless-death', 'headless-death'), ('dance', 'song-and-dance'), ('frustrated', 'frustrated-f'),
                   ('lose3', 'wrecked'), ('short-squeeze', 'short-squeeze'), ('gag-miss', 'gag-miss'), ('pie-large', 'pie-large'), ('rolled', 'rolled'), ('pie-large-lured', 'pie-large-lured'), ('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
                   ('highroller-neutral-levitate-in-out', 'highroller-neutral-levitate-in-out', 4), ('wrecked', 'wrecked'), ('sidestep-left', 'sidestep-left'),
                   ('sidestep-right', 'sidestep-right'), ('squirt-large-react', 'squirt-large'), ('sound-react', 'sound-react'), ('sound-react-bow', 'sound-react-bow'),
-                  ('sound-react-nt', 'sound-react-nt'),
+                  ('sound-react-nt', 'sound-react-nt'), ('glower', 'glower', 4),
                   ('landing', 'landing'), ('reach', 'walknreach-bill'), ('rake-react', 'rake'), ('hypnotized', 'hypnotize'), ('shock', 'shock'), ('large-zap', 'large-zap'),
                   ('small-zap', 'small-zap'), ('soak', 'soak'), ('lured', 'lured'), ('lured2', 'lured'))
 SuitsCEOBattle = (('sit', 'sit'), ('sit-eat-in', 'sit-eat-in'), ('sit-eat-loop', 'sit-eat-loop'), ('sit-eat-out', 'sit-eat-out'), ('lose3', 'wrecked'), ('sit-angry', 'sit-angry'),
@@ -1257,6 +1257,7 @@ class Suit(Avatar.Avatar):
         self.collectCallMult = 0
         self.isSoaked = 0
         self.isZapped = 0
+        self.freshlyZapped = 0
         self.actuallySoaked = 0
         self.actuallyMarked = 0
         self.isSyphon = 0
@@ -1485,7 +1486,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(7.45)
         elif dna.name == 'cr':
             self.scale = 6.75 / cSize
-            self.handColor = VBase4(0.816, 0.776, 0.761, 1)
+            self.handColor = VBase4(0.784, 0.706, 0.667, 1)
             self.generateBody()
             self.generateHead2('flunky')
             texture = loader.loadTexture('phase_4/maps/corporate-raider.jpg')
@@ -6673,6 +6674,12 @@ class Suit(Avatar.Avatar):
     def makeUnZapped(self):
         self.isZapped = 0
 
+    def makeFreshlyZapped(self):
+        self.freshlyZapped = 1
+
+    def makeUnFreshlyZapped(self):
+        self.freshlyZapped = 0
+
     def makeUnSoaked(self, elite=False):
         self.actuallySoaked = 0
         self.isSoaked = 0
@@ -6808,6 +6815,9 @@ class Suit(Avatar.Avatar):
         self.isStormCell = 1
         self.isOilRain = 0
         self.isMonsoon = 0
+
+    def makePhase3(self):
+        self.isPhase3 = 1
 
     def makeAmbassadorPhase3(self, elite=False):
         for headPart in self.headParts:
@@ -8621,6 +8631,12 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'wtapper' and not self.isSkeleton:
             loadDialog(1)
             return StenographerDialogArray
+        elif self.style.name == 'djockey' and not self.isSkeleton:
+            loadDialog(1)
+            return DeskJockeyDialogArray
+        elif self.style.name == 'ptjockey' and not self.isSkeleton:
+            loadDialog(1)
+            return DeskJockeyDialogArray
         elif self.style.name == 'rkeeper' and not self.isSkeleton:
             loadDialog(1)
             return StenographerDialogArray

@@ -223,6 +223,28 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def getBossBattle(self):
         return self.bossBattle
 
+    def _getCustomActiveSuitOrder(self, suits):
+        """
+        Desired visible/AI order:
+        - 1st joined suit stays on the right (index 0)
+        - 2nd joined suit goes to the far left
+        - every later suit fills in between them
+
+        This returns the suit list in slot order.
+        """
+        suits = suits[:]
+
+        if len(suits) <= 1:
+            return suits
+
+        ordered = [suits[0], suits[1]]
+
+        for suit in suits[2:]:
+            # insert before the current far-left anchor (which stays at the end)
+            ordered.insert(len(ordered) - 1, suit)
+
+        return ordered
+
     def b_setState(self, state):
         self.notify.debug('network:setState(%s)' % state)
         stime = globalClock.getRealTime() + SERVER_BUFFER_TIME
@@ -508,6 +530,8 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
 
     def __joinSuit(self, suit):
         self.joiningSuits.append(suit)
+        self._rebuildSuitStateLists()
+
         toPendingTime = MAX_JOIN_T + SERVER_BUFFER_TIME
         taskName = self.taskName('to-pending-av-%d' % suit.doId)
         self.__addJoinResponse(suit.doId, taskName)
@@ -540,7 +564,9 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                         self.notify.warning('joining suits: %s' % self.joiningSuits)
                         self.notify.warning('pending suits: %s' % self.pendingSuits)
                     self.joiningSuits.remove(suit)
-                    self.pendingSuits.append(suit)
+                    if suit not in self.pendingSuits:
+                        self.pendingSuits.append(suit)
+                    self._rebuildSuitStateLists()
             else:
                 self.notify.warning('makeAvPending() %d not in toons or suits' % avId)
                 return
@@ -1967,14 +1993,51 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                     self.battleCalc.addTrainTrapForJoiningSuit(curSuit.doId)
                     self.notify.debug('setting traintrack trap for joining suit %d oldTrap=%s' % (curSuit.doId, oldBattleTrap))
 
-    def __adjustDone(self):
-        for s in self.adjustingSuits:
-            self.pendingSuits.remove(s)
+    def _getCanonicalSuitOrder(self, suits):
+        """
+        Canonical slot order:
+        - first suit stays in slot 0 (normal right-side slot)
+        - second suit stays in the last slot (far-left slot)
+        - every later suit fills between those anchors
+        """
+        suits = suits[:]
 
-            if len(self.activeSuits) < 2:
-                self.activeSuits.append(s)  # first and second stay in normal order
-            else:
-                self.activeSuits.insert(len(self.activeSuits) - 1, s)  # insert before suit 2
+        if len(suits) <= 1:
+            return suits
+
+        ordered = [suits[0], suits[1]]
+
+        for suit in suits[2:]:
+            ordered.insert(len(ordered) - 1, suit)
+
+        return ordered
+
+    def _rebuildSuitStateLists(self):
+        """
+        Rebuild active/pending/joining suit lists so all three match the same
+        canonical slot logic. This keeps previews, adjusts, and movie targeting aligned.
+        """
+        canonical = self._getCanonicalSuitOrder(self.suits)
+
+        self.activeSuits = [s for s in canonical if s in self.activeSuits]
+        self.pendingSuits = [s for s in canonical if s in self.pendingSuits]
+        self.joiningSuits = [s for s in canonical if s in self.joiningSuits]
+
+    def __adjustDone(self):
+        self.notify.debug('__adjustDone()')
+
+        # existing code above this stays the same
+
+        for suit in self.pendingSuits[:]:
+            if self.activeSuits.count(suit) == 0:
+                self.activeSuits.append(suit)
+
+        self.pendingSuits = []
+
+        # IMPORTANT: canonicalize active suit order here
+        self._rebuildSuitStateLists()
+
+        # existing code below this stays the same
 
         self.adjustingSuits = []
         for toon in self.adjustingToons:

@@ -151,7 +151,7 @@ def doSuitAttack(attack):
     elif name == 'NickelAndDime':
         suitTrack = doNickelAndDime(attack)
     elif name == 'Quash':
-        suitTrack = doAceInTheHoleNew(attack)
+        suitTrack = doQuash(attack)
     elif name == 'PennyPinch':
         suitTrack = doPennyPinch(attack)
     elif name == 'Disassemble':
@@ -942,6 +942,8 @@ def doSuitAttack(attack):
     elif name == 'ErfitPhase2':
         suitTrack = MovieCountCheats.doErfitPhase2(attack)
         # high roller phase 1
+    elif name == 'HighRollerPhase2':
+        suitTrack = MovieHighRollerCheats.doPhase2(attack)
     elif name == 'HighRollerNoAttack':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'HighRollerWheelSpin':
@@ -1554,6 +1556,8 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PresidentPuzzling':
             resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'HighRollerPhase3':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'MarkRemoval':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SueApplication':
@@ -2153,6 +2157,103 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
 
 def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
     return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
+
+def doUnderPressure(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    propDelay = 0.7
+    suitTrack = getSuitTrack(attack, animNames=['effort'])
+    propTracks = Parallel()
+    pressTracks = Parallel()
+    soundTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        underPressure = globalPropPool.getProp('under-pressure')
+        leftGear = underPressure.find('**/geo_gear01')
+        rightGear = underPressure.find('**/geo_gear02')
+        stomper = underPressure.find('**/geo_stomperBase')
+        stomper.setPos(Point3(0, 0, 35))
+        propTrack = Sequence(
+            Func(__showProp, underPressure, battle, pos=toon.getPos(battle)),
+            Wait(propDelay),
+            Parallel(
+                LerpHprInterval(leftGear, 0.2, VBase3(0, -90, 0)),
+                LerpHprInterval(rightGear, 0.2, VBase3(0, 90, 0))
+            ),
+            Wait(0.5),
+            Parallel(
+                LerpHprInterval(leftGear, 0.4, VBase3(0, 0, 0), blendType='easeIn'),
+                LerpHprInterval(rightGear, 0.4, VBase3(0, 0, 0), blendType='easeIn')
+            )
+        )
+        if dmg > 0:
+            # TODO if possible: Get actual Under Pressure sound effects.
+            propTrack.append(LerpPosInterval(stomper, 0.1, Point3(0, 0, 7)))
+            propTrack.append(Wait(0.5))
+            propTrack.append(LerpPosInterval(stomper, 0.9, Point3(0, 0, 30), blendType='easeInOut'))
+            pressTracks.append(Sequence(
+                Wait(0.8),
+                LerpScaleInterval(toon, 0.1, VBase3(1, 0.05, 1), blendType='easeInOut'),
+                Wait(0.9),
+                LerpScaleInterval(toon, 0.1, VBase3(2, 2, 0.025)),
+                Wait(1.0),
+                Parallel(
+                    Sequence(
+                        Wait(0.4),
+                        LerpScaleInterval(toon, 0.1, VBase3(1.4, 1.4, 1.4), blendType='easeInOut'),
+                        LerpScaleInterval(toon, 0.05, VBase3(0.8, 0.8, 0.8), blendType='easeInOut'),
+                        LerpScaleInterval(toon, 0.1 / 3.0, VBase3(1.0, 1.0, 1.0), blendType='easeInOut')
+                    ),
+                    SoundInterval(loader.loadSfx('phase_9/audio/sfx/toon_decompress.ogg'), node=toon)
+                )
+            ))
+            soundTracks.append(
+                Track(
+                    (0.9, SoundInterval(loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_cage_land.ogg'), node=toon)),
+                    (1.9, SoundInterval(globalBattleSoundCache.getSound('CHQ_FACT_stomper_small.ogg'), node=toon))
+                )
+            )
+        else:
+            soundTracks.append(Sequence(
+                Wait(0.9),
+                SoundInterval(loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_cage_land.ogg'), node=toon)
+            ))
+        propTrack.append(Func(MovieUtil.removeProp, underPressure))
+        propTracks.append(propTrack)
+
+    toonTracks = Parallel()
+    for i in range(len(targets)):
+        tgt = targets[i]
+        toon = tgt['toon']
+        dmg = tgt['hp']
+        died = tgt['died']
+        toonTrack = Sequence(Func(toon.headsUp, battle, suit.getPos(battle)))
+        if dmg > 0:
+            animTrack = Sequence(
+                Wait(0.9),
+                Func(toon.surpriseEyes),
+                Func(toon.showSurpriseMuzzle),
+                ActorInterval(toon, 'cringe', duration=2.0),
+                Func(toon.hideSurpriseMuzzle),
+                Func(toon.openEyes),
+                Func(toon.startBlink),
+                ActorInterval(toon, 'jump', startTime=0.2)
+            )
+            indicatorTrack = Sequence(
+                Wait(0.91),
+                Func(__doDamage, toon, dmg, died)
+            )
+            # If I, Professor Control, am right, you cut out the extra time when a Toon went sad.  If you don't like the sad extension, remove the condition and what's under it.
+            if died:
+                animTrack.append(Wait(5.0))
+            toonTrack.append(Parallel(animTrack, indicatorTrack))
+        else:
+            toonTrack.append(getToonDodgeTrack(attack, tgt, 0.5, ['sidestep']))
+        toonTracks.append(toonTrack)
+
+    return Parallel(suitTrack, propTracks, pressTracks, toonTracks, soundTracks)
 
 
 def doDoubleCross(attack):
@@ -2869,42 +2970,23 @@ def doNickelAndDime(attack):
     soundTrack = getSoundTrack('ttr_s_ene_bat_nickelAndDime%s.ogg' % ('' if hitAtleastOneToon else ''), node=suit)
     return Parallel(suitTrack, partTrack, waterfallTrack, soundTrack, toonTracks)
 
+
 def doQuash(attack):
-    suit = attack['suit']
-    battle = attack['battle']
-    centerColor = Vec4(1.0, 0.2, 0.2, 0.9)
-    edgeColor = Vec4(0.9, 0.9, 0.9, 0.4)
-    powerBar1 = BattleParticles.createParticleEffect(file='guiltTrip')
-    powerBar2 = BattleParticles.createParticleEffect(file='guiltTrip')
-    powerBar1.setPos(0, 6.1, 0.4)
-    powerBar1.setHpr(-90, 0, 0)
-    powerBar2.setPos(0, 6.1, 0.4)
-    powerBar2.setHpr(90, 0, 0)
-    powerBar1.setScale(5)
-    powerBar2.setScale(5)
-    powerBar1Particles = powerBar1.getParticlesNamed('particles-1')
-    powerBar2Particles = powerBar2.getParticlesNamed('particles-1')
-    powerBar1Particles.renderer.setCenterColor(centerColor)
-    powerBar1Particles.renderer.setEdgeColor(edgeColor)
-    powerBar2Particles.renderer.setCenterColor(centerColor)
-    powerBar2Particles.renderer.setEdgeColor(edgeColor)
-    waterfallEffect = BattleParticles.createParticleEffect('Waterfall')
-    waterfallEffect.setScale(11)
-    waterfallParticles = waterfallEffect.getParticlesNamed('particles-1')
-    waterfallParticles.renderer.setCenterColor(centerColor)
-    waterfallParticles.renderer.setEdgeColor(edgeColor)
+    targets = attack['target']
     suitTrack = getSuitAnimTrack(attack)
+    partTracks = Parallel()
+    toonTracks = getToonTracks(attack, 1.6, ['slip-forward'], 1e-06, ['duck'])
+    soundTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        if dmg > 0:
+            particleEffect = BattleParticles.createParticleEffect(file='quash')
+            partTrack = getPartTrack(particleEffect, 0.01, 2.5, [particleEffect, toon, 0])
+            partTracks.append(partTrack)
+            soundTracks.append(getSoundTrack('ttr_s_ene_bat_quash.ogg', node=toon))
 
-    def getPowerTrack(effect, suit = suit, battle = battle):
-        partTrack = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 15, 0.4)), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
-        return partTrack
-
-    partTrack1 = getPowerTrack(powerBar1)
-    partTrack2 = getPowerTrack(powerBar2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.6, 0.6, [waterfallEffect, suit, 0])
-    toonTracks = getToonTracks(attack, 1.5, ['slip-forward'], 0.86, ['jump'])
-    soundTrack = getSoundTrack('ttr_s_ene_bat_quash.ogg', delay=0.2, node=suit)
-    return Parallel(suitTrack, partTrack1, partTrack2, soundTrack, waterfallTrack, toonTracks)
+    return Parallel(suitTrack, partTracks, toonTracks, soundTracks)
 
 
 def doFountainPen(attack):

@@ -1199,7 +1199,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.headInterval.finish()
             self.headInterval = None
         if self.style.name == 'hroller2':
-            for headPart in suit.animatedHeadParts:
+            for headPart in self.animatedHeadParts:
                 self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
                 hasAnimatedHead = True
         elif self.style.name == 'hrollers':
@@ -1766,7 +1766,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.damageInterval.finish()
             self.damageInterval = None
         x = int(self.currHP)
-        if self.currHP > 0 and self.isZapped:
+        if self.currHP > 0 and self.isZapped and not self.freshlyZapped:
             if self.currHP < self.getZapCondition():
                 self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
                                                         Func(self.showHpTextNew, -x, text="AFTERSHOCK!", colorCode=3),

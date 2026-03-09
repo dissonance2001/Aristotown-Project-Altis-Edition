@@ -25,13 +25,15 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
             state = self.fsm.getStateNamed(stateName)
             state.addTransition('countryClubInterior')
 
-        self.musicFile = random.choice(['phase_12/audio/bgm/Bossbot_Entry_v1.ogg', 'phase_12/audio/bgm/Bossbot_Entry_v2.ogg', 'phase_12/audio/bgm/Bossbot_Entry_v3.ogg'])
+        self.musicFile = random.choice(['phase_12/audio/bgm/BB_courtyard.ogg', 'phase_12/audio/bgm/BB_courtyard_2.ogg'])
+        self.battleMusic = 'phase_12/audio/bgm/BB_courtyard_encntr.ogg'
         self.cogHQExteriorModelPath = 'phase_12/models/bossbotHQ/ttr_m_ara_bhq_bossbotCourtyard'
         self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_DA_Lobby'
         self.cogHQLobbyModelPath = 'phase_12/models/bossbotHQ/ttr_m_ara_bhq_bossbotCountryClubLobby'
         self.geom = None
 
     def load(self, zoneId):
+        self.battleMusic = 'phase_11/audio/bgm/LB_courtyard_encntr.ogg'
         CogHQLoader.CogHQLoader.load(self, zoneId)
         Toon.loadBossbotHQAnims()
 

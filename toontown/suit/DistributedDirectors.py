@@ -232,12 +232,12 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.geom.reparentTo(render)
         self.promotionMusic = base.loader.loadMusic('phase_14/audio/bgm/ET_boss_prep.ogg')
         self.betweenPhaseMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
-        self.battleOneMusic = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
-        self.battleOneMusicNew = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
-        self.battleOneMusicLoop = loader.loadMusic('phase_14/audio/bgm/encntr_penultimate_unlock-loop.ogg')
         self.phaseTwoMusic = loader.loadMusic('phase_12/audio/bgm/BossBot_CEO_v1.ogg')
         self.phaseFourMusic = base.loader.loadMusic('phase_12/audio/bgm/BossBot_CEO_v2.ogg')
         self.pickupFoodSfx = loader.loadSfx('phase_6/audio/sfx/SZ_MM_gliss.ogg')
+        self.battleOneMusic = loader.loadMusic('phase_12/audio/bgm/LB_litigation_casemgr.ogg')
+        self.battleOneMusic2 = loader.loadMusic('phase_12/audio/bgm/RT_chairman_loop.ogg')
+        self.battleOneMusic3 = loader.loadMusic('phase_12/audio/bgm/RT_chairman_intro.ogg')
         self.explodeSfx = loader.loadSfx('phase_4/audio/sfx/firework_distance_02.ogg')
 
         for i in range(14):
@@ -348,6 +348,19 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.accept('avatarDetails', self.__handleAvatarDetails)
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
+        self.battleOneMusic2.setLoop(True)
+        self.battleOneMusic3.play()
+        self.battleOneMusic.stop()
+        taskMgr.doMethodLater(
+            self.battleOneMusic3.length(),
+            self.__startBattleOneLoop,
+            'startBattleOneLoop'
+        )
+
+    def __startBattleOneLoop(self, task):
+        self.battleOneMusic.stop()
+        self.battleOneMusic2.play()
+        return task.done
 
     def makeIntroductionMovie(self, delayDeletes):
         self.reparentTo(render)
@@ -509,6 +522,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         self.controlToons()
+        self.battleOneMusic2.stop()
         self.setToonsToNeutral(self.involvedToons)
         for toonId in self.involvedToons:
             toon = self.cr.doId2do.get(toonId)

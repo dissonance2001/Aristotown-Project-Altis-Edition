@@ -361,96 +361,178 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         chairRadiographer.setScale(0.75)
         chairRadiographer.reparentTo(self.geom)
         chairRadiographer.setPosHpr(-75, 37, 18, 45, 0, 0)
-        track = Parallel()
-        camera.reparentTo(render)
-        localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
+        self.loop('Bb_neutral')
+        track2 = Parallel()
         dooberTrack = Parallel()
         if self.doobers:
             self.__doobersToPromotionPosition(self.doobers)
             turnPosA = ToontownGlobals.SellbotBossDooberTurnPosA
             turnPosB = ToontownGlobals.SellbotBossDooberTurnPosB
             self.__walkDoober(self.doobers[0], 0, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[1], 2, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[2], 4, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[3], 6, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[7], 8, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[6], 10, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[5], 12, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[4], 14, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[8], 16, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[9], 18, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[10], 20, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[11], 22, turnPosB, dooberTrack, delayDeletes)
-        toonTrack = Parallel()
-        self.clearChat()
-        self.cagedToon.clearChat()
-        promoteDoobers = TTLocalizer.BossCogPromoteDoobers % SuitDNA.getDeptFullnameP(self.style.dept)
-        doobersAway = TTLocalizer.BossCogDoobersAway[self.style.dept]
-        welcomeToons = TTLocalizer.BossCogWelcomeToons
-        promoteToons = TTLocalizer.BossCogPromoteToons % SuitDNA.getDeptFullnameP(self.style.dept)
-        discoverToons = TTLocalizer.BossCogDiscoverToons
-        attackToons = TTLocalizer.BossCogAttackToons
-        interruptBoss = TTLocalizer.CagedToonInterruptBoss
-        rescueQuery = TTLocalizer.CagedToonRescueQuery
-        bossAnimTrack = Sequence(
-            ActorInterval(self, 'Ff_speech', startTime=2, duration=10, loop=1),
-            ActorInterval(self, 'ltTurn2Wave', duration=2),
-            ActorInterval(self, 'wave', duration=4, loop=1),
-            ActorInterval(self, 'ltTurn2Wave', startTime=2, endTime=0),
-            ActorInterval(self, 'Ff_speech', duration=7, loop=1))
-        track.append(bossAnimTrack)
-        dialogTrack = Track(
-            (0, Parallel(
-                camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), blendType='easeInOut'),
-                IndirectInterval(toonTrack, 0, 18))),
-            (5.6, Func(self.setChatAbsolute, promoteDoobers, CFSpeech | CFTimeout)),
-            (9, IndirectInterval(dooberTrack, 0, 9)),
-            (10, Sequence(
-                Func(self.clearChat),
-                base.camera.posHprInterval(5, Point3(-23.1, 15.7, 17.2), Point3(-160, -2.4, 0), blendType = 'easeInOut'))),
-            (12, Func(self.setChatAbsolute, doobersAway, CFSpeech)),
-            (16, Parallel(
-                Func(self.clearChat),
-                base.camera.posHprInterval(3, Point3(-25, -99, 10), Point3(-14, 10, 0), blendType = 'easeInOut'),
-                IndirectInterval(dooberTrack, 14),
-                IndirectInterval(toonTrack, 30))),
-            (18, Func(self.setChatAbsolute, welcomeToons, CFSpeech | CFTimeout)),
-            (22, Func(self.setChatAbsolute, promoteToons, CFSpeech | CFTimeout)),
-            (22.2, Sequence(
-                Func(self.cagedToon.nametag3d.setScale, 2),
-                Func(self.cagedToon.setChatAbsolute, interruptBoss, CFSpeech | CFTimeout),
-                ActorInterval(self.cagedToon, 'wave'),
-                Func(self.cagedToon.loop, 'neutral'))),
-            (25, Sequence(
-                Func(self.clearChat),
-                Func(self.cagedToon.clearChat),
-                ActorInterval(self, 'Ff_lookRt'))),
-            (27, Sequence(
-                Func(self.cagedToon.setChatAbsolute, "", CFSpeech | CFTimeout),
-                base.camera.posHprInterval(2, Point3(-12, 48, 94), Point3(-26, 20, 0), blendType = 'easeInOut'),
-                ActorInterval(self.cagedToon, 'wave'),
-                Func(self.cagedToon.loop, 'neutral'))),
-            (31, Sequence(
-                base.camera.posHprInterval(2, Point3(-20, -35, 10), Point3(-88, 25, 0), blendType = 'easeInOut'),
-                Func(self.setChatAbsolute, discoverToons, CFSpeech | CFTimeout),
-                Func(self.cagedToon.nametag3d.setScale, 1),
-                Func(self.cagedToon.clearChat),
-                ActorInterval(self, 'turn2Fb'))),
-            (34, Sequence(
-                Func(self.clearChat),
-                self.loseCogSuits(self.toonsA, self.battleANode, (0, 18, 5, -180, 0, 0)),
-                self.loseCogSuits(self.toonsB, self.battleBNode, (0, 18, 5, -180, 0, 0)))),
-            (37, Sequence(
-                self.toonNormalEyes(self.involvedToons),
-                base.camera.posHprInterval(2, Point3(-23.4, -145.6, 44.0), Point3(-10.0, -12.5, 0), blendType = 'easeInOut'),
-                Func(self.loop, 'Fb_neutral'),
-                Parallel(self.backupToonsToBattlePosition(self.toonsA, self.battleANode),
-                         self.backupToonsToBattlePosition(self.toonsB, self.battleBNode),
-                         Sequence(
-                             Wait(2),
-                             Func(self.setChatAbsolute, "", CFSpeech | CFTimeout))))))
-        track.append(dialogTrack)
-        return Sequence(Func(self.stickToonsToFloor), track, Func(self.unstickToons), name=self.uniqueName('Introduction'))
+            self.__walkDoober(self.doobers[1], 1.5, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[2], 3, turnPosA, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[3], 4.5, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[4], 6, turnPosA, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[5], 7.5, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[6], 9, turnPosA, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[7], 10.5, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[8], 12, turnPosA, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[9], 13.5, turnPosB, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[10], 15, turnPosA, dooberTrack, delayDeletes)
+            self.__walkDoober(self.doobers[11], 16.5, turnPosB, dooberTrack, delayDeletes)
+
+        loseSuitCamAngle = (0, 19, 6, -180, 0, 0)
+        tempNode = self.attachNewNode('temp')
+        tempNode.setPos(0, 60, 15)
+
+        def getCamBossPos(tempNode=tempNode):
+            return tempNode.getPos(render)
+
+        tempNode2 = self.attachNewNode('temp')
+        tempNode2.setPos(0, -55, 15)
+
+        def getCamBossPos2(tempNode2=tempNode2):
+            return tempNode2.getPos(render)
+
+        pressurizerNode = self.attachNewNode('temp')
+        pressurizerNode.reparentTo(self.geom)
+        pressurizerNode.setPosHpr(125.75, -10, 30, 90, 0, 0)
+
+        def getCamBossPosPressurizer(pressurizerNode=pressurizerNode):
+            return pressurizerNode.getPos(render)
+
+        unionbusterNode = self.attachNewNode('temp')
+        unionbusterNode.reparentTo(self.geom)
+        unionbusterNode.setPosHpr(-125.75, -10, 30, -90, 0, 0)
+
+        def getCamBossPosUnionBuster(unionbusterNode=unionbusterNode):
+            return unionbusterNode.getPos(render)
+
+        racketeerNode = self.attachNewNode('temp')
+        racketeerNode.reparentTo(self.geom)
+        racketeerNode.setPosHpr(90, 51.5, 30, 135, 0, 0)
+
+        def getCamBossPosRackteer(racketeerNode=racketeerNode):
+            return racketeerNode.getPos(render)
+
+        radiographerNode = self.attachNewNode('temp')
+        radiographerNode.reparentTo(self.geom)
+        radiographerNode.setPosHpr(-90, 51.5, 30, -135, 0, 0)
+
+        def getCamBossPosRadiographer(radiographerNode=radiographerNode):
+            return radiographerNode.getPos(render)
+
+        dooberTrack2 = Parallel()
+        for i in xrange(len(self.doobers)):
+            suit = self.doobers[i]
+            dooberTrack2.append(Parallel(Sequence(ActorInterval(suit, 'slip-forward'), Func(suit.loop, 'neutral')), Sequence(Func(suit.setChatAbsolute, "We will not let you down, Sir!", CFSpeech), Wait(5.0), Func(suit.setChatAbsolute, "", CFSpeech))))
+
+        track = Sequence(self.loseCogSuits(self.toonsA + self.toonsB, base.localAvatar, loseSuitCamAngle), Wait(2.0), Func(camera.setH, 0), Func(camera.reparentTo, render),
+                         LerpPosInterval(camera, 3, getCamBossPos),
+                         Func(self.setChatAbsolute, "Let's review the current situation.", CFSpeech), Wait(4.0),
+                         Func(self.setChatAbsolute, "Toontown has always been... predictable.", CFSpeech), Wait(4.0),
+                         Func(self.setChatAbsolute, "Disorganized enthusiasm. Chaotic little rebellions that burn out just as quickly as they start.", CFSpeech), Wait(4.0),
+                         Func(self.setChatAbsolute, "But lately?", CFSpeech), Wait(3.0),
+                         Func(self.setChatAbsolute, "They've been far more persistent.", CFSpeech), Wait(4.0),
+                         Parallel(Func(self.setChatAbsolute, "Pressurizer, what is your analysis?", CFSpeech), Wait(2.0),
+                                  Sequence(ActorInterval(self, 'Ff_lookLt'), Func(self.loop, 'Bb_neutral'))),
+                         Parallel(Func(self.setChatAbsolute, "", CFSpeech), LerpPosInterval(camera, 2, getCamBossPosPressurizer), LerpHprInterval(camera, 2, pressurizerNode.getHpr), Sequence(Wait(2),
+                     Func(self.pressurizer.setChatAbsolute, "These Toons may be more persistent, but their performance is sloppy.", CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Func(self.pressurizer.setChatAbsolute, "Their movement patterns are easy to track.", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Func(self.pressurizer.setChatAbsolute, "Their heat signatures light up like fireworks.", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Func(self.pressurizer.setChatAbsolute, "They never realize how visible they are.", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPosRackteer), LerpHprInterval(camera, 2, racketeerNode.getHpr), Sequence(Wait(2),
+                        Func(self.racketeer.setChatAbsolute, "That's because they think they're clever.", CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Func(self.racketeer.setChatAbsolute, "Break a few operations... knock over a few Cogs...", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Func(self.racketeer.setChatAbsolute, "Suddenly they think they're running the place.", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Func(self.racketeer.setChatAbsolute, "Heh, I can't wait to collect on that mistake!", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPosUnionBuster), LerpHprInterval(camera, 2, unionbusterNode.getHpr), Sequence(Wait(2),
+                           Func(self.unionbuster.setChatAbsolute, "Teamwork.",  CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Func(self.unionbuster.setChatAbsolute, "That's their whole trick.", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Func(self.unionbuster.setChatAbsolute, "They rally together, shout a few slogans, throw pies around...", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Func(self.unionbuster.setChatAbsolute, "Then when the pressure finally hits... they scatter.", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPosPressurizer), LerpHprInterval(camera, 2, pressurizerNode.getHpr), Sequence(Wait(2),
+                         Func(self.pressurizer.setChatAbsolute, "They don't scatter.",  CFSpeech | CFTimeout))),
+                         Wait(4.0),
+                         Func(self.pressurizer.setChatAbsolute, "They compress.", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Func(self.pressurizer.setChatAbsolute, "Toons build momentum. They lean on each other.", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Func(self.pressurizer.setChatAbsolute, "But if you apply pressure in the right place... they collapse!", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPos), LerpHprInterval(camera, 2, (0, 0, 0))),
+                         Func(self.setChatAbsolute, "That's exactly why the Pressure Division exists.", CFSpeech), Wait(4.0),
+                         Func(self.pelvis.setH, 180),
+                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Radiographer... You watch them.", CFSpeech)),
+                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Racketeer... You squeeze them.", CFSpeech)),
+                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Union Buster... You fracture their cooperation.", CFSpeech)),
+                         Parallel(Func(self.pelvis.setH, 180), Parallel(ActorInterval(self, 'Ff_lookLt'), Func(self.loop, 'Ff_neutral')), Func(self.setChatAbsolute, "And you Pressurizer...", CFSpeech),),
+                                  Func(self.setChatAbsolute, "", CFSpeech),
+                    Parallel(LerpPosInterval(camera, 2, getCamBossPosRadiographer), LerpHprInterval(camera, 2, radiographerNode.getHpr), Wait(2),
+                          Func(self.radiographer.setChatAbsolute, "Um... Sir?", CFSpeech | CFTimeout)), Wait(2.0),
+                         Parallel(LerpHprInterval(camera, 2, (0, 0, 0)), LerpPosInterval(camera, 2, getCamBossPos)),
+                         Parallel(Func(self.pelvis.setH, 180), Parallel(ActorInterval(self, 'Ff_lookRt'), Func(self.loop, 'Ff_neutral')), Func(self.setChatAbsolute, "What is it?", CFSpeech), Wait(4.0)),
+                         Func(self.setChatAbsolute, "", CFSpeech),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPosRadiographer), LerpHprInterval(camera, 2, radiographerNode.getHpr), Wait(2),
+                                  Func(self.radiographer.setChatAbsolute, "You may want to finish that sentence later...", CFSpeech | CFTimeout)), Wait(2.0),
+                         Func(self.radiographer.setChatAbsolute, "Your audience has arrived.", CFSpeech | CFTimeout), Wait(3.0),
+                         Parallel(LerpHprInterval(camera, 2, (180, 0, 0)), LerpPosInterval(camera, 2, getCamBossPos2),
+                         Sequence(ActorInterval(self, 'Bb2Ff_spin'), Func(self.pelvis.setH, 0), Func(self.loop, 'Ff_neutral')), Func(self.setChatAbsolute, "Well well well...", CFSpeech), Wait(4.0)),
+                         Parallel(Func(self.pelvis.setH, 0), ActorInterval(self, 'turn2Fb'), Func(self.setChatAbsolute, "That saves us the trouble of sending an invitation.", CFSpeech), Wait(4.0)),
+                         Parallel(ActorInterval(self, 'Ff_speech'), ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "You've arrived in the middle of an executive meeting.", CFSpeech)),
+                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "But since you're already here...", CFSpeech)),
+                         Parallel(ActorInterval(self, 'Ff_speech'), ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "You may as well stay for the demonstration.", CFSpeech)),
+                         Parallel(Func(self.loop, 'Ff_neutral'), Func(self.setChatAbsolute, "You see, Toons... I already know why you came.", CFSpeech), Wait(4.0)),
+                         Parallel(Func(self.loop, 'Ff_neutral'), Func(self.setChatAbsolute, "You came up here thinking you will win.", CFSpeech), Wait(4.0)),
+                         Parallel(Func(self.loop, 'Ff_neutral'), Func(self.setChatAbsolute, "And I'm glad you do, confidence makes the fall much more satisfying!", CFSpeech), Wait(4.0)),
+                         Parallel(Func(self.loop, 'Ff_neutral'), Func(self.setChatAbsolute, "And we were just discussing...", CFSpeech), Wait(4.0)),
+                         Parallel(Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/CHQ_VP_big_jump_stomp.ogg')),
+                                  Sequence(ActorInterval(self, 'Fb_jump'), Func(self.loop, 'Ff_neutral')), Func(self.setChatAbsolute, "DEPLOYMENT!", CFSpeech), Sequence(Wait(1.25), dooberTrack2), Wait(4.0)),
+                         Parallel(dooberTrack, Sequence(Parallel(Func(self.loop, 'Ff_neutral'), Func(self.setChatAbsolute, "These units will be restoring order across Toontown.", CFSpeech), Wait(4.0)),
+                         Parallel(Func(self.loop, 'Ff_neutral'), Func(self.setChatAbsolute, "Something your kind has been interfering with far too often.", CFSpeech), Wait(4.0)),
+                         Parallel(LerpHprInterval(camera, 2, (0, 0, 0)), LerpPosInterval(camera, 2, getCamBossPos)),
+                         Parallel(Sequence(ActorInterval(self, 'Bb2Ff_spin'), Func(self.pelvis.setH, 180), Func(self.loop, 'Ff_neutral')), Func(self.setChatAbsolute, "Pressurizer... you and the Pressure Division were hoping for field work.", CFSpeech), Wait(3.0)),
+                         Parallel(Func(self.loop, 'Ff_neutral'), Func(self.setChatAbsolute, "Now you have it.", CFSpeech), Wait(3.0)), Func(self.setChatAbsolute, "", CFSpeech),
+                         Parallel(LerpPosInterval(camera, 2, getCamBossPosPressurizer), LerpHprInterval(camera, 2, pressurizerNode.getHpr), Sequence(Wait(2),
+                          Func(self.pressurizer.setChatAbsolute, "Toons.", CFSpeech | CFTimeout))), Wait(3.0),
+                         Func(self.pressurizer.setChatAbsolute, "You pushed your way in here.", CFSpeech | CFTimeout),
+                         Wait(4.0),
+                         Func(self.pressurizer.setChatAbsolute, "Now let's see how long you last!", CFSpeech | CFTimeout), Wait(3.0),
+                                  Parallel(LerpPosInterval(camera, 2, getCamBossPosRackteer), LerpHprInterval(camera, 2, racketeerNode.getHpr), Sequence(Wait(2),
+                                Func(self.racketeer.setChatAbsolute,  "Sounds like a profitable evening.",  CFSpeech | CFTimeout))),
+                                  Wait(3.0),
+                                  Parallel(LerpPosInterval(camera, 2, getCamBossPosRadiographer), LerpHprInterval(camera, 2, radiographerNode.getHpr), Sequence(Wait(2),
+                                           Func(self.radiographer.setChatAbsolute, "I've already started recording.", CFSpeech | CFTimeout))), Wait(3.0),
+                                  Func(self.radiographer.setChatAbsolute, "Every mistake they make is archived.", CFSpeech | CFTimeout), Wait(3.0),
+                                  Parallel(LerpPosInterval(camera, 2, getCamBossPosUnionBuster), LerpHprInterval(camera, 2, unionbusterNode.getHpr), Sequence(Wait(2),
+                                    Func(self.unionbuster.setChatAbsolute, "They'll break eventually. They always do.", CFSpeech | CFTimeout))),
+                                  Wait(3.0),
+                                  Parallel(LerpPosInterval(camera, 2, getCamBossPosPressurizer), LerpHprInterval(camera, 2, pressurizerNode.getHpr), Sequence(Wait(2),
+                                  Func(self.pressurizer.setChatAbsolute,   "Not eventually.",  CFSpeech | CFTimeout))),
+                                  Wait(3.0), Func(self.pressurizer.setChatAbsolute,   "Soon.",  CFSpeech | CFTimeout), Wait(2.0),
+                         Parallel(LerpHprInterval(camera, 2, (0, 0, 0)), LerpPosInterval(camera, 2, getCamBossPos)),
+                         Func(self.setChatAbsolute, "Try to make it interesting.", CFSpeech), Wait(4.0),
+                         Parallel(Func(self.setChatAbsolute, "Pressure Division, take care of these Toons now!", CFSpeech), Sequence(ActorInterval(self, 'Ff_point'), Func(self.loop, 'Ff_neutral'))),
+                         Wait(4.0),
+                         Parallel(Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/CHQ_VP_big_jump_stomp.ogg')),
+                                  Parallel(LerpHprInterval(camera, 1, (180, 0, 0)), LerpPosInterval(camera, 1, getCamBossPos2)), Sequence(ActorInterval(self, 'Fb_jump'), Func(self.loop, 'Ff_neutral')),
+                                  LerpPosHprInterval(self, 1, (0, -35, 0), (180, 0, 0)), Wait(4.0)), Func(self.setChatAbsolute, "", CFSpeech)))
+                         )
+
+
+        return track
 
     def __makeRollToBattleTwoMovie(self):
         startPos = Point3(ToontownGlobals.SellbotBossBattleOnePosHpr[0], ToontownGlobals.SellbotBossBattleOnePosHpr[1], ToontownGlobals.SellbotBossBattleOnePosHpr[2])
@@ -673,6 +755,8 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.promotionMusic = base.loader.loadMusic('phase_14/audio/bgm/ET_boss_prep.ogg')
         self.betweenPhaseMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleOneMusic = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
+        self.battleOneMusic2 = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_unlock-loop.ogg')
+        self.battleOneMusic3 = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
         self.geom.reparentTo(render)
         self.setPosHpr(0, 60, 18, 0, 0, 0)
 
@@ -798,7 +882,8 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.happy = 1
         self.raised = 1
         self.forward = 1
-        self.doAnimate()
+        #self.doAnimate()
+        self.loop('Bb_neutral')
         self.cagedToon.removeActive()
         base.camLens.setMinFov(ToontownGlobals.VPElevatorFov/(4./3.))
 
@@ -818,15 +903,18 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         NametagGlobals.setWantActiveNametags(True)
         self.setCageIndex(0)
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
+        self.loop('Bb_neutral')
 
     def exitIntroduction(self):
+        self.reparentTo(render)
+        self.setPosHpr(0, 50, 18, 0, 0, 0)
         DistributedBossCog.DistributedBossCog.exitIntroduction(self)
         self.promotionMusic.stop()
 
     def enterBattleOne(self):
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
         self.reparentTo(render)
-        self.setPosHpr(0, - 35, 0, - 90, 0, 0)
+        self.setPosHpr(0, - 35, 0, 0, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -834,11 +922,25 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         NametagGlobals.setWantActiveNametags(True)
         self.clearChat()
         self.cagedToon.clearChat()
+
+        self.battleOneMusic2.setLoop(True)
+        self.battleOneMusic3.play()
+        self.battleOneMusic.stop()
+
         if self.battleA == None or self.battleB == None:
             cageIndex = 1
         else:
             cageIndex = 0
+        taskMgr.doMethodLater(
+            self.battleOneMusic3.length(),
+            self.__startBattleOneLoop,
+            'startBattleOneLoop'
+        )
         self.setCageIndex(cageIndex)
+
+    def __startBattleOneLoop(self, task):
+        self.battleOneMusic2.play()
+        return task.done
 
     def exitBattleOne(self):
         DistributedBossCog.DistributedBossCog.exitBattleOne(self)
@@ -846,8 +948,11 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
     def enterRollToBattleTwo(self):
         self.disableToonCollision()
         self.releaseToons()
+        self.battleOneMusic2.stop()
         self.reparentTo(render)
         self.setCageIndex(2)
+        self.battleOneMusic3.stop()
+        self.battleOneMusic2.stop()
         self.stickBossToFloor()
         intervalName = 'RollToBattleTwo'
         seq = Sequence(self.__makeRollToBattleTwoMovie(), Func(self.__onToPrepareBattleTwo), name=intervalName)
@@ -860,7 +965,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
     def __onToPrepareBattleTwo(self):
         self.disableToonCollision()
         self.unstickBoss()
-        self.setPosHpr(0, 60, 18, - 90, 0, 0)
+        self.setPosHpr(0, 60, 18, 0, 0, 0)
         self.doneBarrier('RollToBattleTwo')
 
     def exitRollToBattleTwo(self):
@@ -882,7 +987,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.clearChat()
         self.cagedToon.clearChat()
         self.reparentTo(render)
-        self.setPosHpr(0, 60, 18, - 90, 0, 0)
+        self.setPosHpr(0, 60, 18, 0, 0, 0)
         self.setCageIndex(2)
         camera.reparentTo(render)
         camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
@@ -913,7 +1018,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.accept('avatarDetails', self.__handleAvatarDetails)
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
-        self.setPosHpr(0, 60, 18, - 90, 0, 0)
+        self.setPosHpr(0, 60, 18, 0, 0, 0)
         self.clearChat()
         self.cagedToon.clearChat()
         self.releaseToons()
@@ -1226,26 +1331,30 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                 pos, h = points[i]
                 toon.setPosHpr(battleNode, pos[0], pos[1] + 10, pos[2], h, 0, 0)
 
+
     def __doobersToPromotionPosition(self, doobers):
         positions = [
-            (15, 60, 18, 0),
-            (-15, 60, 18, 0),
-            (25, 60, 18, 0),
-            (-25, 60, 18, 0),
-            (35, 60, 18, 0),
-            (-35, 60, 18, 0),
-            (40, 40, 18, 0),
-            (-40, 40, 18, 0),
-            (50, 40, 18, 0),
-            (-50, 40, 18, 0),
-            (30, 40, 18, 0),
-            (-30, 40, 18, 0),
+            (-10, 40, 18, 180),
+            (10, 40, 18, 180),
+            (-20, 40, 18, 180),
+            (20, 40, 18, 180),
+            (-30, 40, 18, 180),
+            (30, 40, 18, 180),
+            (-15, 60, 18, 180),
+            (15, 60, 18, 180),
+            (-25, 60, 18, 180),
+            (25, 60, 18, 180),
+            (-35, 60, 18, 180),
+            (35, 60, 18, 180),
         ]
 
         for i in xrange(len(doobers)):
             suit = doobers[i]
             suit.fsm.request('neutral')
             suit.loop('neutral')
+            #suit.doId = 0
+            suit.setPickable(0)
+            suit.hideNametag2d()
 
             x, y, z, h = positions[i]
             suit.wrtReparentTo(render)
