@@ -185,12 +185,12 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
                 delay += 0
 
-            if self.hasLocalToon():
-                camera.reparentTo(self)
-                if random.choice([0, 1]):
-                    camera.setPosHpr(0, -10, 7, 0, 0, 0)
-                else:
-                    camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                if self.hasLocalToon():
+                    camera.reparentTo(self)
+                    if random.choice([0, 1]):
+                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                    else:
+                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
             elif suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'choreo' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'director':
                 suit.setState('Battle')
                 suitTrack = Sequence()
@@ -241,6 +241,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     else:
                         camera.setPosHpr(0, -10, 7, 0, 0, 0)
             else:
+                suitTrack = Sequence()
                 if suit.dna.name == 'hroller2':
                     suit.hide()
                 suit.setState('Battle')
@@ -260,7 +261,8 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 suit.headsUp(self)
                 flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
                 taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
-                suitTracks.append(Track((delay, Sequence(Parallel(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
+                suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
+                suitTracks.append(suitTrack)
                 delay += 1
 
                 if self.hasLocalToon():
