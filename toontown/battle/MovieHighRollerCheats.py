@@ -266,6 +266,10 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         'name'] == 'BroadcasterDonation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'BroadcasterDonation2':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     if splicedAnims:
@@ -787,7 +791,7 @@ def doGameOver(attack):
             musicTrack.append(Func(obj.stinger))
     suitTrack = Sequence(Parallel(getSuitAnimTrack(attack), musicTrack, Sequence(Wait(4.0), Func(suit.setChatAbsolute, "Ha-HA!", CFSpeech | CFTimeout))))
     suitTrack.append(Wait(1.0))
-    toonTracks = getToonTracks(attack, 5.0, ['cringe'], 5.0, ['victory'])
+    toonTracks = getToonTracks(attack, 5.5, ['cringe'], 5.5, ['victory'])
     return Parallel(suitTrack, toonTracks)
 
 def doDonation2(attack):
@@ -828,6 +832,52 @@ def doDonation2(attack):
                 headTrack.append(Func(headPart.loop, 'neutral'))
             headTracks.append(headTrack)
             notifyTrack = Sequence(Parallel(getSuitAnimTrack(attack), Func(suit.checkBroadcasterDonation, theSuit, battle)),
+                                    Wait(6.0))
+            notifyTracks.append(notifyTrack)
+    if theSuit == None:
+        theSuit = suit
+
+    return Parallel(notifyTracks, makeDamageUps, headTracks, soundTrack, makeDesperates)
+
+def doDonationFail(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    notifyTracks = Parallel()
+    cameraTracks = Sequence()
+    makeDesperates = Parallel()
+    makeDamageUps = Parallel()
+    headTracks = Parallel()
+    theSuit = None
+    for headPart in suit.animatedHeadParts:
+        headTrack = Sequence()
+        headTrack.append(Wait(1))
+        headTrack.append(Func(headPart.loop, 'stun'))
+        texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer5.png')
+        texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+        headTrack.append(Func(headPart.setTexture, texture2, 1))
+        headTrack.append(Wait(1.0))
+        headTrack.append(Func(headPart.setTexture, texture, 1))
+        headTrack.append(Func(headPart.loop, 'neutral'))
+        headTracks.append(headTrack)
+    soundTrack = getSoundTrack('mus_dialup_0_fail.ogg')
+    for s in battle.activeSuits:
+        if s.dna.name == 'videog' and not suit.dna.name == 'videog':
+            theSuit = s
+            texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer5.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+            headTrack = Sequence()
+            for headPart in s.animatedHeadParts:
+                headTrack.append(Wait(1))
+                headTrack.append(Func(headPart.loop, 'stun'))
+                texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer5.png')
+                texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+                headTrack.append(Func(headPart.setTexture, texture2, 1))
+                headTrack.append(Wait(1.0))
+                headTrack.append(Func(headPart.setTexture, texture, 1))
+                headTrack.append(Func(headPart.loop, 'neutral'))
+            headTracks.append(headTrack)
+            notifyTrack = Sequence(Parallel(getSuitAnimTrack(attack), Sequence(Wait(1.0), Func(suit.setChatAbsolute, "Hold on... we're losing signal!", CFSpeech | CFTimeout)),
+                                            Func(suit.checkBroadcasterDonation2, theSuit, battle)),
                                     Wait(6.0))
             notifyTracks.append(notifyTrack)
     if theSuit == None:
@@ -1164,7 +1214,7 @@ def doCameraRewind(attack):
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         suitTrack.append(Wait(4.5))
-        if not suit.dna.name == 'videog' and not suit.dna.name == 'hroller2' and not suit.dna.name == 'hroller':
+        if suit.dna.name in ('director', 'fmaker', 'cinema'):
             suitTrack.append(Func(suit.checkCameraRewind))
             suitTrack.append(Func(suit.updateHealthBar, 0))
         if not theSuit:
@@ -1172,13 +1222,11 @@ def doCameraRewind(attack):
                                       Func(suit.setChatAbsolute,
                                            random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
                                            CFSpeech | CFTimeout)))
-        suitTrack.append(
-            Func(suit.setNeutralAnimation))
         suitTracks.append(suitTrack)
     posPoints = [Point3(-0.25, 0, 0), VBase3(0, 180, 0)]
     knifeTracks = Parallel()
     for suit in battle.activeSuits:
-        if not suit.dna.name == 'videog' and not suit.dna.name == 'hroller2':
+        if suit.dna.name in ('director', 'fmaker', 'cinema'):
             theSuit = attack['suit']
             hitPoint = suit.getPos(battle)
             hitPoint.setZ(suit.height + 2)
@@ -1377,12 +1425,10 @@ def doRisingStars(attack):
     sinkPos.setY(sinkPos.getY() + 16.5)
     sinkPos.setZ(sinkPos.getZ() - 4.5)
     sinkPos2.setY(sinkPos.getY() - 22.5)
-    moveTrack = Sequence(LerpPosInterval(suit, 0, sinkPos, other=battle), Wait(suit.getDuration('shot5')), LerpPosInterval(suit, 0, dropPos, other=battle), Func(suit.setPos, battle, dropPos))
-
     suitTrack = Sequence(getSuitAnimTrack(attack))
     if suit.isImmortal and attack['name'] == 'VideographerRisingStars' or attack['name'] == 'VideographerRisingStars2':
         suitTrack.append(Func(suit.makeNonImmortal))
-    return Parallel(suitTrack, moveTrack)
+    return Parallel(suitTrack)
 
 def doElectricShock(attack, ind):
     suit = attack['suit']
@@ -1512,17 +1558,19 @@ def doVideoStatic(attack):
                 headTrack.append(Wait(theSuit.getDuration('throttletwo') - 4.25))
                 headTrack.append(Parallel(Func(headPart.setTexture, texture, 1), soundTrack4, Func(headPart.loop, 'neutral')))
             if suit.dna.name == 'bcaster':
-                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react-nt', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
-                                                   '+25% Vulnerable',
-                                                   2), Func(theSuit.showHpStringLureManager2,
-                                                            '+25% Damage'), Func(theSuit.makeDamageUp), Func(theSuit.makeVulnerable), Func(theSuit.setNeutralAnimation), Func(theSuit.checkDamageUp, + 25), Func(theSuit.checkVulnerabilityUp, + 25), Wait(2.0))
+                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react-nt', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3),
+                                       Func(theSuit.showHpStringVideographer20),
+                                       Func(theSuit.makeDamageUp), Func(theSuit.makeVulnerable),
+                                       Func(theSuit.setNeutralAnimation), Func(theSuit.checkDamageUp, + 20),
+                                       Func(theSuit.checkVulnerabilityUp, + 20), Wait(2.0))
             else:
-                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react-nt', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3), Func(theSuit.showHpText2,
-                                                   '+10% Vulnerable',
-                                                   2), Func(theSuit.showHpStringLureManager2,
-                                                            '+10% Damage'), Func(theSuit.makeDamageUp), Func(theSuit.makeVulnerable), Func(theSuit.setNeutralAnimation), Func(theSuit.checkDamageUp, + 10), Func(theSuit.checkVulnerabilityUp, + 10), Wait(2.0))
+                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react-nt', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3),
+                                       Func(theSuit.showHpStringVideographer5),
+                                       Func(theSuit.makeDamageUp), Func(theSuit.makeVulnerable),
+                                       Func(theSuit.setNeutralAnimation), Func(theSuit.checkDamageUp, + 5),
+                                       Func(theSuit.checkVulnerabilityUp, + 5), Wait(2.0))
             headTracks.append(headTrack)
-            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 12.0, 6.0, -180, 0, 0.0, 0, theSuit), Wait(3.0))
+            cameraTrack = Sequence(MovieCamera.motionShot(0.0, 14.0, 6.0, -180, 0, 0.0, 0, theSuit), Wait(3.0))
             notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     if theSuit == None:
         theSuit = suit
@@ -1687,6 +1735,98 @@ def doVulnerable(attack):
     battle = attack['battle']
     suitTrack = Sequence(Func(suit.makeVulnerable))
     return suitTrack
+
+def doSnipeMegaphone(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    explosionTracks = Parallel()
+    toonTracks = Parallel()
+    soundTracks = Parallel()
+    leftKnifeTracks = Parallel()
+    rightKnifeTracks = Parallel()
+    suitTracks = Parallel()
+    notifyTracks = Parallel()
+    can = loader.loadModel('phase_5/models/props/megaphone')
+    posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
+    throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(1.0), LerpScaleInterval(can, 0.5, (0, 0, 0)),
+                          Func(MovieUtil.removeProp, can))
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        toonPos = toon.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
+        gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
+        leftPosPoints = [Point3(0, 0, 0), VBase3(0, 0, 90)]
+        rightPosPoints = [Point3(0, 0, 0), VBase3(0, 0, 90)]
+        explosionTrack = Sequence()
+        explosionTrack.append(Wait(1.5))
+        explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
+        leftKnives = []
+        rightKnives = []
+        for i in xrange(0, 5):
+            leftKnives.append(globalPropPool.getProp('tnt'))
+            rightKnives.append(globalPropPool.getProp('tnt'))
+
+        for i in xrange(0, 3):
+            knifeDelay = 0.11
+            leftTrack = Sequence()
+            leftTrack.append(Wait(1.1))
+            leftTrack.append(Wait(i * knifeDelay))
+            leftTrack.append(
+                getPropAppearTrack(leftKnives[i], can, leftPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
+            leftTrack.append(getPropThrowTrack(attack, leftKnives[i], hitPointNames=['face'], missPointNames=['miss'],
+                                               hitDuration=0.3, missDuration=0.3, target=t))
+            if dmg > 0:
+                leftKnifeTracks.append(leftTrack)
+            rightTrack = Sequence()
+            rightTrack.append(Wait(1.1))
+            rightTrack.append(Wait(i * knifeDelay))
+            rightTrack.append(
+                getPropAppearTrack(rightKnives[i], can, rightPosPoints, 1e-06, Point3(0.4, 0.4, 0.4), scaleUpTime=0.1))
+            rightTrack.append(getPropThrowTrack(attack, rightKnives[i], hitPointNames=['face'], missPointNames=['miss'],
+                                                hitDuration=0.3, missDuration=0.3, target=t))
+            if dmg > 0:
+                rightKnifeTracks.append(rightTrack)
+
+        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="BOMBSHELLED!", colorCode=4))
+        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
+        soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
+        soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
+        suitTrack = Parallel(getSuitAnimTrack(attack))
+        suitTrack.append(Wait(2.0))
+        if dmg > 0:
+            soundTracks.append(soundTrack)
+            soundTracks.append(soundTrack2)
+            explosionTracks.append(explosionTrack)
+            suitTracks.append(suitTrack)
+            origH = suit.getH(battle)
+
+            # Calculate heading to toon
+            origPos, origHpr = battle.getActorPosHpr(suit)
+            origPos2 = suit.getPos(battle)
+            suit.setPos(battle, origPos)
+            targetPos = toon.getPos(battle)
+            suit.headsUp(battle, targetPos)
+            targetH = suit.getH(battle)
+
+            # Restore original heading
+            suit.setH(battle, origH)
+            suit.setPos(battle, origPos2)
+            delta = (targetH - origH + 180) % 360 - 180
+            if delta > 0:
+                shuffleAnim = 'shuffle-right'
+            else:
+                shuffleAnim = 'shuffle-left'
+            suitTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'glower'),
+                                       Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)),
+                                       Func(suit.setNeutralAnimationDrop)))
+            notifyTracks.append(notifyTrack)
+            notifyTracks.append(throwTrack)
+    damageAnims = [['slip-backward', 0.01, 0.35]]
+    toonDamageTrack = getToonTracksCheat(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7,
+                                         dodgeAnimNames=['neutral'])
+    return Parallel(suitTracks, toonTracks, rightKnifeTracks, toonDamageTrack, notifyTracks, leftKnifeTracks, explosionTracks, soundTracks)
 
 def doSnipe(attack):
     suit = attack['suit']
@@ -3334,7 +3474,7 @@ def doGameTimeCog2(attack, ind):
                                                        taunt,
                                                        CFSpeech | CFTimeout), Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3, Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                        "Ha-HA!",
-                                                       CFSpeech | CFTimeout))))))
+                                                       CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion = Sequence(Wait(1.0), Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                        "It's my time to shine!", CFSpeech | CFTimeout), Func(targetSuit.setNeutralAnimation)), Wait(3.0), Func(targetSuit.setChatAbsolute,
                                                        "Union Bust!", CFSpeech | CFTimeout), Wait(7.0), Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
@@ -3347,7 +3487,7 @@ def doGameTimeCog2(attack, ind):
                                                       Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                         "Ha-HA!",
-                                                                                        CFSpeech | CFTimeout))))))
+                                                                                        CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion2 = Sequence(Wait(1.0),
                                  Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                            "It's my time to shine!",
@@ -3365,7 +3505,7 @@ def doGameTimeCog2(attack, ind):
                                                       Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                         "Ha-HA!",
-                                                                                        CFSpeech | CFTimeout))))))
+                                                                                        CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion3 = Sequence(Wait(1.0),
                                  Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                            "It's my time to shine!",
@@ -3383,7 +3523,7 @@ def doGameTimeCog2(attack, ind):
                                                       Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                         "Ha-HA!",
-                                                                                        CFSpeech | CFTimeout))))))
+                                                                                        CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion4 = Sequence(Wait(1.0),
                                  Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                            "It's my time to shine!",
@@ -3401,7 +3541,7 @@ def doGameTimeCog2(attack, ind):
                                                       Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                         "Ha-HA!",
-                                                                                        CFSpeech | CFTimeout))))))
+                                                                                        CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion5 = Sequence(Wait(1.0),
                                  Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                            "It's my time to shine!",
@@ -3419,7 +3559,7 @@ def doGameTimeCog2(attack, ind):
                                                        Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                 Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                          "Ha-HA!",
-                                                                                         CFSpeech | CFTimeout))))))
+                                                                                         CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion6 = Sequence(Wait(1.0),
                                   Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                             "It's my time to shine!",
@@ -3512,7 +3652,7 @@ def doGameTimeCog(attack, ind):
                                                       Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                         "Ha-HA!",
-                                                                                        CFSpeech | CFTimeout))))))
+                                                                                        CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion2 = Sequence(Wait(1.0),
                                  Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                            "It's my time to shine!",
@@ -3531,7 +3671,7 @@ def doGameTimeCog(attack, ind):
                                                       Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                         "Ha-HA!",
-                                                                                        CFSpeech | CFTimeout))))))
+                                                                                        CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion3 = Sequence(Wait(1.0),
                                  Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                            "It's my time to shine!",
@@ -3550,7 +3690,7 @@ def doGameTimeCog(attack, ind):
                                                       Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                         "Ha-HA!",
-                                                                                        CFSpeech | CFTimeout))))))
+                                                                                        CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion4 = Sequence(Wait(1.0),
                                  Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                            "It's my time to shine!",
@@ -3569,7 +3709,7 @@ def doGameTimeCog(attack, ind):
                                                       Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                         "Ha-HA!",
-                                                                                        CFSpeech | CFTimeout))))))
+                                                                                        CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion5 = Sequence(Wait(1.0),
                                  Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                            "It's my time to shine!",
@@ -3588,7 +3728,7 @@ def doGameTimeCog(attack, ind):
                                                        Parallel(ActorInterval(manager, 'song-and-dance'), soundTrack3,
                                                                 Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                                                          "Ha-HA!",
-                                                                                         CFSpeech | CFTimeout))))))
+                                                                                         CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion6 = Sequence(Wait(1.0),
                                   Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                                                             "It's my time to shine!",
@@ -3598,7 +3738,7 @@ def doGameTimeCog(attack, ind):
                                        "Coal, Oil, and Gas Syndicate!", CFSpeech | CFTimeout), Wait(7.0),
                                   ActorInterval(targetSuit, 'large-zap')
                                   , Func(targetSuit.setNeutralAnimation))
-    selfDamageTrack = Sequence(Wait(16), Func(targetSuit.showHpTextNew, x, text="OVERCHARGED!", colorCode=1),
+    selfDamageTrack = Sequence(Wait(16), Func(targetSuit.showHpTextNew, x, text="OVERCHARGED!", colorCode=5),
                                Func(targetSuit.setHealthForMe, int(targetSuit.maxHP)), Func(targetSuit.setHP,  int(targetSuit.maxHP * 2)), Func(targetSuit.makeExtraAttacks, targetSuit.getExtraAttacks() + 1),
                                Func(targetSuit.updateHealthBar, 0), Wait(2.0), Func(targetSuit.showHpTextWhite, '+1 ATTACK!'))
     suitTrack = random.choice((Parallel(managerTrackQuestion, suitTrackQuestion), Parallel(managerTrackQuestion2, suitTrackQuestion2), Parallel(managerTrackQuestion3, suitTrackQuestion3)

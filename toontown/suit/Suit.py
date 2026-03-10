@@ -2113,6 +2113,8 @@ class Suit(Avatar.Avatar):
             self.generateHighRollerBodyWhite()
             self.generateHead3('highroller', animated=True)
             self.makeVirtual()
+            self.makeDamageReduction()
+            self.setDamageReduction(10)
             self.setHeight(11.0)
             self.setTransparency(1)
         elif dna.name == 'hroller2':

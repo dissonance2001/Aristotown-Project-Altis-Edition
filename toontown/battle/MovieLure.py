@@ -187,7 +187,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
-                elif suit.isLureImmune:
+                elif suit.isLureImmune and not suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
@@ -195,7 +195,6 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                 elif suit.isImmortal and suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
                 elif suit.isImmortal and suit.dna.name == 'videog':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
@@ -211,9 +210,6 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                 elif suit.isImmortal and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
                     suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
                     suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
-                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
-                elif suit.dna.name == 'hroller':
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
                 elif suit.dna.name == 'hroller2' and not suit.isPhase3:

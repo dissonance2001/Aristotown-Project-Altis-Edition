@@ -661,7 +661,7 @@ def doMandatoryFiling(attack):
                 dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
                 dustCloud.setBillboardAxis(2.0)
                 dustCloud.setZ(3)
-                dustCloud.setScale(0.4)
+                dustCloud.setScale(Point3(5.0, 1.0, 1.0))
                 dustCloud.createTrack()
                 dustCloudHideIval = Sequence(Func(dustCloud.reparentTo, bookshelf), Func(dustCloud.setPos,
                                                                                     Point3(0, -70, 0)),
@@ -2281,7 +2281,7 @@ def doFore(attack):
         dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
         dustCloud.setBillboardAxis(2.0)
         dustCloud.setZ(3)
-        dustCloud.setScale(0.4)
+        dustCloud.setScale(Point3(5.0, 1.0, 1.0))
         dustCloud.createTrack()
         dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
         return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, battle, oldPos + (0, 0, theSuit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
@@ -2290,7 +2290,7 @@ def doFore(attack):
         dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
         dustCloud.setBillboardAxis(2.0)
         dustCloud.setZ(3)
-        dustCloud.setScale(0.4)
+        dustCloud.setScale(Point3(5.0, 1.0, 1.0))
         dustCloud.createTrack()
         dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
         return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, battle, oldPos + (0, -50, theSuit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
@@ -2313,7 +2313,7 @@ def doForeRevert(attack):
         dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
         dustCloud.setBillboardAxis(2.0)
         dustCloud.setZ(3)
-        dustCloud.setScale(0.4)
+        dustCloud.setScale(Point3(5.0, 1.0, 1.0))
         dustCloud.createTrack()
         dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
         return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, battle, oldPos + (0, 0, theSuit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
@@ -2322,7 +2322,7 @@ def doForeRevert(attack):
         dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
         dustCloud.setBillboardAxis(2.0)
         dustCloud.setZ(3)
-        dustCloud.setScale(0.4)
+        dustCloud.setScale(Point3(5.0, 1.0, 1.0))
         dustCloud.createTrack()
         dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
         return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, battle, oldPos + (0, -50, theSuit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),

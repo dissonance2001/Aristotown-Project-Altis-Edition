@@ -954,6 +954,8 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doPuzzleBan(attack)
     elif name == 'HighRollerGameOver':
         suitTrack = MovieHighRollerCheats.doGameOver(attack)
+    elif name == 'HighRollerGameOver2':
+        suitTrack = MovieHighRollerCheats.doGameOver(attack)
     elif name == 'HighRollerCommercialBreak':
         suitTrack = MovieHighRollerCheats.doCommercialBreak(attack)
     elif name == 'HighRollerGameTimeSpawn':
@@ -1049,6 +1051,8 @@ def doSuitAttack(attack):
     # broadcaster cheats
     elif name == 'BroadcasterDonation':
         suitTrack = MovieHighRollerCheats.doDonation2(attack)
+    elif name == 'BroadcasterDonation2':
+        suitTrack = MovieHighRollerCheats.doDonationFail(attack)
     elif name == 'BroadcasterViralSensation':
         suitTrack = MovieHighRollerCheats.doViralSensation(attack)
     #filmmaker cheats
@@ -1066,7 +1070,7 @@ def doSuitAttack(attack):
     elif name == 'DirectorAction':
         suitTrack = MovieHighRollerCheats.doAction(attack)
     elif name == 'DirectorActionRetaliation':
-        suitTrack = MovieHighRollerCheats.doSnipe(attack)
+        suitTrack = MovieHighRollerCheats.doSnipeMegaphone(attack)
     elif name == 'DirectorBackToOnes':
         suitTrack = MovieHighRollerCheats.doBackToOnes(attack)
     elif name == 'DirectorProductionBudget':
@@ -3486,7 +3490,7 @@ def doFloodTheMarket(attack):
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0, showDamageExtraTime=1.0)
-    synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('SA_synergy.ogg'), node=suit))
+    synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_floodTheMarket.ogg'), node=suit))
     if hitAtleastOneToon > 0:
         puddleCounter = 0
         for t in targets:
@@ -4728,7 +4732,7 @@ def doEvilEye(attack):
     damageDelay = 2.44
     dodgeDelay = 1.64
     suitName = suit.getStyleName()
-    posPoints = [Point3(-0.4, 5.0, suit.height - 2.5), VBase3(-155.0, -20.0, 0.0)]
+    posPoints = [Point3(-0.4, 4.5, suit.height - 2.5), VBase3(-155.0, -20.0, 0.0)]
     appearDelay = 0.8
     suitHoldStart = 1.06
     suitHoldStop = 1.69
@@ -6421,7 +6425,7 @@ def doAcidRain(attack):
     cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
     damageAnims = [['melt'], ['jump', 1.5, 0.4]]
     toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_liquidate.ogg', delay=2.0, node=suit)
+    soundTrack = getSoundTrack('SA_acid.ogg', delay=2.0, node=suit)
     if dmg > 0:
         puddle = globalPropPool.getProp('quicksand')
         puddle.setColor(Vec4(0.0, 1.0, 0.0, 1))

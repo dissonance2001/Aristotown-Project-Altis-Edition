@@ -1795,9 +1795,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HighRollerWheelSpin':
         camTrack.append(Sequence(motionShot(0.0, 5, 8, -180, 0.0, 0.0, 0, suit), Wait(3.5),
                                  motionShot(0.0, 1.5, 9, -180, 0.0, 0.0, 0, suit), Wait(2.25),
-                                 motionShot(0.0, 10, 8, -180, 0.0, 0.0, 0, suit), Wait(attackDuration - 5.75)))
+                                 motionShot(0.0, 8, 8, -180, 0.0, 0.0, 0, suit), Wait(attackDuration - 5.75)))
     elif name == 'HighRollerGameOver':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, 4), motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, .5, suit), Wait(1.0),
+                                 defaultCamera(openShotDuration=0, attackDuration=attackDuration - 5.5)))
+    elif name == 'HighRollerGameOver2':
+        camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, 4), motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, .5, suit), Wait(1.0),
+                                 defaultCamera(openShotDuration=0, attackDuration=attackDuration - 5.5)))
     elif name == 'HighRollerPuzzle':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'HighRollerPuzzleBan':
@@ -1907,13 +1911,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
         #videographer cheats
     elif name == 'VideographerRisingStars':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerRisingStars2':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerRisingStarsSacrifice':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerRisingStarsSilhouette':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerVideoStatic':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerElectricShock':
@@ -1933,7 +1937,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0.7, suit), Wait(4.0), heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 4.7)))
         # broadcaster cheats
     elif name == 'BroadcasterDonation':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'BroadcasterDonation2':
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'BroadcasterViralSensation':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     #filmmaker cheats
@@ -1954,7 +1960,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
     elif name == 'DirectorActionRetaliation':
         if attackDuration > 1:
-            camTrack.append(defaultCamera(openShotDuration=1.5))
+            camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2

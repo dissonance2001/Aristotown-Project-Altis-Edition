@@ -1342,6 +1342,88 @@ def doUnionBuster(attack):
     return Parallel(suitTrack, cagePropTracks, smokeTrack, toonTrack)
 
 def doUnionBusterDamage(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    propDelay = 0.7
+    propTracks = Parallel()
+    pressTracks = Parallel()
+    soundTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        underPressure = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_underPressure')
+        leftGear = underPressure.find('**/geo_gear01')
+        rightGear = underPressure.find('**/geo_gear02')
+        stomper = underPressure.find('**/geo_stomperBase')
+        stomper.setPos(Point3(0, 0, 35))
+        propTrack = Sequence(
+            Func(__showProp, underPressure, battle, pos=toon.getPos(battle)),
+            Wait(propDelay),
+            Parallel(
+                LerpHprInterval(leftGear, 0.2, VBase3(0, -90, 0)),
+                LerpHprInterval(rightGear, 0.2, VBase3(0, 90, 0))
+            ),
+            Wait(0.5),
+            Parallel(
+                LerpHprInterval(leftGear, 0.4, VBase3(0, 0, 0), blendType='easeIn'),
+                LerpHprInterval(rightGear, 0.4, VBase3(0, 0, 0), blendType='easeIn')
+            )
+        )
+        if dmg > 0:
+            # TODO if possible: Get actual Under Pressure sound effects.
+            propTrack.append(LerpPosInterval(stomper, 0.1, Point3(0, 0, 7)))
+            propTrack.append(Wait(0.5))
+            propTrack.append(LerpPosInterval(stomper, 0.9, Point3(0, 0, 30), blendType='easeInOut'))
+            pressTracks.append(Sequence(
+                Wait(0.8),
+                LerpScaleInterval(toon, 0.1, VBase3(1, 0.05, 1), blendType='easeInOut'),
+                Wait(0.9),
+                LerpScaleInterval(toon, 0.1, VBase3(2, 2, 0.025)),
+                Wait(1.0),
+                Parallel(
+                    Sequence(
+                        Wait(0.4),
+                        LerpScaleInterval(toon, 0.1, VBase3(1.4, 1.4, 1.4), blendType='easeInOut'),
+                        LerpScaleInterval(toon, 0.05, VBase3(0.8, 0.8, 0.8), blendType='easeInOut'),
+                        LerpScaleInterval(toon, 0.1 / 3.0, VBase3(1.0, 1.0, 1.0), blendType='easeInOut')
+                    ),
+                    SoundInterval(loader.loadSfx('phase_9/audio/sfx/toon_decompress.ogg'), node=toon)
+                )
+            ))
+            soundTracks.append(
+                Track(
+                    (0.9, SoundInterval(loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_cage_land.ogg'), node=toon)),
+                    (1.9, SoundInterval(globalBattleSoundCache.getSound('CHQ_FACT_stomper_small.ogg'), node=toon))
+                )
+            )
+            propTrack.append(Func(underPressure.removeNode))
+            propTracks.append(propTrack)
+
+    toonTracks = Parallel()
+    for i in range(len(targets)):
+        tgt = targets[i]
+        toon = tgt['toon']
+        dmg = tgt['hp']
+        died = tgt['died']
+        toonTrack = Sequence(Func(toon.headsUp, battle, suit.getPos(battle)))
+        if dmg > 0:
+            animTrack = Sequence(
+                Wait(0.9),
+                ActorInterval(toon, 'cringe', duration=2.0),
+                ActorInterval(toon, 'jump', startTime=0.2)
+            )
+            indicatorTrack = Sequence(
+                Wait(0.91),
+                Func(__doDamage, toon, dmg, died)
+            )
+            # If I, Professor Control, am right, you cut out the extra time when a Toon went sad.  If you don't like the sad extension, remove the condition and what's under it.
+            toonTrack.append(Parallel(animTrack, indicatorTrack))
+            toonTracks.append(toonTrack)
+
+    return Parallel(propTracks, pressTracks, toonTracks, soundTracks)
+
+def doUnionBusterDamageOld(attack):
     battle = attack['battle']
     targets = attack['target']
     cagePropTracks = Parallel()
@@ -2176,6 +2258,8 @@ def doRadioInfrequency(attack):
     headTracks = Parallel()
     for headPart in suit.animatedHeadParts:
         headTracks.append(ActorInterval(headPart, 'death', startTime=headPart.getDuration('death') - 1.5))
+        headTracks.append(Wait(4.0))
+        headTracks.append(ActorInterval(headPart, 'death', startTime=headPart.getDuration('death'), endTime=headPart.getDuration('death') - 1.5))
     sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
     sprayEffect.setDepthWrite(0)
     sprayEffect.setDepthTest(0)

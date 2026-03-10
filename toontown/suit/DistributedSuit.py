@@ -685,10 +685,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         searchString = chatString.lower()
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             type = 'special'
-        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
-            type = 'question'
         elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
             type = 'exclamation'
+        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
+            type = 'question'
         elif random.randint(0, 1):
             type = 'statementA'
         else:
@@ -716,10 +716,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 sfxIndex = 1
             elif length >= 3:
                 sfxIndex = 2
-        elif type == 'question':
-            sfxIndex = 3
         elif type == 'exclamation':
             sfxIndex = 4
+        elif type == 'question':
+            sfxIndex = 3
         elif type == 'special':
             sfxIndex = 1
         else:
@@ -1846,6 +1846,36 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                    Func(videog.updateHealthBar, 0), ActorInterval(videog, 'mob-mentality', startTime=1, endTime=0),
                                Func(videog.setNeutralAnimation)).start()
 
+    def checkBroadcasterDonation2(self, videog, battle):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int(self.currHP)
+        if self.currHP < 111:
+            self.damageInterval = Sequence(ActorInterval(self, 'mob-mentality', endTime=1),
+                                                   Func(self.showHpText, -x),
+                                                   Func(self.setHealthForMe, -x),
+                                                   Func(self.updateHealthBar, 0), ActorInterval(self, 'slip-forward'),
+                               Func(self.setNeutralAnimation)).start()
+            self.healInterval = Sequence(ActorInterval(videog, 'mob-mentality', endTime=1),
+                                                  Func(videog.showHpText, +x),
+                                                  Func(videog.setHealthForMe, +x),
+                                                  Func(videog.updateHealthBar, 0), ActorInterval(videog, 'pie-small-react'),
+                                         Func(videog.setNeutralAnimation)).start()
+        else:
+            self.damageInterval = Sequence(ActorInterval(self, 'mob-mentality', endTime=1),
+                                                  Func(self.showHpText, -111),
+                                                  Func(self.setHealthForMe, -111),
+                                                  Func(self.updateHealthBar, 0), ActorInterval(self, 'slip-forward'),
+                                         Func(self.setNeutralAnimation)).start()
+            self.healInterval = Sequence(ActorInterval(videog, 'mob-mentality', endTime=1), Func(videog.showHpText, +111),
+                                                   Func(videog.setHealthForMe, +111),
+                                                   Func(videog.updateHealthBar, 0), ActorInterval(videog, 'pie-small-react'),
+                               Func(videog.setNeutralAnimation)).start()
+
     def checkAmbassadorDamageUp(self, videog, battle):
         if self.healInterval:
             self.healInterval.finish()
@@ -2368,10 +2398,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.nametag.setChatReversed(False)
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             self.animHead = 'murmur'
-        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
-            self.animHead = 'question'
         elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
             self.animHead = 'grunt'
+        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
+            self.animHead = 'question'
         else:
             stringLength = len(chatString)
             if stringLength <= 1:
@@ -2478,10 +2508,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.nametag.setChatReversed(False)
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             self.animHead = 'murmur'
-        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
-            self.animHead = 'question'
         elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
             self.animHead = 'grunt'
+        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
+            self.animHead = 'question'
         else:
             stringLength = len(chatString)
             if stringLength <= 1:

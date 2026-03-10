@@ -6,6 +6,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.particles import ParticleEffect
 from toontown.battle import BattleParticles
 from toontown.battle import BattleProps
+from toontown.effects import DustCloud
 from panda3d.core import *
 from toontown.suit import SuitBase
 from toontown.suit.SuitDNA import *
@@ -1511,55 +1512,19 @@ def shortCircuitTrack(suit, battle):
     return Parallel(suitTrack, explodeTracks, colorTracks)
 
 def shortCircuitTrack2(suit, battle):
-    if suit.isHidden():
-        return Sequence()
+    oldPos, oldHpr = battle.getActorPosHpr(suit)
+    def getDustCloudIval(oldPos=oldPos):
+        dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
+        dustCloud.setBillboardAxis(2.0)
+        dustCloud.setZ(3)
+        dustCloud.setScale(Point3(5.0, 1.0, 1.0))
+        dustCloud.createTrack()
+        dustCloud.setColorScale(0, 0, 0, 1)
+        return Sequence(Func(dustCloud.reparentTo, battle), Func(dustCloud.setPos, battle, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
+                        name='dustCloadIval')
 
-    suitPos = suit.getPos(battle)
-    # Base suit track
-    suitTrack = Sequence(
-                 Wait(1.0),
-                Func(suit.hide),
-                Func(suit.cleanupLoseActor),
-             Func(suit.makeDead),
-                 Wait(1.0)
-             )
-
-    # Fade out suit parts
-    colorTracks = Parallel()
-    actorNode = suit.find('**/__Actor_modelRoot')
-    actorCollection = actorNode.findAllMatches('*')
-    for thingIndex in range(actorCollection.getNumPaths()):
-        thing = actorCollection[thingIndex]
-        colorTracks.append(Sequence(
-            Func(thing.setDepthWrite, False),
-            Func(thing.setBin, 'fixed', 1),
-            LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
-            Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
-        ))
-
-    # Smoke effect
-    toonPos = suit.getPos(battle)
-
-    # Explosion effects (reuse a loop)
-    explodeTracks = Parallel()
-    offsets = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]  # z offsets for explosions
-    for offset in offsets:
-        explode = globalPropPool.getProp('dust2')
-        explode.setTwoSided(True)
-        explode.setColor(0, 0, 0, 1)
-        explode.setBillboardPointWorld(2)
-
-        explodePosPoints = [Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + offset), PNT3_ZERO]
-        delay = abs(offset) * 0.1  # small stagger
-        explodeTrack = Sequence(
-            Wait(delay),
-            getPropAppearTrack(explode, battle, explodePosPoints, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=0),
-            Sequence(ActorInterval(explode, 'dust2'), Func(explode.removeNode))
-        )
-        explodeTracks.append(explodeTrack)
-
-    # Return all tracks in parallel
-    return Parallel(suitTrack, explodeTracks, colorTracks)
+    suitTrack = Sequence(Parallel(Func(getDustCloudIval().start), Func(suit.hide)))
+    return suitTrack
 
 
 def createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits):

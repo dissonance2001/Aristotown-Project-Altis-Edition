@@ -275,7 +275,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
             tracks.append(Func(suit.checkCogLured, battle))
             tracks.append(MovieUtil.createSuitTeaseMultiTrackSound(suit, battle, tSuitReact))
             #tracks.append(Func(suit.setNeutralAnimationTrap))
-        elif totalDamage[targetIndex] <= 0 and suit.isImmortal:
+        elif totalDamage[targetIndex] <= 0 and suit.isImmortal and not suit.dna.name == 'hroller':
             tracks.append(Func(suit.showHpTextWhite, 'IMMUNE!'))
 
     return tracks

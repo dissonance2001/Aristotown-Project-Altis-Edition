@@ -351,10 +351,10 @@ class Avatar(Actor, ShadowCaster):
                 sfxIndex = 1
             elif length >= 3:
                 sfxIndex = 2
-        elif type == 'question':
-            sfxIndex = 3
         elif type == 'exclamation':
             sfxIndex = 4
+        elif type == 'question':
+            sfxIndex = 3
         elif type == 'special':
             sfxIndex = 1
         else:

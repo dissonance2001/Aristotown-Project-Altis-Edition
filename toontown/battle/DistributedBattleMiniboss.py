@@ -114,12 +114,6 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 for obj in base.cr.doId2do.values():
                     if isinstance(obj, DistributedSellbotBossMini):
                         obj.hideRadiographer()
-            if suit.dna.name == 'hrollers':
-                suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
-            if suit.dna.name == 'bcaster':
-                suit.setPos(0, 0, 50)
-                return self.showSuitsFallingSilhouette(suits, ts, name, callback)
             if suit.dna.name == 'hroller':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingHighRoller(suit, ts, name, callback)
@@ -132,7 +126,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
                     dustCloud.setBillboardAxis(2.0)
                     dustCloud.setZ(3)
-                    dustCloud.setScale(0.4)
+                    dustCloud.setScale(Point3(5.0, 1.0, 1.0))
                     dustCloud.createTrack()
                     dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
                     return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
@@ -165,6 +159,38 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                         camera.setPosHpr(0, -10, 7, 0, 0, 0)
                     else:
                         camera.setPosHpr(0, -10, 7, 0, 0, 0)
+            elif suit.dna.name == 'hrollers' or suit.dna.name == 'bcaster':
+                suit.setState('Battle')
+                suitTrack = Sequence()
+                if suit in self.joiningSuits:
+                    i = self._getPendingPreviewIndex(suit)
+                    destPos, h = self.suitPendingPointsSilhouettes[i]
+                    destHpr = VBase3(h, 0, 0)
+                else:
+                    destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+                startPos = destPos + Point3(0, 0, 0)
+                startPos.setY(startPos.getY() + 16.5)
+                startPos.setZ(startPos.getZ() - 4.5)
+                startPos2 = destPos + Point3(0, 0, 0)
+                self.notify.debug('startPos for %s = %s' % (suit, startPos))
+                suitTrack.append(Func(suit.reparentTo, self))
+                suitTrack.append(Func(suit.headsUp, self))
+                suitTrack.append(LerpPosInterval(suit, 0, startPos))
+                suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+                suitTrack.append(LerpColorScaleInterval(suit, 0, (0, 0, 0, 0)))
+                suitTrack.append(Sequence(ActorInterval(suit, 'shot5', startTime=3, endTime=3), Parallel(Wait(3.0), LerpColorScaleInterval(suit, 3, (1, 1, 1, 1)))))
+                suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+                suitTracks.append(suitTrack)
+                # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+                suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+                delay += 0
+
+            if self.hasLocalToon():
+                camera.reparentTo(self)
+                if random.choice([0, 1]):
+                    camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                else:
+                    camera.setPosHpr(0, -10, 7, 0, 0, 0)
             elif suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'choreo' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'director':
                 suit.setState('Battle')
                 suitTrack = Sequence()
@@ -174,7 +200,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
                     dustCloud.setBillboardAxis(2.0)
                     dustCloud.setZ(3)
-                    dustCloud.setScale(0.4)
+                    dustCloud.setScale(Point3(5.0, 1.0, 1.0))
                     dustCloud.createTrack()
                     dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
                     return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
@@ -263,7 +289,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
                 dustCloud.setBillboardAxis(2.0)
                 dustCloud.setZ(3)
-                dustCloud.setScale(0.4)
+                dustCloud.setScale(Point3(5.0, 1.0, 1.0))
                 dustCloud.createTrack()
                 dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
                 return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),

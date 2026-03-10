@@ -1818,13 +1818,12 @@ def doCaseInsurancePlanInsurance(attack):
         )
         knifeTracks.append(knifeTrack)
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
-    suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimation))
     #insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
     soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
     multiTrack = Parallel(soundTrack1, soundTrack2)
     healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
-    return Parallel(suitTrack, suitTracks, healSound, liftTracks, multiTrack, knifeTracks)
+    return Parallel(suitTracks, healSound, liftTracks, multiTrack, knifeTracks)
 
 
 def doCaseInsurancePlanInsurance2(attack):
@@ -1893,13 +1892,12 @@ def doCaseInsurancePlanInsurance2(attack):
         )
         knifeTracks.append(knifeTrack)
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
-    suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimation))
     #insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
     soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
     multiTrack = Parallel(soundTrack1, soundTrack2)
     healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
-    return Parallel(suitTrack, suitTracks, healSound, liftTracks, multiTrack, knifeTracks)
+    return Parallel(suitTracks, healSound, liftTracks, multiTrack, knifeTracks)
 
 def doCaseInsurancePlanSkelecogInsurance2(attack):
     suit = attack['suit']
@@ -1971,13 +1969,12 @@ def doCaseInsurancePlanSkelecogInsurance2(attack):
         )
         knifeTracks.append(knifeTrack)
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
-    suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimationDrop))
     #insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
     #soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
     multiTrack = soundTrack2
     healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
-    return Parallel(suitTrack, liftTracks, suitTracks, healSound, multiTrack, knifeTracks)
+    return Parallel(liftTracks, suitTracks, healSound, multiTrack, knifeTracks)
 
 def doCaseInsurancePlanSkelecogInsurance(attack):
     suit = attack['suit']
@@ -2015,7 +2012,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
         suitTrack.append(Func(suit.makeInsured))
         suitTracks.append(suitTrack)
         suitTracks.append(tauntInterval)
-        suitTracks.append(Sequence(ActorInterval(theSuit, 'throw-paper'), Func(suit.setNeutralAnimation)))
+        suitTracks.append(Sequence(ActorInterval(theSuit, 'throw-paper'), Func(suit.setNeutralAnimationDrop)))
         suitTracks.append(Wait(6.5))
     posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
     knifeTracks = Parallel()
@@ -2038,13 +2035,12 @@ def doCaseInsurancePlanSkelecogInsurance(attack):
         )
         knifeTracks.append(knifeTrack)
     #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
-    suitTrack = Sequence(Wait(6.0), Func(suit.setNeutralAnimationDrop))
     #insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
     #soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
     multiTrack = soundTrack2
     healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
-    return Parallel(suitTrack, liftTracks, suitTracks, healSound, multiTrack, knifeTracks)
+    return Parallel(liftTracks, suitTracks, healSound, multiTrack, knifeTracks)
 
 def doLiquidationSale(attack):
     suit = attack['suit']
