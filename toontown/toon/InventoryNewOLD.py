@@ -414,6 +414,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                 self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
                 return ""
 
+        self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
         if track == HEAL_TRACK and 'healBoost' in base.localAvatar.battleConditions:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['healBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'healBoost')
@@ -522,7 +523,6 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if track == HEAL_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 1:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
-        self.detailDataLabel['text_fg'] = (0.05, 0.14, 0.4, 1)
         lureValue = int(math.ceil(
             ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
         if track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7:

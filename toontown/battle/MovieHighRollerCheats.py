@@ -3477,7 +3477,7 @@ def doGameTimeCog2(attack, ind):
                                                        CFSpeech | CFTimeout), Func(manager.setNeutralAnimationDrop))))))
     suitTrackQuestion = Sequence(Wait(1.0), Parallel(ActorInterval(targetSuit, 'mob-mentality'), Func(targetSuit.setChatAbsolute,
                                                        "It's my time to shine!", CFSpeech | CFTimeout), Func(targetSuit.setNeutralAnimation)), Wait(3.0), Func(targetSuit.setChatAbsolute,
-                                                       "Union Bust!", CFSpeech | CFTimeout), Wait(7.0), Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
+                                                       "Union Bust!", CFSpeech | CFTimeout), Wait(7.0), Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
     managerTrackQuestion2 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                              "Who does the Major Player fancy?",
                                                              CFSpeech | CFTimeout),
@@ -3495,7 +3495,7 @@ def doGameTimeCog2(attack, ind):
                                           Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                  Func(targetSuit.setChatAbsolute,
                                       "Nobody!", CFSpeech | CFTimeout), Wait(7.0),
-                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
+                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
     managerTrackQuestion3 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                              "Which hand does the Head Attorney use during 'Objection'?",
                                                              CFSpeech | CFTimeout),
@@ -3513,7 +3513,7 @@ def doGameTimeCog2(attack, ind):
                                           Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                  Func(targetSuit.setChatAbsolute,
                                       "Right!", CFSpeech | CFTimeout), Wait(7.0),
-                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
+                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
     managerTrackQuestion4 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                              "TRUE or FALSE: The longest employee position name int he company is the Public Relations Representative?",
                                                              CFSpeech | CFTimeout),
@@ -3531,7 +3531,7 @@ def doGameTimeCog2(attack, ind):
                                           Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                  Func(targetSuit.setChatAbsolute,
                                       "FALSE!", CFSpeech | CFTimeout), Wait(7.0),
-                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
+                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
     managerTrackQuestion5 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                              "Who is the Name Dropper planning on having lunch with?",
                                                              CFSpeech | CFTimeout),
@@ -3549,7 +3549,7 @@ def doGameTimeCog2(attack, ind):
                                           Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                  Func(targetSuit.setChatAbsolute,
                                       "The Mingler!", CFSpeech | CFTimeout), Wait(7.0),
-                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
+                                 Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
     managerTrackQuestion6 = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
                                                               "What does the acronym C.O.G.S. stand for?",
                                                               CFSpeech | CFTimeout),
@@ -3567,7 +3567,7 @@ def doGameTimeCog2(attack, ind):
                                            Func(targetSuit.setNeutralAnimation)), Wait(3.0),
                                   Func(targetSuit.setChatAbsolute,
                                        "Crush Organics until Green and Sad!", CFSpeech | CFTimeout), Wait(7.0),
-                                  Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack2(targetSuit, battle))
+                                  Func(targetSuit.loop, 'large-zap'), MovieUtil.shortCircuitTrack(targetSuit, battle))
     selfDamageTrack = Sequence(Wait(14), Func(targetSuit.showHpTextNew,  - targetSuit.currHP, text="WRONG ANSWER!", colorCode=3),
                                Func(targetSuit.setHealthForMe, - targetSuit.currHP),
                                Func(targetSuit.updateHealthBar, 0))
