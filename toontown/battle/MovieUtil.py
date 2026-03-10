@@ -329,6 +329,7 @@ def createSuitReviveTrack(suit, battle):
     suitTrack.append(Func(suit.makeRevive))
     suitTrack.append(Func(suit.makeUnDead))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
+    suitTrack.append(Func(suit.loop, 'neutral'))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:
@@ -542,7 +543,7 @@ def createSuitReviveRedd(suit, battle):
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
     suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
-    suitTrack.append(Func(suit.loop, 'neutral-unstable'))
+    suitTrack.append(Func(suit.loop, 'neutral'))
     if suit.style.name == 'redd' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
     else:
@@ -777,6 +778,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Func(suit.checkDamageUp, 50))
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
+    suitTrack.append(Func(suit.loop, 'neutral'))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:

@@ -3244,7 +3244,7 @@ def doCommercialBreak(attack):
         suitTrack = Sequence()
         if not suit.dna.name == 'hroller':
             suitTrack.append(Wait(1.0))
-            suitTrack.append(Parallel(ActorInterval(suit, 'soak', endTime=1), MovieUtil.shortCircuitTrack2(suit, battle)))
+            suitTrack.append(Parallel(ActorInterval(suit, 'soak', endTime=1), MovieUtil.shortCircuitTrack(suit, battle)))
         suitTracks.append(suitTrack)
     return Parallel(suitTracks, suitTrack2, soundTrack, suitTrackHighRoller)
 
