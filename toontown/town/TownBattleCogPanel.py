@@ -142,67 +142,11 @@ class TownBattleCogPanel(DirectFrame):
         infoButton.reparentTo(self.healthNode)
         self.hpText = DirectLabel(parent=self, text='', text_fg=Vec4(0, 0, 0, 1), pos=(0.09, 0.125, 0.1335),
                                   text_scale=0.072)
-        self.enraged = None
-        self.desperation = None
-        self.desperationText = None
-        self.collectcall = None
-        self.collectcallText = None
-        self.shielding = None
-        self.overcharged = None
-        self.luredCog = None
-        self.luredManager = None
-        self.status8 = None
-        self.statusFrame = None
-        self.statusFramePanel = None
-        self.insured = None
-        self.damageUp = None
-        self.skeleton = None
-        self.virtual = None
-        self.immortal = None
-        self.vulnerable = None
-        self.soakResist = None
-        self.syphon = None
-        self.absorbing = None
-        self.damageReduction = None
-        self.zapped = None
-        self.status = None
-        self.marked = None
-        self.sued2 = None
-        self.status2 = None
-        self.status3 = None
-        self.status4 = None
-        self.status5 = None
-        self.status6 = None
-        self.status7 = None
-        self.status8 = None
-        self.status9 = None
-        self.status10 = None
-        self.attackIcon = None
-        self.attackIcon1 = None
-        self.attackIcon2 = None
-        self.attackIcon3 = None
-        self.attackIcon4 = None
-        self.attackIcon5 = None
-        self.attackIcon6 = None
-        self.attackIcon7 = None
-        self.attackIcon8 = None
-        self.attackIcon9 = None
-        self.lureImmune = None
-        self.rainbow = None
-        self.hollywoods = None
-        self.sharkwatcher = None
-        self.soaked = None
-        self.dazed = None
-        self.pulseTask = None
-        self.extraAttacks = None
         self.setScale(0.525)
         self.button = button
         self.head = None
         self.suitHead = None
         self.blinkTask = None
-        self.luredCogTest = None
-        self.statusText1 = None
-        self.statusText2 = None
         self.hide()
         healthGui.removeNode()
         gui.removeNode()
@@ -257,7 +201,7 @@ class TownBattleCogPanel(DirectFrame):
                 'collectcallText', 'luredText', 'damageMultText', 'damageMultText2',
                 'extraAttacks', 'sued', 'sued2', 'suedRoundsText', 'sued2RoundsText',
                 'extraAttacksText', 'dazed', 'dazedText', 'enrageCountText',
-                'soakedRoundsText', 'soaked', 'marked', 'zapped',
+                'soakedRoundsText', 'soaked', 'marked', 'zapped', 'insuredRoundsText', 'contractedRoundsText',
                 'zappedRoundsText', 'markedRoundsText', 'enraged', 'shielding',
                 'skeleton', 'virtual', 'damageUp', 'overcharged', 'insured',
                 'insuredText', 'vulnerabilityText', 'damageReductionText',
@@ -424,8 +368,6 @@ class TownBattleCogPanel(DirectFrame):
         self._buildStatusSlots()
 
         # Shark Watcher and Leveling Information
-        if self.sharkwatcher != None:
-            self.sharkwatcher.removeNode()
         if self.cog.dna.name == 'shw':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.sharkwatcher = status.find('**/ripped_icon')
@@ -706,15 +648,76 @@ class TownBattleCogPanel(DirectFrame):
 
         if self.cog.isInsured or self.cog.isInsured2:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.insured = status.find('**/heal_over_time_icon')
+            self.insured = status.find('**/insured_icon')
+            self.insuredRoundsText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getInsuranceRounds() - 1),
+                                         text_fg=(1, 1, 1, 1),
+                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -.5),
+                                         text_scale=.5)
+            self.insuredRoundsText.show()
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
 
-        if self.cog.isContracted or self.cog.dna.name == 'supervis' or self.cog.dna.name == 'ovt':
+        if self.cog.isInsured or self.cog.isInsured2:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.insured = status.find('**/insured_icon')
+            self.insured = status.find('**/heal_over_time_icon')
+            if self.cog.isInsured2:
+                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+85", text_fg=(0, 1, 0.047, 1),
+                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                               pos=(0.25, 0, -.5),
+                                               text_scale=.4)
+                self.insuredText.show()
+            else:
+                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+50", text_fg=(0, 1, 0.047, 1),
+                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                               pos=(0.25, 0, -.5),
+                                               text_scale=.4)
+                self.insuredText.show()
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isContracted or self.cog.isContracted2 or self.cog.dna.name == 'supervis' or self.cog.dna.name == 'ovt':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/insured_icon')
+            self.contractedRoundsText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getContractedRounds() - 1),
+                                         text_fg=(1, 1, 1, 1),
+                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -.5),
+                                         text_scale=.5)
+            self.contractedRoundsText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isContracted or self.cog.isContracted2:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/heal_over_time_icon')
+            if self.cog.isContracted2:
+                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+125", text_fg=(0, 1, 0.047, 1),
+                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                               pos=(0.25, 0, -.5),
+                                               text_scale=.4)
+                self.insuredText.show()
+            else:
+                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+95", text_fg=(0, 1, 0.047, 1),
+                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                               pos=(0.25, 0, -.5),
+                                               text_scale=.4)
+                self.insuredText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isOilRain:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/oilrain_icon')
+            self.insuredText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getOilRainRounds() - 1),
+                                           text_fg=(1, 1, 1, 1),
+                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                           pos=(0.25, 0, -.5),
+                                           text_scale=.5)
+            self.insuredText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
 
         if self.cog.extraAttack:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -772,7 +775,8 @@ class TownBattleCogPanel(DirectFrame):
                                                      text_scale=.4)
                 self.vulnerabilityText.show()
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.damageReduction, slot, slotColor=(1, 0.984, 0, 1))
+            self._attachStatusIcon(self.damageReduction, slot)
+            self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
 
         if self.cog.isSyphon:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -1387,211 +1391,6 @@ class TownBattleCogPanel(DirectFrame):
             return
         self.isLoaded = 0
         self.exit()
-        if self.luredText != None:
-            self.luredText.removeNode()
-        if self.damageMultText != None:
-            self.damageMultText.removeNode()
-        if self.damageMultText2 != None:
-            self.damageMultText2.removeNode()
-        if self.extraAttacks != None:
-            self.extraAttacks.removeNode()
-        if self.sued != None:
-            self.sued.removeNode()
-        if self.sued2 != None:
-            self.sued2.removeNode()
-        if self.suedRoundsText != None:
-            self.suedRoundsText.removeNode()
-        if self.sued2RoundsText != None:
-            self.sued2RoundsText.removeNode()
-        if self.extraAttacksText != None:
-            self.extraAttacksText.removeNode()
-        if self.dazed != None:
-            self.dazed.removeNode()
-        if self.dazedText != None:
-            self.dazedText.removeNode()
-        if self.enrageCountText != None:
-            self.enrageCountText.removeNode()
-        if self.soakedRoundsText != None:
-            self.soakedRoundsText.removeNode()
-        if self.soaked != None:
-            self.soaked.removeNode()
-        if self.markedRoundsText != None:
-            self.markedRoundsText.removeNode()
-        if self.marked != None:
-            self.marked.removeNode()
-        if self.zappedRoundsText != None:
-            self.zappedRoundsText.removeNode()
-        if self.zapped != None:
-            self.zapped.removeNode()
-        if self.enraged != None:
-            self.enraged.removeNode()
-        if self.dazed != None:
-            self.dazed.removeNode()
-        if self.soaked != None:
-            self.soaked.removeNode()
-        if self.extraAttacks != None:
-            self.extraAttacks.removeNode()
-        if self.shielding != None:
-            self.shielding.removeNode()
-        if self.skeleton != None:
-            self.skeleton.removeNode()
-        if self.virtual != None:
-            self.virtual.removeNode()
-        if self.damageUp != None:
-            self.damageUp.removeNode()
-        if self.desperationText != None:
-            self.desperationText.removeNode()
-        if self.desperation != None:
-            self.desperation.removeNode()
-        if self.collectcall != None:
-            self.collectcall.removeNode()
-        if self.collectcallText != None:
-            self.collectcallText.removeNode()
-        if self.attackIcon != None:
-            self.attackIcon.removeNode()
-        if self.attackIcon1 != None:
-            self.attackIcon1.removeNode()
-        if self.attackIcon2 != None:
-            self.attackIcon2.removeNode()
-        if self.attackIcon3 != None:
-            self.attackIcon3.removeNode()
-        if self.attackIcon4 != None:
-            self.attackIcon4.removeNode()
-        if self.attackIcon5 != None:
-            self.attackIcon5.removeNode()
-        if self.attackIcon6 != None:
-            self.attackIcon6.removeNode()
-        if self.attackIcon7 != None:
-            self.attackIcon7.removeNode()
-        if self.damageUpMgr != None:
-            self.damageUpMgr.removeNode()
-        if self.overcharged != None:
-            self.overcharged.removeNode()
-        if self.insured != None:
-            self.insured.removeNode()
-        if self.insuredText != None:
-            self.insuredText.removeNode()
-        if self.overcharged != None:
-            self.overcharged.removeNode()
-        if self.lured != None:
-            self.lured.removeNode()
-        if self.vulnerabilityText != None:
-            self.vulnerabilityText.removeNode()
-        if self.damageReductionText != None:
-            self.damageReductionText.removeNode()
-        if self.luredManagerText != None:
-            self.luredManagerText.removeNode()
-        if self.rageBuildingText != None:
-            self.rageBuildingText.removeNode()
-        if self.immortal != None:
-            self.immortal.removeNode()
-        if self.luredManager != None:
-            self.luredManager.removeNode()
-        if self.syphon != None:
-            self.syphon.removeNode()
-        if self.vulnerable != None:
-            self.vulnerable.removeNode()
-        if self.soakResist != None:
-            self.soakResist.removeNode()
-        if self.absorbing != None:
-            self.absorbing.removeNode()
-        if self.damageReduction != None:
-            self.damageReduction.removeNode()
-        if self.lureImmune != None:
-            self.lureImmune.removeNode()
-        if self.rainbow != None:
-            self.rainbow.removeNode()
-        if self.hollywoods != None:
-            self.hollywoods.removeNode()
-        if self.sharkwatcher != None:
-            self.sharkwatcher.removeNode()
-        if self.luredCog != None:
-            self.luredCog.removeNode()
-        if self.statusFrame != None:
-            self.statusFrame.removeNode()
-        if self.status != None:
-            self.status.removeNode()
-        if self.status2 != None:
-            self.status2.removeNode()
-        if self.status3 != None:
-            self.status3.removeNode()
-        if self.status4 != None:
-            self.status4.removeNode()
-        if self.status5 != None:
-            self.status5.removeNode()
-        if self.status6 != None:
-            self.status6.removeNode()
-        if self.status7 != None:
-            self.status7.removeNode()
-        if self.status8 != None:
-            self.status8.removeNode()
-        if self.pulseTask != None:
-            self.pulseTask.finish()
-            del self.pulseTask
-        if self.statusFramePanel != None:
-            self.statusFramePanel.removeNode()
-        if self.statusText2 != None:
-            self.statusText2.removeNode()
-        if self.statusText1 != None:
-            self.statusText1.removeNode()
-        del self.enraged
-        del self.shielding
-        del self.overcharged
-        del self.luredCog
-        del self.luredManager
-        del self.insured
-        del self.damageUp
-        del self.desperationText
-        del self.desperation
-        del self.collectcall
-        del self.collectcallText
-        del self.damageDown
-        del self.skeleton
-        del self.virtual
-        del self.immortal
-        del self.vulnerable
-        del self.soakResist
-        del self.syphon
-        del self.marked
-        del self.absorbing
-        del self.damageReduction
-        del self.lureImmune
-        del self.rainbow
-        del self.hollywoods
-        del self.sharkwatcher
-        del self.soaked
-        del self.dazed
-        del self.extraAttacks
-        del self.cog
-        del self.button
-        del self.blinkTask
-        del self.hpText
-        del self.status
-        del self.status2
-        del self.status3
-        del self.status4
-        del self.status5
-        del self.status6
-        del self.status7
-        del self.status8
-        del self.attackIcon
-        del self.attackIcon1
-        del self.attackIcon2
-        del self.attackIcon3
-        del self.attackIcon4
-        del self.attackIcon5
-        del self.attackIcon6
-        del self.attackIcon7
-        del self.statusFrame
-        del self.healthNode
-        del self.statusFramePanel
-        del self.statusText2
-        del self.statusText2
-        del self.pulseTask
-        del self.attackIcon8
-        del self.attackIcon9
-        del self.status9
-        del self.status10
         DirectFrame.destroy(self)
 
     def cleanup(self):

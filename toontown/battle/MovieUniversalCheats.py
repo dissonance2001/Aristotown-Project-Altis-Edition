@@ -577,7 +577,7 @@ def __soakRemoval(suit, remove=0):
             color = Point4(1.0, 1.0, 1.0, 1.0)
     else:
         color = SoakColor
-    suitInterval = Sequence()
+    suitInterval = Parallel()
     actorNode = suit.find('**/__Actor_modelRoot')
     actorCollection = actorNode.findAllMatches('*')
     parts = ()
@@ -585,10 +585,16 @@ def __soakRemoval(suit, remove=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            suitInterval.append(Func(thing.setColor, color))
+            suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
     if not suit.isSkeleton:
-        suitInterval.append(Func(suit.find('**/hands').setTexture, texture, 1))
-        suitInterval.append(Func(suit.find('**/hands').setColor, suit.handColor))
+        hands = suit.find('**/hands')
+        handTint = Vec4(
+            suit.handColor[0] * color[0],
+            suit.handColor[1] * color[1],
+            suit.handColor[2] * color[2],
+            suit.handColor[3] * color[3]
+        )
+        suitInterval.append(Func(hands.setColorScale, suit.handColor))
     if suit.dna.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryLitigator))
     if suit.style.name == 'safesupervis' and not suit.isSkeleton:
@@ -818,7 +824,7 @@ def doSoakRemoval(attack):
     if suit.dna.name == 'safesupervis':
         suitTrack.append(Parallel(Func(suit.makeUnDamageDown), Func(suit.checkDamageDown, - 25), ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1), Func(suit.makeUnSoaked)))
     else:
-        suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1), Func(suit.makeUnSoaked)))
+        suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), __soakRemoval(suit, 1)), Func(suit.makeUnSoaked)))
     for suit in battle.activeSuits:
         suitTrack.append(Func(suit.checkSoakRounds))
     if suit.isVirtual and suit.dna.name == 'redd':
@@ -847,7 +853,7 @@ def doMarkRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Parallel()
-    suitTrack.append(Sequence(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2.25), Func(suit.splatClear), Func(suit.makeUnMarked)), Func(suit.setNeutralAnimationDrop)))
+    suitTrack.append(Sequence(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2.25), Sequence(Wait(1.0), Func(suit.splatSuit, 0, 1)), Func(suit.makeUnMarked)), Func(suit.setNeutralAnimationDrop)))
     for suit in battle.activeSuits:
         suitTrack.append(Func(suit.checkMarkRounds))
     return suitTrack

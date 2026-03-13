@@ -13,6 +13,7 @@ from toontown.battle import PlayByPlayText
 from direct.directnotify import DirectNotifyGlobal
 from direct.directtools.DirectGeometry import CLAMP
 from direct.distributed.ClockDelta import *
+from otp.otpbase import OTPLocalizerEnglish
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.interval.IntervalGlobal import *
@@ -891,6 +892,18 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             pass
 
+    def checkHealingPhrases(self, num):
+        if self.deathInterval != None:
+            self.deathInterval = None
+        if self.getHP() > 0 and num == 0:
+            self.deathInterval = Sequence(Func(self.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout))
+            self.deathInterval.start()
+        elif self.getHP() > 0 and num == 1:
+            self.deathInterval = Sequence(Func(self.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitMarkedPhrases), CFSpeech | CFTimeout))
+            self.deathInterval.start()
+        else:
+            pass
+
     def checkCogHPDrop(self, battle):
         if self.deathInterval != None:
             self.deathInterval = None
@@ -1125,7 +1138,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 color = Point4(1.0, 1.0, 1.0, 1.0)
         else:
             color = SoakColor
-        suitInterval = Sequence()
+        suitInterval = Parallel()
         actorNode = self.find('**/__Actor_modelRoot')
         actorCollection = actorNode.findAllMatches('*')
         texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
@@ -1133,10 +1146,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         for thingIndex in xrange(0, actorCollection.getNumPaths()):
             thing = actorCollection[thingIndex]
             if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-                suitInterval.append(Func(thing.setColor, color))
+                suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
         if not self.isSkeleton:
-            suitInterval.append(Func(self.find('**/hands').setTexture, texture, 1))
-            suitInterval.append(Func(self.find('**/hands').setColor, self.handColor))
+            hands = self.find('**/hands')
+            suitInterval.append(Func(hands.setColorScale, self.handColor))
         if self.dna.name == 'lgator' and not self.isSkeleton:
             suitInterval.append(Func(self.makeDryLitigator))
         if self.style.name == 'safesupervis' and not self.isSkeleton:
@@ -1257,16 +1270,16 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.splashInterval = None
         if (self.isSoaked == 0 and self.actuallySoaked and not self.isDead) or self.dna.name == 'phouse':
             if self.dna.name == 'safesupervis':
-                self.splashInterval = Sequence(Parallel(Func(self.makeUnDamageDown), Func(self.checkDamageDown, - 25), ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimation)).start()
+                self.splashInterval = Sequence(Parallel(Func(self.makeUnDamageDown), Func(self.checkDamageDown, - 25), ActorInterval(self, 'soak', startTime=3.5), Sequence(Wait(1.0), Func(self.__soakRemoval, 1))), Func(self.makeUnSoaked), Func(self.setNeutralAnimationDrop)).start()
             else:
-                self.splashInterval = Sequence(Parallel(ActorInterval(self, 'soak', startTime=3.5), Func(self.__soakRemoval, 1)), Func(self.makeUnSoaked), Func(self.setNeutralAnimation)).start()
+                self.splashInterval = Sequence(Parallel(ActorInterval(self, 'soak', startTime=3.5),  Sequence(Wait(1.0), Func(self.__soakRemoval, 1))), Func(self.makeUnSoaked), Func(self.setNeutralAnimationDrop)).start()
 
     def checkMarkRounds(self):
         if self.splashInterval:
             self.splashInterval.finish()
             self.splashInterval = None
         if self.isMarked == 0 and self.actuallyMarked and not self.isDead:
-            self.splashInterval = Sequence(Parallel(ActorInterval(self, 'squirt-small-react', startTime=2), Func(self.splatClear), Func(self.makeUnMarked)), Func(self.setNeutralAnimation)).start()
+            self.splashInterval = Sequence(Parallel(ActorInterval(self, 'squirt-small-react', startTime=2.25), Sequence(Wait(1.0), Func(self.splatSuit, 0, 1)), Func(self.makeUnMarked)), Func(self.setNeutralAnimationDrop)).start()
 
     def checkContractEnforcement(self):
         x = int((self.maxHP * self.hardMaxHP) - self.currHP)
@@ -1490,7 +1503,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.damageInterval.finish()
             self.damageInterval = None
         x = int(self.currHP)
-        if self.currHP > 0 and not self.getManager() and not self.isContracted and not self.isDead:
+        if self.currHP > 0 and not self.getManager() and not self.isDead:
             self.damageInterval = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle), Func(self.showHpTextNew, -self.currHP, text="BUSTED!", colorCode=3),
                                    Func(self.setHealthForMe, - self.currHP),
                                    Func(self.updateHealthBar, 0))).start()
@@ -1532,51 +1545,140 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                    Func(ambassador.updateHealthBar, 0)),
                                Func(ambassador.setNeutralAnimation)).start()
 
+    def _getSplatFilename2(self, level):
+        splatDict = {
+            0: 'tiny_splat_cake',
+            1: 'tiny_splat_fruit',
+            2: 'tiny_splat_cream',
+            3: 'tiny_splat_cake',
+            4: 'tiny_splat_fruit',
+            5: 'tiny_splat_cream',
+            6: 'tiny_splat_cake',
+            7: 'tiny_splat_wedding'
+        }
+        return 'phase_5/maps/%s.png' % (
+            splatDict[level]
+        )
+
+    def _getSplatFilename(self, level):
+        splatDict = {
+            0: 'splat_cake',
+            1: 'splat_fruit',
+            2: 'splat_cream',
+            3: 'splat_cake',
+            4: 'splat_fruit',
+            5: 'splat_cream',
+            6: 'splat_cake',
+            7: 'splat_wedding'
+        }
+        return 'phase_5/maps/%s_%s.png' % (
+            splatDict[level],
+            random.choice((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12))
+        )
+
+    def _getSplatParts(self):
+        if hasattr(self, '_splatParts'):
+            return self._splatParts
+
+        actorNode = self.find('**/__Actor_modelRoot')
+        actorCollection = actorNode.findAllMatches('*')
+        self._splatParts = []
+
+        for i in xrange(actorCollection.getNumPaths()):
+            thing = actorCollection[i]
+            if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
+                self._splatParts.append(thing)
+
+        return self._splatParts
+
+    def _initCompositeSplat(self, sampleFilename):
+        if hasattr(self, '_splatImage'):
+            return
+
+        sampleTex = loader.loadTexture(sampleFilename)
+        if not sampleTex:
+            print
+            'Failed to load sample splat texture:', sampleFilename
+            return
+
+        sampleImage = PNMImage()
+        sampleTex.store(sampleImage)
+
+        if sampleImage.getNumChannels() < 1:
+            print
+            'Sample splat image invalid:', sampleFilename
+            return
+
+        x = sampleImage.getXSize()
+        y = sampleImage.getYSize()
+
+        self._splatImage = PNMImage(x, y, 4)
+
+        # White RGB + zero alpha works well for decal-style overlays
+        self._splatImage.fill(1.0, 1.0, 1.0)
+        self._splatImage.alphaFill(0.0)
+
+        self._splatTexture = Texture('composite-splat')
+        self._splatTexture.load(self._splatImage)
+        self._splatTexture.setWrapU(Texture.WMClamp)
+        self._splatTexture.setWrapV(Texture.WMClamp)
+        self._splatTexture.setMinfilter(Texture.FTLinear)
+        self._splatTexture.setMagfilter(Texture.FTLinear)
+
+        self._splatStage = TextureStage('compositeSplat')
+        self._splatStage.setMode(TextureStage.MDecal)
+        self._splatStage.setSavedResult(True)
+
+        for thing in self._getSplatParts():
+            thing.setTransparency(TransparencyAttrib.MAlpha)
+            thing.setTexture(self._splatStage, self._splatTexture, 1)
+
+    def _addSplatToComposite(self, filename):
+        self._initCompositeSplat(filename)
+
+        if not hasattr(self, '_splatImage'):
+            return
+
+        splatTex = loader.loadTexture(filename)
+        if not splatTex:
+            print
+            'Failed to load splat texture:', filename
+            return
+
+        splatImage = PNMImage()
+        splatTex.store(splatImage)
+
+        if splatImage.getNumChannels() < 1:
+            print
+            'Invalid splat image:', filename
+            return
+
+        if splatImage.getXSize() != self._splatImage.getXSize() or splatImage.getYSize() != self._splatImage.getYSize():
+            print
+            'Splat size mismatch:', filename
+            return
+
+        # Blend the new splat over the old composite
+        self._splatImage.blendSubImage(splatImage, 0, 0, 0, 0)
+
+        # Push updated pixels back into the same texture
+        self._splatTexture.load(self._splatImage)
+
+    def _clearCompositeSplat(self):
+        if not hasattr(self, '_splatImage'):
+            return
+
+        self._splatImage.fill(1.0, 1.0, 1.0)
+        self._splatImage.alphaFill(0.0)
+        self._splatTexture.load(self._splatImage)
+
     def splatSuit(self, level, clear):
-        if not clear:
-            splatDict = {0: 'splat_cake', 1: 'splat_fruit', 2: 'splat_cream',
-                         3: 'splat_cake', 4: 'splat_fruit', 5: 'splat_cream', 6: 'splat_cake', 7: 'splat_wedding'}
-            splatTex = loader.loadTexture(
-                'phase_5/maps/' + splatDict[level] + '_%s.png' % random.choice((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)))
-            splatTex2 = loader.loadTexture('phase_5/maps/tiny_' + splatDict[level] + '.png')
-            splat = TextureStage(splatDict[level])
-            splat.setMode(TextureStage.MDecal)
-            splat.setSavedResult(True)
-            actorNode = self.find('**/__Actor_modelRoot')
-            actorCollection = actorNode.findAllMatches('*')
-            parts = ()
-            for thingIndex in xrange(0, actorCollection.getNumPaths()):
-                thing = actorCollection[thingIndex]
-                if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-                    thing.setTexture(splat, splatTex)
-            #for headPart in self.headParts:
-                #headPart.setTexture(splat, splatTex)
         if clear:
-            stages = self.findAllTextureStages()
-            for stage in stages:
-                actorNode = self.find('**/__Actor_modelRoot')
-                actorCollection = actorNode.findAllMatches('*')
-                parts = ()
-                for thingIndex in xrange(0, actorCollection.getNumPaths()):
-                    thing = actorCollection[thingIndex]
-                    if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'joint_shadow', 'def_nameTag'):
-                        if stage.getName().startswith('splat_wedding'):
-                            thing.clearTexture(stage)
-                        if stage.getName().startswith('splat_cream'):
-                            thing.clearTexture(stage)
-                        if stage.getName().startswith('splat_fruit'):
-                            thing.clearTexture(stage)
-                        if stage.getName().startswith('splat_cake'):
-                            thing.clearTexture(stage)
-            #  for headPart in self.headParts:
-            # if stage.getName().startswith('splat_wedding'):
-            #    headPart.clearTexture(stage)
-            #  if stage.getName().startswith('splat_cream'):
-            #    headPart.clearTexture(stage)
-            # if stage.getName().startswith('splat_fruit'):
-            #   headPart.clearTexture(stage)
-            # if stage.getName().startswith('splat_cake'):
-            #  headPart.clearTexture(stage)
+            self._clearCompositeSplat()
+            return
+
+        filename = self._getSplatFilename(level)
+        self._addSplatToComposite(filename)
 
     def splatClear(self):
         stages = self.findAllTextureStages()
@@ -1938,15 +2040,38 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.healInterval.finish()
             self.healInterval = None
         x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP >= (self.maxHP * self.hardMaxHP):
-            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="CHARGED!", colorCode=5),
-                                         Func(self.updateHealthBar, 0)).start()
-        elif self.currHP > self.maxHP:
-            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="CHARGED!", colorCode=5),
-                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        if not self.getManager():
+            if self.currHP >= (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="CHARGED!", colorCode=5),
+                                             Func(self.updateHealthBar, 0)).start()
+            elif self.currHP > self.maxHP:
+                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="CHARGED!", colorCode=5),
+                                             Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+            else:
+                self.healInterval = Parallel(Func(self.showHpTextNew, self.maxHP, text="CHARGED!", colorCode=5),
+                                             Func(self.setHealthForMe, self.maxHP), Func(self.updateHealthBar, 0)).start()
         else:
-            self.healInterval = Parallel(Func(self.showHpTextNew, self.maxHP, text="CHARGED!", colorCode=5),
-                                         Func(self.setHealthForMe, self.maxHP), Func(self.updateHealthBar, 0)).start()
+            if self.currHP >= (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="CHARGED!", colorCode=5),
+                                             Func(self.updateHealthBar, 0)).start()
+            elif self.currHP + 200 > (self.maxHP * self.hardMaxHP):
+                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="CHARGED!", colorCode=5),
+                                             Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+            else:
+                self.healInterval = Parallel(Func(self.showHpTextNew, 200, text="CHARGED!", colorCode=5),
+                                             Func(self.setHealthForMe, 200), Func(self.updateHealthBar, 0)).start()
+
+    def checkInsuranceRounds(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.addInsuranceRounds, self.getInsuranceRounds() + num)).start()
+
+    def checkContractedRounds(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.addContractedRounds, self.getContractedRounds() + num)).start()
 
     def checkLayoffs(self):
         if self.healInterval:
@@ -1954,6 +2079,36 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.healInterval = None
         self.healInterval = Parallel(Func(self.showHpTextNew, -self.currHP, text="FIRED!", colorCode=4),
                                          Func(self.setHealthForMe, -self.currHP), Func(self.updateHealthBar, 0)).start()
+
+    def checkContracted(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.currHP >= (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="CONTRACTED!", colorCode=1),
+                                         Func(self.updateHealthBar, 0)).start()
+        elif self.currHP + 95 > (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="CONTRACTED!", colorCode=1),
+                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        else:
+            self.healInterval = Parallel(Func(self.showHpTextNew, 95, text="CONTRACTED!", colorCode=1),
+                                         Func(self.setHealthForMe, 95), Func(self.updateHealthBar, 0)).start()
+
+    def checkContracted2(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.currHP >= (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="CONTRACTED!", colorCode=1),
+                                         Func(self.updateHealthBar, 0)).start()
+        elif self.currHP + 150 > (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, x, text="CONTRACTED!", colorCode=1),
+                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+        else:
+            self.healInterval = Parallel(Func(self.showHpTextNew, 150, text="CONTRACTED!", colorCode=1),
+                                         Func(self.setHealthForMe, 150), Func(self.updateHealthBar, 0)).start()
 
     def checkInsuranceScapegoatHP(self):
         if self.healInterval:

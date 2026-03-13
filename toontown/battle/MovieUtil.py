@@ -2342,7 +2342,7 @@ def zapCog(suit, anim, before, after, battle):
     if suit.isSkeleton:
         suitBody = [suit]
     else:
-        suitBody = [suit.find('**/body'), suit.find('**/hands')]
+        suitBody = [suit.find('**/body')]
     zapTrack = Sequence(Wait(before), SoundInterval(zapSfx, volume=0.6))
     flashTrack = Sequence()
     for bodyPart in suitBody:

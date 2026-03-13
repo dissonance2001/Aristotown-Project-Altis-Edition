@@ -336,23 +336,22 @@ class Movie(DirectObject.DirectObject):
             s.makeUnFreshlyZapped()
             if s.dna.name == 'clubpres' and s.getActualLevel() == 21:
                 s.makeExtraAttacks(s.getExtraAttacks() + 1)
-            for suit in self.battle.activeSuits:
-                if suit.dna.name == 'sgoat':
-                    currentBossHealth = suit.currHP
-                    if currentBossHealth >= 1:
-                        if s.isInsured:
-                            s.makeInsured2()
-                        if s.isInsured:
-                            s.makeInsured2()
-                    else:
-                        if s.isInsured:
-                            s.makeInsured()
-                        if s.isInsured2:
-                            s.makeInsured()
             if s.getLuredRounds() == 1:
                 s.makeUnLured()
             if not s.getLuredRounds() <= 0:
                 s.addLuredRounds(s.getLuredRounds() - 1)
+            if s.getInsuranceRounds() == 1:
+                s.removeInsured()
+            if not s.getInsuranceRounds() <= 0:
+                s.addInsuranceRounds(s.getInsuranceRounds() - 1)
+            if s.getContractedRounds() == 1:
+                s.removeContracted()
+            if not s.getContractedRounds() <= 0:
+                s.addContractedRounds(s.getContractedRounds() - 1)
+            if s.getOilRainRounds() == 1:
+                s.removeOilRain()
+            if not s.getOilRainRounds() <= 0:
+                s.addOilRainRounds(s.getOilRainRounds() - 1)
             if not s.getExplosiveCondition() <= 0:
                 s.makeExplosive(s.getExplosiveCondition() - 1)
             if not s.getSleepyCondition() <= 0:

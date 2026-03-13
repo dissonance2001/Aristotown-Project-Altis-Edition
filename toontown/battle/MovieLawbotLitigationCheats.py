@@ -672,7 +672,7 @@ def doThrowBookCog(attack, ind):
                                scaleUpTime=0.1),
             Wait(1.5),
             Parallel(
-                getThrowTrack(knife, hitPoint, 1.0, battle, -100),
+                getThrowTrack(knife, Point3(0, 0, 0), 1.0, targetSuit, -100),
                 LerpHprInterval(knife, 0.5, VBase3(0, 0, 0)), LerpScaleInterval(knife, 0, VBase3(8.5, 8.5, 8.5))), Sequence(Wait(1), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0))),
             Func(knife.removeNode)
         )
@@ -1277,7 +1277,6 @@ def doBayouBellow(attack):
         suitTrack.append(Func(suit.checkCogLured, battle))
         suitTrack.append(Func(battle.unlureSuit, suit))
         suitTrack.append(Wait(1.0))
-        suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1)))
         suitTrack.append(Func(battle.unSueSuit, suit))
         suitTrack.append(Func(suit.makeSoaked, 0))
         suitTrack.append(Func(suit.setSued2, 0))
@@ -1285,13 +1284,10 @@ def doBayouBellow(attack):
         suitTrack.append(Func(suit.makeUnMarked))
         suitTrack.append(Func(suit.makeUnZapped))
         suitTrack.append(Func(suit.makeUnDazed))
-        suitTrack.append(
-            Func(suit.setNeutralAnimation))
         suitTracks.append(Wait(0.5))
         suitTracks.append(Func(theSuit.createSuitBellowInterval))
         suitTracks.append(Wait(4.0))
         suitTracks.append(suitTrack)
-        suitTracks.append(Func(suit.setNeutralAnimation))
     soundTrack = getSoundTrack('SA_bellow.ogg', delay=0.1)
     return Parallel(suitTracks, sprayTrack, soundTrack)
 
@@ -1678,20 +1674,14 @@ def doCaseInsurance(attack):
     healSounds = Parallel()
     for suit in battle.activeSuits:
         suitTrack = Sequence()
-        currentBossHealth = -1
-        for s in battle.suits:
-            if s.dna.name == 'sgoat':
-                currentBossHealth = s.currHP
-        if currentBossHealth >= 1:
-            if suit.isInsured:
-                suitTrack.append(Func(suit.checkInsuranceScapegoatHP))
-                suitTracks.append(suitTrack)
-        else:
-            if suit.isInsured:
-                suitTrack.append(Func(suit.checkInsuranceHP))
-                suitTracks.append(suitTrack)
-    if theSuit.isInsured:
-        healSounds.append(healSound)
+        if suit.isInsured2:
+            suitTrack.append(Func(suit.checkInsuranceScapegoatHP))
+            suitTracks.append(suitTrack)
+            healSounds.append(healSound)
+        elif suit.isInsured:
+            suitTrack.append(Func(suit.checkInsuranceHP))
+            suitTracks.append(suitTrack)
+            healSounds.append(healSound)
     return Parallel(suitTracks, healSounds)
 
 def doLegallyBound(attack):
@@ -1755,33 +1745,47 @@ def doLegallyBound(attack):
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=damageDelay + 0.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['neutral'], showDamageExtraTime=1.0)
     return Parallel(toonTracks, toonSpinTracks, toonDamageTrack, spinTracks1, spinTracks2, spinTracks3, notifyTracks, soundTracks)
 
-def doCaseInsurancePlanInsurance(attack):
+def doCaseInsurancePlanInsurance(attack, ind, ind2, ind3):
     suit = attack['suit']
     theSuit = attack['suit']
     battle = attack['battle']
-    tauntIndex = attack['taunt']
-    toon = attack['target'][0]['toon']
-    if attack['suitName'] == 'caseman':
-        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
-    elif attack['suitName'] == 'fbd':
-        taunt = 'Hrm...'
+    if len(battle.activeSuits) > 1 and ind == 1:
+        targetSuit = battle.activeSuits[ind]
+    elif ind == 0:
+        targetSuit = battle.activeSuits[ind]
     else:
-        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
+        targetSuit = None
+    if len(battle.activeSuits) >= 3 and ind2 == 2:
+        targetSuit2 = battle.activeSuits[ind2]
+    elif len(battle.activeSuits) >= 4 and ind2 == 3:
+        targetSuit2 = battle.activeSuits[ind2]
+    else:
+        targetSuit2 = None
+    if len(battle.activeSuits) >= 5 and ind3 == 4:
+        targetSuit3 = battle.activeSuits[ind3]
+    elif len(battle.activeSuits) >= 6 and ind3 == 5:
+        targetSuit3 = battle.activeSuits[ind3]
+    else:
+        targetSuit3 = None
+
+    targetSuits = [s for s in (targetSuit, targetSuit2, targetSuit3, theSuit) if s is not None]
 
     suitTracks = Parallel()
     liftTracks = Parallel()
+    knifeTracks = Parallel()
+    taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
     tauntInterval = Sequence(Func(suit.setChatAbsoluteSpecial, taunt, CFSpeech | CFTimeout))
-    for suit in battle.activeSuits:
+    for suit in targetSuits:
         liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
-        liftEffect.setPos(suit.getPos(battle))
+        #liftEffect.setPos(suit.getPos(battle))
         liftEffect.setZ(liftEffect.getZ() - 1.3)
-        liftTracks.append(getPartTrack(liftEffect, 4.5, 4.0, [liftEffect, battle, 0], softStop=-1))
+        liftTracks.append(getPartTrack(liftEffect, 4.5, 4.0, [liftEffect, suit, 0], softStop=-2))
         suitTrack = Sequence()
-        suitTrack.append(Wait(4.5))
-        suitTrack.append(Func(suit.showHpString, "INSURANCE!"))
+        suitTrack.append(Wait(5.2))
         suitTrack.append(Func(suit.updateHealthBar, 0))
         if not suit.dna.name == 'caseman':
-            suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
+            suitTrack.append(Func(suit.checkHealingPhrases, 0))
+        suitTrack.append(Func(suit.showHpTextNew, 0, text="INSURANCE!", colorCode=1))
         #suitTrack.append(Func(suit.setNeutralAnimation))
         suitTrack.append(Func(battle.unSueSuit, suit))
         currentBossHealth = -1
@@ -1793,27 +1797,44 @@ def doCaseInsurancePlanInsurance(attack):
         else:
             suitTrack.append(Func(suit.makeInsured))
         suitTrack.append(Func(suit.setSued2, 0))
+        suitTrack.append(Func(target.addInsuranceRounds, 3))
         suitTracks.append(suitTrack)
         suitTracks.append(tauntInterval)
         suitTracks.append(Sequence(MovieUtil.createSuitInsuranceInterval(theSuit), Func(theSuit.setNeutralAnimationDrop)))
         suitTracks.append(Wait(6.5))
-    posPoints = [Point3(0.4775687409551388, -1.3458755426917506, 0.4775687409551388), VBase3(171.40376266280748, -44.02315484804629, 153.69030390738055)]
-    knifeTracks = Parallel()
-    for suit in battle.activeSuits:
-        theSuit = attack['suit']
-        hitPoint = suit.getPos(battle)
-        hitPoint.setZ(suit.height + 2)
-        hitPoint.setY(hitPoint.getY() + 0.5)
         knife = globalPropPool.getProp('shredder-paper')
+
+
+        posPoints = [Point3(0.4775687409551388, -1.3458755426917506, 0.4775687409551388), VBase3(171.40376266280748, -44.02315484804629, 153.69030390738055)]
+
         knifeTrack = Sequence(
-            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(0.8, 0.8, 0.8),
-                               scaleUpTime=0.1),
+            getPropAppearTrack(
+                knife,
+                theSuit.getRightHand(),
+                posPoints,
+                0.5,
+                VBase3(0.8, 0.8, 0.8),
+                scaleUpTime=0.1
+            ),
             Wait(2.3),
+
             Parallel(
-                getThrowTrack(knife, hitPoint, 1.5, battle, -20.288),
-                LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
-            Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
-                     Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
+                getThrowTrack(knife, (0, 0, suit.getHeight() + 2.5), 1.5, suit, -20.288),
+                LerpHprInterval(knife, 1.0, VBase3(0, -20, -20))
+            ),
+
+            Wait(0.15),
+
+            Parallel(
+                LerpPosInterval(knife, 0.45, (0, 0, suit.getHeight() - 2.5), other=suit, blendType='easeIn'),
+                LerpScaleInterval(knife, 0.45, VBase3(0.6, 0.6, 0.6), blendType='easeIn')
+            ),
+
+            Parallel(
+                LerpScaleInterval(knife, 0.2, VBase3(0.01, 0.01, 0.01)),
+                LerpColorScaleInterval(knife, 0.2, Vec4(1, 1, 1, 0))
+            ),
+
             Func(knife.removeNode)
         )
         knifeTracks.append(knifeTrack)
@@ -1822,7 +1843,7 @@ def doCaseInsurancePlanInsurance(attack):
     soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
     multiTrack = Parallel(soundTrack1, soundTrack2)
-    healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
+    healSound = Sequence(Wait(5.2), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
     return Parallel(suitTracks, healSound, liftTracks, multiTrack, knifeTracks)
 
 
@@ -1830,29 +1851,23 @@ def doCaseInsurancePlanInsurance2(attack):
     suit = attack['suit']
     theSuit = attack['suit']
     battle = attack['battle']
-    tauntIndex = attack['taunt']
-    toon = attack['target'][0]['toon']
-    if attack['suitName'] == 'caseman':
-        taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
-    elif attack['suitName'] == 'fbd':
-        taunt = 'Hrm...'
-    else:
-        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
 
     suitTracks = Parallel()
     liftTracks = Parallel()
+    knifeTracks = Parallel()
+    taunt = random.choice(['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'])
     tauntInterval = Sequence(Func(suit.setChatAbsoluteSpecial, taunt, CFSpeech | CFTimeout))
     for suit in battle.activeSuits:
         liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
-        liftEffect.setPos(suit.getPos(battle))
+        # liftEffect.setPos(suit.getPos(battle))
         liftEffect.setZ(liftEffect.getZ() - 1.3)
-        liftTracks.append(getPartTrack(liftEffect, 4.5, 4.0, [liftEffect, battle, 0], softStop=-1))
+        liftTracks.append(getPartTrack(liftEffect, 4.5, 4.0, [liftEffect, suit, 0], softStop=-2))
         suitTrack = Sequence()
-        suitTrack.append(Wait(4.5))
+        suitTrack.append(Wait(5.2))
         suitTrack.append(Func(suit.updateHealthBar, 0))
         if not suit.dna.name == 'caseman':
-            suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
-        #suitTrack.append(Func(suit.setNeutralAnimation))
+            suitTrack.append(Func(suit.checkHealingPhrases, 0))
+        # suitTrack.append(Func(suit.setNeutralAnimation))
         suitTrack.append(Func(battle.unSueSuit, suit))
         currentBossHealth = -1
         for s in battle.suits:
@@ -1871,176 +1886,289 @@ def doCaseInsurancePlanInsurance2(attack):
         suitTracks.append(tauntInterval)
         suitTracks.append(Sequence(MovieUtil.createSuitInsuranceInterval(theSuit), Func(theSuit.setNeutralAnimationDrop)))
         suitTracks.append(Wait(6.5))
-    posPoints = [Point3(0.4775687409551388, -1.3458755426917506, 0.4775687409551388), VBase3(171.40376266280748, -44.02315484804629, 153.69030390738055)]
-    knifeTracks = Parallel()
-    for suit in battle.activeSuits:
-        theSuit = attack['suit']
-        hitPoint = suit.getPos(battle)
-        hitPoint.setZ(suit.height + 2)
-        hitPoint.setY(hitPoint.getY() + 0.5)
         knife = globalPropPool.getProp('shredder-paper')
+
+        posPoints = [Point3(0.4775687409551388, -1.3458755426917506, 0.4775687409551388), VBase3(171.40376266280748, -44.02315484804629, 153.69030390738055)]
+
         knifeTrack = Sequence(
-            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, .5, VBase3(0.8, 0.8, 0.8),
-                               scaleUpTime=0.1),
+            getPropAppearTrack(
+                knife,
+                theSuit.getRightHand(),
+                posPoints,
+                0.5,
+                VBase3(0.8, 0.8, 0.8),
+                scaleUpTime=0.1
+            ),
             Wait(2.3),
+
             Parallel(
-                getThrowTrack(knife, hitPoint, 1.5, battle, -20.288),
-                LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
-            Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
-                     Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
+                getThrowTrack(knife, (0, 0, suit.getHeight() + 2.5), 1.5, suit, -20.288),
+                LerpHprInterval(knife, 1.0, VBase3(0, -20, -20))
+            ),
+
+            Wait(0.15),
+
+            Parallel(
+                LerpPosInterval(knife, 0.45, (0, 0, suit.getHeight() - 2.5), other=suit, blendType='easeIn'),
+                LerpScaleInterval(knife, 0.45, VBase3(0.6, 0.6, 0.6), blendType='easeIn')
+            ),
+
+            Parallel(
+                LerpScaleInterval(knife, 0.2, VBase3(0.01, 0.01, 0.01)),
+                LerpColorScaleInterval(knife, 0.2, Vec4(1, 1, 1, 0))
+            ),
+
             Func(knife.removeNode)
         )
         knifeTracks.append(knifeTrack)
-    #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
-    #insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
+    # cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
+    # insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
     soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
     multiTrack = Parallel(soundTrack1, soundTrack2)
-    healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
+    healSound = Sequence(Wait(5.2), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
     return Parallel(suitTracks, healSound, liftTracks, multiTrack, knifeTracks)
 
 def doCaseInsurancePlanSkelecogInsurance2(attack):
     suit = attack['suit']
     theSuit = attack['suit']
     battle = attack['battle']
-    tauntIndex = attack['taunt']
-    liftTracks = Parallel()
-    toon = attack['target'][0]['toon']
-    if attack['suitName'] == 'caseman':
-        taunt = random.choice(
-            ["Hmph...", "Hrnhmpf...",
-             "Hrm...",
-             "Hm, hm..."])
-    elif attack['suitName'] == 'fbd':
-        taunt = 'Hrm...'
+    if len(battle.activeSuits) > 1 and ind == 1:
+        targetSuit = battle.activeSuits[ind]
+    elif ind == 0:
+        targetSuit = battle.activeSuits[ind]
     else:
-        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
+        targetSuit = None
+    if len(battle.activeSuits) >= 3 and ind2 == 2:
+        targetSuit2 = battle.activeSuits[ind2]
+    elif len(battle.activeSuits) >= 4 and ind2 == 3:
+        targetSuit2 = battle.activeSuits[ind2]
+    else:
+        targetSuit2 = None
+    if len(battle.activeSuits) >= 5 and ind3 == 4:
+        targetSuit3 = battle.activeSuits[ind3]
+    elif len(battle.activeSuits) >= 6 and ind3 == 5:
+        targetSuit3 = battle.activeSuits[ind3]
+    else:
+        targetSuit3 = None
+    targetSuits = [s for s in (targetSuit, targetSuit2, targetSuit3, theSuit) if s is not None]
 
+    healSound = getSoundTrack('LB_toonup.ogg')
     suitTracks = Parallel()
-    tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    for suit in battle.activeSuits:
-        suitTrack = Sequence()
-        liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
-        liftEffect.setPos(suit.getPos(battle))
-        liftEffect.setZ(liftEffect.getZ() - 1.3)
-        liftTracks.append(getPartTrack(liftEffect, 4.5, 4.0, [liftEffect, battle, 0], softStop=-1))
-        suitTrack.append(Wait(4.5))
-        suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'caseman':
-            suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
+    liftTracks = Parallel()
+    knifeTracks = Parallel()
+
+    if targetSuits:
         currentBossHealth = -1
         for s in battle.suits:
-            if s.dna.name == 'lgator':
+            if s.dna.name == '':
                 currentBossHealth = s.currHP
-        if currentBossHealth >= 1:
-            suitTrack.append(Func(suit.showHpString, "+10% Damage!"))
-            suitTrack.append(Func(suit.updateHealthBar, 0))
-            suitTrack.append(Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 10)))
-        else:
-            suitTrack.append(Func(suit.showHpString, "+5% Damage!"))
-            suitTrack.append(Func(suit.updateHealthBar, 0))
-            suitTrack.append(Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 5)))
-        #suitTrack.append(Func(suit.setNeutralAnimation))
-        suitTrack.append(Func(battle.unSueSuit, suit))
-        suitTrack.append(Func(suit.setSued2, 0))
-        suitTrack.append(Func(suit.makeInsured))
-        suitTracks.append(suitTrack)
-        suitTracks.append(tauntInterval)
-        suitTracks.append(Sequence(ActorInterval(theSuit, 'throw-paper'), Func(theSuit.setNeutralAnimationDrop)))
-        suitTracks.append(Wait(6.5))
-    posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
-    knifeTracks = Parallel()
-    for suit in battle.activeSuits:
-        theSuit = attack['suit']
-        hitPoint = suit.getPos(battle)
-        hitPoint.setZ(suit.height + 2)
-        hitPoint.setY(hitPoint.getY() + 0.5)
-        knife = globalPropPool.getProp('shredder-paper')
-        knifeTrack = Sequence(
-            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 1, VBase3(1.2, 1.2, 1.2),
-                               scaleUpTime=0.25),
-            Wait(1.75),
-            Parallel(
-                getThrowTrack(knife, hitPoint, 1.5, battle, -20.288),
-                LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
-            Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
-                     Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
-            Func(knife.removeNode)
-        )
-        knifeTracks.append(knifeTrack)
-    #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
-    #insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
-    #soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
-    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
-    multiTrack = soundTrack2
-    healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
-    return Parallel(liftTracks, suitTracks, healSound, multiTrack, knifeTracks)
+                break
 
-def doCaseInsurancePlanSkelecogInsurance(attack):
+        for target in targetSuits:
+            liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
+            # liftEffect.setPos(target.getPos(battle))
+            liftEffect.setZ(liftEffect.getZ() - 1.3)
+            liftEffect.reparentTo(target)
+            liftTracks.append(getPartTrack(liftEffect, 4, 4.0, [liftEffect, target, 0], softStop=-2))
+
+            suitTrack = Sequence(
+                Wait(4.25)
+            )
+
+
+            currentBossHealth = -1
+            for s in battle.suits:
+                if s.dna.name == 'lgator':
+                    currentBossHealth = s.currHP
+            if currentBossHealth >= 1:
+                suitTrack.append(Func(target.showHpString, "+10% Damage!"))
+                suitTrack.append(Func(target.updateHealthBar, 0))
+                suitTrack.append(Parallel(Func(target.makeDamageUp), Func(target.checkDamageUp, + 10)))
+            else:
+                suitTrack.append(Func(suit.showHpString, "+5% Damage!"))
+                suitTrack.append(Func(suit.updateHealthBar, 0))
+                suitTrack.append(Parallel(Func(target.makeDamageUp), Func(target.checkDamageUp, + 5)))
+
+            if not target.dna.name == 'caseman':
+                suitTrack.append(
+                    Parallel(
+                        healSound,
+                        Func(
+                            target.checkHealingPhrases, 0
+                        )
+                    )
+                )
+
+            suitTrack.append(Func(battle.unSueSuit, target))
+            suitTracks.append(suitTrack)
+
+            knife = globalPropPool.getProp('shredder-paper')
+            posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
+
+            knifeTrack = Sequence(
+                getPropAppearTrack(
+                    knife,
+                    theSuit.getRightHand(),
+                    posPoints,
+                    0.75,
+                    VBase3(1.2, 1.2, 1.2),
+                    scaleUpTime=0.25
+                ),
+                Wait(0.95),
+
+                Parallel(
+                    getThrowTrack(knife, (0, 0, target.getHeight() + 2.5), 1.5, target, -20.288),
+                    LerpHprInterval(knife, 1.0, VBase3(0, -20, -20))
+                ),
+
+                Wait(0.15),
+
+                Parallel(
+                    LerpPosInterval(knife, 0.45, (0, 0, target.getHeight() - 2.5), other=target, blendType='easeIn'),
+                    LerpScaleInterval(knife, 0.45, VBase3(0.6, 0.6, 0.6), blendType='easeIn')
+                ),
+
+                Parallel(
+                    LerpScaleInterval(knife, 0.2, VBase3(0.01, 0.01, 0.01)),
+                    LerpColorScaleInterval(knife, 0.2, Vec4(1, 1, 1, 0))
+                ),
+
+                Func(knife.removeNode)
+            )
+            knifeTracks.append(knifeTrack)
+
+    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
+    soundTrack = getSoundTrack('LB_toonup.ogg', delay=4.25)
+
+    return Parallel(
+        getSuitAnimTrack(attack, playRate=1.5),
+        suitTracks,
+        soundTrack2,
+        liftTracks,
+        soundTrack,
+        knifeTracks
+    )
+
+
+def doCaseInsurancePlanSkelecogInsurance(attack, ind, ind2, ind3):
     suit = attack['suit']
     theSuit = attack['suit']
     battle = attack['battle']
-    tauntIndex = attack['taunt']
-    liftTracks = Parallel()
-    toon = attack['target'][0]['toon']
-    if attack['suitName'] == 'caseman':
-        taunt = random.choice(
-            ["Hmph...", "Hrnhmpf...",
-             "Hrm...",
-             "Hm, hm..."])
-    elif attack['suitName'] == 'fbd':
-        taunt = 'Hrm...'
+    if len(battle.activeSuits) > 1 and ind == 1:
+        targetSuit = battle.activeSuits[ind]
+    elif ind == 0:
+        targetSuit = battle.activeSuits[ind]
     else:
-        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
+        targetSuit = None
+    if len(battle.activeSuits) >= 3 and ind2 == 2:
+        targetSuit2 = battle.activeSuits[ind2]
+    elif len(battle.activeSuits) >= 4 and ind2 == 3:
+        targetSuit2 = battle.activeSuits[ind2]
+    else:
+        targetSuit2 = None
+    if len(battle.activeSuits) >= 5 and ind3 == 4:
+        targetSuit3 = battle.activeSuits[ind3]
+    elif len(battle.activeSuits) >= 6 and ind3 == 5:
+        targetSuit3 = battle.activeSuits[ind3]
+    else:
+        targetSuit3 = None
+    targetSuits = [s for s in (targetSuit, targetSuit2, targetSuit3, theSuit) if s is not None]
 
+    healSound = getSoundTrack('LB_toonup.ogg')
     suitTracks = Parallel()
-    tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    for suit in battle.activeSuits:
-        suitTrack = Sequence()
-        liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
-        liftEffect.setPos(suit.getPos(battle))
-        liftEffect.setZ(liftEffect.getZ() - 1.3)
-        liftTracks.append(getPartTrack(liftEffect, 4.5, 4.0, [liftEffect, battle, 0], softStop=-1))
-        suitTrack.append(Wait(4.5))
-        suitTrack.append(Func(suit.showHpString, "INSURANCE!", 0))
-        suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'caseman':
-            suitTrack.append(Parallel(Sequence(Wait(4.0)), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout)))
-        #suitTrack.append(Func(suit.setNeutralAnimation))
-        suitTrack.append(Func(battle.unSueSuit, suit))
-        suitTrack.append(Func(suit.setSued2, 0))
-        suitTrack.append(Func(suit.makeInsured))
-        suitTracks.append(suitTrack)
-        suitTracks.append(tauntInterval)
-        suitTracks.append(Sequence(ActorInterval(theSuit, 'throw-paper'), Func(suit.setNeutralAnimationDrop)))
-        suitTracks.append(Wait(6.5))
-    posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
+    liftTracks = Parallel()
     knifeTracks = Parallel()
-    for suit in battle.activeSuits:
-        theSuit = attack['suit']
-        hitPoint = suit.getPos(battle)
-        hitPoint.setZ(suit.height + 2)
-        hitPoint.setY(hitPoint.getY() + 0.5)
-        knife = globalPropPool.getProp('shredder-paper')
-        knifeTrack = Sequence(
-            getPropAppearTrack(knife, theSuit.getRightHand(), posPoints, 1, VBase3(1.2, 1.2, 1.2),
-                               scaleUpTime=0.25),
-            Wait(1.75),
-            Parallel(
-                getThrowTrack(knife, hitPoint, 1.5, battle, -20.288),
-                LerpHprInterval(knife, 0.8, VBase3(0, -20, -20))),
-            Parallel(LerpPosInterval(knife, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)),
-                     Sequence(Wait(0.25), LerpScaleInterval(knife, 0.5, VBase3(0, 0, 0)))),
-            Func(knife.removeNode)
-        )
-        knifeTracks.append(knifeTrack)
-    #cameraTrack = Sequence(LerpPosHprInterval(camera, duration=0.95, pos=Point3(0, -15, 2), hpr=Point3(0, 0, 0), blendType='easeInOut'))
-    #insuranceTrack = MovieUtil.createSuitInsuranceInterval(suit)
-    #soundTrack1 = getSoundTrack('SA_insurance.ogg', delay=0, node=suit)
-    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.8, node=suit)
-    multiTrack = soundTrack2
-    healSound = Sequence(Wait(4.5), SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg')))
-    return Parallel(liftTracks, suitTracks, healSound, multiTrack, knifeTracks)
+
+    if targetSuits:
+        currentBossHealth = -1
+        for s in battle.suits:
+            if s.dna.name == 'safesupervis':
+                currentBossHealth = s.currHP
+                break
+
+        for target in targetSuits:
+            liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
+            #liftEffect.setPos(target.getPos(battle))
+            liftEffect.setZ(liftEffect.getZ() - 1.3)
+            liftEffect.reparentTo(target)
+            liftTracks.append(getPartTrack(liftEffect, 4, 4.0, [liftEffect, target, 0], softStop=-2))
+
+            suitTrack = Sequence(
+                Wait(4.25)
+            )
+
+            suitTrack.append(Func(target.showHpTextNew, 0, text="INSURANCE!", colorCode=1))
+
+            currentBossHealth = -1
+            for s in battle.suits:
+                if s.dna.name == 'sgoat':
+                    currentBossHealth = s.currHP
+            if currentBossHealth >= 1:
+                suitTrack.append(Func(target.makeInsured2))
+            else:
+                suitTrack.append(Func(target.makeInsured))
+
+            if not target.dna.name == 'caseman':
+                suitTrack.append(
+                    Parallel(
+                        healSound,
+                        Func(
+                            target.checkHealingPhrases, 0
+                        )
+                    )
+                )
+
+            suitTrack.append(Func(battle.unSueSuit, target))
+            suitTrack.append(Func(target.addInsuranceRounds, 3))
+            suitTracks.append(suitTrack)
+
+            knife = globalPropPool.getProp('shredder-paper')
+            posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
+
+            knifeTrack = Sequence(
+                getPropAppearTrack(
+                    knife,
+                    theSuit.getRightHand(),
+                    posPoints,
+                    0.75,
+                    VBase3(1.2, 1.2, 1.2),
+                    scaleUpTime=0.25
+                ),
+                Wait(0.95),
+
+                Parallel(
+                    getThrowTrack(knife, (0, 0, target.getHeight() + 2.5), 1.5, target, -20.288),
+                    LerpHprInterval(knife, 1.0, VBase3(0, -20, -20))
+                ),
+
+                Wait(0.15),
+
+                Parallel(
+                    LerpPosInterval(knife, 0.45, (0, 0, target.getHeight() - 2.5), other=target, blendType='easeIn'),
+                    LerpScaleInterval(knife, 0.45, VBase3(0.6, 0.6, 0.6), blendType='easeIn')
+                ),
+
+                Parallel(
+                    LerpScaleInterval(knife, 0.2, VBase3(0.01, 0.01, 0.01)),
+                    LerpColorScaleInterval(knife, 0.2, Vec4(1, 1, 1, 0))
+                ),
+
+                Func(knife.removeNode)
+            )
+            knifeTracks.append(knifeTrack)
+
+    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
+    soundTrack = getSoundTrack('LB_toonup.ogg', delay=4.25)
+
+    return Parallel(
+        getSuitAnimTrack(attack, playRate=1.5),
+        suitTracks,
+        soundTrack2,
+        liftTracks,
+        soundTrack,
+        knifeTracks
+    )
 
 def doLiquidationSale(attack):
     suit = attack['suit']

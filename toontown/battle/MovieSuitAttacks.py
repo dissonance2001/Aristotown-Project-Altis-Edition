@@ -416,13 +416,24 @@ def doSuitAttack(attack):
     #case manager cheats
     elif name == 'CaseManagerInsurancePlan':
         if not suit.isSkeleton:
-            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack)
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack, 1, 3, 5)
         else:
-            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanSkelecogInsurance(attack)
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanSkelecogInsurance(attack, 1, 3, 5)
+    elif name == 'CaseManagerInsurancePlan2':
+        if not suit.isSkeleton:
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack, 0, 2, 4)
+        else:
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanSkelecogInsurance(attack, 0, 2, 4)
     elif name == 'CaseManagerInsurance':
         suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
     elif name == 'CaseManagerLegalBindings':
         suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
+    elif name == 'UnionBusterContractEnforcementHealing':
+        suitTrack = MovieSellbotLitigationCheats.doContractEnforcementHealing(attack)
+    elif name == 'UnionBusterContractEnforcement':
+        suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack, 1, 3, 5)
+    elif name == 'UnionBusterContractEnforcement2':
+        suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack, 0, 2, 4)
     elif name == 'CaseManagerLegalBindings2':
         if not suit.isSkeleton:
             suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance2(attack)
@@ -846,7 +857,9 @@ def doSuitAttack(attack):
     elif name == 'UnionBusterBreachOfContract4':
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
     elif name == 'UnionBusterContractEnforcement':
-        suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack)
+        suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack, 1, 3, 5)
+    elif name == 'UnionBusterContractEnforcement2':
+        suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack, 0, 2, 4)
         # racketeer
     elif name == 'RacketeerOverextendedLeverage':
         suitTrack = MovieSellbotLitigationCheats.doOverextendedLeverage(attack)
@@ -866,8 +879,8 @@ def doSuitAttack(attack):
         suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
     elif name == 'RacketeerCompensation':
         suitTrack = MovieSellbotLitigationCheats.doCompensation(attack)
-    elif name == 'RacketeerHustling':
-        suitTrack = MovieSellbotLitigationCheats.doHustling(attack)
+    elif name == 'RacketeerHustling': # Pressurizer Target Check
+        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'RacketeerRacketeering':
         suitTrack = MovieSellbotLitigationCheats.doRacketeering(attack)
     elif name == 'RacketeerPeckingOrderRetaliation':
@@ -1024,6 +1037,8 @@ def doSuitAttack(attack):
     elif name == 'HighRollerCheerRetaliation':
         suitTrack = MovieHighRollerCheats.doSnipe(attack)
     #videographer cheats
+    elif name == 'VideographerHardCut':
+        suitTrack = MovieHighRollerCheats.doHardCut(attack)
     elif name == 'VideographerRisingStars':
         suitTrack = MovieHighRollerCheats.doRisingStars(attack)
     elif name == 'VideographerRisingStars2':
@@ -1096,6 +1111,8 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'SoakRemoval':
         suitTrack = MovieUniversalCheats.doSoakRemoval(attack)
+    elif name == 'OilRemoval':
+        suitTrack = MovieBossbotLitigationCheats.doOilRemoval(attack)
     elif name == 'GovernaughtDeath':
         suitTrack = MovieUniversalCheats.doGovernaughtDeath(attack)
     elif name == 'MarkRemoval':
@@ -1552,6 +1569,8 @@ def doSuitAttack(attack):
            # resetSuitTrack = Sequence(suitTrack2, unlureSuit)
         elif name == 'SoakRemoval':
             resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'OilRemoval':
+            resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SyphonMovie':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'MintFraudulentDamage':
@@ -1569,6 +1588,8 @@ def doSuitAttack(attack):
         elif name == 'SueRemoval':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'SueDamage':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'RacketeerHustling':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ZapMovie':
             resetSuitTrack = Sequence(suitTrack2)
@@ -1616,7 +1637,7 @@ def doSuitAttack(attack):
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ButcherOffboarding3':
             resetSuitTrack = Sequence(suitTrack2)
-        elif name == 'ButcherOffboarding4':
+        elif name == 'UnionBusterContractEnforcementHealing':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'ButcherOffboarding5':
             resetSuitTrack = Sequence(suitTrack2)
@@ -1683,6 +1704,12 @@ def doSuitAttack(attack):
         elif name == 'PowerhouseSnipeGagBan':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseSnipeBookkept':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'PowerhouseSnipeCollectCall':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'PowerhouseGeneration':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'PowerhouseGeneration2':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'PowerhouseSnipeCollectCall':
             resetSuitTrack = Sequence(suitTrack2)
@@ -5368,9 +5395,8 @@ def doBash(attack):
         ActorInterval(card, 'ttht_m_ene_techbotLaptop', playRate=1.5),
         Func(card.removeNode)
     )
-    cagePos = [Point3(suitPos.getX() - 3, suitPos.getY() - 3, 0), suit.getHpr(battle)]
     cagePropTrack = Sequence(
-            getPropAppearTrack(cage, battle, cagePos, 0.01, scaleUpPoint=Point3(1.5), scaleUpTime=1),
+            getPropAppearTrack(cage, suit, Point3(2.5, 4, 0), 0.01, scaleUpPoint=Point3(1.5), scaleUpTime=1),
             Parallel(
                 SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/asfhdfha.ogg'), duration=0.75, node=cage)
             ),
@@ -5410,15 +5436,15 @@ def doDataCorruption(attack):
     )
     cagePos = [Point3(suitPos.getX() - 3, suitPos.getY() - 3, 0), suit.getHpr(battle)]
     cagePropTrack = Sequence(
-        getPropAppearTrack(cage, battle, cagePos, 0.01, scaleUpPoint=Point3(1.5), scaleUpTime=1),
-        Parallel(
-            SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/asfhdfha.ogg'), duration=0.75, node=cage)
-        ),
-        Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=cage),
-        Wait(1.0),
-        LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
-        Func(cage.removeNode)
-    )
+            getPropAppearTrack(cage, suit, Point3(2.5, 4, 0), 0.01, scaleUpPoint=Point3(1.5), scaleUpTime=1),
+            Parallel(
+                SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/asfhdfha.ogg'), duration=0.75, node=cage)
+            ),
+            Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=cage),
+            Wait(1.0),
+            LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
+            Func(cage.removeNode)
+        )
 
     cagePropTracks.append(cagePropTrack)
     damageAnims = [['cringe']]

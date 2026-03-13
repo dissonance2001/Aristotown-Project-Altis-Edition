@@ -51,6 +51,8 @@ def showLureRounds(suit, battle, level):
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.dna.name == 'videog' and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
+    elif suit.dna.name == 'bcaster' and not trapProp:
+        suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.dna.name == 'hroller' and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.dna.name == 'fires' and not trapProp:

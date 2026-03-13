@@ -173,9 +173,9 @@ def cameraActorShot(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
         Func(camera.setPosHpr, 0, -1, 2, 0, 0, 0),
         ActorInterval(cameraActor, anim),
         Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
-        Wait(remainTime),
+        Wait(remainTime - cameraActor.getDuration(anim)),
         Func(camera.reparentTo, previousParent),
-        Func(camera.setPosHpr, 0.0, -20.0, 10.0, 0, -20, 0),
+        Func(camera.setPosHpr, 0.0, -15.0, 10.0, 0, -20, 0),
         Func(cameraActor.cleanup),
         name=name
     )
@@ -189,8 +189,8 @@ def cameraActorShotHighRoller(parent, anim, remainTime = 0.0, name = 'cameraActo
     node = cameraActor.find('**/CameraBone')
     track = Sequence(
         Func(cameraActor.reparentTo, parent),
-        Func(camera.reparentTo, node),
-        Func(cameraActor.setPosHpr, 0, -27.5, -25, 180, 80, 0),
+        #Func(camera.reparentTo, node),
+        Func(camera.setPosHpr, 0, -1, 2, 0, 0, 0),
         ActorInterval(cameraActor, anim),
         Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
         Wait(remainTime),
@@ -914,7 +914,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                       heldRelativeShot(suit, 0.0, 6.8096, 8, -180, -10.0, 0.0, attackDuration)))
     elif name == 'LitigatorBayouBellow':
-        camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5)))
+        camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', attackDuration)))
         # stenographer cheats
     elif name == 'StenographerSanctionBindings':
         if attackDuration > 2:
@@ -943,6 +943,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
         # case manager cheats
     elif name == 'CaseManagerInsurancePlan':
+        if not suit.isSkeleton:
+            camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                      motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7), moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+
+        else:
+            camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                     motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                     moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
+                                     heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+    elif name == 'CaseManagerInsurancePlan2':
         if not suit.isSkeleton:
             camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                       motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7), moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
@@ -1204,9 +1214,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == 'AmbassadorRefinement':
-        camTrack.append(Parallel(Wait(attackDuration), Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, suit.getDuration('snap') + .5), cameraActorShot(suit, 'summon-cog', 0))))
+        camTrack.append(Sequence(heldShot(0.0, -15.0, 10.0, 0, -20, 0, suit.getDuration('snap') + .5), cameraActorShot(suit, 'summon-cog', (attackDuration - (suit.getDuration('snap') + .5)))))
     elif name == 'AmbassadorRefinementManager':
-        camTrack.append(Parallel(Wait(attackDuration), Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, suit.getDuration('snap') + .5), cameraActorShot(suit, 'summon-cog', 0))))
+        camTrack.append(Sequence(heldShot(0.0, -15.0, 10.0, 0, -20, 0, suit.getDuration('snap') + .5), cameraActorShot(suit, 'summon-cog', (attackDuration - (suit.getDuration('snap') + .5)))))
     elif name == 'AmbassadorGhostMentality':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'AmbassadorPhase2':
@@ -1283,6 +1293,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
     # union buster cheats
+    elif name == 'UnionBusterContractEnforcementHealing':
+        camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
     elif name == 'UnionBusterUnionDues':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'UnionBusterNoStrikeClause':
@@ -1339,24 +1352,29 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
                                  moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+    elif name == 'UnionBusterContractEnforcement2':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
         # racketeer
     elif name == 'RacketeerOverextendedLeverage':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RacketeerProfiteering':
-        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
     elif name == 'RacketeerProfiteering2':
-        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
     elif name == 'RacketeerProfiteering3':
-        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
     elif name == 'RacketeerProfiteering4':
-        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
     elif name == 'RacketeerProfiteering5':
-        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
     elif name == 'RacketeerExtortion':
-        camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', 0), Wait(attackDuration)))
+        camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', attackDuration), Wait(attackDuration)))
     elif name == 'RacketeerExtortion2':
         if attackDuration > 2:
-            camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', 0), Wait(attackDuration)))
+            camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', attackDuration), Wait(attackDuration)))
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
@@ -1732,7 +1750,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ContingencyContingencyClauseRetaliation':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=3), defaultCamera(openShotDuration=1.5, attackDuration=attackDuration-3)))
     elif name == 'ContingencyRedundantAuthority':
-        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', 0), Wait(attackDuration)))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
     elif name == 'ContingencyOperationalFreeze':
         camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == 'ContingencyForecastCollapse':
@@ -1809,27 +1827,27 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HighRollerCommercialBreak':
         camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'HighRollerGameTimeSpawn':
-        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
+        camTrack.append(Sequence(motionShot(0.0, 8.8096, 9.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'HighRollerGameTimeCog':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerGameTimeCog2':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerGameTimeCog3':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerGameTimeCog4':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerGameTimeCog5':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerGameTimeCog6':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerGameTimeCog7':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerGameTimeCog8':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerGameTimeCog9':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerGameTimeCog10':
-        camTrack.append(heldShot(0.0, -10.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
     elif name == 'HighRollerBust':
         if attackDuration > 2:
             camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
@@ -1841,11 +1859,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
     # high roller phase 2 cheats
     elif name == 'HighRollerPhase3':
-        camTrack2 = Sequence(motionShot(0.0, 20, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration))
+        camTrack2 = Sequence(motionShot(0.0, 20, 9.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     # high roller phase 3 cheats
     elif name == 'HighRollerPhase2':
-        camTrack2 = Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration))
+        camTrack2 = Sequence(motionShot(0.0, 8.8096, 9.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'HighRollerFreeCruise':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3.7))
@@ -1910,16 +1928,18 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
         #videographer cheats
+    elif name == 'VideographerHardCut':
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'VideographerRisingStars':
-        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
+        camTrack.append(Sequence(motionShot(0.0, 10.8096, 10.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerRisingStars2':
-        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
+        camTrack.append(Sequence(motionShot(0.0, 10.8096, 10.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerRisingStarsSacrifice':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerRisingStarsSilhouette':
-        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
+        camTrack.append(Sequence(motionShot(0.0, 10.8096, 10.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerVideoStatic':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(heldShot(0.0, -15.0, 12.5, 0, -20, 0, attackDuration))
     elif name == 'VideographerElectricShock':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerElectricShock2':
@@ -2117,7 +2137,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PresidentSyphon':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'PresidentBayouBellow':
-        camTrack.append(Parallel(Wait(attackDuration), Sequence(cameraActorShot(suit, 'litigator-bellow', 0), heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.5))))
+        camTrack.append(Parallel(Wait(attackDuration), Sequence(cameraActorShot(suit, 'litigator-bellow', attackDuration))))
     elif name == 'PresidentSnipe':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'PresidentDeepFreeze':
@@ -2149,7 +2169,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'CalculatingFees':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'DeathCheck':
-        camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        camTrack2 = Sequence(Wait(attackDuration))
         return camTrack2
     elif name == 'CogSpawn':
         camTrack2 = Sequence(Wait(attackDuration))
@@ -2161,6 +2181,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = Sequence(Wait(attackDuration))
         return camTrack2
     elif name == 'SoakRemoval':
+        camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
+    elif name == 'OilRemoval':
         camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
     elif name == 'GovernaughtDeath':

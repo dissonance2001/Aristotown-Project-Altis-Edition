@@ -70,7 +70,7 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('reanimated', 'reanimated'), ('shuffle-left', 'shuffle-left'), ('shuffle-right', 'shuffle-right'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('summon-cog', 'summon-cog'), ('sacrifice-cog', 'sacrifice-cog'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
+AllSuits = (('walk', 'walk'), ('reanimated', 'reanimated'), ('sticker', 'sticker'), ('shuffle-left', 'shuffle-left'), ('shuffle-right', 'shuffle-right'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('summon-cog', 'summon-cog'), ('sacrifice-cog', 'sacrifice-cog'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
             ('falling-knife', 'falling-knife'), ('throw-object', 'throw-object'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),
             ('throw-paper', 'throw-paper'), ('mob-mentality', 'mob-mentality'), ('neutral', 'neutral'), ('neutral2', 'neutral'), ('magnet', 'magnet'), ('neutral2-hurt', 'neutral-hurt'),
             ('neutral-hurt', 'neutral-hurt'), ('neutral-unstable', 'neutral-unstable'), ('neutral-enraged-return', 'neutral-enraged-return'), ('ottoman-sit-loop', 'ottoman-sit-loop'),
@@ -293,7 +293,7 @@ pbl = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swi
 director = (('golf-club-swing', 'golf-club-swing', 4), ('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
 bcaster = (('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 std2 = (('glower', 'glower', 4), ('smile', 'smile', 4), ('golf-club-swing', 'golf-club-swing', 4), ('neutral', 'rolled', 4), ('shot5', 'shot5', 4))
-videog = (('cigar-smoke', 'cigar-smoke', 4), ('snap', 'snap2', 4), ('finger-wag', 'finger-wag', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('smile', 'smile', 4))
+videog = (('cigar-smoke', 'cigar-smoke', 4), ('snap', 'snap2', 4), ('scabbard', 'scabbard', 4), ('finger-wag', 'finger-wag', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('smile', 'smile', 4))
 prt = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 pla = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
 plk = (('speak', 'speak', 4), ('cigar-smoke', 'cigar-smoke', 4), ('golf-club-swing', 'golf-club-swing', 4))
@@ -1222,9 +1222,12 @@ class Suit(Avatar.Avatar):
         self.isWaiter = 0
         self.isGovernaught = 0
         self.isInsured = 0
+        self.insuranceRounds = 0
         self.isInsured2 = 0
+        self.contractedRounds = 0
         self.isAmbassadorPhase3 = 0
         self.isContracted = 0
+        self.isContracted2 = 0
         self.isExecutive = 0
         self.isSued = 0
         self.isAngry = 0
@@ -1242,6 +1245,7 @@ class Suit(Avatar.Avatar):
         self.isHeavyRain = 0
         self.isFreezingRain = 0
         self.isStormCell = 0
+        self.oilRainRounds = 0
         self.isOilRain = 0
         self.isMonsoon = 0
         self.stormCellDamage = 60
@@ -6797,7 +6801,7 @@ class Suit(Avatar.Avatar):
         self.isOilRain = 0
         self.isMonsoon = 0
 
-    def makeOilRain(self, elite=False):
+    def makeOilRainOLD(self, elite=False):
         self.isHeavyRain = 0
         self.isFreezingRain = 0
         self.isStormCell = 0
@@ -7923,6 +7927,40 @@ class Suit(Avatar.Avatar):
     def makeInsured2(self):
         self.isInsured2 = 1
 
+    def addInsuranceRounds(self, num):
+        self.insuranceRounds = num
+
+    def getInsuranceRounds(self):
+        return self.insuranceRounds
+
+    def removeOilRain(self):
+        self.isOilRain = 0
+
+    def makeOilRain(self):
+        self.isOilRain = 1
+
+    def addOilRainRounds(self, num):
+        self.oilRainRounds = num
+
+    def getOilRainRounds(self):
+        return self.oilRainRounds
+
+    def makeContracted(self):
+        self.isContracted = 1
+
+    def makeContracted2(self):
+        self.isContracted2 = 1
+
+    def removeContracted(self):
+        self.isContracted = 0
+        self.isContracted2 = 0
+
+    def addContractedRounds(self, num):
+        self.contractedRounds = num
+
+    def getContractedRounds(self):
+        return self.contractedRounds
+
     def leaveAfterimageTask(self, task):
         """Create a faded clone of the Cog as an afterimage."""
         ghost = NodePath("afterimage")
@@ -8522,12 +8560,6 @@ class Suit(Avatar.Avatar):
 
     def removeSued(self):
         self.isSued = 0
-
-    def makeContracted(self):
-        self.isContracted= 1
-
-    def removeContracted(self):
-        self.isContracted = 0
 
     def makeIntoPhase3(self):
         self.isPhase3 = 1

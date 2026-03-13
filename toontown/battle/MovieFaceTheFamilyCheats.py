@@ -907,19 +907,33 @@ def doExtraTip(attack, ind):
     can.setTexture(texture, 1)
     posPoints = [Point3(-0.3039073806078143, -0.390738060781473, -0.390738060781473), VBase3(-7.814761215629517, -156.55571635311145, -183.90738060781476)]
     knifeTrack = Sequence(
-            getPropAppearTrack(can, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
-                               scaleUpTime=0.5),
-            Wait(1.0),
-            Parallel(
-                getThrowTrack(can, hitPoint, 1.5, battle, -30.288),
-                LerpHprInterval(can, 0.8, VBase3(0, 0, 0)), LerpScaleInterval(can, 0, VBase3(8.5, 8.5, 8.5))),
-        Parallel(LerpPosInterval(can, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)), Sequence(Wait(0.25), LerpScaleInterval(can, 0.5, VBase3(0, 0, 0)))),
-            Func(MovieUtil.removeProp, can)
-        )
+        getPropAppearTrack(can, theSuit.getRightHand(), posPoints, .5, VBase3(8.5, 8.5, 8.5),
+                           scaleUpTime=0.5),
+        Wait(0.95),
+
+        Parallel(
+            getThrowTrack(can, (0, 0, targetSuit.getHeight() + 2.5), 1.5, targetSuit, -20.288),
+            LerpHprInterval(can, 1.0, VBase3(0, -0, -0))
+        ),
+
+        Wait(0.15),
+
+        Parallel(
+            LerpPosInterval(can, 0.45, (0, 0, targetSuit.getHeight() - 2.5), other=targetSuit, blendType='easeIn'),
+            LerpScaleInterval(can, 0.45, VBase3(0.6, 0.6, 0.6), blendType='easeIn')
+        ),
+
+        Parallel(
+            LerpScaleInterval(can, 0.2, VBase3(0.01, 0.01, 0.01)),
+            LerpColorScaleInterval(can, 0.2, Vec4(1, 1, 1, 0))
+        ),
+
+        Func(can.removeNode)
+    )
     knifeTracks.append(knifeTrack)
     suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
     soundTrack1 = getSoundTrack('SA_extra_tip.ogg', delay=2)
-    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=4)
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=4.0)
     multiTrack = Parallel(soundTrack1, soundTrack2)
     return Parallel(suitTrackAnim, suitTracks, multiTrack, knifeTracks)
 

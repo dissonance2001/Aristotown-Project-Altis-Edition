@@ -464,7 +464,10 @@ def __throwPie(throw, delay, hitCount, npcs):
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(updateHealthBar)
-        suitResponseTrack.append(Func(suit.makeMarked, 3))
+        if toon.getTrackBonusLevel(THROW_TRACK) > 1:
+            suitResponseTrack.append(Func(suit.makeMarked, 1))
+        else:
+            suitResponseTrack.append(Func(suit.makeMarked, 0))
         suitResponseTrack.append(sival)
         #suitResponseTrack.append(Wait(0))
         #suitResponseTrack.append(markDamage)

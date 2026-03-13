@@ -2613,22 +2613,22 @@ def doShadowToon(attack):
                         name='dustCloadIval')
 
     suitTrack = Sequence(
-                    Parallel(
-                        LerpPosInterval(suit, duration=1.0, pos=(newPos), other=battle),
-                        ActorInterval(suit, 'walk', loop=1, playRate=-1, duration=1.0)),
-                    Parallel(
-                        Sequence(
-                            getSuitAnimTrack(attack),
-                            Func(suit.setNeutralAnimationDrop)),
-                        Sequence(
-                            Wait(1.35),
-                            Func(getDustCloudIval().start),
-                            Wait(0.5),
-                            Func(evilToon.addActive),
-                            Func(evilToon.reparentTo, render)
-                        ),
-                    ),
-                )
+        Parallel(
+            LerpPosHprInterval(suit, duration=1.0, pos=(newPos), hpr=(180, 0, 0), other=battle),
+            ActorInterval(suit, 'walk', loop=1, playRate=-1, duration=1.0)),
+        Parallel(
+            Sequence(
+                getSuitAnimTrack(attack),
+                Func(suit.setNeutralAnimationDrop)),
+            Sequence(
+                Wait(1.35),
+                Func(getDustCloudIval().start),
+                Wait(0.5),
+                Func(evilToon.addActive),
+                Func(evilToon.reparentTo, render)
+            ),
+        ),
+    )
     pieName = 'creampie'
     pie = globalPropPool.getProp(pieName)
     pieType = globalPropPool.getPropType(pieName)
@@ -2686,8 +2686,8 @@ def doShadowToon(attack):
         pieTrack.append(pieMiss)
         pieTrack.append(pieHide)
         pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
-
-    moveUp = Sequence(Parallel(LerpPosInterval(suit, duration=1.0, pos=(oldPos), other=battle), ActorInterval(suit, 'walk', loop=1, duration=1.0)),
+    resetPos, resetHpr = battle.getActorPosHpr(suit)
+    moveUp = Sequence(Parallel(LerpPosHprInterval(suit, duration=1.0, pos=(oldPos), hpr=(resetHpr), other=battle), ActorInterval(suit, 'walk', loop=1, duration=1.0)),
                       Func(suit.setNeutralAnimationDrop))
     notifyTrack = Sequence(Wait(tPieHitsSuit), Func(toon.showHpTextNew,  - int(hp), "DAMAGE DEBUFF!", colorCode=1))
     currentBossHealth = -1
@@ -3936,23 +3936,56 @@ def doScabbard(attack):
     suitTracks = Parallel()
     liftTracks = Parallel()
     selfDamageTracks = Parallel()
-    selfDamageTracks.append(Sequence(Func(theSuit.createSuitScabbardInterval)))
+    posPoints = [Point3(0, 0, 0), VBase3(0, 0, 180)]
+    knifeTracks = Parallel()
+    suitTracks = Parallel()
     for s in battle.activeSuits:
         suitTrack = Sequence()
-        suitTrack.append(Wait(1))
-        if not s.getManager():
-            suitTrack.append(Func(s.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases), CFSpeech | CFTimeout))
-            suitTrack.append(Func(s.checkScabbard))
-            liftEffect = BattleParticles.createParticleEffect('SyphonLift')
-            liftEffect.setPos(s.getPos(battle))
-            liftEffect.setZ(liftEffect.getZ() - 1.3)
-            liftTracks.append(getPartTrack(liftEffect, 1, 4.1, [liftEffect, battle, 0], softStop=-1))
+        suitTrack.append(Wait(4.5))
+        if not s.dna.name == 'dking':
+            suitTrack.append(Func(s.checkHealingPhrases, 0))
+            suitTrack.append(Func(s.setNeutralAnimationDrop))
+            suitTrack.append(ActorInterval(s, 'large-zap'))
+        suitTrack.append(Func(s.checkScabbard))
+        liftEffect = BattleParticles.createParticleEffect('SyphonLift')
+        #liftEffect.setPos(s.getPos(battle))
+        liftEffect.setZ(liftEffect.getZ() - 1.3)
+        liftTracks.append(getPartTrack(liftEffect, 1, 4.1, [liftEffect, s, 0], softStop=-1))
+        theSuit = attack['suit']
+        can = loader.loadModel('phase_5/models/props/lightning')
+        knifeTrack = Sequence(
+            getPropAppearTrack(can, theSuit.getRightHand(), posPoints, 0, VBase3(.1, .1, .1),
+                               scaleUpTime=0.25),
+            Parallel(Wait(1.85), LerpHprInterval(can, 1.85, VBase3(180, 0, 180))),
+
+            Parallel(
+                getThrowTrack(can, (0, 0, s.getHeight() + 2.5), 1.5, s, -20.288),
+                Func(can.setR, 0),
+                LerpHprInterval(can, 1.5, VBase3(360, 0, 0))
+            ),
+
+            Wait(0.15),
+
+            Parallel(
+                LerpHprInterval(can, 0.45, VBase3(0, 0, 0)),
+                LerpPosInterval(can, 0.45, (0, 0, s.getHeight() - 2.5), other=s, blendType='easeIn'),
+                LerpScaleInterval(can, 0.45, VBase3(0.1, 0.1, 0.1), blendType='easeIn')
+            ),
+
+            Parallel(
+                LerpScaleInterval(can, 0.2, VBase3(0.01, 0.01, 0.01)),
+                LerpColorScaleInterval(can, 0.2, Vec4(1, 1, 1, 0))
+            ),
+
+            Func(can.removeNode)
+        )
+        knifeTracks.append(knifeTrack)
         suitTracks.append(suitTrack)
-    suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack.append(Wait(5.0))
-    soundTrack1 = getSoundTrack('SA_bash.ogg', node=theSuit)
-    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=1, node=theSuit)
-    return Parallel(suitTrack, selfDamageTracks, suitTracks, soundTrack2, liftTracks, soundTrack1)
+    suitTrack3 = Sequence(getSuitAnimTrack(attack))
+    suitTrack2 = Sequence(ActorInterval(theSuit, 'sticker', endTime=1.0), Wait(2.0), ActorInterval(theSuit, 'sticker', startTime=1.0), Func(theSuit.setNeutralAnimationDrop))
+    soundTrack1 = getSoundTrack('AA_lightning.ogg', delay=3, node=theSuit)
+    soundTrack2 = getSoundTrack('AA_cog_shock.ogg', delay=4.5, node=theSuit)
+    return Parallel(suitTrack3, knifeTracks, suitTrack2, selfDamageTracks, suitTracks, soundTrack2, liftTracks, soundTrack1)
 
 def doKickback(attack):
     suit = attack['suit']
@@ -4444,8 +4477,7 @@ def doEmbezzle(attack):
     glowTrack.append(Wait(4.0))
     glowTrack.append(Func(glow.hide))
     glowTrack.append(Func(glow.removeNode))
-    notifyTrack = Sequence(Wait(0.25), Func(toon.showHpTextNew, - int(dmg), text="CONFUSED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
+    notifyTrack = Sequence(Wait(0.25), Func(toon.showHpTextNew, - int(dmg)))
     multiTrackList = Parallel(suitTrack, notifyTrack, toonTrack, glowTrack)
     if dmg > 0:
         soundTrack = getSoundTrack('SA_pick_pocket.ogg', delay=0.2, node=suit)

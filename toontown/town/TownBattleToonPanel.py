@@ -439,6 +439,11 @@ class TownBattleToonPanel(DirectFrame):
         if avatar.cheer:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.cheer = status.find('**/cheer_icon')
+            self.cheerRounds = DirectLabel(parent=self.cheer, relief=None, text="%s" % avatar.getCheerRounds(), text_fg=(1, 1, 1, 1),
+                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, -.5),
+                                            text_scale=.6)
+            self.cheerRounds.show()
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.cheer, slot, slotColor=(1, 0.984, 0, 1))
 

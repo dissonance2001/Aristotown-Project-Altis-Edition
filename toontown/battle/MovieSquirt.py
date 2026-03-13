@@ -437,7 +437,7 @@ def showSoakRounds(suit, level):
 
 def __soakSuit(suit, tContact, remove=0):
     if remove:
-        color = Point4(1.0, 1.0, 1.0)
+        color = Point4(1.0, 1.0, 1.0, 1.0)
     else:
         color = SoakColor
     if suit.isSkeleton:
@@ -455,8 +455,14 @@ def __soakSuit(suit, tContact, remove=0):
             if not suit.dna.name == 'cbutcher':
                 suitInterval.append(Func(thing.setColor, color))
     if not suit.isSkeleton:
-        suitInterval.append(Func(suit.find('**/hands').setTexture, texture, 1))
-        suitInterval.append(Func(suit.find('**/hands').setColor, suit.handColor))
+        hands = suit.find('**/hands')
+        handTint = Vec4(
+            suit.handColor[0] * color[0],
+            suit.handColor[1] * color[1],
+            suit.handColor[2] * color[2],
+            suit.handColor[3] * color[3]
+        )
+        suitInterval.append(Func(hands.setColorScale, handTint))
     if suit.dna.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetLitigator))
     if suit.style.name == 'safesupervis' and not suit.isSkeleton:
